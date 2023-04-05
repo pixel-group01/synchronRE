@@ -49,13 +49,9 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
-            <version>6.0.4</version>
+            <version>6.0.7</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.kongchen</groupId>
-            <artifactId>swagger-maven-plugin</artifactId>
-            <version>3.1.8</version>
-        </dependency>
+
 
         <dependency>
             <groupId>org.mapstruct</groupId>
