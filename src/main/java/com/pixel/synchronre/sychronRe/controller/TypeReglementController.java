@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/banque")
+@RequestMapping("/typReglement")
 @RequiredArgsConstructor
-public class BanqueController {
+public class TypeReglementController {
 }
