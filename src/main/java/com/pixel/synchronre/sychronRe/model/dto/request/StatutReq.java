@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronRe.model.dto.request;
 
+import com.pixel.synchronre.sychronRe.model.dto.validator.NoneExistingStatutCode;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,6 +17,7 @@ public class StatutReq {
     @NotBlank(message = "Veuillez saisir le code")
     @NotNull(message = "Veuillez saisir le code")
     @Length(message = "Le code doit contenir au moins 3 caractères", min = 3)
+    @NoneExistingStatutCode
     private String staCode;
 
     @NotBlank(message = "Veuillez saisir le libelle")
