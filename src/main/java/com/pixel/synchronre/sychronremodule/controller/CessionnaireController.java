@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
@@ -24,8 +25,8 @@ public class CessionnaireController
     }
 
     @PutMapping(path = "/update")
-    public CessionnaireDetailsResp updateCessionnaire(@RequestBody @Valid CreateCessionnaireReq dto) throws UnknownHostException {
-        return cessionnaireService.createCessionnaire(dto);
+    public CessionnaireDetailsResp updateCessionnaire(@RequestBody @Valid UpdateCessionnaireReq dto) throws UnknownHostException {
+        return cessionnaireService.updateCessionnaire(dto);
     }
 
     @GetMapping(path = "/list")

@@ -2,7 +2,6 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.StatutMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.request.StatutReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.StatutIservice;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +14,4 @@ import java.net.UnknownHostException;
 public class StatutService implements StatutIservice {
     private final StatutRepository statRepo;
     private final StatutMapper statutMapper;
-    @Override
-    public void save(StatutReq dto) throws UnknownHostException {
-        Statut statut=statutMapper.mapToStatut(dto);
-        statut= statRepo.save(statut);
-    }
 }
