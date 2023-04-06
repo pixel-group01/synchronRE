@@ -22,7 +22,7 @@ import java.util.List;
 @Profile({"dev", "prod"})
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path = "/gest-ass/types") @Validated
+@RequestMapping(path = "/types") @Validated
 public class TypeResource
 {
     private final TypeRepo typeRepo;

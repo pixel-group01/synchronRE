@@ -13,38 +13,38 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RequiredArgsConstructor
-@RestController @RequestMapping("/gest-asso")
+@RestController @RequestMapping("/privileges")
 public class PrvResource
 {
     private final IPrivilegeService prvService;
     private final PrvRepo prvRepo;
 
-    @PostMapping(path = "/prvs/create-prv")
+    @PostMapping(path = "/create")
     public ReadPrvDTO createPrv(@RequestBody @Valid CreatePrivilegeDTO dto) throws UnknownHostException, IllegalAccessException {
         return prvService.createPrivilege(dto);
     }
 
-    @GetMapping(path = "/prvs/search")
+    @GetMapping(path = "/search")
     public Page<ReadPrvDTO> searchPrv(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int num, @RequestParam(defaultValue = "2") int size) throws UnknownHostException, IllegalAccessException {
         return prvService.searchPrivileges(key, PageRequest.of(num, size));
     }
 
-    @GetMapping(path = "/prvs/existsByName/{name}")
+    @GetMapping(path = "/existsByName/{name}")
     public boolean existsByName(@PathVariable String name) throws UnknownHostException, IllegalAccessException {
         return prvRepo.existsByName(name);
     }
 
-    @GetMapping(path = "/prvs/existsByName/{name}/{prvId}")
+    @GetMapping(path = "/existsByName/{name}/{prvId}")
     public boolean existsByName(@PathVariable String name, @PathVariable Long prvId) throws UnknownHostException, IllegalAccessException {
         return prvRepo.existsByName(name, prvId);
     }
 
-    @GetMapping(path = "/prvs/existsByCode/{code}")
+    @GetMapping(path = "/existsByCode/{code}")
     public boolean existsByCode(@PathVariable String code) throws UnknownHostException, IllegalAccessException {
         return prvRepo.existsByCode(code);
     }
 
-    @GetMapping(path = "/prvs/existsByCode/{code}/{prvId}")
+    @GetMapping(path = "/existsByCode/{code}/{prvId}")
     public boolean existsByCode(@PathVariable String code, @PathVariable Long prvId) throws UnknownHostException, IllegalAccessException {
         return prvRepo.existsByCode(code, prvId);
     }

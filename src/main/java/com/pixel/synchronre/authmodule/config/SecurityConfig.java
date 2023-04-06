@@ -39,7 +39,7 @@ public class SecurityConfig
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/gest-asso/open/**").permitAll()
+                .requestMatchers("/*/open/**").permitAll()
                 .anyRequest().authenticated()
                 .and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)

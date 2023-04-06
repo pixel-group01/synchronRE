@@ -21,6 +21,7 @@ import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderSe
 import com.pixel.synchronre.notificationmodule.controller.services.EmailServiceConfig;
 import com.pixel.synchronre.notificationmodule.model.entities.EmailNotification;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -54,6 +55,7 @@ public class UserService implements IUserService
     private final ILogService logger;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService uds;
+    private final ObjectCopier<AppUser> userCopier;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
@@ -113,9 +115,8 @@ public class UserService implements IUserService
     @Override @Transactional
     public ReadUserDTO updateUser(UpdateUserDTO dto) throws UnknownHostException {
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
-        AppUser oldUser = new AppUser();BeanUtils.copyProperties(user, oldUser);
+        AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
         user.setTel(dto.getTel());
-        user.setLastModificationDate(LocalDateTime.now());
         logger.logg(AuthActions.UPDATE_USER, oldUser, user, AuthTables.USER_TABLE);
         return userMapper.mapToReadUserDTO(user);
     }
@@ -124,10 +125,9 @@ public class UserService implements IUserService
     public ReadUserDTO changePassword(ChangePasswordDTO dto) throws UnknownHostException
     {
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
-        AppUser oldUser = new AppUser();BeanUtils.copyProperties(user, oldUser);
+        AppUser oldUser = userCopier.copy(user);
         if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) throw new AppException("L'ancien mot de passe est incorrect");
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-        user.setLastModificationDate(LocalDateTime.now());
         logger.logg(AuthActions.CHANGE_PASSWORD, oldUser, user, AuthTables.USER_TABLE);
         return userMapper.mapToReadUserDTO(user);
     }
@@ -135,9 +135,8 @@ public class UserService implements IUserService
     @Override @Transactional
     public ReadUserDTO reinitialisePassword(ReinitialisePasswordDTO dto) throws UnknownHostException {
         AppUser user = userRepo.findByEmail(dto.getEmail()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
-        AppUser oldUser = new AppUser();BeanUtils.copyProperties(user, oldUser);
+        AppUser oldUser = userCopier.copy(user);
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-        user.setLastModificationDate(LocalDateTime.now());
         logger.loggOffConnection(AuthActions.REINIT_PASSWORD, dto.getEmail(),oldUser, user, AuthTables.USER_TABLE);
         AccountToken token = tokenRepo.findByToken(dto.getPasswordReinitialisationToken()).orElseThrow(()->new AppException(SecurityErrorMsg.INVALID_ACTIVATION_TOKEN_ERROR_MSG));
 

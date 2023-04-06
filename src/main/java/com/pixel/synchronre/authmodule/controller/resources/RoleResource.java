@@ -13,38 +13,38 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RequiredArgsConstructor
-@RestController @RequestMapping("/gest-asso")
+@RestController @RequestMapping("/roles")
 public class RoleResource
 {
     private final IRoleService roleService;
     private final RoleRepo roleRepo;
 
-    @PostMapping(path = "/roles/create-role")
+    @PostMapping(path = "/create")
     public ReadRoleDTO createrole(@RequestBody @Valid CreateRoleDTO dto) throws UnknownHostException, IllegalAccessException {
         return roleService.createRole(dto);
     }
 
-    @GetMapping(path = "/roles/search")
+    @GetMapping(path = "/search")
     public Page<ReadRoleDTO> searchrole(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int num, @RequestParam(defaultValue = "2") int size) throws UnknownHostException, IllegalAccessException {
         return roleService.searchRoles(key, PageRequest.of(num, size));
     }
 
-    @GetMapping(path = "/roles/existsByName/{name}")
+    @GetMapping(path = "/existsByName/{name}")
     public boolean existsByName(@PathVariable String name) throws UnknownHostException, IllegalAccessException {
         return roleRepo.existsByName(name);
     }
 
-    @GetMapping(path = "/roles/existsByName/{name}/{roleId}")
+    @GetMapping(path = "/existsByName/{name}/{roleId}")
     public boolean existsByName(@PathVariable String name, @PathVariable Long roleId) throws UnknownHostException, IllegalAccessException {
         return roleRepo.existsByName(name, roleId);
     }
 
-    @GetMapping(path = "/roles/existsByCode/{code}")
+    @GetMapping(path = "/existsByCode/{code}")
     public boolean existsByCode(@PathVariable String code) throws UnknownHostException, IllegalAccessException {
         return roleRepo.existsByCode(code);
     }
 
-    @GetMapping(path = "/roles/existsByCode/{code}/{roleId}")
+    @GetMapping(path = "/existsByCode/{code}/{roleId}")
     public boolean existsByCode(@PathVariable String code, @PathVariable Long roleId) throws UnknownHostException, IllegalAccessException {
         return roleRepo.existsByCode(code, roleId);
     }

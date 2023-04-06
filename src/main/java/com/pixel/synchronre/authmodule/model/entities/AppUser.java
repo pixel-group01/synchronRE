@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -24,7 +26,9 @@ public class AppUser
     private boolean active;
     private boolean notBlocked;
     private Long currentFunctionId;
+    @CreationTimestamp
     private LocalDateTime creationDate;
+    @UpdateTimestamp
     private LocalDateTime lastModificationDate;
 
     public AppUser(Long userId) {

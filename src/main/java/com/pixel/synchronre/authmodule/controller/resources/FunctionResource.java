@@ -14,23 +14,23 @@ import java.net.UnknownHostException;
 import java.util.Set;
 
 @RestController @RequiredArgsConstructor
-@RequestMapping(path = "/synchronre/functions")
+@RequestMapping(path = "/functions")
 public class FunctionResource
 {
     private final IFunctionService functionService;
     private final FunctionRepo functionRepo;
 
-    @PutMapping(path = "/create-fnc")
+    @PutMapping(path = "/create")
     public ReadFncDTO createFunction(CreateFncDTO dto) throws UnknownHostException {
         return functionService.createFnc(dto);
     }
 
-    @PutMapping(path = "/update-fnc")
+    @PutMapping(path = "/update")
     public ReadFncDTO updateFunction(@RequestBody UpdateFncDTO dto) throws UnknownHostException {
          return functionService.updateFunction(dto);
     }
 
-    @PutMapping(path = "/current-fnc-for-user/{userId}")
+    @PutMapping(path = "/get-current-fnc-for-user/{userId}")
     public Long getActiveCurrentFunctionId(@PathVariable Long userId)
     {
         return functionService.getActiveCurrentFunctionId(userId);
@@ -41,18 +41,18 @@ public class FunctionResource
     {
         functionService.setFunctionAsDefault(fncId);
     }
-    @PutMapping(path = "/revoke-fnc/{fncId}")
+    @PutMapping(path = "/revoke/{fncId}")
     public void revokeFunction(@PathVariable Long fncId) throws UnknownHostException
     {
         functionService.revokeFunction(fncId);
     }
-    @PutMapping(path = "/restore-fnc/{fncId}")
+    @PutMapping(path = "/restore/{fncId}")
     public void restoreFunction(@PathVariable Long fncId) throws UnknownHostException
     {
         functionService.restoreFunction(fncId);
     }
 
-    @PutMapping(path = "/set-fnc-authorities")
+    @PutMapping(path = "/set-authorities")
     public AppFunction setFunctionAuthorities(@RequestBody SetAuthoritiesToFunctionDTO dto)
     {
         return functionService.setFunctionAuthorities(dto);
