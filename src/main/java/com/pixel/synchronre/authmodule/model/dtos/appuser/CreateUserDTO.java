@@ -9,4 +9,7 @@ public class CreateUserDTO
     private String email;
     @UniqueTel(message = "N° de téléphone déjà attribué")
     private String tel;
+    private String firstName;
+    private String lastName;
+    private Long idMetier;
 }

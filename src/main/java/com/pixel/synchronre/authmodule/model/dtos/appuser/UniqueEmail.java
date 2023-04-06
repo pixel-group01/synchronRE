@@ -20,16 +20,6 @@ public @interface UniqueEmail
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
-    /*@Component @RequiredArgsConstructor
-    class NoneExistingEmailValidatorOnUpdate implements ConstraintValidator<UniqueEmail, UpdateUserDTO>
-    {
-        private final UserRepo userRepo;
-        @Override
-        public boolean isValid(UpdateUserDTO dto, ConstraintValidatorContext context) {
-            return !userRepo.alreadyExistsByEmail(dto.getEmail(), dto.getUserId());
-        }
-    }*/
-
     @Component @RequiredArgsConstructor
     class NoneExistingEmailValidatorOnCreate implements ConstraintValidator<UniqueEmail, String>
     {

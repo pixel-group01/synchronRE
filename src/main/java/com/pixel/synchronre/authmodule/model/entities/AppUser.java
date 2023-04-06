@@ -18,6 +18,9 @@ public class AppUser
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ID_GEN")
     @SequenceGenerator(name = "USER_ID_GEN", sequenceName = "USER_ID_GEN", allocationSize = 10)
     private Long userId;
+    private String firstName;
+    private String lastName;
+    private Long idMetier; //Id de la cedente (Filiale)
     private String password;
     @Column(unique = true)
     private String email;
