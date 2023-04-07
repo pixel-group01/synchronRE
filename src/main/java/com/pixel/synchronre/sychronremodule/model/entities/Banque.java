@@ -1,9 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +19,14 @@ public class Banque {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long banId;
+  private String banCode;
   private String banLibelle;
   private String banLibelleAbrege;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+  @ManyToOne
+  @JoinColumn(name = "banStatut")
+  private Statut statut;
 }

@@ -12,9 +12,8 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class BanqueService implements IserviceBanque {
+public class BanqueService {
 
-    private final BanqueRepository banqueRepository;
-    private final BanqueMapper banqueMapper;
+
 
 }
