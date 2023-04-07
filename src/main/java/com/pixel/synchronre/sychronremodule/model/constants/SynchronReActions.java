@@ -12,4 +12,6 @@ public class SynchronReActions
     public static final String UPDATE_COUVERTURE = "Modification d'une couverture";
     public static final String CREATE_STATUT = "Creation d'un statut";
     public static final String UPDATE_STATUT = "Modification d'un statut";
+    public static final String CREATE_CEDENTE = "Création d'une cédente";
+    public static final String UPDATE_CEDENTE = "Modification d'une cédente";
 }

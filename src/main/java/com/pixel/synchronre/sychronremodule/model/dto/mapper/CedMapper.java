@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
+import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
@@ -13,12 +14,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PersistenceContext;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 
+@Mapper(componentModel = "spring")
 public abstract class CedMapper
 {
     protected StatutRepository staRepo;
@@ -26,9 +29,9 @@ public abstract class CedMapper
     @PersistenceContext private EntityManager entityManager;
 
     @Mapping(target = "cedStatut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
-    abstract Cedente mapToCedente(CreateCedenteDTO dto);
+    public abstract Cedente mapToCedente(CreateCedenteDTO dto);
 
-    Cedente mapToCedente(UpdateCedenteDTO dto)
+    public Cedente mapToCedente(UpdateCedenteDTO dto)
     {
         Cedente cedente = cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable"));
         entityManager.detach(cedente);
@@ -36,6 +39,6 @@ public abstract class CedMapper
         return cedente;
     }
 
-    @Mapping(target = "cedStatut", source = "cedStatut.name()")
-    abstract ReadCedenteDTO mapToReadCedenteDTO(Cedente ced);
+    @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaType().name())")
+    public abstract ReadCedenteDTO mapToReadCedenteDTO(Cedente ced);
 }

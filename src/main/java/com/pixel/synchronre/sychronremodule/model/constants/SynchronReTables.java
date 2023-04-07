@@ -6,4 +6,5 @@ public class SynchronReTables {
     public static final String BRANCHE = "Branche";
     public static final String COUVERTURE = "Couverture";
     public static final String STATUT = "Statut";
+    public static final String CEDENTE = "Cedente";
 }

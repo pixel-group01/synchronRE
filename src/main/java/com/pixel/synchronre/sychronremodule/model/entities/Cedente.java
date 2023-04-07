@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,4 +27,6 @@ public class Cedente {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+  @ManyToOne
+  private Statut cedStatut;
 }
