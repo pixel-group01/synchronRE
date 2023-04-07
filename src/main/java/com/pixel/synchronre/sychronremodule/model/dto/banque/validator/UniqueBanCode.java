@@ -17,7 +17,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueBanCode
 {
-    String message() default "Code bancaire déjà attribuée";
+    String message() default "Code bancaire déjà attribué";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
