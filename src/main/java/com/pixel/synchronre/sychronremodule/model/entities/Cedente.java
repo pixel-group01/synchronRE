@@ -28,6 +28,8 @@ public class Cedente {
   private String cedSituationGeo;
   @ManyToOne @JoinColumn(name = "ced_ban_id")
   private Banque banque;
+  @ManyToOne @JoinColumn(name = "ced_pays_code")
+  private Pays pays;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp
