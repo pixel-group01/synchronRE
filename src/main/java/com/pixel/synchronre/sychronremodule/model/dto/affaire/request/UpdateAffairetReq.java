@@ -1,22 +1,18 @@
-package com.pixel.synchronre.sychronremodule.model.dto.statut.request;
+package com.pixel.synchronre.sychronremodule.model.dto.affaire.request;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesEmail;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesTel;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.ExistingStatId;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.UniqueStaCode;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.UniqueStaLibelle;
-import jakarta.validation.constraints.*;
+import com.pixel.synchronre.sychronremodule.model.dto.affaire.validator.ExistingAfftId;
+import com.pixel.synchronre.sychronremodule.model.dto.affaire.validator.UniqueAffCode;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 
-@UniqueStaCode(message ="staCode::Ce code statut est déjà utilisé")
-@UniqueStaLibelle
+@UniqueAffCode(message ="staCode::Ce code statut est déjà utilisé")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class UpdateStatutReq
+public class UpdateAffairetReq
 {
-    @ExistingStatId
+    @ExistingAfftId
     @NotNull(message = "Veuillez selectionner un statut")
     private Long staId;
 

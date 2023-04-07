@@ -1,7 +1,5 @@
-package com.pixel.synchronre.sychronremodule.model.dto.statut.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.affaire.validator;
 
-import com.pixel.synchronre.authmodule.model.dtos.asignation.ExistingAssId;
-import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -14,9 +12,9 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingStatId.ExistingCesIdValidator.class})
+@Constraint(validatedBy = {ExistingAfftId.ExistingCesIdValidator.class})
 @Documented
-public @interface ExistingStatId
+public @interface ExistingAfftId
 {
     String message() default "Identitifiant du statut introuvable";
     Class<?>[] groups() default {};
@@ -24,7 +22,7 @@ public @interface ExistingStatId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingStatId, Long>
+    class ExistingCesIdValidator implements ConstraintValidator<ExistingAfftId, Long>
     {
         private final StatutRepository statRepo;
         @Override

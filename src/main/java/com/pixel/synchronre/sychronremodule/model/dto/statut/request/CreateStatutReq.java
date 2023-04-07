@@ -4,6 +4,8 @@ import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesEmail;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesTel;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.UniqueStaCode;
+import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.UniqueStaLibelle;
+import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.ValidStaType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.*;
@@ -11,6 +13,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@UniqueStaLibelle
 public class CreateStatutReq
 {
 
@@ -30,8 +33,8 @@ public class CreateStatutReq
     @Length(message = "Le libellé du statut doit contenir au moins trois caractères", min = 3)
     private String staLibelleLong;
 
-//    @NotBlank(message = "Veuillez saisir le type du statut")
-//    @NotNull(message = "Veuillez saisir le type du statut")
-//    @Length(min = 3, max = 4, message = "type du statut doit être comprise entre 3 et 4 caractères")
-//    private String staType;
+    @NotBlank(message = "Veuillez saisir le type du statut")
+    @NotNull(message = "Veuillez saisir le type du statut")
+    @ValidStaType
+    private String staType;
 }

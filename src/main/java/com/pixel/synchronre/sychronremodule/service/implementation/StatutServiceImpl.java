@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
@@ -47,7 +48,7 @@ public class StatutServiceImpl implements StatutIservice {
         Statut oldStat = staCopier.copy(statut);
         statut.setStaCode(dto.getStaCode());
         statut.setStaLibelle(dto.getStaLibelle());
-        //statut.setStaType(dto.getStaType());
+        statut.setStaType(TypeStatut.valueOf(dto.getStaType()));
         statut.setStaLibelleLong(dto.getStaLibelleLong());
         statut=statRepo.save(statut);
         logService.logg(SynchronReActions.UPDATE_STATUT, oldStat, statut, SynchronReTables.STATUT);

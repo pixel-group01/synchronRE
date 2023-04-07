@@ -2,12 +2,20 @@ package com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator;
 
 import com.pixel.synchronre.authmodule.model.dtos.asignation.ExistingAssId;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanCode;
+import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.*;
+
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {ExistingCesId.ExistingCesIdValidator.class})
+@Documented
 public @interface ExistingCesId
 {
     String message() default "Identitifiant du cessionnaire introuvable";
@@ -16,7 +24,7 @@ public @interface ExistingCesId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingAssId, Long>
+    class ExistingCesIdValidator implements ConstraintValidator<ExistingCesId, Long>
     {
         private final CessionnaireRepository cesRepo;
         @Override
