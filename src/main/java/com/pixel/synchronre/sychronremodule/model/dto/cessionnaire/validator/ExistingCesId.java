@@ -16,7 +16,7 @@ public @interface ExistingCesId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingAssId, Long>
+    class ExistingCesIdValidator implements ConstraintValidator<ExistingCesId, Long>
     {
         private final CessionnaireRepository cesRepo;
         @Override
