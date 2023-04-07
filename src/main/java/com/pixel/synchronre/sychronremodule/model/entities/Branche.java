@@ -1,9 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -25,4 +22,7 @@ public class Branche {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+  @ManyToOne
+  @JoinColumn(name = "branStatut")
+  private Statut statut;
 }
