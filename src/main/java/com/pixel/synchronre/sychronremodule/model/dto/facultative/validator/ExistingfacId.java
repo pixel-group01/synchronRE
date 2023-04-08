@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.dto.affaire.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.facultative.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import jakarta.validation.Constraint;
@@ -12,9 +12,9 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingAfftId.ExistingCesIdValidator.class})
+@Constraint(validatedBy = {ExistingfacId.ExistingCesIdValidator.class})
 @Documented
-public @interface ExistingAfftId
+public @interface ExistingfacId
 {
     String message() default "Identitifiant du statut introuvable";
     Class<?>[] groups() default {};
@@ -22,7 +22,7 @@ public @interface ExistingAfftId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingAfftId, Long>
+    class ExistingCesIdValidator implements ConstraintValidator<ExistingfacId, Long>
     {
         private final StatutRepository statRepo;
         @Override
