@@ -25,4 +25,8 @@ public class Branche {
   @ManyToOne
   @JoinColumn(name = "branStatut")
   private Statut statut;
+
+  public Branche(Long branId) {
+    this.branId = branId;
+  }
 }
