@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.banque.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.couverture.validator;
 
 
 
