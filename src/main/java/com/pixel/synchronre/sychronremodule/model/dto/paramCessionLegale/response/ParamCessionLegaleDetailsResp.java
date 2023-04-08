@@ -12,5 +12,5 @@ public class ParamCessionLegaleDetailsResp
     private Long paramCesLegCapital;
     private float paramCesLegTaux;
     private Long paysId;
-    private Long cedanteId;
+    private Long cedId;
 }

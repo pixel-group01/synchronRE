@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Pays {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long PaysId;
   private String paysCode;
   private String paysIndicatif;
   private String paysNom;
@@ -18,8 +20,7 @@ public class Pays {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-
-  public Pays(String paysCode) {
-    this.paysCode = paysCode;
+  public Pays(Long paysId) {
+    PaysId = paysId;
   }
 }

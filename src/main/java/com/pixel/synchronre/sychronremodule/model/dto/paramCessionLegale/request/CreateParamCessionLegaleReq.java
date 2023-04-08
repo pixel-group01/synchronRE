@@ -24,5 +24,6 @@ public class CreateParamCessionLegaleReq
     private Long paysId;
     @NotBlank(message = "Veuillez choisir la cédante")
     @NotNull(message = "Veuillez  choisir la cédante")
-    private Long cedanteId;
+    private Long cedId;
+
 }
