@@ -34,7 +34,6 @@ public class serviceCouvertureImpl implements IserviceCouverture {
     @Override
     public CouvertureDetailsResp createCouverture(CreateCouvertureReq dto) throws UnknownHostException {
         Couverture couv = couvMapper.mapCouvertureReqToCouverture(dto);
-        //couv.setBranche(new Branche(dto.getBranId()));
         couv = couvRepo.save(couv);
         logService.logg(SynchronReActions.CREATE_COUVERTURE, null, couv, SynchronReTables.COUVERTURE);
         return couvMapper.mapToCouvertureDetailsResp(couv);
