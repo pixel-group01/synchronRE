@@ -10,7 +10,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedente.CreateCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedente;
+import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICedenteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,26 +25,26 @@ public class CedenteService implements ICedenteService
 {
     private final CedRepo cedRepo;
     private final CedMapper cedMapper;
-    private final ObjectCopier<Cedente> cedCopier;
+    private final ObjectCopier<Cedante> cedCopier;
     private final ILogService logService;
 
     @Override @Transactional
     public ReadCedenteDTO createCedente(CreateCedenteDTO dto) throws UnknownHostException
     {
-        Cedente cedente = cedMapper.mapToCedente(dto);
-        cedente = cedRepo.save(cedente);
-        logService.logg(SynchronReActions.CREATE_CEDENTE, null, cedente, SynchronReTables.CEDENTE);
-        return cedMapper.mapToReadCedenteDTO(cedente);
+        Cedante cedante = cedMapper.mapToCedente(dto);
+        cedante = cedRepo.save(cedante);
+        logService.logg(SynchronReActions.CREATE_CEDENTE, null, cedante, SynchronReTables.CEDENTE);
+        return cedMapper.mapToReadCedenteDTO(cedante);
     }
 
     @Override @Transactional
     public ReadCedenteDTO updateCedente(UpdateCedenteDTO dto) throws UnknownHostException
     {
-        Cedente oldCed = cedCopier.copy(cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable")));
-        Cedente cedente = cedMapper.mapToCedente(dto);
-        cedente = cedRepo.save(cedente);
-        logService.logg(SynchronReActions.UPDATE_CEDENTE, oldCed, cedente, SynchronReTables.CEDENTE);
-        return cedMapper.mapToReadCedenteDTO(cedente);
+        Cedante oldCed = cedCopier.copy(cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable")));
+        Cedante cedante = cedMapper.mapToCedente(dto);
+        cedante = cedRepo.save(cedante);
+        logService.logg(SynchronReActions.UPDATE_CEDENTE, oldCed, cedante, SynchronReTables.CEDENTE);
+        return cedMapper.mapToReadCedenteDTO(cedante);
     }
 
     @Override

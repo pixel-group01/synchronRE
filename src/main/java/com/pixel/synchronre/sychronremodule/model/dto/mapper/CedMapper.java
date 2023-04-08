@@ -1,25 +1,18 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
-import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedente.CreateCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedente;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
+import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public abstract class CedMapper
@@ -29,16 +22,16 @@ public abstract class CedMapper
     @PersistenceContext private EntityManager entityManager;
 
     @Mapping(target = "cedStatut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
-    public abstract Cedente mapToCedente(CreateCedenteDTO dto);
+    public abstract Cedante mapToCedente(CreateCedenteDTO dto);
 
-    public Cedente mapToCedente(UpdateCedenteDTO dto)
+    public Cedante mapToCedente(UpdateCedenteDTO dto)
     {
-        Cedente cedente = cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable"));
-        entityManager.detach(cedente);
-        BeanUtils.copyProperties(dto, cedente, "cedId", "createdAt", "updatedAt");
-        return cedente;
+        Cedante cedante = cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable"));
+        entityManager.detach(cedante);
+        BeanUtils.copyProperties(dto, cedante, "cedId", "createdAt", "updatedAt");
+        return cedante;
     }
 
     @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaType().name())")
-    public abstract ReadCedenteDTO mapToReadCedenteDTO(Cedente ced);
+    public abstract ReadCedenteDTO mapToReadCedenteDTO(Cedante ced);
 }

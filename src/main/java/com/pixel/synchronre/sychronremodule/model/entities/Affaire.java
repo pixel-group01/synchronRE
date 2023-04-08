@@ -24,7 +24,7 @@ public abstract class Affaire {
     protected LocalDate affDateEcheance;
     protected int affEtat;
     @ManyToOne @JoinColumn(name = "cedente_id")
-    protected Cedente cedente;
+    protected Cedante cedante;
     @ManyToOne @JoinColumn(name = "statut_code")
     protected Statut statut;
     @ManyToOne @JoinColumn(name = "couverture_id")

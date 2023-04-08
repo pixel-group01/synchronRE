@@ -1,11 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.facultative.request;
 
 //import com.pixel.synchronre.sychronremodule.model.dto.affaire.validator.UniqueAffCode;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedente;
-import com.pixel.synchronre.sychronremodule.model.entities.Couverture;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDate;

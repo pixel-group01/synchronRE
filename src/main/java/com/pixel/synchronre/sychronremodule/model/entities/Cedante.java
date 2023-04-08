@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
 @Entity
-public class Cedente {
+public class Cedante {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long cedId;
