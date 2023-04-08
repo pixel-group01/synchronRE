@@ -1,7 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesEmail;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.UniqueCesTel;
+
 import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
