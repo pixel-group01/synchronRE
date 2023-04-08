@@ -17,4 +17,9 @@ public class Pays {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+
+  public Pays(String paysCode) {
+    this.paysCode = paysCode;
+  }
 }

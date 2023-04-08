@@ -29,4 +29,8 @@ public class Cedante {
   private LocalDateTime updatedAt;
   @ManyToOne
   private Statut cedStatut;
+
+  public Cedante(Long cedId) {
+    this.cedId = cedId;
+  }
 }
