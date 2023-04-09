@@ -16,7 +16,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
         from ParamCessionLegale pr where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.paramCesLegLibelle, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.cedante.cedNomFiliale, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.pays.paysNom, '') ) as string)) ) >0 ) 
-                                         and cv.statut.staCode = 'ACT'     
+                                         and pr.statut.staCode = 'ACT'     
 """)
     Page<ParamCessionLegaleListResp> searchParams(String key, Pageable pageable);
 }

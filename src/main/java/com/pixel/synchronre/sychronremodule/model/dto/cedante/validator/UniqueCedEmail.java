@@ -1,9 +1,7 @@
-package com.pixel.synchronre.sychronremodule.model.dto.cedente.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.cedante.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -36,11 +34,11 @@ public @interface UniqueCedEmail
 
     @Component
     @RequiredArgsConstructor
-    class UniqueCesEmailValidatorOnUpdate implements ConstraintValidator<UniqueCedEmail, UpdateCedenteDTO>
+    class UniqueCesEmailValidatorOnUpdate implements ConstraintValidator<UniqueCedEmail, UpdateCedanteDTO>
     {
         private final CedRepo cedRepo;
         @Override
-        public boolean isValid(UpdateCedenteDTO dto, ConstraintValidatorContext context) {
+        public boolean isValid(UpdateCedanteDTO dto, ConstraintValidatorContext context) {
             return !cedRepo.alreadyExistsByEmail(dto.getCedEmail(), dto.getCedId());
         }
     }

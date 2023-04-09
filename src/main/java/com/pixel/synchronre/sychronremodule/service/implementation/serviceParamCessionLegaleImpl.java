@@ -44,7 +44,7 @@ public class serviceParamCessionLegaleImpl implements IserviceParamCessionLegale
         ParamCessionLegale oldParam = paramCopier.copy(param);
         param.setParamCesLegCapital(dto.getParamCesLegCapital());
         param.setParamCesLegLibelle(dto.getParamCesLegLibelle());
-        param.setPays(new Pays(dto.getPaysId()));
+        param.setPays(new Pays(dto.getPaysCode()));
         param.setCedante(new Cedante((dto.getCedanteId())));
         param = paramRepo.save(param);
         logService.logg(SynchronReActions.UPDATE_PARAM_CESSION_LEGALE, oldParam, param, SynchronReTables.PARAM_CESSION_LEGALE);

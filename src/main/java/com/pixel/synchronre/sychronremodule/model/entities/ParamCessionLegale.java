@@ -15,9 +15,9 @@ public class ParamCessionLegale {
     private String paramCesLegLibelle;
     private Long paramCesLegCapital;
     private float paramCesLegTaux;
-    @ManyToOne @JoinColumn(name = "pays_id")
+    @ManyToOne @JoinColumn(name = "paysCode")
     private Pays pays;
-    @ManyToOne @JoinColumn(name = "ced_id")
+    @ManyToOne @JoinColumn(name = "cedId")
     private Cedante cedante;
     @ManyToOne @JoinColumn(name = "paramStatut")
     private Statut statut;

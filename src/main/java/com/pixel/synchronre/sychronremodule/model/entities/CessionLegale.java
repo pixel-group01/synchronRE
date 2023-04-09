@@ -17,6 +17,8 @@ public class CessionLegale {
     private float cesLegTaux;
     @ManyToOne @JoinColumn(name = "affaireId")
     private Affaire affaire;
+    @ManyToOne @JoinColumn(name = "cesParamCesLegId")
+    private ParamCessionLegale paramCessionLegale;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

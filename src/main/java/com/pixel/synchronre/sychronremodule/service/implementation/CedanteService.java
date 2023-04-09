@@ -6,12 +6,12 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
-import com.pixel.synchronre.sychronremodule.service.interfac.ICedenteService;
+import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.UnknownHostException;
 
 @Service @RequiredArgsConstructor
-public class CedenteService implements ICedenteService
+public class CedanteService implements ICedanteService
 {
     private final CedRepo cedRepo;
     private final CedMapper cedMapper;
@@ -38,7 +38,7 @@ public class CedenteService implements ICedenteService
     }
 
     @Override @Transactional
-    public ReadCedenteDTO updateCedente(UpdateCedenteDTO dto) throws UnknownHostException
+    public ReadCedenteDTO updateCedente(UpdateCedanteDTO dto) throws UnknownHostException
     {
         Cedante oldCed = cedCopier.copy(cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable")));
         Cedante cedante = cedMapper.mapToCedente(dto);

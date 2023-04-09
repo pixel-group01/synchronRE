@@ -3,9 +3,9 @@ package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,7 +24,7 @@ public abstract class CedMapper
     @Mapping(target = "cedStatut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
     public abstract Cedante mapToCedente(CreateCedenteDTO dto);
 
-    public Cedante mapToCedente(UpdateCedenteDTO dto)
+    public Cedante mapToCedente(UpdateCedanteDTO dto)
     {
         Cedante cedante = cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable"));
         entityManager.detach(cedante);

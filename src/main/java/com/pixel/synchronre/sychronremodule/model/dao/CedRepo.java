@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

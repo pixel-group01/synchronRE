@@ -21,7 +21,7 @@ public class CreateParamCessionLegaleReq
     private float paramCesLegTaux;
     @NotBlank(message = "Veuillez saisir le pays")
     @NotNull(message = "Veuillez saisir le pays")
-    private Long paysId;
+    private String paysCode;
     @NotBlank(message = "Veuillez choisir la cédante")
     @NotNull(message = "Veuillez  choisir la cédante")
     private Long cedId;

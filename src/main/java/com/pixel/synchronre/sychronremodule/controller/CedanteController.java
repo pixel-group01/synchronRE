@@ -1,10 +1,10 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.ReadCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedente.UpdateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.service.interfac.ICedenteService;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
+import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +14,9 @@ import java.net.UnknownHostException;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/cedentes")
-public class CedenteController 
+public class CedanteController
 {
-    private final ICedenteService cedService;
+    private final ICedanteService cedService;
     private final CedRepo cedRepo;
     
     @PostMapping(path = "/create")
@@ -25,7 +25,7 @@ public class CedenteController
     }
 
     @PutMapping(path = "/update")
-    public ReadCedenteDTO updateCedente(@RequestBody UpdateCedenteDTO dto) throws UnknownHostException {
+    public ReadCedenteDTO updateCedente(@RequestBody UpdateCedanteDTO dto) throws UnknownHostException {
         return cedService.updateCedente(dto);
     }
 
