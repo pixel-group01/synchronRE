@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
     boolean alreadyExistsByTel(String tel, Long cedId);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO(c.cedId, c.cedNomFiliale, c.cedSigleFiliale, c.cedTel, c.cedEmail, 
+        select new com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO(c.cedId, c.cedNomFiliale, c.cedSigleFiliale, c.cedTel, c.cedEmail, 
         c.cedAdressePostale,c.cedFax, c.cedSituationGeo, c.cedStatut.staLibelle) 
         from Cedante c where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedEmail, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedTel, '') ) as string)) ) >0 
@@ -34,6 +34,6 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedNomFiliale, '') ) as string)) ) >0 ) 
                                          and c.cedStatut.staCode = 'ACT'     
 """)
-    Page<ReadCedenteDTO> searchCedentes(String key, Pageable pageable);
+    Page<ReadCedanteDTO> searchCedentes(String key, Pageable pageable);
 
 }

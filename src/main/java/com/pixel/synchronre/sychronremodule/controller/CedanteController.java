@@ -1,8 +1,8 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +20,17 @@ public class CedanteController
     private final CedRepo cedRepo;
     
     @PostMapping(path = "/create")
-    public ReadCedenteDTO createCedente(@RequestBody CreateCedenteDTO dto) throws UnknownHostException {
+    public ReadCedanteDTO createCedente(@RequestBody CreateCedanteDTO dto) throws UnknownHostException {
         return cedService.createCedente(dto);
     }
 
     @PutMapping(path = "/update")
-    public ReadCedenteDTO updateCedente(@RequestBody UpdateCedanteDTO dto) throws UnknownHostException {
+    public ReadCedanteDTO updateCedente(@RequestBody UpdateCedanteDTO dto) throws UnknownHostException {
         return cedService.updateCedente(dto);
     }
 
     @GetMapping(path = "/list")
-    public Page<ReadCedenteDTO> searchCedente(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<ReadCedanteDTO> searchCedente(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return cedService.searchCedente(key, PageRequest.of(page, size));
     }
 }

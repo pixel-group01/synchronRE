@@ -6,8 +6,8 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
@@ -29,7 +29,7 @@ public class CedanteService implements ICedanteService
     private final ILogService logService;
 
     @Override @Transactional
-    public ReadCedenteDTO createCedente(CreateCedenteDTO dto) throws UnknownHostException
+    public ReadCedanteDTO createCedente(CreateCedanteDTO dto) throws UnknownHostException
     {
         Cedante cedante = cedMapper.mapToCedente(dto);
         cedante = cedRepo.save(cedante);
@@ -38,7 +38,7 @@ public class CedanteService implements ICedanteService
     }
 
     @Override @Transactional
-    public ReadCedenteDTO updateCedente(UpdateCedanteDTO dto) throws UnknownHostException
+    public ReadCedanteDTO updateCedente(UpdateCedanteDTO dto) throws UnknownHostException
     {
         Cedante oldCed = cedCopier.copy(cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable")));
         Cedante cedante = cedMapper.mapToCedente(dto);
@@ -48,7 +48,7 @@ public class CedanteService implements ICedanteService
     }
 
     @Override
-    public Page<ReadCedenteDTO> searchCedente(String key, Pageable pageable) {
+    public Page<ReadCedanteDTO> searchCedente(String key, Pageable pageable) {
         return cedRepo.searchCedentes(key, pageable);
     }
 }

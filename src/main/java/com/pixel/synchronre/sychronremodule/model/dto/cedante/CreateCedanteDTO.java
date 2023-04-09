@@ -9,7 +9,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class CreateCedenteDTO
+public class CreateCedanteDTO
 {
     @NotBlank(message = "Veuillez saisir le nom de la cedente")
     @NotNull(message = "Veuillez saisir le nom de la cedente")

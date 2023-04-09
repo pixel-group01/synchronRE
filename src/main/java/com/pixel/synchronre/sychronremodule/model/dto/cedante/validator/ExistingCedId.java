@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.dto.cedente.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.cedante.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import jakarta.validation.ConstraintValidator;

@@ -3,7 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.cedante;
 import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class ReadCedenteDTO
+public class ReadCedanteDTO
 {
     private Long cedId;
     private String cedNomFiliale;

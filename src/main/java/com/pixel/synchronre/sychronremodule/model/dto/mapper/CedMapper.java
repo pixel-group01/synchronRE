@@ -3,8 +3,8 @@ package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedenteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedenteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import jakarta.persistence.EntityManager;
@@ -22,7 +22,7 @@ public abstract class CedMapper
     @PersistenceContext private EntityManager entityManager;
 
     @Mapping(target = "cedStatut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
-    public abstract Cedante mapToCedente(CreateCedenteDTO dto);
+    public abstract Cedante mapToCedente(CreateCedanteDTO dto);
 
     public Cedante mapToCedente(UpdateCedanteDTO dto)
     {
@@ -33,5 +33,5 @@ public abstract class CedMapper
     }
 
     @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaType().name())")
-    public abstract ReadCedenteDTO mapToReadCedenteDTO(Cedante ced);
+    public abstract ReadCedanteDTO mapToReadCedenteDTO(Cedante ced);
 }
