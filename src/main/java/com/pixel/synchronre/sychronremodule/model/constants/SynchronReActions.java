@@ -18,4 +18,6 @@ public class SynchronReActions
     public static final String UPDATE_PARAM_CESSION_LEGALE = "Modification d'un paramètre de cession légale";
     public static final String CREATE_PAYS = "Création d'un pays";
     public static final String UPDATE_PAYS = "Modification d'un pays";
+    public static final String CREATE_FAC = "Création d'une affaire facultative";
+    public static final String UPDATE_FAC = "Modification d'une affaire facultative";
 }

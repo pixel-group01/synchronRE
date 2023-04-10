@@ -14,13 +14,10 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public abstract class BrancheMapper {
+public interface BrancheMapper
+{
+    @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    Branche mapBrancheToBrancheReq(CreateBrancheReq dto);
 
-    @Autowired
-    protected StatutRepository staRepo;
-
-    @Mapping(target = "statut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
-    public abstract Branche mapBrancheToBrancheReq(CreateBrancheReq dto);
-
-    public abstract BrancheDetailsResp mapBrancheDetailsRespToBranche(Branche bran);
+    BrancheDetailsResp mapBrancheDetailsRespToBranche(Branche bran);
 }

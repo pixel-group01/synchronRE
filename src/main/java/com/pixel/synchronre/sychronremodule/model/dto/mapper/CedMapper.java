@@ -17,11 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Mapper(componentModel = "spring")
 public abstract class CedMapper
 {
-    protected StatutRepository staRepo;
     @Autowired protected CedRepo cedRepo;
     @PersistenceContext private EntityManager entityManager;
 
-    @Mapping(target = "cedStatut", expression = "java(staRepo.findByStaCode(\"ACT\"))")
+    @Mapping(target = "cedStatut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     public abstract Cedante mapToCedente(CreateCedanteDTO dto);
 
     public Cedante mapToCedente(UpdateCedanteDTO dto)

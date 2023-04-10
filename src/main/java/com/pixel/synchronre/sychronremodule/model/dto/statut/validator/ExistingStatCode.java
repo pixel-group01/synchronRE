@@ -14,24 +14,24 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingStatId.ExistingCesIdValidator.class})
+@Constraint(validatedBy = {ExistingStatCode.ExistingStatCodeValidator.class})
 @Documented
-public @interface ExistingStatId
+public @interface ExistingStatCode
 {
-    String message() default "Identitifiant du statut introuvable";
+    String message() default "Code de statut introuvable";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingStatId, Long>
+    class ExistingStatCodeValidator implements ConstraintValidator<ExistingStatCode, String>
     {
         private final StatutRepository statRepo;
         @Override
-        public boolean isValid(Long staId, ConstraintValidatorContext context)
+        public boolean isValid(String staCode, ConstraintValidatorContext context)
         {
-            if (staId == null) return true;
-            return statRepo.existsById(staId);
+            if (staCode == null) return true;
+            return statRepo.existsById(staCode);
         }
     }
 }

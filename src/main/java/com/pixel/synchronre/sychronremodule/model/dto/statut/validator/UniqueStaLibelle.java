@@ -49,7 +49,7 @@ public @interface UniqueStaLibelle
         public boolean isValid(UpdateStatutReq staReq, ConstraintValidatorContext context)
         {
             if( Arrays.stream(TypeStatut.values()).filter(Objects::nonNull).noneMatch(type->type.name().equals(staReq.getStaType()))) return true;
-            return !staRepo.alreadyExistsByLibelleAndType(staReq.getStaLibelle(), TypeStatut.valueOf(staReq.getStaType()), staReq.getStaId());
+            return !staRepo.alreadyExistsByLibelleAndType(staReq.getStaLibelle(), TypeStatut.valueOf(staReq.getStaType()), staReq.getStaCode());
         }
     }
 }

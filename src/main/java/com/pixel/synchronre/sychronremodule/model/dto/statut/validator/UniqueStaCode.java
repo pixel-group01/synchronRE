@@ -41,7 +41,7 @@ public @interface UniqueStaCode
         private final StatutRepository statRepo;
         @Override
         public boolean isValid(UpdateStatutReq dto, ConstraintValidatorContext context) {
-            return !statRepo.alreadyExistsByCode(dto.getStaCode(), dto.getStaId());
+            return !statRepo.alreadyExistsByCode(dto.getStaCode());
         }
     }
 }

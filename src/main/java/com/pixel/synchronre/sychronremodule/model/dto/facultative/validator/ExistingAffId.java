@@ -1,7 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.dto.facultative.validator;
 
-import com.pixel.synchronre.sychronremodule.model.dao.FacultativeRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,9 +14,9 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingfacId.ExistingCesIdValidator.class})
+@Constraint(validatedBy = {ExistingAffId.ExistingAffIdDateValidator.class})
 @Documented
-public @interface ExistingfacId
+public @interface ExistingAffId
 {
     String message() default "Affaire introuvable";
     Class<?>[] groups() default {};
@@ -23,14 +24,14 @@ public @interface ExistingfacId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingfacId, Long>
+    class ExistingAffIdDateValidator implements ConstraintValidator<ExistingAffId, Long>
     {
-        private final FacultativeRepository facRepo;
+        private final AffaireRepository affRepo;
         @Override
-        public boolean isValid(Long facId, ConstraintValidatorContext context)
+        public boolean isValid(Long affId, ConstraintValidatorContext context)
         {
-            if (facId == null) return true;
-            return facRepo.existsById(facId);
+            if (affId == null) return true;
+            return affRepo.existsById(affId);
         }
     }
 }

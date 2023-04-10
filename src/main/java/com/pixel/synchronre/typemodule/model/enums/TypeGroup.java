@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter @AllArgsConstructor
 public enum TypeGroup
 {
-    STRUCTURE("TYP_STR", "TYPE-STRUCTURE"),
+    TYPE_REP("TYP_REP", "TYPE-REPARTITION"),
     AGENT("TYP_AGT", "TYPE-AGENT"),
     DEMANDE("TYP_DMD", "TYPE-DEMANDE"),
     MOUVEMENT("TYP_MVT", "TYPE-MOUVEMENT"),

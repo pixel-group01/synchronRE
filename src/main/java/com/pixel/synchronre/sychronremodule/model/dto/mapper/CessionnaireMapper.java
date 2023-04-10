@@ -13,14 +13,11 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public abstract class CessionnaireMapper
+public interface CessionnaireMapper
 {
-    @Autowired protected StatutRepository staRepo;
-
-    @Mapping(target = "statut", expression = "java( staRepo.findByStaCode(\"ACT\"))")
-    public abstract Cessionnaire mapToCessionnaire(CreateCessionnaireReq dto);
-
-    public abstract CessionnaireDetailsResp mapToCessionnaireDetailsResp(Cessionnaire ces);
+    @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    Cessionnaire mapToCessionnaire(CreateCessionnaireReq dto);
+    CessionnaireDetailsResp mapToCessionnaireDetailsResp(Cessionnaire ces);
 }
 
 

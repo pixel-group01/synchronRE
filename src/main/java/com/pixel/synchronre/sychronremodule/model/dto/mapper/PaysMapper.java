@@ -11,15 +11,10 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public abstract class PaysMapper {
-
-    @Autowired StatutRepository staRepo;
-
-    @Mapping(target = "statut", expression = "java( staRepo.findByStaCode(\"ACT\"))")
-    public abstract Pays mapToPaysReq(CreatePaysReq dto);
-
-    public abstract PaysDetailsResp mapToPaysDetails(Pays pa);
-
-
-    public abstract Pays mapToUpdatePaysReq(UpdatePaysReq dto);
+public interface PaysMapper
+{
+    @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    Pays mapToPaysReq(CreatePaysReq dto);
+    PaysDetailsResp mapToPaysDetails(Pays pa);
+    Pays mapToUpdatePaysReq(UpdatePaysReq dto);
 }

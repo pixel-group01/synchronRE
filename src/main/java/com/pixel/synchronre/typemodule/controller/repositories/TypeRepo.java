@@ -97,6 +97,7 @@ public interface TypeRepo extends JpaRepository<Type, Long>
     boolean typeGroupHasChild(TypeGroup typeGroup, String uniqueCode);
 
     Type findByUniqueCode(String uniqueCode);
+
     @Query("select t.typeId from Type t where t.uniqueCode = ?1")
     Long findTypeIdByUniqueCode(String uniqueCode);
 }

@@ -13,7 +13,6 @@ public class FacultativeDetailsResp
     private String affActivite;
     private LocalDate affDateEffet;
     private LocalDate affDateEcheance;
-    private int affEtat;
     private String facNumeroPolice;
     private Long facCapitaux;
     private Long facSmpLci;

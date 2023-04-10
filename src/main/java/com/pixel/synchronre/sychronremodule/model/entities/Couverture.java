@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @Entity
 public class Couverture {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "COU_ID_GEN", sequenceName = "COU_ID_GEN")
   private Long couId;
   private String couLibelle;
   private String couLibelleAbrege;
@@ -27,4 +28,7 @@ public class Couverture {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
+    public Couverture(Long couvertureId) {
+      this.couId = couvertureId;
+    }
 }

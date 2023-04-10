@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
@@ -49,6 +50,6 @@ public class CedanteService implements ICedanteService
 
     @Override
     public Page<ReadCedanteDTO> searchCedente(String key, Pageable pageable) {
-        return cedRepo.searchCedentes(key, pageable);
+        return cedRepo.searchCedentes(StringUtils.stripAccentsToUpperCase(key), pageable);
     }
 }

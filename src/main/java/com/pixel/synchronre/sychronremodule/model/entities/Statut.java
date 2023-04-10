@@ -18,9 +18,6 @@ import java.time.LocalDateTime;
 @Entity
 public class Statut {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long staId;
-  @Column(unique = true)
   private String staCode;
   private String staLibelle;
   private String staLibelleLong;
@@ -30,4 +27,8 @@ public class Statut {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+    public Statut(String staCode) {
+      this.staCode = staCode;
+    }
 }

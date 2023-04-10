@@ -16,11 +16,14 @@ import java.time.LocalDateTime;
 @Entity
 public class Mouvement {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "MVT_ID_GEN", sequenceName = "MVT_ID_GEN")
   private Long mvtId;
   @ManyToOne @JoinColumn(name = "mvt_sta_code")
   private Statut statut;
   private String mvtObservation;
+  @ManyToOne @JoinColumn(name = "AFF_ID")
+  private Affaire affaire;
   @CreationTimestamp
   private LocalDateTime mvtDate;
 }

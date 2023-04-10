@@ -44,7 +44,7 @@ public class StatutServiceImpl implements StatutIservice {
 
     @Override @Transactional
     public StatutDetailsResp updateStatut(UpdateStatutReq dto) throws UnknownHostException {
-        Statut statut = statRepo.findById(dto.getStaId()).orElseThrow(()->new AppException("Statut introuvable"));
+        Statut statut = statRepo.findById(dto.getStaCode()).orElseThrow(()->new AppException("Statut introuvable"));
         Statut oldStat = staCopier.copy(statut);
         statut.setStaCode(dto.getStaCode());
         statut.setStaLibelle(dto.getStaLibelle());

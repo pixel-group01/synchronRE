@@ -34,6 +34,12 @@ public class TypeResource
         return typeRepo.findAllTypes();
     }
 
+    /*@GetMapping(path = "/find-by-unique-code/{uniqueCode}") //@PreAuthorize("hasAuthority('DEV')")
+    public ReadTypeDTO getTypeByUniqueCode(@PathVariable String uniqueCode)
+    {
+        return typeRepo.findByUniqueCode(uniqueCode);
+    }*/
+
     //@PreAuthorize("isAuthenticated()")
     @GetMapping(path = "/{group-code}")
     public List<ReadTypeDTO> getByGroupCode(@PathVariable String groupCode)
@@ -106,7 +112,7 @@ public class TypeResource
         typeService.removeSousType(dto);
     }
 
-    @GetMapping(path = "/set-sub-type")
+    @GetMapping(path = "/list")
     public Page<Type> searchTypes(@RequestParam(defaultValue = "") String key, String typeGroup, @RequestParam(defaultValue = "0") int num, @RequestParam(defaultValue = "2") int size) throws UnknownHostException {
         return typeService.searchPageOfTypes(key, typeGroup, num, size);
     }

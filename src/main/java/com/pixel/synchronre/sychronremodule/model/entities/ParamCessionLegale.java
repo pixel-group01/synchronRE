@@ -13,7 +13,7 @@ public class ParamCessionLegale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paramCesLegId;
     private String paramCesLegLibelle;
-    private Long paramCesLegCapital;
+    private float paramCesLegCapital;
     private float paramCesLegTaux;
     @ManyToOne @JoinColumn(name = "paysId")
     private Pays pays;
