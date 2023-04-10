@@ -11,7 +11,7 @@ public class ParamCessionLegaleListResp
     private String paramCesLegLibelle;
     private Long paramCesLegCapital;
     private float paramCesLegTaux;
-    private String paysLibelle;
+    private String paysNom;
     private String cedNomFiliale;
     private String staLibelle;
 }

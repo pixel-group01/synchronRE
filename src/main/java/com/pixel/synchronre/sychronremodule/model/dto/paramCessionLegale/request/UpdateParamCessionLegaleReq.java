@@ -18,9 +18,8 @@ public class UpdateParamCessionLegaleReq
     private Long paramCesLegCapital;
     @NotNull(message = "Veuillez saisir le taux de la cession légale")
     private float paramCesLegTaux;
-    @NotBlank(message = "Veuillez saisir le pays")
     @NotNull(message = "Veuillez saisir le pays")
-    private String paysCode;
+    private Long paysId;
     @NotNull(message = "Veuillez  choisir la cédante")
     private Long cedId;
 }

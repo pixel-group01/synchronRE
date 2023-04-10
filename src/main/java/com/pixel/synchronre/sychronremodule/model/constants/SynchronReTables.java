@@ -7,5 +7,6 @@ public class SynchronReTables {
     public static final String COUVERTURE = "Couverture";
     public static final String STATUT = "Statut";
     public static final String CEDENTE = "Cedente";
-    public static final  String PARAM_CESSION_LEGALE = "ParamCessionLegale";
+    public static final String PARAM_CESSION_LEGALE = "ParamCessionLegale";
+    public static final String PAYS = "Pays";
 }
