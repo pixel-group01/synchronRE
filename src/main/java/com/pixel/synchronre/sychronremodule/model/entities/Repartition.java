@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
 
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,22 +12,26 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "typRep")
-public abstract class Repartition {
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
+public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long repId;
-    protected String repInterlocuteur;
-    protected boolean repStatut;
+    private Long repId;
+    private float repCapital;
+    private float repTaux;
+    private float repSousCommission;
+    private String repInterlocuteur;
+    private boolean repStatut;
+    @ManyToOne @JoinColumn(name = "aff_id")
+    private Affaire affaire;
     @ManyToOne @JoinColumn(name = "cessionnaire_id")
-    protected Cessionnaire cessionnaire;
-    @ManyToOne @JoinColumn(name = "libelle_id")
-    protected Libelle libelle;
+    private Cessionnaire cessionnaire;
+    @ManyToOne @JoinColumn(name = "param_ces_legal_id")
+    private Type type;
+    @ManyToOne @JoinColumn(name = "typ_id")
+    private ParamCessionLegale paramCessionLegale;
     @CreationTimestamp
-    protected LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    protected LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }
