@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.facultative.validator;
 
-import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;

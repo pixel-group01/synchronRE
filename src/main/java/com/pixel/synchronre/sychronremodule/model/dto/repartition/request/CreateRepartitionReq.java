@@ -18,21 +18,21 @@ public class CreateRepartitionReq
 
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
-    private float repCapital;
+    private Float repCapital;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
-    private float repTaux;
+    private Float repTaux;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     @Max(value = 100)
     @SeuilRepTauBesoinFac
-    private float repTauxBesoinFac;
+    private Float repTauxBesoinFac;
 
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
-    private float repSousCommission; //TODO A Valider
+    private Float repSousCommission; //TODO A Valider
 
     @NotBlank(message = "Veuillez saisir le nom de l'interlocuteur")
     @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")

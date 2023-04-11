@@ -14,11 +14,11 @@ public class Facultative extends Affaire
 {
   private String facNumeroPolice;
   //private float facCapitaux;
-  private float facSmpLci;
-  private float facPrime;
+  private Float facSmpLci;
+  private Float facPrime;
 
 
-  public Facultative(Affaire aff, String facNumeroPolice, float facSmpLci, float facPrime)
+  public Facultative(Affaire aff, String facNumeroPolice, Float facSmpLci, Float facPrime)
   {
     this.setFacNumeroPolice(facNumeroPolice);
     //this.setFacCapitaux(facCapitaux);

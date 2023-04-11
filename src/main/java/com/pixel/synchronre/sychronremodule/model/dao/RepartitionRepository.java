@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
     @Query("select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
-    float getRepartitionsByAffId(Long affId);
+    Float getRepartitionsByAffId(Long affId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(

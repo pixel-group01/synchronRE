@@ -17,9 +17,9 @@ public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repId;
-    private float repCapital;
-    private float repTaux;
-    private float repSousCommission;
+    private Float repCapital;
+    private Float repTaux;
+    private Float repSousCommission;
     private String repInterlocuteur;
     private boolean repStatut;
     @ManyToOne @JoinColumn(name = "aff_id")

@@ -18,14 +18,14 @@ import lombok.*;
 public class UpdateRepartitionReq
 {
     private Long repId;
-    private float repCapital;
-    private float repTaux;
+    private Float repCapital;
+    private Float repTaux;
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     @Max(value = 100)
     @SeuilRepTauBesoinFac
-    private float repTauxBesoinFac;
-    private float repSousCommission;
+    private Float repTauxBesoinFac;
+    private Float repSousCommission;
     private String repInterlocuteur;
     @ExistingAffId
     @NotNull(message = "Veuillez choisir le type de la répartition")

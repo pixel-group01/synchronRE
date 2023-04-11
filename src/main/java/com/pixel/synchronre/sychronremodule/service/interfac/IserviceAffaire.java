@@ -1,10 +1,10 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
 public interface IserviceAffaire {
-    float calculateRestARepartir(Long affId);
+    Float calculateRestARepartir(Long affId);
 
-    float calculateDejaRepartir(Long affId);
+    Float calculateDejaRepartir(Long affId);
 
-    float calculateTauxDejaRepartir(Long affId);
-    float calculateRestTauxARepartir(Long affId);
+    Float calculateTauxDejaRepartir(Long affId);
+    Float calculateRestTauxARepartir(Long affId);
 }

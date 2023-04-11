@@ -16,10 +16,10 @@ public class FacultativeDetailsResp
     private String facNumeroPolice;
     private Long facCapitaux;
     private Long facSmpLci;
-    private float facPrime;
+    private Float facPrime;
     private Long cedenteId;
     private String statutCode;
     protected Long couvertureId;
-    private float restARepartir;
-    private float capitalDejaReparti;
+    private Float restARepartir;
+    private Float capitalDejaReparti;
 }

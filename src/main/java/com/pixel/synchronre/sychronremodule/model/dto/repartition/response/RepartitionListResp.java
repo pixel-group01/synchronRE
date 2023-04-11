@@ -5,9 +5,9 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class RepartitionListResp {
     private Long repId;
-    private float repCapital;
-    private float repTaux;
-    private float repSousCommission;
+    private Float repCapital;
+    private Float repTaux;
+    private Float repSousCommission;
     private String repInterlocuteur;
     private boolean repStatut;
     private Long affId;

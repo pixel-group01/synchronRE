@@ -3,12 +3,20 @@ package com.pixel.synchronre.sychronremodule.model.dto.couverture.validator;
 
 
 import com.pixel.synchronre.sychronremodule.model.dao.CouvertureRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanCode;
+import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.lang.annotation.*;
+
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {ExistingCouId.ExistingCouIddValidator.class})
+@Documented
 public @interface ExistingCouId
 {
     String message() default "Identitifiant de la couverture est introuvable";
@@ -17,7 +25,7 @@ public @interface ExistingCouId
 
     @Component
     @RequiredArgsConstructor
-    class ExistingCesIdValidator implements ConstraintValidator<ExistingCouId, Long>
+    class ExistingCouIddValidator implements ConstraintValidator<ExistingCouId, Long>
     {
         private final CouvertureRepository couvRepo;
         @Override

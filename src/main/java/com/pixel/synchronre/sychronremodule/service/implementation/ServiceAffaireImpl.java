@@ -12,24 +12,33 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final AffaireRepository affRepo;
     private final RepartitionRepository repRepo;
     @Override
-    public float calculateRestARepartir(Long affId)
+    public Float calculateRestARepartir(Long affId)
     {
-        return repRepo.getRepartitionsByAffId(affId) - affRepo.getCapitalInitial(affId);
+        Float resp = repRepo.getRepartitionsByAffId(affId);
+        resp = resp == null ? 0 : resp;
+        return resp  - affRepo.getCapitalInitial(affId);
     }
 
     @Override
-    public float calculateDejaRepartir(Long affId) {
-        return repRepo.getRepartitionsByAffId(affId);
-    }
-
-    @Override
-    public float calculateTauxDejaRepartir(Long affId)
+    public Float calculateDejaRepartir(Long affId)
     {
-        return (this.calculateDejaRepartir(affId)/affRepo.getCapitalInitial(affId))*100;
+        Float resp = repRepo.getRepartitionsByAffId(affId);
+        resp = resp == null ? 0 : resp;
+        return resp;
     }
 
     @Override
-    public float calculateRestTauxARepartir(Long affId) {
-        return 100 - this.calculateTauxDejaRepartir(affId);
+    public Float calculateTauxDejaRepartir(Long affId)
+    {
+        Float resp = this.calculateDejaRepartir(affId);
+        resp = resp == null ? 0 : resp;
+        return (resp/affRepo.getCapitalInitial(affId))*100;
+    }
+
+    @Override
+    public Float calculateRestTauxARepartir(Long affId) {
+        Float resp = this.calculateTauxDejaRepartir(affId);
+        resp = resp == null ? 0 : resp;
+        return 100 - resp;
     }
 }

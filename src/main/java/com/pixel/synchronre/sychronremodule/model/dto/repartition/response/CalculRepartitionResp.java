@@ -5,8 +5,8 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class CalculRepartitionResp
 {
-    private float capital;
-    private float taux;
-    private float tauxBesoinFac;
-    private float besoinFacRestant;
+    private Float capital;
+    private Float taux;
+    private Float tauxBesoinFac;
+    private Float besoinFacRestant;
 }

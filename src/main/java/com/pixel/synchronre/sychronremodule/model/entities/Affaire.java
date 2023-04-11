@@ -23,7 +23,7 @@ public class Affaire {
     protected String affActivite;
     protected LocalDate affDateEffet;
     protected LocalDate affDateEcheance;
-    private float affCapitalInitial; //Capital à 100
+    private Float affCapitalInitial; //Capital à 100
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;
     @ManyToOne @JoinColumn(name = "statut_code")

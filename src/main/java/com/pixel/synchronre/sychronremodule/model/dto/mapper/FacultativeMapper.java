@@ -10,13 +10,14 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.security.cert.X509Certificate;
 
 @Mapper(componentModel = "spring")
 public abstract class FacultativeMapper
 {
-    protected IserviceAffaire affService;
+    @Autowired protected IserviceAffaire affService;
     public Facultative mapToFacultative(CreateFacultativeReq dto)
     {
         Affaire affaire = new Affaire();
