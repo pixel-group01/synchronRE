@@ -41,7 +41,7 @@ public class CreateFacultativeReq
 
     @NotNull(message = "Veuillez saisir le capital de l'affaire")
     @PositiveOrZero(message = "Le capital de l'affaire doit être un nombre positif")
-    private Float facCapitaux;
+    private Float affCapitalInitial;
 
     @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")

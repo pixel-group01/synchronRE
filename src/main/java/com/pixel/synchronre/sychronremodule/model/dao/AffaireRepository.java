@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
-    @Query("select a.affCapitalInitial from Affaire a where a.affId = ?1")
+    @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     float getCapitalInitial(Long affId);
 }

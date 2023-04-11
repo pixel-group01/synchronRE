@@ -71,47 +71,50 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByCapital(Long affId, float capital)
+    public CalculRepartitionResp calculateRepByCapital(Long affId, Float capital)
     {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        float restARepartir = affService.calculateRestARepartir(affId);
+        Float restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? 0 : restARepartir;
         if(aff == null) return null;
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(100 * capital/aff.getAffCapitalInitial());
         resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(restARepartir - capital);
+        resp.setBesoinFacRestant(capital - restARepartir);
         return resp;
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByTaux(Long affId, float taux)
+    public CalculRepartitionResp calculateRepByTaux(Long affId, Float taux)
     {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        float restARepartir = affService.calculateRestARepartir(affId);
+        Float restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? 0 : restARepartir;
         if(aff == null) return null;
-        float capital = taux * aff.getAffCapitalInitial();
+        Float capital = taux * aff.getAffCapitalInitial();
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
         resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(restARepartir - capital);
+        resp.setBesoinFacRestant(capital - restARepartir);
         return resp;
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, float tauxBesoin) {
+    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, Float tauxBesoin) {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        float restARepartir = affService.calculateRestARepartir(affId);
+        Float restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? 0 : restARepartir;
 
-        float capital = tauxBesoin * restARepartir;
+        Float capital = tauxBesoin * restARepartir;
 
         if(aff == null) return null;
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(100 * capital/aff.getAffCapitalInitial());
         resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(restARepartir - capital);
+        resp.setBesoinFacRestant(capital - restARepartir);
         return resp;
     }
 }

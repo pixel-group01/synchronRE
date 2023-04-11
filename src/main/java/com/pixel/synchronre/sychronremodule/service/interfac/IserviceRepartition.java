@@ -19,8 +19,8 @@ public interface IserviceRepartition {
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
 
-    CalculRepartitionResp calculateRepByCapital(Long affId, float capital);
-    CalculRepartitionResp calculateRepByTaux(Long affId, float taux);
-    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, float tauxBesoin);
+    CalculRepartitionResp calculateRepByCapital(Long affId, Float capital);
+    CalculRepartitionResp calculateRepByTaux(Long affId, Float taux);
+    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, Float tauxBesoin);
 
 }

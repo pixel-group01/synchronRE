@@ -14,7 +14,7 @@ public class FacultativeDetailsResp
     private LocalDate affDateEffet;
     private LocalDate affDateEcheance;
     private String facNumeroPolice;
-    private Long facCapitaux;
+    private Float affCapitalInitial;
     private Long facSmpLci;
     private Float facPrime;
     private Long cedenteId;

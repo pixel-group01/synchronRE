@@ -30,8 +30,8 @@ public abstract class FacultativeMapper
     @Mapping(target = "cedenteId", expression = "java(fac.getCedante() == null ? null : fac.getCedante().getCedId())")
     @Mapping(target = "statutCode", expression = "java(fac.getStatut() == null ? null : fac.getStatut().getStaCode())")
     @Mapping(target = "couvertureId", expression = "java(fac.getCouverture() == null ? null : fac.getCouverture().getCouId())")
-    @Mapping(target = "restARepartir", expression = "java(affService.calculateDejaRepartir(fac.getAffId()))")
-    @Mapping(target = "capitalDejaReparti", expression = "java(affService.calculateRestARepartir(fac.getAffId()))")
+    @Mapping(target = "restARepartir", expression = "java(affService.calculateRestARepartir(fac.getAffId()))")
+    @Mapping(target = "capitalDejaReparti", expression = "java(affService.calculateDejaRepartir(fac.getAffId()))")
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Facultative fac);
 
     /*

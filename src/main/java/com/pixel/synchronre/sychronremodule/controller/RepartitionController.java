@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
@@ -9,12 +10,14 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/repartitions")
+@Validated
 public class RepartitionController
 {
     private final IserviceRepartition repService;
@@ -38,14 +41,20 @@ public class RepartitionController
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")
-    public CalculRepartitionResp calculRepartitionRespByTaux(Long affId, float taux)
+    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable float taux)
     {
         return repService.calculateRepByTaux(affId, taux);
     }
 
     @GetMapping(path = "/calculate/by-taux-besoin/{affId}/{tauxBesoin}")
-    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(Long affId, float tauxBesoin)
+    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable float tauxBesoin)
     {
         return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin);
+    }
+
+    @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
+    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable float capital)
+    {
+        return repService.calculateRepByCapital(affId, capital);
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
-    @Query("select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
+    @Query("select coalesce(sum(r.repCapital), 0) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     Float getRepartitionsByAffId(Long affId);
 
     @Query("""
