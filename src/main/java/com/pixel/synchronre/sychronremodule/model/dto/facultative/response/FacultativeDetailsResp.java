@@ -20,4 +20,6 @@ public class FacultativeDetailsResp
     private Long cedenteId;
     private String statutCode;
     protected Long couvertureId;
+    private float restARepartir;
+    private float capitalDejaReparti;
 }

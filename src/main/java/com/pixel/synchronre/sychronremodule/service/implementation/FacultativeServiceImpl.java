@@ -7,7 +7,9 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.FacultativeRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -29,11 +31,13 @@ import java.net.UnknownHostException;
 @RequiredArgsConstructor
 public class FacultativeServiceImpl implements IserviceFacultative {
     private final FacultativeRepository facRepo;
+    private final AffaireRepository affRepo;
     private final FacultativeMapper facultativeMapper;
     private final ObjectCopier<Facultative> facCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
     private final StatutRepository staRepo;
+    private final RepartitionRepository repRepo;
 
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException {
@@ -51,7 +55,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
         Facultative fac = facRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         Facultative oldFac = facCopier.copy(fac);
-        fac.setFacCapitaux(dto.getFacCapitaux());
+        //fac.setFacCapitaux(dto.getFacCapitaux());
         fac.setFacPrime(dto.getFacPrime());
         fac.setFacSmpLci(dto.getFacSmpLci());
         fac.setAffActivite(dto.getAffActivite());
@@ -67,4 +71,6 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     public Page<FacultativeListResp> searchFacultative(String key, Pageable pageable) {
         return null;
     }
+
+
 }

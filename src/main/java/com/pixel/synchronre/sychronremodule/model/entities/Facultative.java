@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 public class Facultative extends Affaire
 {
   private String facNumeroPolice;
-  private float facCapitaux;
+  //private float facCapitaux;
   private float facSmpLci;
   private float facPrime;
 
 
-  public Facultative(Affaire aff, String facNumeroPolice, float facCapitaux, float facSmpLci, float facPrime)
+  public Facultative(Affaire aff, String facNumeroPolice, float facSmpLci, float facPrime)
   {
     this.setFacNumeroPolice(facNumeroPolice);
-    this.setFacCapitaux(facCapitaux);
+    //this.setFacCapitaux(facCapitaux);
     this.setFacSmpLci(facSmpLci);
     this.setFacPrime(facPrime);
     BeanUtils.copyProperties(aff, this);

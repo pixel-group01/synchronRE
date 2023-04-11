@@ -26,9 +26,9 @@ public class Repartition {
     private Affaire affaire;
     @ManyToOne @JoinColumn(name = "cessionnaire_id")
     private Cessionnaire cessionnaire;
-    @ManyToOne @JoinColumn(name = "param_ces_legal_id")
-    private Type type;
     @ManyToOne @JoinColumn(name = "typ_id")
+    private Type type;
+    @ManyToOne @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
     @CreationTimestamp
     private LocalDateTime createdAt;

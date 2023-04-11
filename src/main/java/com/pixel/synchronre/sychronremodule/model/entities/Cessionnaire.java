@@ -28,4 +28,9 @@ public class Cessionnaire {
   private LocalDateTime updatedAt;
   @ManyToOne @JoinColumn(name = "cesStatut")
   private Statut statut;
+
+    public Cessionnaire(Long cesId)
+    {
+      this.cesId = cesId;
+    }
 }

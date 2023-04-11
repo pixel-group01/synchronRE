@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueDeta
 import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,9 @@ public interface IserviceRepartition {
     RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException;
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
+
+    CalculRepartitionResp calculateRepByCapital(Long affId, float capital);
+    CalculRepartitionResp calculateRepByTaux(Long affId, float taux);
+    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, float tauxBesoin);
+
 }

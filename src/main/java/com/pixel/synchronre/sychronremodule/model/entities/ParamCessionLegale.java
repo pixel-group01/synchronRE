@@ -25,4 +25,9 @@ public class ParamCessionLegale {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public ParamCessionLegale(Long paramCesLegalId)
+    {
+        this.paramCesLegId = paramCesLegalId;
+    }
 }
