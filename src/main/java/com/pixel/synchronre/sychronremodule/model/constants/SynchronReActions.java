@@ -21,4 +21,5 @@ public class SynchronReActions
     public static final String CREATE_FAC = "Création d'une affaire facultative";
     public static final String UPDATE_FAC = "Modification d'une affaire facultative";
     public static final String CREATE_PAIEMENT = "Création d'une paiement";
+    public static final String UPDATE_PAIEMENT = "Modification d'un paiement";
 }

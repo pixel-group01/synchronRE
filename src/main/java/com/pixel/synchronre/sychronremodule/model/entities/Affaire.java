@@ -40,4 +40,12 @@ public class Affaire {
     public Affaire(Long affId) {
         this.affId = affId;
     }
+
+    public Affaire(String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance) {
+        this.affCode = affCode;
+        this.affAssure = affAssure;
+        this.affActivite = affActivite;
+        this.affDateEffet = affDateEffet;
+        this.affDateEcheance = affDateEcheance;
+    }
 }

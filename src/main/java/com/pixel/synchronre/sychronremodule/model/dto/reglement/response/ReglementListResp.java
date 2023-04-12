@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.reglement.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -10,8 +11,8 @@ public class ReglementListResp {
     private String regCode;
     private String regReference;
     private LocalDate regDate;
-    private float regMontant;
-    private float regCommission;
+    private BigDecimal regMontant;
+    private BigDecimal regCommission;
     private String typeReglement;
     private String affCode;
     private String affAssure;

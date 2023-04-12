@@ -36,4 +36,5 @@ public class Reglement {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
 }
