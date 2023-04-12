@@ -76,54 +76,70 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override
     public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital)
     {
+        if(capital.compareTo(zero)<0) throw new AppException("Le capital doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
-        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? zero : restARepartir;
         if(aff == null) return null;
+        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        if(capital.compareTo(restARepartir)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
+        restARepartir = restARepartir == null ? zero : restARepartir;
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
+        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
+
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(capital.multiply(cent).divide(aff.getAffCapitalInitial()));
         resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
-        resp.setBesoinFacRestant(capital.subtract(restARepartir));
+        resp.setBesoinFac(restARepartir);
+        resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
     }
 
     @Override
     public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux)
     {
+        if(taux.compareTo(zero)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         
         if(aff == null) return null;
         BigDecimal restARepartir = affService.calculateRestARepartir(affId);
         restARepartir = restARepartir == null ? zero : restARepartir;
+
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
-        if(restARepartir.equals(zero) || capitalInit.equals(zero)) return new CalculRepartitionResp(zero, zero,zero,zero);
+        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
         
         BigDecimal capital = capitalInit.multiply(taux.divide(cent));
+        if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + cent.multiply(restARepartir).divide(capitalInit) + "%");
+
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
         resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
-        resp.setBesoinFacRestant(capital.subtract(restARepartir));
+        resp.setBesoinFac(restARepartir);
+        resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
     }
 
+
     @Override
-    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin) {
+    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin)
+    {
+        if(tauxBesoin.compareTo(zero)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
+        if(tauxBesoin.compareTo(cent)>0) throw new AppException("Le taux de repartition ne doit pas exéder 100% du besoin fac");
 
         if(aff == null) return null;
         BigDecimal restARepartir = affService.calculateRestARepartir(affId);
         restARepartir = restARepartir == null ? zero : restARepartir;
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
-        if(restARepartir.equals(zero) || capitalInit.equals(zero)) return new CalculRepartitionResp(zero, zero,zero,zero);
+        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
 
         BigDecimal capital = tauxBesoin.divide(cent).multiply(restARepartir);
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(capital.multiply(cent).divide(capitalInit));
-        resp.setTauxBesoinFac(capital.divide(restARepartir));
-        resp.setBesoinFacRestant(capital.subtract(restARepartir));
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setBesoinFac(restARepartir);
+        resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
     }
 }
