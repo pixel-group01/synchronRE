@@ -94,6 +94,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return resp;
     }
 
+
     @Override
     public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux)
     {
