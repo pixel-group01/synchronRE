@@ -28,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
 @Service
@@ -40,6 +41,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
     private final ILogService logService;
+    private BigDecimal zero = new BigDecimal(0);
+    private BigDecimal cent = new BigDecimal(100);
 
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
@@ -71,50 +74,56 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByCapital(Long affId, Float capital)
+    public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital)
     {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        Float restARepartir = affService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? 0 : restARepartir;
+        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? zero : restARepartir;
         if(aff == null) return null;
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(100 * capital/aff.getAffCapitalInitial());
-        resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(capital - restARepartir);
+        resp.setTaux(capital.multiply(cent).divide(aff.getAffCapitalInitial()));
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setBesoinFacRestant(capital.subtract(restARepartir));
         return resp;
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByTaux(Long affId, Float taux)
+    public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux)
     {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        Float restARepartir = affService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? 0 : restARepartir;
+        
         if(aff == null) return null;
-        Float capital = taux * aff.getAffCapitalInitial();
+        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? zero : restARepartir;
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
+        if(restARepartir.equals(zero) || capitalInit.equals(zero)) return new CalculRepartitionResp(zero, zero,zero,zero);
+        
+        BigDecimal capital = capitalInit.multiply(taux.divide(cent));
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
-        resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(capital - restARepartir);
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setBesoinFacRestant(capital.subtract(restARepartir));
         return resp;
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, Float tauxBesoin) {
+    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin) {
         Affaire aff = affRepo.findById(affId).orElse(null);
-        Float restARepartir = affService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? 0 : restARepartir;
-
-        Float capital = tauxBesoin * restARepartir;
 
         if(aff == null) return null;
+        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        restARepartir = restARepartir == null ? zero : restARepartir;
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
+        if(restARepartir.equals(zero) || capitalInit.equals(zero)) return new CalculRepartitionResp(zero, zero,zero,zero);
+
+        BigDecimal capital = tauxBesoin.divide(cent).multiply(restARepartir);
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(100 * capital/aff.getAffCapitalInitial());
-        resp.setTauxBesoinFac(100 * capital / restARepartir);
-        resp.setBesoinFacRestant(capital - restARepartir);
+        resp.setTaux(capital.multiply(cent).divide(capitalInit));
+        resp.setTauxBesoinFac(capital.divide(restARepartir));
+        resp.setBesoinFacRestant(capital.subtract(restARepartir));
         return resp;
     }
 }

@@ -1,10 +1,12 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import java.math.BigDecimal;
+
 public interface IserviceAffaire {
-    Float calculateRestARepartir(Long affId);
+    BigDecimal calculateRestARepartir(Long affId);
 
-    Float calculateDejaRepartir(Long affId);
+    BigDecimal calculateDejaRepartir(Long affId);
 
-    Float calculateTauxDejaRepartir(Long affId);
-    Float calculateRestTauxARepartir(Long affId);
+    BigDecimal calculateTauxDejaRepartir(Long affId);
+    BigDecimal calculateRestTauxARepartir(Long affId);
 }

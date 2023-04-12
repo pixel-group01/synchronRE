@@ -12,6 +12,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
 public interface IserviceRepartition {
@@ -19,8 +20,8 @@ public interface IserviceRepartition {
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
 
-    CalculRepartitionResp calculateRepByCapital(Long affId, Float capital);
-    CalculRepartitionResp calculateRepByTaux(Long affId, Float taux);
-    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, Float tauxBesoin);
+    CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital);
+    CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux);
+    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin);
 
 }

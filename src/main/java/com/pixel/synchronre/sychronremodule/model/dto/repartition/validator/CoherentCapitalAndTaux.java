@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.math.BigDecimal;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -32,7 +33,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return 100 * dto.getRepCapital() / affRepo.getCapitalInitial(dto.getAffId()) == dto.getRepTaux();
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
         }
     }
 
@@ -46,7 +47,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return 100 * dto.getRepCapital() / affRepo.getCapitalInitial(dto.getAffId()) == dto.getRepTaux();
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
         }
     }
 }

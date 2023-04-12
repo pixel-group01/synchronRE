@@ -33,10 +33,4 @@ public abstract class FacultativeMapper
     @Mapping(target = "restARepartir", expression = "java(affService.calculateRestARepartir(fac.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(affService.calculateDejaRepartir(fac.getAffId()))")
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Facultative fac);
-
-    /*
-    private Long cedenteId;
-    private String statutCode;
-    protected Long couvertureId;
-     */
 }

@@ -13,19 +13,21 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux
 public class UpdateRepartitionReq
 {
     private Long repId;
-    private Float repCapital;
-    private Float repTaux;
+    private BigDecimal repCapital;
+    private BigDecimal repTaux;
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     @Max(value = 100)
     @SeuilRepTauBesoinFac
-    private Float repTauxBesoinFac;
-    private Float repSousCommission;
+    private BigDecimal repTauxBesoinFac;
+    private BigDecimal repSousCommission;
     private String repInterlocuteur;
     @ExistingAffId
     @NotNull(message = "Veuillez choisir le type de la répartition")

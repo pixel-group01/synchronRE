@@ -11,6 +11,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -45,15 +46,15 @@ public class UpdateFacultativeReq
 
     @NotNull(message = "Veuillez saisir le capital de l'affaire")
     @PositiveOrZero(message = "Le capital de l'affaire doit être un nombre positif")
-    private Float facCapitaux;
+    private BigDecimal facCapitaux;
 
     @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
-    private Float facSmpLci;
+    private BigDecimal facSmpLci;
 
     @NotNull(message = "Veuillez saisir le montant de la prime")
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
-    private Float facPrime;
+    private BigDecimal facPrime;
     @ExistingCedId
     private Long cedenteId;
     @ExistingCouId

@@ -34,7 +34,7 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return affService.calculateRestARepartir(dto.getAffId()) >= dto.getRepCapital();
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) == 0 ;
         }
     }
 
@@ -48,7 +48,7 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return affService.calculateRestARepartir(dto.getAffId()) >= dto.getRepCapital();
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
         }
     }
 }

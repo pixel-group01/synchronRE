@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
 @RestController @RequiredArgsConstructor
@@ -41,19 +42,19 @@ public class RepartitionController
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")
-    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable float taux)
+    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux)
     {
         return repService.calculateRepByTaux(affId, taux);
     }
 
     @GetMapping(path = "/calculate/by-taux-besoin/{affId}/{tauxBesoin}")
-    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable float tauxBesoin)
+    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin)
     {
         return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin);
     }
 
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
-    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable float capital)
+    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital)
     {
         return repService.calculateRepByCapital(affId, capital);
     }

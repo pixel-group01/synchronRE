@@ -10,6 +10,8 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @SeuilRepCap @SeuilRepTau
 public class CreateRepartitionReq
@@ -18,21 +20,21 @@ public class CreateRepartitionReq
 
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
-    private Float repCapital;
+    private BigDecimal repCapital;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
-    private Float repTaux;
+    private BigDecimal repTaux;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     @Max(value = 100)
     @SeuilRepTauBesoinFac
-    private Float repTauxBesoinFac;
+    private BigDecimal repTauxBesoinFac;
 
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
-    private Float repSousCommission; //TODO A Valider
+    private BigDecimal repSousCommission; //TODO A Valider
 
     @NotBlank(message = "Veuillez saisir le nom de l'interlocuteur")
     @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")

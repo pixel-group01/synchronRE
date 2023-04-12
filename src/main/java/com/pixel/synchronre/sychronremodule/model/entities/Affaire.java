@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,7 +24,7 @@ public class Affaire {
     protected String affActivite;
     protected LocalDate affDateEffet;
     protected LocalDate affDateEcheance;
-    private Float affCapitalInitial; //Capital à 100
+    private BigDecimal affCapitalInitial; //Capital à 100
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;
     @ManyToOne @JoinColumn(name = "statut_code")
