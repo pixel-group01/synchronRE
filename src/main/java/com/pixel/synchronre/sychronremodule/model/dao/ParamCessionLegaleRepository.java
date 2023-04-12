@@ -19,4 +19,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
                                          and pr.statut.staCode = 'ACT'     
 """)
     Page<ParamCessionLegaleListResp> searchParams(String key, Pageable pageable);
+
+    @Query("select count(pcl) from ParamCessionLegale pcl where pcl.pays.paysId = (select a.cedante.pays.paysId from Affaire a where a.affId = ?1)")
+    Long countByAffId(Long affId);
 }

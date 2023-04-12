@@ -2,9 +2,13 @@ package com.pixel.synchronre;
 
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.sharedmodule.enums.PersStatus;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
+import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -28,7 +32,7 @@ public class SynchronReApplication {
 
     @Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
-                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo)
+                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo)
     {
         return args->{
            AppUser user = new AppUser(1l, "admin", "admin", null,
@@ -36,6 +40,16 @@ public class SynchronReApplication {
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
             userRepo.save(user);
+
+            Type t1 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            Type t2 = new Type(null, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null);
+            Type t3 = new Type(null, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null);
+
+            Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3));
 
             Statut s1 = new Statut("SAI", "Saisie", "Affaire saisie", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s2 = new Statut("TRA", "Transmis", "Affaire transmise", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
