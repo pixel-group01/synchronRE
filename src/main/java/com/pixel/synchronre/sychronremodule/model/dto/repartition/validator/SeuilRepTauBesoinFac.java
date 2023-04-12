@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.math.BigDecimal;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
@@ -22,12 +23,12 @@ public @interface SeuilRepTauBesoinFac
     Class<? extends Payload>[] payload() default {};
 
     @RequiredArgsConstructor
-    class SeuilRepTauValidator implements ConstraintValidator<SeuilRepTauBesoinFac, Float>
+    class SeuilRepTauValidator implements ConstraintValidator<SeuilRepTauBesoinFac, BigDecimal>
     {
         @Override
-        public boolean isValid(Float repTauBesoinFac, ConstraintValidatorContext context)
+        public boolean isValid(BigDecimal repTauBesoinFac, ConstraintValidatorContext context)
         {
-            return repTauBesoinFac <= 100;
+            return repTauBesoinFac.compareTo(new BigDecimal(100)) <= 0;
         }
     }
 }
