@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,11 +15,11 @@ public class Facultative extends Affaire
 {
   private String facNumeroPolice;
   //private float facCapitaux;
-  private Float facSmpLci;
-  private Float facPrime;
+  private BigDecimal facSmpLci;
+  private BigDecimal facPrime;
 
 
-  public Facultative(Affaire aff, String facNumeroPolice, Float facSmpLci, Float facPrime)
+  public Facultative(Affaire aff, String facNumeroPolice, BigDecimal facSmpLci, BigDecimal facPrime)
   {
     this.setFacNumeroPolice(facNumeroPolice);
     //this.setFacCapitaux(facCapitaux);

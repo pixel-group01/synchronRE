@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -41,15 +42,15 @@ public class CreateFacultativeReq
 
     @NotNull(message = "Veuillez saisir le capital de l'affaire")
     @PositiveOrZero(message = "Le capital de l'affaire doit être un nombre positif")
-    private Float affCapitalInitial;
+    private BigDecimal affCapitalInitial;
 
     @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
-    private Float facSmpLci;
+    private BigDecimal facSmpLci;
 
     @NotNull(message = "Veuillez saisir le montant de la prime")
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
-    private Float facPrime;
+    private BigDecimal facPrime;
     @ExistingCedId
     private Long cedenteId;
     @ExistingCouId

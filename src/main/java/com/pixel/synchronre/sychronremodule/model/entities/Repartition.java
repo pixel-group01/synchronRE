@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
@@ -17,9 +18,9 @@ public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repId;
-    private Float repCapital;
-    private Float repTaux;
-    private Float repSousCommission;
+    private BigDecimal repCapital;
+    private BigDecimal repTaux;
+    private BigDecimal repSousCommission;
     private String repInterlocuteur;
     private boolean repStatut;
     @ManyToOne @JoinColumn(name = "aff_id")

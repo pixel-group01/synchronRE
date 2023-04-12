@@ -2,12 +2,14 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class RepartitionDetailsResp {
     private Long repId;
-    private Float repCapital;
-    private Float repTaux;
-    private Float repSousCommission;
+    private BigDecimal repCapital;
+    private BigDecimal repTaux;
+    private BigDecimal repSousCommission;
     private String repInterlocuteur;
     private boolean repStatut;
     private Long affId;

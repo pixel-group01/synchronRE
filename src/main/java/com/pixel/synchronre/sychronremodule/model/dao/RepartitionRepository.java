@@ -7,11 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
+
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
     @Query("select coalesce(sum(r.repCapital), 0) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
-    Float getRepartitionsByAffId(Long affId);
+    BigDecimal getRepartitionsByAffId(Long affId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(

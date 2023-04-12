@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -23,8 +24,8 @@ public class Reglement {
   private Long regId;
   private String regReference;
   private LocalDate regDate;
-  private float regMontant;
-  private float regCommission;
+  private BigDecimal regMontant;
+  private BigDecimal regCommission;
   @Enumerated(EnumType.STRING)
   private TypeReglement typeReglement;
   @ManyToOne @JoinColumn(name = "aff_id")

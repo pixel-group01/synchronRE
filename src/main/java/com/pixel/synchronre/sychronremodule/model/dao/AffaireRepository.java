@@ -4,13 +4,10 @@ import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
+
 public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
-    float getCapitalInitial(Long affId);
-
-    @Query("select (count(a) > 0) from Affaire a where a.affId = ?1")
-    boolean existingAffId(Long affId);
-
-
+    BigDecimal getCapitalInitial(Long affId);
 }

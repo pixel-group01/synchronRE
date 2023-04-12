@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.facultative.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -17,7 +18,7 @@ public class FacultativeListResp
     private String facNumeroPolice;
     private Long facCapitaux;
     private Long facSmpLci;
-    private Float facPrime;
+    private BigDecimal facPrime;
     private Long cedenteId;
     private String statutCode;
     protected Long couvertureId;

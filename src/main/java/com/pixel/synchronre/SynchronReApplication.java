@@ -67,8 +67,6 @@ public class SynchronReApplication {
             Cedante ced2 = new Cedante(2l, "NSIA BN", "NSIA BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN", null, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             Cedante ced3 = new Cedante(3l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", null, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             cedRepo.saveAll(Arrays.asList(ced1, ced2, ced3));
-
-
         };
     }
 }
