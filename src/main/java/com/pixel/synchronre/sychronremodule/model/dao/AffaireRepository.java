@@ -8,4 +8,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     float getCapitalInitial(Long affId);
+
+    @Query("select (count(a) > 0) from Affaire a where a.affId = ?1")
+    boolean existingAffId(Long affId);
+
+
 }

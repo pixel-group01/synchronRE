@@ -21,7 +21,6 @@ public class Reglement {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REG_ID_GEN")
   @SequenceGenerator(name = "REG_ID_GEN", sequenceName = "REG_ID_GEN")
   private Long regId;
-  private String regCode;
   private String regReference;
   private LocalDate regDate;
   private float regMontant;

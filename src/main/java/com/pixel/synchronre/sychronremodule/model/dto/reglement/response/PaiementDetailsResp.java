@@ -5,9 +5,8 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class ReglementDetailsResp {
+public class PaiementDetailsResp {
     private Long regId;
-    private String regCode;
     private String regReference;
     private LocalDate regDate;
     private float regMontant;
