@@ -1,18 +1,19 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
-import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux @LimitedNumberOfCesLeg
-public class CreateCesLegReq
+@SeuilRepCap @SeuilRepTau  @CoherentCapitalAndTaux
+public class CreatePartCedRepartitionReq
 {
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
@@ -31,9 +32,6 @@ public class CreateCesLegReq
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
     private BigDecimal repSousCommission; //TODO A Valider
-
-    @ExistingAffId @NotNull(message = "Veuillez choisir l'affaire'")
+    @ExistingAffId
     private Long affId;
-    @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
-    private Long paramCesLegalId;
 }

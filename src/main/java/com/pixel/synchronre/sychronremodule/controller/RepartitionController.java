@@ -1,12 +1,15 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
+import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/repartitions")
@@ -22,14 +26,32 @@ import java.net.UnknownHostException;
 public class RepartitionController
 {
     private final IserviceRepartition repService;
+    private final ParamCessionLegaleRepository pclRepo;
 
     @PostMapping(path = "/create")
-    public RepartitionDetailsResp createRep(CreateRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp createRep(@Valid CreateRepartitionReq dto) throws UnknownHostException {
         return repService.createRepartition(dto);
     }
 
+    @PostMapping(path = "/create-ces-leg")
+    public List<RepartitionDetailsResp> createCesLegRep(@Valid List<CreateCesLegReq> dtos) throws UnknownHostException {
+        return repService.createCesLegRepartitions(dtos);
+    }
+
+    @PostMapping(path = "/create-part-ced")
+    public RepartitionDetailsResp createPartCedRep(@Valid CreatePartCedRepartitionReq dto) throws UnknownHostException {
+        return repService.createPartCedRepartition(dto);
+    }
+
+    @PostMapping(path = "/create-pla")
+    public RepartitionDetailsResp createPladRep(@Valid CreatePlaRepartitionReq dto) throws UnknownHostException {
+        return repService.createPlaRepartition(dto);
+    }
+
+
+
     @PutMapping(path = "/update")
-    public RepartitionDetailsResp updateRep(UpdateRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp updateRep(@Valid UpdateRepartitionReq dto) throws UnknownHostException {
         return repService.updateRepartition(dto);
     }
 
@@ -39,6 +61,12 @@ public class RepartitionController
                                                @RequestParam(defaultValue = "10", required = false) int size)
     {
         return repService.searchRepartition(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/ces-leg-param/{affId}")
+    public List<ParamCessionLegaleListResp> getCesLegParam(@PathVariable @ExistingAffId Long affId)
+    {
+        return pclRepo.findByAffId(affId);
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")

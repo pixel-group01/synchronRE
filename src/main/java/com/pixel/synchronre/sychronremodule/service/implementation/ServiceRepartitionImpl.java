@@ -9,8 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
@@ -30,6 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +50,42 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition rep = repMapper.mapToRepartition(dto);
         rep = repRepo.save(rep);
         logService.logg(RepartitionActions.CREATE_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        return repMapper.mapToRepartitionDetailsResp(rep);
+    }
+
+
+    private RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException {
+        Repartition rep = repMapper.mapToCesLegRepartition(dto);
+        rep = repRepo.save(rep);
+        logService.logg(RepartitionActions.CREATE_CES_LEG_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        return repMapper.mapToRepartitionDetailsResp(rep);
+    }
+
+    @Override
+    public List<RepartitionDetailsResp> createCesLegRepartitions(List<CreateCesLegReq> dtos) throws UnknownHostException {
+        return dtos.stream().map(dto-> {
+            try {
+                return this.createCesLegRepartition(dto);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                return  null;
+            }
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public RepartitionDetailsResp createPartCedRepartition(CreatePartCedRepartitionReq dto) throws UnknownHostException {
+        Repartition rep = repMapper.mapToPartCedRepartition(dto);
+        rep = repRepo.save(rep);
+        logService.logg(RepartitionActions.CREATE_CED_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        return repMapper.mapToRepartitionDetailsResp(rep);
+    }
+
+    @Override
+    public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException {
+        Repartition rep = repMapper.mapToPlaRepartition(dto);
+        rep = repRepo.save(rep);
+        logService.logg(RepartitionActions.CREATE_PLA_REPARTITION, null, rep, RepartitionTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 

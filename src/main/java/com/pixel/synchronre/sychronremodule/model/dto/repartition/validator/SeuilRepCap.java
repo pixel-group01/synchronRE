@@ -1,9 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
-import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.pays.validator.ExistingPaysId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -16,7 +13,10 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {SeuilRepCap.SeuilRepCapValidatorOnCreate.class, SeuilRepCap.SeuilRepCapValidatorOnUpdate.class})
+@Constraint(validatedBy = {SeuilRepCap.SeuilRepCapValidatorOnCreate.class,
+        SeuilRepCap.SeuilRepCapValidatorOnUpdate.class,
+        SeuilRepCap.SeuilRepCapValidatorOnCreateCesLeg.class,
+        SeuilRepCap.SeuilRepCapValidatorOnCreatePartCed.class, SeuilRepCap.SeuilRepCapValidatorOnCreatePlaRep.class})
 @Documented
 public @interface SeuilRepCap
 {
@@ -31,6 +31,48 @@ public @interface SeuilRepCap
         private final IserviceAffaire affService;
         @Override
         public boolean isValid(CreateRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) == 0 ;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepCapValidatorOnCreateCesLeg implements ConstraintValidator<SeuilRepCap, CreateCesLegReq>
+    {
+        private final IserviceAffaire affService;
+        @Override
+        public boolean isValid(CreateCesLegReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) == 0 ;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepCapValidatorOnCreatePlaRep implements ConstraintValidator<SeuilRepCap, CreatePlaRepartitionReq>
+    {
+        private final IserviceAffaire affService;
+        @Override
+        public boolean isValid(CreatePlaRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) == 0 ;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepCapValidatorOnCreatePartCed implements ConstraintValidator<SeuilRepCap, CreatePartCedRepartitionReq>
+    {
+        private final IserviceAffaire affService;
+        @Override
+        public boolean isValid(CreatePartCedRepartitionReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
