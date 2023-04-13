@@ -8,6 +8,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
