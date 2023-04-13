@@ -28,6 +28,7 @@ public @interface SeuilRepTauBesoinFac
         @Override
         public boolean isValid(BigDecimal repTauBesoinFac, ConstraintValidatorContext context)
         {
+            if(repTauBesoinFac == null) return true;
             return repTauBesoinFac.compareTo(new BigDecimal(100)) <= 0;
         }
     }

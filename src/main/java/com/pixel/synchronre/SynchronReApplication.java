@@ -30,7 +30,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-    @Bean
+    //@Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo)
     {
@@ -73,13 +73,13 @@ public class SynchronReApplication {
             couRepo.saveAll(Arrays.asList(c1, c2, c3));
 
             Pays ci = new Pays(1l, "CIV", "Côte d'Ivoire", "+225", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays bn = new Pays(1l, "BNN", "Benin", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays tg = new Pays(1l, "TGO", "Togo", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays bn = new Pays(2l, "BNN", "Benin", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays tg = new Pays(3l, "TGO", "Togo", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             paysRepo.saveAll(Arrays.asList(ci, bn, tg));
 
-            Cedante ced1 = new Cedante(1l, "NSIA CI", "NSIA CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI", null, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-            Cedante ced2 = new Cedante(2l, "NSIA BN", "NSIA BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN", null, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-            Cedante ced3 = new Cedante(3l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", null, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante ced1 = new Cedante(1l, "NSIA CI", "NSIA CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI", ci, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante ced2 = new Cedante(2l, "NSIA BN", "NSIA BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN", bn, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante ced3 = new Cedante(3l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", tg, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             cedRepo.saveAll(Arrays.asList(ced1, ced2, ced3));
         };
     }

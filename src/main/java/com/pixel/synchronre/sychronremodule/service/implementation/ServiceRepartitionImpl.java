@@ -58,6 +58,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition rep = repMapper.mapToCesLegRepartition(dto);
         rep = repRepo.save(rep);
         logService.logg(RepartitionActions.CREATE_CES_LEG_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 

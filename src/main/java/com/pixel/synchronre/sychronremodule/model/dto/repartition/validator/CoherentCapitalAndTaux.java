@@ -39,7 +39,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
         }
     }
 
@@ -52,7 +52,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
         }
     }
 
@@ -65,7 +65,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0 ;
         }
     }
 
@@ -79,7 +79,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).equals(dto.getRepTaux()) ;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
         }
     }
 }

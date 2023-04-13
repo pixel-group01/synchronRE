@@ -21,7 +21,7 @@ public class Cedante {
   private String cedAdressePostale;
   private String cedFax;
   private String cedSituationGeo;
-  @ManyToOne @JoinColumn(name = "ced_pays_code")
+  @ManyToOne @JoinColumn(name = "ced_pays_id")
   private Pays pays;
   @CreationTimestamp
   private LocalDateTime createdAt;

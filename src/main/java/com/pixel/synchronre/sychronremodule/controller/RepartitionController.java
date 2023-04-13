@@ -29,29 +29,29 @@ public class RepartitionController
     private final ParamCessionLegaleRepository pclRepo;
 
     @PostMapping(path = "/create")
-    public RepartitionDetailsResp createRep(@Valid CreateRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp createRep(@Valid @RequestBody CreateRepartitionReq dto) throws UnknownHostException {
         return repService.createRepartition(dto);
     }
 
     @PostMapping(path = "/create-ces-leg")
-    public List<RepartitionDetailsResp> createCesLegRep(@Valid List<CreateCesLegReq> dtos) throws UnknownHostException {
+    public List<RepartitionDetailsResp> createCesLegRep(@Valid @RequestBody List<CreateCesLegReq> dtos) throws UnknownHostException {
         return repService.createCesLegRepartitions(dtos);
     }
 
     @PostMapping(path = "/create-part-ced")
-    public RepartitionDetailsResp createPartCedRep(@Valid CreatePartCedRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp createPartCedRep(@Valid @RequestBody CreatePartCedRepartitionReq dto) throws UnknownHostException {
         return repService.createPartCedRepartition(dto);
     }
 
     @PostMapping(path = "/create-pla")
-    public RepartitionDetailsResp createPladRep(@Valid CreatePlaRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp createPladRep(@Valid @RequestBody CreatePlaRepartitionReq dto) throws UnknownHostException {
         return repService.createPlaRepartition(dto);
     }
 
 
 
     @PutMapping(path = "/update")
-    public RepartitionDetailsResp updateRep(@Valid UpdateRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp updateRep(@Valid @RequestBody UpdateRepartitionReq dto) throws UnknownHostException {
         return repService.updateRepartition(dto);
     }
 
