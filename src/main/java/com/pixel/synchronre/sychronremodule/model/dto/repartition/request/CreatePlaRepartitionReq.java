@@ -1,18 +1,22 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
-import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentCapitalAndTaux;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTauBesoinFac;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux @LimitedNumberOfCesLeg
-public class CreateCesLegReq
+@SeuilRepCap @SeuilRepTau  @CoherentCapitalAndTaux
+public class CreatePlaRepartitionReq
 {
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
@@ -32,8 +36,11 @@ public class CreateCesLegReq
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
     private BigDecimal repSousCommission; //TODO A Valider
 
-    @ExistingAffId @NotNull(message = "Veuillez choisir l'affaire'")
+    @NotBlank(message = "Veuillez saisir le nom de l'interlocuteur")
+    @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
+    @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
+    private String repInterlocuteur;
+
+    @ExistingAffId
     private Long affId;
-    @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
-    private Long paramCesLegalId;
 }

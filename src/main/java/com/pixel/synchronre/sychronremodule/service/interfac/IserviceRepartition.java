@@ -4,8 +4,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.banque.request.CreateBanqu
 import com.pixel.synchronre.sychronremodule.model.dto.banque.request.UpdateBanqueReq;
 import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
@@ -14,9 +13,19 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IserviceRepartition {
     RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException;
+
+    //RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException;
+
+    List<RepartitionDetailsResp> createCesLegRepartitions(List<CreateCesLegReq> dtos) throws UnknownHostException;
+
+    RepartitionDetailsResp createPartCedRepartition(CreatePartCedRepartitionReq dto) throws UnknownHostException;
+
+    RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException;
+
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
 

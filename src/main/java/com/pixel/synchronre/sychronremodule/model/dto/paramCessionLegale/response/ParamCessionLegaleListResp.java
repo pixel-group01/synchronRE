@@ -1,17 +1,15 @@
 package com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response;
-
-
 import lombok.*;
 
+import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class ParamCessionLegaleListResp
 {
     private Long paramCesLegId;
     private String paramCesLegLibelle;
-    private Long paramCesLegCapital;
-    private float paramCesLegTaux;
+    private BigDecimal paramCesLegCapital;
+    private BigDecimal paramCesLegTaux;
     private String paysNom;
-    private String cedNomFiliale;
     private String staLibelle;
 }

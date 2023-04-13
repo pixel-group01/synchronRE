@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
@@ -13,12 +14,10 @@ public class ParamCessionLegale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paramCesLegId;
     private String paramCesLegLibelle;
-    private float paramCesLegCapital;
-    private float paramCesLegTaux;
+    private BigDecimal paramCesLegCapital;
+    private BigDecimal paramCesLegTaux;
     @ManyToOne @JoinColumn(name = "paysId")
     private Pays pays;
-    @ManyToOne @JoinColumn(name = "cedId")
-    private Cedante cedante;
     @ManyToOne @JoinColumn(name = "paramStatut")
     private Statut statut;
     @CreationTimestamp
