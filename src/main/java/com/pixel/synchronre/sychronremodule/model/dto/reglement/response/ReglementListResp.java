@@ -8,18 +8,17 @@ import java.time.LocalDate;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class ReglementListResp {
     private Long regId;
-    private String regCode;
     private String regReference;
     private LocalDate regDate;
     private BigDecimal regMontant;
     private BigDecimal regCommission;
     private String typeReglement;
-    private String affCode;
-    private String affAssure;
-    private String affActivite;
-    private LocalDate affDateEffet;
-    private LocalDate affDateEcheance;
-    private String cedNomFiliale;
-    private String cedSigleFiliale;
-    private Long userId;
+
+    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission) {
+        this.regId = regId;
+        this.regReference = regReference;
+        this.regDate = regDate;
+        this.regMontant = regMontant;
+        this.regCommission = regCommission;
+    }
 }

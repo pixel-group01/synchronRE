@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.request;
 
 import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedTel;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.UniqueReference;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -14,12 +15,12 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class UpdatePaiementReq {
+@UniqueReference(message = "regReference::Cette réference existe déja")
+public class UpdateReglementReq {
 
     private Long regId;
     @NotBlank(message = "Veuillez saisir la réference du paiement")
     @NotNull(message = "Veuillez saisir la réference du paiement")
-    @UniqueReference
     private String regReference;
 
     @NotNull(message = "Veuillez saisir le montant du paiement")

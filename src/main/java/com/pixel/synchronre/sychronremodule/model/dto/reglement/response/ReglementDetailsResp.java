@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class PaiementDetailsResp {
+public class ReglementDetailsResp {
     private Long regId;
     private String regReference;
     private LocalDate regDate;

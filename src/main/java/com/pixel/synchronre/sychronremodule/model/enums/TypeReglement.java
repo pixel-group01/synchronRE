@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public enum TypeReglement
 {
-  PAIEMENT_RECU("Paiement reçu"),
-  REVERSEMENT("Reversement");
+  paiement("Paiement reçu"),
+  reversement("Reversement");
   public String typRegLibelle;
 }

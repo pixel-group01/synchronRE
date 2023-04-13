@@ -1,9 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.validator;
 
-import com.pixel.synchronre.sychronremodule.model.dao.BanqueRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.banque.request.UpdateBanqueReq;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdatePaiementReq;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {UniqueReference.UniqueReferenceValidatorOnCreate.class, UniqueReference.ReferenceValidatorOnUpdate.class})
 @Documented
@@ -36,11 +34,11 @@ public @interface UniqueReference
 
     @Component
     @RequiredArgsConstructor
-    class ReferenceValidatorOnUpdate implements ConstraintValidator<UniqueReference, UpdatePaiementReq>
+    class ReferenceValidatorOnUpdate implements ConstraintValidator<UniqueReference, UpdateReglementReq>
     {
         private final ReglementRepository regRepo;
         @Override
-        public boolean isValid(UpdatePaiementReq dto, ConstraintValidatorContext context) {
+        public boolean isValid(UpdateReglementReq dto, ConstraintValidatorContext context) {
             return !regRepo.alreadyExistsByReference(dto.getRegReference());
         }
     }

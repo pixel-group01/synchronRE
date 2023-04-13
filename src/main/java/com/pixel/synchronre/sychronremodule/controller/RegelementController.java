@@ -1,9 +1,10 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreatePaiementReq;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdatePaiementReq;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.PaiementDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
+import com.pixel.synchronre.sychronremodule.model.enums.TypeReglement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceReglement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,21 +16,23 @@ import java.net.UnknownHostException;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(path ="/reglements")
 public class RegelementController {
     private final IserviceReglement regService;
 
-    @PostMapping(path = "/paiements/create")
-    public PaiementDetailsResp createPaiement(@RequestBody @Valid CreatePaiementReq dto) throws UnknownHostException {
-        return regService.createPaiement(dto);
+    @PostMapping(path = "/{typeReg}/create")
+    public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
+        return regService.createReglement(TypeReglement.valueOf(typeReg),dto);
     }
 
-    @PutMapping(path = "/paiements/update")
-    public PaiementDetailsResp updatePaiement(@RequestBody @Valid UpdatePaiementReq dto) throws UnknownHostException {
-        return regService.updatePaiement(dto);
+    @PutMapping(path = "/{typeReg}/update")
+    public ReglementDetailsResp updateReglement(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
+        return regService.updateReglement(dto);
     }
 
-    @GetMapping(path = "/paiements/list")
-    public Page<ReglementListResp> searchPaiements(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return regService.searchReglement(key, PageRequest.of(page, size));
+    @GetMapping(path = "/{typeReg}/list")
+    public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key, @PathVariable String typeReg, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        return regService.searchReglement(key, TypeReglement.valueOf(typeReg), PageRequest.of(page, size));
     }
+
 }

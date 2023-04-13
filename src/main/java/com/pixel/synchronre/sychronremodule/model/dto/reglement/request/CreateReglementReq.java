@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-public class CreatePaiementReq {
+public class CreateReglementReq {
 
     @NotBlank(message = "Veuillez saisir la réference du paiement")
     @NotNull(message = "Veuillez saisir la réference du paiement")
