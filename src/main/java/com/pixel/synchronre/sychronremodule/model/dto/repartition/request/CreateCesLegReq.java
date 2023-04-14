@@ -11,7 +11,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux @LimitedNumberOfCesLeg
+@SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux @ValidPclId
 public class CreateCesLegReq
 {
     @NotNull(message = "Veuillez saisir le capital")

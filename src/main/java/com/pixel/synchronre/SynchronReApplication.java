@@ -30,7 +30,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-    //@Bean
+    @Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo)
     {
