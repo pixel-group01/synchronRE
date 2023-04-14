@@ -16,21 +16,21 @@ import java.net.UnknownHostException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path ="/reglements")
+@RequestMapping(path ="/{typeReg}")
 public class RegelementController {
     private final IserviceReglement regService;
 
-    @PostMapping(path = "/{typeReg}/create")
+    @PostMapping(path = "/create")
     public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglement(TypeReglement.valueOf(typeReg),dto);
     }
 
-    @PutMapping(path = "/{typeReg}/update")
+    @PutMapping(path = "/update")
     public ReglementDetailsResp updateReglement(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
         return regService.updateReglement(dto);
     }
 
-    @GetMapping(path = "/{typeReg}/list")
+    @GetMapping(path = "/list")
     public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key, @PathVariable String typeReg, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return regService.searchReglement(key, TypeReglement.valueOf(typeReg), PageRequest.of(page, size));
     }

@@ -1,7 +1,12 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cedante;
 
+import com.pixel.synchronre.authmodule.model.dtos.appfunction.ExistingFncId;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.ExistingCedId;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedEmail;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedTel;
+import com.pixel.synchronre.sychronremodule.model.dto.pays.validator.ExistingPaysId;
+import com.pixel.synchronre.typemodule.model.dtos.ExistingTypeId;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,4 +35,15 @@ public class CreateCedanteDTO
     private String cedAdressePostale;
     private String cedFax;
     private String cedSituationGeo;
+    @ExistingPaysId
+    private Long paysId;
+    @ExistingUserId
+    private Long cedUserCreator;
+    @ExistingFncId
+    private Long cedFonCreator;
+    @ExistingTypeId
+    private Long cedTypeId;
+    @ExistingCedId
+    private Long cedParentId;
+    private boolean selfParent;
 }

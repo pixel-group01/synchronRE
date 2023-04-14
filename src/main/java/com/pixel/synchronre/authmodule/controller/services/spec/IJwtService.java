@@ -24,4 +24,8 @@ public interface IJwtService
     String getCurrentJwt();
 
     Object getClaim(String claimName);
+    Long getConnectedUserId();
+    Long getConnectedUserFunctionId();
+    Long getConnectedUserCedId();
+    Long getConnectedUserCedParentId();
 }

@@ -49,7 +49,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
     @Override
     public ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException {
-        Reglement ref = regRepo.findById(dto.getRegId()).orElseThrow(()->new AppException("Paiement introuvable"));
+        Reglement ref = regRepo.findById(dto.getRegId()).orElseThrow(()->new AppException("Reglement introuvable"));
         Reglement oldPai = paiCopier.copy(ref);
         ref.setRegReference(dto.getRegReference());
         ref.setRegMontant(dto.getRegMontant());

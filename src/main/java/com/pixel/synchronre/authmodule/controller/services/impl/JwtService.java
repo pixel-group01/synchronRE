@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.logmodule.model.entities.Log;
+import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,6 +26,7 @@ public class JwtService implements IJwtService
 {
     private final FunctionRepo functionRepo;
     private final UserRepo userRepo;
+    private final CedRepo cedRepo;
 
     @Override
     public AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId)
@@ -129,5 +131,27 @@ public class JwtService implements IJwtService
     public Object getClaim(String claimName)
     {
         return this.extractAllClaims(this.getCurrentJwt()).get(claimName);
+    }
+
+    @Override
+    public Long getConnectedUserId() {
+        return (Long)this.getClaim("userId");
+    }
+
+    @Override
+    public Long getConnectedUserFunctionId() {
+        return (Long)this.getClaim("functionId");
+    }
+
+    @Override
+    public Long getConnectedUserCedId() {
+        return (Long)this.getClaim("visibilityId");
+    }
+
+    @Override
+    public Long getConnectedUserCedParentId()
+    {
+        Long cedId = this.getConnectedUserCedId();
+        return cedId == null ? null : cedRepo.getCedParentId(cedId);
     }
 }

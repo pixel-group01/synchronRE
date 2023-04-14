@@ -34,6 +34,7 @@ public class CedanteService implements ICedanteService
     {
         Cedante cedante = cedMapper.mapToCedente(dto);
         cedante = cedRepo.save(cedante);
+        cedante.setCedParentId(dto.isSelfParent() ? cedante.getCedId()  : cedante.getCedParentId());
         logService.logg(SynchronReActions.CREATE_CEDENTE, null, cedante, SynchronReTables.CEDENTE);
         return cedMapper.mapToReadCedenteDTO(cedante);
     }
@@ -44,6 +45,7 @@ public class CedanteService implements ICedanteService
         Cedante oldCed = cedCopier.copy(cedRepo.findById(dto.getCedId()).orElseThrow(()->new AppException("Cedente introuvable")));
         Cedante cedante = cedMapper.mapToCedente(dto);
         cedante = cedRepo.save(cedante);
+
         logService.logg(SynchronReActions.UPDATE_CEDENTE, oldCed, cedante, SynchronReTables.CEDENTE);
         return cedMapper.mapToReadCedenteDTO(cedante);
     }

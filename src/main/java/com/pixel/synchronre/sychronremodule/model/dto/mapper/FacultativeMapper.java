@@ -1,5 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
@@ -18,12 +21,18 @@ import java.security.cert.X509Certificate;
 public abstract class FacultativeMapper
 {
     @Autowired protected IserviceAffaire affService;
+    @Autowired protected IJwtService jwtService;
+
     public Facultative mapToFacultative(CreateFacultativeReq dto)
     {
+        Long connectedUserId = jwtService.getConnectedUserId();
+        Long connectedFncId = jwtService.getConnectedUserFunctionId();
         Affaire affaire = new Affaire();
         BeanUtils.copyProperties(dto, affaire);
         affaire.setCedante(dto.getCedenteId() == null ? null : new Cedante(dto.getCedenteId()));
         affaire.setCouverture(dto.getCouvertureId() == null ? null : new Couverture(dto.getCouvertureId()));
+        affaire.setAffUserCreator(connectedUserId == null ? null : new AppUser(connectedUserId));
+        affaire.setAffFonCreator(connectedFncId == null ? null : new AppFunction(connectedFncId));
         return new Facultative(affaire, dto.getFacNumeroPolice(), dto.getFacSmpLci(), dto.getFacPrime());
     }
 

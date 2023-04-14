@@ -55,4 +55,5 @@ public class CreateFacultativeReq
     private Long cedenteId;
     @ExistingCouId
     private Long couvertureId;
+
 }

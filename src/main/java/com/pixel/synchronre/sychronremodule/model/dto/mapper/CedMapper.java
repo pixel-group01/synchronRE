@@ -1,8 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
@@ -18,9 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class CedMapper
 {
     @Autowired protected CedRepo cedRepo;
+    @Autowired protected IJwtService jwtService;
     @PersistenceContext private EntityManager entityManager;
 
     @Mapping(target = "cedStatut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    @Mapping(target = "pays",  expression = "java(dto.getPaysId()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysId()))")
+    @Mapping(target = "cedUserCreator",  expression = "java(jwtService.getConnectedUserId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
+    @Mapping(target = "cedFonCreator",  expression = "java(jwtService.getConnectedUserFunctionId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
+    @Mapping(target = "cedType",  expression = "java(dto.getCedTypeId()==null? null : new com.pixel.synchronre.typemodule.model.entities.Type(dto.getCedTypeId()))")
     public abstract Cedante mapToCedente(CreateCedanteDTO dto);
 
     public Cedante mapToCedente(UpdateCedanteDTO dto)

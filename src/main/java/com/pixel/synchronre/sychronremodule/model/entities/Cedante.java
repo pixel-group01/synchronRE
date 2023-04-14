@@ -1,6 +1,9 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -21,8 +24,15 @@ public class Cedante {
   private String cedAdressePostale;
   private String cedFax;
   private String cedSituationGeo;
+  private Long cedParentId;
   @ManyToOne @JoinColumn(name = "ced_pays_id")
   private Pays pays;
+  @ManyToOne @JoinColumn(name = "ced_user_creator")
+  private AppUser cedUserCreator;
+  @ManyToOne @JoinColumn(name = "ced_fon_creator")
+  private AppFunction cedFonCreator;
+  @ManyToOne @JoinColumn(name = "ced_type")
+  private Type cedType;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp

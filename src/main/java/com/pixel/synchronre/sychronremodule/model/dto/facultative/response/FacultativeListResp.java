@@ -14,12 +14,12 @@ public class FacultativeListResp
     private String affActivite;
     private LocalDate affDateEffet;
     private LocalDate affDateEcheance;
-    private int affEtat;
     private String facNumeroPolice;
     private Long facCapitaux;
     private Long facSmpLci;
     private BigDecimal facPrime;
     private Long cedenteId;
     private String statutCode;
-    protected Long couvertureId;
+    private String staLibelle;
+    protected String couLibelle;
 }

@@ -1,6 +1,7 @@
 package com.pixel.synchronre;
 
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.enums.PersStatus;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
@@ -18,10 +19,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class SynchronReApplication {
@@ -30,9 +29,10 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-    //@Bean
+    @Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
-                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo)
+                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
+                                   FacultativeRepository facRepo)
     {
         return args->{
            AppUser user = new AppUser(1l, "admin", "admin", null,
@@ -49,7 +49,10 @@ public class SynchronReApplication {
             Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
             Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
 
-            typeRepo.saveAll(Arrays.asList(t1,t2,t3));
+            Type fil= new Type(null, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null);
+            Type rea = new Type(null, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null);
+
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3,fil,rea));
 
             Statut s1 = new Statut("SAI", "Saisie", "Affaire saisie", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s2 = new Statut("TRA", "Transmis", "Affaire transmise", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
@@ -77,10 +80,22 @@ public class SynchronReApplication {
             Pays tg = new Pays(3l, "TGO", "Togo", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             paysRepo.saveAll(Arrays.asList(ci, bn, tg));
 
-            Cedante ced1 = new Cedante(1l, "NSIA CI", "NSIA CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI", ci, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-            Cedante ced2 = new Cedante(2l, "NSIA BN", "NSIA BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN", bn, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-            Cedante ced3 = new Cedante(3l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", tg, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante nre = new Cedante(1l, "Nelson RE", "NRE", "05 05 05 05 01", "nre@gmail.com", "NRE", "NRE", "ABJ", null, ci,new AppUser(1l),null, rea, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            nre = cedRepo.save(nre); nre.setCedParentId(nre.getCedId());nre = cedRepo.save(nre);
+
+            Cedante ced1 = new Cedante(2l, "NSIA CI", "NSIA CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI", nre.getCedId(), ci,new AppUser(1l), null, fil, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante ced2 = new Cedante(3l, "NSIA BN", "NSIA BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN", nre.getCedId(), bn, new AppUser(1l), null, fil, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+            Cedante ced3 = new Cedante(4l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", nre.getCedId(), tg, new AppUser(1l), null, fil, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             cedRepo.saveAll(Arrays.asList(ced1, ced2, ced3));
+
+
+//            Facultative fac =new Facultative(1L,"FAC-00231","","",LocalDate.of(2023, 04, 01),LocalDate.of(2023, 04, 01),new BigDecimal(1000000000),"");
+//            facRepo.save(fac);
+
+
+//            CreateFacultativeReq fac1 = new CreateFacultativeReq("DGMP", "Pasation de marchés", LocalDate.of(2023, 04, 01), LocalDate.of(24,04,01), "A00123", new BigDecimal(1000000000), new BigDecimal(1000000000), new BigDecimal(1000000000), 1L, 1L);
+//            facService.createFacultative(fac1);
+
         };
     }
 }

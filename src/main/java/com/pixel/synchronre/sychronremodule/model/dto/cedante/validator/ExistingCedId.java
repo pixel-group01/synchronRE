@@ -29,6 +29,7 @@ public @interface ExistingCedId
         @Override
         public boolean isValid(Long cedId, ConstraintValidatorContext context)
         {
+            if(cedId == null) return true;
             return cedRepo.existsById(cedId);
         }
     }

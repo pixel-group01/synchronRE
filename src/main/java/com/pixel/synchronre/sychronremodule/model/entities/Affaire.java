@@ -1,6 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
 
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,6 +37,11 @@ public class Affaire {
     protected LocalDateTime createdAt;
     @UpdateTimestamp
     protected LocalDateTime updatedAt;
+
+    @ManyToOne @JoinColumn(name = "aff_user_creator")
+    private AppUser affUserCreator;
+    @ManyToOne @JoinColumn(name = "aff_fon_creator")
+    private AppFunction affFonCreator;
 
 
     public Affaire(Long affId) {
