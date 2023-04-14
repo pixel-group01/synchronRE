@@ -21,5 +21,6 @@ public class FacultativeListResp
     private Long cedenteId;
     private String statutCode;
     private String staLibelle;
-    protected String couLibelle;
+    private String couLibelle;
+    private String affVisibility;
 }

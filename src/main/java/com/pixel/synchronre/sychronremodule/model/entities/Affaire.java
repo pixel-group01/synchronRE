@@ -43,6 +43,8 @@ public class Affaire {
     @ManyToOne @JoinColumn(name = "aff_fon_creator")
     private AppFunction affFonCreator;
 
+    private Long affVisibility;
+
 
     public Affaire(Long affId) {
         this.affId = affId;

@@ -39,13 +39,18 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                          or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.couLibelle, '') ) as string))) >0
                                          ) and fnc.id = coalesce(:fncId, fnc.id)
                                          and u.userId = coalesce(:userId, u.userId)
+                                         and f.affVisibility = coalesce(:affVisibility, f.affVisibility)
                                          and ced.cedId = coalesce(:cedId, ced.cedId)
                                          and ced.cedParentId = coalesce(:cedParentId, ced.cedParentId)
                                          and s.staCode in :staCodes
 """)
-    Page<FacultativeListResp> searchAffaires(@Param("key") String key, @Param("fncId") Long fncId, @Param("userId") Long userId,
-                                             @Param("cedId")Long cedId, @Param("cedParentId")Long cedParentId,
-                                             @Param("staCodes")List<String> staCodes, Pageable pageable);
+    Page<FacultativeListResp> searchAffaires(@Param("key") String key,
+                                             @Param("fncId") Long fncId,
+                                             @Param("userId") Long userId,
+                                             @Param("affVisibility") Long affVisibility,
+                                             @Param("cedId") Long cedId,
+                                             @Param("cedParentId") Long cedParentId,
+                                             @Param("staCodes") List<String> staCodes, Pageable pageable);
 
 
 

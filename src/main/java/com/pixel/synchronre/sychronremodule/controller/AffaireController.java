@@ -44,7 +44,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-function")
@@ -52,7 +52,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null, null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null, null,null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-cedante")
@@ -60,14 +60,56 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/facultative/by-reassureur")
-    public Page<FacultativeListResp> searchAffaireByReassureur(@RequestParam(defaultValue = "") String key,
+    @GetMapping(path = "/facultative/by-cedante-transmis") //Transmis par la cedante mais en cours de traitement
+    public Page<FacultativeListResp> searchAffaireByCedanteTrans(@RequestParam(defaultValue = "") String key,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size)
+    {
+        return affRepo.searchAffaires(key, null, null, null, jwtService.getConnectedUserCedId(), null, Arrays.asList("VAL", "TRA"), PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/by-reassureur-en-traitement") //Transmis par les cédantes et saisi par le réassureur
+    public Page<FacultativeListResp> searchAffaireByReassureurEnTrai(@RequestParam(defaultValue = "") String key,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, null, jwtService.getConnectedUserCedParentId(), Arrays.asList("SAI", "TRA"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedParentId(), null, jwtService.getConnectedUserCedParentId(),Arrays.asList("SAI", "TRA"), PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur
+    public Page<FacultativeListResp> searchAffaireByReassureurValide(@RequestParam(defaultValue = "") String key,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "10") int size)
+    {
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedParentId(), null, jwtService.getConnectedUserCedParentId(),Arrays.asList("VAL"), PageRequest.of(page, size));
+    }
+
+    //====================================
+
+    @GetMapping(path = "/facultative/by-user-arch")
+    public Page<FacultativeListResp> searchAffaireByUserAch(@RequestParam(defaultValue = "") String key,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "10") int size)
+    {
+        return affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, null, Arrays.asList("ARC"), PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/by-function-arch")
+    public Page<FacultativeListResp> searchAffaireByFncArch(@RequestParam(defaultValue = "") String key,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size)
+    {
+        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null, null,null, Arrays.asList("ARC"), PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/by-cedante-arch")
+    public Page<FacultativeListResp> searchAffaireByCedanteArch(@RequestParam(defaultValue = "") String key,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size)
+    {
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, null, Arrays.asList("ARC"), PageRequest.of(page, size));
     }
 }
