@@ -18,6 +18,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select count(r.repId) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     Long countCesLegByAffaire(Long affId);
 
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true")
+    boolean repExistsByAffaireAndPcl(Long affId, Long pclId);
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(
         r.repId, r.repCapital, r.repTaux, r.repSousCommission, r.repInterlocuteur, r.repStatut, r.affaire.affId,
