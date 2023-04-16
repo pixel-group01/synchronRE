@@ -7,16 +7,42 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.Create
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+
 @Mapper(componentModel = "spring")
 public abstract class RepartitionMapper {
     @Autowired protected TypeRepo typeRepo;
     @Autowired protected ParamCessionLegaleRepository pclRepo;
+    @Autowired protected IserviceAffaire affService;
     public abstract Repartition mapToRepartition(CreateRepartitionReq dto);
+
+
+    private String affAssure;
+    private String affActivite;
+    private Long cesId;
+    private String cesNom;
+    private String cesSigle;
+    private String cesEmail;
+    private String cesTelephone;
+    private BigDecimal affBesoinFac; //Reste à repartir après avoir fait la répartition
+    private BigDecimal affTauxBesoinFac;
+
+    @Mapping(target = "affId", source = "affaire.affId")
+    @Mapping(target = "affCode", source = "affaire.affCode")
+    @Mapping(target = "affAssure", source = "affaire.affAssure")
+    @Mapping(target = "affActivite", source = "affaire.affActivite")
+    @Mapping(target = "cesNom", source = "cessionnaire.cesNom")
+    @Mapping(target = "cesSigle", source = "cessionnaire.cesSigle")
+    @Mapping(target = "cesEmail", source = "cessionnaire.cesEmail")
+    @Mapping(target = "cesTelephone", source = "cessionnaire.cesTelephone")
+    @Mapping(target = "affBesoinFac", expression = "java(affService.calculateRestARepartir(res.getAffaire().getAffId()))")
+    @Mapping(target = "affTauxBesoinFac", expression = "java(affService.calculateRestTauxARepartir(res.getAffaire().getAffId()))")
     public abstract RepartitionDetailsResp mapToRepartitionDetailsResp(Repartition res);
 
     @Mapping(target = "repStatut", expression = "java(true)")

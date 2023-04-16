@@ -33,4 +33,10 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
                                          and r.repStatut = true
     """)
     Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
+    boolean existsByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
+    Repartition findByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
 }

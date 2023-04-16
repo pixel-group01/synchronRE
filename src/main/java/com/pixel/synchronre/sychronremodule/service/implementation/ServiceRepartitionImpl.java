@@ -54,8 +54,16 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
 
-    private RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException {
-        Repartition rep = repMapper.mapToCesLegRepartition(dto);
+    private RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException
+    {
+        Repartition rep;
+        if(repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()))
+        {
+            rep = repRepo.findByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
+            rep.setRepCapital(dto.getRepCapital());
+            rep.setRepTaux(dto.getRepTaux());
+        }
+        rep = repMapper.mapToCesLegRepartition(dto);
         rep = repRepo.save(rep);
         logService.logg(RepartitionActions.CREATE_CES_LEG_REPARTITION, null, rep, RepartitionTables.REPARTITION);
         rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));

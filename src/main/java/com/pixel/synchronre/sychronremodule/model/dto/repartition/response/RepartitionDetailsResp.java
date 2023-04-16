@@ -21,4 +21,6 @@ public class RepartitionDetailsResp {
     private String cesSigle;
     private String cesEmail;
     private String cesTelephone;
+    private BigDecimal affBesoinFac; //Reste à repartir après avoir fait la répartition
+    private BigDecimal affTauxBesoinFac; //Le taux du besoinFaac par rapport au capital initial
 }

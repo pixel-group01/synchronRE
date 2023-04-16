@@ -183,17 +183,20 @@ public class JwtService implements IJwtService
 
     @Override
     public Long getConnectedUserId() {
-        return (Long)this.getClaim("userId");
+        Object userId = this.getClaim("userId");
+        return userId == null ? null : Long.valueOf(String.valueOf(userId));
     }
 
     @Override
     public Long getConnectedUserFunctionId() {
-        return (Long)this.getClaim("functionId");
+        Object functionId = this.getClaim("functionId");
+        return functionId == null ? null : Long.valueOf(String.valueOf(functionId));
     }
 
     @Override
     public Long getConnectedUserCedId() {
-        return (Long)this.getClaim("visibilityId");
+        Object visibilityId = this.getClaim("visibilityId");
+        return visibilityId == null ? null : Long.valueOf(String.valueOf(visibilityId));
     }
 
     @Override
