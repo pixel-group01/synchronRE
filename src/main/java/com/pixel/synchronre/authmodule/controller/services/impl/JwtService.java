@@ -151,10 +151,10 @@ public class JwtService implements IJwtService
         Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
 
         jwtInfos.setFncId(functionId);
-        jwtInfos.setFncName(function == null ? null : function.getName());
+        jwtInfos.setFncName(function == null ? "" : function.getName());
         jwtInfos.setCedId(cedId);
-        jwtInfos.setCedName(ced == null ? null : ced.getCedNomFiliale());
-        jwtInfos.setCedSigle(ced == null ? null : ced.getCedSigleFiliale());
+        jwtInfos.setCedName(ced == null ? "" : ced.getCedNomFiliale());
+        jwtInfos.setCedSigle(ced == null ? "" : ced.getCedSigleFiliale());
         jwtInfos.setUserEmail(this.extractUsername(jwt));
         jwtInfos.setUserId(claims.get("userId", Long.class));
         jwtInfos.setAuthorities(claims.get("authorities", List.class));
