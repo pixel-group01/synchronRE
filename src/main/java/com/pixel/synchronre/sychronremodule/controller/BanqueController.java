@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 @RestController
 @RequestMapping("/banques")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5000")
 public class BanqueController {
 
     private final IserviceBanque banqueService;
