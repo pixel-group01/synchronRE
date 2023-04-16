@@ -19,6 +19,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
@@ -32,7 +34,7 @@ public class SynchronReApplication {
     @Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
-                                   FacultativeRepository facRepo)
+                                   FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo)
     {
         return args->{
            AppUser user = new AppUser(1l, "admin", "admin", null,
@@ -89,10 +91,19 @@ public class SynchronReApplication {
             Cedante ced3 = new Cedante(4l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", nre.getCedId(), tg, new AppUser(1l), null, fil, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             cedRepo.saveAll(Arrays.asList(ced1, ced2, ced3));
 
+            Cessionnaire ces1 = new Cessionnaire(1l, "Aveni-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces2 = new Cessionnaire(2l, "Grand-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces4 = new Cessionnaire(4l, "Nelson-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
 
+            cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, ces4));
 //            Facultative fac =new Facultative(1L,"FAC-00231","","",LocalDate.of(2023, 04, 01),LocalDate.of(2023, 04, 01),new BigDecimal(1000000000),"");
 //            facRepo.save(fac);
 
+         Affaire aff1 = new Affaire("AFF-002", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2025, 10, 05));
+         //aff1 = affRepo.save(aff1);
+         Facultative fac = new Facultative(aff1, "HHHHHH", new BigDecimal(10000000), new BigDecimal(10000000));
+         //facRepo.save(fac);
 
 //            CreateFacultativeReq fac1 = new CreateFacultativeReq("DGMP", "Pasation de marchés", LocalDate.of(2023, 04, 01), LocalDate.of(24,04,01), "A00123", new BigDecimal(1000000000), new BigDecimal(1000000000), new BigDecimal(1000000000), 1L, 1L);
 //            facService.createFacultative(fac1);

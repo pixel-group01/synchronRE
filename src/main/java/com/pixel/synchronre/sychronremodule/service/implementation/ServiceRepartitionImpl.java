@@ -57,15 +57,23 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException
     {
         Repartition rep;
+        Repartition oldRep = null;
+        boolean existByAffaireAndPcl = repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
         if(repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()))
         {
+            oldRep = new Repartition();
             rep = repRepo.findByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
+            oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTaux(dto.getRepTaux());
         }
-        rep = repMapper.mapToCesLegRepartition(dto);
+        else
+        {
+            rep = repMapper.mapToCesLegRepartition(dto);
+        }
+
         rep = repRepo.save(rep);
-        logService.logg(RepartitionActions.CREATE_CES_LEG_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        logService.logg(existByAffaireAndPcl ? RepartitionActions.UPDATE_CES_LEG_REPARTITION : RepartitionActions.CREATE_CES_LEG_REPARTITION, oldRep , rep, RepartitionTables.REPARTITION);
         rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
@@ -84,17 +92,54 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override
     public RepartitionDetailsResp createPartCedRepartition(CreatePartCedRepartitionReq dto) throws UnknownHostException {
-        Repartition rep = repMapper.mapToPartCedRepartition(dto);
+        boolean existsByAffaireAndTypeCed = repRepo.existsByAffaireAndTypeCed(dto.getAffId(), "REP_CED");
+        Repartition rep;
+        Repartition oldRep = null;
+        if(existsByAffaireAndTypeCed)
+        {
+            rep = repRepo.findByAffaireAndTypeCed(dto.getAffId(), "REP_CED");
+            oldRep = repCopier.copy(rep);
+            rep.setRepCapital(dto.getRepCapital());
+            rep.setRepTaux(dto.getRepTaux());
+        }
+        else
+        {
+            rep = repMapper.mapToPartCedRepartition(dto);
+        }
+
         rep = repRepo.save(rep);
-        logService.logg(RepartitionActions.CREATE_CED_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeCed ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
+    }
+
+    @Override @Transactional
+    public RepartitionDetailsResp createCedLegRepartition(CreateCedLegRepartitionReq dto) throws UnknownHostException
+    {
+         this.createCesLegRepartitions(dto.getCesLegDtos());
+         CreatePartCedRepartitionReq partCedDto = new CreatePartCedRepartitionReq();
+         BeanUtils.copyProperties(dto, partCedDto, "cesLegDtos");
+         return this.createPartCedRepartition(partCedDto);
     }
 
     @Override
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException {
-        Repartition rep = repMapper.mapToPlaRepartition(dto);
+
+        boolean existsByAffaireAndTypeCed = repRepo.existsByAffaireAndTypeCedAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+        Repartition rep;
+        Repartition oldRep = null;
+        if(existsByAffaireAndTypeCed)
+        {
+            rep = repRepo.findByAffaireAndTypeCedAndCesId(dto.getAffId(), "REP_CED", dto.getCesId());
+            oldRep = repCopier.copy(rep);
+            rep.setRepCapital(dto.getRepCapital());
+            rep.setRepTaux(dto.getRepTaux());
+        }
+        else
+        {
+            rep = repMapper.mapToPlaRepartition(dto);
+        }
         rep = repRepo.save(rep);
-        logService.logg(RepartitionActions.CREATE_PLA_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeCed ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 

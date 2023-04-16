@@ -15,7 +15,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {SeuilRepTau.SeuilRepTauValidatorOnCreate.class,
         SeuilRepTau.SeuilRepTauValidatorOnUpdate.class, SeuilRepTau.SeuilRepTauValidatorOnCreatePartCed.class,
-        SeuilRepTau.SeuilRepTauValidatorOnCreateCesLeg.class, SeuilRepTau.SeuilRepTauValidatorOnCreatePlaRep.class})
+        SeuilRepTau.SeuilRepTauValidatorOnCreateCesLeg.class,
+        SeuilRepTau.SeuilRepTauValidatorOnCreatePlaRep.class,
+        SeuilRepTau.SeuilRepTauValidatorOnCreateCedLegRep.class})
 @Documented
 public @interface SeuilRepTau
 {
@@ -86,6 +88,20 @@ public @interface SeuilRepTau
         private final IserviceAffaire affService;
         @Override
         public boolean isValid(UpdateRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepTauValidatorOnCreateCedLegRep implements ConstraintValidator<SeuilRepTau, CreateCedLegRepartitionReq>
+    {
+        private final IserviceAffaire affService;
+        @Override
+        public boolean isValid(CreateCedLegRepartitionReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;

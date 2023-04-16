@@ -33,17 +33,22 @@ public class RepartitionController
         return repService.createRepartition(dto);
     }
 
-    @PostMapping(path = "/create-ces-leg")
+    @PostMapping(path = "/create-cession-legale-repartition")
     public List<RepartitionDetailsResp> createCesLegRep(@Valid @RequestBody List<CreateCesLegReq> dtos) throws UnknownHostException {
         return repService.createCesLegRepartitions(dtos);
     }
 
-    @PostMapping(path = "/create-part-ced")
+    @PostMapping(path = "/create-part-cedante-repartition")
     public RepartitionDetailsResp createPartCedRep(@Valid @RequestBody CreatePartCedRepartitionReq dto) throws UnknownHostException {
         return repService.createPartCedRepartition(dto);
     }
 
-    @PostMapping(path = "/create-pla")
+    @PostMapping(path = "/create-cedante-legale-repartition")
+    public RepartitionDetailsResp createCedLegRep(@Valid @RequestBody CreateCedLegRepartitionReq dto) throws UnknownHostException {
+        return repService.createCedLegRepartition(dto);
+    }
+
+    @PostMapping(path = "/create-placement")
     public RepartitionDetailsResp createPladRep(@Valid @RequestBody CreatePlaRepartitionReq dto) throws UnknownHostException {
         return repService.createPlaRepartition(dto);
     }

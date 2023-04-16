@@ -31,7 +31,7 @@ public @interface ValidPclId
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return !pclRepo.existsByPaysAndAffaire(dto.getParamCesLegalId(), dto.getAffId());
+            return pclRepo.existsByPclIdAndAffaire(dto.getParamCesLegalId(), dto.getAffId());
         }
     }
 }

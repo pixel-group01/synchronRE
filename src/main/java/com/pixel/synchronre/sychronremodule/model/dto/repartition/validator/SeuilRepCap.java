@@ -16,7 +16,9 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = {SeuilRepCap.SeuilRepCapValidatorOnCreate.class,
         SeuilRepCap.SeuilRepCapValidatorOnUpdate.class,
         SeuilRepCap.SeuilRepCapValidatorOnCreateCesLeg.class,
-        SeuilRepCap.SeuilRepCapValidatorOnCreatePartCed.class, SeuilRepCap.SeuilRepCapValidatorOnCreatePlaRep.class})
+        SeuilRepCap.SeuilRepCapValidatorOnCreatePartCed.class,
+        SeuilRepCap.SeuilRepCapValidatorOnCreatePlaRep.class,
+        SeuilRepCap.SeuilRepCapValidatorOnCreateCedLeg.class})
 @Documented
 public @interface SeuilRepCap
 {
@@ -87,6 +89,20 @@ public @interface SeuilRepCap
         private final IserviceAffaire affService;
         @Override
         public boolean isValid(UpdateRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return affService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepCapValidatorOnCreateCedLeg implements ConstraintValidator<SeuilRepCap, CreateCedLegRepartitionReq>
+    {
+        private final IserviceAffaire affService;
+        @Override
+        public boolean isValid(CreateCedLegRepartitionReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
