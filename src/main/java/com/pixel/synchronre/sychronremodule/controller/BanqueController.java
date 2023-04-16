@@ -23,18 +23,21 @@ public class BanqueController {
 
 
     @PostMapping(path = "/create")
+    @CrossOrigin(origins = "*")
     public BanqueDetailsResp createBanque(@RequestBody @Valid CreateBanqueReq dto) throws UnknownHostException {
         return banqueService.createBanque(dto);
     }
 
 
     @PutMapping(path = "/update")
+    @CrossOrigin(origins = "*")
     public BanqueDetailsResp updateBanque(@RequestBody @Valid UpdateBanqueReq dto) throws UnknownHostException {
         return banqueService.updateBanque(dto);
     }
 
 
     @GetMapping(path = "/list")
+    @CrossOrigin(origins = "*")
     public Page<BanqueListResp> searchBanques(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return banqueService.searchBanque(key, PageRequest.of(page, size));
     }
