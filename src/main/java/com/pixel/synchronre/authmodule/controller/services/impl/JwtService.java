@@ -43,12 +43,24 @@ public class JwtService implements IJwtService
         Long functionId = functionIds == null || functionIds.size() != 1 ? null : new ArrayList<>(functionIds).get(0);
         Map<String, Object> extraClaims = new HashMap<>(); //functionId = 1l;
 
+
+        AppFunction function = functionId == null ? null : functionRepo.findById(functionId).orElse(null);
+        Long cedId = function == null ? null : function.getVisibilityId();
+        Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
+
         extraClaims.put("userId", userId);
         extraClaims.put("userEmail", userEmail);
         extraClaims.put("authorities", userDetails.getAuthorities());
         extraClaims.put("visibilityId", visibilityIds == null ? null : visibilityIds.size() != 1 ? null : new ArrayList<>(visibilityIds).get(0));
         extraClaims.put("functionId", functionId);
         extraClaims.put("connectionId", connectionId);
+
+        extraClaims.put("functionName", function == null ? null : function.getName());
+        extraClaims.put("cedId", cedId);
+        extraClaims.put("cedName", ced == null ? null : ced.getCedNomFiliale());
+        extraClaims.put("cedSigle", ced == null ? null : ced.getCedSigleFiliale());
+        extraClaims.put("functionStartingDate", function == null ? null : function.getStartsAt());
+        extraClaims.put("functionEndingDate", function == null ? null : function.getEndsAt());
 
         return generateJwt(userEmail, extraClaims);
     }
@@ -149,6 +161,8 @@ public class JwtService implements IJwtService
         jwtInfos.setConnectionId(claims.get("connectionId", String.class));
         jwtInfos.setTokenStartingDate(this.extractClaim(jwt,Claims::getIssuedAt));
         jwtInfos.setTokenEndingDate(this.extractClaim(jwt,Claims::getExpiration));
+        jwtInfos.setFncStartingDate(function == null ? null : function.getStartsAt());
+        jwtInfos.setFncEndingDate(function == null ? null : function.getEndsAt());
 
         return jwtInfos;
     }
