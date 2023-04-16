@@ -15,8 +15,9 @@ import java.net.UnknownHostException;
 
 @RestController
 @RequestMapping("/banques")
+@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5000")
+
 public class BanqueController {
 
     private final IserviceBanque banqueService;
@@ -27,10 +28,12 @@ public class BanqueController {
         return banqueService.createBanque(dto);
     }
 
+
     @PutMapping(path = "/update")
     public BanqueDetailsResp updateBanque(@RequestBody @Valid UpdateBanqueReq dto) throws UnknownHostException {
         return banqueService.updateBanque(dto);
     }
+
 
     @GetMapping(path = "/list")
     public Page<BanqueListResp> searchBanques(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
