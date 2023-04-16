@@ -30,4 +30,10 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
     from ParamCessionLegale pcl where pcl.pays.paysId = (select a.cedante.pays.paysId from Affaire a where a.affId = ?1)
     """)
     List<ParamCessionLegaleListResp> findByAffId(Long affId);
+
+    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where pcl.pays.paysId = ?1 and ?1 = (select a.cedante.pays.paysId from Affaire a where a.affId = ?2)")
+    boolean existsByPaysAndAffaire(Long paysId, Long affId);
+
+    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where (select pcl2.pays.paysId from ParamCessionLegale pcl2 where pcl2.paramCesLegId = ?1) = (select a.cedante.pays.paysId from Affaire a where a.affId = ?2)")
+    boolean existsByPclIdAndAffaire(Long pclId, Long affId);
 }

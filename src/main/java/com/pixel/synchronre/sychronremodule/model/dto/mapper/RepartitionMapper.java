@@ -59,5 +59,6 @@ public abstract class RepartitionMapper {
     @Mapping(target = "repStatut", expression = "java(true)")
     @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_PLA\"))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
+    @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     public abstract Repartition mapToPlaRepartition(CreatePlaRepartitionReq dto);
 }

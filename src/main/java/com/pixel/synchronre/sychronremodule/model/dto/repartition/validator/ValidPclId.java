@@ -14,25 +14,24 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {LimitedNumberOfCesLeg.LimitedNumberOfCesLegValidator.class})
+@Constraint(validatedBy = {ValidPclId.ValidPclIdValidator.class})
 @Documented
-public @interface LimitedNumberOfCesLeg
+public @interface ValidPclId
 {
-    String message() default "Impossible de faire plus cessions légales sur cette affaire";
+    String message() default "paramCesLegalId::Impossible d'appliquer les paramètres de cession légale d'un pays à une affaire d'un autre pays";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class LimitedNumberOfCesLegValidator implements ConstraintValidator<LimitedNumberOfCesLeg, CreateCesLegReq> {
-        private final RepartitionRepository repRepo;
+    class ValidPclIdValidator implements ConstraintValidator<ValidPclId, CreateCesLegReq> {
         private final ParamCessionLegaleRepository pclRepo;
         @Override
         public boolean isValid(CreateCesLegReq dto, ConstraintValidatorContext context)
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()) ||  repRepo.countCesLegByAffaire(dto.getAffId()) < pclRepo.countByAffId(dto.getAffId());
+            return pclRepo.existsByPclIdAndAffaire(dto.getParamCesLegalId(), dto.getAffId());
         }
     }
 }

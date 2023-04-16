@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentCapitalAndTaux;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
@@ -40,6 +41,10 @@ public class CreatePlaRepartitionReq
     @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
     @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
     private String repInterlocuteur;
+
+    @NotNull(message = "Veuillez selectionner le cessionnaire")
+    @ExistingCesId
+    private Long cesId;
 
     @ExistingAffId
     private Long affId;

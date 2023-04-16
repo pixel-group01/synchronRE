@@ -1,28 +1,25 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
-import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
-import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
-import com.pixel.synchronre.typemodule.model.entities.Type;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentCapitalAndTaux;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTauBesoinFac;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux @ValidPclId
-public class CreateCesLegReq
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux
+public class CreateCedLegRepartitionReq
 {
+    @NotEmpty(message = "Veuillez saisir les informations de cession(s) légale(s)")
+    private List<CreateCesLegReq> cesLegDtos;
+
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
     private BigDecimal repCapital;
@@ -40,9 +37,6 @@ public class CreateCesLegReq
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
     private BigDecimal repSousCommission; //TODO A Valider
-
-    @ExistingAffId @NotNull(message = "Veuillez choisir l'affaire'")
+    @ExistingAffId
     private Long affId;
-    @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
-    private Long paramCesLegalId;
 }

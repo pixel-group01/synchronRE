@@ -8,4 +8,7 @@ public class RepartitionActions {
     public static final String CREATE_CES_LEG_REPARTITION = "Insertion d'une répartition de type cession légale";
     public static final String CREATE_CED_REPARTITION = "Insertion d'une répartition de type part cédante";
     public static final String CREATE_PLA_REPARTITION = "Insertion d'une répartition de type placement";
+    public static final String UPDATE_CES_LEG_REPARTITION = "Modification d'une répartition de type cession légale";
+    public static final String UPDATE_CED_REPARTITION = "Modification d'une répartition de type part cédante";
+    public static String UPDATE_PLA_REPARTITION = "Modification d'une répartition de type part placement";
 }

@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select count(r.repId) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     Long countCesLegByAffaire(Long affId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true")
+    boolean repExistsByAffaireAndPcl(Long affId, Long pclId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(
@@ -39,4 +43,16 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
     Repartition findByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
+    boolean existsByAffaireAndTypeCed(Long affId, String typeUniqueCodeCode);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
+    Repartition findByAffaireAndTypeCed(Long affId, String rep_ced);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
+    boolean existsByAffaireAndTypeCedAndCesId(Long affId, String rep_pla, Long cesId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
+    Repartition findByAffaireAndTypeCedAndCesId(Long affId, String rep_pla, Long cesId);
 }

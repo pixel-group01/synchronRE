@@ -1,10 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCesLegReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreatePartCedRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -21,7 +18,9 @@ import java.math.BigDecimal;
 @Constraint(validatedBy = {CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreate.class,
         CoherentCapitalAndTaux.CoherentCapitalAndTauxOnUpdate.class,
         CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreateCesLeg.class,
-        CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreatePartCed.class})
+        CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreatePartCed.class,
+        CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreatePlacement.class,
+        CoherentCapitalAndTaux.CoherentCapitalAndTauxOnCreateCedLeg.class})
 @Documented
 public @interface CoherentCapitalAndTaux
 {
@@ -82,4 +81,35 @@ public @interface CoherentCapitalAndTaux
             return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
         }
     }
+
+
+
+    @Component
+    @RequiredArgsConstructor
+    class CoherentCapitalAndTauxOnCreateCedLeg implements ConstraintValidator<CoherentCapitalAndTaux, CreateCedLegRepartitionReq>
+    {
+        private final AffaireRepository affRepo;
+        @Override
+        public boolean isValid(CreateCedLegRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if (dto == null) return true;
+            if (dto.getAffId() == null) return true;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class CoherentCapitalAndTauxOnCreatePlacement implements ConstraintValidator<CoherentCapitalAndTaux, CreatePlaRepartitionReq>
+    {
+        private final AffaireRepository affRepo;
+        @Override
+        public boolean isValid(CreatePlaRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if (dto == null) return true;
+            if (dto.getAffId() == null) return true;
+            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId())).compareTo(dto.getRepTaux()) == 0;
+        }
+    }
+
 }
