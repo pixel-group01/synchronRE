@@ -2,6 +2,7 @@ package com.pixel.synchronre.authmodule.controller.resources;
 
 import com.pixel.synchronre.authmodule.model.dtos.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
+import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import jakarta.validation.Valid;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
@@ -80,5 +81,10 @@ public class UserResource
     @GetMapping(path = "/open/click-link/{token}")
     public void clickLink(@PathVariable @Valid String token ) throws UnknownHostException, IllegalAccessException {
         userService.clickLink(token);
+    }
+
+    @GetMapping(path = "/token-introspection")
+    public JwtInfos getJwtInfos() throws UnknownHostException, IllegalAccessException {
+        return jwtService.getJwtInfos();
     }
 }

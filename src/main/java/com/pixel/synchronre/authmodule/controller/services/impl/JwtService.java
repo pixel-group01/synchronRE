@@ -5,8 +5,11 @@ import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
+import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -36,7 +41,7 @@ public class JwtService implements IJwtService
         Set<Long> visibilityIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
         Set<Long> functionIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
         Long functionId = functionIds == null || functionIds.size() != 1 ? null : new ArrayList<>(functionIds).get(0);
-        Map<String, Object> extraClaims = new HashMap<>();
+        Map<String, Object> extraClaims = new HashMap<>(); //functionId = 1l;
 
         extraClaims.put("userId", userId);
         extraClaims.put("userEmail", userEmail);
@@ -119,12 +124,41 @@ public class JwtService implements IJwtService
     }
 
     @Override
+    public JwtInfos getJwtInfos() {
+        return this.getJwtInfos(this.getCurrentJwt());
+    }
+
+    @Override
+    public JwtInfos getJwtInfos(String jwt)
+    {
+        JwtInfos jwtInfos = new JwtInfos();
+        Claims claims= this.extractAllClaims(jwt);
+        Long  functionId = claims.get("functionId", Long.class);
+        AppFunction function = functionId == null ? null : functionRepo.findById(functionId).orElse(null);
+        Long cedId = function == null ? null : function.getVisibilityId();
+        Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
+
+        jwtInfos.setFncId(functionId);
+        jwtInfos.setFncName(function == null ? null : function.getName());
+        jwtInfos.setCedId(cedId);
+        jwtInfos.setCedName(ced == null ? null : ced.getCedNomFiliale());
+        jwtInfos.setCedSigle(ced == null ? null : ced.getCedSigleFiliale());
+        jwtInfos.setUserEmail(this.extractUsername(jwt));
+        jwtInfos.setUserId(claims.get("userId", Long.class));
+        jwtInfos.setAuthorities(claims.get("authorities", List.class));
+        jwtInfos.setConnectionId(claims.get("connectionId", String.class));
+        jwtInfos.setTokenStartingDate(this.extractClaim(jwt,Claims::getIssuedAt));
+        jwtInfos.setTokenEndingDate(this.extractClaim(jwt,Claims::getExpiration));
+
+        return jwtInfos;
+    }
+
+    @Override
     public String getCurrentJwt()
     {
         HttpServletRequest request = HttpServletManager.getCurrentHttpRequest();
         if(request == null) return null;
-        String token  = request.getHeader("Authorization").substring("Bearer ".length());
-        return token;
+        return request.getHeader("Authorization").substring("Bearer ".length());
     }
 
     @Override

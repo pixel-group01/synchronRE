@@ -1,6 +1,7 @@
 package com.pixel.synchronre.authmodule.controller.services.spec;
 
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
+import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import com.pixel.synchronre.logmodule.model.entities.Log;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,9 @@ public interface IJwtService
     Log getUserInfosFromJwt(String token);
 
     Log getUserInfosFromJwt();
+
+    JwtInfos getJwtInfos();
+    JwtInfos getJwtInfos(String jwt);
 
     String getCurrentJwt();
 
