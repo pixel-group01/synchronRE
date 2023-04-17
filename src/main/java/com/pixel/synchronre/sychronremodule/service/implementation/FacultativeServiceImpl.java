@@ -12,10 +12,12 @@ import com.pixel.synchronre.sychronremodule.model.dao.FacultativeRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.MouvementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Facultative;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
@@ -71,6 +73,5 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     public Page<FacultativeListResp> searchFacultative(String key, Pageable pageable) {
         return null;
     }
-
 
 }

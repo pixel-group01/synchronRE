@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.Existing
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedEmail;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedTel;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.validator.ExistingPaysId;
+import com.pixel.synchronre.sychronremodule.model.dto.pays.validator.UniquePaysCode;
 import com.pixel.synchronre.typemodule.model.dtos.ExistingTypeId;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -35,8 +36,8 @@ public class CreateCedanteDTO
     private String cedAdressePostale;
     private String cedFax;
     private String cedSituationGeo;
-    @ExistingPaysId
-    private Long paysId;
+    @UniquePaysCode
+    private String paysCode;
     @ExistingUserId
     private Long cedUserCreator;
     @ExistingFncId

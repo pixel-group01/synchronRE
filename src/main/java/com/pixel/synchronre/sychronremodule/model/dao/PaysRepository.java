@@ -16,8 +16,6 @@ public interface PaysRepository extends JpaRepository<Pays, Long> {
     @Query("select (count(p) > 0) from Pays p where upper(p.paysCode) = upper(?1)")
     boolean alreadyExistsByCode(String paysCode);
 
-    @Query("select (count(p) > 0) from Pays p where p.paysCode = ?1 and p.paysId <> ?2")
-    boolean alreadyExistsByCode(String paysCode, Long paysId);
 
 
     @Query("""

@@ -6,7 +6,6 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PaysListResp
 {
-    private Long paysId;
     private String paysCode;
     private String paysIndicatif;
     private String paysNom;

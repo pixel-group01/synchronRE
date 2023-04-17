@@ -11,10 +11,10 @@ import lombok.*;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class UpdatePaysReq
 {
-    @ExistingPaysId
-    private Long paysId;
+
     @NotBlank(message = "Veuillez saisir le code du pays")
     @NotNull(message = "Veuillez saisir le code du pays")
+    @UniquePaysCode
     private String paysCode;
     @NotBlank(message = "Veuillez saisir le numéro indicatif du pays")
     @NotNull(message = "Veuillez saisir le numéro indicatif du pays")

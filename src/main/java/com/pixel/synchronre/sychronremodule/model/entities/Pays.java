@@ -9,11 +9,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Pays {
-
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PAY_ID_GEN")
-  @SequenceGenerator(name = "PAY_ID_GEN", sequenceName = "PAY_ID_GEN", allocationSize = 10)
-  private Long paysId;
   private String paysCode;
   private String paysIndicatif;
   private String paysNom;
@@ -25,8 +21,8 @@ public class Pays {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-  public Pays(Long paysId) {
-    this.paysId = paysId;
+  public Pays(String paysCode) {
+    this.paysCode = paysCode;
   }
 
 }

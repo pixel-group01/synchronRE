@@ -22,7 +22,7 @@ public abstract class CedMapper
     @PersistenceContext private EntityManager entityManager;
 
     @Mapping(target = "cedStatut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
-    @Mapping(target = "pays",  expression = "java(dto.getPaysId()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysId()))")
+    @Mapping(target = "pays",  expression = "java(dto.getPaysCode()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysCode()))")
     @Mapping(target = "cedUserCreator",  expression = "java(jwtService.getConnectedUserId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "cedFonCreator",  expression = "java(jwtService.getConnectedUserFunctionId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     @Mapping(target = "cedType",  expression = "java(dto.getCedTypeId()==null? null : new com.pixel.synchronre.typemodule.model.entities.Type(dto.getCedTypeId()))")

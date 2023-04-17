@@ -21,19 +21,19 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 """)
     Page<ParamCessionLegaleListResp> searchParams(String key, Pageable pageable);
 
-    @Query("select count(pcl.paramCesLegId) from ParamCessionLegale pcl where pcl.pays.paysId = (select a.cedante.pays.paysId from Affaire a where a.affId = ?1)")
+    @Query("select count(pcl.paramCesLegId) from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1)")
     Long countByAffId(Long affId);
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(
     pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle)
-    from ParamCessionLegale pcl where pcl.pays.paysId = (select a.cedante.pays.paysId from Affaire a where a.affId = ?1)
+    from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1)
     """)
     List<ParamCessionLegaleListResp> findByAffId(Long affId);
 
-    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where pcl.pays.paysId = ?1 and ?1 = (select a.cedante.pays.paysId from Affaire a where a.affId = ?2)")
+    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where pcl.pays.paysCode = ?1 and ?1 = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?2)")
     boolean existsByPaysAndAffaire(Long paysId, Long affId);
 
-    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where (select pcl2.pays.paysId from ParamCessionLegale pcl2 where pcl2.paramCesLegId = ?1) = (select a.cedante.pays.paysId from Affaire a where a.affId = ?2)")
+    @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where (select pcl2.pays.paysCode from ParamCessionLegale pcl2 where pcl2.paramCesLegId = ?1) = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?2)")
     boolean existsByPclIdAndAffaire(Long pclId, Long affId);
 }

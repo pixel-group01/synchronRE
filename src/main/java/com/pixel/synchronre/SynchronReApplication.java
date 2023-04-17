@@ -78,9 +78,9 @@ public class SynchronReApplication {
             Couverture c3 = new Couverture(3L, "Décès groupe", "Décès groupe", new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             couRepo.saveAll(Arrays.asList(c1, c2, c3));
 
-            Pays ci = new Pays(1l, "CIV", "Côte d'Ivoire", "+225", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays bn = new Pays(2l, "BNN", "Benin", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays tg = new Pays(3l, "TGO", "Togo", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays ci = new Pays("CIV", "Côte d'Ivoire", "+225", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays bn = new Pays("BNN", "Benin", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays tg = new Pays("TGO", "Togo", "+226", new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             paysRepo.saveAll(Arrays.asList(ci, bn, tg));
 
             Cedante nre = new Cedante(1l, "Nelson RE", "NRE", "05 05 05 05 01", "nre@gmail.com", "NRE", "NRE", "ABJ", null, ci,new AppUser(1l),null, rea, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
@@ -91,12 +91,16 @@ public class SynchronReApplication {
             Cedante ced3 = new Cedante(4l, "NSIA TG", "NSIA TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG", nre.getCedId(), tg, new AppUser(1l), null, fil, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             cedRepo.saveAll(Arrays.asList(ced1, ced2, ced3));
 
-            Cessionnaire ces1 = new Cessionnaire(1l, "Aveni-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces2 = new Cessionnaire(2l, "Grand-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
             Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces4 = new Cessionnaire(4l, "Nelson-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces4 = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
 
-            cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, ces4));
+            cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, ces4,ces5, ces6, ces7, ces8));
 //            Facultative fac =new Facultative(1L,"FAC-00231","","",LocalDate.of(2023, 04, 01),LocalDate.of(2023, 04, 01),new BigDecimal(1000000000),"");
 //            facRepo.save(fac);
 

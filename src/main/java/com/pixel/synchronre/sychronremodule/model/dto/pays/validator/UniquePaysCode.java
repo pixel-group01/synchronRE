@@ -40,7 +40,7 @@ public @interface UniquePaysCode
         private final PaysRepository paysRepo;
         @Override
         public boolean isValid(UpdatePaysReq dto, ConstraintValidatorContext context) {
-            return !paysRepo.alreadyExistsByCode(dto.getPaysCode(), dto.getPaysId());
+            return !paysRepo.alreadyExistsByCode(dto.getPaysCode());
         }
     }
 }

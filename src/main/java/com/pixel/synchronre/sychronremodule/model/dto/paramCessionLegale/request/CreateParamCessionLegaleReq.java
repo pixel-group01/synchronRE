@@ -20,6 +20,6 @@ public class CreateParamCessionLegaleReq
     @NotNull(message = "Veuillez saisir le taux de la cession légale")
     private BigDecimal paramCesLegTaux;
     @NotNull(message = "Veuillez saisir le pays")
-    private Long paysId;
+    private String paysCode;
 
 }

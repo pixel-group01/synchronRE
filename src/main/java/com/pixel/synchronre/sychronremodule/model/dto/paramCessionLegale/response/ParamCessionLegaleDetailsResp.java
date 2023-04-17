@@ -13,5 +13,5 @@ public class ParamCessionLegaleDetailsResp
     private String paramCesLegLibelle;
     private BigDecimal paramCesLegCapital;
     private BigDecimal paramCesLegTaux;
-    private Long paysId;
+    private String paysCode;
 }

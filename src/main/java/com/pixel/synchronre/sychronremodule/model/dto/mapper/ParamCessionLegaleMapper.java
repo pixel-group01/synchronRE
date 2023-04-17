@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract interface ParamCessionLegaleMapper
 {
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
-    @Mapping(target = "pays",  expression = "java(dto.getPaysId()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysId()))")
+    @Mapping(target = "pays",  expression = "java(dto.getPaysCode()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysCode()))")
     ParamCessionLegale mapParamCessionToParamCessionLegaleReq(CreateParamCessionLegaleReq dto);
 
-    @Mapping(target = "paysId",  expression = "java(param.getPays().getPaysId()==null? null : new Long(param.getPays().getPaysId())) ")
+    @Mapping(target = "paysCode",  expression = "java(param.getPays().getPaysCode()==null? null : new String(param.getPays().getPaysCode())) ")
     ParamCessionLegaleDetailsResp mapParamDetailsToParamCessionLegale(ParamCessionLegale param);
 }
