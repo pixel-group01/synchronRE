@@ -25,32 +25,32 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp(
         f.affId, f.affCode, f.affAssure, f.affActivite, f.affDateEffet, f.affDateEcheance, f.facNumeroPolice, f.affCapitalInitial,
-        f.facSmpLci, f.facPrime, s.staCode, s.staLibelle, c.couLibelle) 
+        f.facSmpLci, f.facPrime, f.cedante.cedId, s.staCode, s.staLibelle, c.couLibelle) 
         from Facultative f left join f.statut s left join f.couverture c left join f.affUserCreator u left join f.affFonCreator fnc left join f.cedante ced
-                                        where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affAssure, '') ) as string))) >0
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affActivite, '') ) as string))) >0
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.facNumeroPolice, '') ) as string))) >0
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affCapitalInitial, '') ) as string))) =1
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.facSmpLci, '') ) as string))) =1
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.facPrime, '') ) as string))) =1
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staCode, '') ) as string))) >0
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staLibelle, '') ) as string))) >0
-                                         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.couLibelle, '') ) as string))) >0
-                                         ) and fnc.id = coalesce(:fncId, fnc.id)
-                                         and u.userId = coalesce(:userId, u.userId)
-                                         and f.affVisibility = coalesce(:affVisibility, f.affVisibility)
-                                         and ced.cedId = coalesce(:cedId, ced.cedId)
-                                         and ced.cessionnaire.cesId = coalesce(:cedCesId, ced.cessionnaire.cesId)
-                                         and s.staCode in :staCodes
+        where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affAssure, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affActivite, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  f.facNumeroPolice ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(f.affCapitalInitial as string))) =1
+        or locate(upper(coalesce(:key, '') ), upper(cast(f.facSmpLci as string))) =1
+        or locate(upper(coalesce(:key, '') ), upper(cast(f.facPrime as string))) =1
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staCode, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staLibelle, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.couLibelle, '') ) as string))) >0
+        ) 
+        and (:fncId is null or :fncId = fnc.id)
+        and (:userId is null or :userId = u.userId)
+        and (:cedId is null or :cedId = ced.cedId)
+        and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId)
+        and s.staCode in :staCodes
 """)
     Page<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,
                                              @Param("userId") Long userId,
-                                             @Param("affVisibility") Long affVisibility,
                                              @Param("cedId") Long cedId,
                                              @Param("cedCesId") Long cedCesId,
                                              @Param("staCodes") List<String> staCodes, Pageable pageable);
+
 
 
 

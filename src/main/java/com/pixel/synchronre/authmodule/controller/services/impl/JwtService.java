@@ -9,7 +9,9 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
+import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,8 +23,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
 public class JwtService implements IJwtService
@@ -30,6 +34,7 @@ public class JwtService implements IJwtService
     private final FunctionRepo functionRepo;
     private final UserRepo userRepo;
     private final CedRepo cedRepo;
+    private final CessionnaireRepository cesRepo;
 
     @Override
     public AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId)
@@ -46,9 +51,12 @@ public class JwtService implements IJwtService
         Long cedId = function == null ? null : function.getVisibilityId();
         Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
 
+        Long cesId = function == null ? null : function.getCesId();
+        Cessionnaire ces = cesId == null ? null : cesRepo.findById(cesId).orElse(null);
+
         extraClaims.put("userId", userId);
         extraClaims.put("userEmail", userEmail);
-        extraClaims.put("authorities", userDetails.getAuthorities());
+        extraClaims.put("authorities", userDetails.getAuthorities().stream().map(auth->auth.getAuthority()).collect(Collectors.toSet()));
         extraClaims.put("visibilityId", visibilityIds == null ? null : visibilityIds.size() != 1 ? null : new ArrayList<>(visibilityIds).get(0));
         extraClaims.put("functionId", functionId);
         extraClaims.put("connectionId", connectionId);
@@ -57,8 +65,13 @@ public class JwtService implements IJwtService
         extraClaims.put("cedId", cedId);
         extraClaims.put("cedName", ced == null ? null : ced.getCedNomFiliale());
         extraClaims.put("cedSigle", ced == null ? null : ced.getCedSigleFiliale());
-        extraClaims.put("functionStartingDate", function == null ? null : function.getStartsAt());
-        extraClaims.put("functionEndingDate", function == null ? null : function.getEndsAt());
+
+        extraClaims.put("cesId", cesId);
+        extraClaims.put("cesNom", ces == null ? null : ces.getCesNom());
+        extraClaims.put("cedSigle", ces == null ? null : ces.getCesSigle());
+
+        extraClaims.put("functionStartingDate", function == null ? null : Date.from(function.getStartsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        extraClaims.put("functionEndingDate", function == null ? null : Date.from(function.getEndsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         return generateJwt(userEmail, extraClaims);
     }

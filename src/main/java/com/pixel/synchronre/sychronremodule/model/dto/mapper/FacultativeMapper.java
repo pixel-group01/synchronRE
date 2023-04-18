@@ -33,7 +33,6 @@ public abstract class FacultativeMapper
         affaire.setCouverture(dto.getCouvertureId() == null ? null : new Couverture(dto.getCouvertureId()));
         affaire.setAffUserCreator(connectedUserId == null ? null : new AppUser(connectedUserId));
         affaire.setAffFonCreator(connectedFncId == null ? null : new AppFunction(connectedFncId));
-        affaire.setAffVisibility(jwtService.getConnectedUserCedId());
         return new Facultative(affaire, dto.getFacNumeroPolice(), dto.getFacSmpLci(), dto.getFacPrime());
     }
 

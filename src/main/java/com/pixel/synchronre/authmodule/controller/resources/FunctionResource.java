@@ -20,8 +20,8 @@ public class FunctionResource
     private final IFunctionService functionService;
     private final FunctionRepo functionRepo;
 
-    @PutMapping(path = "/create")
-    public ReadFncDTO createFunction(CreateFncDTO dto) throws UnknownHostException {
+    @PostMapping(path = "/create")
+    public ReadFncDTO createFunction(@RequestBody CreateFncDTO dto) throws UnknownHostException {
         return functionService.createFnc(dto);
     }
 
@@ -30,7 +30,7 @@ public class FunctionResource
          return functionService.updateFunction(dto);
     }
 
-    @PutMapping(path = "/get-current-fnc-for-user/{userId}")
+    @GetMapping(path = "/get-current-fnc-for-user/{userId}")
     public Long getActiveCurrentFunctionId(@PathVariable Long userId)
     {
         return functionService.getActiveCurrentFunctionId(userId);

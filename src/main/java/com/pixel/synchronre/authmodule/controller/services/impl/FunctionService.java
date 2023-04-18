@@ -14,14 +14,18 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.FncMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,14 +52,26 @@ public class FunctionService implements IFunctionService
         return ids == null ? null : ids.size() != 1 ? null : new ArrayList<>(ids).get(0);
     }
 
-    @Override @Transactional
+    @Override @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public ReadFncDTO createFnc(CreateFncDTO dto) throws UnknownHostException
     {
         AppFunction function = fncMapper.mapToFunction(dto);
+        boolean userHasFunction = functionRepo.userHasAnyAppFunction(dto.getUserId());
         function = functionRepo.save(function);
         Long fncId = function.getId();
+        if(!userHasFunction)
+        {
+            function.setFncStatus(1);
+            AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException("Utilisateur introuvable"));
+            AppUser oldUser = userCopier.copy(user);
+            user.setCurrentFunctionId(fncId);
+            user = userRepo.save(user);
+            logger.logg(AuthActions.SET_USER_DEFAULT_FNC_ID, oldUser, user, AuthTables.USER_TABLE);
+        }
         logger.logg(AuthActions.CREATE_FNC, null, function, AuthTables.FUNCTION);
-        dto.getRoleIds().forEach(id->
+        Set<Long> roleIds = dto.getRoleIds() == null ? new HashSet<>() : dto.getRoleIds();
+        Set<Long> prvIds = dto.getPrvIds() == null ? new HashSet<>() : dto.getPrvIds();
+        roleIds.forEach(id->
         {
             RoleToFncAss roleToFunctionAss = new RoleToFncAss();
             roleToFunctionAss.setAssStatus(1);
@@ -71,7 +87,7 @@ public class FunctionService implements IFunctionService
             }
         });
 
-        dto.getPrvIds().forEach(id->
+        prvIds.forEach(id->
         {
             PrvToFunctionAss prvToFunctionAss = new PrvToFunctionAss();
             prvToFunctionAss.setAssStatus(1);
@@ -79,7 +95,7 @@ public class FunctionService implements IFunctionService
             prvToFunctionAss.setEndsAt(dto.getEndsAt());
             prvToFunctionAss.setPrivilege(new AppPrivilege(id));
             prvToFunctionAss.setFunction(new AppFunction(fncId));
-
+            ptfRepo.save(prvToFunctionAss);
             try {
                 logger.logg(AuthActions.ADD_PRV_TO_FNC, null, prvToFunctionAss, AuthTables.ASS);
             } catch (UnknownHostException e) {
@@ -113,7 +129,9 @@ public class FunctionService implements IFunctionService
         function.setFncStatus(1);
         logger.logg(AuthActions.SET_FNC_AS_NONE_DEFAULT, oldFnc, function, AuthTables.FUNCTION);
 
-        AppUser user = function.getUser();
+
+        if(function == null || function.getUser() == null ||function.getUser().getUserId() == null) throw new AppException("Utilisateur introuvable");
+        AppUser user = userRepo.findById(function.getUser().getUserId()).orElseThrow(()->new AppException("Utilisateur introuvable"));
         AppUser oldUser = userCopier.copy(user);
         user.setCurrentFunctionId(fncId);
         user = userRepo.save(user);

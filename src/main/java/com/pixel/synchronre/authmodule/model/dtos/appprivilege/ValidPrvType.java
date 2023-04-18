@@ -30,7 +30,7 @@ public @interface ValidPrvType
         public boolean isValid(Long value, ConstraintValidatorContext context)
         {
             if(value == null) return true;
-            return typeRepo.typeGroupHasChild(TypeGroup.PRIVILEGE, value) ;
+            return typeRepo.typeGroupHasChild(TypeGroup.TYPE_PRV, value) ;
         }
     }
 }

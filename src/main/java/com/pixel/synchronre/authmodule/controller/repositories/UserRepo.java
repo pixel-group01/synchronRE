@@ -32,4 +32,7 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
 
     @Query("select (count(u.userId)>0) from AppUser u where u.email = ?1")
     boolean existsByEmail(String email);
+
+    @Query("select f.user from AppFunction f where f.user.userId = ?1")
+    AppUser findByFunctionId(Long fncId);
 }

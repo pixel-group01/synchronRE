@@ -20,7 +20,8 @@ public class AppUser
     private Long userId;
     private String firstName;
     private String lastName;
-    private Long idMetier; //Id de la cedente (Filiale)
+    private Long visibilityId; // Id de la cédante. Dans un autre projet ça peut désigner l'ID d'une autre entité
+    private Long cesId; // Id du cessionnaire //Seulement valable dans le cadre du projet SynchronRE
     private String password;
     @Column(unique = true)
     private String email;

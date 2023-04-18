@@ -43,14 +43,13 @@ public class Affaire {
     @ManyToOne @JoinColumn(name = "aff_fon_creator")
     private AppFunction affFonCreator;
 
-    private Long affVisibility;
-
 
     public Affaire(Long affId) {
         this.affId = affId;
     }
 
-    public Affaire(String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance) {
+    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance) {
+        this.affCapitalInitial = affCapitalInitial;
         this.affCode = affCode;
         this.affAssure = affAssure;
         this.affActivite = affActivite;
