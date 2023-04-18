@@ -9,6 +9,4 @@ public interface IserviceAffaire {
 
     BigDecimal calculateTauxDejaRepartir(Long affId);
     BigDecimal calculateRestTauxARepartir(Long affId);
-
-    void transmettre(long affId, String staCode);
 }
