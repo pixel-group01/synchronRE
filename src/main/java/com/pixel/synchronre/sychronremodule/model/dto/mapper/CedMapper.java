@@ -25,7 +25,7 @@ public abstract class CedMapper
     @Mapping(target = "pays",  expression = "java(dto.getPaysCode()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Pays(dto.getPaysCode()))")
     @Mapping(target = "cedUserCreator",  expression = "java(jwtService.getConnectedUserId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "cedFonCreator",  expression = "java(jwtService.getConnectedUserFunctionId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
-    @Mapping(target = "cedType",  expression = "java(dto.getCedTypeId()==null? null : new com.pixel.synchronre.typemodule.model.entities.Type(dto.getCedTypeId()))")
+    @Mapping(target = "cessionnaire", expression = "java(dto.getCedCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCedCesId()))")
     public abstract Cedante mapToCedente(CreateCedanteDTO dto);
 
     public Cedante mapToCedente(UpdateCedanteDTO dto)
@@ -36,6 +36,9 @@ public abstract class CedMapper
         return cedante;
     }
 
-    @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaType().name())")
+    @Mapping(target = "cesId", source = "cessionnaire.cesId")
+    @Mapping(target = "cesNom", source = "cessionnaire.cesNom")
+    @Mapping(target = "cesSigle", source = "cessionnaire.cesSigle")
+    @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaCode())")
     public abstract ReadCedanteDTO mapToReadCedenteDTO(Cedante ced);
 }

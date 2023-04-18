@@ -31,5 +31,5 @@ public interface IJwtService
     Long getConnectedUserId();
     Long getConnectedUserFunctionId();
     Long getConnectedUserCedId();
-    Long getConnectedUserCedParentId();
+    Long getConnectedUserCesId();
 }

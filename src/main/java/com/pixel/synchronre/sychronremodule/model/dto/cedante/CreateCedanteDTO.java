@@ -17,6 +17,9 @@ import org.hibernate.validator.constraints.Length;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class CreateCedanteDTO
 {
+    @ExistingCedId
+    @NotNull(message = "Veuillez selectionner le cessionnaire de la cédante")
+    private Long cedCesId;
     @NotBlank(message = "Veuillez saisir le nom de la cedente")
     @NotNull(message = "Veuillez saisir le nom de la cedente")
     @Length(message = "Le nom de la cedente doit contenir au moins deux caractères", min = 2)
@@ -42,9 +45,4 @@ public class CreateCedanteDTO
     private Long cedUserCreator;
     @ExistingFncId
     private Long cedFonCreator;
-    @ExistingTypeId
-    private Long cedTypeId;
-    @ExistingCedId
-    private Long cedParentId;
-    private boolean selfParent;
 }

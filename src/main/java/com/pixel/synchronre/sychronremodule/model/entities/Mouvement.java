@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
-@Entity
+@AllArgsConstructor @NoArgsConstructor @Data @Builder @Entity
 public class Mouvement {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,6 +20,10 @@ public class Mouvement {
   @ManyToOne @JoinColumn(name = "mvt_sta_code")
   private Statut statut;
   private String mvtObservation;
+  @ManyToOne @JoinColumn(name = "mvt_user_id")
+  private AppUser mvtUser;
+  @ManyToOne @JoinColumn(name = "mvt_function_id")
+  private AppFunction mvtFunction;
   @ManyToOne @JoinColumn(name = "AFF_ID")
   private Affaire affaire;
   @CreationTimestamp

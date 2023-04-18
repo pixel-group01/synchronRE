@@ -6,6 +6,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.Create
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class AffaireController
     private final IserviceFacultative facService;
     private final AffaireRepository affRepo;
     private IJwtService jwtService;
+    private final IServiceMouvement mvtService;
 
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -52,7 +55,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null, null,null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null, null,null, Arrays.asList("SAI", "RET", "CREP"), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-cedante")
@@ -60,7 +63,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, null, Arrays.asList("SAI", "RET"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, null, Arrays.asList("SAI", "RET", "CREP"), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-cedante-transmis") //Transmis par la cedante mais en cours de traitement
@@ -76,7 +79,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedParentId(), null, jwtService.getConnectedUserCedParentId(),Arrays.asList("SAI", "TRA"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCesId(), null, jwtService.getConnectedUserCesId(),Arrays.asList("SAI", "TRA"), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur
@@ -84,7 +87,7 @@ public class AffaireController
                                                                @RequestParam(defaultValue = "0") int page,
                                                                @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedParentId(), null, jwtService.getConnectedUserCedParentId(),Arrays.asList("VAL"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCesId(), null, jwtService.getConnectedUserCesId(),Arrays.asList("VAL"), PageRequest.of(page, size));
     }
 
     //====================================
@@ -111,5 +114,24 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, null, Arrays.asList("ARC"), PageRequest.of(page, size));
+    }
+
+    @PostMapping(path = "/affaire/transmettre/{affId}")
+    public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId)
+    {
+        mvtService.createMvtSuivant(new MvtSuivantReq("APLA", affId));
+        return affRepo.searchAffaires("", null, null, jwtService.getConnectedUserCedId(), jwtService.getConnectedUserCedId(), null, Arrays.asList("SAI", "RET", "CREP"), PageRequest.of(0, 10));
+    }
+
+    @PostMapping(path = "/affaire/valider/{affId}")
+    public void validerPlacement(@PathVariable Long affId)
+    {
+        mvtService.createMvtSuivant(new MvtSuivantReq("AREG", affId));
+    }
+
+    @PostMapping(path = "/affaire/archiver/{affId}")
+    public void archiverAffaire(@PathVariable Long affId)
+    {
+        mvtService.createMvtSuivant(new MvtSuivantReq("ARC", affId));
     }
 }

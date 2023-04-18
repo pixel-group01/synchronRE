@@ -41,7 +41,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                          and u.userId = coalesce(:userId, u.userId)
                                          and f.affVisibility = coalesce(:affVisibility, f.affVisibility)
                                          and ced.cedId = coalesce(:cedId, ced.cedId)
-                                         and ced.cedParentId = coalesce(:cedParentId, ced.cedParentId)
+                                         and ced.cessionnaire.cesId = coalesce(:cedCesId, ced.cessionnaire.cesId)
                                          and s.staCode in :staCodes
 """)
     Page<FacultativeListResp> searchAffaires(@Param("key") String key,
@@ -49,7 +49,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                              @Param("userId") Long userId,
                                              @Param("affVisibility") Long affVisibility,
                                              @Param("cedId") Long cedId,
-                                             @Param("cedParentId") Long cedParentId,
+                                             @Param("cedCesId") Long cedCesId,
                                              @Param("staCodes") List<String> staCodes, Pageable pageable);
 
 

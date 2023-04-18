@@ -21,5 +21,8 @@ public class MouvementListResp
     private String cedNomFiliale;
     private String cedSigleFiliale;
     private String mvtObservation;
+    private String userEmail;
+    private String userFullNom;
+    private String functionName;
     private LocalDateTime mvtDate;
 }

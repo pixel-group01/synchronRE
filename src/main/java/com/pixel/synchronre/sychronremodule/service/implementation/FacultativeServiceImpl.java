@@ -17,6 +17,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.Update
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Facultative;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
@@ -44,10 +45,10 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException {
         Facultative fac=facultativeMapper.mapToFacultative(dto);
-        fac.setStatut(staRepo.findByStaCode("SAI"));
+        fac.setStatut(new Statut("SAI"));
         fac=facRepo.save(fac);
         logService.logg(SynchronReActions.CREATE_FAC, null, fac, SynchronReTables.AFFAIRE);
-        mvtService.createMouvement(fac.getAffId(), "SAI", null);
+        mvtService.createMvtSuivant(new MvtSuivantReq(fac.getStatut().getStaCode(), fac.getAffId()));
         return facultativeMapper.mapToFacultativeDetailsResp(fac);
     }
 

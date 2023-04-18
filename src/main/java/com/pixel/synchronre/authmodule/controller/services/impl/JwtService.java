@@ -21,8 +21,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
@@ -200,9 +198,9 @@ public class JwtService implements IJwtService
     }
 
     @Override
-    public Long getConnectedUserCedParentId()
+    public Long getConnectedUserCesId()
     {
         Long cedId = this.getConnectedUserCedId();
-        return cedId == null ? null : cedRepo.getCedParentId(cedId);
+        return cedId == null ? null : cedRepo.getCedCesId(cedId);
     }
 }

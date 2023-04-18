@@ -1,7 +1,12 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.MvtMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Mouvement;
@@ -11,7 +16,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,12 +27,25 @@ import java.util.List;
 public class ServiceMouvementImpl implements IServiceMouvement
 {
     private final MouvementRepository mvtRepo;
-    private final StatutRepository staRepo;
+    private final MvtMapper mvtMapper;
+    private final AffaireRepository affRepo;
 
-    @Override
-    public void createMouvement(Long affId, String staCode, String mvtObs)
+
+    @Override @Transactional
+    public void createMvtRet(MvtRetourReq dto)
     {
-        Mouvement mvt = new Mouvement(null, new Statut(staCode), mvtObs, new Affaire(affId), LocalDateTime.now());
+        Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        aff.setStatut(new Statut("RET"));
+        Mouvement mvt = mvtMapper.mapTomouvement(dto);
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void createMvtSuivant(MvtSuivantReq dto)
+    {
+        Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        aff.setStatut(new Statut(dto.getStaCode()));
+        Mouvement mvt = mvtMapper.mapTomouvement(dto);
         mvtRepo.save(mvt);
     }
 

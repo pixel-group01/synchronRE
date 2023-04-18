@@ -24,15 +24,14 @@ public class Cedante {
   private String cedAdressePostale;
   private String cedFax;
   private String cedSituationGeo;
-  private Long cedParentId;
-  @ManyToOne @JoinColumn(name = "ced_pays_id")
+  @ManyToOne() @JoinColumn(name = "ced_ces_id")
+  private Cessionnaire cessionnaire;
+  @ManyToOne @JoinColumn(name = "ced_pays_code")
   private Pays pays;
   @ManyToOne @JoinColumn(name = "ced_user_creator")
   private AppUser cedUserCreator;
   @ManyToOne @JoinColumn(name = "ced_fon_creator")
   private AppFunction cedFonCreator;
-  @ManyToOne @JoinColumn(name = "ced_type")
-  private Type cedType;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp
