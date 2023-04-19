@@ -6,8 +6,10 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import com.pixel.synchronre.logmodule.model.entities.Log;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
@@ -40,7 +42,7 @@ public class JwtService implements IJwtService
     public AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId)
     {
         String userEmail = userDetails.getUsername();
-        Long userId = userRepo.getUserIdByEmail(userEmail);
+        AppUser user = userRepo.findByEmail(userEmail).orElseThrow(()->new AppException("Utilisateur introuvable"));
         Set<Long> visibilityIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
         Set<Long> functionIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
         Long functionId = functionIds == null || functionIds.size() != 1 ? null : new ArrayList<>(functionIds).get(0);
@@ -54,8 +56,11 @@ public class JwtService implements IJwtService
         Long cesId = function == null ? null : function.getCesId();
         Cessionnaire ces = cesId == null ? null : cesRepo.findById(cesId).orElse(null);
 
-        extraClaims.put("userId", userId);
-        extraClaims.put("userEmail", userEmail);
+        extraClaims.put("userId", user.getUserId());
+        extraClaims.put("email", userEmail);
+        extraClaims.put("nom", user.getFirstName());
+        extraClaims.put("tel", user.getTel());
+        extraClaims.put("prenom", user.getLastName());
         extraClaims.put("authorities", userDetails.getAuthorities().stream().map(auth->auth.getAuthority()).collect(Collectors.toSet()));
         extraClaims.put("visibilityId", visibilityIds == null ? null : visibilityIds.size() != 1 ? null : new ArrayList<>(visibilityIds).get(0));
         extraClaims.put("functionId", functionId);
