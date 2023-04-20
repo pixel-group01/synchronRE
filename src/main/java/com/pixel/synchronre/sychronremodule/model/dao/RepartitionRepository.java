@@ -55,4 +55,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
     Repartition findByAffaireAndTypeCedAndCesId(Long affId, String rep_pla, Long cesId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
+    boolean affaireHasPlacement(Long affId);
 }

@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
@@ -9,6 +10,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
@@ -17,6 +19,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import com.pixel.synchronre.typemodule.model.entities.Type;
@@ -42,6 +45,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
     private final ILogService logService;
+    private final IServiceMouvement mvtService;
     private BigDecimal zero = new BigDecimal(0);
     private BigDecimal cent = new BigDecimal(100);
 
@@ -112,18 +116,21 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
-    @Override @Transactional
+    @Override @Transactional //Répartition de type cession légale et part cédante (balayage de tout l'écran vrouuuu)
     public RepartitionDetailsResp createCedLegRepartition(CreateCedLegRepartitionReq dto) throws UnknownHostException
     {
          this.createCesLegRepartitions(dto.getCesLegDtos());
          CreatePartCedRepartitionReq partCedDto = new CreatePartCedRepartitionReq();
          BeanUtils.copyProperties(dto, partCedDto, "cesLegDtos");
-         return this.createPartCedRepartition(partCedDto);
+         RepartitionDetailsResp repartitionDetailsResp = this.createPartCedRepartition(partCedDto);
+         mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_REPARTITION.staCode, dto.getAffId()));
+         return repartitionDetailsResp;
     }
 
-    @Override
-    public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException {
-
+    @Override //Placemement
+    public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
+    {
+        boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
         boolean existsByAffaireAndTypeCed = repRepo.existsByAffaireAndTypeCedAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;
         Repartition oldRep = null;
@@ -140,6 +147,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
         rep = repRepo.save(rep);
         logService.logg(existsByAffaireAndTypeCed ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        if(firstPlacement)
+        {
+            mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_PLACEMENT.staCode, dto.getAffId()));
+        }
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
