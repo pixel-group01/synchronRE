@@ -44,7 +44,7 @@ public class JwtService implements IJwtService
         String userEmail = userDetails.getUsername();
         AppUser user = userRepo.findByEmail(userEmail).orElseThrow(()->new AppException("Utilisateur introuvable"));
         Set<Long> visibilityIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
-        Set<Long> functionIds = functionRepo.getCurrentFncVisibilityIds(userDetails.getUsername());
+        Set<Long> functionIds = functionRepo.getCurrentFncIds(user.getUserId());
         Long functionId = functionIds == null || functionIds.size() != 1 ? null : new ArrayList<>(functionIds).get(0);
         Map<String, Object> extraClaims = new HashMap<>(); //functionId = 1l;
 

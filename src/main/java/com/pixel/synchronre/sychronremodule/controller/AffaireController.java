@@ -119,7 +119,7 @@ public class AffaireController
         return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, Arrays.asList("ARC"), PageRequest.of(page, size));
     }
 
-    @PostMapping(path = "/affaire/transmettre/{affId}")
+    @PostMapping(path = "/facultative/transmettre/{affId}")
     public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId)
     {
         mvtService.createMvtSuivant(new MvtSuivantReq("APLA", affId));
@@ -129,11 +129,11 @@ public class AffaireController
     }
 
     @PostMapping(path = "/affaire/retourner/{affId}")
-    public Page<FacultativeListResp> retournerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId, @RequestBody String obs)
+    public Page<FacultativeListResp> retournerAffaire(@PathVariable Long affId, @RequestBody String obs)
     {
         mvtService.createMvtRet(new MvtRetourReq(obs, affId));
         return affRepo.searchAffaires("", null, null,
-                cedId,
+                affRepo.getAffCedId(affId),
                 null, Arrays.asList("APLA", "CPLA"), PageRequest.of(0, 10));
     }
 

@@ -51,6 +51,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                              @Param("cedCesId") Long cedCesId,
                                              @Param("staCodes") List<String> staCodes, Pageable pageable);
 
+    @Query("select aff.cedante.cedId from Affaire aff where aff.affId = ?1")
+    Long getAffCedId(Long affId);
+
 
 
 
