@@ -2,6 +2,7 @@ package com.pixel.synchronre.sharedmodule.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,7 +39,8 @@ public class AppExceptionHandler
     {
         String errMsg = exception instanceof DisabledException ?
                 "Votre compte a bien été créé mais n'est pas encore activé.\nPour recevoir un lien d'activation, veillez cliquer sur le lien ci-dessous." :
-                exception instanceof LockedException ? "Compte bloqué" : "Username ou mot de passe incorrect";
+                exception instanceof LockedException ? "Compte bloqué" :
+                exception instanceof InsufficientAuthenticationException ? exception.getMessage() : "Username ou mot de passe incorrect";
         return errMsg;
     }
 }

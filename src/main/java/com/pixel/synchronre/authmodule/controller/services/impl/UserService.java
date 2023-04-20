@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
+import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.dtos.LoginDTO;
@@ -26,7 +27,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,9 +59,11 @@ public class UserService implements IUserService
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService uds;
     private final ObjectCopier<AppUser> userCopier;
+    private final FunctionRepo fncRepo;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
+        if(!fncRepo.userHasAnyAppFunction(dto.getUsername())) throw new InsufficientAuthenticationException("Vous ne disposez d'aucune fonction. Veuillez contacter un administrateur SVP");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         UserDetails userDetails = uds.loadUserByUsername(dto.getUsername());
         Log log = logger.logLoginOrLogout(dto.getUsername(), AuthActions.LOGIN);

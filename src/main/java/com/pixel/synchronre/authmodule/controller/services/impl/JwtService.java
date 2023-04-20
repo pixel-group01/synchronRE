@@ -55,8 +55,8 @@ public class JwtService implements IJwtService
 
         Long cesId = function == null ? null : function.getCesId();
         Cessionnaire ces = cesId == null ? null : cesRepo.findById(cesId).orElse(null);
-
-        extraClaims.put("userId", user.getUserId());
+        Long userId = user.getUserId();
+        extraClaims.put("userId", userId);
         extraClaims.put("email", userEmail);
         extraClaims.put("nom", user.getFirstName());
         extraClaims.put("tel", user.getTel());
@@ -77,6 +77,11 @@ public class JwtService implements IJwtService
 
         extraClaims.put("functionStartingDate", function == null ? null : Date.from(function.getStartsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         extraClaims.put("functionEndingDate", function == null ? null : Date.from(function.getEndsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        boolean hasCurrentFonction = functionId != null && functionRepo.functionIsCurrentForUser(functionId, userId);
+        boolean doesNotHaveAnyFunction = !functionRepo.userHasAnyAppFunction(userId);
+        //boolean hasActiveFunctionsButNotCurrent = ;
+        //boolean currentFunctionHasExpired = ;
 
         return generateJwt(userEmail, extraClaims);
     }
@@ -180,6 +185,7 @@ public class JwtService implements IJwtService
         jwtInfos.setFncStartingDate(function == null ? null : function.getStartsAt());
         jwtInfos.setFncEndingDate(function == null ? null : function.getEndsAt());
 
+
         return jwtInfos;
     }
 
@@ -220,5 +226,12 @@ public class JwtService implements IJwtService
     {
         Long cedId = this.getConnectedUserCedId();
         return cedId == null ? null : cedRepo.getCedCesId(cedId);
+    }
+
+    class TokenStatus
+    {
+        private int status;
+        private String description;
+        private String message;
     }
 }

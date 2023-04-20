@@ -26,6 +26,12 @@ public interface FunctionRepo extends JpaRepository<AppFunction, Long>
     @Query("select (count(ps)>0) from AppFunction ps where ps.user.userId = ?1")
     boolean userHasAnyAppFunction(Long userId);
 
-    @Query("select ps.user.userId from AppFunction ps where ps.id = ?1")
+    @Query("select (count(ps)>0) from AppFunction ps where ps.user.email = ?1")
+    boolean userHasAnyAppFunction(String username);
+
+    @Query("select f.user.userId from AppFunction f where f.id = ?1")
     Long getUserId(Long id);
+
+    @Query("select (count(u.userId) = 1) from AppFunction f join f.user u where u.currentFunctionId = ?1 and u.userId = ?2 and f.fncStatus = 1 and current_date between coalesce(f.startsAt, current_date) and coalesce(f.endsAt, current_date)")
+    boolean functionIsCurrentForUser(Long fncId, Long userId);
 }

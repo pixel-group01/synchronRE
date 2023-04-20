@@ -1,5 +1,6 @@
 package com.pixel.synchronre;
 
+import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
@@ -36,10 +37,11 @@ public class SynchronReApplication {
     //@Bean
     public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
-                                   FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo, PrvRepo prvRepo)
+                                   FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,
+                                   PrvRepo prvRepo, FunctionRepo fncRepo)
     {
         return args->{
-           AppUser user = new AppUser(1l, "admin", "admin", null, 4l,
+           AppUser admin = new AppUser(1l, "admin", "admin", null, 4l,
                     pe.encode("1234"), "admin@gmail.com", "1234",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
@@ -58,7 +60,7 @@ public class SynchronReApplication {
                     pe.encode("usertg"), "usertg@gmail.com", "usertg-tel",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
-            userRepo.saveAll(Arrays.asList(user, userci, userbn, usertg));
+            userRepo.saveAll(Arrays.asList(admin, userci, userbn, usertg));
 
             Type t1 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
             Type t2 = new Type(null, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null);
@@ -119,6 +121,10 @@ public class SynchronReApplication {
 
          cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 
+            AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            fncRepo.save(function);
+            admin.setCurrentFunctionId(1l);
+            userRepo.save(admin);
             //Cedante nre = new Cessionnaire(1l, "Nelson RE", "NRE", ,"05 05 05 05 01", "nre@gmail.com", "NRE", "NRE", "ABJ", null, ci,new AppUser(1l),null, rea, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             //nre = cedRepo.save(nre); nre.setCedParentId(nre.getCedId());nre = cedRepo.save(nre);
 
