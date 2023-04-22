@@ -148,7 +148,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         return  mtCommission.multiply(tauxCommission.subtract(tauxCommissionReassureur));
     }
 
-    @Override //TODO A implementer
+    @Override
     public BigDecimal calculateMtTotaleCmsCed(Long affId) //Montant totale de la commission cedante
     {
         Set<Long> cesIds = repRepo.getCesIdsByAffId(affId);

@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
@@ -30,8 +31,14 @@ public class Reglement {
   private Type typeReglement;
   @ManyToOne @JoinColumn(name = "aff_id")
   private Affaire affaire;
+  @ManyToOne @JoinColumn(name = "sin_id")
+  private Sinistre sinistre;
+  @ManyToOne @JoinColumn(name = "ces_id")
+  private Cessionnaire cessionnaire;
   @ManyToOne @JoinColumn(name = "user_id")
   private AppUser appUser;
+  @ManyToOne @JoinColumn(name = "function_id")
+  private AppFunction functionCreator;
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp

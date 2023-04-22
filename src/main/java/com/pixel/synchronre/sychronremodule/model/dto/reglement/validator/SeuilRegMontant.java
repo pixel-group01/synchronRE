@@ -16,11 +16,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {SeuilRegMontant.SeuilRegMontantValidatorOnCreate.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnUpdate.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnCreateCesLeg.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnCreatePartCed.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnCreatePlaRep.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnCreateCedLeg.class})
+        SeuilRegMontant.SeuilRepCapValidatorOnUpdate.class})
 @Documented
 public @interface SeuilRegMontant
 {
@@ -38,49 +34,7 @@ public @interface SeuilRegMontant
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRegMontant()) == 0 ;
-        }
-    }
-
-    @Component
-    @RequiredArgsConstructor
-    class SeuilRepCapValidatorOnCreateCesLeg implements ConstraintValidator<SeuilRegMontant, CreateCesLegReq>
-    {
-        private final IServiceCalculsComptables comptaService;
-        @Override
-        public boolean isValid(CreateCesLegReq dto, ConstraintValidatorContext context)
-        {
-            if(dto == null) return true;
-            if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
-        }
-    }
-
-    @Component
-    @RequiredArgsConstructor
-    class SeuilRepCapValidatorOnCreatePlaRep implements ConstraintValidator<SeuilRegMontant, CreatePlaRepartitionReq>
-    {
-        private final IServiceCalculsComptables comptaService;
-        @Override
-        public boolean isValid(CreatePlaRepartitionReq dto, ConstraintValidatorContext context)
-        {
-            if(dto == null) return true;
-            if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
-        }
-    }
-
-    @Component
-    @RequiredArgsConstructor
-    class SeuilRepCapValidatorOnCreatePartCed implements ConstraintValidator<SeuilRegMontant, CreatePartCedRepartitionReq>
-    {
-        private final IServiceCalculsComptables comptaService;
-        @Override
-        public boolean isValid(CreatePartCedRepartitionReq dto, ConstraintValidatorContext context)
-        {
-            if(dto == null) return true;
-            if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
+            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRegMontant()) == 0 ;
         }
     }
 
@@ -94,21 +48,7 @@ public @interface SeuilRegMontant
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
-        }
-    }
-
-    @Component
-    @RequiredArgsConstructor
-    class SeuilRepCapValidatorOnCreateCedLeg implements ConstraintValidator<SeuilRegMontant, CreateCedLegRepartitionReq>
-    {
-        private final IServiceCalculsComptables comptaService;
-        @Override
-        public boolean isValid(CreateCedLegRepartitionReq dto, ConstraintValidatorContext context)
-        {
-            if(dto == null) return true;
-            if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
         }
     }
 }

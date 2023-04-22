@@ -22,4 +22,6 @@ public class SynchronReActions
     public static final String UPDATE_FAC = "Modification d'une affaire facultative";
     public static final String CREATE_REGLEMENT = "Création d'une paiement";
     public static final String UPDATE_REGLEMENT = "Modification d'un paiement";
+    public static final String CREATE_SINISTRE = "Création d'un sinistre";
+    public static final String UPDATE_SINISTRE = "Mise à jour d'un sinistre";
 }

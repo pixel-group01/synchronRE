@@ -11,4 +11,5 @@ public class SynchronReTables {
     public static final String AFFAIRE = "Affaire";
     public static final String PAYS = "Pays";
     public static final String REGLEMENT = "Reglement";
+    public static final String SINISTRE = "Sinistre";
 }

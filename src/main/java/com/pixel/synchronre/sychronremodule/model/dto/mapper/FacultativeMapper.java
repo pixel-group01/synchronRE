@@ -54,6 +54,13 @@ public abstract class FacultativeMapper
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(fac.getAffId()))")
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Facultative fac);
 
+    @Mapping(target = "cedenteId", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedId())")
+    @Mapping(target = "statutCode", expression = "java(aff.getStatut() == null ? null : aff.getStatut().getStaCode())")
+    @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
+    @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
+    @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
+    public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Affaire aff);
+
     @Mapping(target = "mtTotalCmsCedante", expression = "java(comptaService.calculateMtTotaleCmsCed(aff.getAffId()))")
     @Mapping(target = "mtTotalCmsReaOwner", expression = "java(comptaService.calculateMtTotalCmsReaOwner(aff.getAffId()))")
     @Mapping(target = "mtTotalPrimeNetteCes", expression = "java(comptaService.calculateMtTotalAReverseAuxCes(aff.getAffId()))")

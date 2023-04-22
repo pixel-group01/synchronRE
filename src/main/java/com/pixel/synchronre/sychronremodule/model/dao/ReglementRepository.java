@@ -32,4 +32,15 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("select r.affaire.facPrime * r.repTaux * r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
     BigDecimal getMtSousCommissionByCessionnaire(Long affId, Long cesId);
+
+    @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.regStatut = true")
+    BigDecimal getMtRegleBySinistre(Long sinId);
+
+    @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true")
+    BigDecimal getMtRegleBySinistreAndCes(Long sinId, Long cesId);
+
+    @Query("select r.repTaux * s.sinMontant100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId where s.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.repStatut = true")
+    BigDecimal getMtAReglerBySinistreAndCes(Long sinId, Long cesId);
+
+
 }

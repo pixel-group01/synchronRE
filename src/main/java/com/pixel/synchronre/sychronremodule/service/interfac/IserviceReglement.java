@@ -10,7 +10,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
 
-public interface IserviceReglement {
+public interface IserviceReglement
+{
     ReglementDetailsResp createReglement(String typeReg, CreateReglementReq dto) throws UnknownHostException;
     ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException;
     Page<ReglementListResp> searchReglement(String key, String typRegUniqueCode, Pageable pageable);

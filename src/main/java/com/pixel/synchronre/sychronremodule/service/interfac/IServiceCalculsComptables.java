@@ -36,4 +36,6 @@ public interface IServiceCalculsComptables
     BigDecimal calculateTauxDeReglement(Long affId);
 
     BigDecimal calculateTauxDeReversement(Long affId);
+
+
 }

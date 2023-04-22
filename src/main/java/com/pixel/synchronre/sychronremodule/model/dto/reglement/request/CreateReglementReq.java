@@ -1,24 +1,20 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.request;
 
-import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.SeuilRegMontant;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.UniqueReference;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRegMontant(groups = {PAIEMENT_GROUP.class})
-@SeuilRepCap
+@SeuilRegMontant(groups = {CREATE_GROUP.class})
 public class CreateReglementReq {
 
     @NotBlank(message = "Veuillez saisir la réference du paiement")

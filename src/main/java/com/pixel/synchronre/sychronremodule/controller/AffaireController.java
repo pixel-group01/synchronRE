@@ -40,7 +40,7 @@ public class AffaireController
     private final IServiceMouvement mvtService;
     private final IserviceAffaire affService;
 
-    @PostMapping("/facultative/details/{affId}")
+    @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId) throws MethodArgumentNotValidException, UnknownHostException {
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
