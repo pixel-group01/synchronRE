@@ -1,14 +1,17 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourReq;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
@@ -32,9 +35,17 @@ public class AffaireController
 {
     private final IserviceFacultative facService;
     private final AffaireRepository affRepo;
+    private final FacultativeMapper facMapper;
     private final IJwtService jwtService;
     private final IServiceMouvement mvtService;
     private final IserviceAffaire affService;
+
+    @PostMapping("/facultative/details/{affId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId) throws MethodArgumentNotValidException, UnknownHostException {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        return facMapper.mapToFacultativeDetailsResp(affaire);
+    }
 
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
