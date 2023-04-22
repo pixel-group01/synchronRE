@@ -1,7 +1,9 @@
-package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
+package com.pixel.synchronre.sychronremodule.model.dto.reglement.validator;
 
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,35 +15,36 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {SeuilRepTau.SeuilRepTauValidatorOnCreate.class,
-        SeuilRepTau.SeuilRepTauValidatorOnUpdate.class, SeuilRepTau.SeuilRepTauValidatorOnCreatePartCed.class,
-        SeuilRepTau.SeuilRepTauValidatorOnCreateCesLeg.class,
-        SeuilRepTau.SeuilRepTauValidatorOnCreatePlaRep.class,
-        SeuilRepTau.SeuilRepTauValidatorOnCreateCedLegRep.class})
+@Constraint(validatedBy = {SeuilRegMontant.SeuilRegMontantValidatorOnCreate.class,
+        SeuilRegMontant.SeuilRepCapValidatorOnUpdate.class,
+        SeuilRegMontant.SeuilRepCapValidatorOnCreateCesLeg.class,
+        SeuilRegMontant.SeuilRepCapValidatorOnCreatePartCed.class,
+        SeuilRegMontant.SeuilRepCapValidatorOnCreatePlaRep.class,
+        SeuilRegMontant.SeuilRepCapValidatorOnCreateCedLeg.class})
 @Documented
-public @interface SeuilRepTau
+public @interface SeuilRegMontant
 {
-    String message() default "repTaux::Le taux de répartition ne peut exéder le taux restant";
+    String message() default "regMontant::Le montant du règlement ne peut excéder le reste à régler";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnCreate implements ConstraintValidator<SeuilRepTau, CreateRepartitionReq>
+    class SeuilRegMontantValidatorOnCreate implements ConstraintValidator<SeuilRegMontant, CreateReglementReq>
     {
         private final IServiceCalculsComptables comptaService;
         @Override
-        public boolean isValid(CreateRepartitionReq dto, ConstraintValidatorContext context)
+        public boolean isValid(CreateReglementReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRegMontant()) == 0 ;
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnCreateCesLeg implements ConstraintValidator<SeuilRepTau, CreateCesLegReq>
+    class SeuilRepCapValidatorOnCreateCesLeg implements ConstraintValidator<SeuilRegMontant, CreateCesLegReq>
     {
         private final IServiceCalculsComptables comptaService;
         @Override
@@ -49,27 +52,13 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnCreatePartCed implements ConstraintValidator<SeuilRepTau, CreatePartCedRepartitionReq>
-    {
-        private final IServiceCalculsComptables comptaService;
-        @Override
-        public boolean isValid(CreatePartCedRepartitionReq dto, ConstraintValidatorContext context)
-        {
-            if(dto == null) return true;
-            if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
-        }
-    }
-
-    @Component
-    @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnCreatePlaRep implements ConstraintValidator<SeuilRepTau, CreatePlaRepartitionReq>
+    class SeuilRepCapValidatorOnCreatePlaRep implements ConstraintValidator<SeuilRegMontant, CreatePlaRepartitionReq>
     {
         private final IServiceCalculsComptables comptaService;
         @Override
@@ -77,13 +66,27 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnUpdate implements ConstraintValidator<SeuilRepTau, UpdateRepartitionReq>
+    class SeuilRepCapValidatorOnCreatePartCed implements ConstraintValidator<SeuilRegMontant, CreatePartCedRepartitionReq>
+    {
+        private final IServiceCalculsComptables comptaService;
+        @Override
+        public boolean isValid(CreatePartCedRepartitionReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getAffId() == null) return true;
+            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepCapValidatorOnUpdate implements ConstraintValidator<SeuilRegMontant, UpdateRepartitionReq>
     {
         private final IServiceCalculsComptables comptaService;
         @Override
@@ -97,7 +100,7 @@ public @interface SeuilRepTau
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepTauValidatorOnCreateCedLegRep implements ConstraintValidator<SeuilRepTau, CreateCedLegRepartitionReq>
+    class SeuilRepCapValidatorOnCreateCedLeg implements ConstraintValidator<SeuilRegMontant, CreateCedLegRepartitionReq>
     {
         private final IServiceCalculsComptables comptaService;
         @Override

@@ -23,4 +23,7 @@ public class FacultativeDetailsResp
     protected Long couvertureId;
     private BigDecimal restARepartir;
     private BigDecimal capitalDejaReparti;
+
+    private EtatComptableAffaire etatComptable;
+
 }

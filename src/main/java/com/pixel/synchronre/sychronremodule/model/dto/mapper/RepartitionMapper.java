@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.Create
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
 public abstract class RepartitionMapper {
     @Autowired protected TypeRepo typeRepo;
     @Autowired protected ParamCessionLegaleRepository pclRepo;
-    @Autowired protected IserviceAffaire affService;
+    @Autowired protected IServiceCalculsComptables comptaService;
     public abstract Repartition mapToRepartition(CreateRepartitionReq dto);
 
 
@@ -41,8 +42,8 @@ public abstract class RepartitionMapper {
     @Mapping(target = "cesSigle", source = "cessionnaire.cesSigle")
     @Mapping(target = "cesEmail", source = "cessionnaire.cesEmail")
     @Mapping(target = "cesTelephone", source = "cessionnaire.cesTelephone")
-    @Mapping(target = "affBesoinFac", expression = "java(affService.calculateRestARepartir(res.getAffaire().getAffId()))")
-    @Mapping(target = "affTauxBesoinFac", expression = "java(affService.calculateRestTauxARepartir(res.getAffaire().getAffId()))")
+    @Mapping(target = "affBesoinFac", expression = "java(comptaService.calculateRestARepartir(res.getAffaire().getAffId()))")
+    @Mapping(target = "affTauxBesoinFac", expression = "java(comptaService.calculateRestTauxARepartir(res.getAffaire().getAffId()))")
     public abstract RepartitionDetailsResp mapToRepartitionDetailsResp(Repartition res);
 
     @Mapping(target = "repStatut", expression = "java(true)")

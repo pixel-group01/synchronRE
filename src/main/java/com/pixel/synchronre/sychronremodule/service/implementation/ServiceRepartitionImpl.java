@@ -19,8 +19,8 @@ import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 {
     private final RepartitionRepository repRepo;
     private final AffaireRepository affRepo;
-    private final IserviceAffaire affService;
+    private final IServiceCalculsComptables comptaService;
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
     private final ILogService logService;
@@ -181,7 +181,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(capital.compareTo(zero)<0) throw new AppException("Le capital doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(aff == null) return null;
-        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
         restARepartir = restARepartir == null ? zero : restARepartir;
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
@@ -204,7 +204,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Affaire aff = affRepo.findById(affId).orElse(null);
         
         if(aff == null) return null;
-        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
         restARepartir = restARepartir == null ? zero : restARepartir;
 
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
@@ -231,7 +231,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(tauxBesoin.compareTo(cent)>0) throw new AppException("Le taux de repartition ne doit pas exéder 100% du besoin fac");
 
         if(aff == null) return null;
-        BigDecimal restARepartir = affService.calculateRestARepartir(affId);
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
         restARepartir = restARepartir == null ? zero : restARepartir;
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);

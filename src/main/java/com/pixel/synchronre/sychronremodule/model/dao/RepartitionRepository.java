@@ -9,10 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
+    @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.repStatut = true")
+    BigDecimal getTauxSousCommission(Long affId, Long cesId);
+
     @Query("select coalesce(sum(r.repCapital), 0) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     BigDecimal getRepartitionsByAffId(Long affId);
 
@@ -58,4 +62,13 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     boolean affaireHasPlacement(Long affId);
+
+    @Query("select r.cessionnaire.cesId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    Set<Long> getCesIdsByAffId(Long affId);
+
+    @Query("select r.repTaux from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    BigDecimal getTauRep(Long affId, Long cesId);
+
+    @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    BigDecimal getTauxCms(Long affId, Long cesId);
 }

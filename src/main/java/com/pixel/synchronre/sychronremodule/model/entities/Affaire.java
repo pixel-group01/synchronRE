@@ -27,6 +27,11 @@ public class Affaire {
     protected LocalDate affDateEffet;
     protected LocalDate affDateEcheance;
     private BigDecimal affCapitalInitial; //Capital à 100
+    private BigDecimal affTauxCommissionReassureur;
+    private String facNumeroPolice;
+    //private float facCapitaux;
+    private BigDecimal facSmpLci; // Sinistre max
+    private BigDecimal facPrime;
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;
     @ManyToOne @JoinColumn(name = "statut_code")

@@ -1,8 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
-import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
-import com.pixel.synchronre.sychronremodule.model.enums.TypeReglement;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,8 +25,9 @@ public class Reglement {
   private LocalDate regDate;
   private BigDecimal regMontant;
   private BigDecimal regCommission;
-  @Enumerated(EnumType.STRING)
-  private TypeReglement typeReglement;
+  private boolean regStatut;
+  @ManyToOne @JoinColumn(name = "type_id")
+  private Type typeReglement;
   @ManyToOne @JoinColumn(name = "aff_id")
   private Affaire affaire;
   @ManyToOne @JoinColumn(name = "user_id")

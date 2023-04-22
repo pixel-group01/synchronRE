@@ -12,6 +12,7 @@ public enum StatutEnum
     RETOURNE("RET", "Retournée"),
     EN_ATTENTE_DE_REGLEMENT("AREG", "En attente de règlement"),
     EN_COURS_DE_REGLEMENT("CREG", "En cours de règlement"),
+    AFFAIRE_SOLDE("SOLD", "Affaire soldée"),
     EN_ATTENTE_D_ARCHIVAGE("AARC", "En attente d'archivage"),
     ARCHIVE("ARC", "Archivé");
 

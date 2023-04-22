@@ -1,19 +1,17 @@
 package com.pixel.synchronre.notificationmodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import jakarta.persistence.*;
 import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class EmailNotification
 {
-    @Id @GeneratedValue(strategy = GenerationType.TABLE, generator = "id_generator")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NOTIF_ID_GEN")
+    @SequenceGenerator(name = "NOTIF_ID_GEN", sequenceName = "NOTIF_ID_GEN", allocationSize = 10)
     private Long mailId;
     private String username;
     private String email; //Recipient Email

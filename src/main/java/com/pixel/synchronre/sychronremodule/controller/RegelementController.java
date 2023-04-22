@@ -4,7 +4,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateRe
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
-import com.pixel.synchronre.sychronremodule.model.enums.TypeReglement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceReglement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +16,13 @@ import java.net.UnknownHostException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path ="/{typeReg}")
-public class RegelementController {
+public class RegelementController
+{
     private final IserviceReglement regService;
 
     @PostMapping(path = "/create")
     public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
-        return regService.createReglement(TypeReglement.valueOf(typeReg),dto);
+        return regService.createReglement(typeReg,dto);
     }
 
     @PutMapping(path = "/update")
@@ -32,7 +32,6 @@ public class RegelementController {
 
     @GetMapping(path = "/list")
     public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key, @PathVariable String typeReg, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return regService.searchReglement(key, TypeReglement.valueOf(typeReg), PageRequest.of(page, size));
+        return regService.searchReglement(key, typeReg, PageRequest.of(page, size));
     }
-
 }

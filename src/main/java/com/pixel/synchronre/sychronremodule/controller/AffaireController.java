@@ -4,11 +4,13 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourReq;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class AffaireController
     private final AffaireRepository affRepo;
     private final IJwtService jwtService;
     private final IServiceMouvement mvtService;
+    private final IserviceAffaire affService;
 
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
@@ -154,5 +157,11 @@ public class AffaireController
         return affRepo.searchAffaires("", null, null, cedId
                 ,jwtService.getConnectedUserCesId(),
                 Arrays.asList(EN_COURS_DE_REGLEMENT.staCode), PageRequest.of(0, 10));
+    }
+
+    @GetMapping(path = "/facultative/etat-comptable/{affId}")
+    public EtatComptableAffaire getEtatComptable(@PathVariable Long affId)
+    {
+        return affService.getEtatComptable(affId);
     }
 }

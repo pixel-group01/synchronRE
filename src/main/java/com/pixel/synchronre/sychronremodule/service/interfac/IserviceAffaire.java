@@ -1,12 +1,9 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
+
 import java.math.BigDecimal;
 
 public interface IserviceAffaire {
-    BigDecimal calculateRestARepartir(Long affId);
-
-    BigDecimal calculateDejaRepartir(Long affId);
-
-    BigDecimal calculateTauxDejaRepartir(Long affId);
-    BigDecimal calculateRestTauxARepartir(Long affId);
+    EtatComptableAffaire getEtatComptable(Long affId);
 }
