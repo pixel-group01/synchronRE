@@ -15,6 +15,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDeta
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
@@ -34,12 +36,19 @@ public abstract class FacultativeMapper
     @Autowired protected CessionnaireRepository cesRepo;
 
 
+    private String facNumeroPolice;
+    private BigDecimal facSmpLci;
+    private BigDecimal facPrime;
+
     public Facultative mapToFacultative(CreateFacultativeReq dto)
     {
         Long connectedUserId = jwtService.getConnectedUserId();
         Long connectedFncId = jwtService.getConnectedUserFunctionId();
         Affaire affaire = new Affaire();
         BeanUtils.copyProperties(dto, affaire);
+        affaire.setFacNumeroPolice(dto.getFacNumeroPolice());
+        affaire.setFacPrime(dto.getFacPrime());
+        affaire.setFacSmpLci(dto.getFacSmpLci());
         affaire.setCedante(dto.getCedenteId() == null ? null : new Cedante(dto.getCedenteId()));
         affaire.setCouverture(dto.getCouvertureId() == null ? null : new Couverture(dto.getCouvertureId()));
         affaire.setAffUserCreator(connectedUserId == null ? null : new AppUser(connectedUserId));
