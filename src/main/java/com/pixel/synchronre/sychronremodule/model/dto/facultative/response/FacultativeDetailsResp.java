@@ -25,6 +25,7 @@ public class FacultativeDetailsResp
     private String cedSigleFiliale;
     private String statutCode;
     protected Long couvertureId;
+    private String couLibelle;
     private BigDecimal restARepartir;
     private BigDecimal capitalDejaReparti;
 
