@@ -31,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -189,8 +190,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(cent).divide(aff.getAffCapitalInitial()));
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setTaux(capital.multiply(cent).divide(capitalInit, 3, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
@@ -210,13 +211,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
         
-        BigDecimal capital = capitalInit.multiply(taux.divide(cent));
-        if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + cent.multiply(restARepartir).divide(capitalInit) + "%");
+        BigDecimal capital = capitalInit.multiply(taux.divide(cent, 3, RoundingMode.HALF_UP));
+        if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + cent.multiply(restARepartir).divide(capitalInit, 3, RoundingMode.HALF_UP) + "%");
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
@@ -236,11 +237,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
 
-        BigDecimal capital = tauxBesoin.divide(cent).multiply(restARepartir);
+        BigDecimal capital = tauxBesoin.divide(cent, 3, RoundingMode.HALF_UP).multiply(restARepartir);
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(cent).divide(capitalInit));
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir));
+        resp.setTaux(capital.multiply(cent).divide(capitalInit, 3, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
