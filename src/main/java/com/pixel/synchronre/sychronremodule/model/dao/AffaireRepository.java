@@ -25,7 +25,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp(
         f.affId, f.affCode, f.affAssure, f.affActivite, f.affDateEffet, f.affDateEcheance, f.facNumeroPolice, f.affCapitalInitial,
-        f.facSmpLci, f.facPrime, f.cedante.cedId, s.staCode, s.staLibelle, c.couLibelle) 
+        f.facSmpLci, f.facPrime, f.cedante.cedId, s.staCode, s.staLibelle, c.couLibelle, ced.cedNomFiliale, ced.cedSigleFiliale) 
         from Facultative f left join f.statut s left join f.couverture c left join f.affUserCreator u left join f.affFonCreator fnc left join f.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affAssure, '') ) as string))) >0

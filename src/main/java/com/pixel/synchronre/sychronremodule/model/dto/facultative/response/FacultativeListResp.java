@@ -22,4 +22,6 @@ public class FacultativeListResp
     private String statutCode;
     private String staLibelle;
     private String couLibelle;
+    private String cedNomFiliale;
+    private String cedSigleFiliale;
 }
