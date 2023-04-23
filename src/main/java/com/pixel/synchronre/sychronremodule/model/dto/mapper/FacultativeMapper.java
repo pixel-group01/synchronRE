@@ -55,6 +55,8 @@ public abstract class FacultativeMapper
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Facultative fac);
 
     @Mapping(target = "cedenteId", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedId())")
+    @Mapping(target = "cedNomFiliale", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedNomFiliale())")
+    @Mapping(target = "cedSigleFiliale", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedSigleFiliale())")
     @Mapping(target = "statutCode", expression = "java(aff.getStatut() == null ? null : aff.getStatut().getStaCode())")
     @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
