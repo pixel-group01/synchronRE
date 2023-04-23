@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +49,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         dejaReparti = dejaReparti == null ? ZERO : dejaReparti;
         BigDecimal capitalinit = !affIdExists ? ZERO : affRepo.getCapitalInitial(affId);
         capitalinit = capitalinit == null ? ZERO : capitalinit;
-        return dejaReparti.multiply(CENT).divide(capitalinit);
+        return dejaReparti.multiply(CENT).divide(capitalinit, 2, RoundingMode.HALF_UP);
     }
 
     @Override
@@ -180,12 +181,12 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateTauxDeReglement(Long affId)
     {
-        return CENT.multiply(this.calculateDejaRegle(affId).divide(affRepo.getFacPrime(affId)));
+        return CENT.multiply(this.calculateDejaRegle(affId).divide(affRepo.getFacPrime(affId), 2, RoundingMode.HALF_UP));
     }
 
     @Override
     public BigDecimal calculateTauxDeReversement(Long affId)
     {
-        return CENT.multiply(this.calculateDejaReverse(affId).divide(this.calculateMtTotalAReverseAuxCes(affId)));
+        return CENT.multiply(this.calculateDejaReverse(affId).divide(this.calculateMtTotalAReverseAuxCes(affId), 2, RoundingMode.HALF_UP));
     }
 }
