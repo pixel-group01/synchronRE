@@ -1,11 +1,7 @@
 package com.pixel.synchronre;
 
-import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
-import com.pixel.synchronre.authmodule.model.entities.AppFunction;
-import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.authmodule.controller.repositories.*;
+import com.pixel.synchronre.authmodule.model.entities.*;
 import com.pixel.synchronre.sharedmodule.enums.PersStatus;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
@@ -35,52 +31,124 @@ public class SynchronReApplication {
     }
 
     @Bean
-    public CommandLineRunner start(UserRepo userRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
+    public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
                                    FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,
-                                   PrvRepo prvRepo, FunctionRepo fncRepo,ParamCessionLegaleRepository pcslRepo)
+                                   PrvRepo prvRepo, FunctionRepo fncRepo, ParamCessionLegaleRepository pcslRepo, PrvToFunctionAssRepo ptfRepo)
     {
         return args->{
-           AppUser admin = new AppUser(1l, "admin", "admin", null, 4l,
+
+            Type t1 = new Type(1l, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            Type t2 = new Type(2l, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null);
+            Type t3 = new Type(3l, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null);
+
+            //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
+            Type t7 = new Type(4l, TypeGroup.TYPE_PRV, "PRV-AFF", "Privilège du module affaire", PersStatus.ACTIVE, null);
+            Type t8 = new Type(5l, TypeGroup.TYPE_PRV, "PRV-ADM", "Privilège du module admin", PersStatus.ACTIVE, null);
+
+            Type paiement = new Type(6l, TypeGroup.TYPE_REGLEMENT, "paiements", "Paiement reçu", PersStatus.ACTIVE, null);
+            Type reversement = new Type(7l, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null);
+            Type reglement_sinistre = new Type(8l, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null);
+
+            Type fil= new Type(9l, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null);
+            Type rea = new Type(10l, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null);
+            Type facType= new Type(11l, TypeGroup.TYPE_AFFAIRE, "FAC", "Facultative", PersStatus.ACTIVE, null);
+            Type trai = new Type(12l, TypeGroup.TYPE_AFFAIRE, "TRAITE", "Traite", PersStatus.ACTIVE, null);
+
+
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai));
+
+            AppPrivilege agentSaisie = new AppPrivilege(1l, "SAISIE", "AGENT_DE_SAISIE", new Type(4l));
+            AppPrivilege validateur = new AppPrivilege(2l, "VALIDATEUR", "VALIDATEUR", new Type(4l));
+            AppPrivilege observateur = new AppPrivilege(3l, "OBSERVATEUR", "OBSERVATEUR", new Type(4l));
+            AppPrivilege roleAdmin = new AppPrivilege(4l, "ADMIN", "ADMINISTRATEUR", new Type(4l));
+            AppPrivilege comptable = new AppPrivilege(5l, "COMPTABLE", "COMPTABLE", new Type(4l));
+            AppPrivilege souscripteur = new AppPrivilege(6l, "SOUSCRIPTEUR", "SOUSCRIPTEUR", new Type(4l));
+
+            prvRepo.saveAll(Arrays.asList(agentSaisie, validateur, observateur, roleAdmin, comptable, souscripteur));
+
+            AppUser useradmin = new AppUser(1l, "admin", "admin", null, 4l,
                     pe.encode("1234"), "admin@gmail.com", "1234",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userci = new AppUser(2l, "userci", "userci", 1l, 4l,
-                    pe.encode("userci"), "userci@gmail.com", "userci-tel",
+                    pe.encode("1234"), "userci@gmail.com", "userci-tel",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userbn = new AppUser(3l, "userbn", "userbn", 2l, 4l,
-                    pe.encode("userbn"), "userbn@gmail.com", "userbn-tel",
+                    pe.encode("1234"), "userbn@gmail.com", "userbn-tel",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser usertg = new AppUser(4l, "usertg", "usertg", 3l, 4l,
-                    pe.encode("usertg"), "usertg@gmail.com", "usertg-tel",
+                    pe.encode("1234"), "usertg@gmail.com", "usertg-tel",
                     true, true, null, LocalDateTime.now(),
                     LocalDateTime.now());
-            userRepo.saveAll(Arrays.asList(admin, userci, userbn, usertg));
+
+            AppUser userSaisienre = new AppUser(5l, "Koffi", "Alain", null, 4l,
+                    pe.encode("1234"), "agentsaisienre@gmail.com", "123456789",
+                    true, true, null, LocalDateTime.now(),
+                    LocalDateTime.now());
+
+            AppUser userValidateur = new AppUser(6l, "Seka", "Jean-Georesse", null, 4l,
+                    pe.encode("1234"), "agentvalidateur@gmail.com", "123456780",
+                    true, true, null, LocalDateTime.now(),
+                    LocalDateTime.now());
+
+            AppUser userObservateur = new AppUser(7l, "Ouattara", "Ali", null, 4l,
+                    pe.encode("1234"), "agentobservateur@gmail.com", "123456781",
+                    true, true, null, LocalDateTime.now(),
+                    LocalDateTime.now());
+
+            AppUser userComptable = new AppUser(8l, "Asseke", "Elisé", null, 4l,
+                    pe.encode("1234"), "comptable@gmail.com", "123456782",
+                    true, true, null, LocalDateTime.now(),
+                    LocalDateTime.now());
+
+            AppUser userSouscripteur = new AppUser(9l, "Gossé", "Gossé Maxim", null, 4l,
+                    pe.encode("1234"), "souscripteur@gmail.com", "123456783",
+                    true, true, null, LocalDateTime.now(),
+                    LocalDateTime.now());
+
+            userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur));
+
+            AppFunction fncUserci = new AppFunction(1l, 2l, 4l, "Acteur de saisie NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncUserbn = new AppFunction(2l, 3l, 4l, "Acteur de saisie NSIA-BN", userbn, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncUsertg = new AppFunction(3l, 4l, 4l, "Acteur de saisie NSIA-TG", usertg, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+
+            AppFunction functionAdmin = new AppFunction(4l, null, 4l, "Administrateur SyncrhoneRe", useradmin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncAgentSaisie = new AppFunction(5l, null, 4l, "Acteur de saisie NelsonRE", userSaisienre, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncObservateur = new AppFunction(6l, null, 4l, "Observateur SynchronRE", userObservateur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncValidateur = new AppFunction(7l, null, 4l, "Acteur de Validation", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncComptable = new AppFunction(8l, null, 4l, "Comptable NelsonRE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            AppFunction fncSouscripteur = new AppFunction(9l, null, 5l, "Souscripteur NelsonRE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin, fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur));
+
+            PrvToFunctionAss saisiAssci = new PrvToFunctionAss(agentSaisie, fncUserci); saisiAssci.setAssStatus(1); saisiAssci.setStartsAt(LocalDate.now()); saisiAssci.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss saisiAssbn = new PrvToFunctionAss(agentSaisie, fncUserbn); saisiAssbn.setAssStatus(1); saisiAssbn.setStartsAt(LocalDate.now()); saisiAssbn.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss saisiAsstg = new PrvToFunctionAss(agentSaisie, fncUsertg); saisiAsstg.setAssStatus(1); saisiAsstg.setStartsAt(LocalDate.now()); saisiAsstg.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss adminAss = new PrvToFunctionAss(roleAdmin, functionAdmin); adminAss.setAssStatus(1); adminAss.setStartsAt(LocalDate.now()); adminAss.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss saisiAss = new PrvToFunctionAss(agentSaisie, fncAgentSaisie); saisiAss.setAssStatus(1); saisiAss.setStartsAt(LocalDate.now()); saisiAss.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss obsAss = new PrvToFunctionAss(observateur, fncObservateur); obsAss.setAssStatus(1); obsAss.setStartsAt(LocalDate.now()); obsAss.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss validAss = new PrvToFunctionAss(validateur, fncValidateur); validAss.setAssStatus(1); validAss.setStartsAt(LocalDate.now()); validAss.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss comptableAss = new PrvToFunctionAss(comptable, fncComptable); comptableAss.setAssStatus(1); comptableAss.setStartsAt(LocalDate.now()); comptableAss.setEndsAt(LocalDate.now().plusYears(1));
+            PrvToFunctionAss sousCripteurAss = new PrvToFunctionAss(souscripteur, fncSouscripteur); sousCripteurAss.setAssStatus(1); sousCripteurAss.setStartsAt(LocalDate.now()); sousCripteurAss.setEndsAt(LocalDate.now().plusYears(1));
+
+            ptfRepo.saveAll(Arrays.asList(saisiAssci, saisiAssbn, saisiAsstg, adminAss, saisiAss, obsAss, validAss, comptableAss, sousCripteurAss));
+
+            //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+            //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
 
 
-            Type t1 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            Type t2 = new Type(null, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null);
-            Type t3 = new Type(null, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null);
+            userci.setCurrentFunctionId(1l); userbn.setCurrentFunctionId(2l); usertg.setCurrentFunctionId(3l);
+            useradmin.setCurrentFunctionId(4l); userSaisienre.setCurrentFunctionId(5l); userObservateur.setCurrentFunctionId(6l);
+            userValidateur.setCurrentFunctionId(7l); userComptable.setCurrentFunctionId(8l); userSouscripteur.setCurrentFunctionId(9l);
 
-            //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            Type t7 = new Type(null, TypeGroup.TYPE_PRV, "PRV-AFF", "Privilège du module affaire", PersStatus.ACTIVE, null);
-            Type t8 = new Type(null, TypeGroup.TYPE_PRV, "PRV-ADM", "Privilège du module admin", PersStatus.ACTIVE, null);
-
-            Type paiement = new Type(null, TypeGroup.TYPE_REGLEMENT, "paiements", "Paiement reçu", PersStatus.ACTIVE, null);
-            Type reversement = new Type(null, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null);
-            Type reglement_sinistre = new Type(null, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null);
-
-            Type fil= new Type(null, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null);
-            Type rea = new Type(null, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null);
-
-            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement));
+            userRepo.saveAll(Arrays.asList(userci, userbn, usertg, useradmin, userSaisienre, userObservateur, userValidateur, userComptable, userSouscripteur));
 
             Statut s1 = new Statut("SAI", "Saisie", "Affaire saisie", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s2 = new Statut("TRA", "Transmis", "Affaire transmise", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
@@ -91,7 +159,6 @@ public class SynchronReApplication {
             Statut s9 = new Statut("APLA", "Attente de placement", "Affaire en attente de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut S10 = new Statut("CPLA", "En cour de placement", "Affaire en cour de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut S11 = new Statut("CREP", "En cour de repartition", "Affaire en cour de repartition", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-
 
             Statut s7 = new Statut("ACT", "Actif", "Actif", TypeStatut.PERSISTANCE, LocalDateTime.now(), LocalDateTime.now());
             Statut s8 = new Statut("SUPP", "Supprimée", "Supprimé", TypeStatut.PERSISTANCE, LocalDateTime.now(), LocalDateTime.now());
@@ -169,10 +236,7 @@ public class SynchronReApplication {
 
          cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 
-            AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
-            fncRepo.save(function);
-            admin.setCurrentFunctionId(1l);
-            userRepo.save(admin);
+
             //Cedante nre = new Cessionnaire(1l, "Nelson RE", "NRE", ,"05 05 05 05 01", "nre@gmail.com", "NRE", "NRE", "ABJ", null, ci,new AppUser(1l),null, rea, LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             //nre = cedRepo.save(nre); nre.setCedParentId(nre.getCedId());nre = cedRepo.save(nre);
 
@@ -211,11 +275,6 @@ public class SynchronReApplication {
             aff1.setStatut(new Statut("SAI"));
             Facultative fac = new Facultative(aff1, "AFF-004", new BigDecimal(50000000), new BigDecimal(50000000));
             facRepo.save(fac);
-
-
-            AppPrivilege prv1 = new AppPrivilege(1l, "SAI-AFF", "Saisir une affaire", t7);
-            AppPrivilege prv2 = new AppPrivilege(2l, "VAL-AFF", "Valider une affaire", t7);
-            prvRepo.saveAll(Arrays.asList(prv1, prv2));
         };
     }
 }

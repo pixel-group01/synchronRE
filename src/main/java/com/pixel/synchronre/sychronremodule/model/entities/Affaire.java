@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 @DiscriminatorColumn(name = "affType")
 public class Affaire {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "AFF_ID_GEN", sequenceName = "AFF_ID_GEN", allocationSize = 1)
     protected Long affId;
     @Column(unique = true)
     protected String affCode;
