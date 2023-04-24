@@ -60,12 +60,13 @@ public class RepartitionController
         return repService.updateRepartition(dto);
     }
 
-    @GetMapping(path = "/list")
-    public Page<RepartitionListResp> searchRep(@RequestParam(defaultValue = "", required = false) String key,
+    @GetMapping(path = "/list-placement/{affId}")
+    public Page<RepartitionListResp> searchPlacement(@PathVariable(required = false) Long affId,
+                                                @RequestParam(defaultValue = "", required = false) String key,
                                                @RequestParam(defaultValue = "0", required = false) int page,
                                                @RequestParam(defaultValue = "10", required = false) int size)
     {
-        return repService.searchRepartition(key, PageRequest.of(page, size));
+        return repService.searchRepartition(key, affId, "REP_PLA", PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/ces-leg-param/{affId}")

@@ -29,18 +29,20 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(
         r.repId, r.repCapital, r.repTaux, r.repSousCommission, r.repInterlocuteur, r.repStatut, a.affId,
-        a.affCode, a.affAssure, a.affActivite, c.cesId, c.cesNom, c.cesSigle,
+        a.affCode, a.affAssure, a.affActivite, c.cesId, c.cesNom, c.cesSigle, 
         c.cesEmail, c.cesTelephone
-        ) from Repartition r left join r.cessionnaire c left join r.affaire a
+        ) from Repartition r left join r.cessionnaire c left join r.affaire a left join r.type t
                                         where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affCode, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affAssure, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affActivite, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesNom, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesEmail, '') ) as string)) ) >0
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesTelephone, '') ) as string)) ) >0 ) 
+                                         and (?2 is null or a.affId = ?2)
+                                         and coalesce(?3, t.uniqueCode) = t.uniqueCode
                                          and r.repStatut = true
     """)
-    Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
+    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
     boolean existsByIdAffIdAndPclId(Long affId, Long paramCesLegalId);

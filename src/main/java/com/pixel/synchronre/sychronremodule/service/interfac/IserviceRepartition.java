@@ -29,7 +29,7 @@ public interface IserviceRepartition {
     RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException;
 
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
-    Page<RepartitionListResp> searchRepartition(String key, Pageable pageable);
+    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
 
     CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital);
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux);
