@@ -14,5 +14,5 @@ public interface IserviceParamCessionLegale {
 
     ParamCessionLegaleDetailsResp createParamCessionLegale(CreateParamCessionLegaleReq dto) throws UnknownHostException;
     ParamCessionLegaleDetailsResp  updateParamCessionLegale(UpdateParamCessionLegaleReq dto) throws UnknownHostException;
-    Page<ParamCessionLegaleListResp> searchParamCessionLegale(String key, Pageable pageable);
+    //Page<ParamCessionLegaleListResp> searchParamCessionLegale(String key, Pageable pageable);
 }

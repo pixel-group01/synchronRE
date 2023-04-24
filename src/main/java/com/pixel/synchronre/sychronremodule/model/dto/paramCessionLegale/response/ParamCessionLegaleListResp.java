@@ -12,4 +12,6 @@ public class ParamCessionLegaleListResp
     private BigDecimal paramCesLegTaux;
     private String paysNom;
     private String staLibelle;
+    private String paysCode;
+    private Long numOrdre;
 }
