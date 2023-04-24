@@ -27,10 +27,10 @@ public class CreatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-    @NotNull(message = "Veuillez saisir le taux")
-    @PositiveOrZero(message = "Le taux doit être un nombre positif")
-    @Max(value = 100)
-    @SeuilRepTauBesoinFac
+    //@NotNull(message = "Veuillez saisir le taux")
+    //@PositiveOrZero(message = "Le taux doit être un nombre positif")
+    //@Max(value = 100)
+    //@SeuilRepTauBesoinFac
     private BigDecimal repTauxBesoinFac;
 
     @NotNull(message = "Veuillez saisir la sous commission")

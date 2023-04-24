@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.response;
 
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.math.BigDecimal;
