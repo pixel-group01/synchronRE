@@ -4,26 +4,19 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.request.CreateStatutReq;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,11 +27,15 @@ public abstract class FacultativeMapper
     @Autowired protected IJwtService jwtService;
     @Autowired protected RepartitionRepository repRepo;
     @Autowired protected CessionnaireRepository cesRepo;
+    @Autowired protected TypeRepo typeRepo;
 
-
-    private String facNumeroPolice;
-    private BigDecimal facSmpLci;
-    private BigDecimal facPrime;
+    @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
+    @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
+    @Mapping(target = "couverture", expression = "java(dto.getCouvertureId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Couverture(dto.getCouvertureId()))")
+    @Mapping(target = "affType", expression = "java(typeRepo.findByUniqueCode(\"FAC\"))")
+    @Mapping(target = "affUserCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
+    @Mapping(target = "affFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
+    public abstract Affaire mapToAffaire(CreateFacultativeReq dto);
 
     public Facultative mapToFacultative(CreateFacultativeReq dto)
     {
@@ -49,7 +46,7 @@ public abstract class FacultativeMapper
         affaire.setFacNumeroPolice(dto.getFacNumeroPolice());
         affaire.setFacPrime(dto.getFacPrime());
         affaire.setFacSmpLci(dto.getFacSmpLci());
-        affaire.setCedante(dto.getCedenteId() == null ? null : new Cedante(dto.getCedenteId()));
+        affaire.setCedante(dto.getCedId() == null ? null : new Cedante(dto.getCedId()));
         affaire.setCouverture(dto.getCouvertureId() == null ? null : new Couverture(dto.getCouvertureId()));
         affaire.setAffUserCreator(connectedUserId == null ? null : new AppUser(connectedUserId));
         affaire.setAffFonCreator(connectedFncId == null ? null : new AppFunction(connectedFncId));

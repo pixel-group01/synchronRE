@@ -52,7 +52,7 @@ public class CreateFacultativeReq
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
     private BigDecimal facPrime;
     @ExistingCedId
-    private Long cedenteId;
+    private Long cedId;
     @ExistingCouId
     private Long couvertureId;
 

@@ -7,10 +7,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.FacultativeRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.MouvementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -18,9 +15,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.Facul
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Facultative;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
 import jakarta.transaction.Transactional;
@@ -30,6 +25,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class FacultativeServiceImpl implements IserviceFacultative {
@@ -41,18 +38,26 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     private final IServiceMouvement mvtService;
     private final StatutRepository staRepo;
     private final RepartitionRepository repRepo;
+    private final CedRepo cedRepo;
+    private final CouvertureRepository couvRepo;
 
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException {
-        Facultative fac=facultativeMapper.mapToFacultative(dto);
-        fac.setStatut(new Statut("SAI"));
-        fac=facRepo.save(fac);
-        logService.logg(SynchronReActions.CREATE_FAC, null, fac, SynchronReTables.AFFAIRE);
-        mvtService.createMvtSuivant(new MvtSuivantReq(fac.getStatut().getStaCode(), fac.getAffId()));
-        return facultativeMapper.mapToFacultativeDetailsResp(fac);
+        Affaire aff=facultativeMapper.mapToAffaire(dto);
+        aff.setStatut(new Statut("SAI"));
+        aff=affRepo.save(aff);
+        aff.setAffCode(this.generateAffCode(aff.getAffId()));
+        logService.logg(SynchronReActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
+        mvtService.createMvtSuivant(new MvtSuivantReq(aff.getStatut().getStaCode(), aff.getAffId()));
+        aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
+        aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
+        return facultativeMapper.mapToFacultativeDetailsResp(aff);
     }
 
-
+    private String generateAffCode(Long affId)
+    {
+        return "FAC-" + String.format("%09d", affId);
+    }
 
     @Override @Transactional
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {

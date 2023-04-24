@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +39,9 @@ public class Affaire {
     protected Statut statut;
     @ManyToOne @JoinColumn(name = "couverture_id")
     protected Couverture couverture;
+
+    @ManyToOne @JoinColumn(name = "type_code")
+    protected Type affType;
     @CreationTimestamp
     protected LocalDateTime createdAt;
     @UpdateTimestamp
