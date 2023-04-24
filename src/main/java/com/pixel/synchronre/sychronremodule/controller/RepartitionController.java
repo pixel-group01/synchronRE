@@ -80,7 +80,7 @@ public class RepartitionController
     @GetMapping(path = "/ces-leg-param/{affId}")
     public List<ParamCessionLegaleListResp> getCesLegParam(@PathVariable @ExistingAffId Long affId)
     {
-        return pclRepo.findByAffId(affId);
+        return repService.getCesLegParam(affId);
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")

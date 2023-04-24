@@ -9,9 +9,11 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
@@ -50,6 +52,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IServiceMouvement mvtService;
     private BigDecimal zero = new BigDecimal(0);
     private BigDecimal cent = new BigDecimal(100);
+    private final ParamCessionLegaleRepository pclRepo;
 
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
@@ -262,5 +265,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
             }
         }
+    }
+
+    @Override
+    public List<ParamCessionLegaleListResp> getCesLegParam(Long affId)
+    {
+        return pclRepo.findByAffId(affId).stream()
+            .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux()).getCapital()))
+            .collect(Collectors.toList());
     }
 }
