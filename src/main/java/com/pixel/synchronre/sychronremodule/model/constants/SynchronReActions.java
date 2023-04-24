@@ -24,4 +24,5 @@ public class SynchronReActions
     public static final String UPDATE_REGLEMENT = "Modification d'un paiement";
     public static final String CREATE_SINISTRE = "Création d'un sinistre";
     public static final String UPDATE_SINISTRE = "Mise à jour d'un sinistre";
+    public static final String DELETE_PLACEMENT = "Suppression d'un placement";
 }

@@ -73,4 +73,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
     BigDecimal getTauxCms(Long affId, Long cesId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
+    boolean placementExists(Long plaId);
 }

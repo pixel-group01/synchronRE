@@ -35,4 +35,5 @@ public interface IserviceRepartition {
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux);
     CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin);
 
+    void deletePlacement(Long repId) throws UnknownHostException;
 }

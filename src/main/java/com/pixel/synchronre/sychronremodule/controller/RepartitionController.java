@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
@@ -27,10 +28,17 @@ public class RepartitionController
 {
     private final IserviceRepartition repService;
     private final ParamCessionLegaleRepository pclRepo;
+    private final RepartitionRepository repRepo;
 
     @PostMapping(path = "/create")
     public RepartitionDetailsResp createRep(@Valid @RequestBody CreateRepartitionReq dto) throws UnknownHostException {
         return repService.createRepartition(dto);
+    }
+
+    @DeleteMapping(path = "/delete-placement/{repId}")
+    public void deletePlacement(@PathVariable Long repId) throws UnknownHostException
+    {
+        repService.deletePlacement(repId);
     }
 
     @PostMapping(path = "/create-cession-legale-repartition")
