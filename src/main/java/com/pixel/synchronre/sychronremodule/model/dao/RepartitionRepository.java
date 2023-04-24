@@ -31,7 +31,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
         r.repId, r.repCapital, r.repTaux, r.repSousCommission, r.repInterlocuteur, r.repStatut, a.affId,
         a.affCode, a.affAssure, a.affActivite, c.cesId, c.cesNom, c.cesSigle, 
         c.cesEmail, c.cesTelephone
-        ) from Repartition r left join r.cessionnaire c left join r.affaire a left join r.type t
+        ) from Repartition r left join r.cessionnaire c left join r.affaire a join r.type t
                                         where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affCode, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affAssure, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affActivite, '') ) as string)) ) >0 
@@ -73,4 +73,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
     BigDecimal getTauxCms(Long affId, Long cesId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
+    boolean placementExists(Long plaId);
 }

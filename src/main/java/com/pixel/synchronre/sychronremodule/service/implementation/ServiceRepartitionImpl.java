@@ -6,7 +6,8 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
-import com.pixel.synchronre.sychronremodule.model.constants.RepartitionTables;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
@@ -54,7 +55,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
         Repartition rep = repMapper.mapToRepartition(dto);
         rep = repRepo.save(rep);
-        logService.logg(RepartitionActions.CREATE_REPARTITION, null, rep, RepartitionTables.REPARTITION);
+        logService.logg(RepartitionActions.CREATE_REPARTITION, null, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
@@ -78,7 +79,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
 
         rep = repRepo.save(rep);
-        logService.logg(existByAffaireAndPcl ? RepartitionActions.UPDATE_CES_LEG_REPARTITION : RepartitionActions.CREATE_CES_LEG_REPARTITION, oldRep , rep, RepartitionTables.REPARTITION);
+        logService.logg(existByAffaireAndPcl ? RepartitionActions.UPDATE_CES_LEG_REPARTITION : RepartitionActions.CREATE_CES_LEG_REPARTITION, oldRep , rep, SynchronReTables.REPARTITION);
         rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
@@ -113,7 +114,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
 
         rep = repRepo.save(rep);
-        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
@@ -147,7 +148,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep = repMapper.mapToPlaRepartition(dto);
         }
         rep = repRepo.save(rep);
-        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         if(firstPlacement)
         {
             mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_PLACEMENT.staCode, dto.getAffId()));
@@ -165,7 +166,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
         rep.setAffaire(new Affaire(dto.getAffId()));
         rep.setParamCessionLegale(new ParamCessionLegale(dto.getParamCesLegalId()));
-        logService.logg(RepartitionActions.UPDATE_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        logService.logg(RepartitionActions.UPDATE_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         repRepo.save(rep);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
@@ -245,5 +246,21 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
         return resp;
+    }
+
+    @Override
+    public void deletePlacement(Long repId) throws UnknownHostException
+    {
+        boolean plaExists = repRepo.placementExists(repId);
+        if(plaExists)
+        {
+            Repartition placement = repRepo.findById(repId).orElse(null);
+            if(placement != null)
+            {
+                Repartition oldPlacement = repCopier.copy(placement);
+                repRepo.deleteById(repId);
+                logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
+            }
+        }
     }
 }
