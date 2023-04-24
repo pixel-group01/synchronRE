@@ -49,9 +49,4 @@ public class serviceParamCessionLegaleImpl implements IserviceParamCessionLegale
         logService.logg(SynchronReActions.UPDATE_PARAM_CESSION_LEGALE, oldParam, param, SynchronReTables.PARAM_CESSION_LEGALE);
         return paramMapper.mapParamDetailsToParamCessionLegale(param);
     }
-
-    @Override
-    public Page<ParamCessionLegaleListResp> searchParamCessionLegale(String key, Pageable pageable) {
-        return paramRepo.searchParams(StringUtils.stripAccentsToUpperCase(key), pageable);
-    }
 }

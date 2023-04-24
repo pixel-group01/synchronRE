@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 
+import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.request.CreateParamCessionLegaleReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.request.UpdateParamCessionLegaleReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleDetailsResp;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ import java.net.UnknownHostException;
 public class ParamCessionLegaleController {
 
      private final IserviceParamCessionLegale paramCessionService;
+     private final ParamCessionLegaleRepository pclRepo;
 
     @PostMapping(path = "/create")
     public ParamCessionLegaleDetailsResp createParamCession(@RequestBody @Valid CreateParamCessionLegaleReq dto) throws UnknownHostException {
@@ -31,9 +34,14 @@ public class ParamCessionLegaleController {
         return paramCessionService.updateParamCessionLegale(dto);
     }
 
-    @GetMapping(path = "/list")
-    public Page<ParamCessionLegaleListResp> searchParamsCessions(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return paramCessionService.searchParamCessionLegale(key, PageRequest.of(page, size));
+    @GetMapping(path = "/list-by-affaire/{affId}")
+    public List<ParamCessionLegaleListResp> searchParamsCessions(@PathVariable Long affId) throws UnknownHostException {
+        return pclRepo.findByAffId(affId);
     }
+
+   /* @GetMapping(path = "/list-by-pays/{payCode}")
+    public List<ParamCessionLegaleListResp> searchParamsCessionsByPays(@PathVariable String payCode) throws UnknownHostException {
+        return pclRepo.findByAffId(affId);
+    }*/
 
 }

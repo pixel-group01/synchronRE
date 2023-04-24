@@ -20,6 +20,7 @@ public class ParamCessionLegale {
     private Pays pays;
     @ManyToOne @JoinColumn(name = "paramStatut")
     private Statut statut;
+    private Long numOdre;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
