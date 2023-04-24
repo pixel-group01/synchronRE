@@ -97,10 +97,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override
     public RepartitionDetailsResp createPartCedRepartition(CreatePartCedRepartitionReq dto) throws UnknownHostException {
-        boolean existsByAffaireAndTypeCed = repRepo.existsByAffaireAndTypeCed(dto.getAffId(), "REP_CED");
+        boolean existsByAffaireAndTypeRep = repRepo.existsByAffaireAndTypeRep(dto.getAffId(), "REP_CED");
         Repartition rep;
         Repartition oldRep = null;
-        if(existsByAffaireAndTypeCed)
+        if(existsByAffaireAndTypeRep)
         {
             rep = repRepo.findByAffaireAndTypeCed(dto.getAffId(), "REP_CED");
             oldRep = repCopier.copy(rep);
@@ -113,7 +113,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
 
         rep = repRepo.save(rep);
-        logService.logg(existsByAffaireAndTypeCed ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
@@ -132,12 +132,12 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
     {
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
-        boolean existsByAffaireAndTypeCed = repRepo.existsByAffaireAndTypeCedAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+        boolean existsByAffaireAndTypeRep = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;
         Repartition oldRep = null;
-        if(existsByAffaireAndTypeCed)
+        if(existsByAffaireAndTypeRep)
         {
-            rep = repRepo.findByAffaireAndTypeCedAndCesId(dto.getAffId(), "REP_CED", dto.getCesId());
+            rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTaux(dto.getRepTaux());
@@ -147,7 +147,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep = repMapper.mapToPlaRepartition(dto);
         }
         rep = repRepo.save(rep);
-        logService.logg(existsByAffaireAndTypeCed ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
+        logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, RepartitionTables.REPARTITION);
         if(firstPlacement)
         {
             mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_PLACEMENT.staCode, dto.getAffId()));

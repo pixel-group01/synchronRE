@@ -49,16 +49,16 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     Repartition findByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
-    boolean existsByAffaireAndTypeCed(Long affId, String typeUniqueCodeCode);
+    boolean existsByAffaireAndTypeRep(Long affId, String typeUniqueCodeCode);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
     Repartition findByAffaireAndTypeCed(Long affId, String rep_ced);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
-    boolean existsByAffaireAndTypeCedAndCesId(Long affId, String rep_pla, Long cesId);
+    boolean existsByAffaireAndTypeRepAndCesId(Long affId, String rep_pla, Long cesId);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
-    Repartition findByAffaireAndTypeCedAndCesId(Long affId, String rep_pla, Long cesId);
+    Repartition findByAffaireAndTypeRepAndCesId(Long affId, String typeRep, Long cesId);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     boolean affaireHasPlacement(Long affId);
