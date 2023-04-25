@@ -14,8 +14,8 @@ public class JasperReportConfig {
 
     @Bean
     public JasperReport jasperReport() throws Exception {
-        String reportPath = reportLocation + "/Note_Cession.jrxml";
-        JasperReport jasperReport = JasperCompileManager.compileReport(reportPath);
+        String reportPath = reportLocation + "/Note_Cession_1.jrxml";
+       JasperReport jasperReport = JasperCompileManager.compileReport(reportPath);
         return jasperReport;
     }
 }
