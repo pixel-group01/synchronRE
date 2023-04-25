@@ -1,7 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCesLegReq;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
