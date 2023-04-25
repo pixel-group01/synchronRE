@@ -52,7 +52,7 @@ public class SecurityConfig
                     cors.configurationSource(source);
                 })
                 .authorizeHttpRequests()
-                .requestMatchers("/*/open/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/*/open/**", "/reports/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
