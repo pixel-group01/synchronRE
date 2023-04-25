@@ -32,4 +32,6 @@ public interface IJwtService
     Long getConnectedUserFunctionId();
     Long getConnectedUserCedId();
     Long getConnectedUserCesId();
+
+    boolean UserIsCourtier();
 }

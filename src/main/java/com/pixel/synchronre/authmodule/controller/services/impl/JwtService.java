@@ -70,10 +70,11 @@ public class JwtService implements IJwtService
         extraClaims.put("cedId", cedId);
         extraClaims.put("cedName", ced == null ? null : ced.getCedNomFiliale());
         extraClaims.put("cedSigle", ced == null ? null : ced.getCedSigleFiliale());
+        extraClaims.put("isCourtier", cedId==null);
 
         extraClaims.put("cesId", cesId);
         extraClaims.put("cesNom", ces == null ? null : ces.getCesNom());
-        extraClaims.put("cedSigle", ces == null ? null : ces.getCesSigle());
+        extraClaims.put("cesSigle", ces == null ? null : ces.getCesSigle());
 
         extraClaims.put("functionStartingDate", function == null ? null : Date.from(function.getStartsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         extraClaims.put("functionEndingDate", function == null ? null : Date.from(function.getEndsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
@@ -226,6 +227,12 @@ public class JwtService implements IJwtService
     {
         Long cedId = this.getConnectedUserCedId();
         return cedId == null ? null : cedRepo.getCedCesId(cedId);
+    }
+
+    @Override
+    public boolean UserIsCourtier()
+    {
+        return this.getConnectedUserCedId() == null;
     }
 
     class TokenStatus

@@ -41,7 +41,7 @@ public class AffaireController
     private final IserviceAffaire affService;
 
     @GetMapping("/facultative/details/{affId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId) throws MethodArgumentNotValidException, UnknownHostException {
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         return facMapper.mapToFacultativeDetailsResp(affaire);
@@ -97,7 +97,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),Arrays.asList(SAISIE.staCode, "TRA", EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),Arrays.asList(SAISIE_CRT.staCode, TRANSMIS.staCode, EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur

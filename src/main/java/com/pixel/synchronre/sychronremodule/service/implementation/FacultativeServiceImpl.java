@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
@@ -27,6 +28,9 @@ import org.springframework.stereotype.Service;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 
+import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SAISIE;
+import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SAISIE_CRT;
+
 @Service
 @RequiredArgsConstructor
 public class FacultativeServiceImpl implements IserviceFacultative {
@@ -40,11 +44,14 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     private final RepartitionRepository repRepo;
     private final CedRepo cedRepo;
     private final CouvertureRepository couvRepo;
+    private final IJwtService jwtService;
 
     @Override @Transactional
-    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException {
+    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException
+    {
+        boolean isCourtier = jwtService.UserIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
-        aff.setStatut(new Statut("SAI"));
+        aff.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
         aff=affRepo.save(aff);
         aff.setAffCode(this.generateAffCode(aff.getAffId()));
         logService.logg(SynchronReActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
