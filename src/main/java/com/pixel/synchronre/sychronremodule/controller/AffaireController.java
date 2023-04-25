@@ -97,7 +97,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "10") int size)
     {
-        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),Arrays.asList(SAISIE.staCode, "TRA"), PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),Arrays.asList(SAISIE.staCode, "TRA", EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur
