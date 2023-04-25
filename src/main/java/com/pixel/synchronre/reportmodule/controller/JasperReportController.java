@@ -19,6 +19,8 @@ public class JasperReportController {
     @Autowired
     private JasperReportService jasperReportService;
 
+
+    //Récupéartion du chemin vers le report
     @Value("${jasper.report.location}")
     public String reportLocation;
 
