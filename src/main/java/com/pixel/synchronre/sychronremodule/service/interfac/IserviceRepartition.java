@@ -4,6 +4,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.banque.request.CreateBanqu
 import com.pixel.synchronre.sychronremodule.model.dto.banque.request.UpdateBanqueReq;
 import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
@@ -36,4 +37,6 @@ public interface IserviceRepartition {
     CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin);
 
     void deletePlacement(Long repId) throws UnknownHostException;
+
+    List<ParamCessionLegaleListResp> getCesLegParam(Long affId);
 }
