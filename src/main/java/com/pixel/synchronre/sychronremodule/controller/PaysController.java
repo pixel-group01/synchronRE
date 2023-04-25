@@ -1,10 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
+
 import com.pixel.synchronre.sychronremodule.model.dto.pays.request.CreatePaysReq;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.request.UpdatePaysReq;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysDetailsResp;

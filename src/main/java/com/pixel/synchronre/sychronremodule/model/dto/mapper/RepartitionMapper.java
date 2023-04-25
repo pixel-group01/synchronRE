@@ -8,7 +8,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.Create
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
