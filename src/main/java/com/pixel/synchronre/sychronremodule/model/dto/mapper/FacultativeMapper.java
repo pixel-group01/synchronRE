@@ -35,6 +35,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "affType", expression = "java(typeRepo.findByUniqueCode(\"FAC\"))")
     @Mapping(target = "affUserCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "affFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
+    @Mapping(target = "exercice", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Exercice(dto.getExeCode()))")
     public abstract Affaire mapToAffaire(CreateFacultativeReq dto);
 
     public Facultative mapToFacultative(CreateFacultativeReq dto)

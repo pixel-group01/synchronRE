@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.facultative.request;
 //import com.pixel.synchronre.sychronremodule.model.dto.affaire.validator.UniqueAffCode;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.ExistingCedId;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.ExistingCouId;
+import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ActiveExercice;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidEcheanceDate;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -34,6 +35,10 @@ public class CreateFacultativeReq
     @FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate affDateEcheance;
+
+    @NotNull(message = "Veuillez choisir l'exercice")
+    @ActiveExercice
+    private Long exeCode;
 
     @NotNull(message = "Veuillez saisir le numéro de police")
     @NotBlank(message = "Veuillez saisir le numéro de police")

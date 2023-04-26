@@ -39,4 +39,6 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
 """)
     Page<ReadCedanteDTO> searchCedentes(String key, Pageable pageable);
 
+    @Query("select c.cedSigleFiliale from Cedante c where c.cedId = ?1")
+    String getCedSigleById(Long cedId);
 }

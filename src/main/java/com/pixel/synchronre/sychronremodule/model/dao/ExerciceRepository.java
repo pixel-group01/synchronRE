@@ -33,4 +33,7 @@ public interface ExerciceRepository extends JpaRepository<Exercice, Long> {
     @Query("update Exercice e set e.exeCourant =false  where e.exeCourant = true")
     @Modifying
     void setExerciceAsNoneCourant();
+
+    @Query("select (count(e)>0) from Exercice e where e.exeCode = ?1 and e.statut.staCode = 'ACT'")
+    boolean exerciceIsActive(Long value);
 }

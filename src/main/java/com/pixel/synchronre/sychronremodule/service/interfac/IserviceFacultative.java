@@ -14,6 +14,9 @@ import java.net.UnknownHostException;
 
 public interface IserviceFacultative {
     FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException;
+
+    String generateAffCode(Long affId);
+
     FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException;
     Page<FacultativeListResp> searchFacultative(String key, Pageable pageable);
 

@@ -18,6 +18,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     private final CedRepo cedRepo;
     private final CouvertureRepository couvRepo;
     private final IJwtService jwtService;
+    private final IserviceExercie exoService;
 
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException
@@ -60,10 +62,15 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
         return facultativeMapper.mapToFacultativeDetailsResp(aff);
     }
-
-    private String generateAffCode(Long affId)
+    private final BrancheRepository branRepo;
+    @Override //F+Code filiale+codeBranche+Exercice+numeroOrdre
+    public String generateAffCode(Long affId)
     {
-        return "FAC-" + String.format("%09d", affId);
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        return "F-" + cedRepo.getCedSigleById(affaire.getCedante().getCedId()) +
+                branRepo.getBranCheByCouId(affaire.getCouverture().getCouId()) +
+                exoService.getExerciceCourant().getExeCode() + "-" +
+                String.format("%05d", affId);
     }
 
     @Override @Transactional

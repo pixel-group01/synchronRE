@@ -39,4 +39,8 @@ public class Repartition {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Repartition(Long repId) {
+        this.repId = repId;
+    }
 }

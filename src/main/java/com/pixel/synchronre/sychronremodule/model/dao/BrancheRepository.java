@@ -16,4 +16,7 @@ public interface BrancheRepository extends JpaRepository<Branche, Long> {
                                          and br.statut.staCode = 'ACT'     
 """)
     Page<BrancheListResp> searchBranches(String key, Pageable pageable);
+
+    @Query("select c.branche.branLibelleAbrege from Couverture c where c.couId = ?1")
+    String getBranCheByCouId(Long couId);
 }
