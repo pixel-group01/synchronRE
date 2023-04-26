@@ -33,5 +33,6 @@ public class UpdateCedanteDTO
     private String cedAdressePostale;
     private String cedFax;
     private String cedSituationGeo;
+    private String cedInterlocuteur;
     private String cedStatut;
 }

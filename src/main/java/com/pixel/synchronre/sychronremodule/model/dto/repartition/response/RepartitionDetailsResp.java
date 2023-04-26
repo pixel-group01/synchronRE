@@ -11,6 +11,8 @@ public class RepartitionDetailsResp {
     private BigDecimal repTaux;
     private BigDecimal repSousCommission;
     private String repInterlocuteur;
+    private BigDecimal repTauxcomCed;
+    private BigDecimal repTauxcomCourt;
     private boolean repStatut;
     private Long affId;
     private String affCode;
@@ -23,4 +25,5 @@ public class RepartitionDetailsResp {
     private String cesTelephone;
     private BigDecimal affBesoinFac; //Reste à repartir après avoir fait la répartition
     private BigDecimal affTauxBesoinFac; //Le taux du besoinFaac par rapport au capital initial
+
 }

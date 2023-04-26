@@ -41,6 +41,9 @@ public class Affaire {
     @ManyToOne @JoinColumn(name = "couverture_id")
     protected Couverture couverture;
 
+    @ManyToOne @JoinColumn(name = "exe_code")
+    protected Exercice exercice;
+
     @ManyToOne @JoinColumn(name = "type_code")
     protected Type affType;
     @CreationTimestamp
@@ -58,12 +61,13 @@ public class Affaire {
         this.affId = affId;
     }
 
-    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance) {
+    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance,Exercice exercice) {
         this.affCapitalInitial = affCapitalInitial;
         this.affCode = affCode;
         this.affAssure = affAssure;
         this.affActivite = affActivite;
         this.affDateEffet = affDateEffet;
         this.affDateEcheance = affDateEcheance;
+        this.exercice=exercice;
     }
 }

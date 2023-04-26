@@ -10,6 +10,8 @@ public class RepartitionListResp {
     private BigDecimal repCapital;
     private BigDecimal repTaux;
     private BigDecimal repSousCommission;
+    private BigDecimal repTauxcomCed;
+    private BigDecimal repTauxcomCourt;
     private String repInterlocuteur;
     private boolean repStatut;
     private Long affId;

@@ -39,6 +39,7 @@ public class CreateCedanteDTO
     private String cedAdressePostale;
     private String cedFax;
     private String cedSituationGeo;
+    private String cedInterlocuteur;
     @UniquePaysCode
     private String paysCode;
     @ExistingUserId

@@ -24,6 +24,7 @@ public class Cedante {
   private String cedAdressePostale;
   private String cedFax;
   private String cedSituationGeo;
+  private String cedInterlocuteur;
   @ManyToOne() @JoinColumn(name = "ced_ces_id")
   private Cessionnaire cessionnaire;
   @ManyToOne @JoinColumn(name = "ced_pays_code")

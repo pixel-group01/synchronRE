@@ -25,7 +25,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp(
         f.affId, f.affCode, f.affAssure, f.affActivite, f.affDateEffet, f.affDateEcheance, f.facNumeroPolice, f.affCapitalInitial,
-        f.facSmpLci, f.facPrime, f.cedante.cedId, s.staCode, s.staLibelle, c.couLibelle, ced.cedNomFiliale, ced.cedSigleFiliale) 
+        f.facSmpLci, f.facPrime, ced.cedId, s.staCode, s.staLibelle, c.couLibelle, ced.cedNomFiliale, ced.cedSigleFiliale) 
         from Affaire f left join f.statut s left join f.couverture c left join f.affUserCreator u left join f.affFonCreator fnc left join f.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.affAssure, '') ) as string))) >0
@@ -37,19 +37,21 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staCode, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staLibelle, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.couLibelle, '') ) as string))) >0
-        ) 
-        and (:fncId is null or :fncId = fnc.id)
-        and (:userId is null or :userId = u.userId)
-        and (:cedId is null or :cedId = ced.cedId)
-        and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId)
-        and s.staCode in :staCodes
+        )       
+        and (:fncId is null or :fncId = fnc.id) 
+        and (:userId is null or :userId = u.userId) 
+        and (:cedId is null or :cedId = ced.cedId) 
+        and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId) 
+        and (:exeCode is null or :exeCode = f.exercice.exeCode) 
+        and s.staCode in :staCodes 
 """)
     Page<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,
                                              @Param("userId") Long userId,
                                              @Param("cedId") Long cedId,
                                              @Param("cedCesId") Long cedCesId,
-                                             @Param("staCodes") List<String> staCodes, Pageable pageable);
+                                             @Param("staCodes") List<String> staCodes,
+                                             @Param("exeCode")Long exeCode, Pageable pageable);
 
     @Query("select aff.cedante.cedId from Affaire aff where aff.affId = ?1")
     Long getAffCedId(Long affId);
