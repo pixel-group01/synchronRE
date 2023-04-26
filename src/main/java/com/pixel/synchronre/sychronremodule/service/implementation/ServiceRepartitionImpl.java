@@ -21,6 +21,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
@@ -128,8 +129,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
          mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_REPARTITION.staCode, dto.getAffId()));
          return repartitionDetailsResp;
     }
-
-    @Override //Placemement
+    private final IserviceBordereau bordService;
+    @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
     {
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
@@ -147,8 +148,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             rep = repMapper.mapToPlaRepartition(dto);
             rep.setRepStaCode(new Statut(StatutEnum.SAISIE_CRT.staCode));
+
+            rep = repRepo.save(rep);
+            bordService.createBordereau(rep.getRepId());
         }
-        rep = repRepo.save(rep);
         logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         if(firstPlacement)
         {

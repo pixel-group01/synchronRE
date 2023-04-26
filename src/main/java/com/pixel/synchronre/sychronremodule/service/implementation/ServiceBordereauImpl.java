@@ -16,9 +16,8 @@ import org.springframework.stereotype.Service;
 public class ServiceBordereauImpl implements IserviceBordereau {
     private final BordereauRepository bordRepo;
     private final RepartitionRepository repRepo;
-    private final IserviceAffaire affService;
     @Override
-    public Bordereau createBorderau(Long plaId)
+    public Bordereau createBordereau(Long plaId)
     {
         Bordereau bordereau = new Bordereau();
         bordereau.setRepartition(new Repartition(plaId));

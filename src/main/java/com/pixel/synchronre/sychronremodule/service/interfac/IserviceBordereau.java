@@ -4,5 +4,5 @@ import com.pixel.synchronre.sychronremodule.model.entities.Bordereau;
 
 public interface IserviceBordereau
 {
-    Bordereau createBorderau(Long plaId);
+    Bordereau createBordereau(Long plaId);
 }
