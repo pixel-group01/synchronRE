@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class ServiceBordereauImpl implements IserviceBordereau {
     private final BordereauRepository bordRepo;
     private final RepartitionRepository repRepo;
+    private final AffaireRepository affRepo;
     @Override
     public Bordereau createBordereau(Long plaId)
     {
@@ -31,7 +33,8 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Répartition introuvable"));
         Long cesId = placement.getCessionnaire().getCesId();
-        String bordNum = "BC" + String.format("%04d", cesId)+ placement.getAffaire().getAffCode() + "-" + String.format("%05d", borId);
+
+        String bordNum = "BC." + String.format("%04d", cesId)+ "."+ affRepo.getAffCode(placement.getAffaire().getAffId()) + "." + String.format("%05d", borId);
         return bordNum;
     }
 }

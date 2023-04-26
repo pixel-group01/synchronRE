@@ -67,9 +67,9 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     public String generateAffCode(Long affId)
     {
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
-        return "F-" + cedRepo.getCedSigleById(affaire.getCedante().getCedId()) +
-                branRepo.getBranCheByCouId(affaire.getCouverture().getCouId()) +
-                exoService.getExerciceCourant().getExeCode() + "-" +
+        return "F." + cedRepo.getCedSigleById(affaire.getCedante().getCedId()) + "." +
+                branRepo.getBranCheByCouId(affaire.getCouverture().getCouId()) + "." +
+                exoService.getExerciceCourant().getExeCode() + "." +
                 String.format("%05d", affId);
     }
 
