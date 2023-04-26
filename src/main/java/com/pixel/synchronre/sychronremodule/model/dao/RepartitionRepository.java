@@ -45,13 +45,13 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
-    boolean existsByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
+    boolean existsByAffIdAndPclId(Long affId, Long paramCesLegalId);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
-    Repartition findByIdAffIdAndPclId(Long affId, Long paramCesLegalId);
+    Repartition findByAffIdAndPclId(Long affId, Long paramCesLegalId);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
-    boolean existsByAffaireAndTypeRep(Long affId, String typeUniqueCodeCode);
+    boolean existsByAffaireAndTypeRep(Long affId, String typeUniqueCode);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
     Repartition findByAffaireAndTypeCed(Long affId, String rep_ced);
@@ -76,4 +76,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     boolean placementExists(Long plaId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    Repartition getPlacementByAffIdAndCesId(Long affId, Long cesId);
 }

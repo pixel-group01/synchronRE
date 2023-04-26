@@ -12,4 +12,9 @@ public class CalculRepartitionResp
     private BigDecimal tauxBesoinFac;
     private BigDecimal besoinFac;
     private BigDecimal besoinFacRestant;
+
+    private BigDecimal cmsRea;
+    private BigDecimal cmsCourtage;
+    private BigDecimal cmsCedante;
+    private BigDecimal primeNetteCessionnaire;
 }

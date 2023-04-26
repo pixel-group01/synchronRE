@@ -16,7 +16,15 @@ public enum StatutEnum
     AFFAIRE_SOLDE("SOLD", "Affaire soldée"),
     EN_ATTENTE_D_ARCHIVAGE("AARC", "En attente d'archivage"),
     ARCHIVE("ARC", "Archivé"),
-    TRANSMIS("TRA", "Transmis");
+    TRANSMIS("TRA", "Transmis"),
+
+    EN_ATTENTE_DE_VALIDATION("AVAL", "En attente de validation"),
+    VALIDE("VAL", "Validé"),
+    EN_ATTENTE_DE_CONFIRMATION("ACONF", "En attente de confirmation"),
+    REFUSE("REFUSE", "Réfusé"),
+    ANNULE("ANNULE", "Annulé"),
+    MODIFIE("MOD", "Modifié"),
+    ACCEPTE("ACCEPTE", "Accepté");
 
     public String staCode;
     public String staLibelle;

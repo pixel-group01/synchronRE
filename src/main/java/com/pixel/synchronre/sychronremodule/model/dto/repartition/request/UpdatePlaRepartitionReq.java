@@ -1,9 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -14,8 +11,10 @@ import java.math.BigDecimal;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @SeuilRepCap @SeuilRepTau  @CoherentCapitalAndTaux @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
-public class CreatePlaRepartitionReq
+public class UpdatePlaRepartitionReq
 {
+    @ExistingPlaId
+    private Long plaId;
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
     private BigDecimal repCapital;
@@ -42,11 +41,4 @@ public class CreatePlaRepartitionReq
     @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
     @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
     private String repInterlocuteur;
-
-    @NotNull(message = "Veuillez selectionner le cessionnaire")
-    @ExistingCesId
-    private Long cesId;
-
-    @ExistingAffId
-    private Long affId;
 }
