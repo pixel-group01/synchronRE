@@ -156,15 +156,26 @@ public class SynchronReApplication {
             Statut s4 = new Statut("VAL", "Validée", "Affaire validée", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s5 = new Statut("ARC", "Archivée", "Affaire archivée", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s6 = new Statut("SUP", "Supprimée", "Affaire supprimée", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut s9 = new Statut("APLA", "Attente de placement", "Affaire en attente de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut S10 = new Statut("CPLA", "En cour de placement", "Affaire en cour de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut S11 = new Statut("CREP", "En cour de repartition", "Affaire en cour de repartition", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
 
             Statut s7 = new Statut("ACT", "Actif", "Actif", TypeStatut.PERSISTANCE, LocalDateTime.now(), LocalDateTime.now());
             Statut s8 = new Statut("SUPP", "Supprimée", "Supprimé", TypeStatut.PERSISTANCE, LocalDateTime.now(), LocalDateTime.now());
 
-            Statut s12 = new Statut("SAI-CRT", "Saisie courtier", "Affaire saisie par le courtier", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12));
+
+            Statut s9 = new Statut("APLA", "Attente de placement", "Affaire en attente de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+            Statut S10 = new Statut("CPLA", "En cour de placement", "Affaire en cour de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+            Statut S11 = new Statut("CREP", "En cour de repartition", "Affaire en cour de repartition", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+
+            Statut s12 = new Statut("AVAL", "En attente de validation", "Placement en attente de validation", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut S13 = new Statut("VAL", "Validé", "Placement validé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut S14 = new Statut("ACONF", "En attente de confirmation", "Placement en attente de confirmation", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut s15 = new Statut("REFUSE", "Refusé", "Placement refusé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut S16 = new Statut("ANNULE", "Annulé", "Pladement annulé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut S17 = new Statut("MOD", "Modifié", "Placement modifié", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut s18 = new Statut("ACCEPTE", "Accepté", "Placement accepté", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+
+
+            Statut s19 = new Statut("SAI-CRT", "Saisie courtier", "Affaire saisie par le courtier", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19 ));
 
             Branche b1 = new Branche(1L, "VIE", "VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             Branche b2 = new Branche(2L, "NVI", "Non Vie", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
@@ -226,14 +237,15 @@ public class SynchronReApplication {
             ParamCessionLegale franc22 = new ParamCessionLegale(null,"Cession légale Fac CICA RE",new BigDecimal(0),new BigDecimal(5),new Pays("MAL"),new Statut("ACT"),2L,LocalDateTime.now(), LocalDateTime.now());
             pcslRepo.saveAll(Arrays.asList(franc21, franc22));
 
-         Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
-         Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", LocalDateTime.now(), LocalDateTime.now(), s7);
+            BigDecimal FIVE = new BigDecimal(5);
+            Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", FIVE,LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
 
          cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 

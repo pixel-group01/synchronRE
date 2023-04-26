@@ -84,20 +84,25 @@ public class RepartitionController
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")
-    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux)
+    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
     {
-        return repService.calculateRepByTaux(affId, taux);
+        return repService.calculateRepByTaux(affId, taux, tauxCmsRea, tauxCmsCourtage);
     }
 
     @GetMapping(path = "/calculate/by-taux-besoin/{affId}/{tauxBesoin}")
-    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin)
+    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
     {
-        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin);
+        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin, tauxCmsRea, tauxCmsCourtage);
     }
 
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
-    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital)
+    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
     {
-        return repService.calculateRepByCapital(affId, capital);
+        return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage);
+    }
+
+    void soumettreAVlaidation(Long plaId)
+    {
+
     }
 }

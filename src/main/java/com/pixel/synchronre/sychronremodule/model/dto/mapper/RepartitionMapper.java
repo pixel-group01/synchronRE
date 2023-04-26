@@ -22,17 +22,6 @@ public abstract class RepartitionMapper {
     @Autowired protected IServiceCalculsComptables comptaService;
     public abstract Repartition mapToRepartition(CreateRepartitionReq dto);
 
-
-    private String affAssure;
-    private String affActivite;
-    private Long cesId;
-    private String cesNom;
-    private String cesSigle;
-    private String cesEmail;
-    private String cesTelephone;
-    private BigDecimal affBesoinFac; //Reste à repartir après avoir fait la répartition
-    private BigDecimal affTauxBesoinFac;
-
     @Mapping(target = "affId", source = "affaire.affId")
     @Mapping(target = "affCode", source = "affaire.affCode")
     @Mapping(target = "affAssure", source = "affaire.affAssure")
@@ -60,5 +49,6 @@ public abstract class RepartitionMapper {
     @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_PLA\"))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
+    @Mapping(target = "repTauxComCed", expression = "java(dto.getRepSousCommission().subtract(dto.getRepTauxComCourt()))")
     public abstract Repartition mapToPlaRepartition(CreatePlaRepartitionReq dto);
 }

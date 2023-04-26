@@ -39,7 +39,8 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
 
@@ -52,20 +53,23 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class CoherentCapitalAndTauxOnCreate implements ConstraintValidator<CoherentCapitalAndTaux, CreateRepartitionReq> {
+    class CoherentCapitalAndTauxOnCreate implements ConstraintValidator<CoherentCapitalAndTaux, CreateRepartitionReq>
+    {
         private final AffaireRepository affRepo;
         @Override
         public boolean isValid(CreateRepartitionReq dto, ConstraintValidatorContext context)
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0 ;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
 
@@ -79,11 +83,10 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
-
-
 
     @Component
     @RequiredArgsConstructor
@@ -95,7 +98,8 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
 
@@ -109,8 +113,8 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).compareTo(dto.getRepTaux()) == 0;
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
-
 }

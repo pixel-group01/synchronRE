@@ -32,9 +32,9 @@ public interface IserviceRepartition {
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
 
-    CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital);
-    CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux);
-    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin);
+    CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage);
+    CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage);
+    CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage);
 
     void deletePlacement(Long repId) throws UnknownHostException;
 

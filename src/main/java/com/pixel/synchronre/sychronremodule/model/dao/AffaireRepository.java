@@ -57,8 +57,8 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("select aff.facPrime from Affaire aff where aff.affId = ?1")
     BigDecimal getFacPrime(Long affId);
 
-    @Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
-    BigDecimal getTauxCommissionReassureur(Long affId);
+    //@Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
+    //BigDecimal getTauxCommissionReassureur(Long affId);
 
 
 

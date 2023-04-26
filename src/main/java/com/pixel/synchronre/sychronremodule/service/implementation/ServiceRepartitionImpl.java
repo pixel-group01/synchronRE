@@ -18,10 +18,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
-import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
@@ -50,8 +47,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final ObjectCopier<Repartition> repCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
-    private BigDecimal zero = new BigDecimal(0);
-    private BigDecimal cent = new BigDecimal(100);
+    private BigDecimal ZERO = BigDecimal.ZERO;
+    private BigDecimal CENT = new BigDecimal(100);
     private final ParamCessionLegaleRepository pclRepo;
 
     @Override
@@ -67,11 +64,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     {
         Repartition rep;
         Repartition oldRep = null;
-        boolean existByAffaireAndPcl = repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
-        if(repRepo.existsByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()))
+        boolean existByAffaireAndPcl = repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
+        if(repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()))
         {
             oldRep = new Repartition();
-            rep = repRepo.findByIdAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
+            rep = repRepo.findByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTaux(dto.getRepTaux());
@@ -149,6 +146,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         else
         {
             rep = repMapper.mapToPlaRepartition(dto);
+            rep.setRepStaCode(new Statut(StatutEnum.SAISIE_CRT.staCode));
         }
         rep = repRepo.save(rep);
         logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
@@ -181,73 +179,95 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital)
+    public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
     {
-        if(capital.compareTo(zero)<0) throw new AppException("Le capital doit être un nombre strictement positif");
+        if(capital.compareTo(ZERO)<0) throw new AppException("Le capital doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(aff == null) return null;
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
-        restARepartir = restARepartir == null ? zero : restARepartir;
-        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
-        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
+        restARepartir = restARepartir == null ? ZERO : restARepartir;
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
+        if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(cent).divide(capitalInit, 3, RoundingMode.HALF_UP));
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
+        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 2, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
+
+        return calculatePrimeAndCms(tauxCmsRea, tauxCmsCourtage, aff, resp);
+    }
+
+    private CalculRepartitionResp calculatePrimeAndCms(BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Affaire aff, CalculRepartitionResp resp)
+    {
+        BigDecimal facPrime = aff.getFacPrime();
+        if(facPrime == null || tauxCmsRea == null || tauxCmsCourtage == null) return resp;
+
+        BigDecimal cmsRea = facPrime.multiply(tauxCmsRea).divide(CENT, 2, RoundingMode.HALF_UP);
+        BigDecimal cmsCourtage = facPrime.multiply(tauxCmsCourtage).divide(CENT, 2, RoundingMode.HALF_UP);
+        BigDecimal primeNetteCes = facPrime.subtract(cmsRea);
+        BigDecimal cmsCedante = cmsRea.subtract(cmsCourtage);
+
+        resp.setCmsRea(cmsRea);
+        resp.setPrimeNetteCessionnaire(primeNetteCes);
+        resp.setCmsCourtage(cmsCourtage);
+        resp.setCmsCedante(cmsCedante);
+
         return resp;
     }
 
 
     @Override
-    public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux)
+    public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
     {
-        if(taux.compareTo(zero)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
+        if(taux.compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         
         if(aff == null) return null;
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? zero : restARepartir;
+        restARepartir = restARepartir == null ? ZERO : restARepartir;
 
-        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
-        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
+        if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
         
-        BigDecimal capital = capitalInit.multiply(taux.divide(cent, 3, RoundingMode.HALF_UP));
-        if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + cent.multiply(restARepartir).divide(capitalInit, 3, RoundingMode.HALF_UP) + "%");
+        BigDecimal capital = capitalInit.multiply(taux.divide(CENT, 2, RoundingMode.HALF_UP));
+        if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
-        return resp;
+
+        return calculatePrimeAndCms(tauxCmsRea, tauxCmsCourtage, aff, resp);
     }
 
 
     @Override
-    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin)
+    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
     {
-        if(tauxBesoin.compareTo(zero)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
+        if(tauxBesoin.compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
-        if(tauxBesoin.compareTo(cent)>0) throw new AppException("Le taux de repartition ne doit pas exéder 100% du besoin fac");
+        if(tauxBesoin.compareTo(CENT)>0) throw new AppException("Le taux de repartition ne doit pas exéder 100% du besoin fac");
 
         if(aff == null) return null;
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? zero : restARepartir;
-        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? zero : aff.getAffCapitalInitial();
-        if(restARepartir.compareTo(zero) <= 0 || capitalInit.compareTo(zero) <= 0) return new CalculRepartitionResp(zero, zero,zero,zero, zero);
+        restARepartir = restARepartir == null ? ZERO : restARepartir;
+        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
+        if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
 
-        BigDecimal capital = tauxBesoin.divide(cent, 3, RoundingMode.HALF_UP).multiply(restARepartir);
+        BigDecimal capital = tauxBesoin.divide(CENT, 2, RoundingMode.HALF_UP).multiply(restARepartir);
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(cent).divide(capitalInit, 3, RoundingMode.HALF_UP));
-        resp.setTauxBesoinFac(capital.multiply(cent).divide(restARepartir, 3, RoundingMode.HALF_UP));
+        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 2, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
+
+        this.calculatePrimeAndCms(tauxCmsRea, tauxCmsCourtage, aff, resp);
         return resp;
     }
 
@@ -271,7 +291,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public List<ParamCessionLegaleListResp> getCesLegParam(Long affId)
     {
         return pclRepo.findByAffId(affId).stream()
-            .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux()).getCapital()))
+            .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux(), null, null).getCapital()))
             .collect(Collectors.toList());
     }
 }

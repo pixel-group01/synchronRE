@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
@@ -22,6 +23,7 @@ public class Cessionnaire {
   private String cesCellulaire;
   private String cesAdressePostale;
   private String cesSituationGeo;
+  private BigDecimal repTauxComCourtage = new BigDecimal(5);
   @CreationTimestamp
   private LocalDateTime createdAt;
   @UpdateTimestamp

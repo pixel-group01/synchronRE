@@ -30,8 +30,8 @@ public interface IServiceCalculsComptables
     BigDecimal calculateMtCmsCedByCes(Long affId, Long cesId);
     BigDecimal calculateMtTotaleCmsCed(Long affId);
 
-    BigDecimal calculateMtCmsReaOwnerByCes(Long affId, Long cesId);
-    BigDecimal calculateMtTotalCmsReaOwner(Long affId);
+    BigDecimal calculateMtCmsCourtageByCes(Long affId, Long cesId);
+    BigDecimal calculateMtTotalCmsCourtage(Long affId);
 
     BigDecimal calculateTauxDeReglement(Long affId);
 

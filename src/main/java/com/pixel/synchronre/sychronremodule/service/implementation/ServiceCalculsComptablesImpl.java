@@ -3,7 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -137,16 +137,16 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtCmsCedByCes(Long affId, Long cesId)
     {
-        //boolean affIdExists = affId != null && affRepo.existsById(affId);
+        Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId, cesId);
+        if(placement == null) return BigDecimal.ZERO;
         BigDecimal mtCommission = this.calculateMtCmsByCes(affId, cesId);
+
         BigDecimal tauxCommission = repRepo.getTauxSousCommission(affId, cesId); //Taux de commission accepté le cessionnaire
         tauxCommission = tauxCommission == null ? ZERO : tauxCommission;
-        BigDecimal tauxCommissionReassureur = affRepo.getTauxCommissionReassureur(affId); //Taux de commission de NelsonRe
-        tauxCommissionReassureur = tauxCommissionReassureur == null ? ZERO : tauxCommissionReassureur;
+        BigDecimal tauxComCourt = placement.getRepTauxComCourt(); //Taux de commission de NelsonRe
+        tauxComCourt = tauxComCourt == null ? ZERO : tauxComCourt;
 
-        //BigDecimal sousCommission = !affIdExists ? zero : regRepo.getMtSousCommissionByCessionnaire(affId, cesId);
-
-        return  mtCommission.multiply(tauxCommission.subtract(tauxCommissionReassureur));
+        return  mtCommission.multiply(tauxCommission.subtract(tauxComCourt));
     }
 
     @Override
@@ -160,21 +160,22 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
-    public BigDecimal calculateMtCmsReaOwnerByCes(Long affId, Long cesId) //Montant de la commission du réassureur propriétaire de l'affaire (NelsonRE) par cessionnaire
+    public BigDecimal calculateMtCmsCourtageByCes(Long affId, Long cesId) //Montant de la commission du réassureur propriétaire de l'affaire (NelsonRE) par cessionnaire
     {
+        Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId, cesId);
         BigDecimal mtCms = this.calculateMtCmsByCes(affId, cesId);
-        BigDecimal tauxCmsRea = affRepo.getTauxCommissionReassureur(affId);
-        tauxCmsRea = tauxCmsRea == null ? new BigDecimal(0) : tauxCmsRea;
-        return mtCms.multiply(tauxCmsRea);
+        BigDecimal tauxCmsCourt = placement.getRepTauxComCourt();
+        tauxCmsCourt = tauxCmsCourt == null ? new BigDecimal(0) : tauxCmsCourt;
+        return mtCms.multiply(tauxCmsCourt);
     }
 
     @Override
-    public BigDecimal calculateMtTotalCmsReaOwner(Long affId) //Montant total de la commission du réassureur proproétaire de l'affaire (NelsonRE)
+    public BigDecimal calculateMtTotalCmsCourtage(Long affId) //Montant total de la commission du réassureur proproétaire de l'affaire (NelsonRE)
     {
         Set<Long> cesIds = repRepo.getCesIdsByAffId(affId);
         cesIds = cesIds == null ? new HashSet<>() : cesIds;
         return cesIds.stream()
-                .map(cesId->this.calculateMtCmsReaOwnerByCes(affId, cesId))
+                .map(cesId->this.calculateMtCmsCourtageByCes(affId, cesId))
                 .reduce(ZERO, BigDecimal::add);
     }
 

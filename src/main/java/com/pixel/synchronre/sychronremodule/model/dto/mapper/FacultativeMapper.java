@@ -71,7 +71,7 @@ public abstract class FacultativeMapper
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Affaire aff);
 
     @Mapping(target = "mtTotalCmsCedante", expression = "java(comptaService.calculateMtTotaleCmsCed(aff.getAffId()))")
-    @Mapping(target = "mtTotalCmsReaOwner", expression = "java(comptaService.calculateMtTotalCmsReaOwner(aff.getAffId()))")
+    @Mapping(target = "mtTotalCmsCourtage", expression = "java(comptaService.calculateMtTotalCmsCourtage(aff.getAffId()))")
     @Mapping(target = "mtTotalPrimeNetteCes", expression = "java(comptaService.calculateMtTotalAReverseAuxCes(aff.getAffId()))")
     @Mapping(target = "dejaRegle", expression = "java(comptaService.calculateDejaRegle(aff.getAffId()))")
     @Mapping(target = "resteARegler", expression = "java(comptaService.calculateRestARegler(aff.getAffId()))")
@@ -101,7 +101,7 @@ public abstract class FacultativeMapper
         EtatComptableAffaire.DetailsEtatComptable details = new EtatComptableAffaire().new DetailsEtatComptable();
         details.setCesId(cesId); details.setCesNom(ces.getCesNom()); details.setCesSigle(ces.getCesSigle());
         details.setMtCmsCedante(comptaService.calculateMtCmsCedByCes(affId, cesId));
-        details.setMtCmsReaOwner(comptaService.calculateMtCmsReaOwnerByCes(affId, cesId));
+        details.setMtCmsCourtage(comptaService.calculateMtCmsCourtageByCes(affId, cesId));
         details.setMtPrimeNetteCes(comptaService.calculateMtPrimeNetteByCes(affId, cesId));
         //TODO dejaReverse resteAReverser tauxDeReversement
 
