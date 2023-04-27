@@ -31,6 +31,7 @@ public class Type {
     private PersStatus status;
     @Transient
     private List<Type> children;
+    private String objectFolder;
 
     @Override
     public String toString() {

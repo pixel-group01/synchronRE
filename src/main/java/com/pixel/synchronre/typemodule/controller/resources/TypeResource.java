@@ -6,6 +6,7 @@ import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.dtos.TypeParamDTO;
 import com.pixel.synchronre.typemodule.model.dtos.UpdateTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
+import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import com.pixel.synchronre.typemodule.controller.services.ITypeService;
@@ -44,7 +45,7 @@ public class TypeResource
     @GetMapping(path = "/{group-code}")
     public List<ReadTypeDTO> getByGroupCode(@PathVariable String groupCode)
     {
-        return typeRepo.findByTypeGroup(groupCode); //typeRepo.findByGroupCode(groupCode);
+        return typeRepo.findByTypeGroup(TypeGroup.valueOf(groupCode)); //typeRepo.findByGroupCode(groupCode);
     }
 
     //@PreAuthorize("isAnonymous()")

@@ -44,7 +44,7 @@ public interface TypeRepo extends JpaRepository<Type, Long>
     //Long typeId, String typeGroup, String uniqueCode, String name, String status
 
     @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status) from Type t where t.typeGroup = ?1 and t.status = 'ACTIVE'")
-    List<ReadTypeDTO> findByTypeGroup(String typeGroup);
+    List<ReadTypeDTO> findByTypeGroup(TypeGroup typeGroup);
 
     @Query("select t.typeId from Type t where upper(t.typeGroup) = upper(?1) and t.status = 'ACTIVE'")
     List<Long> getTypeIdsByTypeGroup(String typeGroup);

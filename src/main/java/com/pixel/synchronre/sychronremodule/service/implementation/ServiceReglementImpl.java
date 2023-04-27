@@ -1,6 +1,8 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 
+import com.pixel.synchronre.archivemodule.controller.service.IServiceDocument;
+import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
@@ -44,6 +46,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final AffaireRepository affRepo;
     private final TypeRepo typeRepo;
     private final IServiceMouvement mvtService;
+    private final IServiceDocument docService;
 
     @Override @Transactional
     public ReglementDetailsResp createReglement(String typeReg, CreateReglementReq dto) throws UnknownHostException {
@@ -58,6 +61,10 @@ public class ServiceReglementImpl implements IserviceReglement {
         {
             mvtService.createMvtSuivant(new MvtSuivantReq(EN_COURS_DE_REGLEMENT.staCode, dto.getAffId()));
         }
+
+        UploadDocReq uploadDocReq = new UploadDocReq(paiement.getRegId(), "RECU_PAI", dto.getRegReference(), dto.getRegRecu());
+        docService.uploadRecuReglement(uploadDocReq);
+
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
 

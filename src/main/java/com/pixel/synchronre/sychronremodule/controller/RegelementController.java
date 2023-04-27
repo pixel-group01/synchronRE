@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.archivemodule.model.dtos.validator.OnRegUpload;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
@@ -20,7 +22,7 @@ public class RegelementController
 {
     private final IserviceReglement regService;
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "/create") @Validated({OnRegUpload.class})
     public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglement(typeReg,dto);
     }

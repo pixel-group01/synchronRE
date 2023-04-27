@@ -44,4 +44,7 @@ public class Reglement {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
+  public Reglement(Long regId) {
+    this.regId = regId;
+  }
 }

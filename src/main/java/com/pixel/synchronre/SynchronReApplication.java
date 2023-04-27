@@ -16,6 +16,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
@@ -30,7 +31,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-   @Bean
+   //@Bean @Order(1)
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
                                    FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,
@@ -40,27 +41,30 @@ public class SynchronReApplication {
     {
         return args->{
 
-            Type t1 = new Type(1l, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            Type t2 = new Type(2l, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null);
-            Type t3 = new Type(3l, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null);
+            Type t1 = new Type(1l, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
+            Type t2 = new Type(2l, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null, null);
+            Type t3 = new Type(3l, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null, null);
 
-            //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null);
-            Type t7 = new Type(4l, TypeGroup.TYPE_PRV, "PRV-AFF", "Privilège du module affaire", PersStatus.ACTIVE, null);
-            Type t8 = new Type(5l, TypeGroup.TYPE_PRV, "PRV-ADM", "Privilège du module admin", PersStatus.ACTIVE, null);
+            //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
+            //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
+            //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
+            Type t7 = new Type(4l, TypeGroup.TYPE_PRV, "PRV-AFF", "Privilège du module affaire", PersStatus.ACTIVE, null, null);
+            Type t8 = new Type(5l, TypeGroup.TYPE_PRV, "PRV-ADM", "Privilège du module admin", PersStatus.ACTIVE, null, null);
 
-            Type paiement = new Type(6l, TypeGroup.TYPE_REGLEMENT, "paiements", "Paiement reçu", PersStatus.ACTIVE, null);
-            Type reversement = new Type(7l, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null);
-            Type reglement_sinistre = new Type(8l, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null);
+            Type paiement = new Type(6l, TypeGroup.TYPE_REGLEMENT, "paiements", "Paiement reçu", PersStatus.ACTIVE, null, null);
+            Type reversement = new Type(7l, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null, null);
+            Type reglement_sinistre = new Type(8l, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null, null);
 
-            Type fil= new Type(9l, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null);
-            Type rea = new Type(10l, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null);
-            Type facType= new Type(11l, TypeGroup.TYPE_AFFAIRE, "FAC", "Facultative", PersStatus.ACTIVE, null);
-            Type trai = new Type(12l, TypeGroup.TYPE_AFFAIRE, "TRAITE", "Traite", PersStatus.ACTIVE, null);
+            Type fil= new Type(9l, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null);
+            Type rea = new Type(10l, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null);
+            Type facType= new Type(11l, TypeGroup.TYPE_AFFAIRE, "FAC", "Facultative", PersStatus.ACTIVE, null, null);
+            Type trai = new Type(12l, TypeGroup.TYPE_AFFAIRE, "TRAITE", "Traite", PersStatus.ACTIVE, null, null);
 
+            Type photo = new Type(13l, TypeGroup.DOCUMENT, "PHT", "Photo", PersStatus.ACTIVE, null, "user");
+            Type recuPaiement = new Type(14l, TypeGroup.DOCUMENT, "RECU_PAI", "Recu de paiement", PersStatus.ACTIVE, null, "reglement");
+            Type recuReversement = new Type(15l, TypeGroup.DOCUMENT, "RECU_VER", "Recu de versement", PersStatus.ACTIVE, null, "reglement");
 
-            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai));
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo, recuPaiement, recuReversement));
 
             AppPrivilege agentSaisie = new AppPrivilege(1l, "SAISIE", "AGENT_DE_SAISIE", new Type(4l));
             AppPrivilege validateur = new AppPrivilege(2l, "VALIDATEUR", "VALIDATEUR", new Type(4l));
