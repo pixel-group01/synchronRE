@@ -2,6 +2,7 @@ package com.pixel.synchronre.reportmodule.service;
 
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import jakarta.servlet.http.HttpServletResponse;
+import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import org.springframework.stereotype.Service;

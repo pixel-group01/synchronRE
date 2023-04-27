@@ -1,6 +1,7 @@
 package com.pixel.synchronre.reportmodule.controller;
 
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
+import com.google.zxing.EncodeHintType;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
