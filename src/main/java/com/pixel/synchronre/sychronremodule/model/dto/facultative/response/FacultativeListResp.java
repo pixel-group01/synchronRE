@@ -24,4 +24,5 @@ public class FacultativeListResp
     private String couLibelle;
     private String cedNomFiliale;
     private String cedSigleFiliale;
+    private Long exeCode;
 }
