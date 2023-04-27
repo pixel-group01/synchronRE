@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-27T17:09:53 -->
+<!-- 2023-04-27T01:41:45 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -404,7 +404,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date  :  "  +new SimpleDateFormat("dd/MM/yyyy").format(TODAY( ))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Date  :  "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement x="2" y="2" width="190" height="58" uuid="be1f93cf-1724-4550-b138-f29b8531ecd6"/>
@@ -820,6 +820,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement x="33" y="442" width="117" height="111" uuid="c8932404-d5c1-4424-b552-2c3d0ec289b1"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA["Application SynchronRE : Votre Demande de placement porte sur   N°  Affaire : "+ $F{aff_id}  +"   Assuré :  " + $F{aff_assure} + " Numéro de Police :  " +$F{fac_numero_police} + " "]]></jr:codeExpression>
+				</jr:QRCode>
 			</componentElement>
 		</band>
 	</detail>
