@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-27T17:02:19 -->
+<!-- 2023-04-27T01:07:15 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -1137,6 +1137,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
+			<componentElement>
+				<reportElement x="13" y="450" width="117" height="89" uuid="6b2a6fef-13f3-40eb-b1aa-5f9c39079162"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA["Application SynchronRE : La demande de placement de  " +$F{ced_nom_filiale}+"  porte sur  N°  Affaire : "+ $F{aff_id}  +" ,  Assuré :  " + $F{aff_assure} + ", Numéro de Police  :  " +$F{fac_numero_police} + ", avec  le numéro de bordereau suivant  :  "+$F{bord_num}]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
 		</band>
 	</detail>
 </jasperReport>
