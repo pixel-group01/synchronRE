@@ -89,7 +89,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, Arrays.asList(SAISIE.staCode, SAISIE_CRT.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/by-cedante-transmis") //Transmis par la cedante mais en cours de traitement

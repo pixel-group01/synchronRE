@@ -45,6 +45,7 @@ public class ServiceMouvementImpl implements IServiceMouvement
     {
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         aff.setStatut(new Statut(dto.getStaCode()));
+        affRepo.save(aff);
         Mouvement mvt = mvtMapper.mapTomouvement(dto);
         mvtRepo.save(mvt);
     }
