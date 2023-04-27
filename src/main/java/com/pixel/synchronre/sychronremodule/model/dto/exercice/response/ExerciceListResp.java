@@ -9,5 +9,5 @@ import lombok.*;
 public class ExerciceListResp {
     private Long exeCode;
     private String exeLibelle;
-    private String exeCourant;
+    private boolean exeCourant;
 }
