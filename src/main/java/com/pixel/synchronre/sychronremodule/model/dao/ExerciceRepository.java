@@ -19,7 +19,6 @@ public interface ExerciceRepository extends JpaRepository<Exercice, Long> {
         select new com.pixel.synchronre.sychronremodule.model.dto.exercice.response.ExerciceListResp(e.exeCode,e.exeLibelle,e.exeCourant) 
         from Exercice  e where locate(upper(coalesce(?1, '') ), cast(e.exeCode as string)) >0 
                           or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(e.exeLibelle, '') ) as string)) ) >0 
-                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(e.exeCourant, '') ) as string)) ) >0
                           order by e.exeCode desc
 """)
     List<ExerciceListResp> searchExercice(String key);

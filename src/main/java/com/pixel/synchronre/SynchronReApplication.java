@@ -168,8 +168,8 @@ public class SynchronReApplication {
 
 
             Statut s9 = new Statut("APLA", "Attente de placement", "Affaire en attente de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut S10 = new Statut("CPLA", "En cour de placement", "Affaire en cour de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut S11 = new Statut("CREP", "En cour de repartition", "Affaire en cour de repartition", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+            Statut S10 = new Statut("CPLA", "En cours de placement", "Affaire en cours de placement", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
+            Statut S11 = new Statut("CREP", "En cours de repartition", "Affaire en cours de repartition", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
 
             Statut s12 = new Statut("AVAL", "En attente de validation", "Placement en attente de validation", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             Statut S13 = new Statut("VAL", "Validé", "Placement validé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
