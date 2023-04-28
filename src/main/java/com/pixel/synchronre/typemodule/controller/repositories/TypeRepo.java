@@ -43,13 +43,13 @@ public interface TypeRepo extends JpaRepository<Type, Long>
 
     //Long typeId, String typeGroup, String uniqueCode, String name, String status
 
-    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status) from Type t where t.typeGroup = ?1 and t.status = 'ACTIVE'")
+    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status, t.objectFolder) from Type t where t.typeGroup = ?1 and t.status = 'ACTIVE'")
     List<ReadTypeDTO> findByTypeGroup(TypeGroup typeGroup);
 
     @Query("select t.typeId from Type t where upper(t.typeGroup) = upper(?1) and t.status = 'ACTIVE'")
     List<Long> getTypeIdsByTypeGroup(String typeGroup);
 
-    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status) from Type t order by t.typeGroup, t.uniqueCode, t.typeId")
+    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status) from Type t order by t.typeGroup, t.uniqueCode, t.typeId, t.objectFolder")
     List<ReadTypeDTO> findAllTypes();
 
     @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(s.child.typeId, s.child.typeGroup, s.child.uniqueCode, s.child.name, s.child.status) from TypeParam s where s.parent.typeId = ?1")
@@ -100,4 +100,10 @@ public interface TypeRepo extends JpaRepository<Type, Long>
 
     @Query("select t.typeId from Type t where t.uniqueCode = ?1")
     Long findTypeIdByUniqueCode(String uniqueCode);
+
+    @Query("select t.objectFolder from Type t where t.uniqueCode = ?1")
+    String getObjectFolderByUniqueCode(String uniqueCode);
+
+    @Query("select t.uniqueCode from Type t where t.objectFolder = ?1")
+    List<String> findUniqueCodesByObjectFolder(String objectFolder);
 }

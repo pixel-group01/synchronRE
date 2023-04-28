@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
@@ -101,8 +102,51 @@ public class RepartitionController
         return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage);
     }
 
-    void soumettreAVlaidation(Long plaId)
+    @PutMapping(path = "/transmettre-placement-pour-validation")
+    void transmettrePourValadation(@PathVariable Long plaId)
     {
+        repService.transmettrePlacementPourValidation(plaId);
+    }
 
+    @PutMapping(path = "/valider-placement")
+    void validerPlacement(@PathVariable Long plaId)
+    {
+        repService.validerPlacement(plaId);
+    }
+
+    @PutMapping(path = "/retourner-placement")
+    void retournerPlacement(@PathVariable Long plaId, @RequestBody String message)
+    {
+        repService.retournerPlacement(plaId, message);
+    }
+
+    @PutMapping(path = "/envoyer-note-cession")
+    void envoyerNoteCession(@PathVariable Long plaId)
+    {
+        repService.transmettreNoteDeCession(plaId);
+    }
+
+    @PutMapping(path = "/refuser-placement")
+    void refuserPlacement(@PathVariable Long plaId, @RequestBody String message)
+    {
+        repService.refuserPlacement(plaId, message);
+    }
+
+    @PutMapping(path = "/annuler-placement")
+    void annulerPlacement(@PathVariable Long plaId)
+    {
+        repService.annulerPlacement(plaId);
+    }
+
+    @PutMapping(path = "/modifier-placement")
+    void modifierPlacement(@RequestBody UpdatePlaRepartitionReq dto)
+    {
+        repService.modifierPlacement(dto);
+    }
+
+    @PutMapping(path = "/accepter-placement")
+    void accepterPlacement(@PathVariable Long plaId, @RequestBody MultipartFile noteCessionFile)
+    {
+        repService.accepterPlacement(plaId,noteCessionFile);
     }
 }

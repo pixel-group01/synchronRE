@@ -20,9 +20,11 @@ public abstract class DocMapper
     @Mapping(target = "user", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(dto.getObjecId()))")
     public abstract Document mapToPhotoDoc(UploadDocReq dto);
 
-    @Mapping(target = "docDescription", expression = "java(\"Reçu de paiement\")")
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
     @Mapping(target = "reglement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Reglement(dto.getObjecId()))")
-    public abstract Document mapToRecuPaiementDoc(UploadDocReq dto);
+    public abstract Document mapToReglementDoc(UploadDocReq dto);
 
+    @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
+    @Mapping(target = "placement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Repartition(dto.getObjecId()))")
+    public abstract Document mapToPlacementDoc(UploadDocReq dto);
 }

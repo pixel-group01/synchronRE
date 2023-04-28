@@ -3,19 +3,17 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
-import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.MouvementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
@@ -27,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
-import java.time.LocalDate;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SAISIE;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SAISIE_CRT;
@@ -57,7 +54,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         aff=affRepo.save(aff);
         aff.setAffCode(this.generateAffCode(aff.getAffId()));
         logService.logg(SynchronReActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
-        mvtService.createMvtSuivant(new MvtSuivantReq(aff.getStatut().getStaCode(), aff.getAffId()));
+        mvtService.createMvtSuivant(new MvtSuivantAffaireReq(aff.getStatut().getStaCode(), aff.getAffId()));
         aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
         return facultativeMapper.mapToFacultativeDetailsResp(aff);

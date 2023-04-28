@@ -2,11 +2,11 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 
 import com.pixel.synchronre.archivemodule.controller.service.IServiceDocument;
+import com.pixel.synchronre.archivemodule.controller.service.ReglementDocUploader;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
-import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
@@ -15,7 +15,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
@@ -25,7 +25,6 @@ import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceReglement;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +46,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final TypeRepo typeRepo;
     private final IServiceMouvement mvtService;
     private final IServiceDocument docService;
+    private final ReglementDocUploader regDocUploader;
 
     @Override @Transactional
     public ReglementDetailsResp createReglement(String typeReg, CreateReglementReq dto) throws UnknownHostException {
@@ -59,11 +59,12 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         if(!hasReglement)
         {
-            mvtService.createMvtSuivant(new MvtSuivantReq(EN_COURS_DE_REGLEMENT.staCode, dto.getAffId()));
+            mvtService.createMvtSuivant(new MvtSuivantAffaireReq(EN_COURS_DE_REGLEMENT.staCode, dto.getAffId()));
         }
-
-        UploadDocReq uploadDocReq = new UploadDocReq(paiement.getRegId(), "RECU_PAI", dto.getRegReference(), dto.getRegRecu());
-        docService.uploadRecuReglement(uploadDocReq);
+        String docUniqueCode = typeReg.equals("paiements") ? "RECU_PAI" : typeReg.equals("reversements") ? "RECU_REV" : "";
+        String docDescription = typeReg.equals("paiements") ? "Reçu de paiement" : typeReg.equals("reversements") ? "Reçu de reversement" : "";
+        UploadDocReq uploadDocReq = new UploadDocReq(paiement.getRegId(), docUniqueCode, dto.getRegReference(), docDescription,dto.getRegRecu());
+        regDocUploader.uploadDocument(uploadDocReq);
 
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }

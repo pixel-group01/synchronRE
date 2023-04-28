@@ -17,6 +17,7 @@ public class ReadTypeDTO
     private String uniqueCode;
     private String name;
     private String status;
+    private String objectFolder;
     private List<ReadTypeDTO> children;
 
     public ReadTypeDTO(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status) {
@@ -25,6 +26,15 @@ public class ReadTypeDTO
         this.uniqueCode = uniqueCode;
         this.name = name;
         this.status = status.name();
+    }
+
+    public ReadTypeDTO(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, String objectFolder) {
+        this.typeId = typeId;
+        this.typeGroup = typeGroup.name();
+        this.uniqueCode = uniqueCode;
+        this.name = name;
+        this.status = status.name();
+        this.objectFolder = objectFolder;
     }
 
     public ReadTypeDTO(Type type) {

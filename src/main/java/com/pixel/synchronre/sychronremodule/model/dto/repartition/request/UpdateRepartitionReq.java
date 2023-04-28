@@ -3,10 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentCapitalAndTaux;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTauBesoinFac;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
 import com.pixel.synchronre.typemodule.model.dtos.ExistingTypeId;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
@@ -19,6 +16,7 @@ import java.math.BigDecimal;
 @SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux
 public class UpdateRepartitionReq
 {
+    @ExistingRepId
     private Long repId;
     private BigDecimal repCapital;
     private BigDecimal repTaux;

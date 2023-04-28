@@ -82,13 +82,14 @@ public class DocumentServiceImpl implements IServiceDocument
 	}
 
 	@Override
-	public void uploadRecuReglement(UploadDocReq dto)
+	public void uploadReglementDoc(UploadDocReq dto)
 	{
 		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode());
-		Document recuPaie = docMapper.mapToRecuPaiementDoc(dto);
-		String path = this.generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), recuPaie.getDocDescription());
-		recuPaie.setDocPath(path);
-		docRepo.save(recuPaie);
+		Document regDoc = docMapper.mapToReglementDoc(dto);
+		String path = this.generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), regDoc.getDocDescription());
+		regDoc.setDocPath(path);
+		docRepo.save(regDoc);
+		this.uploadFile(dto.getFile(), path);
 	}
 
 	@Override
@@ -99,6 +100,7 @@ public class DocumentServiceImpl implements IServiceDocument
 		String path = this.generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), photo.getDocDescription());
 		photo.setDocPath(path);
 		docRepo.save(photo);
+		this.uploadFile(dto.getFile(), path);
 	}
 
 	@Bean @Order(2)
@@ -110,9 +112,23 @@ public class DocumentServiceImpl implements IServiceDocument
 			if(!agtUploadDir.exists()) agtUploadDir.mkdirs();
 			typeRepo.findByTypeGroup(TypeGroup.DOCUMENT).forEach(type->
 			{
-				File typeDir = new File(DocumentsConstants.UPLOADS_DIR + "\\" + type.getUniqueCode()) ;
-				if(!typeDir.exists()) typeDir.mkdirs();
+				String objectFolder = type.getObjectFolder();
+				typeRepo.findUniqueCodesByObjectFolder(objectFolder).forEach(uc->
+				{
+					File typeDir = new File(DocumentsConstants.UPLOADS_DIR  + "\\" + objectFolder + "\\" + type.getUniqueCode()) ;
+					if(!typeDir.exists()) typeDir.mkdirs();
+				});
 			});
 		};
 	}
 }
+
+
+
+
+
+
+
+
+
+

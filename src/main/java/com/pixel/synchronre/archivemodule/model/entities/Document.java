@@ -31,8 +31,8 @@ public class Document
 	private AppUser user;
 	@ManyToOne @JoinColumn(name = "AFF_ID")
 	private Affaire affaire;
-	@ManyToOne @JoinColumn(name = "REP_ID")
-	private Repartition repartition;
+	@ManyToOne @JoinColumn(name = "PLA_ID")
+	private Repartition placement;
 	@ManyToOne @JoinColumn(name = "REG_ID")
 	private Reglement reglement;
 	@ManyToOne @JoinColumn(name = "SIN_ID")

@@ -62,9 +62,11 @@ public class SynchronReApplication {
 
             Type photo = new Type(13l, TypeGroup.DOCUMENT, "PHT", "Photo", PersStatus.ACTIVE, null, "user");
             Type recuPaiement = new Type(14l, TypeGroup.DOCUMENT, "RECU_PAI", "Recu de paiement", PersStatus.ACTIVE, null, "reglement");
-            Type recuReversement = new Type(15l, TypeGroup.DOCUMENT, "RECU_VER", "Recu de versement", PersStatus.ACTIVE, null, "reglement");
+            Type recuReversement = new Type(15l, TypeGroup.DOCUMENT, "RECU_REV", "Recu de versement", PersStatus.ACTIVE, null, "reglement");
+            Type avisModCession = new Type(15l, TypeGroup.DOCUMENT, "AVI_MOD_CES", "Avis de modification de cession", PersStatus.ACTIVE, null, "placement");
+            Type noteCession = new Type(15l, TypeGroup.DOCUMENT, "NOT_CES", "Note de cession", PersStatus.ACTIVE, null, "placement");
 
-            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo, recuPaiement, recuReversement));
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo, recuPaiement, recuReversement, avisModCession, noteCession));
 
             AppPrivilege agentSaisie = new AppPrivilege(1l, "SAISIE", "AGENT_DE_SAISIE", new Type(4l));
             AppPrivilege validateur = new AppPrivilege(2l, "VALIDATEUR", "VALIDATEUR", new Type(4l));

@@ -10,6 +10,6 @@ public interface IServiceDocument
 	String generatePath(MultipartFile file, String objectFolder, String typeCode, String objectName);
 	void renameFile(String oldPath, String newPath);
 
-	void uploadRecuReglement(UploadDocReq dto);
+	void uploadReglementDoc(UploadDocReq dto);
 	void uploadPhoto(UploadDocReq dto);
 }

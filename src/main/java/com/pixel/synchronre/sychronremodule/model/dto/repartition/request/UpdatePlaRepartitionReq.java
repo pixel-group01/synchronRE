@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 
@@ -23,11 +24,6 @@ public class UpdatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-    //@NotNull(message = "Veuillez saisir le taux")
-    //@PositiveOrZero(message = "Le taux doit être un nombre positif")
-    //@Max(value = 100)
-    //@SeuilRepTauBesoinFac
-    private BigDecimal repTauxBesoinFac;
 
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
@@ -37,8 +33,5 @@ public class UpdatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux de commission de courtage doit être un nombre positif")
     private BigDecimal repTauxComCourt;
 
-    @NotBlank(message = "Veuillez saisir le nom de l'interlocuteur")
-    @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
-    @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
-    private String repInterlocuteur;
+    private MultipartFile avisModificationCession;
 }

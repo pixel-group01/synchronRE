@@ -24,6 +24,7 @@ public class UploadDocReq
     @ValidArchiveType
     private String docUniqueCode;
     private String docNum;
+    private String docDescription;
     @ValidFileSize
     private MultipartFile file;
 }

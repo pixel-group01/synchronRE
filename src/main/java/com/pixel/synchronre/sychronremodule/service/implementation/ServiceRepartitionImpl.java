@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.archivemodule.controller.service.PlacementDocUploader;
+import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
@@ -9,10 +11,13 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.MvtMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtPlacementReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
@@ -30,12 +35,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +59,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private BigDecimal ZERO = BigDecimal.ZERO;
     private BigDecimal CENT = new BigDecimal(100);
     private final ParamCessionLegaleRepository pclRepo;
+    private final MvtMapper mvtMapper;
+    private final MouvementRepository mvtRepo;
+    private final PlacementDocUploader placementDocUploader;
 
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
@@ -126,7 +137,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
          CreatePartCedRepartitionReq partCedDto = new CreatePartCedRepartitionReq();
          BeanUtils.copyProperties(dto, partCedDto, "cesLegDtos");
          RepartitionDetailsResp repartitionDetailsResp = this.createPartCedRepartition(partCedDto);
-         mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_REPARTITION.staCode, dto.getAffId()));
+         mvtService.createMvtSuivant(new MvtSuivantAffaireReq(StatutEnum.EN_COURS_DE_REPARTITION.staCode, dto.getAffId()));
          return repartitionDetailsResp;
     }
     private final IserviceBordereau bordService;
@@ -155,7 +166,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         if(firstPlacement)
         {
-            mvtService.createMvtSuivant(new MvtSuivantReq(StatutEnum.EN_COURS_DE_PLACEMENT.staCode, dto.getAffId()));
+            mvtService.createMvtSuivant(new MvtSuivantAffaireReq(StatutEnum.EN_COURS_DE_PLACEMENT.staCode, dto.getAffId()));
         }
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
@@ -297,4 +308,98 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux(), null, null).getCapital()))
             .collect(Collectors.toList());
     }
+
+    @Override @Transactional
+    public void transmettrePlacementPourValidation(Long plaId)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(EN_ATTENTE_DE_VALIDATION.staCode));
+        repRepo.save(placement);
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, EN_ATTENTE_DE_VALIDATION.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void retournerPlacement(Long plaId, String motif)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(RETOURNE.staCode));
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, RETOURNE.staCode, null,motif));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void validerPlacement(Long plaId)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(VALIDE.staCode));
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, VALIDE.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void transmettreNoteDeCession(Long plaId)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(EN_ATTENTE_DE_CONFIRMATION.staCode));
+        /** //TODO
+         * Envoyer mail avec le lien de la note de cession facultative
+         */
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, EN_ATTENTE_DE_CONFIRMATION.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void refuserPlacement(Long plaId, String motif)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(REFUSE.staCode));
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, REFUSE.staCode, null,motif));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void annulerPlacement(Long plaId)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepStaCode(new Statut(ANNULE.staCode));
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, ANNULE.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void modifierPlacement(UpdatePlaRepartitionReq dto)
+    {
+        Repartition placement = repRepo.findPlacementById(dto.getPlaId()).orElseThrow(()->new AppException("Placement introuvable"));
+        placement.setRepCapital(dto.getRepCapital());
+        placement.setRepTaux(dto.getRepTaux());
+        placement.setRepSousCommission(dto.getRepSousCommission());
+        placement.setRepTauxComCourt(dto.getRepTauxComCourt());
+        placement.setRepTauxComCed(dto.getRepSousCommission().subtract(dto.getRepTauxComCourt()));
+        placement.setRepStaCode(new Statut(MODIFIE.staCode));
+
+        if(dto.getAvisModificationCession() != null)
+            placementDocUploader.uploadDocument(new UploadDocReq(dto.getPlaId(), "AVI_MOD_CES", null ,"Avis de modification de cession",dto.getAvisModificationCession()));
+        /**
+         * //TODO Upload document de modification du placement
+         */
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(dto.getPlaId(), MODIFIE.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+    @Override @Transactional
+    public void accepterPlacement(Long plaId, MultipartFile noteCessionSigneeRea)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+
+        placement.setRepStaCode(new Statut(ACCEPTE.staCode));
+        placementDocUploader.uploadDocument(new UploadDocReq(plaId, "NOT_CES", null ,"Note de cession",noteCessionSigneeRea));
+        /**
+         * //TODO Upload la note de cession signée par le réassureur
+         */
+        Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, ACCEPTE.staCode, null,null));
+        mvtRepo.save(mvt);
+    }
+
+
 }
