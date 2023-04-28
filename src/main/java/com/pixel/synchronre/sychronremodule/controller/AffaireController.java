@@ -9,10 +9,9 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatC
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourReq;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourAffaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Exercice;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
@@ -156,17 +155,37 @@ public class AffaireController
         return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
     }
 
+    @GetMapping(path = "/facultative/by-reassureur-en-reglement")
+    public Page<FacultativeListResp> searchAffaireByCessionnaireEnReglement(@RequestParam(required = false) Long exeCode,
+                                                                @RequestParam(defaultValue = "") String key,
+                                                                @RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size)
+    {
+        exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
+        return affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), Arrays.asList(EN_ATTENTE_DE_REGLEMENT.staCode, EN_COURS_DE_REGLEMENT.staCode), exeCode, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/by-cedante-en-reglement")
+    public Page<FacultativeListResp> searchAffaireByCedantEnReglement(@RequestParam(required = false) Long exeCode,
+                                                                            @RequestParam(defaultValue = "") String key,
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "10") int size)
+    {
+        exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, Arrays.asList(EN_ATTENTE_DE_REGLEMENT.staCode, EN_COURS_DE_REGLEMENT.staCode), exeCode, PageRequest.of(page, size));
+    }
+
     @PostMapping(path = "/facultative/transmettre/{affId}")
     public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId)
     {
-        mvtService.createMvtSuivant(new MvtSuivantReq(EN_ATTENTE_DE_PLACEMENT.staCode, affId));
+        mvtService.createMvtSuivant(new MvtSuivantAffaireReq(EN_ATTENTE_DE_PLACEMENT.staCode, affId));
         return affRepo.searchAffaires("", null, null,
                 jwtService.getConnectedUserCedId(),
                 null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
     }
 
     @PostMapping(path = "/facultative/retourner")
-    public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtRetourReq dto)
+    public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtRetourAffaireReq dto)
     {
         mvtService.createMvtRet(dto);
         return affRepo.searchAffaires("", null, null,
@@ -177,7 +196,7 @@ public class AffaireController
     @PostMapping(path = "/facultative/valider/{affId}")
     public Page<FacultativeListResp> validerPlacement(@PathVariable Long affId, @RequestParam(required = false) Long cedId)
     {
-        mvtService.createMvtSuivant(new MvtSuivantReq(EN_COURS_DE_REGLEMENT.staCode, affId));
+        mvtService.createMvtSuivant(new MvtSuivantAffaireReq(EN_COURS_DE_REGLEMENT.staCode, affId));
         return affRepo.searchAffaires("", null, null, cedId,
                 jwtService.getConnectedUserCesId(), Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
     }
@@ -185,7 +204,7 @@ public class AffaireController
     @PostMapping(path = "/facultative/archiver/{affId}")
     public Page<FacultativeListResp> archiverAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId)
     {
-        mvtService.createMvtSuivant(new MvtSuivantReq(ARCHIVE.staCode, affId));
+        mvtService.createMvtSuivant(new MvtSuivantAffaireReq(ARCHIVE.staCode, affId));
         return affRepo.searchAffaires("", null, null, cedId
                 ,jwtService.getConnectedUserCesId(),
                 Arrays.asList(EN_COURS_DE_REGLEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
