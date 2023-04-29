@@ -36,7 +36,7 @@ public class SynchronReApplication {
    @Bean @Order(1)
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo, TypeParamRepo typeParamRepo,
-                                   FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,
+                                   FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,DeviseRepository devRepo,
                                    PrvRepo prvRepo, FunctionRepo fncRepo, ParamCessionLegaleRepository pcslRepo, PrvToFunctionAssRepo ptfRepo,
                                    ExerciceRepository exeRepo
                                   )
@@ -56,6 +56,12 @@ public class SynchronReApplication {
             Type paiement = new Type(6l, TypeGroup.TYPE_REGLEMENT, "paiements", "Paiement reçu", PersStatus.ACTIVE, null, null);
             Type reversement = new Type(7l, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null, null);
             Type reglement_sinistre = new Type(8l, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null, null);
+
+            Devise dev1 = new Devise("CFA", "Franc CFA", "FCFA", "XOF");
+            Devise dev2 = new Devise("DOL", "Dollars", "Dollars", "$");
+            Devise dev3 = new Devise("EUR", "Euros", "EURO", "£");
+            devRepo.saveAll(Arrays.asList(dev1,dev2,dev3));
+
 
             Type fil= new Type(9l, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null);
             Type rea = new Type(10l, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null);
