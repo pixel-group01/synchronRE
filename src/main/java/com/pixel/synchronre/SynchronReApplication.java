@@ -57,11 +57,6 @@ public class SynchronReApplication {
             Type reversement = new Type(7l, TypeGroup.TYPE_REGLEMENT, "reversements", "Reversement", PersStatus.ACTIVE, null, null);
             Type reglement_sinistre = new Type(8l, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null, null);
 
-            Devise dev1 = new Devise("CFA", "Franc CFA", "FCFA", "XOF");
-            Devise dev2 = new Devise("DOL", "Dollars", "Dollars", "$");
-            Devise dev3 = new Devise("EUR", "Euros", "EURO", "£");
-            devRepo.saveAll(Arrays.asList(dev1,dev2,dev3));
-
 
             Type fil= new Type(9l, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null);
             Type rea = new Type(10l, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null);
@@ -206,6 +201,11 @@ public class SynchronReApplication {
             Statut s19 = new Statut("SAI-CRT", "Saisie courtier", "Affaire saisie par le courtier", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s20 = new Statut("CREG", "En cours de règlement", "Placement en cours de règlement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20 ));
+
+            Devise dev1 = new Devise("CFA", "Franc CFA", "FCFA", "XOF", s7);
+            Devise dev2 = new Devise("USD", "Dollars", "Dollars", "$", s7);
+            Devise dev3 = new Devise("EUR", "Euros", "EURO", "£", s7);
+            devRepo.saveAll(Arrays.asList(dev1,dev2,dev3));
 
             Branche b1 = new Branche(1L, "VIE", "VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             Branche b2 = new Branche(2L, "NVI", "Non Vie", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
