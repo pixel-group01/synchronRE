@@ -21,4 +21,5 @@ public class ReglementDetailsResp {
     private String cedNomFiliale;
     private String cedSigleFiliale;
     private Long userId;
+    private String regMode;
 }

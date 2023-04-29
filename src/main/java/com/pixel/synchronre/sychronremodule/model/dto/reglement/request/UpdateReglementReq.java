@@ -32,4 +32,8 @@ public class UpdateReglementReq {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate regDate;
 
+    @NotBlank(message = "Veuillez selectionner le mode reglement")
+    @NotNull(message = "Veuillez selectionner le mode reglement")
+    private String regMode;
+
 }

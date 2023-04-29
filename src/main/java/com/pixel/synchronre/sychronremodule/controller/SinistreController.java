@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RestController @RequiredArgsConstructor
-@RequestMapping(path ="/{sinistre}")
+@RequestMapping(path ="/sinistres")
 public class SinistreController
 {
     private final IServiceSinistre sinService;

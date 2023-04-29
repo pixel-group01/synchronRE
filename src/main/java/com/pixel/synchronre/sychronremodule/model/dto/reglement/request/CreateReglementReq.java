@@ -33,9 +33,10 @@ public class CreateReglementReq {
     private LocalDate regDate;
 
     private MultipartFile regRecu;
-
-    //private String typeReglement;
-
     @ExistingAffId
     private Long affId;
+
+    @NotBlank(message = "Veuillez selectionner le mode reglement")
+    @NotNull(message = "Veuillez selectionner le mode reglement")
+    private String regMode;
 }

@@ -14,7 +14,7 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     boolean alreadyExistsByReference(String regReference);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission) 
+        select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission,regMode) 
         from Reglement r where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(r.regReference, '') ) as string)) ) >0 
                                          or cast(r.regMontant as string) like concat(coalesce(concat(?1), ''), '%'))
                                          and upper(r.typeReglement.uniqueCode) = upper(?2)     

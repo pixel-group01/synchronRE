@@ -27,6 +27,7 @@ public class Reglement {
   private BigDecimal regMontant;
   private BigDecimal regCommission;
   private boolean regStatut;
+  private String regMode;
   @ManyToOne @JoinColumn(name = "type_id")
   private Type typeReglement;
   @ManyToOne @JoinColumn(name = "aff_id")
