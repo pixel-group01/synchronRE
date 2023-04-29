@@ -14,5 +14,5 @@ public interface IserviceReglement
 {
     ReglementDetailsResp createReglement(String typeReg, CreateReglementReq dto) throws UnknownHostException;
     ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException;
-    Page<ReglementListResp> searchReglement(String key, String typRegUniqueCode, Pageable pageable);
+    Page<ReglementListResp> searchReglement(String key, Long affId, String typRegUniqueCode, Pageable pageable);
 }

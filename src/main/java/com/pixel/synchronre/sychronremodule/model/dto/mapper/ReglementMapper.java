@@ -3,16 +3,21 @@ package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.math.BigDecimal;
 
 @Mapper(componentModel = "spring")
-public  interface ReglementMapper
+public  abstract class ReglementMapper
 {
+    @Autowired protected IServiceCalculsComptables comptService;
     @Mapping(target = "affaire",  expression = "java(dto.getAffId()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     //@Mapping(target = "typeReglement", expression = "java(typeRepo.findByUniqueCode(dto.getTypeReglement()))")
-    Reglement mapToReglement(CreateReglementReq dto);
+    public abstract Reglement mapToReglement(CreateReglementReq dto);
 
 
     @Mapping(target = "affCode", source = "affaire.affCode")
@@ -24,6 +29,14 @@ public  interface ReglementMapper
     @Mapping(target = "cedSigleFiliale", source = "affaire.cedante.cedSigleFiliale")
     @Mapping(target = "userId", source = "appUser.userId")
     @Mapping(target = "typeReglement", source = "typeReglement.name")
-    ReglementDetailsResp mapToReglementDetailsResp(Reglement res);
+    @Mapping(target = "dejaRegle", source = "appUser.userId")
+    @Mapping(target = "resteARegler", source = "typeReglement.name")
+    public abstract ReglementDetailsResp mapToReglementDetailsResp(Reglement res);
+
+    void boo(Reglement res)
+    {
+        comptService.calculateRestARegler(res.getAffaire().getAffId());
+        comptService.calculateDejaRegle(res.getAffaire().getAffId());
+    }
 }
 

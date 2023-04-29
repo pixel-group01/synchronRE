@@ -35,6 +35,7 @@ public class CreateReglementReq {
 
     private MultipartFile regRecu;
     @ExistingAffId
+    @NotNull(message = "Veuillez choisir l'affaire")
     private Long affId;
 
     @NotBlank(message = "Veuillez selectionner le mode reglement")

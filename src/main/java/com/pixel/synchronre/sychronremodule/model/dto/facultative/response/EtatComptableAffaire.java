@@ -44,6 +44,7 @@ public class EtatComptableAffaire
         private Long cesId;
         private String cesNom;
         private String cesSigle;
+        private BigDecimal mtCapital;
         private BigDecimal mtCmsCedante;
         private BigDecimal mtCmsCourtage; //Commission du réassureur propriétaire (NelsonRE)
         private BigDecimal mtPrimeNetteCes; //Montant du au cessionnaire

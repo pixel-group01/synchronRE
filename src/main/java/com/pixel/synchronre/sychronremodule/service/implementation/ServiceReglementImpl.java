@@ -85,7 +85,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     }
 
     @Override
-    public Page<ReglementListResp> searchReglement(String key, String typRegUniqueCode, Pageable pageable) {
-        return regRepo.searchReglement(StringUtils.stripAccentsToUpperCase(key),typRegUniqueCode, pageable);
+    public Page<ReglementListResp> searchReglement(String key, Long affId, String typRegUniqueCode, Pageable pageable) {
+        return regRepo.searchReglement(StringUtils.stripAccentsToUpperCase(key), affId, typRegUniqueCode, pageable);
     }
 }

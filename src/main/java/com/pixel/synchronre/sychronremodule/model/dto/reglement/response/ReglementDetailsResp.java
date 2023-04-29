@@ -22,4 +22,6 @@ public class ReglementDetailsResp {
     private String cedSigleFiliale;
     private Long userId;
     private String regMode;
+    private BigDecimal dejaRegle;
+    private BigDecimal resteARegler;
 }

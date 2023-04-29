@@ -52,6 +52,9 @@ public interface IserviceRepartition {
     void validerPlacement(Long plaId);
 
     @Transactional
+    void transmettreNoteDeCession(List<Long> plaId);
+
+    @Transactional
     void transmettreNoteDeCession(Long plaId);
 
     @Transactional

@@ -15,6 +15,9 @@ import java.util.List;
 
 public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
+
+
+
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     BigDecimal getCapitalInitial(Long affId);
 
