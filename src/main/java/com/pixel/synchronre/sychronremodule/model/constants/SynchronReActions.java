@@ -27,4 +27,6 @@ public class SynchronReActions
     public static final String DELETE_PLACEMENT = "Suppression d'un placement";
     public static final String CREATE_EXERCICE = "Ouverture d'exercice";
     public static final String UPDATE_XERCICE = "Modification de l'exrcice";
+    public static final String CREATE_DEVISE = "Création d'une devise";
+    public static final String UPDATE_DEVISE = "Modification d'une devise";
 }
