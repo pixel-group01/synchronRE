@@ -64,8 +64,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         String docUniqueCode = typeReg.equals("paiements") ? "RECU_PAI" : typeReg.equals("reversements") ? "RECU_REV" : "";
         String docDescription = typeReg.equals("paiements") ? "Reçu de paiement" : typeReg.equals("reversements") ? "Reçu de reversement" : "";
         UploadDocReq uploadDocReq = new UploadDocReq(paiement.getRegId(), docUniqueCode, dto.getRegReference(), docDescription,dto.getRegRecu());
-        regDocUploader.uploadDocument(uploadDocReq);
-
+        if(dto.getRegRecu() != null && !dto.getRegRecu().getOriginalFilename().equals(""))regDocUploader.uploadDocument(uploadDocReq);
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
 

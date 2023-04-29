@@ -6,8 +6,10 @@ import com.pixel.synchronre.sharedmodule.enums.PersStatus;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeParamRepo;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
+import com.pixel.synchronre.typemodule.model.entities.TypeParam;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,7 +35,7 @@ public class SynchronReApplication {
 
    @Bean @Order(1)
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
-                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo,
+                                   BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo, TypeParamRepo typeParamRepo,
                                    FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,
                                    PrvRepo prvRepo, FunctionRepo fncRepo, ParamCessionLegaleRepository pcslRepo, PrvToFunctionAssRepo ptfRepo,
                                    ExerciceRepository exeRepo
@@ -61,14 +63,25 @@ public class SynchronReApplication {
             Type trai = new Type(12l, TypeGroup.TYPE_AFFAIRE, "TRAITE", "Traite", PersStatus.ACTIVE, null, null);
 
             Type photo = new Type(13l, TypeGroup.DOCUMENT, "PHT", "Photo", PersStatus.ACTIVE, null, "user");
-            Type recuPaiement = new Type(14l, TypeGroup.DOCUMENT, "RECU_PAI", "Recu de paiement", PersStatus.ACTIVE, null, "reglement");
-            Type recuReversement = new Type(15l, TypeGroup.DOCUMENT, "RECU_REV", "Recu de versement", PersStatus.ACTIVE, null, "reglement");
-            Type avisModCession = new Type(15l, TypeGroup.DOCUMENT, "AVI_MOD_CES", "Avis de modification de cession", PersStatus.ACTIVE, null, "placement");
-            Type noteCession = new Type(15l, TypeGroup.DOCUMENT, "NOT_CES", "Note de cession", PersStatus.ACTIVE, null, "placement");
-            Type Virement = new Type(15l, TypeGroup.MODE_REGLEMENT, "VRG", "Virement bancaire", PersStatus.ACTIVE, null, null);
-            Type Chèque = new Type(15l, TypeGroup.MODE_REGLEMENT, "CHE", "Chèque", PersStatus.ACTIVE, null, null);
 
-            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo, recuPaiement, recuReversement, avisModCession, noteCession,Virement,Chèque));
+            Type docReglement = new Type(14l, TypeGroup.DOCUMENT, "DOC_REG", "Document de règlement", PersStatus.ACTIVE, null, "reglement");
+            Type recuReglement = new Type(15l, TypeGroup.DOCUMENT, "RECU_REG", "Recu de règlement", PersStatus.ACTIVE, null, "reglement");
+            Type chequeRegelemnt = new Type(16l, TypeGroup.DOCUMENT, "CHEQ", "Chèque de règlement", PersStatus.ACTIVE, null, "reglement");
+            Type bordereauVirement = new Type(17l, TypeGroup.DOCUMENT, "BORD_VIR", "Bordereau de virement", PersStatus.ACTIVE, null, "reglement");
+            Type ordreVirement = new Type(18l, TypeGroup.DOCUMENT, "ORDE_VIR", "Ordre de virement", PersStatus.ACTIVE, null, "reglement");
+
+            Type avisModCession = new Type(25l, TypeGroup.DOCUMENT, "AVI_MOD_CES", "Avis de modification de cession", PersStatus.ACTIVE, null, "placement");
+            Type noteCession = new Type(26l, TypeGroup.DOCUMENT, "NOT_CES", "Note de cession", PersStatus.ACTIVE, null, "placement");
+            Type Virement = new Type(27l, TypeGroup.MODE_REGLEMENT, "VRG", "Virement bancaire", PersStatus.ACTIVE, null, null);
+            Type Chèque = new Type(28l, TypeGroup.MODE_REGLEMENT, "CHE", "Chèque", PersStatus.ACTIVE, null, null);
+
+            typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo,
+                    avisModCession, noteCession,Virement,Chèque, docReglement, recuReglement, chequeRegelemnt, bordereauVirement));
+            ordreVirement = typeRepo.save(ordreVirement);
+            typeParamRepo.save(new TypeParam(null, docReglement, recuReglement, PersStatus.ACTIVE));
+            typeParamRepo.save(new TypeParam(null, docReglement, chequeRegelemnt, PersStatus.ACTIVE));
+            typeParamRepo.save(new TypeParam(null, docReglement, bordereauVirement, PersStatus.ACTIVE));
+            typeParamRepo.save(new TypeParam(null, docReglement, ordreVirement, PersStatus.ACTIVE));
 
             AppPrivilege agentSaisie = new AppPrivilege(1l, "SAISIE", "AGENT_DE_SAISIE", new Type(4l));
             AppPrivilege validateur = new AppPrivilege(2l, "VALIDATEUR", "VALIDATEUR", new Type(4l));

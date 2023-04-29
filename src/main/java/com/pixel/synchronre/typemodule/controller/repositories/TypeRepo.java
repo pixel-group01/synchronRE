@@ -52,7 +52,7 @@ public interface TypeRepo extends JpaRepository<Type, Long>
     @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(t.typeId, t.typeGroup, t.uniqueCode, t.name, t.status) from Type t order by t.typeGroup, t.uniqueCode, t.typeId, t.objectFolder")
     List<ReadTypeDTO> findAllTypes();
 
-    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(s.child.typeId, s.child.typeGroup, s.child.uniqueCode, s.child.name, s.child.status) from TypeParam s where s.parent.typeId = ?1")
+    @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(s.child.typeId, s.child.typeGroup, s.child.uniqueCode, s.child.name, s.child.status) from TypeParam s where s.parent.typeId = ?1 order by s.child.name")
     List<ReadTypeDTO> findSousTypeOf(Long parentId);
 
     @Query("select new com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO(s.child.typeId, s.child.typeGroup, s.child.uniqueCode, s.child.name, s.child.status) from TypeParam s where upper(s.parent.uniqueCode) = upper(?1)")

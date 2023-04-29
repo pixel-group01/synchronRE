@@ -13,16 +13,16 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ValidArchiveType.ValidArchiveTypeValidator.class})
+@Constraint(validatedBy = {ValidDocType.ValidArchiveTypeValidator.class})
 @Documented
-public @interface ValidArchiveType
+public @interface ValidDocType
 {
     String message() default "Type d'archive invalide";
     Class<?> [] groups() default {};
     Class<? extends Payload> [] payload() default {};
 
     @Component @RequiredArgsConstructor
-    class ValidArchiveTypeValidator implements ConstraintValidator<ValidArchiveType, String>
+    class ValidArchiveTypeValidator implements ConstraintValidator<ValidDocType, String>
     {
         private final TypeRepo typeRepo;
 
