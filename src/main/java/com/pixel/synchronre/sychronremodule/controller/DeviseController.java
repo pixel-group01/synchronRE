@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
@@ -27,12 +28,14 @@ public class DeviseController {
 
 
     @PostMapping(path = "/create")
+    @ResponseStatus(HttpStatus.CREATED)
     public DeviseDetailsResp createDevise(@RequestBody @Valid CreateDeviseReq dto) throws UnknownHostException {
         return deviseService.createDevise(dto);
     }
 
 
     @PutMapping(path = "/update")
+    @ResponseStatus()
     public DeviseDetailsResp updateDevise(@RequestBody @Valid UpdateDeviseReq dto) throws UnknownHostException {
         return deviseService.updateDevise(dto);
     }
