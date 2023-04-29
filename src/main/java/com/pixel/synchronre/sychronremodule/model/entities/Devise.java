@@ -25,4 +25,11 @@ public class Devise {
     @ManyToOne
     @JoinColumn(name = "devStatut")
     private Statut statut;
+
+    public Devise(String devCode, String devLibelle, String devLibelleAbrege, String devSymbole) {
+        this.devCode = devCode;
+        this.devLibelle = devLibelle;
+        this.devLibelleAbrege = devLibelleAbrege;
+        this.devSymbole = devSymbole;
+    }
 }

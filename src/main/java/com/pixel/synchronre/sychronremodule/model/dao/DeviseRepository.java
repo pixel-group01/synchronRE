@@ -21,7 +21,8 @@ public interface DeviseRepository extends JpaRepository<Devise, String> {
                                           or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(dv.devLibelle, '') ) as string)) ) >0 
                                            or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(dv.devSymbole, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(dv.devLibelleAbrege, '') ) as string)) ) >0 ) 
-                                         and dv.statut.staCode = 'ACT'     
+                                         and dv.statut.staCode = 'ACT' order by dv.devCode 
+                                            
 """)
     Page<DeviseListResp> searchDevises(String key, Pageable pageable);
 }
