@@ -54,17 +54,21 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement paiement = reglementMapper.mapToReglement(dto);
         paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(typeReg));
-        paiement = regRepo.save(paiement);
+        paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
         logService.logg(SynchronReActions.CREATE_REGLEMENT, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         if(!hasReglement)
         {
             mvtService.createMvtSuivant(new MvtSuivantAffaireReq(EN_COURS_DE_REGLEMENT.staCode, dto.getAffId()));
         }
-        String docUniqueCode = typeReg.equals("paiements") ? "RECU_PAI" : typeReg.equals("reversements") ? "RECU_REV" : "";
-        String docDescription = typeReg.equals("paiements") ? "Reçu de paiement" : typeReg.equals("reversements") ? "Reçu de reversement" : "";
-        UploadDocReq uploadDocReq = new UploadDocReq(paiement.getRegId(), docUniqueCode, dto.getRegReference(), docDescription,dto.getRegRecu());
-        if(dto.getRegRecu() != null && !dto.getRegRecu().getOriginalFilename().equals(""))regDocUploader.uploadDocument(uploadDocReq);
+
+        dto.getRegDocReqs().forEach(docDto->
+        {
+            String uniqueCode = typeRepo.getUniqueCode(docDto.getDocTypeId());
+            UploadDocReq uploadDocReq = new UploadDocReq(regId, uniqueCode, dto.getRegReference(), docDto.getDescription(), docDto.getRegDoc());
+            if(docDto.getRegDoc() != null && !docDto.getRegDoc().getOriginalFilename().equals("")) regDocUploader.uploadDocument(uploadDocReq);
+        });
+
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
 
