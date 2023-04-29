@@ -14,7 +14,8 @@ public enum TypeGroup
     DEMANDE("TYP_DMD", "TYPE-DEMANDE"),
     MOUVEMENT("TYP_MVT", "TYPE-MOUVEMENT"),
     TYPE_PRV("TYP_PRV", "TYPE-PRIVILEGE"),
-    DOCUMENT("TYP_DOC", "TYPE-DOCUMENT");
+    DOCUMENT("TYP_DOC", "TYPE-DOCUMENT"),
+    MODE_REGLEMENT("TYP_MOD_REG", "MODE_REGLEMENT");
     private String groupCode;
     private String groupName;
 }

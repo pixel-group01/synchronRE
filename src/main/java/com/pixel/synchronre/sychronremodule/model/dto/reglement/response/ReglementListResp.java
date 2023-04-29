@@ -13,12 +13,14 @@ public class ReglementListResp {
     private BigDecimal regMontant;
     private BigDecimal regCommission;
     private String typeReglement;
+    private String regMode;
 
-    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission) {
+    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission,String regMode) {
         this.regId = regId;
         this.regReference = regReference;
         this.regDate = regDate;
         this.regMontant = regMontant;
         this.regCommission = regCommission;
+        this.regMode=regMode;
     }
 }
