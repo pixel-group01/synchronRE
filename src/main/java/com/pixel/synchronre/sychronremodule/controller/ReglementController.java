@@ -31,7 +31,7 @@ public class ReglementController
     private final TypeRepo typeRepo;
 
     @PostMapping(path = "/create") @Validated({OnRegUpload.class})
-    public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
+    public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglement(typeReg,dto);
     }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-27T17:02:19 -->
+<!-- 2023-04-29T22:21:57 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -187,6 +187,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
+   AND repartition.sta_code = 'ACCEPTE'
   AND repartition.aff_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}]]>
 		</queryString>
@@ -248,6 +249,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id 
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 2
+   AND repartition.sta_code = 'ACCEPTE'
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -303,6 +305,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.param_ces_legal_id = param_cession_legale.param_ces_leg_id
   AND repartition.typ_id = 1
+   AND repartition.sta_code = 'ACCEPTE'
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -348,18 +351,22 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
        branche.bran_libelle,
        repartition.rep_interlocuteur,
        repartition.cessionnaire_id,
-       bordereau.bord_num
+       bordereau.bord_num,
+       devise.dev_libelle
 FROM affaire,
      cedante,
      couverture,
      branche,
      repartition,
-     bordereau
+     bordereau,
+     devise
 WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND couverture.bran_id = branche.bran_id
   AND affaire.aff_id = repartition.aff_id
+  AND affaire.devise_code = devise.dev_code
   AND bordereau.rep_id = repartition.rep_id
+  AND repartition.sta_code = 'ACCEPTE'
   AND affaire.aff_id = $P{aff_id}
   AND repartition.cessionnaire_id = $P{ces_id}]]>
 	</queryString>
@@ -380,6 +387,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="rep_interlocuteur" class="java.lang.String"/>
 	<field name="cessionnaire_id" class="java.lang.Long"/>
 	<field name="bord_num" class="java.lang.String"/>
+	<field name="dev_libelle" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -424,7 +432,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Abidjan,  le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="7" y="558" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
@@ -466,9 +474,9 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Monnaie : "]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Monnaie : " +$F{dev_libelle}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="14" y="48" width="156" height="19" uuid="afa51d87-f994-4299-862d-be2a0ca07f65">
