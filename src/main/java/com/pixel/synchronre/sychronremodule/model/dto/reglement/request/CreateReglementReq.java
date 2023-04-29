@@ -42,14 +42,6 @@ public class CreateReglementReq {
     private String regMode;
 
     private List<RegDocReq> regDocReqs;
-
-    public class RegDocReq
-    {
-        @ValidDocRegId
-        private Long docTypeId;
-        @ValidFileExtension @ValidFileSize
-        private MultipartFile regDoc;
-    }
 }
 
 
