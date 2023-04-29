@@ -37,4 +37,7 @@ public class Devise {
         this.statut = statut;
     }
 
+    public Devise(String devCode) {
+        this.devCode = devCode;
+    }
 }

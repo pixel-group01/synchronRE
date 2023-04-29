@@ -18,6 +18,8 @@ public class FacultativeListResp
     private BigDecimal facCapitaux;
     private BigDecimal facSmpLci;
     private BigDecimal facPrime;
+    private String affStatutCreation;
+    private String devCode;
     private Long cedanteId;
     private String statutCode;
     private String staLibelle;
