@@ -20,7 +20,9 @@ public class FacultativeDetailsResp
     private BigDecimal affCapitalInitial;
     private Long facSmpLci;
     private BigDecimal facPrime;
+    private String affStatutCreation;
     private Long cedenteId;
+    private String devCode;
     private String cedNomFiliale;
     private String cedSigleFiliale;
     private String statutCode;

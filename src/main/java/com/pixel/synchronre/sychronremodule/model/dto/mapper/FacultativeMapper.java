@@ -33,6 +33,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
     @Mapping(target = "couverture", expression = "java(dto.getCouvertureId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Couverture(dto.getCouvertureId()))")
+    @Mapping(target = "devise", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Devise(dto.getDevCode()))")
     @Mapping(target = "affType", expression = "java(typeRepo.findByUniqueCode(\"FAC\"))")
     @Mapping(target = "affUserCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "affFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
@@ -48,15 +49,18 @@ public abstract class FacultativeMapper
         affaire.setFacNumeroPolice(dto.getFacNumeroPolice());
         affaire.setFacPrime(dto.getFacPrime());
         affaire.setFacSmpLci(dto.getFacSmpLci());
+        affaire.setAffStatutCreation(dto.getAffStatutCreation());
         affaire.setCedante(dto.getCedId() == null ? null : new Cedante(dto.getCedId()));
         affaire.setCouverture(dto.getCouvertureId() == null ? null : new Couverture(dto.getCouvertureId()));
         affaire.setAffUserCreator(connectedUserId == null ? null : new AppUser(connectedUserId));
         affaire.setAffFonCreator(connectedFncId == null ? null : new AppFunction(connectedFncId));
+        affaire.setDevise(dto.getDevCode() == null ? null : new Devise(dto.getDevCode()));
         return new Facultative(affaire, dto.getFacNumeroPolice(), dto.getFacSmpLci(), dto.getFacPrime());
     }
 
     @Mapping(target = "cedenteId", expression = "java(fac.getCedante() == null ? null : fac.getCedante().getCedId())")
     @Mapping(target = "statutCode", expression = "java(fac.getStatut() == null ? null : fac.getStatut().getStaCode())")
+    @Mapping(target = "devCode", expression = "java(fac.getDevise() == null ? null : fac.getDevise().getDevCode())")
     @Mapping(target = "couvertureId", expression = "java(fac.getCouverture() == null ? null : fac.getCouverture().getCouId())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(fac.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(fac.getAffId()))")
@@ -67,6 +71,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "cedSigleFiliale", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedSigleFiliale())")
     @Mapping(target = "statutCode", expression = "java(aff.getStatut() == null ? null : aff.getStatut().getStaCode())")
     @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
+    @Mapping(target = "devCode", expression = "java(aff.getDevise() == null ? null : aff.getDevise().getDevCode())")
     @Mapping(target = "couLibelle", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouLibelle())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
@@ -85,6 +90,7 @@ public abstract class FacultativeMapper
 
     @Mapping(target = "cedenteId", expression = "java(aff.getCedante() == null ? null : aff.getCedante().getCedId())")
     @Mapping(target = "statutCode", expression = "java(aff.getStatut() == null ? null : aff.getStatut().getStaCode())")
+    @Mapping(target = "devCode", expression = "java(aff.getDevise() == null ? null : aff.getDevise().getDevCode())")
     @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")

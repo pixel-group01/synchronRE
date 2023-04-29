@@ -19,6 +19,8 @@ public class EtatComptableAffaire
     private BigDecimal affCapitalInitial;
     private Long facSmpLci;
     private BigDecimal facPrime;
+    private String affStatutCreation;
+    private String devCode;
     private Long cedenteId;
     private String statutCode;
     protected Long couvertureId;

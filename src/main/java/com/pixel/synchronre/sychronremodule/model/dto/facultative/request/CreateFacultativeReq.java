@@ -56,9 +56,14 @@ public class CreateFacultativeReq
     @NotNull(message = "Veuillez saisir le montant de la prime")
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
     private BigDecimal facPrime;
+
+    @NotNull(message = "Veuillez définir le statut de l'affaire")
+    @NotBlank(message = "Veuillez définir le statut de l'affaire")
+    protected String affStatutCreation;
+
     @ExistingCedId
     private Long cedId;
     @ExistingCouId
     private Long couvertureId;
-
+    protected String devCode;
 }
