@@ -36,8 +36,5 @@ public class CessionnaireController
         return cessionnaireService.searchCessionnaire(key, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/getInterlocuteur")
-    public String getInterlocuteur(@RequestParam Long cesId){
-        return cessRepo.getInterlocuteur(cesId);
-    }
+
 }
