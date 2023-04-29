@@ -17,9 +17,10 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
         select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission,regMode) 
         from Reglement r where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(r.regReference, '') ) as string)) ) >0 
                                          or cast(r.regMontant as string) like concat(coalesce(concat(?1), ''), '%'))
+                                         and r.affaire.affId = ?2
                                          and upper(r.typeReglement.uniqueCode) = upper(?2)     
         """)
-    Page<ReglementListResp> searchReglement(String key, String typeReg, Pageable pageable);
+    Page<ReglementListResp> searchReglement(String key, Long affId, String typeReg, Pageable pageable);
 
     @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 ")
     boolean affaireHasReglement(Long affId, String typeReg);

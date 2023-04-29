@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -82,4 +84,17 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     Optional<Repartition> findPlacementById(Long plaId);
+
+    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    List<Long> getPlIdsByAffId(Long affId);
+
+    @Query("select r.affaire.affId from Repartition r where r.repId = ?1")
+    Long getAffIdByRepId(Long repId);
+
+    @Query("select r.cessionnaire.cesId from Repartition r where r.repId = ?1")
+    Long getCesIdByRepId(Long repId);
+
+    @Query("select r.repCapital from Repartition r where r.repId = ?1")
+    BigDecimal getRepCapitalByRepId(Long repId);
+
 }

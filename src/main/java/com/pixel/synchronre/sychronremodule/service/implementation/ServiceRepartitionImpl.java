@@ -338,12 +338,18 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
+    public void transmettreNoteDeCession(List<Long> plaIds) {
+        plaIds.forEach(plaId->this.transmettreNoteDeCession(plaId));
+    }
+
+    @Override @Transactional
     public void transmettreNoteDeCession(Long plaId)
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(EN_ATTENTE_DE_CONFIRMATION.staCode));
-        /** //TODO
-         * Envoyer mail avec le lien de la note de cession facultative
+        /**
+         *TODO Envoyer mail avec le lien de la note de cession facultative
+         *
          */
         Mouvement mvt = mvtMapper.mapTomouvement(new MvtPlacementReq(plaId, EN_ATTENTE_DE_CONFIRMATION.staCode, null,null));
         mvtRepo.save(mvt);

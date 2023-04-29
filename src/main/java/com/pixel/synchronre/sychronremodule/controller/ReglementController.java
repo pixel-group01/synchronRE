@@ -40,9 +40,14 @@ public class ReglementController
         return regService.updateReglement(dto);
     }
 
-    @GetMapping(path = "/list")
-    public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key, @PathVariable String typeReg, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return regService.searchReglement(key, typeReg, PageRequest.of(page, size));
+    @GetMapping(path = "/list/{affId}")
+    public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key,
+                                                   @PathVariable Long affId,
+                                                   @PathVariable String typeReg,
+                                                   @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        return regService.searchReglement(key, affId,typeReg, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/type-documents")

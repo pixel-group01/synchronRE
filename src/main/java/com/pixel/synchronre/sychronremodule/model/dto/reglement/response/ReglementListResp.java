@@ -15,7 +15,16 @@ public class ReglementListResp {
     private String typeReglement;
     private String regMode;
 
-    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission,String regMode) {
+
+    private String affCode;
+    private String affAssure;
+    private String affActivite;
+    private LocalDate affDateEffet;
+    private LocalDate affDateEcheance;
+    private BigDecimal affCapitalInitial;
+    private String facNumeroPolice;
+
+    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission) {
         this.regId = regId;
         this.regReference = regReference;
         this.regDate = regDate;

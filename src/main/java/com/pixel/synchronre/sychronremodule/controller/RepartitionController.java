@@ -115,15 +115,21 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/retourner-placement")
-    void retournerPlacement(@PathVariable Long plaId, @RequestBody String message)
+    void retournerPlacement(@PathVariable Long plaId, @RequestBody String motif)
     {
-        repService.retournerPlacement(plaId, message);
+        repService.retournerPlacement(plaId, motif);
     }
 
     @PutMapping(path = "/envoyer-note-cession")
     void envoyerNoteCession(@PathVariable Long plaId)
     {
         repService.transmettreNoteDeCession(plaId);
+    }
+
+    @PutMapping(path = "/envoyer-notes-cession")
+    void envoyerNoteCession(@PathVariable List<Long> plaIds)
+    {
+        repService.transmettreNoteDeCession(plaIds);
     }
 
     @PutMapping(path = "/refuser-placement")
