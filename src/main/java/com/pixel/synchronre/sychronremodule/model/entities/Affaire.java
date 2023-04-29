@@ -34,6 +34,7 @@ public class Affaire {
     //private float facCapitaux;
     private BigDecimal facSmpLci; // Sinistre max
     private BigDecimal facPrime;
+    protected String affStatutCreation; //Statut à la création de l'affaire ( Réalisée / En instance / Non Réalisée )
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;
     @ManyToOne @JoinColumn(name = "statut_code")
@@ -55,6 +56,8 @@ public class Affaire {
     private AppUser affUserCreator;
     @ManyToOne @JoinColumn(name = "aff_fon_creator")
     private AppFunction affFonCreator;
+    @ManyToOne @JoinColumn(name = "devise_code")
+    protected Devise devise;
 
 
     public Affaire(Long affId) {
