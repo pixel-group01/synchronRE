@@ -9,4 +9,5 @@ public class DeviseDetailsResp
     private String devCode;
     private String devLibelle;
     private String devLibelleAbrege;
+    private String devSymbole;
 }

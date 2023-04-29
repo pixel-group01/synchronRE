@@ -35,7 +35,7 @@ public class serviceDeviseImpl implements IServiceDevise {
     private final ILogService logService;
 
 
-    @Override
+    @Override @Transactional
     public DeviseDetailsResp createDevise(CreateDeviseReq dto) throws UnknownHostException {
         Devise dev = devMapper.mapDeviseToDeviseReq(dto);
         dev = devRepo.save(dev);

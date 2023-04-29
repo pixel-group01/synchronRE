@@ -18,5 +18,6 @@ public class CreateDeviseReq
     @NotBlank(message = "Veuillez saisir l'abréviation de la devise")
     @NotNull(message = "Veuillez saisir l'abréviation de la devise")
     private String devLibelleAbrege;
+    private String devSymbole;
 
 }

@@ -8,5 +8,6 @@ public class DeviseListResp
     private String devCode;
     private String devLibelle;
     private String devLibelleAbrege;
+    private String devSymbole;
     private String staLibelle;
 }

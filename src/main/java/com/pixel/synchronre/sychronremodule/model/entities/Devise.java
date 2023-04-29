@@ -17,6 +17,7 @@ public class Devise {
     private String devCode;
     private String devLibelle;
     private String devLibelleAbrege;
+    private String devSymbole;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
