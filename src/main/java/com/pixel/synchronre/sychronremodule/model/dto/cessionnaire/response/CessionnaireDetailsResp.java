@@ -17,4 +17,5 @@ public class CessionnaireDetailsResp
     private String cesTelephone;
     private String cesAdressePostale;
     private String cesSituationGeo;
+    private String cesInterlocuteur;
 }

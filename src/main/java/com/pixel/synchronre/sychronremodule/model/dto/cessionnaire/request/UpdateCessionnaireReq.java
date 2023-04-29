@@ -31,6 +31,9 @@ public class UpdateCessionnaireReq
     private String cesTelephone;
     private String cesAdressePostale;
     private String cesSituationGeo;
+    @NotBlank(message = "Veuillez saisir l'interlocuteur")
+    @NotNull(message = "Veuillez saisir l'interlocuteur")
+    private String cesInterlocuteur;
 
 
 }
