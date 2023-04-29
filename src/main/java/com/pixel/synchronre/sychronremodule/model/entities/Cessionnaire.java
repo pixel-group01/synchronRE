@@ -23,6 +23,7 @@ public class Cessionnaire {
   private String cesCellulaire;
   private String cesAdressePostale;
   private String cesSituationGeo;
+  private String cesInterlocuteur;
   private BigDecimal repTauxComCourtage = new BigDecimal(5);
   @CreationTimestamp
   private LocalDateTime createdAt;

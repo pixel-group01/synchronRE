@@ -268,14 +268,14 @@ public class SynchronReApplication {
             pcslRepo.saveAll(Arrays.asList(franc21, franc22));
 
             BigDecimal FIVE = new BigDecimal(5);
-            Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ", FIVE,LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
-            Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ","ATSIN Ghislain Hermann", FIVE,LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ","COULIBALY Lenimama Ibrahima", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ","ATSIN Ghislain Hermann", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ","ADOU Venance", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ","YOUIN Salif", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ","KONAN Laurent", FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
+            Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", "ESSOH Fernand",FIVE, LocalDateTime.now(), LocalDateTime.now(), s7);
 
          cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 

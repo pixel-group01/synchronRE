@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
@@ -18,6 +19,7 @@ import java.net.UnknownHostException;
 public class CessionnaireController
 {
     private final IserviceCessionnaire cessionnaireService;
+    private final CessionnaireRepository cessRepo;
 
     @PostMapping(path = "/create")
     public CessionnaireDetailsResp createCessionnaire(@RequestBody @Valid CreateCessionnaireReq dto) throws UnknownHostException {
@@ -32,5 +34,10 @@ public class CessionnaireController
     @GetMapping(path = "/list")
     public Page<CessionnaireListResp> searchCessionnaires(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return cessionnaireService.searchCessionnaire(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/getInterlocuteur")
+    public String getInterlocuteur(@RequestParam Long cesId){
+        return cessRepo.getInterlocuteur(cesId);
     }
 }

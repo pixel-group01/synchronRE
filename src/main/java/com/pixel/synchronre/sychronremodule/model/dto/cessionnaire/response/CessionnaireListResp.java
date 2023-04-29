@@ -14,4 +14,5 @@ public class CessionnaireListResp
     private String cesAdressePostale;
     private String cesSituationGeo;
     private String staLibelle;
+    private String cesInterlocuteur;
 }
