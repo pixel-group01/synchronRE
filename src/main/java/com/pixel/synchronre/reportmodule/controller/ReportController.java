@@ -4,7 +4,9 @@ import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.google.zxing.EncodeHintType;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class ReportController
     private final IServiceReport jrService;
     private final JasperReportConfig jrConfig;
     private final RepartitionRepository repRepo;
+    private final AffaireRepository affRepo;
 
     @GetMapping("/note-cession/{plaId}")
     public void generateNoteCession(HttpServletResponse response, @PathVariable Long plaId) throws Exception
@@ -31,6 +34,8 @@ public class ReportController
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", jrConfig.imagesLocation);
 
@@ -41,8 +46,11 @@ public class ReportController
     @GetMapping("/note-de-debit/{affId}")
     public void generateNoteDebit(HttpServletResponse response, @PathVariable Long affId) throws Exception
     {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affId);
+        params.put("aff_id", affaire.getAffId());
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebit, params);
         jrService.displayPdf(response, reportBytes, "Note-de-debit");
@@ -55,9 +63,12 @@ public class ReportController
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCredit, params);
         jrService.displayPdf(response, reportBytes, "Note-de-credit");
     }
+
 }

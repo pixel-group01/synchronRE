@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity
@@ -73,4 +74,6 @@ public class Affaire {
         this.affDateEcheance = affDateEcheance;
         this.exercice=exercice;
     }
+
+
 }

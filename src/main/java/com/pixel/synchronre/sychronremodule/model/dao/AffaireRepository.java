@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
@@ -20,6 +22,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     BigDecimal getCapitalInitial(Long affId);
+
+    @Query("select r from Affaire r where r.affId = ?1")
+    Optional<Affaire> findById(Long affId);
 
     @Query("select a from Affaire a where a.affCode = :affCode and a.cedante.cedNomFiliale = :cedNomFiliale")
     List<Affaire> test(@Param("affCode") String affCode, @Param("cedNomFiliale") String cedNomFiliale);

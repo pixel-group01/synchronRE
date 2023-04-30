@@ -33,7 +33,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-   @Bean @Order(1)
+   //@Bean @Order(1)
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo, TypeParamRepo typeParamRepo,
                                    FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,DeviseRepository devRepo,
@@ -202,10 +202,61 @@ public class SynchronReApplication {
             Statut s20 = new Statut("CREG", "En cours de règlement", "Placement en cours de règlement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20 ));
 
-            Devise dev1 = new Devise("CFA", "Franc CFA", "FCFA", "XOF", s7);
-            Devise dev2 = new Devise("USD", "Dollars", "Dollars", "$", s7);
-            Devise dev3 = new Devise("EUR", "Euros", "EURO", "£", s7);
-            devRepo.saveAll(Arrays.asList(dev1,dev2,dev3));
+            Devise dev0 = new Devise ("CFA",  "Franc CFA", "F CFA", "XOF", s7);
+            Devise dev1 = new Devise ("AED",  "Dirham EMIRAT ", "Dirham EMIRAT ", null,  s7);
+            Devise dev2 = new Devise ("AOA",  "Angolan kwanza", "Angolan kwanza", null,  s7);
+            Devise dev3 = new Devise ("BDT",  "Taka Bangladesh", "Taka Bangladesh", null,  s7);
+            Devise dev4 = new Devise ("BHD",  "Dinar Bahrein", "Dinar Bahrein", null,  s7);
+            Devise dev5 = new Devise ("BIF",  "Franc Burundais", "Franc Burundais", null,  s7);
+            Devise dev6 = new Devise ("BTN",  "Bhoutan-Ngultru", "Bhoutan-Ngultru", null,  s7);
+            Devise dev7 = new Devise ("BWP",  "Pula Botswana", "Pula Botswana", null, s7);
+            Devise dev8 = new Devise ("CHF",  "Francs suisse", "Francs suisse", null,  s7);
+            Devise dev9 = new Devise ("CVE",  "Escudo", "Escudo", null,  s7);
+            Devise dev10 = new Devise ("DJF",  "Franc Djibouti", "Franc Djibouti", null,  s7);
+            Devise dev11 = new Devise ("DZD",  "Dinar Algérien", "Dinar Algérien", null,  s7);
+            Devise dev12 = new Devise ("EGP",  "Livre Egypte", "Livre Egypte", null,  s7);
+            Devise dev13 = new Devise ("ETB",  "Birr Ethiopie", "Birr Ethiopie", null,  s7);
+            Devise dev14 = new Devise ("EUR",  "Euro", "Euro", null, s7);
+            Devise dev15 = new Devise ("GBP",  "Livre sterling", "Livre sterling", null, s7);
+            Devise dev16 = new Devise ("GHS",  "Cedis Ghanéen n", "Cedis Ghanéen n", null,  s7);
+            Devise dev17 = new Devise ("GMD",  "Dalasi Gambie", "Dalasi Gambie", null, s7);
+            Devise dev18 = new Devise ("GNF",  "Franc Guinée", "Franc Guinée", null,  s7);
+            Devise dev19 = new Devise ("IDR",  "Rupiah Indonés.", "Rupiah Indonés.", null,  s7);
+            Devise dev20 = new Devise ("INR",  "Roupie indienne", "Roupie indienne", null,  s7);
+            Devise dev21 = new Devise ("IQD",  "Dinar Irakien", "Dinar Irakien", null,  s7);
+            Devise dev22 = new Devise ("IRR",  "Rial Iranien", "Rial Iranien", null,  s7);
+            Devise dev23 = new Devise ("JOD",  "Dinar Jordanien", "Dinar Jordanien", null,  s7);
+            Devise dev24 = new Devise ("JPY",  "YEN", "YEN", null,  s7);
+            Devise dev25 = new Devise ("KES",  "Shilling Kenya", "Shilling Kenya", null,  s7);
+            Devise dev26 = new Devise ("KPW",  "Won -Corée Nord", "Won -Corée Nord", null,  s7);
+            Devise dev27 = new Devise ("KRW",  "Corée du Sud ", "Corée du Sud ", null,  s7);
+            Devise dev28 = new Devise ("KWD",  "Dinar Koweïtien", "Dinar Koweïtien", null, s7);
+            Devise dev29 = new Devise ("LBP",  "Livre Libanaise", "Livre Libanaise", null,  s7);
+            Devise dev30 = new Devise ("LRD",  "Dollar libérien", "Dollar libérien", null,  s7);
+            Devise dev31 = new Devise ("LSL",  "Lesotho-Loti", "Lesotho-Loti", null, s7);
+            Devise dev32 = new Devise ("LYD",  "Dinar Lybien", "Dinar Lybien", null,  s7);
+            Devise dev33 = new Devise ("MAD",  "Dirham Marocain", "Dirham Marocain", null,  s7);
+            Devise dev34 = new Devise ("MGA",  "Ariayry Madaga.", "Ariayry Madaga.", null,  s7);
+            Devise dev35 = new Devise ("MGF",  "Franc magache", "Franc magache", null,  s7);
+            Devise dev36 = new Devise ("MRO",  "Ougiya Maurita.", "Ougiya Maurita.", null,  s7);
+            Devise dev37 = new Devise ("MRU",  "MRU", "MRU", null,  s7);
+            Devise dev38 = new Devise ("MUR",  "Roupie Maurice", "Roupie Maurice", null,  s7);
+            Devise dev39 = new Devise ("MVR",  "Roupie maldive", "Roupie maldive", null, s7);
+            Devise dev40 = new Devise ("MWK",  "Kwacha Malawi", "Kwacha Malawi", null,  s7);
+            Devise dev41 = new Devise ("MYR",  "Ringgit Malais.", "Ringgit Malais.", null,  s7);
+            Devise dev42 = new Devise ("MZM",  "Franc Mozambiq.", "Franc Mozambiq.", null,  s7);
+            Devise dev43 = new Devise ("MZN",  "Metical Mozamb.", "Metical Mozamb.", null,  s7);
+            Devise dev44 = new Devise ("NAD",  null, "0", null,  s7);
+            Devise dev45 = new Devise ("NGN",  "Naira", "Naira", null,  s7);
+            Devise dev46 = new Devise ("NPR",  "Népal Roupie", "Népal Roupie", null,  s7);
+            Devise dev47 = new Devise ("OMR",  "Rial d''OMAN", "Rial d''OMAN", null,  s7);
+            Devise dev48 = new Devise ("PGK",  "PAPOUASIE KINA", "PAPOUASIE KINA", null,  s7);
+            Devise dev49 = new Devise ("PHP",  "Peso philippin", "Peso philippin", null,  s7);
+            Devise dev50 = new Devise ("PKR",  "Pakistan-Roupie", "Pakistan-Roupie", null,  s7);
+            Devise dev51 = new Devise ("QAR",  "Riyal du Qatar", "Riyal du Qatar", null,  s7);
+            Devise dev52 = new Devise ("SZL ",  "Swaziland Lilan", "Swaziland Lilan", null,  s7);
+            Devise dev53 = new Devise ("RWF",  "Franc Rwandais", "Franc Rwandais", null, s7);
+            devRepo.saveAll(Arrays.asList(dev0,dev1,dev2,dev3,dev4,dev5,dev6,dev7,dev8,dev9,dev10,dev11,dev12,dev13,dev14,dev15,dev16,dev17,dev18,dev19,dev20,dev21,dev22,dev23,dev24,dev25,dev26,dev27,dev28,dev29,dev30,dev31,dev32,dev33,dev34,dev35,dev36,dev37,dev38,dev39,dev40,dev41,dev42,dev43,dev44,dev45,dev46,dev47,dev48,dev49,dev50,dev51,dev52,dev53));
 
             Branche b1 = new Branche(1L, "VIE", "VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             Branche b2 = new Branche(2L, "NVI", "Non Vie", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));

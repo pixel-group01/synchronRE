@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-27T02:45:37 -->
+<!-- 2023-04-30T20:57:10 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Credit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b258cd63-2ea2-4241-8959-d0231463b3ee">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -75,6 +75,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
+  AND repartition.sta_code = 'ACCEPTE'
   AND repartition.aff_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}]]>
 		</queryString>
@@ -109,6 +110,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	</parameter>
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
+	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct affaire.aff_id,
        affaire.aff_activite,
@@ -140,7 +142,9 @@ WHERE affaire.couverture_id = couverture.cou_id
   AND repartition.cessionnaire_id = cessionnaire.ces_id
   AND couverture.bran_id = branche.bran_id
   AND affaire.aff_id = repartition.aff_id
-  AND bordereau.rep_id = repartition.rep_id]]>
+  AND bordereau.rep_id = repartition.rep_id
+  AND affaire.aff_id = $P{aff_id}
+  AND repartition.cessionnaire_id = $P{ces_id}]]>
 	</queryString>
 	<field name="aff_id" class="java.lang.Long"/>
 	<field name="aff_activite" class="java.lang.String"/>
@@ -197,13 +201,13 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["ID FAC  :  "+$F{aff_code}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="401" y="11" width="151" height="21" uuid="99b1449c-3876-4f4d-8676-1e8f48c2a65a">
+				<reportElement x="402" y="11" width="151" height="21" uuid="99b1449c-3876-4f4d-8676-1e8f48c2a65a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date   :    "+new SimpleDateFormat("dd/MM/yyyy").format(TODAY( ))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Date   :    "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="76" width="80" height="20" uuid="924a8c7f-a681-4dd4-b0a7-1def3beaea42"/>
@@ -350,7 +354,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{aff_date_echeance}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="131" y="124" width="250" height="19" uuid="5675dc18-65ae-457d-a0b5-d1b9196ce910">
@@ -395,7 +399,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{aff_date_effet}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="130" y="281" width="250" height="19" uuid="fd5ede5e-e5bb-4c7e-acb8-94a451507688">
@@ -711,7 +715,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Fait à Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(TODAY( ))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Fait à Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="626" width="553" height="1" uuid="2f49184c-002d-4649-82c2-c4085f46a762">
@@ -747,12 +751,10 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<text><![CDATA[Montant]]></text>
 			</staticText>
-			<componentElement>
-				<reportElement x="12" y="543" width="97" height="77" uuid="bedbe88d-f603-4a47-b402-bd365a74d02a"/>
-				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<jr:codeExpression><![CDATA["Application SynchronRE : La demande de placement de " +$F{ced_nom_filiale}+"  porte sur  N°  Affaire : "+ $F{aff_id}  +" ,  Assuré : " + $F{aff_assure} + ", Numéro de Police  :  " +$F{fac_numero_police} + ", avec  le numéro de bordereau suivant  :  "+$F{bord_num}]]></jr:codeExpression>
-				</jr:QRCode>
-			</componentElement>
+			<image>
+				<reportElement x="12" y="543" width="97" height="77"></reportElement>
+				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

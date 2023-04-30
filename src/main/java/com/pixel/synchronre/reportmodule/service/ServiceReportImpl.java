@@ -30,9 +30,8 @@ public class ServiceReportImpl implements IServiceReport
     public byte[] generateReport(String reportName, Map<String, Object> parameters) throws Exception
     {
         //Map<String, Object> parameters = new HashMap<>();
-        parameters.put("aff_id", "001");
-        parameters.put("aff_assure", "Jean Dupont");
-        parameters.put("fac_numero_police", "12345");
+        //parameters.put("aff_assure", "Jean Dupont");
+        //parameters.put("fac_numero_police", "12345");
 
         // Génération du code QR
         String qrText = "Application SynchronRE : Votre Demande de placement porte sur N° Affaire : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");

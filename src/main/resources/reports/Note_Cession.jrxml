@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-29T22:21:57 -->
+<!-- 2023-04-30T17:16:27 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -334,6 +334,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	</parameter>
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
+	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT affaire.aff_id,
        affaire.aff_activite,
@@ -432,7 +433,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement>
 					<font fontName="Times New Roman" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Abidjan,  le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="7" y="558" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
@@ -1145,6 +1146,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
+
+			<image>
+				<reportElement x="13" y="450" width="117" height="89"></reportElement>
+				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

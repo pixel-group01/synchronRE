@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-27T17:09:53 -->
+<!-- 2023-04-30T20:48:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -307,6 +307,7 @@ WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.couverture_id = couverture.cou_id 
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
+   AND repartition.sta_code = 'ACCEPTE'
   AND repartition.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -354,6 +355,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{aff_id}]]></defaultValueExpression>
 	</parameter>
+	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct affaire.aff_id,
        affaire.aff_activite,
@@ -404,7 +406,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date  :  "  +new SimpleDateFormat("dd/MM/yyyy").format(TODAY( ))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Date  :  "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<image>
 				<reportElement x="2" y="2" width="190" height="58" uuid="be1f93cf-1724-4550-b138-f29b8531ecd6"/>
@@ -552,7 +554,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[ new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet} ) +  "   du    "  +  new SimpleDateFormat("dd/MM/yy").format( $F{aff_date_echeance})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet} ) +  "   du    "  +  new SimpleDateFormat("dd/MM/yy").format( $F{aff_date_echeance})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="19">
@@ -821,6 +823,10 @@ WHERE affaire.couverture_id = couverture.cou_id
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<image>
+				<reportElement x="33" y="442" width="117" height="111"></reportElement>
+				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>
