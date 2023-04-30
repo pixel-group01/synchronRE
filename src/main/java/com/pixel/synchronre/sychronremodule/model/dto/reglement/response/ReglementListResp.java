@@ -24,7 +24,7 @@ public class ReglementListResp {
     private BigDecimal affCapitalInitial;
     private String facNumeroPolice;
 
-    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission) {
+    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission,String regMode) {
         this.regId = regId;
         this.regReference = regReference;
         this.regDate = regDate;
