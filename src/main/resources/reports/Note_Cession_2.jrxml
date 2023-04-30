@@ -97,8 +97,8 @@
     repartition.rep_taux,
 	param_cession_legale.param_ces_leg_libelle,
     repartition.rep_sous_commission,
-    repartition.rep_tauxcom_ced,
-    repartition.rep_tauxcom_court,
+    repartition.rep_taux_com_ced,
+    repartition.rep_taux_com_court,
     repartition.typ_id,
     repartition.rep_interlocuteur,
     affaire.aff_activite,
@@ -128,8 +128,8 @@
 		<field name="rep_taux" class="java.math.BigDecimal"/>
 		<field name="param_ces_leg_libelle" class="java.lang.String"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
-		<field name="rep_tauxcom_ced" class="java.math.BigDecimal"/>
-		<field name="rep_tauxcom_court" class="java.math.BigDecimal"/>
+		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
+		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
 		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="aff_activite" class="java.lang.String"/>
@@ -388,6 +388,10 @@ WHERE affaire.couverture_id = couverture.cou_id
 			<image>
 				<reportElement x="111" y="3" width="190" height="67" uuid="a1be9f72-70eb-412c-b67b-a258a34cba59"/>
 				<imageExpression><![CDATA[$P{param_image}+"logo_NELSONRE.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="0" y="0" width="100" height="100"/>
+				<imageExpression><![CDATA[new ByteArrayInputStream((byte[]) $P{qrCode})]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="421" y="3" width="130" height="51" forecolor="#2D919C" uuid="5322a71a-21c6-4951-806c-c171ad9f8fad"/>
@@ -1137,12 +1141,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement x="13" y="450" width="117" height="89" uuid="6b2a6fef-13f3-40eb-b1aa-5f9c39079162"/>
-				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<jr:codeExpression><![CDATA["Application SynchronRE : La demande de placement de  " +$F{ced_nom_filiale}+"  porte sur  N°  Affaire : "+ $F{aff_id}  +" ,  Assuré :  " + $F{aff_assure} + ", Numéro de Police  :  " +$F{fac_numero_police} + ", avec  le numéro de bordereau suivant  :  "+$F{bord_num}]]></jr:codeExpression>
-				</jr:QRCode>
-			</componentElement>
+
 		</band>
 	</detail>
 </jasperReport>
