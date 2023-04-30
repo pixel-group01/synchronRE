@@ -21,6 +21,4 @@ public class JasperReportConfig {
     @Value("${report.location.note.credit}")
     public String noteCredit;
 
-    @Value("${report.location.note.test}")
-    public String noteTest;
 }
