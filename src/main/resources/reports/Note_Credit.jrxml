@@ -75,7 +75,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
-  AND repartition.sta_code = 'ACCEPTE'
+  AND repartition.sta_code = 'MAIL'
   AND repartition.aff_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}]]>
 		</queryString>

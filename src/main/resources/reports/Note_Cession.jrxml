@@ -187,7 +187,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
-   AND repartition.sta_code = 'ACCEPTE'
+   AND repartition.sta_code = 'MAIL'
   AND repartition.aff_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}]]>
 		</queryString>
@@ -249,7 +249,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.couverture_id = couverture.cou_id 
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 2
-   AND repartition.sta_code = 'ACCEPTE'
+   AND repartition.sta_code = 'MAIL'
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -305,7 +305,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.param_ces_legal_id = param_cession_legale.param_ces_leg_id
   AND repartition.typ_id = 1
-   AND repartition.sta_code = 'ACCEPTE'
+   AND repartition.sta_code = 'MAIL'
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -367,7 +367,7 @@ WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.aff_id = repartition.aff_id
   AND affaire.devise_code = devise.dev_code
   AND bordereau.rep_id = repartition.rep_id
-  AND repartition.sta_code = 'ACCEPTE'
+  AND repartition.sta_code = 'MAIL'
   AND affaire.aff_id = $P{aff_id}
   AND repartition.cessionnaire_id = $P{ces_id}]]>
 	</queryString>
