@@ -13,7 +13,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.Update
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
@@ -54,7 +54,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         aff=affRepo.save(aff);
         aff.setAffCode(this.generateAffCode(aff.getAffId()));
         logService.logg(SynchronReActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
-        mvtService.createMvtSuivant(new MvtSuivantAffaireReq(aff.getStatut().getStaCode(), aff.getAffId()));
+        mvtService.createMvtAffaire(new MvtReq(aff.getAffId(), aff.getStatut().getStaCode(), null));
         aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
         return facultativeMapper.mapToFacultativeDetailsResp(aff);

@@ -37,4 +37,8 @@ public class Sinistre
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Sinistre(Long sinId) {
+        this.sinId = sinId;
+    }
 }

@@ -26,7 +26,8 @@ public class Mouvement {
   private AppFunction mvtFunction;
   @ManyToOne @JoinColumn(name = "AFF_ID")
   private Affaire affaire;
-
+  @ManyToOne @JoinColumn(name = "SIN_ID")
+  private Sinistre sinistre;
   @ManyToOne @JoinColumn(name = "PLA_ID")
   private Repartition placement;
   @CreationTimestamp

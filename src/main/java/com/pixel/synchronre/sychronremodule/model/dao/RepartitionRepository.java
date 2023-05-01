@@ -1,6 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import org.springframework.data.domain.Page;
@@ -42,9 +44,10 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesTelephone, '') ) as string)) ) >0 ) 
                                          and (?2 is null or a.affId = ?2)
                                          and coalesce(?3, t.uniqueCode) = t.uniqueCode
+                                         and r.repStaCode.staCode in ?4
                                          and r.repStatut = true
     """)
-    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
+    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, List<String> staCodes, Pageable pageable);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2")
     boolean existsByAffIdAndPclId(Long affId, Long paramCesLegalId);
@@ -59,7 +62,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     Repartition findByAffaireAndTypeCed(Long affId, String rep_ced);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
-    boolean existsByAffaireAndTypeRepAndCesId(Long affId, String rep_pla, Long cesId);
+    boolean existsByAffaireAndTypeRepAndCesId(Long affId, String uniqueCode, Long cesId);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
     Repartition findByAffaireAndTypeRepAndCesId(Long affId, String typeRep, Long cesId);
@@ -97,4 +100,15 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.repCapital from Repartition r where r.repId = ?1")
     BigDecimal getRepCapitalByRepId(Long repId);
 
+    @Query("select r.cessionnaire.cesEmail from Repartition r where r.repId = ?1")
+    String getInterlocuteurEmail(Long plaId);
+
+    @Query("select r.cessionnaire.cesInterlocuteur from Repartition r where r.repId = ?1")
+    String getInterlocuteur(Long plaId);
+
+    @Query("select r.cessionnaire from Repartition r where r.repId = ?1")
+    Optional<Cessionnaire> getCessionnaireByRepId(Long repId);
+
+    @Query("select r.affaire from Repartition r where r.repId = ?1")
+    Optional<Affaire> getAffairedByRepId(Long plaId);
 }

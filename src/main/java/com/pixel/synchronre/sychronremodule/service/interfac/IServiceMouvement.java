@@ -1,16 +1,25 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtRetourAffaireReq;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface IServiceMouvement
 {
-    void createMvtRet(MvtRetourAffaireReq dto);
+    @Transactional
+    void createMvtAffaire(MvtReq dto);
 
-    void createMvtSuivant(MvtSuivantAffaireReq dto);
+    @Transactional
+    void createMvtPlacement(MvtReq dto);
 
-    List<MouvementListResp> findByAffaire(Long affId);
+    @Transactional
+    void createMvtSinistre(MvtReq dto);
+
+    List<MouvementListResp> findMvtAffaire(Long affId);
+
+    List<MouvementListResp> findMvtPlacement(Long plaId);
+
+    List<MouvementListResp> findMvtSinistre(Long sinId);
 }

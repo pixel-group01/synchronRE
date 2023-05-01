@@ -4,13 +4,10 @@ package com.pixel.synchronre.notificationmodule.controller.services;
 public interface EmailSenderService
 {
     void sendEmail(String senderMail, String receiverMail, String mailObject, String message) throws IllegalAccessException;
-
-    //void sendConfirmationEmail(String receiverMail, String link) throws IllegalAccessException;
-
-    //void resendConfirmationEmail(String receiverMail, String oldActivationToken, String link) throws IllegalAccessException;
-
     void sendReinitialisePasswordEmail(String receiverMail, String recipientUsername, String link) throws IllegalAccessException;
     void sendAccountActivationEmail(String receiverMail, String recipientUsername, String activationLink) throws IllegalAccessException;
+
+    void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws IllegalAccessException;
 
     default String buildHtmlEmail(String receiverName, String link)
     {
@@ -81,4 +78,10 @@ public interface EmailSenderService
                 "\n" +
                 "</div></div>";
     }
+
+
+    //void sendConfirmationEmail(String receiverMail, String link) throws IllegalAccessException;
+
+    //void resendConfirmationEmail(String receiverMail, String oldActivationToken, String link) throws IllegalAccessException;
+
 }

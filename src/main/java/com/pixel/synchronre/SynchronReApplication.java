@@ -195,12 +195,13 @@ public class SynchronReApplication {
             Statut s15 = new Statut("REFUSE", "Refusé", "Placement refusé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             Statut S16 = new Statut("ANNULE", "Annulé", "Pladement annulé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             Statut S17 = new Statut("MOD", "Modifié", "Placement modifié", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut staMail = new Statut("MAIL", "Mail", "Mail envoyé", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
             Statut s18 = new Statut("ACCEPTE", "Accepté", "Placement accepté", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
 
 
             Statut s19 = new Statut("SAI-CRT", "Saisie courtier", "Affaire saisie par le courtier", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
             Statut s20 = new Statut("CREG", "En cours de règlement", "Placement en cours de règlement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
-            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20 ));
+            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20, staMail ));
 
             Devise dev0 = new Devise ("CFA",  "Franc CFA", "F CFA", "XOF", s7);
             Devise dev1 = new Devise ("AED",  "Dirham EMIRAT ", "Dirham EMIRAT ", null,  s7);

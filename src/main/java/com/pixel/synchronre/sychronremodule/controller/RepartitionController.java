@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.constants.RepStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
@@ -69,13 +70,22 @@ public class RepartitionController
         return repService.updateRepartition(dto);
     }
 
-    @GetMapping(path = "/list-placement/{affId}")
-    public Page<RepartitionListResp> searchPlacement(@PathVariable(required = false) Long affId,
+    @GetMapping(path = "/list-placement-saisie/{affId}")
+    public Page<RepartitionListResp> searchPlacementSaisie(@PathVariable(required = false) Long affId,
                                                 @RequestParam(defaultValue = "", required = false) String key,
                                                @RequestParam(defaultValue = "0", required = false) int page,
                                                @RequestParam(defaultValue = "10", required = false) int size)
     {
-        return repService.searchRepartition(key, affId, "REP_PLA", PageRequest.of(page, size));
+        return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabSaisie,PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/list-placement-valide/{affId}")
+    public Page<RepartitionListResp> searchPlacementValide(@PathVariable(required = false) Long affId,
+                                                     @RequestParam(defaultValue = "", required = false) String key,
+                                                     @RequestParam(defaultValue = "0", required = false) int page,
+                                                     @RequestParam(defaultValue = "10", required = false) int size)
+    {
+        return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabValide,PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/ces-leg-param/{affId}")
@@ -102,57 +112,54 @@ public class RepartitionController
         return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage);
     }
 
-    @PutMapping(path = "/transmettre-placement-pour-validation")
-    void transmettrePourValadation(@PathVariable Long plaId)
-    {
+    @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
+    void transmettrePourValadation(@PathVariable Long plaId) throws UnknownHostException {
         repService.transmettrePlacementPourValidation(plaId);
     }
 
-    @PutMapping(path = "/valider-placement")
-    void validerPlacement(@PathVariable Long plaId)
-    {
+    @PutMapping(path = "/transmettre-placements-pour-validation")
+    void transmettrePourValadation(@RequestParam List<Long> plaIds) throws UnknownHostException {
+        repService.transmettrePlacementPourValidation(plaIds);
+    }
+
+    @PutMapping(path = "/valider-placement/{plaId}")
+    void validerPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.validerPlacement(plaId);
     }
 
-    @PutMapping(path = "/retourner-placement")
-    void retournerPlacement(@PathVariable Long plaId, @RequestBody String motif)
-    {
+    @PutMapping(path = "/retourner-placement/{plaId}")
+    void retournerPlacement(@PathVariable Long plaId, @RequestBody String motif) throws UnknownHostException {
         repService.retournerPlacement(plaId, motif);
     }
 
-    @PutMapping(path = "/envoyer-note-cession")
-    void envoyerNoteCession(@PathVariable Long plaId)
-    {
+    @PutMapping(path = "/envoyer-note-cession/{plaId}")
+    void envoyerNoteCession(@PathVariable Long plaId) throws IllegalAccessException, UnknownHostException {
         repService.transmettreNoteDeCession(plaId);
     }
 
     @PutMapping(path = "/envoyer-notes-cession")
-    void envoyerNoteCession(@PathVariable List<Long> plaIds)
+    void envoyerNoteCession(@RequestParam List<Long> plaIds)
     {
         repService.transmettreNoteDeCession(plaIds);
     }
 
-    @PutMapping(path = "/refuser-placement")
-    void refuserPlacement(@PathVariable Long plaId, @RequestBody String message)
-    {
+    @PutMapping(path = "/refuser-placement/{plaId}")
+    void refuserPlacement(@PathVariable Long plaId, @RequestBody String message) throws UnknownHostException {
         repService.refuserPlacement(plaId, message);
     }
 
-    @PutMapping(path = "/annuler-placement")
-    void annulerPlacement(@PathVariable Long plaId)
-    {
+    @PutMapping(path = "/annuler-placement/{plaId}")
+    void annulerPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.annulerPlacement(plaId);
     }
 
     @PutMapping(path = "/modifier-placement")
-    void modifierPlacement(@RequestBody UpdatePlaRepartitionReq dto)
-    {
+    void modifierPlacement(@RequestBody UpdatePlaRepartitionReq dto) throws UnknownHostException {
         repService.modifierPlacement(dto);
     }
 
-    @PutMapping(path = "/accepter-placement")
-    void accepterPlacement(@PathVariable Long plaId, @RequestBody MultipartFile noteCessionFile)
-    {
-        repService.accepterPlacement(plaId,noteCessionFile);
+    @PutMapping(path = "/accepter-placement/{plaId}")
+    void accepterPlacement(@PathVariable Long plaId) throws UnknownHostException {
+        repService.accepterPlacement(plaId);
     }
 }

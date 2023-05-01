@@ -18,7 +18,8 @@ import java.util.Optional;
 public interface AffaireRepository extends JpaRepository<Affaire, Long>
 {
 
-
+    @Query("select a.affStatutCreation from Affaire a where a.affId = ?1")
+    String getAffStatutCreation(Long affId);
 
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     BigDecimal getCapitalInitial(Long affId);

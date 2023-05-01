@@ -15,7 +15,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtSuivantAffaireReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
@@ -59,7 +59,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         if(!hasReglement)
         {
-            mvtService.createMvtSuivant(new MvtSuivantAffaireReq(EN_COURS_DE_REGLEMENT.staCode, dto.getAffId()));
+            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REGLEMENT.staCode, null));
         }
 
         dto.getRegDocReqs().forEach(docDto->

@@ -24,6 +24,7 @@ public enum StatutEnum
     REFUSE("REFUSE", "Réfusé"),
     ANNULE("ANNULE", "Annulé"),
     MODIFIE("MOD", "Modifié"),
+    MAIL("MAIL", "Mail envoyé"),
     ACCEPTE("ACCEPTE", "Accepté");
 
     public String staCode;

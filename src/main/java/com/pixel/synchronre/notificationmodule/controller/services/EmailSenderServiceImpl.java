@@ -22,6 +22,8 @@ public class EmailSenderServiceImpl implements EmailSenderService
     private final EmailServiceConfig emailServiceConfig;
     @Value("${auth.server.address}")
     private String authServerAddress;
+    @Value("${synchronre.server.address}")
+    private String synchronreAdress;
 
     @Override
     @Async
@@ -53,5 +55,12 @@ public class EmailSenderServiceImpl implements EmailSenderService
     public void sendAccountActivationEmail(String receiverMail, String recipientUsername, String activationLink) throws IllegalAccessException
     {
         this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, htmlEmailBuilder.buildAccountActivationHTMLEmail(recipientUsername, authServerAddress + activationLink));
+    }
+
+    @Override
+    public void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws IllegalAccessException
+    {
+        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode, synchronreAdress + "/reports/note-cession/" + plaId);
+        this.sendEmail( senderMail,  receiverMail,  mailObject,  message);
     }
 }

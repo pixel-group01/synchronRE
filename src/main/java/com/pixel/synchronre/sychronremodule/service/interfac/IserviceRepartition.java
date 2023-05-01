@@ -32,7 +32,7 @@ public interface IserviceRepartition {
     RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException;
 
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
-    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, Pageable pageable);
+    Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, List<String> staCodes, Pageable pageable);
 
     CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage);
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage);
@@ -43,29 +43,32 @@ public interface IserviceRepartition {
     List<ParamCessionLegaleListResp> getCesLegParam(Long affId);
 
     @Transactional
-    void transmettrePlacementPourValidation(Long plaId);
+    void transmettrePlacementPourValidation(Long plaId) throws UnknownHostException;
 
     @Transactional
-    void retournerPlacement(Long plaId, String motif);
+    void transmettrePlacementPourValidation(List<Long> plaIds) throws UnknownHostException;
 
     @Transactional
-    void validerPlacement(Long plaId);
+    void retournerPlacement(Long plaId, String motif) throws UnknownHostException;
+
+    @Transactional
+    void validerPlacement(Long plaId) throws UnknownHostException;
 
     @Transactional
     void transmettreNoteDeCession(List<Long> plaId);
 
     @Transactional
-    void transmettreNoteDeCession(Long plaId);
+    void transmettreNoteDeCession(Long plaId) throws IllegalAccessException, UnknownHostException;
 
     @Transactional
-    void refuserPlacement(Long plaId, String motif);
+    void refuserPlacement(Long plaId, String motif) throws UnknownHostException;
 
     @Transactional
-    void annulerPlacement(Long plaId);
+    void annulerPlacement(Long plaId) throws UnknownHostException;
 
     @Transactional
-    void modifierPlacement(UpdatePlaRepartitionReq dto);
+    void modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException;
 
     @Transactional
-    void accepterPlacement(Long plaId, MultipartFile noteCessionSigneeRea);
+    void accepterPlacement(Long plaId) throws UnknownHostException;
 }
