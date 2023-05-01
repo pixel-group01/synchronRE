@@ -22,6 +22,7 @@ public class Sinistre
     @SequenceGenerator(name = "SIN_ID_GEN", sequenceName = "SIN_ID_GEN")
     private Long sinId;
     private BigDecimal sinMontant100;
+    private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;

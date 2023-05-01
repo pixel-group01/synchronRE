@@ -135,7 +135,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
-    public BigDecimal calculateMtCmsCedByCes(Long affId, Long cesId)
+    public BigDecimal calculateMtCmsCedByCes(Long affId, Long cesId) //TODO Revoir les calcul
     {
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId, cesId);
         if(placement == null) return BigDecimal.ZERO;

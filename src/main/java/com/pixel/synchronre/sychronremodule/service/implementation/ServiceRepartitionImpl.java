@@ -56,11 +56,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final ObjectCopier<Repartition> repCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
-    private BigDecimal ZERO = BigDecimal.ZERO;
-    private BigDecimal CENT = new BigDecimal(100);
+    private final BigDecimal ZERO = BigDecimal.ZERO;
+    private final BigDecimal CENT = new BigDecimal(100);
     private final ParamCessionLegaleRepository pclRepo;
-    private final MvtMapper mvtMapper;
-    private final MouvementRepository mvtRepo;
     private final PlacementDocUploader placementDocUploader;
     private final EmailSenderService mailSenderService;
     @Value("${synchronre.email}")
@@ -82,7 +80,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         boolean existByAffaireAndPcl = repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
         if(repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()))
         {
-            oldRep = new Repartition();
             rep = repRepo.findByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
@@ -377,14 +374,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public void transmettreNoteDeCession(Long plaId) throws IllegalAccessException, UnknownHostException {
         Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
-        if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée");
-
+        if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
-        placement.setRepStaCode(new Statut(MAIL.staCode));
-        String interlocEmail = repRepo.getInterlocuteurEmail(plaId);
         Cessionnaire cessionnaire = repRepo.getCessionnaireByRepId(plaId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
-
         mailSenderService.sendNoteCessionEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
+        placement.setRepStaCode(new Statut(MAIL.staCode));
         mvtService.createMvtPlacement(new MvtReq(plaId, MAIL.staCode, null));
         logService.saveLog(RepartitionActions.TRANSMETTRE_NOTE_CESSION);
     }
@@ -398,6 +392,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez saisir le motif de retour");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(REFUSE.staCode));
+        placement.setRepStatut(false);
         repRepo.save(placement);
         mvtService.createMvtPlacement(new MvtReq(plaId, REFUSE.staCode, motif));
         logService.saveLog(RepartitionActions.REFUSER_PLACEMENT);
@@ -442,6 +437,20 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         mvtService.createMvtPlacement(new MvtReq(plaId, ACCEPTE.staCode, null));
         repRepo.save(placement);
         logService.saveLog(RepartitionActions.ACCEPTER_PLACEMENT);
+    }
+
+    @Override
+    public void validerPlacement(List<Long> plaIds)
+    {
+        if(plaIds == null) return;
+        plaIds.forEach(plaId->
+        {
+            try {
+                this.validerPlacement(plaId);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 

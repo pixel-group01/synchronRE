@@ -71,4 +71,6 @@ public interface IserviceRepartition {
 
     @Transactional
     void accepterPlacement(Long plaId) throws UnknownHostException;
+
+    void validerPlacement(List<Long> plaIds);
 }

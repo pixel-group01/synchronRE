@@ -63,4 +63,10 @@ public class EmailSenderServiceImpl implements EmailSenderService
         String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode, synchronreAdress + "/reports/note-cession/" + plaId);
         this.sendEmail( senderMail,  receiverMail,  mailObject,  message);
     }
+
+    @Override
+    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws IllegalAccessException {
+        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode, synchronreAdress + "/reports/note-cession-sinistre/" + sinId, synchronreAdress + "/reports/note-debit-sinistre/" + sinId);
+        this.sendEmail( synchronreEmail,  cesEmail,  "Note de cession sinistre et note de débit",  message);
+    }
 }

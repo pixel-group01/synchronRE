@@ -79,6 +79,8 @@ public interface EmailSenderService
                 "</div></div>";
     }
 
+    void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws IllegalAccessException;
+
 
     //void sendConfirmationEmail(String receiverMail, String link) throws IllegalAccessException;
 

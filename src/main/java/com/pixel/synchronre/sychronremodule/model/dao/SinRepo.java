@@ -3,6 +3,8 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface SinRepo extends JpaRepository<Sinistre, Long>
 {
@@ -33,7 +36,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         and (:cedId is null or :cedId = ced.cedId)
         and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId)
         and s.statut.staCode in :staCodes
-""")
+           """)
     Page<SinistreDetailsResp> searchSinistres(@Param("key") String key,
                                               @Param("fncId") Long fncId,
                                               @Param("userId") Long userId,
@@ -43,4 +46,15 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
 
     @Query("select s.sinMontant100 from Sinistre s where s.sinId = ?1")
     BigDecimal getMtSinistre(Long sinId);
+
+    @Query("select s.affaire from Sinistre s where s.sinId = ?1")
+    Optional<Affaire> getAffairedBySinId(Long sinId);
+
+    @Query("""
+        select r.cessionnaire from Repartition r 
+        where r.repStaCode.staCode not in('REFUSE','RET','SAI', 'SAI-CRT') 
+        and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true 
+        and r.affaire.affId = (select s.affaire.affId from Sinistre s where s.sinId = ?1)
+    """)
+    List<Cessionnaire> getCessionnaireBySinId(Long sinId);
 }

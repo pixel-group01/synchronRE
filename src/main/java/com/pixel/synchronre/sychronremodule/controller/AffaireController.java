@@ -214,5 +214,21 @@ public class AffaireController
     {
         return affService.getEtatComptable(affId);
     }
+
+    @PutMapping(path = "/facultative/set-as-realisee/{affId}")
+    public void setAsRealise(@PathVariable Long affId) throws UnknownHostException
+    {
+        affService.setAsRealisee(affId);
+    }
+
+    @PutMapping(path = "/facultative/set-as-non-realisee/{affId}")
+    public void setAsNonRealise(@PathVariable Long affId) throws UnknownHostException
+    {
+        affService.setAsNonRealisee(affId);
+    }
+
+
+
+
 }
 

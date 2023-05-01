@@ -79,11 +79,20 @@ public class RepartitionController
         return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabSaisie,PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/list-placement-valide/{affId}")
-    public Page<RepartitionListResp> searchPlacementValide(@PathVariable(required = false) Long affId,
+    @GetMapping(path = "/list-placement-en-attente-de-validation/{affId}")
+    public Page<RepartitionListResp> searchPlacementValideEnAttenteDeValidation(@PathVariable(required = false) Long affId,
                                                      @RequestParam(defaultValue = "", required = false) String key,
                                                      @RequestParam(defaultValue = "0", required = false) int page,
                                                      @RequestParam(defaultValue = "10", required = false) int size)
+    {
+        return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabAttenteValidation,PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/list-placement-valide/{affId}")
+    public Page<RepartitionListResp> searchPlacementValide(@PathVariable(required = false) Long affId,
+                                                           @RequestParam(defaultValue = "", required = false) String key,
+                                                           @RequestParam(defaultValue = "0", required = false) int page,
+                                                           @RequestParam(defaultValue = "10", required = false) int size)
     {
         return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabValide,PageRequest.of(page, size));
     }
@@ -125,6 +134,11 @@ public class RepartitionController
     @PutMapping(path = "/valider-placement/{plaId}")
     void validerPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.validerPlacement(plaId);
+    }
+
+    @PutMapping(path = "/valider-placements")
+    void validerPlacements(@RequestParam List<Long> plaIds) throws UnknownHostException {
+        repService.validerPlacement(plaIds);
     }
 
     @PutMapping(path = "/retourner-placement/{plaId}")
