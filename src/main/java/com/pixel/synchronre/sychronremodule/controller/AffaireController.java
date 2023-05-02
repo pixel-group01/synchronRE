@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -80,6 +81,7 @@ public class AffaireController
         return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
     }
 
+    //Tab saisie par la cedante : affiche les affaires saisies par la cedante
     @GetMapping(path = "/facultative/by-cedante")
     public Page<FacultativeListResp> searchAffaireByCedante(@RequestParam(required = false) Long exeCode,
                                                             @RequestParam(defaultValue = "") String key,
@@ -87,9 +89,11 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, Arrays.asList(SAISIE.staCode, SAISIE_CRT.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabSaisieCed, exeCode, PageRequest.of(page, size));
     }
 
+
+    //Tab transmis et en cours de placement visible par la cedante :affiche les affaires transmises au souscripte
     @GetMapping(path = "/facultative/by-cedante-transmis") //Transmis par la cedante mais en cours de traitement
     public Page<FacultativeListResp> searchAffaireByCedanteTrans(@RequestParam(required = false) Long exeCode,
                                                                  @RequestParam(defaultValue = "") String key,
@@ -97,9 +101,10 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
     }
 
+    //Tab saisie par le souscripteur NEL-RE : affiche les affaires saisies par le souscripteur
     @GetMapping(path = "/facultative/by-reassureur-en-traitement") //Transmis par les cédantes et saisi par le réassureur
     public Page<FacultativeListResp> searchAffaireByReassureurEnTrai(@RequestParam(required = false) Long exeCode,
                                                                      @RequestParam(defaultValue = "") String key,
@@ -108,9 +113,20 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),Arrays.asList(SAISIE_CRT.staCode, TRANSMIS.staCode, EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabSaisieSous, exeCode, PageRequest.of(page, size));
     }
 
+    //Tab En cours de placement par le souscripteur NEL-RE : affiche les affaires en attentes de placement par le souscripteur et transmises par la cedante
+    @GetMapping(path = "/facultative/by-reassureur-en-placement")
+    public Page<FacultativeListResp> searchAffaireByReassureurEnPlacement(@RequestParam(required = false) Long exeCode,
+                                                                     @RequestParam(defaultValue = "") String key,
+                                                                     @RequestParam(required = false) Long cedId,
+                                                                     @RequestParam(defaultValue = "0") int page,
+                                                                     @RequestParam(defaultValue = "10") int size)
+    {
+        exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
+        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+    }
     @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur
     public Page<FacultativeListResp> searchAffaireByReassureurValide(@RequestParam(required = false) Long exeCode,
                                                                      @RequestParam(defaultValue = "") String key,
@@ -144,6 +160,7 @@ public class AffaireController
         return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
     }
 
+    //Tab archives : affiche les affaires archivées de la cedante
     @GetMapping(path = "/facultative/by-cedante-arch")
     public Page<FacultativeListResp> searchAffaireByCedanteArch(@RequestParam(required = false) Long exeCode,
                                                                  @RequestParam(defaultValue = "") String key,
@@ -151,9 +168,10 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null,AffStatutGroup.tabArchives, exeCode, PageRequest.of(page, size));
     }
 
+    //Tab en cours de reglement : affiche les affaires du souscripteur NE-LRE en cours de reglement
     @GetMapping(path = "/facultative/by-reassureur-en-reglement")
     public Page<FacultativeListResp> searchAffaireByCessionnaireEnReglement(@RequestParam(required = false) Long exeCode,
                                                                 @RequestParam(defaultValue = "") String key,
@@ -161,9 +179,10 @@ public class AffaireController
                                                                 @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), Arrays.asList(EN_ATTENTE_DE_REGLEMENT.staCode, EN_COURS_DE_REGLEMENT.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
     }
 
+    //Tab en cours de reglement : affiche les affaires de la cedante en cours de reglement
     @GetMapping(path = "/facultative/by-cedante-en-reglement")
     public Page<FacultativeListResp> searchAffaireByCedantEnReglement(@RequestParam(required = false) Long exeCode,
                                                                             @RequestParam(defaultValue = "") String key,
@@ -171,7 +190,7 @@ public class AffaireController
                                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, Arrays.asList(EN_ATTENTE_DE_REGLEMENT.staCode, EN_COURS_DE_REGLEMENT.staCode), exeCode, PageRequest.of(page, size));
+        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
     }
 
     @PostMapping(path = "/facultative/transmettre/{affId}")
