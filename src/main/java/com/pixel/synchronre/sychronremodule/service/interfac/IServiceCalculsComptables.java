@@ -9,7 +9,7 @@ public interface IServiceCalculsComptables
     BigDecimal calculateDejaRepartir(Long affId);
 
     BigDecimal calculateTauxDejaRepartir(Long affId);
-    BigDecimal calculateRestTauxARepartir(Long affId);
+    BigDecimal calculateTauxRestARepartir(Long affId);
 
     BigDecimal calculateDejaRegle(Long affId);
     BigDecimal calculateRestARegler(Long affId);
@@ -18,19 +18,19 @@ public interface IServiceCalculsComptables
 
     BigDecimal calculateMtTotalAReverseAuxCes(Long affId);
 
-    BigDecimal calculateMtPrimeNetteByCes(Long affId, Long cesId) //Prime nette du aux cessionnaires
+    BigDecimal calculateMtPrimeNetteByCes(Long plaId) //Prime nette du aux cessionnaires
     ;
 
     BigDecimal calculateRestAReverser(Long affId);
 
     BigDecimal calculateMtTotaleCms(Long affId);
 
-    BigDecimal calculateMtCmsByCes(Long affId, Long cesId);
+    BigDecimal calculateMtCmsByCes(Long plaId);
 
-    BigDecimal calculateMtCmsCedByCes(Long affId, Long cesId);
+    BigDecimal calculateMtCmsCedByCes(Long plaId);
     BigDecimal calculateMtTotaleCmsCed(Long affId);
 
-    BigDecimal calculateMtCmsCourtageByCes(Long affId, Long cesId);
+    BigDecimal calculateMtCmsCourtageByCes(Long plaId);
     BigDecimal calculateMtTotalCmsCourtage(Long affId);
 
     BigDecimal calculateTauxDeReglement(Long affId);

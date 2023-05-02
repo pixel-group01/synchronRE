@@ -29,6 +29,8 @@ public class EtatComptableAffaire
 
     private BigDecimal mtTotalCmsCedante;
     private BigDecimal mtTotalCmsCourtage; //Commission du réassureur propriétaire (NelsonRE)
+
+    private BigDecimal mtTotalPrimeBruteCes;
     private BigDecimal mtTotalPrimeNetteCes; //Montant du aux cessionnaires
     private BigDecimal dejaRegle;
     private BigDecimal resteARegler;
@@ -45,8 +47,13 @@ public class EtatComptableAffaire
         private String cesNom;
         private String cesSigle;
         private BigDecimal mtCapital;
+        private BigDecimal mtSousCms;
         private BigDecimal mtCmsCedante;
         private BigDecimal mtCmsCourtage; //Commission du réassureur propriétaire (NelsonRE)
+        private BigDecimal tauxSousCms;
+        private BigDecimal tauxCmsCedante;
+        private BigDecimal tauxCmsCourtage;
+        private BigDecimal mtPrimeBruteCes;
         private BigDecimal mtPrimeNetteCes; //Montant du au cessionnaire
         private BigDecimal dejaReverse;
         private BigDecimal resteAReverser;
