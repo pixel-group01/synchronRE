@@ -1,5 +1,9 @@
 package com.pixel.synchronre.sharedmodule.utilities;
 
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class ConvertMontant {
 
     private static String Unite(long nombre) {
