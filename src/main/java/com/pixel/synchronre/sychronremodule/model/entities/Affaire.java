@@ -29,6 +29,7 @@ public class Affaire {
     protected String affActivite;
     protected LocalDate affDateEffet;
     protected LocalDate affDateEcheance;
+    protected LocalDate aff_date_limite_Paiement;
     private BigDecimal affCapitalInitial; //Capital à 100
     //private BigDecimal affTauxCommissionReassureur;
     private String facNumeroPolice;

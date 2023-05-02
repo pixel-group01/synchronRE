@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-30T17:16:27 -->
+<!-- 2023-05-02T11:58:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -335,6 +335,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
+	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT affaire.aff_id,
        affaire.aff_activite,
@@ -425,7 +426,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="587" splitType="Stretch">
+		<band height="635" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="170" y="466" width="280" height="15" uuid="b044fa67-4de7-4964-9841-e6c6ea8900ef">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -436,14 +437,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="558" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
+				<reportElement x="7" y="542" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[LA CEDANTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="415" y="558" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
+				<reportElement x="415" y="526" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
@@ -470,7 +471,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Interlocuteur : " +$F{rep_interlocuteur}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="346" y="25" width="198" height="19" uuid="078daa03-13b5-467f-9492-94eb642c3ed7">
+				<reportElement x="331" y="25" width="220" height="19" uuid="078daa03-13b5-467f-9492-94eb642c3ed7">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -626,7 +627,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[Expiration de la cession : ]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="349" y="48" width="196" height="19" uuid="684f6cb7-b467-4ceb-b27c-3b336007c3af">
+				<reportElement x="332" y="48" width="219" height="19" uuid="684f6cb7-b467-4ceb-b27c-3b336007c3af">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -1146,10 +1147,15 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
-
 			<image>
-				<reportElement x="13" y="450" width="117" height="89"></reportElement>
+				<reportElement x="13" y="442" width="117" height="89" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="20" y="567" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
 			</image>
 		</band>
 	</detail>

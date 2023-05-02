@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-04-30T20:48:52 -->
+<!-- 2023-05-01T23:45:24 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -356,6 +356,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<defaultValueExpression><![CDATA[$P{aff_id}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
+	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct affaire.aff_id,
        affaire.aff_activite,
@@ -429,7 +430,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="593" splitType="Stretch">
+		<band height="613" splitType="Stretch">
 			<textField>
 				<reportElement x="1" y="31" width="553" height="26" uuid="2d750b78-f098-47ba-a0a3-c0db16365f04">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -583,7 +584,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[NELSON RE ne sera pas tenu responsable des consèquences, y compris l'annulation de la couverture qui peut resulter d'un retard ou d'une défaillance de votre part de payer la présente note à la date indiquée]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="568" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
+				<reportElement x="340" y="523" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
@@ -824,8 +825,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<image>
-				<reportElement x="33" y="442" width="117" height="111"></reportElement>
+				<reportElement x="33" y="442" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="390" y="545" width="90" height="60" uuid="efd38a83-7177-4e4a-ab13-b4066f680633">
+					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
 			</image>
 		</band>
 	</detail>

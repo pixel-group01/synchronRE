@@ -38,7 +38,14 @@ public class ReportController
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", jrConfig.imagesLocation);
-
+            //@Charly
+            //Affichage du cachet en fonction d'une expression dans l'etat
+        if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
+            params.put("param_visible", "true");
+            }else{
+            params.put("param_visible", "false");
+        }
+            //fin de la manip
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCession, params);
         jrService.displayPdf(response, reportBytes, "Note-de-cession");
     }
