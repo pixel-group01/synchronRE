@@ -28,12 +28,6 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     @Query("select coalesce(sum(r.regMontant), 0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 and r.regStatut = true")
     BigDecimal getMontantRegleByAffId(Long affId, String typeRegUniqueCode);
 
-    @Query("select sum(r.affaire.facPrime * r.repTaux * r.repSousCommission) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
-    BigDecimal getMtTotalSousCommission(Long affId);
-
-    @Query("select r.affaire.facPrime * r.repTaux * r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
-    BigDecimal getMtSousCommissionByCessionnaire(Long affId, Long cesId);
-
     @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.regStatut = true")
     BigDecimal getMtRegleBySinistre(Long sinId);
 

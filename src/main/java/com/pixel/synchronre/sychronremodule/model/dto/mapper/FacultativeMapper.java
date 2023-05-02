@@ -4,7 +4,6 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
@@ -94,11 +93,12 @@ public abstract class FacultativeMapper
     @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
+    @Mapping(target = "mtTotalPrimeBruteCes", expression = "java(repRepo.calculateMtPrimeBruteByAffaire(aff.getAffId()))")
     public abstract EtatComptableAffaire mapToEtatComptableAffaire(Affaire aff);
 
     protected List<EtatComptableAffaire.DetailsEtatComptable> getDetailsEtatComptables(Long affId)
     {
-        return repRepo.getPlIdsByAffId(affId).stream()
+        return repRepo.getPlaIdsByAffId(affId).stream()
                 .map(plaId->this.getDetailsEtatComptable(plaId))
                 .collect(Collectors.toList());
     }
@@ -113,9 +113,14 @@ public abstract class FacultativeMapper
         Cessionnaire ces = cesRepo.findById(cesId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
         EtatComptableAffaire.DetailsEtatComptable details = new EtatComptableAffaire().new DetailsEtatComptable();
         details.setCesId(cesId); details.setCesNom(ces.getCesNom()); details.setCesSigle(ces.getCesSigle());
-        details.setMtCmsCedante(comptaService.calculateMtCmsCedByCes(affId, cesId));
-        details.setMtCmsCourtage(comptaService.calculateMtCmsCourtageByCes(affId, cesId));
-        details.setMtPrimeNetteCes(comptaService.calculateMtPrimeNetteByCes(affId, cesId));
+        details.setMtSousCms(repRepo.calculateMtSousCmsByCes(plaId));
+        details.setMtCmsCedante(comptaService.calculateMtCmsCedByCes(plaId));
+        details.setMtCmsCourtage(comptaService.calculateMtCmsCourtageByCes(plaId));
+        details.setTauxSousCms(repRepo.getTauxSousCommission(plaId));
+        details.setTauxCmsCedante(repRepo.getTauxCmsCedante(plaId));
+        details.setTauxCmsCourtage(repRepo.getTauxCmsCourtage(plaId));
+        details.setMtPrimeBruteCes(repRepo.calculateMtPrimeBruteByCes(plaId));
+        details.setMtPrimeNetteCes(comptaService.calculateMtPrimeNetteByCes(plaId));
         details.setMtCapital(repRepo.getRepCapitalByRepId(plaId));
         //TODO dejaReverse resteAReverser tauxDeReversement
 

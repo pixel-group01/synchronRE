@@ -19,10 +19,10 @@ import java.util.Set;
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
-    @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.repStatut = true")
-    BigDecimal getTauxSousCommission(Long affId, Long cesId);
+    @Query("select r.repSousCommission from Repartition r where r.repId = ?1")
+    BigDecimal getTauxSousCommission(Long repId);
 
-    @Query("select coalesce(sum(r.repCapital), 0) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
+    @Query("select coalesce(sum(r.repCapital), 0) from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE'))")
     BigDecimal getRepartitionsByAffId(Long affId);
 
     @Query("select count(r.repId) from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
@@ -70,26 +70,32 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     boolean affaireHasPlacement(Long affId);
 
-    @Query("select r.cessionnaire.cesId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    @Query("select r.cessionnaire.cesId from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE'))")
     Set<Long> getCesIdsByAffId(Long affId);
 
-    @Query("select r.repTaux from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
-    BigDecimal getTauRep(Long affId, Long cesId);
+    @Query("select r.repTaux from Repartition r where r.repId = ?1")
+    BigDecimal getTauRep(Long plaId);
 
-    @Query("select r.repSousCommission from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
-    BigDecimal getTauxCms(Long affId, Long cesId);
+    @Query("select r.repTauxComCed from Repartition r where r.repId = ?1")
+    BigDecimal getTauxCmsCedante(Long plaId);
+
+    @Query("select r.repTauxComCourt from Repartition r where r.repId = ?1")
+    BigDecimal getTauxCmsCourtage(Long plaId);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     boolean placementExists(Long plaId);
 
-    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut =true and r.repStaCode.staCode not in ('REFUSE')")
+    boolean placementExistsAndIsActive(Long plaId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
     Repartition getPlacementByAffIdAndCesId(Long affId, Long cesId);
 
     @Query("select r from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     Optional<Repartition> findPlacementById(Long plaId);
 
-    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
-    List<Long> getPlIdsByAffId(Long affId);
+    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
+    List<Long> getPlaIdsByAffId(Long affId);
 
     @Query("select r.affaire.affId from Repartition r where r.repId = ?1")
     Long getAffIdByRepId(Long repId);
@@ -111,4 +117,25 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.affaire from Repartition r where r.repId = ?1")
     Optional<Affaire> getAffairedByRepId(Long plaId);
+
+    @Query("select r.affaire.facPrime from Repartition r where r.repId = ?1")
+    BigDecimal getFacPrimeTotalByPlaId(Long plaId);
+
+    @Query("select (a.facPrime * r.repTaux * r.repTauxComCed /10000) from Repartition r join r.affaire a where r.repId = ?1")
+    BigDecimal calculateMtCmsCedByCes(Long plaId);
+
+    @Query("select (a.facPrime * r.repTaux * r.repTauxComCourt /10000) from Repartition r join r.affaire a where r.repId = ?1")
+    BigDecimal calculateMtCmsCourtByCes(Long plaId);
+
+    @Query("select (a.facPrime * r.repTaux * r.repSousCommission /10000) from Repartition r join r.affaire a where r.repId = ?1")
+    BigDecimal calculateMtSousCmsByCes(Long plaId);
+
+    @Query("select sum(r.affaire.facPrime * r.repTaux * r.repSousCommission/10000) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true")
+    BigDecimal calculateMtTotalSousCommission(Long affId);
+
+    @Query("select (a.facPrime * r.repTaux /100) from Repartition r join r.affaire a where r.repId = ?1")
+    BigDecimal calculateMtPrimeBruteByCes(Long plaId);
+
+    @Query("select sum(a.facPrime * r.repTaux /100) from Repartition r join r.affaire a where a.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') ")
+    BigDecimal calculateMtPrimeBruteByAffaire(Long affId);
 }
