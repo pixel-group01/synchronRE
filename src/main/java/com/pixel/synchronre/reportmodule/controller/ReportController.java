@@ -78,4 +78,20 @@ public class ReportController
         jrService.displayPdf(response, reportBytes, "Note-de-credit");
     }
 
+
+    @GetMapping("/note-cession-sinistre/{plaId}")
+    public void generateNoteCessionSinistre(HttpServletResponse response, @PathVariable Long plaId) throws Exception
+    {
+        Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
+        if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Map<String, Object> params = new HashMap<>();
+        params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("param_image", jrConfig.imagesLocation);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteCessionSinistre, params);
+        jrService.displayPdf(response, reportBytes, "Note-cession-sinistre");
+    }
+
 }

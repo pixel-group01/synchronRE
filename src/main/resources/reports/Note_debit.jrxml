@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-05-01T23:45:24 -->
+<!-- 2023-05-02T15:58:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -359,19 +359,20 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct affaire.aff_id,
-       affaire.aff_activite,
-       affaire.aff_assure,
-       affaire.fac_numero_police,
-       affaire.aff_capital_initial,
-       affaire.aff_code,
-       affaire.aff_date_echeance,
-       affaire.aff_date_effet,
-       affaire.fac_prime,
-       affaire.fac_smp_lci,
-       affaire.cedente_id,
-       cedante.ced_nom_filiale,
-       couverture.cou_libelle,
-       branche.bran_libelle
+                affaire.aff_activite,
+                affaire.aff_assure,
+                affaire.fac_numero_police,
+                affaire.aff_capital_initial,
+                affaire.aff_code,
+                affaire.aff_date_echeance,
+                affaire.aff_date_effet,
+                affaire.fac_prime,
+                affaire.fac_smp_lci,
+                affaire.cedente_id,
+                affaire.aff_date_limite_paiement,
+                cedante.ced_nom_filiale,
+                couverture.cou_libelle,
+                branche.bran_libelle
 FROM affaire,
      cedante,
      couverture,
@@ -392,6 +393,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="fac_prime" class="java.math.BigDecimal"/>
 	<field name="fac_smp_lci" class="java.math.BigDecimal"/>
 	<field name="cedente_id" class="java.lang.Long"/>
+	<field name="aff_date_limite_paiement" class="java.sql.Date"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
 	<field name="bran_libelle" class="java.lang.String"/>
@@ -595,7 +597,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date de Paiement : " +  new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Date de Paiement : " +  new SimpleDateFormat("dd/MM/yy").format($F{aff_date_limite_paiement})]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="1" y="178" width="553" height="19" uuid="447314b9-0787-4174-8f97-207d1a2f5eee">
