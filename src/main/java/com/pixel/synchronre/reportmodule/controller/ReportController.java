@@ -40,7 +40,7 @@ public class ReportController
         params.put("param_image", jrConfig.imagesLocation);
             //@Charly
             //Affichage du cachet en fonction d'une expression dans l'etat
-        if (placement.getRepStaCode().getStaCode().equals("VAL") && placement.getRepStaCode().getStaCode().equals("MAIL")){
+        if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
             params.put("param_visible", "true");
             }else{
             params.put("param_visible", "false");
