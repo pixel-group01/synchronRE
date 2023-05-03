@@ -9,14 +9,19 @@ import java.time.LocalDate;
 public class SinistreDetailsResp
 {
     private Long sinId;
+    private String sinCode;
     private BigDecimal sinMontant100;
     private LocalDate sinDateSurvenance;
-    private LocalDate  sinDateDeclaration;
+    private LocalDate sinDateDeclaration;
     private String sinCommentaire;
     private String affCode;
     private String affAssure;
     private String affActivite;
     private BigDecimal affCapitalInitial;
+
+    private BigDecimal dejaRegle;
+    private BigDecimal restARegle;
+    private BigDecimal tauxDeReglement;
 
     public SinistreDetailsResp(Long sinId, BigDecimal sinMontant100, LocalDate sinDateSurvenance, LocalDate sinDateDeclaration, String sinCommentaire, String affCode, String affAssure, String affActivite, BigDecimal affCapitalInitial) {
         this.sinId = sinId;
@@ -30,7 +35,5 @@ public class SinistreDetailsResp
         this.affCapitalInitial = affCapitalInitial;
     }
 
-    private BigDecimal dejaRegle;
-    private BigDecimal restARegle;
-    private BigDecimal tauxDeReglement;
+
 }

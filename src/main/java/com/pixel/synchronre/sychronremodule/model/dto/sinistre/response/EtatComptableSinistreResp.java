@@ -10,7 +10,9 @@ import java.util.List;
 public class EtatComptableSinistreResp
 {
     private Long sinId;
+    private String sinCode;
     private BigDecimal sinMontant100;
+    private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;

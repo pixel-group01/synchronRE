@@ -57,4 +57,51 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         and r.affaire.affId = (select s.affaire.affId from Sinistre s where s.sinId = ?1)
     """)
     List<Cessionnaire> getCessionnaireBySinId(Long sinId);
+
+    @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true")
+    BigDecimal calculateMtDejaRegle(Long sinId);
+
+    @Query("""
+        select (s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId 
+        where s.sinId = ?1 and r.cessionnaire.cesId = ?2 
+        and r.type = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISE'
+    """)
+    BigDecimal calculateMtAReglerBySinAndCes(Long sinId, Long cesId);
+
+    @Query("""
+        select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'
+""")
+    BigDecimal calculateMtDejaReglerBySinAndCes(Long sinId, Long cesId);
+
+    @Query("select sum(s.sinMontant100 + s.sinMontantHonoraire) from Sinistre s where s.affaire.exercice = ?1 and s.affaire.affStatutCreation = 'REALISEE'")
+    BigDecimal calculateMtTotalSinistreByExercice(Long exeCode);
+
+
+    @Query("""
+       select sum(r.regMontant) from Reglement r where r.sinistre.affaire.exercice.exeCode = ?1 and r.sinistre.sinId is not null and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true  and r.sinistre.affaire.affStatutCreation = 'REALISEE'
+          """)
+    BigDecimal calculateMtTotalSinistreDejaReglerByExercice(Long exeCode);
+
+    @Query("""
+        select sum(r.regMontant) from Reglement r where r.cessionnaire.cesId = ?1 and r.sinistre.affaire.exercice.exeCode = ?2 and r.sinistre.sinId is not null and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true
+          """)
+    BigDecimal calculateMtSinistreDejaRegleByCesAndExercice(Long cesId, Long exeCode);
+
+    @Query("""
+        select (s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId
+        where r.cessionnaire.cesId = ?1 and a.exercice = ?2
+        and r.type = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISE'
+    """)
+    BigDecimal calculateMtSinistreAReglerByCesAndExercice(Long cesId, Long exeCode);
+
+    @Query("""
+        select sum(s.sinMontant100 + s.sinMontantHonoraire) from Sinistre s where s.affaire.cedante.cedId = ?1 and s.affaire.affStatutCreation = 'REALISEE'
+        """)
+    BigDecimal calculateMtSinistreTotalAReverserByCed(Long cedId);
+
+
+    @Query("""
+        select sum(r.regMontant) from Reglement r where r.sinistre.sinId is not null and r.sinistre.affaire.cedante.cedId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'reversements' and r.sinistre.affaire.affStatutCreation = 'REALISEE'
+""")
+    BigDecimal calculateMtSinistreTotalDejaReverserByCed(Long cedId);
 }

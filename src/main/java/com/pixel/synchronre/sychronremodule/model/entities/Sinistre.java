@@ -21,11 +21,13 @@ public class Sinistre
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SIN_ID_GEN")
     @SequenceGenerator(name = "SIN_ID_GEN", sequenceName = "SIN_ID_GEN")
     private Long sinId;
+    private String sinCode;
     private BigDecimal sinMontant100;
     private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;
+
     @ManyToOne @JoinColumn(name = "aff_id")
     private Affaire affaire;
     @ManyToOne @JoinColumn(name = "sta_code")

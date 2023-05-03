@@ -17,10 +17,11 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
         select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission,r.regMode) 
         from Reglement r where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(r.regReference, '') ) as string)) ) >0 
                                          or cast(r.regMontant as string) like concat(coalesce(concat(?1), ''), '%'))
-                                         and r.affaire.affId = ?2
-                                         and upper(r.typeReglement.uniqueCode) = upper(?3)     
+                                         and (r.affaire.affId = ?2 or ?2 is null)
+                                         and (r.sinistre.sinId = ?3 or ?3 is null)
+                                         and upper(r.typeReglement.uniqueCode) = upper(?4)     
         """)
-    Page<ReglementListResp> searchReglement(String key, Long affId, String typeReg, Pageable pageable);
+    Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typeReg, Pageable pageable);
 
     @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 ")
     boolean affaireHasReglement(Long affId, String typeReg);
@@ -38,4 +39,6 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     BigDecimal getMtAReglerBySinistreAndCes(Long sinId, Long cesId);
 
 
+    @Query("select (count(r.sinistre.sinId)>0) from Reglement r where r.sinistre.sinId = ?1 and r.typeReglement.uniqueCode = ?2 ")
+    boolean sinistreHasReglement(Long sinId, String typeReg);
 }

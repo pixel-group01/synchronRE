@@ -10,12 +10,15 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Mapper(componentModel = "spring")
 public  abstract class ReglementMapper
 {
     @Autowired protected IServiceCalculsComptables comptService;
     @Mapping(target = "affaire",  expression = "java(dto.getAffId()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
+    @Mapping(target = "sinistre", expression = "java(dto.getSinId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Sinistre(dto.getSinId()))")
+    @Mapping(target = "regStatut", expression ="java(true)")
     //@Mapping(target = "typeReglement", expression = "java(typeRepo.findByUniqueCode(dto.getTypeReglement()))")
     public abstract Reglement mapToReglement(CreateReglementReq dto);
 
@@ -31,12 +34,13 @@ public  abstract class ReglementMapper
     @Mapping(target = "typeReglement", source = "typeReglement.name")
     @Mapping(target = "dejaRegle", source = "appUser.userId")
     @Mapping(target = "resteARegler", source = "typeReglement.name")
-    public abstract ReglementDetailsResp mapToReglementDetailsResp(Reglement res);
 
-    void boo(Reglement res)
-    {
-        comptService.calculateRestARegler(res.getAffaire().getAffId());
-        comptService.calculateDejaRegle(res.getAffaire().getAffId());
-    }
+    @Mapping(target = "sinId", source = "sinistre.sinId")
+    @Mapping(target = "sinCode", source = "sinistre.sinCode")
+    @Mapping(target = "sinMontant100", source = "sinistre.sinMontant100")
+    @Mapping(target = "sinDateSurvenance", source = "sinistre.sinDateSurvenance")
+    @Mapping(target = "sinDateDeclaration", source = "sinistre.sinDateDeclaration")
+    @Mapping(target = "sinCommentaire", source = "sinistre.sinCommentaire")
+    public abstract ReglementDetailsResp mapToReglementDetailsResp(Reglement res);
 }
 

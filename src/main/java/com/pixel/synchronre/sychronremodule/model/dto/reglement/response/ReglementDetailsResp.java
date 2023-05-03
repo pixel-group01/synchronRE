@@ -24,4 +24,11 @@ public class ReglementDetailsResp {
     private String regMode;
     private BigDecimal dejaRegle;
     private BigDecimal resteARegler;
+
+    private Long sinId;
+    private String sinCode;
+    private BigDecimal sinMontant100;
+    private LocalDate sinDateSurvenance;
+    private LocalDate sinDateDeclaration;
+    private String sinCommentaire;
 }

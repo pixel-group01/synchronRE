@@ -1,7 +1,8 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.archivemodule.model.dtos.validator.OnRegUpload;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.REG_AFF_GROUP;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.REG_SIN_GROUP;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
@@ -30,24 +31,44 @@ public class ReglementController
     private final IserviceReglement regService;
     private final TypeRepo typeRepo;
 
-    @PostMapping(path = "/create") @Validated({OnRegUpload.class})
-    public ReglementDetailsResp createReglement(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
-        return regService.createReglement(typeReg,dto);
+    @PostMapping(path = "/affaire/create") @Validated({REG_AFF_GROUP.class})
+    public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
+        return regService.createReglementAffaire(typeReg,dto);
     }
 
-    @PutMapping(path = "/update")
-    public ReglementDetailsResp updateReglement(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
+    @PutMapping(path = "/affaire/update") @Validated({REG_AFF_GROUP.class})
+    public ReglementDetailsResp updateReglementAffaire(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
         return regService.updateReglement(dto);
     }
 
-    @GetMapping(path = "/list/{affId}")
-    public Page<ReglementListResp> searchReglement(@RequestParam(defaultValue = "") String key,
+    @PostMapping(path = "/sinistre/create") @Validated({REG_SIN_GROUP.class})
+    public ReglementDetailsResp createReglementSinistre(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
+        return regService.createReglementSinistre(typeReg,dto);
+    }
+
+    @PutMapping(path = "/sinistre/update") @Validated({REG_SIN_GROUP.class})
+    public ReglementDetailsResp updateReglementSinistre(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
+        return regService.updateReglement(dto);
+    }
+
+    @GetMapping(path = "/affaire/list/{affId}")
+    public Page<ReglementListResp> searchReglementAffaire(@RequestParam(defaultValue = "") String key,
                                                    @PathVariable Long affId,
                                                    @PathVariable String typeReg,
                                                    @RequestParam(defaultValue = "0") int page,
                                                    @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        return regService.searchReglement(key, affId,typeReg, PageRequest.of(page, size));
+        return regService.searchReglement(key, affId, null,typeReg, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/sinistre/list/{affId}")
+    public Page<ReglementListResp> searchReglementSinistre(@RequestParam(defaultValue = "") String key,
+                                                   @PathVariable Long sinId,
+                                                   @PathVariable String typeReg,
+                                                   @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        return regService.searchReglement(key, null,sinId,typeReg, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/type-documents")

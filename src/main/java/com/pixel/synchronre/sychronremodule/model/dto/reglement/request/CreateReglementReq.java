@@ -1,11 +1,10 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.request;
 
-import com.pixel.synchronre.archivemodule.model.dtos.validator.ValidFileExtension;
-import com.pixel.synchronre.archivemodule.model.dtos.validator.ValidFileSize;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.SeuilRegMontant;
+import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.SeuilRegMontantSin;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.UniqueReference;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.validator.ValidDocRegId;
+import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.ExistingSinId;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,9 +15,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRegMontant(groups = {CREATE_GROUP.class})
-public class CreateReglementReq {
-
+@SeuilRegMontant(groups = {REG_AFF_GROUP.class})
+@SeuilRegMontantSin(groups = {REG_SIN_GROUP.class})
+public class CreateReglementReq
+{
     @NotBlank(message = "Veuillez saisir la réference du paiement")
     @NotNull(message = "Veuillez saisir la réference du paiement")
     @UniqueReference
@@ -34,9 +34,13 @@ public class CreateReglementReq {
     private LocalDate regDate;
 
     private MultipartFile regRecu;
-    @ExistingAffId
-    @NotNull(message = "Veuillez choisir l'affaire")
+    @ExistingAffId(groups = {REG_AFF_GROUP.class})
+    @NotNull(message = "Veuillez choisir l'affaire", groups = {REG_AFF_GROUP.class})
     private Long affId;
+
+    @ExistingSinId(groups = {REG_SIN_GROUP.class})
+    @NotNull(message = "Veuillez choisir le sinistre", groups = {REG_SIN_GROUP.class})
+    private Long sinId;
 
     @NotBlank(message = "Veuillez selectionner le mode reglement")
     @NotNull(message = "Veuillez selectionner le mode reglement")

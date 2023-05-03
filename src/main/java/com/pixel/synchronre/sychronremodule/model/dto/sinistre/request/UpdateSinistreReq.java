@@ -2,12 +2,9 @@ package com.pixel.synchronre.sychronremodule.model.dto.sinistre.request;
 
 import com.pixel.synchronre.authmodule.model.dtos.asignation.CoherentDates;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CREATE_GROUP;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.ExistingSinId;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.SeuilSinMontant;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.SinistreNotTooLate;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.validator.ExistingStatCode;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;

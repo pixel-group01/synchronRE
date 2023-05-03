@@ -24,6 +24,13 @@ public class ReglementListResp {
     private BigDecimal affCapitalInitial;
     private String facNumeroPolice;
 
+    private Long sinId;
+    private String sinCode;
+    private BigDecimal sinMontant100;
+    private LocalDate sinDateSurvenance;
+    private LocalDate sinDateDeclaration;
+    private String sinCommentaire;
+
     public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission,String regMode) {
         this.regId = regId;
         this.regReference = regReference;

@@ -1,9 +1,9 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -15,10 +15,10 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {SeuilRegMontant.SeuilRegMontantValidatorOnCreate.class,
-        SeuilRegMontant.SeuilRepCapValidatorOnUpdate.class})
+@Constraint(validatedBy = {SeuilRegMontantSin.SeuilRegMontantValidatorOnCreate.class,
+        SeuilRegMontantSin.SeuilRepCapValidatorOnUpdate.class})
 @Documented
-public @interface SeuilRegMontant
+public @interface SeuilRegMontantSin
 {
     String message() default "regMontant::Le montant du règlement ne peut excéder le reste à régler";
     Class<?>[] groups() default {};
@@ -26,29 +26,29 @@ public @interface SeuilRegMontant
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRegMontantValidatorOnCreate implements ConstraintValidator<SeuilRegMontant, CreateReglementReq>
+    class SeuilRegMontantValidatorOnCreate implements ConstraintValidator<SeuilRegMontantSin, CreateReglementReq>
     {
-        private final IServiceCalculsComptables comptaService;
+        private final IServiceCalculsComptablesSinistre comptaSinistreService;
         @Override
         public boolean isValid(CreateReglementReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRegMontant()) <= 0 ;
+            return comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(dto.getRegMontant()) <= 0 ;
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class SeuilRepCapValidatorOnUpdate implements ConstraintValidator<SeuilRegMontant, UpdateRepartitionReq>
+    class SeuilRepCapValidatorOnUpdate implements ConstraintValidator<SeuilRegMontantSin, UpdateRepartitionReq>
     {
-        private final IServiceCalculsComptables comptaService;
+        private final IServiceCalculsComptablesSinistre comptaSinistreService;
         @Override
         public boolean isValid(UpdateRepartitionReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRepCapital()) <= 0;
+            return comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(dto.getRepCapital()) <= 0;
         }
     }
 }

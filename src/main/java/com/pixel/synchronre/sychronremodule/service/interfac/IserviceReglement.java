@@ -12,7 +12,8 @@ import java.net.UnknownHostException;
 
 public interface IserviceReglement
 {
-    ReglementDetailsResp createReglement(String typeReg, CreateReglementReq dto) throws UnknownHostException;
+    ReglementDetailsResp createReglementAffaire(String typeReg, CreateReglementReq dto) throws UnknownHostException;
+    ReglementDetailsResp createReglementSinistre(String typeReg, CreateReglementReq dto) throws UnknownHostException;
     ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException;
-    Page<ReglementListResp> searchReglement(String key, Long affId, String typRegUniqueCode, Pageable pageable);
+    Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typRegUniqueCode, Pageable pageable);
 }
