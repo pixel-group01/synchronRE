@@ -20,4 +20,16 @@ public class MouvementController
     {
         return mvtRepo.findByAffaire(affId);
     }
+
+    @GetMapping(path = "/affaire/message-retour/{affId}")
+    String getMessageRetourAffaire(@PathVariable Long affId)
+    {
+        return mvtRepo.getMessageRetourForAffaire(affId);
+    }
+
+    @GetMapping(path = "/placement/message-retour/{plaId}")
+    String getMessageRetourPlacement(@PathVariable Long plaId)
+    {
+        return mvtRepo.getMessageRetourForPlacement(plaId);
+    }
 }
