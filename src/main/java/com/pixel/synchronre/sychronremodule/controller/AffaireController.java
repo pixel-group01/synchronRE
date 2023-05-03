@@ -12,20 +12,22 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.Facul
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
+import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.LifecycleState;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
@@ -41,6 +43,7 @@ public class AffaireController
     private final IServiceMouvement mvtService;
     private final IserviceAffaire affService;
     private final IserviceExercie exoService;
+    private final IServiceCalculsComptables comptaAffaireService;
 
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
@@ -68,7 +71,9 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode), exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @GetMapping(path = "/facultative/by-function")
@@ -78,7 +83,9 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //Tab saisie par la cedante : affiche les affaires saisies par la cedante
@@ -89,7 +96,9 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabSaisieCed, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabSaisieCed, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
 
@@ -101,7 +110,9 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //Tab saisie par le souscripteur NEL-RE : affiche les affaires saisies par le souscripteur
@@ -113,7 +124,16 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabSaisieSous, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabSaisieSous, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
+    }
+
+    private boolean placementIsFinished(Long affId)
+    {
+        BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
+        besFac = besFac == null ? BigDecimal.ZERO : besFac;
+        return besFac.compareTo(BigDecimal.ZERO) == 0;
     }
 
     //Tab En cours de placement par le souscripteur NEL-RE : affiche les affaires en attentes de placement par le souscripteur et transmises par la cedante
@@ -125,7 +145,9 @@ public class AffaireController
                                                                      @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
     @GetMapping(path = "/facultative/by-reassureur-valide") //validé par le réassureur
     public Page<FacultativeListResp> searchAffaireByReassureurValide(@RequestParam(required = false) Long exeCode,
@@ -135,7 +157,10 @@ public class AffaireController
                                                                @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null,  cedId, jwtService.getConnectedUserCesId(),Arrays.asList("VAL"), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId, jwtService.getConnectedUserCesId(),Arrays.asList("VAL"), exeCode, PageRequest.of(page, size));
+
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //====================================
@@ -147,7 +172,9 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @GetMapping(path = "/facultative/by-function-arch")
@@ -157,7 +184,9 @@ public class AffaireController
                                                         @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //Tab archives : affiche les affaires archivées de la cedante
@@ -168,7 +197,9 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null,AffStatutGroup.tabArchives, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null,AffStatutGroup.tabArchives, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //Tab en cours de reglement : affiche les affaires du souscripteur NE-LRE en cours de reglement
@@ -179,7 +210,9 @@ public class AffaireController
                                                                 @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     //Tab en cours de reglement : affiche les affaires de la cedante en cours de reglement
@@ -190,42 +223,66 @@ public class AffaireController
                                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        return affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, AffStatutGroup.tabEnCoursReg, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @PostMapping(path = "/facultative/transmettre/{affId}")
-    public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId)
+    public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId,
+                                                        @RequestParam(defaultValue = "") String key,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(affId, EN_ATTENTE_DE_PLACEMENT.staCode, null));
-        return affRepo.searchAffaires("", null, null,
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 jwtService.getConnectedUserCedId(),
-                null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+                null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @PostMapping(path = "/facultative/retourner")
-    public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtReq dto)
+    public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtReq dto,
+                                                      @RequestParam(defaultValue = "") String key,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
-        return affRepo.searchAffaires("", null, null,
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 affRepo.getAffCedId(dto.getObjectId()),
                 null, Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @PostMapping(path = "/facultative/valider/{affId}")
-    public Page<FacultativeListResp> validerPlacement(@PathVariable Long affId, @RequestParam(required = false) Long cedId)
+    public Page<FacultativeListResp> validerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
+                                                    @RequestParam(defaultValue = "") String key,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(affId, EN_COURS_DE_REGLEMENT.staCode,null));
-        return affRepo.searchAffaires("", null, null, cedId,
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId,
                 jwtService.getConnectedUserCesId(), Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @PostMapping(path = "/facultative/archiver/{affId}")
-    public Page<FacultativeListResp> archiverAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId)
+    public Page<FacultativeListResp> archiverAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
+                                                     @RequestParam(defaultValue = "") String key,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(affId, ARCHIVE.staCode,null));
-        return affRepo.searchAffaires("", null, null, cedId
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId
                 ,jwtService.getConnectedUserCesId(),
                 Arrays.asList(EN_COURS_DE_REGLEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
     @GetMapping(path = "/facultative/etat-comptable/{affId}")
