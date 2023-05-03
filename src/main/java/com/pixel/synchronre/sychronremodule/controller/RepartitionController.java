@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/repartitions")
-@Validated
+@Validated @ResponseStatus(HttpStatus.OK)
 public class RepartitionController
 {
     private final IserviceRepartition repService;
@@ -35,6 +36,11 @@ public class RepartitionController
     @PostMapping(path = "/create")
     public RepartitionDetailsResp createRep(@Valid @RequestBody CreateRepartitionReq dto) throws UnknownHostException {
         return repService.createRepartition(dto);
+    }
+
+    @GetMapping(path = "/get-ced-leg-update-dto/{affId}")
+    public CreateCedLegRepartitionReq  CedLegDtoForUpdate(@PathVariable Long affId) throws UnknownHostException {
+        return repService.getCedLegRepartitionDTO(affId);
     }
 
     @DeleteMapping(path = "/delete-placement/{repId}")

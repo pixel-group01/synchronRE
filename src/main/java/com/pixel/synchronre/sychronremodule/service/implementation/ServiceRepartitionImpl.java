@@ -259,6 +259,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
 
+
     @Override
     public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
     {
@@ -298,6 +299,26 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
             }
         }
+    }
+
+    @Override
+    public CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId) {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        CreateCedLegRepartitionReq dto = repRepo.getCedLegRepartitionDTO(affId);
+        List<ParamCessionLegaleListResp> pcls = this.pclRepo.findByAffId(affId);
+        List<CreateCesLegReq> cesLegReqs = pcls.stream().map(pcl->
+        {
+            boolean accepte = repRepo.existsValidByAffIdAndPclId(affId,pcl.getParamCesLegId());
+            CreateCesLegReq cesLegReq =  new CreateCesLegReq();
+            cesLegReq.setRepCapital(accepte ? repRepo.findValidByAffIdAndPclId(affId, pcl.getParamCesLegId()).getRepCapital() : pcl.getParamCesLegTaux().multiply(affaire.getAffCapitalInitial()));
+            cesLegReq.setRepTaux(pcl.getParamCesLegTaux());
+            cesLegReq.setAffId(affId);
+            cesLegReq.setParamCesLegalId(pcl.getParamCesLegId());
+            cesLegReq.setAccepte(accepte);
+            return cesLegReq;
+        }).collect(Collectors.toList());
+        dto.setCesLegDtos(cesLegReqs);
+        return dto;
     }
 
     @Override

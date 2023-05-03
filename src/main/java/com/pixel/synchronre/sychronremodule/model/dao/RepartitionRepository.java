@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
@@ -138,4 +139,14 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select sum(a.facPrime * r.repTaux /100) from Repartition r join r.affaire a where a.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') ")
     BigDecimal calculateMtPrimeBruteByAffaire(Long affId);
+
+
+    @Query("select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq(r.repCapital,  r.repTaux, r.repSousCommission, r.affaire.affId) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CED' and r.repStatut = true")
+    CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId);
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut =true")
+    boolean existsValidByAffIdAndPclId(Long affId, Long pclId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut =true")
+    Repartition findValidByAffIdAndPclId(Long affId, Long pclId);
 }

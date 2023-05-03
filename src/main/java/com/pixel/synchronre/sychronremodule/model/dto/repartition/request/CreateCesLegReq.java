@@ -45,4 +45,5 @@ public class CreateCesLegReq
     private Long affId;
     @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
     private Long paramCesLegalId;
+    private boolean accepte;
 }

@@ -17,6 +17,12 @@ public interface MouvementRepository extends JpaRepository<Mouvement, Long>
             From Mouvement m where m.affaire.affId = ?1 order by m.mvtDate desc""")
     List<MouvementListResp> findByAffaire(Long affId);
 
+    @Query("select m.mvtObservation from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET' and m.mvtDate = (select max(m.mvtDate) from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET')")
+    String getMessageRetourForAffaire(Long affId);
+
+    @Query("select m.mvtObservation from Mouvement m where m.placement.repId = ?1 and m.statut.staCode = 'RET' and m.mvtDate = (select max(m.mvtDate) from Mouvement m where m.placement.repId = ?1 and m.statut.staCode = 'RET')")
+    String getMessageRetourForPlacement(Long affId);
+
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp(

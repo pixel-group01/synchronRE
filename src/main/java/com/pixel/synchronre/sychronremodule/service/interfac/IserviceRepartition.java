@@ -40,6 +40,8 @@ public interface IserviceRepartition {
 
     void deletePlacement(Long repId) throws UnknownHostException;
 
+    CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId);
+
     List<ParamCessionLegaleListResp> getCesLegParam(Long affId);
 
     @Transactional

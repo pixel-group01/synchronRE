@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.domain.Page;
@@ -105,4 +106,6 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                                    @Param("staCodes")List<String> staCodes, Pageable pageable);
 
      */
+
+
 }
