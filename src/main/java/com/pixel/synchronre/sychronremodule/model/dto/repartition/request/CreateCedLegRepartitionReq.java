@@ -1,13 +1,11 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
-import com.pixel.synchronre.sharedmodule.groups.CREATE_GROUP;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentCapitalAndTaux;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTauBesoinFac;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
