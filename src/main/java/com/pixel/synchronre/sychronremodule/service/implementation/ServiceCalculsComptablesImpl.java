@@ -178,6 +178,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateTauxDeReversement(Long affId)
     {
-        return CENT.multiply(this.calculateDejaReverse(affId).divide(this.calculateMtTotalAReverseAuxCes(affId), 2, RoundingMode.HALF_UP));
+        BigDecimal mtTotalAReverseAuxCes = this.calculateMtTotalAReverseAuxCes(affId);
+        if(mtTotalAReverseAuxCes.compareTo(ZERO) == 0) return CENT;
+        return CENT.multiply(this.calculateDejaReverse(affId).divide(mtTotalAReverseAuxCes, 2, RoundingMode.HALF_UP));
     }
 }
