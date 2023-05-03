@@ -17,7 +17,7 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder @SeuilRepCap @SeuilRepTau @CoherentCapitalAndTaux
 public class CreateCedLegRepartitionReq
 {
-    @NotEmpty(message = "Veuillez saisir les informations de cession(s) légale(s)")
+    //@NotEmpty(message = "Veuillez saisir les informations de cession(s) légale(s)")
     private List<CreateCesLegReq> cesLegDtos;
 
     @NotNull(message = "Veuillez saisir le capital")
