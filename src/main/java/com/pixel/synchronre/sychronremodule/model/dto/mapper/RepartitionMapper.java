@@ -31,7 +31,7 @@ public abstract class RepartitionMapper {
     @Mapping(target = "cesEmail", source = "cessionnaire.cesEmail")
     @Mapping(target = "cesTelephone", source = "cessionnaire.cesTelephone")
     @Mapping(target = "affBesoinFac", expression = "java(comptaService.calculateRestARepartir(res.getAffaire().getAffId()))")
-    @Mapping(target = "affTauxBesoinFac", expression = "java(comptaService.calculateRestTauxARepartir(res.getAffaire().getAffId()))")
+    @Mapping(target = "affTauxBesoinFac", expression = "java(comptaService.calculateTauxRestARepartir(res.getAffaire().getAffId()))")
     public abstract RepartitionDetailsResp mapToRepartitionDetailsResp(Repartition res);
 
     @Mapping(target = "repStatut", expression = "java(true)")
