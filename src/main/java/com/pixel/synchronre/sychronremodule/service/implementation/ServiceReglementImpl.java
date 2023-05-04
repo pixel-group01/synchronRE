@@ -75,7 +75,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         if(comptaAffaireService.calculateRestARegler(dto.getAffId()).compareTo(BigDecimal.ZERO) == 0) {
             mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), SOLDE.staCode, null));
         }
-
+        if(dto.getRegDocReqs() == null) return reglementMapper.mapToReglementDetailsResp(paiement);
         return uploadRegDocs(dto, paiement, regId);
     }
 
