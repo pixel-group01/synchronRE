@@ -20,6 +20,7 @@ public  abstract class ReglementMapper
     @Mapping(target = "sinistre", expression = "java(dto.getSinId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Sinistre(dto.getSinId()))")
     @Mapping(target = "regStatut", expression ="java(true)")
     //@Mapping(target = "typeReglement", expression = "java(typeRepo.findByUniqueCode(dto.getTypeReglement()))")
+    @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     public abstract Reglement mapToReglement(CreateReglementReq dto);
 
 
