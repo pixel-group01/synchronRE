@@ -20,6 +20,7 @@ public  abstract class ReglementMapper
     @Mapping(target = "sinistre", expression = "java(dto.getSinId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Sinistre(dto.getSinId()))")
     @Mapping(target = "regStatut", expression ="java(true)")
     //@Mapping(target = "typeReglement", expression = "java(typeRepo.findByUniqueCode(dto.getTypeReglement()))")
+    @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     public abstract Reglement mapToReglement(CreateReglementReq dto);
 
 
@@ -32,8 +33,8 @@ public  abstract class ReglementMapper
     @Mapping(target = "cedSigleFiliale", source = "affaire.cedante.cedSigleFiliale")
     @Mapping(target = "userId", source = "appUser.userId")
     @Mapping(target = "typeReglement", source = "typeReglement.name")
-    @Mapping(target = "dejaRegle", source = "appUser.userId")
-    @Mapping(target = "resteARegler", source = "typeReglement.name")
+    @Mapping(target = "dejaRegle", expression = "java(comptService.calculateDejaRegle(res.getAffaire().getAffId()))")
+    @Mapping(target = "resteARegler", expression = "java(comptService.calculateRestARegler(res.getAffaire().getAffId()))")
 
     @Mapping(target = "sinId", source = "sinistre.sinId")
     @Mapping(target = "sinCode", source = "sinistre.sinCode")

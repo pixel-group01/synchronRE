@@ -46,6 +46,8 @@ public class CreateReglementReq
     @NotNull(message = "Veuillez selectionner le mode reglement")
     private String regMode;
 
+    private Long cesId;
+
     private List<RegDocReq> regDocReqs;
 }
 
