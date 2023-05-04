@@ -32,4 +32,10 @@ public class MouvementController
     {
         return mvtRepo.getMessageRetourForPlacement(plaId);
     }
+
+    @GetMapping(path = "/placement/message-refus/{plaId}")
+    String getMessageRefusPlacement(@PathVariable Long plaId)
+    {
+        return mvtRepo.getMessageRefusForPlacement(plaId);
+    }
 }
