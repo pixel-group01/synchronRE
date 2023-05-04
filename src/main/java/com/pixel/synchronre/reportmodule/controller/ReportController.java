@@ -97,9 +97,25 @@ public class ReportController
         }else{
             params.put("param_visible", "false");
         }
-
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCessionSinistre, params);
         jrService.displayPdf(response, reportBytes, "Note-cession-sinistre");
     }
+
+
+    @GetMapping("/note-debit-sinistre/{affId}")
+    public void generateNoteDebitSinistre(HttpServletResponse response, @PathVariable Long affId) throws Exception
+    {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Map<String, Object> params = new HashMap<>();
+        params.put("aff_id", affaire.getAffId());
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
+        params.put("param_image", jrConfig.imagesLocation);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params);
+        jrService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
+    }
+
+
+
 
 }
