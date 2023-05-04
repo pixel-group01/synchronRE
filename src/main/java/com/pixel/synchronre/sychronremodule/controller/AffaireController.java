@@ -241,7 +241,7 @@ public class AffaireController
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
-    @PostMapping(path = "/facultative/transmettre/{affId}")
+    @PutMapping(path = "/facultative/transmettre/{affId}")
     public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId,
                                                         @RequestParam(defaultValue = "") String key,
                                                         @RequestParam(defaultValue = "0") int page,
@@ -255,7 +255,7 @@ public class AffaireController
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
-    @PostMapping(path = "/facultative/retourner")
+    @PutMapping(path = "/facultative/retourner")
     public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtReq dto,
                                                       @RequestParam(defaultValue = "") String key,
                                                       @RequestParam(defaultValue = "0") int page,
@@ -270,7 +270,7 @@ public class AffaireController
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
-    @PostMapping(path = "/facultative/valider/{affId}")
+    @PutMapping(path = "/facultative/valider/{affId}")
     public Page<FacultativeListResp> validerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
                                                     @RequestParam(defaultValue = "") String key,
                                                     @RequestParam(defaultValue = "0") int page,
@@ -283,7 +283,7 @@ public class AffaireController
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
 
-    @PostMapping(path = "/facultative/archiver/{affId}")
+    @PutMapping(path = "/facultative/archiver/{affId}")
     public Page<FacultativeListResp> archiverAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
                                                      @RequestParam(defaultValue = "") String key,
                                                      @RequestParam(defaultValue = "0") int page,
