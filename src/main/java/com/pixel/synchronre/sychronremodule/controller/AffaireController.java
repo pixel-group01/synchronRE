@@ -66,13 +66,14 @@ public class AffaireController
 
     //Tab all affaires : affiche toutes les affaires qui sont pas supprimées quelques soit l'acteur
     @GetMapping(path = "/facultative/all")
-    public Page<FacultativeListResp> searchAllAffaires(@RequestParam(required = false) Long exeCode,
+    public Page<FacultativeListResp> searchAllAffaires(@RequestParam(required = false) Long exeCode, @RequestParam(required = false) Long cedId,
                                                             @RequestParam(defaultValue = "") String key,
                                                             @RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), jwtService.getConnectedUserCesId(), AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
+        cedId = cedId == null ? jwtService.getConnectedUserCedId() : cedId;
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId, jwtService.getConnectedUserCesId(), AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
         //List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return facPages;
     }
