@@ -32,7 +32,7 @@ public class ReglementController
     private final TypeRepo typeRepo;
 
     @PostMapping(path = "/affaire/create") @Validated({REG_AFF_GROUP.class})
-    public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
+    public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglementAffaire(typeReg,dto);
     }
 
