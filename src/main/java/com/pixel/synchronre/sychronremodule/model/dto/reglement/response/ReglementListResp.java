@@ -24,6 +24,10 @@ public class ReglementListResp {
     private BigDecimal affCapitalInitial;
     private String facNumeroPolice;
 
+    private Long cesId;
+    private String cesNom;
+    private String cesSigle;
+
     private Long sinId;
     private String sinCode;
     private BigDecimal sinMontant100;
@@ -38,5 +42,16 @@ public class ReglementListResp {
         this.regMontant = regMontant;
         this.regCommission = regCommission;
         this.regMode=regMode;
+    }
+
+    public ReglementListResp(Long regId,String regReference, LocalDate regDate, BigDecimal regMontant, BigDecimal regCommission,String regMode, Long cesId, String cesNom) {
+        this.regId = regId;
+        this.regReference = regReference;
+        this.regDate = regDate;
+        this.regMontant = regMontant;
+        this.regCommission = regCommission;
+        this.regMode=regMode;
+        this.cesId = cesId;
+        this.cesNom = cesNom;
     }
 }
