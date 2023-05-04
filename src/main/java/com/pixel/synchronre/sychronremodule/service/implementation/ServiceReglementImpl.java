@@ -102,6 +102,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
     private ReglementDetailsResp uploadRegDocs(CreateReglementReq dto, Reglement paiement, Long regId)
     {
+        if(dto == null) return reglementMapper.mapToReglementDetailsResp(paiement);
         dto.getRegDocReqs().forEach(docDto->
         {
             String uniqueCode = typeRepo.getUniqueCode(docDto.getDocTypeId());
