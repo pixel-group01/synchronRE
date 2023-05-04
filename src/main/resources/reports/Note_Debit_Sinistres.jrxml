@@ -717,7 +717,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
-								<text><![CDATA[Prime à reverser]]></text>
+								<text><![CDATA[Sinistre à payer]]></text>
 							</staticText>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table 3_TH" height="19" rowSpan="1">
