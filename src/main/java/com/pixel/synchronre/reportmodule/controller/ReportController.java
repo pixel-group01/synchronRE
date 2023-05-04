@@ -63,10 +63,11 @@ public class ReportController
         jrService.displayPdf(response, reportBytes, "Note-de-debit");
     }
 
-    @GetMapping("/note-de-credit/{plaId}")
-    public void generateNoteCredit(HttpServletResponse response, @PathVariable Long plaId) throws Exception
+    @GetMapping("/note-de-credit/{affId}/{cesId}")
+    public void generateNoteCredit(HttpServletResponse response, @PathVariable Long affId, @PathVariable Long cesId) throws Exception
     {
-        Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
+
+        Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
