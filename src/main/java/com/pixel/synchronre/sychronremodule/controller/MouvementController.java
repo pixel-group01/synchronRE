@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MvtMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,20 +23,23 @@ public class MouvementController
     }
 
     @GetMapping(path = "/affaire/message-retour/{affId}")
-    String getMessageRetourAffaire(@PathVariable Long affId)
+    MvtMessage getMessageRetourAffaire(@PathVariable Long affId)
     {
-        return mvtRepo.getMessageRetourForAffaire(affId);
+        String message = mvtRepo.getMessageRetourForAffaire(affId);
+        return new MvtMessage(message == null ? "" : message);
     }
 
     @GetMapping(path = "/placement/message-retour/{plaId}")
-    String getMessageRetourPlacement(@PathVariable Long plaId)
+    MvtMessage getMessageRetourPlacement(@PathVariable Long plaId)
     {
-        return mvtRepo.getMessageRetourForPlacement(plaId);
+        String message = mvtRepo.getMessageRetourForPlacement(plaId);
+        return new MvtMessage(message == null ? "" : message);
     }
 
     @GetMapping(path = "/placement/message-refus/{plaId}")
-    String getMessageRefusPlacement(@PathVariable Long plaId)
+    MvtMessage getMessageRefusPlacement(@PathVariable Long plaId)
     {
-        return mvtRepo.getMessageRefusForPlacement(plaId);
+        String message = mvtRepo.getMessageRefusForPlacement(plaId);
+        return new MvtMessage(message == null ? "" : message);
     }
 }
