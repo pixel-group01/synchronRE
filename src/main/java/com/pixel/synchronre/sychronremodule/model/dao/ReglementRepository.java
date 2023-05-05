@@ -15,9 +15,11 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission,r.regMode, r.cessionnaire.cesId, concat(r.cessionnaire.cesNom, '(', r.cessionnaire.cesSigle, ')') ) 
-        from Reglement r left join r.affaire a left join r.sinistre s left join r.typeReglement t left join r.cessionnaire c where (?1 = ?1) and (a.affId = ?2 or ?2 is null)
+        from Reglement r left join r.affaire a left join r.sinistre s left join r.typeReglement t left join r.cessionnaire c where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(r.regReference, '') ) as string)) ) >0 
+                                         or cast(r.regMontant as string) like concat(coalesce(concat(?1), ''), '%'))
+                                         and (a.affId = ?2 or ?2 is null)
                                          and (s.sinId = ?3 or ?3 is null)
-                                         and upper(t.uniqueCode) = upper(?4)     
+                                         and upper(r.typeReglement.uniqueCode) = upper(?4)     
         """)
     Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typeReg, Pageable pageable);
 
