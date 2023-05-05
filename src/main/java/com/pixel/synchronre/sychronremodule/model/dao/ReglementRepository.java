@@ -15,7 +15,7 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp(r.regId,r.regReference, r.regDate,r.regMontant,r.regCommission,r.regMode, r.cessionnaire.cesId, concat(r.cessionnaire.cesNom, '(', r.cessionnaire.cesSigle, ')') ) 
-        from Reglement r left join r.affaire a left join r.sinistre s left join r.typeReglement t where (?1 = ?1) and (a.affId = ?2 or ?2 is null)
+        from Reglement r left join r.affaire a left join r.sinistre s left join r.typeReglement t left join r.cessionnaire c where (?1 = ?1) and (a.affId = ?2 or ?2 is null)
                                          and (s.sinId = ?3 or ?3 is null)
                                          and upper(t.uniqueCode) = upper(?4)     
         """)
