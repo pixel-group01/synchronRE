@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Value("${synchronre.email}")
     private String synchronreEmail;
 
-    @Override
+    @Override @Transactional
     public SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException
     {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
@@ -57,9 +58,18 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Statut sinStatut = isCourtier ? new Statut(TRANSMIS.staCode) : new Statut(SAISIE.staCode);
         sinistre.setStatut(sinStatut);
         sinistre = sinRepo.save(sinistre);
+        sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
+    }
+
+    public String generateSinCode(Long sinId)
+    {
+        Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
+        String affCode = affRepo.getAffCode(sinistre.getAffaire().getAffId());
+        return "SIN." + affCode + "." +
+                String.format("%05d", sinId);
     }
 
     @Override

@@ -44,7 +44,8 @@ public @interface SinistreNotTooLate
             if(dateEffet == null && dateEch == null) return true;
             if(dateEffet == null) return dateSurvenance.isBefore(dateEch);
             if(dateEch == null) return dateSurvenance.isAfter(dateEffet);
-            return  dateSurvenance.isAfter(dateEffet) && dateSurvenance.isBefore(dateEch);
+            return  (dateSurvenance.isAfter(dateEffet) ||dateSurvenance.isEqual(dateEffet)) &&
+                    ( dateSurvenance.isBefore(dateEch) || dateSurvenance.isEqual(dateEch));
         }
     }
 
@@ -65,7 +66,8 @@ public @interface SinistreNotTooLate
             if(dateEffet == null && dateEch == null) return true;
             if(dateEffet == null) return dateSurvenance.isBefore(dateEch);
             if(dateEch == null) return dateSurvenance.isAfter(dateEffet);
-            return  dateSurvenance.isAfter(dateEffet) && dateSurvenance.isBefore(dateEch);
+            return  (dateSurvenance.isAfter(dateEffet) ||dateSurvenance.isEqual(dateEffet)) &&
+                   ( dateSurvenance.isBefore(dateEch) || dateSurvenance.isEqual(dateEch));
         }
     }
 }

@@ -33,7 +33,7 @@ public @interface CoherentDates
         @Override
         public boolean isValid(CreateFunctionDTO dto, ConstraintValidatorContext context)
         {
-            return dto.getStartsAt() == null || dto.getEndsAt() == null ? true : dto.getStartsAt().isBefore(dto.getEndsAt());
+            return dto.getStartsAt() == null || dto.getEndsAt() == null ? true : dto.getStartsAt().isBefore(dto.getEndsAt()) || dto.getStartsAt().isEqual(dto.getEndsAt());
         }
     }
 
@@ -43,7 +43,7 @@ public @interface CoherentDates
         @Override
         public boolean isValid(UpdateFncDTO dto, ConstraintValidatorContext context)
         {
-            return dto.getStartsAt() == null || dto.getEndsAt() == null ? true : dto.getStartsAt().isBefore(dto.getEndsAt());
+            return dto.getStartsAt() == null || dto.getEndsAt() == null ? true : dto.getStartsAt().isBefore(dto.getEndsAt()) || dto.getStartsAt().isEqual(dto.getEndsAt());
         }
     }
 
@@ -57,7 +57,7 @@ public @interface CoherentDates
         {
             LocalDate dateSurvenance = dto.getSinDateSurvenance();
             LocalDate dateDeclaration = dto.getSinDateDeclaration();
-            return dateSurvenance == null || dateDeclaration == null ? true : dateSurvenance.isBefore(dateDeclaration);
+            return dateSurvenance == null || dateDeclaration == null ? true : dateSurvenance.isBefore(dateDeclaration) || dateSurvenance.isEqual(dateDeclaration);
         }
     }
 
@@ -69,7 +69,7 @@ public @interface CoherentDates
         {
             LocalDate dateSurvenance = dto.getSinDateSurvenance();
             LocalDate dateDeclaration = dto.getSinDateDeclaration();
-            return dateSurvenance == null || dateDeclaration == null ? true : dateSurvenance.isBefore(dateDeclaration);
+            return dateSurvenance == null || dateDeclaration == null ? true : dateSurvenance.isBefore(dateDeclaration) || dateSurvenance.isEqual(dateDeclaration);
         }
     }
 }

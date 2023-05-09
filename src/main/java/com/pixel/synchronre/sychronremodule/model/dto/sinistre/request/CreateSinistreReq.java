@@ -27,7 +27,6 @@ public class CreateSinistreReq
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;
     @ExistingAffId
+    @NotNull(message = "Veuillez choisir l'affaire")
     private Long affId;
-    @ExistingStatCode
-    private String staCode;
 }

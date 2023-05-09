@@ -13,6 +13,8 @@ public class Pays {
   private String paysCode;
   private String paysIndicatif;
   private String paysNom;
+  @ManyToOne @JoinColumn(name = "devise")
+  private Devise devise;
   @ManyToOne
   @JoinColumn(name = "payStatut")
   private Statut statut;

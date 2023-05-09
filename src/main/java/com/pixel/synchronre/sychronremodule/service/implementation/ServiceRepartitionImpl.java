@@ -61,6 +61,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final ParamCessionLegaleRepository pclRepo;
     private final PlacementDocUploader placementDocUploader;
     private final EmailSenderService mailSenderService;
+    private final IserviceBordereau bordService;
     @Value("${synchronre.email}")
     private String synchronreEmail;
 
@@ -141,7 +142,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
          return repartitionDetailsResp;
     }
-    private final IserviceBordereau bordService;
+
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
     {
