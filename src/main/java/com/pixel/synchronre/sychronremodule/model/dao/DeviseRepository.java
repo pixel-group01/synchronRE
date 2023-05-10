@@ -25,4 +25,5 @@ public interface DeviseRepository extends JpaRepository<Devise, String> {
                                             
 """)
     Page<DeviseListResp> searchDevises(String key, Pageable pageable);
+
 }

@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public interface SinRepo extends JpaRepository<Sinistre, Long>
 {
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp(
         s.sinId, s.sinMontant100, s.sinDateSurvenance, s.sinDateDeclaration, s.sinCommentaire, aff.affCode, aff.affAssure, aff.affActivite, aff.affCapitalInitial) 

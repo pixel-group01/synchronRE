@@ -15,6 +15,8 @@ public abstract class SinMapper
 
     @Mapping(target = "userCreator", expression = "java(jwtService.getConnectedUserId() == null ? null : new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "functionCreator", expression = "java(jwtService.getConnectedUserFunctionId() == null ? null : new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
+    //@Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
+    @Mapping(target = "affaire", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     public abstract Sinistre mapToSinistre(CreateSinistreReq dto);
 
     @Mapping(target = "affCode", source = "affaire.affCode")

@@ -71,13 +71,32 @@ public class SynchronReApplication {
             Type bordereauVirement = new Type(17l, TypeGroup.DOCUMENT, "BORD_VIR", "Bordereau de virement", PersStatus.ACTIVE, null, "reglement");
             Type ordreVirement = new Type(18l, TypeGroup.DOCUMENT, "ORDE_VIR", "Ordre de virement", PersStatus.ACTIVE, null, "reglement");
 
-            Type avisModCession = new Type(25l, TypeGroup.DOCUMENT, "AVI_MOD_CES", "Avis de modification de cession", PersStatus.ACTIVE, null, "placement");
-            Type noteCession = new Type(26l, TypeGroup.DOCUMENT, "NOT_CES", "Note de cession", PersStatus.ACTIVE, null, "placement");
-            Type Virement = new Type(27l, TypeGroup.MODE_REGLEMENT, "VRG", "Virement bancaire", PersStatus.ACTIVE, null, null);
+            //Type noteCession = new Type()
+
+            //Type avisModCession = new Type(25l, TypeGroup.DOCUMENT, "AVI_MOD_CES", "Avis de modification de cession", PersStatus.ACTIVE, null, "placement");
+            //Type noteCession = new Type(26l, TypeGroup.DOCUMENT, "NOT_CES", "Note de cession", PersStatus.ACTIVE, null, "placement");
+
+            Type virement = new Type(27l, TypeGroup.MODE_REGLEMENT, "VRG", "Virement bancaire", PersStatus.ACTIVE, null, null);
             Type Chèque = new Type(28l, TypeGroup.MODE_REGLEMENT, "CHE", "Chèque", PersStatus.ACTIVE, null, null);
 
+
+            Type noteCessionFac = new Type(29l, TypeGroup.DOCUMENT, "NOT_CES_FAC", "Note de cession facultative", PersStatus.ACTIVE, null, "placement");
+            Type noteCessionTraite = new Type(30l, TypeGroup.DOCUMENT, "NOT_CES_TRAI", "Note de cession en traité", PersStatus.ACTIVE, null, "placement");
+            Type noteCessionSin = new Type(31l, TypeGroup.DOCUMENT, "NOT_CES_SIN", "Note de cession sur sinistre", PersStatus.ACTIVE, null, "placement");
+
+            Type noteDebitFac = new Type(32l, TypeGroup.DOCUMENT, "NOT_DEB_FAC", "Note de débit en facultative", PersStatus.ACTIVE, null, "placement");
+            Type noteDebitTraite = new Type(33l, TypeGroup.DOCUMENT, "NOT_DEB_TRAI", "Note de débit en traité", PersStatus.ACTIVE, null, "placement");
+            Type noteDebitSin = new Type(34l, TypeGroup.DOCUMENT, "NOT_DEB_SIN", "Note de débit sur sinistre", PersStatus.ACTIVE, null, "placement");
+
+
+            Type noteCreditFac = new Type(35l, TypeGroup.DOCUMENT, "NOT_CRED_FAC", "Note de crédit en facultative", PersStatus.ACTIVE, null, "placement");
+            Type noteCreditTraite = new Type(36l, TypeGroup.DOCUMENT, "NOT_CRED_TRAI", "Note de crédit en traité", PersStatus.ACTIVE, null, "placement");
+
             typeRepo.saveAll(Arrays.asList(t1,t2,t3,t7,t8,fil,rea, paiement, reversement, facType, trai, photo,
-                    avisModCession, noteCession,Virement,Chèque, docReglement, recuReglement, chequeRegelemnt, bordereauVirement));
+                    virement,Chèque, docReglement, recuReglement, chequeRegelemnt,
+                    bordereauVirement, noteCessionFac, noteCessionTraite, noteCessionSin, noteDebitFac, noteDebitTraite,
+                    noteDebitSin, noteCreditFac, noteCreditTraite));
+
             ordreVirement = typeRepo.save(ordreVirement);
             typeParamRepo.save(new TypeParam(null, docReglement, recuReglement, PersStatus.ACTIVE));
             typeParamRepo.save(new TypeParam(null, docReglement, chequeRegelemnt, PersStatus.ACTIVE));
@@ -205,7 +224,7 @@ public class SynchronReApplication {
             Statut s22 = new Statut("SOLD", "Règlement soldé", "Règlement soldé", TypeStatut.REGLEMENT, LocalDateTime.now(), LocalDateTime.now());
             staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20, s21, s22, staMail ));
 
-            Devise dev0 = new Devise ("CFA",  "Franc CFA", "F CFA", "XOF", s7);
+            Devise dev0 = new Devise ("XOF",  "Franc CFA", "F CFA", "XOF", s7);
             Devise dev1 = new Devise ("AED",  "Dirham EMIRAT ", "Dirham EMIRAT ", null,  s7);
             Devise dev2 = new Devise ("AOA",  "Angolan kwanza", "Angolan kwanza", null,  s7);
             Devise dev3 = new Devise ("BDT",  "Taka Bangladesh", "Taka Bangladesh", null,  s7);
@@ -259,7 +278,8 @@ public class SynchronReApplication {
             Devise dev51 = new Devise ("QAR",  "Riyal du Qatar", "Riyal du Qatar", null,  s7);
             Devise dev52 = new Devise ("SZL ",  "Swaziland Lilan", "Swaziland Lilan", null,  s7);
             Devise dev53 = new Devise ("RWF",  "Franc Rwandais", "Franc Rwandais", null, s7);
-            devRepo.saveAll(Arrays.asList(dev0,dev1,dev2,dev3,dev4,dev5,dev6,dev7,dev8,dev9,dev10,dev11,dev12,dev13,dev14,dev15,dev16,dev17,dev18,dev19,dev20,dev21,dev22,dev23,dev24,dev25,dev26,dev27,dev28,dev29,dev30,dev31,dev32,dev33,dev34,dev35,dev36,dev37,dev38,dev39,dev40,dev41,dev42,dev43,dev44,dev45,dev46,dev47,dev48,dev49,dev50,dev51,dev52,dev53));
+            Devise dev54 = new Devise ("XAF",  "Franc CFA", "F CFA", "XAF", s7);
+            devRepo.saveAll(Arrays.asList(dev0,dev1,dev2,dev3,dev4,dev5,dev6,dev7,dev8,dev9,dev10,dev11,dev12,dev13,dev14,dev15,dev16,dev17,dev18,dev19,dev20,dev21,dev22,dev23,dev24,dev25,dev26,dev27,dev28,dev29,dev30,dev31,dev32,dev33,dev34,dev35,dev36,dev37,dev38,dev39,dev40,dev41,dev42,dev43,dev44,dev45,dev46,dev47,dev48,dev49,dev50,dev51,dev52,dev53,dev54));
 
             Branche b1 = new Branche(1L, "VIE", "VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
             Branche b2 = new Branche(2L, "NVI", "Non Vie", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
@@ -270,15 +290,15 @@ public class SynchronReApplication {
             Couverture c3 = new Couverture(3L, "Décès groupe", "Décès groupe", new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             couRepo.saveAll(Arrays.asList(c1, c2, c3));
 
-            Pays ci = new Pays("CIV", "+225","Côte d'Ivoire",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays bn = new Pays("BNN", "+226","Benin",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays tg = new Pays("TGO", "+224","Togo",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays sen = new Pays("SEN","+227", "Sénegal",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays GAB = new Pays("GAB","+227", "Gabon",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays gui = new Pays("GUI","+227", "Guinée",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays BFO = new Pays("BFO","+225", "Burkina Faso",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays MAL = new Pays("MAL","+225", "Mali",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-            Pays CMR = new Pays("CMR","+225", "Cameroun",  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays ci = new Pays("CIV", "+225","Côte d'Ivoire",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays bn = new Pays("BNN", "+226","Benin",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays tg = new Pays("TGO", "+224","Togo",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays sen = new Pays("SEN","+227", "Sénegal",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays GAB = new Pays("GAB","+227", "Gabon",new Devise("XAF"), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays gui = new Pays("GUI","+227", "Guinée",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays BFO = new Pays("BFO","+225", "Burkina Faso",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays MAL = new Pays("MAL","+225", "Mali",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+            Pays CMR = new Pays("CMR","+225", "Cameroun",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
             paysRepo.saveAll(Arrays.asList(ci, bn, tg, sen,GAB, gui, BFO, MAL,CMR));
 
             ParamCessionLegale franc1 = new ParamCessionLegale(null,"Cession légale au 1er franc SEN RE",new BigDecimal(0),new BigDecimal(6.5),new Pays("SEN"),new Statut("ACT"),1L,LocalDateTime.now(), LocalDateTime.now());
