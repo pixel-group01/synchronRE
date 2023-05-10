@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long> {
     @Query("select (count(c) > 0) from Cessionnaire c where upper(c.cesEmail) = upper(?1)")
     boolean alreadyExistsByEmail(String cesEmail);
@@ -36,4 +38,13 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
                                          and c.statut.staCode = 'ACT'     
 """)
     Page<CessionnaireListResp> searchCessionnaires(String key, Pageable pageable);
+
+    @Query("""
+        select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
+            r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
+            r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
+            s.staLibelle, r.cessionnaire.cesInterlocuteur)
+        from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and r.repStaCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
+""")
+    List<CessionnaireListResp> findByAffId(Long affId);
 }

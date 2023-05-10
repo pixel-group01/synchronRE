@@ -103,7 +103,7 @@ public abstract class FacultativeMapper
                 .collect(Collectors.toList());
     }
 
-    protected EtatComptableAffaire.DetailsEtatComptable getDetailsEtatComptable(Long plaId)
+    public EtatComptableAffaire.DetailsEtatComptable getDetailsEtatComptable(Long plaId)
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         Long cesId = repRepo.getCesIdByRepId(plaId);
@@ -123,7 +123,8 @@ public abstract class FacultativeMapper
         details.setMtPrimeNetteCes(comptaService.calculateMtPrimeNetteByCes(plaId));
         details.setMtCapital(repRepo.getRepCapitalByRepId(plaId));
         //TODO dejaReverse resteAReverser tauxDeReversement
-
+        details.setDejaReverse(comptaService.calculateDejaReverseByCes(plaId));
+        details.setResteAReverser(comptaService.calculateRestAReverserbyCes(plaId));
         return details;
     }
 }

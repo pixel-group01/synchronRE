@@ -1,5 +1,9 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.REG_AFF_GROUP;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.REG_SIN_GROUP;
@@ -30,6 +34,8 @@ public class ReglementController
 {
     private final IserviceReglement regService;
     private final TypeRepo typeRepo;
+    private final RepartitionRepository repRepo;
+    private final FacultativeMapper affMapper;
 
     @PostMapping(path = "/affaire/create") @Validated({REG_AFF_GROUP.class})
     public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
@@ -76,5 +82,12 @@ public class ReglementController
         Type typeDocReg = typeRepo.findByUniqueCode("DOC_REG");
         if(typeDocReg == null) return new ArrayList<>();
         return typeRepo.findSousTypeOf(typeDocReg.getTypeId());
+    }
+
+    @GetMapping(path ="/details-reversement")
+    public EtatComptableAffaire.DetailsEtatComptable getDetailCession(@RequestParam Long affId, @RequestParam Long cesId)
+    {
+        Long plaId = repRepo.getPlacementIdByAffIdAndCesId(affId, cesId).orElseThrow(()->new AppException("Placement introuvable"));
+        return affMapper.getDetailsEtatComptable(plaId);
     }
 }

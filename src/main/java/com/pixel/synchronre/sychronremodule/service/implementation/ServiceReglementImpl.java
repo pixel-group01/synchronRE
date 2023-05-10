@@ -39,7 +39,8 @@ import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SOLDE;
-import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_REGLEMENT;
+import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_PAIEMENT;
+import static java.math.BigDecimal.ZERO;
 
 @Service @AllArgsConstructor
 public class ServiceReglementImpl implements IserviceReglement {
@@ -56,27 +57,58 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final SinRepo sinRepo;
     private final IServiceCalculsComptables comptaAffaireService;
     private final IServiceCalculsComptablesSinistre comptaSinistreService;
+    private final String PAIEMENT = "paiements";
+    private final String REVERSEMENT = "reversements";
 
-    @Override @Transactional
+
+    @Override
     public ReglementDetailsResp createReglementAffaire(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
-        boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), typeReg);
+        switch (typeReg)
+        {
+            case PAIEMENT: return this.createPaiementAffaire(dto);
+            case REVERSEMENT:return this.createReversementAffaire(dto);
+            default: return null;
+        }
+    }
+    @Override @Transactional
+    public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
+    {
+        boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
-        String action = this.getTypeRegActionOnCreate(typeReg, dto.getAffId(), dto.getSinId());
+        String action = this.getTypeRegActionOnCreate(PAIEMENT, dto.getAffId(), dto.getSinId());
         paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
-        paiement.setTypeReglement(typeRepo.findByUniqueCode(typeReg));
+        paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
         paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
         logService.logg(action, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
 
         if(!hasReglement) {
-            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REGLEMENT.staCode, null));
-        }
-        if(comptaAffaireService.calculateRestARegler(dto.getAffId()).compareTo(BigDecimal.ZERO) == 0) {
-            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), SOLDE.staCode, null));
+            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_PAIEMENT.staCode, null));
         }
         if(dto.getRegDocReqs() == null) return reglementMapper.mapToReglementDetailsResp(paiement);
         return uploadRegDocs(dto, paiement, regId);
+    }
+
+    @Override @Transactional
+    public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
+    {
+        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverser(dto.getAffId());
+        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
+        Reglement reversement = reglementMapper.mapToReglement(dto);
+        String action = this.getTypeRegActionOnCreate(REVERSEMENT, dto.getAffId(), dto.getSinId());
+        reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
+        reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
+        reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
+        logService.logg(action, null, reversement, SynchronReTables.REGLEMENT);
+        reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
+        BigDecimal restARegler = comptaAffaireService.calculateRestARegler(dto.getAffId());
+
+        if(restARegler.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {
+            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), SOLDE.staCode, null));
+        }
+        if(dto.getRegDocReqs() == null) return reglementMapper.mapToReglementDetailsResp(reversement);
+        return uploadRegDocs(dto, reversement, regId);
     }
 
     public ReglementDetailsResp createReglementSinistre(String typeReg, CreateReglementReq dto) throws UnknownHostException
@@ -92,9 +124,9 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setSinistre(sinRepo.findById(dto.getSinId()).orElse(new Sinistre(dto.getSinId())));
         if(!hasReglement)
         {
-            mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_REGLEMENT.staCode, null));
+            mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_PAIEMENT.staCode, null));
         }
-        if(comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(BigDecimal.ZERO) == 0) {
+        if(comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(ZERO) == 0) {
             mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), SOLDE.staCode, null));
         }
         return uploadRegDocs(dto, paiement, regId);

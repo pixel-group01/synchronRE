@@ -91,6 +91,8 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
     Optional<Repartition> getPlacementByAffIdAndCesId(Long affId, Long cesId);
+    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
+    Optional<Long> getPlacementIdByAffIdAndCesId(Long affId, Long cesId);
 
     @Query("select r from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     Optional<Repartition> findPlacementById(Long plaId);
@@ -149,4 +151,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut =true")
     Repartition findValidByAffIdAndPclId(Long affId, Long pclId);
+
+
+
 }

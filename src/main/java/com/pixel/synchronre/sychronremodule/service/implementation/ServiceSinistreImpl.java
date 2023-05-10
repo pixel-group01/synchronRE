@@ -5,7 +5,6 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
@@ -94,11 +93,11 @@ public class ServiceSinistreImpl implements IServiceSinistre
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
-            sinistre.setStatut(new Statut(EN_ATTENTE_DE_REGLEMENT.staCode));
+            sinistre.setStatut(new Statut(EN_ATTENTE_DE_PAIEMENT.staCode));
         });
 
 
-        mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_REGLEMENT.staCode, null));
+        mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
     logService.saveLog(SinistreActions.TRANSMETTRE_NOTE_CESSION_SINISTRE_ET_NOTE_DEBIT);
     }
 

@@ -6,6 +6,8 @@ import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import jakarta.servlet.http.HttpServletResponse;
@@ -115,8 +117,4 @@ public class ReportController
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params);
         jrService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
     }
-
-
-
-
 }

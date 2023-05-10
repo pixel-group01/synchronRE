@@ -33,7 +33,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
 
-   @Bean @Order(1)
+   //@Bean @Order(1)
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo, TypeParamRepo typeParamRepo,
                                    FacultativeRepository facRepo, CessionnaireRepository cesRepo, AffaireRepository affRepo,DeviseRepository devRepo,
@@ -200,9 +200,10 @@ public class SynchronReApplication {
 
 
             Statut s19 = new Statut("SAI-CRT", "Saisie courtier", "Affaire saisie par le courtier", TypeStatut.AFFAIRE, LocalDateTime.now(), LocalDateTime.now());
-            Statut s20 = new Statut("CREG", "En cours de règlement", "Placement en cours de règlement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
-            Statut s21 = new Statut("SOLD", "Règlement soldé", "Règlement soldé", TypeStatut.REGLEMENT, LocalDateTime.now(), LocalDateTime.now());
-            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20, s1, staMail ));
+            Statut s20 = new Statut("APAI", "En attente de paiement", "Placement en attente de paiement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut s21 = new Statut("CPAI", "En cours de paiement", "Placement en cours de paiement", TypeStatut.PLACEMENT, LocalDateTime.now(), LocalDateTime.now());
+            Statut s22 = new Statut("SOLD", "Règlement soldé", "Règlement soldé", TypeStatut.REGLEMENT, LocalDateTime.now(), LocalDateTime.now());
+            staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11, s12,S13,S14, s15,S16,S17, s18, s19, s20, s21, s22, staMail ));
 
             Devise dev0 = new Devise ("CFA",  "Franc CFA", "F CFA", "XOF", s7);
             Devise dev1 = new Devise ("AED",  "Dirham EMIRAT ", "Dirham EMIRAT ", null,  s7);

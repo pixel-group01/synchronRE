@@ -60,7 +60,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 
     @Override
     public BigDecimal calculateDejaRegle(Long affId) {
-        BigDecimal dejaRegle = affId == null || !affRepo.existsById(affId) ? ZERO : regRepo.getMontantRegleByAffId(affId, "paiements");
+        BigDecimal dejaRegle = affId == null || !affRepo.existsById(affId) ? ZERO : regRepo.calculateMontantRegleByAffId(affId, "paiements");
         dejaRegle = dejaRegle == null ? ZERO : dejaRegle;
         return dejaRegle;
     }
@@ -78,7 +78,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateDejaReverse(Long affId)
     {
-        BigDecimal dejaReverse = affId == null || !affRepo.existsById(affId) ? ZERO : regRepo.getMontantRegleByAffId(affId, "reversements");
+        BigDecimal dejaReverse = affId == null || !affRepo.existsById(affId) ? ZERO : regRepo.calculateMontantRegleByAffId(affId, "reversements");
         dejaReverse = dejaReverse == null ? ZERO : dejaReverse;
         return dejaReverse;
     }
@@ -181,5 +181,26 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal mtTotalAReverseAuxCes = this.calculateMtTotalAReverseAuxCes(affId);
         if(mtTotalAReverseAuxCes.compareTo(ZERO) == 0) return CENT;
         return CENT.multiply(this.calculateDejaReverse(affId).divide(mtTotalAReverseAuxCes, 2, RoundingMode.HALF_UP));
+    }
+
+
+    @Override
+    public BigDecimal calculateDejaReverseByCes(Long plaId)
+    {
+        BigDecimal mtDejaReverseByCes = regRepo.calculateMtDejaReverseByCes(plaId);
+        return mtDejaReverseByCes == null ? ZERO : mtDejaReverseByCes;
+    }
+
+    @Override
+    public BigDecimal calculateRestAReverserbyCes(Long plaId) {
+        return this.calculateMtPrimeNetteByCes(plaId).subtract(this.calculateDejaReverse(plaId));
+    }
+
+    @Override
+    public BigDecimal calculateTauxDeReversementByCes(Long plaId)
+    {
+        BigDecimal primeNette = this.calculateMtPrimeNetteByCes(plaId);
+        if(primeNette == null || primeNette.compareTo(ZERO) == 0) return CENT;
+        return this.calculateDejaReverse(plaId).divide(primeNette, 2, RoundingMode.HALF_UP).multiply(CENT);
     }
 }
