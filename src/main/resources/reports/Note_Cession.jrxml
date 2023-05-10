@@ -640,7 +640,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true" >
 				<reportElement x="204" y="172" width="347" height="19" forecolor="#FA2F28" uuid="963a7416-5c54-477c-b7de-a847bcf76421">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -648,7 +648,8 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{fac_prime})]]></textFieldExpression>
+
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0", java.text.DecimalFormatSymbols.getInstance(java.util.Locale.getDefault())).format($F{fac_prime})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="206" y="226" width="348" height="17" uuid="49668e4b-0ee9-4f9c-a65d-deb7187af95c">
@@ -1148,7 +1149,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="431" y="567" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+				<reportElement x="7" y="568" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>

@@ -540,7 +540,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{fac_smp_lci})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[ $F{sin_montant100}== null ? 0.0 : new java.text.DecimalFormat(" #,##0",new java.text.DecimalFormatSymbols(java.util.Locale.FRENCH)).format($F{fac_smp_lci})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="205" y="207" width="347" height="16" uuid="2072ad40-25b6-40c1-82c4-76d517474bff">
