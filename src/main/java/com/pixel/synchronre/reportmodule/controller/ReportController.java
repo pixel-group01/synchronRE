@@ -55,12 +55,21 @@ public class ReportController
     @GetMapping("/note-de-debit/{affId}")
     public void generateNoteDebit(HttpServletResponse response, @PathVariable Long affId) throws Exception
     {
-        Affaire affaire = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Repartition repart = repRepo.repartFindByAffaire(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affaire.getAffId());
-        params.put("aff_assure", affaire.getAffAssure());
-        params.put("fac_numero_police", affaire.getFacNumeroPolice());
+        params.put("aff_id", repart.getAffaire().getAffId());
+        params.put("aff_assure", repart.getAffaire().getAffAssure());
+        params.put("fac_numero_police", repart.getAffaire().getFacNumeroPolice());
         params.put("param_image", jrConfig.imagesLocation);
+
+        //Affichage du cachet en fonction d'une expression dans l'etat
+        if (repart.getRepStaCode().getStaCode().equals("VAL") || repart.getRepStaCode().getStaCode().equals("MAIL")){
+            params.put("param_visible", "true");
+        }else{
+            params.put("param_visible", "false");
+        }
+
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebit, params);
         jrService.displayPdf(response, reportBytes, "Note-de-debit");
     }
