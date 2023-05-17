@@ -84,7 +84,7 @@ public class ReglementController
         return typeRepo.findSousTypeOf(typeDocReg.getTypeId());
     }
 
-    @GetMapping(path ="/details-reversement")
+    @GetMapping(path ="/details")
     public EtatComptableAffaire.DetailsEtatComptable getDetailCession(@RequestParam Long affId, @RequestParam Long cesId)
     {
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(affId, cesId).orElseThrow(()->new AppException("Placement introuvable"));
