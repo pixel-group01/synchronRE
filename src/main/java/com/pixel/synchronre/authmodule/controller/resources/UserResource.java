@@ -38,42 +38,42 @@ public class UserResource
         return userService.createUser(dto);
     }
 
-    @PostMapping(path = "/activate-account")
+    @PutMapping(path = "/activate-account")
     public ReadUserDTO activateUserAccount(@RequestBody @Valid ActivateAccountDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.activateAccount(dto);
     }
 
-    @PostMapping(path = "/update")
+    @PutMapping(path = "/update")
     public ReadUserDTO updateUser(@RequestBody @Valid UpdateUserDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.updateUser(dto);
     }
 
-    @PostMapping(path = "/change-password")
+    @PutMapping(path = "/change-password")
     public ReadUserDTO changePassword(@RequestBody @Valid ChangePasswordDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.changePassword(dto);
     }
 
-    @PostMapping(path = "/block/{userId}")
+    @PutMapping(path = "/block/{userId}")
     public void blockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
         userService.blockAccount(userId);
     }
 
-    @PostMapping(path = "/unblock/{userId}")
+    @PutMapping(path = "/unblock/{userId}")
     public void unblockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
         userService.unBlockAccount(userId);
     }
 
-    @PostMapping(path = "/open/reinit-password")
+    @PutMapping(path = "/open/reinit-password")
     public void reinitPassword(@RequestBody @Valid ReinitialisePasswordDTO dto ) throws UnknownHostException, IllegalAccessException {
         userService.reinitialisePassword(dto);
     }
 
-    @PostMapping(path = "/send-reinit-password-email/{email}")
+    @PutMapping(path = "/send-reinit-password-email/{email}")
     public void sendReinitPasswordEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendReinitialisePasswordEmail(email);
     }
 
-    @PostMapping(path = "/send-acitivation-email/{email}")
+    @PutMapping(path = "/send-acitivation-email/{email}")
     public void sendActivationEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendAccountActivationEmail(email);
     }
