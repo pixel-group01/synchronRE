@@ -1,6 +1,6 @@
 package com.pixel.synchronre.authmodule.controller.resources;
 
-import com.pixel.synchronre.authmodule.model.dtos.LoginDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.logmodule.model.dtos.response.JwtInfos;
 import jakarta.validation.Valid;
@@ -19,7 +19,7 @@ public class UserResource
     private final IJwtService jwtService;
 
     @PostMapping(path = "/open/login")
-    public AuthResponseDTO login(@RequestBody LoginDTO dto) throws UnknownHostException {
+    public AuthResponseDTO login(@RequestBody @Valid LoginDTO dto) throws UnknownHostException {
         return userService.login(dto);
     }
 
@@ -38,7 +38,7 @@ public class UserResource
         return userService.createUser(dto);
     }
 
-    @PutMapping(path = "/activate-account")
+    @PutMapping(path = "/open/activate-account")
     public ReadUserDTO activateUserAccount(@RequestBody @Valid ActivateAccountDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.activateAccount(dto);
     }

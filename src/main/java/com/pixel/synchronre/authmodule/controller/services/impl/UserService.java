@@ -1,9 +1,8 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
-import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
-import com.pixel.synchronre.authmodule.model.dtos.LoginDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.entities.AccountToken;
 import com.pixel.synchronre.authmodule.model.enums.UserStatus;
@@ -27,9 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,11 +56,9 @@ public class UserService implements IUserService
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService uds;
     private final ObjectCopier<AppUser> userCopier;
-    private final FunctionRepo fncRepo;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
-        if(!fncRepo.userHasAnyAppFunction(dto.getUsername())) throw new InsufficientAuthenticationException("Vous ne disposez d'aucune fonction. Veuillez contacter un administrateur SVP");
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         UserDetails userDetails = uds.loadUserByUsername(dto.getUsername());
         Log log = logger.logLoginOrLogout(dto.getUsername(), AuthActions.LOGIN);
@@ -109,7 +104,8 @@ public class UserService implements IUserService
         user.setEmail(dto.getEmail());
         user.setLastModificationDate(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        logger.logg(AuthActions.ACTIVATE_USER_ACCOUNT, oldUser, user, AuthTables.USER_TABLE);
+        user.setChangePasswordDate(LocalDateTime.now());
+        logger.loggOffConnection(AuthActions.ACTIVATE_USER_ACCOUNT, dto.getEmail(),oldUser, user, AuthTables.USER_TABLE);
         AccountToken token = tokenRepo.findByToken(dto.getActivationToken()).orElseThrow(()->new AppException(SecurityErrorMsg.INVALID_ACTIVATION_TOKEN_ERROR_MSG));
         token.setUsageDate(LocalDateTime.now());
         token.setAlreadyUsed(true);
@@ -133,6 +129,7 @@ public class UserService implements IUserService
         AppUser oldUser = userCopier.copy(user);
         if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) throw new AppException("L'ancien mot de passe est incorrect");
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        user.setChangePasswordDate(LocalDateTime.now());
         logger.logg(AuthActions.CHANGE_PASSWORD, oldUser, user, AuthTables.USER_TABLE);
         return userMapper.mapToReadUserDTO(user);
     }
@@ -142,6 +139,7 @@ public class UserService implements IUserService
         AppUser user = userRepo.findByEmail(dto.getEmail()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user);
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        user.setChangePasswordDate(LocalDateTime.now());
         logger.loggOffConnection(AuthActions.REINIT_PASSWORD, dto.getEmail(),oldUser, user, AuthTables.USER_TABLE);
         AccountToken token = tokenRepo.findByToken(dto.getPasswordReinitialisationToken()).orElseThrow(()->new AppException(SecurityErrorMsg.INVALID_ACTIVATION_TOKEN_ERROR_MSG));
 
@@ -220,14 +218,14 @@ public class UserService implements IUserService
 
         Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(loadedUser.getEmail(), loadedUser.getEmail().split("@")[0], emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken());
+        emailSenderService.sendAccountActivationEmail(loadedUser.getEmail(), loadedUser.getEmail().split("@")[0], emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken() + "&userId=" + userId);
         emailNotification.setSent(true);
         accountToken.setEmailSent(true);
         emailRepo.save(emailNotification);
         logger.logg(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
     }
 
-    @Override
+    @Override @Transactional
     public void sendReinitialisePasswordEmail(String email) throws IllegalAccessException, UnknownHostException {
         String username = email.split("@")[0];
         AppUser loadedUser = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(SecurityErrorMsg.USERNAME_NOT_FOUND_ERROR_MSG));
@@ -236,8 +234,9 @@ public class UserService implements IUserService
         logger.logg(AuthActions.CREATE_ACCOUT_TOKEN, null, accountToken, AuthTables.ACCOUNT_TOKEN);
 
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), userRepo.getUserIdByEmail(jwtService.extractUsername()));
-        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink());
+        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink() + "?token=" + accountToken.getToken() + "&userId=" + loadedUser.getUserId());
         emailNotification.setSent(true);
+        accountToken.setEmailSent(true);
         emailRepo.save(emailNotification);
         logger.logg(AuthActions.SEND_REINIT_PASSWORD_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
     }

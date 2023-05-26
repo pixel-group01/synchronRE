@@ -114,47 +114,47 @@ public class SynchronReApplication {
 
             AppUser useradmin = new AppUser(1l, "admin", "admin", null, 4l,
                     pe.encode("1234"), "admin@gmail.com", "1234",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userci = new AppUser(2l, "userci", "userci", 1l, 4l,
                     pe.encode("1234"), "userci@gmail.com", "userci-tel",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userbn = new AppUser(3l, "userbn", "userbn", 2l, 4l,
                     pe.encode("1234"), "userbn@gmail.com", "userbn-tel",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser usertg = new AppUser(4l, "usertg", "usertg", 3l, 4l,
                     pe.encode("1234"), "usertg@gmail.com", "usertg-tel",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userSaisienre = new AppUser(5l, "Koffi", "Alain", null, 4l,
                     pe.encode("1234"), "agentsaisienre@gmail.com", "123456789",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userValidateur = new AppUser(6l, "Seka", "Jean-Georesse", null, 4l,
                     pe.encode("1234"), "agentvalidateur@gmail.com", "123456780",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userObservateur = new AppUser(7l, "Ouattara", "Ali", null, 4l,
                     pe.encode("1234"), "agentobservateur@gmail.com", "123456781",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userComptable = new AppUser(8l, "Asseke", "Elisé", null, 4l,
                     pe.encode("1234"), "comptable@gmail.com", "123456782",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             AppUser userSouscripteur = new AppUser(9l, "Gossé", "Gossé Maxim", null, 4l,
                     pe.encode("1234"), "souscripteur@gmail.com", "123456783",
-                    true, true, null, LocalDateTime.now(),
+                    true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                     LocalDateTime.now());
 
             userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur));

@@ -30,6 +30,7 @@ public class AppUser
     private boolean active;
     private boolean notBlocked;
     private Long currentFunctionId;
+    private LocalDateTime changePasswordDate;
     @CreationTimestamp
     private LocalDateTime creationDate;
     @UpdateTimestamp

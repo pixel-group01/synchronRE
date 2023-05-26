@@ -43,9 +43,9 @@ public class LogService implements ILogService
     }
 
     @Override @Transactional
-    public Log loggOffConnection(String action, String email, Object oldObject, Object newObject, String tableName) throws UnknownHostException
+    public Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName) throws UnknownHostException
     {
-        Log log = this.saveLogOffConnection(action, email);
+        Log log = this.saveLogOffConnection(action, actorEmail);
         List<LogDetails> logDetails = this.saveLogDetails(oldObject, newObject, log, tableName, true);
         log.setLogDetails(logDetails);
         return log;
@@ -69,14 +69,14 @@ public class LogService implements ILogService
     }
 
     @Override @Transactional
-    public Log saveLogOffConnection(String action, String email) throws UnknownHostException
+    public Log saveLogOffConnection(String action, String actorEmail) throws UnknownHostException
     {
         InetAddress Ip=InetAddress.getLocalHost();
-        Long userId = userRepo.getUserIdByEmail(email);
+        Long userId = userRepo.getUserIdByEmail(actorEmail);
         Set<Long> fncIds = functionRepo.getCurrentFncIds(userId);
 
         Log log = new Log();
-        log.setUserEmail(email);
+        log.setUserEmail(actorEmail);
         log.setUserId(userId);
         log.setConnectionId(null);
         log.setAction(action);

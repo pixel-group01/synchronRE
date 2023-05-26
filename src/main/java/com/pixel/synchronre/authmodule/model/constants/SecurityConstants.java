@@ -18,6 +18,7 @@ public class SecurityConstants
     public static final String CONFIRMATION_LINK = "/users/account-confirmation?confirmationToken=";
     public static final String ACTIVATION_LINK = "/users/account-activation?activationToken=";
     public static final String REINITIALISE_PASSWORD_LINK = "/password-reinitialisation?pwdReinitToken=";
+    public static final long PASSWORD_DURATION = 60; //60 jours
 
     public static String ACCOUNT_ACTIVATION_REQUEST_OBJECT = "Activation de votre compte";
     public static String PASSWORD_REINITIALISATION_REQUEST_OBJECT = "Réinitialisation de votre mot de passe";

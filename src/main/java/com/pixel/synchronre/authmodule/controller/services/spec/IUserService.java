@@ -1,9 +1,8 @@
 package com.pixel.synchronre.authmodule.controller.services.spec;
 
-import com.pixel.synchronre.authmodule.model.dtos.LoginDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.enums.UserStatus;
-import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 
 import java.net.UnknownHostException;
 
