@@ -3,6 +3,7 @@ package com.pixel.synchronre.authmodule.controller.services.impl;
 import com.pixel.synchronre.authmodule.controller.services.spec.*;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateInitialFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.entities.AccountToken;
@@ -286,12 +287,15 @@ public class UserService implements IUserService
     public ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
         CreateUserDTO userDto = dto.getCreateUserDTO();
         ReadUserDTO  user = this.createUser(userDto);
-        CreateFncDTO fncDTO = dto.getCreateFncDTO();
-        fncDTO.setVisibilityId(userDto.getVisibilityId());
-        fncDTO.setCesId(userDto.getCesId());
-        fncDTO.setFncStatus(1);
-        fncDTO.setUserId(user.getUserId());
-        functionService.createFnc(fncDTO);
+        CreateFncDTO createFncDTO = new CreateFncDTO();
+        CreateInitialFncDTO createInitialFncDTO = dto.getCreateInitialFncDTO();
+        BeanUtils.copyProperties(createInitialFncDTO, createFncDTO);
+
+        createFncDTO.setVisibilityId(userDto.getVisibilityId());
+        createFncDTO.setCesId(userDto.getCesId());
+        createFncDTO.setFncStatus(1);
+        createFncDTO.setUserId(user.getUserId());
+        functionService.createFnc(createFncDTO);
         return user;
     }
 }
