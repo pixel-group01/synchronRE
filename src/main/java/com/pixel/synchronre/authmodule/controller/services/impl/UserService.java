@@ -284,11 +284,14 @@ public class UserService implements IUserService
 
     @Override
     public ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
-        ReadUserDTO  user = this.createUser(dto.getCreateUserDTO());
-        CreateFncDTO createFncDTO = dto.getCreateFncDTO();
-        createFncDTO.setFncStatus(1);
-        createFncDTO.setUserId(user.getUserId());
-        functionService.createFnc(createFncDTO);
+        CreateUserDTO userDto = dto.getCreateUserDTO();
+        ReadUserDTO  user = this.createUser(userDto);
+        CreateFncDTO fncDTO = dto.getCreateFncDTO();
+        fncDTO.setVisibilityId(userDto.getVisibilityId());
+        fncDTO.setCesId(userDto.getCesId());
+        fncDTO.setFncStatus(1);
+        fncDTO.setUserId(user.getUserId());
+        functionService.createFnc(fncDTO);
         return user;
     }
 }
