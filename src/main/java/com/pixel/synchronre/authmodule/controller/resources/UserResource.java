@@ -41,7 +41,7 @@ public class UserResource
         return userService.createUser(dto);
     }
 
-    @PostMapping(path = "/create-user-function")
+    @PostMapping(path = "/create-user-and-function")
     public ReadUserDTO createUserAndFunction(@RequestBody @Valid CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.createUserAndFunction(dto);
     }
