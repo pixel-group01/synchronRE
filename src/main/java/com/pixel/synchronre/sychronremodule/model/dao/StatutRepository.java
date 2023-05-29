@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface StatutRepository extends JpaRepository<Statut, String>
 {
     @Query("select s from Statut s where s.staCode = ?1")
@@ -32,4 +34,7 @@ public interface StatutRepository extends JpaRepository<Statut, String>
 
     @Query("select (count(s)>0) from Statut s where s.staLibelle = ?1 and s.staType = ?2 and s.staCode <>?3")
     boolean alreadyExistsByLibelleAndType(String libelle, TypeStatut type, String staCode);
+
+    @Query("select s.staCode from Statut s where s.staType = ?1")
+    List<String> getStaCodesByTypeStatut(TypeStatut typeStatut);
 }

@@ -3,8 +3,11 @@ package com.pixel.synchronre.authmodule.controller.services.spec;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.enums.UserStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IUserService
 {
@@ -37,7 +40,9 @@ public interface IUserService
 
     UserStatus getUserStatus(Long userId);
 
+    Page<ListUserDTO> searchUsers(String key, List<String> userStaCode, Pageable pageable);
 
+    ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException;
 
 
 

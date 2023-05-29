@@ -5,5 +5,6 @@ public enum TypeStatut
     PERSISTANCE,
     AFFAIRE,
     REGLEMENT,
-    PLACEMENT;
+    PLACEMENT,
+    USER;
 }

@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.model.entities;
 
+import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,25 @@ public class AppUser
     private LocalDateTime creationDate;
     @UpdateTimestamp
     private LocalDateTime lastModificationDate;
+    @ManyToOne
+    private Statut statut;
+
+    public AppUser(Long userId, String firstName, String lastName, Long visibilityId, Long cesId, String password, String email, String tel, boolean active, boolean notBlocked, Long currentFunctionId, LocalDateTime changePasswordDate, LocalDateTime creationDate, LocalDateTime lastModificationDate) {
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.visibilityId = visibilityId;
+        this.cesId = cesId;
+        this.password = password;
+        this.email = email;
+        this.tel = tel;
+        this.active = active;
+        this.notBlocked = notBlocked;
+        this.currentFunctionId = currentFunctionId;
+        this.changePasswordDate = changePasswordDate;
+        this.creationDate = creationDate;
+        this.lastModificationDate = lastModificationDate;
+    }
 
     public AppUser(Long userId) {
         this.userId = userId;

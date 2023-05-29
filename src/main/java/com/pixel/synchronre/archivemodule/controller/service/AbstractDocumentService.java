@@ -10,38 +10,30 @@ import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
 @Component @RequiredArgsConstructor
-public class DocumentServiceImpl implements IServiceDocument
+public abstract class AbstractDocumentService implements IServiceDocument
 {
-	private final TypeRepo typeRepo;
-	private final DocMapper docMapper;
-	private final DocumentRepository docRepo;
-	@Override
-	public void uploadFile(MultipartFile file, String destinationPath) throws RuntimeException
-	{
-		try
-		{
-			Files.write(Paths.get(destinationPath), file.getBytes());
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
+	protected final TypeRepo typeRepo;
+	protected final DocMapper docMapper;
+	protected final DocumentRepository docRepo;
 
 	@Override
 	public byte[] downloadFile(String filePAth)
@@ -57,6 +49,17 @@ public class DocumentServiceImpl implements IServiceDocument
 			throw new AppException("Erreur de téléchargement");
 		}
 	}
+
+	@Override
+	public boolean deleteFile(String filePath)
+	{
+		File file = new File(filePath);
+		return file == null ? false : file.delete();
+	}
+
+	protected abstract Document mapToDocument(UploadDocReq dto);
+
+
 	@Override
 	public String generatePath(MultipartFile file, String objectFolder, String typeCode, String objectName)
 	{
@@ -67,6 +70,9 @@ public class DocumentServiceImpl implements IServiceDocument
 				StringUtils.stripAccents(objectName).replace(" ", "_") + uuid + "." + FilenameUtils.getExtension(file.getOriginalFilename());
 	}
 
+	private void saveDocument(Document doc) {
+		docRepo.save(doc);
+	}
 
 	@Override
 	public void renameFile(String oldPath, String newPath)
@@ -82,28 +88,44 @@ public class DocumentServiceImpl implements IServiceDocument
 	}
 
 	@Override
-	public void uploadReglementDoc(UploadDocReq dto)
+	public void uploadFile(MultipartFile file, String destinationPath) throws RuntimeException
 	{
-		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode());
-		Document regDoc = docMapper.mapToReglementDoc(dto);
-		String path = this.generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), regDoc.getDocDescription());
-		regDoc.setDocPath(path);
-		docRepo.save(regDoc);
-		this.uploadFile(dto.getFile(), path);
+		try
+		{
+			Files.write(Paths.get(destinationPath), file.getBytes());
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
+
+	public void uploadDocument(UploadDocReq dto) {
+		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode());
+		Document doc = mapToDocument(dto);
+		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+		doc.setDocPath(path);
+		saveDocument(doc);
+		uploadFile(dto.getFile(), doc.getDocPath());
+	}
+
 
 	@Override
-	public void uploadPhoto(UploadDocReq dto)
+	public void displayPdf(HttpServletResponse response, byte[] fileBytes, String displayName)  throws Exception
 	{
-		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode());
-		Document photo = docMapper.mapToPhotoDoc(dto);
-		String path = this.generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), photo.getDocDescription());
-		photo.setDocPath(path);
-		docRepo.save(photo);
-		this.uploadFile(dto.getFile(), path);
+		// Configurez l'en-tête de la réponse HTTP
+		response.setContentType("application/pdf");
+		response.setHeader("Content-disposition", "inline; filename=" + displayName +".pdf");
+		response.setContentLength(fileBytes.length);
+
+		// Écrivez le rapport Jasper dans le flux de sortie de la réponse HTTP
+		OutputStream outStream = response.getOutputStream();
+		outStream.write(fileBytes);
+		outStream.flush();
+		outStream.close();
 	}
 
-	@Bean @Order(2)
+	@Bean
+	@DependsOn("commandLineRunner")
 	CommandLineRunner createSystemDirectories(TypeRepo typeRepo)
 	{
 		return(args)->
@@ -122,13 +144,3 @@ public class DocumentServiceImpl implements IServiceDocument
 		};
 	}
 }
-
-
-
-
-
-
-
-
-
-

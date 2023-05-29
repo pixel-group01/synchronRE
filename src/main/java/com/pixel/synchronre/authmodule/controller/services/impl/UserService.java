@@ -1,7 +1,8 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
-import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
+import com.pixel.synchronre.authmodule.controller.services.spec.*;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
+import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.entities.AccountToken;
@@ -9,8 +10,6 @@ import com.pixel.synchronre.authmodule.model.enums.UserStatus;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.authmodule.controller.repositories.AccountTokenRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IAccountTokenService;
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.authmodule.model.constants.SecurityErrorMsg;
@@ -20,11 +19,15 @@ import com.pixel.synchronre.notificationmodule.controller.dao.EmailNotificationR
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailServiceConfig;
 import com.pixel.synchronre.notificationmodule.model.entities.EmailNotification;
+import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,6 +60,8 @@ public class UserService implements IUserService
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService uds;
     private final ObjectCopier<AppUser> userCopier;
+    private final StatutRepository staRepo;
+    private final IFunctionService functionService;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
@@ -265,5 +271,24 @@ public class UserService implements IUserService
         if(!user.isActive() && user.isNotBlocked() && tokenRepo.hasValidActivationToken(userId)) return UserStatus.STANDING_FOR_ACCOUNT_ACTIVATION;
         if(!user.isActive() && user.isNotBlocked()  && tokenRepo.lastActivationTokenHasExpired(userId)) return UserStatus.STANDING_FOR_ACCOUNT_ACTIVATION_LINK;
         return  UserStatus.UN_KNOWN;
+    }
+
+    @Override
+    public Page<ListUserDTO> searchUsers(String key, List<String> userStaCodes, Pageable pageable)
+    {
+        Long cedId = jwtService.getConnectedUserCedId();
+        Long cesId = jwtService.getConnectedUserCesId();
+        userStaCodes = userStaCodes == null || userStaCodes.isEmpty() ? staRepo.getStaCodesByTypeStatut(TypeStatut.USER) : userStaCodes;
+        return userRepo.searchUsers(key, cedId, cesId, userStaCodes, pageable);
+    }
+
+    @Override
+    public ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
+        ReadUserDTO  user = this.createUser(dto.getCreateUserDTO());
+        CreateFncDTO createFncDTO = dto.getCreateFncDTO();
+        createFncDTO.setFncStatus(1);
+        createFncDTO.setUserId(user.getUserId());
+        functionService.createFnc(createFncDTO);
+        return user;
     }
 }

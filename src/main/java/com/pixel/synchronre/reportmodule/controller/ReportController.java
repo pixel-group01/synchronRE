@@ -1,13 +1,11 @@
 package com.pixel.synchronre.reportmodule.controller;
 
+import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
-import com.google.zxing.EncodeHintType;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +25,7 @@ public class ReportController
     private final JasperReportConfig jrConfig;
     private final RepartitionRepository repRepo;
     private final AffaireRepository affRepo;
+    private final AbstractDocumentService docService;
 
     @GetMapping("/note-cession/{plaId}")
     public void generateNoteCession(HttpServletResponse response, @PathVariable Long plaId) throws Exception
@@ -49,7 +47,7 @@ public class ReportController
         }
             //fin de la manip
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCession, params);
-        jrService.displayPdf(response, reportBytes, "Note-de-cession");
+        docService.displayPdf(response, reportBytes, "Note-de-cession");
     }
 
     @GetMapping("/note-de-debit/{affId}")
@@ -71,7 +69,7 @@ public class ReportController
         }
 
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebit, params);
-        jrService.displayPdf(response, reportBytes, "Note-de-debit");
+        docService.displayPdf(response, reportBytes, "Note-de-debit");
     }
 
     @GetMapping("/note-de-credit/{affId}/{cesId}")
@@ -87,7 +85,7 @@ public class ReportController
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCredit, params);
-        jrService.displayPdf(response, reportBytes, "Note-de-credit");
+        docService.displayPdf(response, reportBytes, "Note-de-credit");
     }
 
 
@@ -110,7 +108,7 @@ public class ReportController
             params.put("param_visible", "false");
         }
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCessionSinistre, params);
-        jrService.displayPdf(response, reportBytes, "Note-cession-sinistre");
+        docService.displayPdf(response, reportBytes, "Note-cession-sinistre");
     }
 
 
@@ -124,6 +122,6 @@ public class ReportController
         params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params);
-        jrService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
+        docService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
     }
 }

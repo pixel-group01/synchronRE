@@ -27,4 +27,8 @@ public abstract class DocMapper
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
     @Mapping(target = "placement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Repartition(dto.getObjecId()))")
     public abstract Document mapToPlacementDoc(UploadDocReq dto);
+
+    @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
+    @Mapping(target = "affaire", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getObjecId()))")
+    public abstract Document mapToAffaireDoc(UploadDocReq dto);
 }

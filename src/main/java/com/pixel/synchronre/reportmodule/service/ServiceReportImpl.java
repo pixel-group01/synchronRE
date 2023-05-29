@@ -60,20 +60,5 @@ public class ServiceReportImpl implements IServiceReport
 
         return reportBytes;
     }
-
-    @Override
-    public void displayPdf(HttpServletResponse response, byte[] reportBytes, String displayName)  throws Exception
-    {
-        // Configurez l'en-tête de la réponse HTTP
-        response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "inline; filename=" + displayName +".pdf");
-        response.setContentLength(reportBytes.length);
-
-        // Écrivez le rapport Jasper dans le flux de sortie de la réponse HTTP
-        OutputStream outStream = response.getOutputStream();
-        outStream.write(reportBytes);
-        outStream.flush();
-        outStream.close();
-    }
 }
 //JasperReport jasperReport = JasperCompileManager.compileReport(reportPath);

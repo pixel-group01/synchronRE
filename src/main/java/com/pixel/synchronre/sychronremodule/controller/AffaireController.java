@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.archivemodule.controller.service.AffaireDocUploader;
+import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
@@ -21,11 +23,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
@@ -43,6 +48,7 @@ public class AffaireController
     private final IserviceAffaire affService;
     private final IserviceExercie exoService;
     private final IServiceCalculsComptables comptaAffaireService;
+    private final AffaireDocUploader docService;
 
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
@@ -317,7 +323,16 @@ public class AffaireController
     }
 
 
-
-
+    @PostMapping(path = "/affaires/upload-doc/{docType}/{affId}")
+    public void uploadDoc(@RequestParam(name = "file") MultipartFile file, @PathVariable String docType, @PathVariable Long affId) throws IOException
+    {
+        UploadDocReq dto = new UploadDocReq();
+        dto.setDocNum(UUID.randomUUID().toString());
+        dto.setDocUniqueCode(docType);
+        dto.setFile(file);
+        dto.setObjecId(affId);
+        dto.setDocDescription(docType);
+        docService.uploadDocument(dto);
+    }
 }
 

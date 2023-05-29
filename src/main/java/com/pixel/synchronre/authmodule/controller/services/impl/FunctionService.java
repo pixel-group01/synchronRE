@@ -52,6 +52,12 @@ public class FunctionService implements IFunctionService
         return ids == null ? null : ids.size() != 1 ? null : new ArrayList<>(ids).get(0);
     }
 
+    @Override
+    public String getActiveCurrentFunctionName(Long userId) {
+        Set<String> fncNames = functionRepo.getCurrentFncNames(userId);
+        return fncNames == null ? null : fncNames.size() != 1 ? null : new ArrayList<>(fncNames).get(0);
+    }
+
     @Override @Transactional(isolation = Isolation.READ_UNCOMMITTED)
     public ReadFncDTO createFnc(CreateFncDTO dto) throws UnknownHostException
     {

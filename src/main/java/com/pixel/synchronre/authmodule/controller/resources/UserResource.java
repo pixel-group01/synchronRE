@@ -7,9 +7,12 @@ import jakarta.validation.Valid;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @RestController @RequestMapping("/users")
@@ -36,6 +39,18 @@ public class UserResource
     @PostMapping(path = "/create")
     public ReadUserDTO createUser(@RequestBody @Valid CreateUserDTO dto) throws UnknownHostException, IllegalAccessException {
         return userService.createUser(dto);
+    }
+
+    @PostMapping(path = "/create-user-function")
+    public ReadUserDTO createUserAndFunction(@RequestBody @Valid CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
+        return userService.createUserAndFunction(dto);
+    }
+
+    @GetMapping(path = "/list")
+    public Page<ListUserDTO> searchUser(@RequestParam(defaultValue = "") String key,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size) throws UnknownHostException, IllegalAccessException {
+        return userService.searchUsers(key, new ArrayList<>(), PageRequest.of(page, size));
     }
 
     @PutMapping(path = "/open/activate-account")

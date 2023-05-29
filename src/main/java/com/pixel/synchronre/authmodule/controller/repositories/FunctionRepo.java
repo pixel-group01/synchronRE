@@ -20,6 +20,9 @@ public interface FunctionRepo extends JpaRepository<AppFunction, Long>
     @Query("select f.id from AppFunction f where f.user.userId= ?1 and f.fncStatus = 1 and coalesce(f.startsAt, current_date ) <= current_date and coalesce(f.endsAt, current_date) >= current_date")
     Set<Long> getCurrentFncIds(Long userId);
 
+    @Query("select f.name from AppFunction f where f.user.userId= ?1 and f.fncStatus = 1 and coalesce(f.startsAt, current_date ) <= current_date and coalesce(f.endsAt, current_date) >= current_date")
+    Set<String> getCurrentFncNames(Long userId);
+
     @Query("select f.visibilityId from AppFunction f where f.user.email= ?1 and f.fncStatus = 1 and coalesce(f.startsAt, current_date ) <= current_date and coalesce(f.endsAt, current_date) >= current_date")
     Set<Long> getCurrentFncVisibilityIds(String username);
 

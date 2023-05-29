@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
-
-import com.pixel.synchronre.archivemodule.controller.service.IServiceDocument;
 import com.pixel.synchronre.archivemodule.controller.service.ReglementDocUploader;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
@@ -38,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
 
-import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SOLDE;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_PAIEMENT;
+import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SOLDE;
 import static java.math.BigDecimal.ZERO;
 
 @Service @AllArgsConstructor
@@ -52,7 +50,6 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final AffaireRepository affRepo;
     private final TypeRepo typeRepo;
     private final IServiceMouvement mvtService;
-    private final IServiceDocument docService;
     private final ReglementDocUploader regDocUploader;
     private final SinRepo sinRepo;
     private final IServiceCalculsComptables comptaAffaireService;

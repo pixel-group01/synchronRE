@@ -12,6 +12,7 @@ import java.util.List;
 public interface IFunctionService
 {
     Long getActiveCurrentFunctionId(Long userId);
+    String getActiveCurrentFunctionName(Long userId);
     ReadFncDTO createFnc(CreateFncDTO dto) throws UnknownHostException;
     void setFunctionAsDefault(Long fncId) throws UnknownHostException;
     void revokeFunction(Long fncId) throws UnknownHostException;

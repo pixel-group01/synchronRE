@@ -5,12 +5,10 @@ import com.pixel.synchronre.archivemodule.model.dtos.DocMapper;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
-@Component
-public class ReglementDocUploader extends AbstractDocumentUploader
+@Component("reglement")
+public class ReglementDocUploader extends AbstractDocumentService
 {
 	public ReglementDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo) {
 		super(typeRepo, docMapper, docRepo);

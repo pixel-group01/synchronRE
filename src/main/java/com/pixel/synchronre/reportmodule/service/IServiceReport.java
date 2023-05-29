@@ -13,5 +13,5 @@ public interface IServiceReport
 {
     byte[] generateReport(String reportName, Map<String, Object> params) throws Exception;
 
-    void displayPdf(HttpServletResponse response, byte[] reportBytes, String displayName)  throws Exception;
+
 }

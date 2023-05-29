@@ -7,8 +7,8 @@ import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.springframework.stereotype.Component;
 
-@Component
-public class PlacementDocUploader extends AbstractDocumentUploader {
+@Component("placement")
+public class PlacementDocUploader extends AbstractDocumentService {
 	public PlacementDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo) {
 		super(typeRepo, docMapper, docRepo);
 	}
