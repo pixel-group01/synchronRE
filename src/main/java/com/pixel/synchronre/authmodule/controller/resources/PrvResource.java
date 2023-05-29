@@ -1,5 +1,7 @@
 package com.pixel.synchronre.authmodule.controller.resources;
 
+import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
+import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IPrivilegeService;
 import jakarta.validation.Valid;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController @RequestMapping("/privileges")
@@ -18,6 +21,8 @@ public class PrvResource
 {
     private final IPrivilegeService prvService;
     private final PrvRepo prvRepo;
+    private final RoleRepo roleRepo;
+    private final PrvToRoleAssRepo ptrRepo;
 
     @PostMapping(path = "/create")
     public ReadPrvDTO createPrv(@RequestBody @Valid CreatePrivilegeDTO dto) throws UnknownHostException, IllegalAccessException {
@@ -47,5 +52,15 @@ public class PrvResource
     @GetMapping(path = "/existsByCode/{code}/{prvId}")
     public boolean existsByCode(@PathVariable String code, @PathVariable Long prvId) throws UnknownHostException, IllegalAccessException {
         return prvRepo.existsByCode(code, prvId);
+    }
+
+    @GetMapping(path = "/privileges-for-roleIds")
+    public Set<Long> getPrvsForRoleIds(@RequestParam Set<Long> roleIds) throws UnknownHostException, IllegalAccessException {
+        return ptrRepo.findActivePrvIdsForRoles(roleIds);
+    }
+
+    @GetMapping(path = "/privilege-belong-to-any-role")
+    public Set<Long> prvBelongToAnyRole(@RequestParam Set<Long> roleIds, @RequestParam Long prvId) throws UnknownHostException, IllegalAccessException {
+        return ptrRepo.prvBelongToAnyRole(roleIds);
     }
 }

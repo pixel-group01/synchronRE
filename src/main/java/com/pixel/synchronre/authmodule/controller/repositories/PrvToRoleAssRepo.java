@@ -62,4 +62,6 @@ public interface PrvToRoleAssRepo extends JpaRepository<PrvToRoleAss, Long>
     @Query("select (count(p.privilegeId)>0) from AppPrivilege p where exists (select ptrAss from PrvToRoleAss ptrAss where ptrAss.role.roleId = ?1 and ptrAss.privilege.privilegeId in ?2 and ptrAss.assStatus = 1 and coalesce(ptrAss.startsAt, current_date ) <= current_date and coalesce(ptrAss.endsAt, current_date) >= current_date)")
     boolean roleHasAnyPrivilege(long roleId, List<Long> prvIds);
 
+    @Query("select (count(p.privilegeId)>0) from AppPrivilege p where exists (select ptrAss from PrvToRoleAss ptrAss where ptrAss.privilege.privilegeId = ?1 and ptrAss.role.roleId in ?2 and ptrAss.assStatus = 1 and coalesce(ptrAss.startsAt, current_date ) <= current_date and coalesce(ptrAss.endsAt, current_date) >= current_date)")
+    Set<Long> prvBelongToAnyRole(Set<Long> roleIds);
 }
