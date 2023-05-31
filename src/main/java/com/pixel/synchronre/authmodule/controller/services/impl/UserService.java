@@ -24,6 +24,7 @@ import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
+import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -88,7 +89,9 @@ public class UserService implements IUserService
     @Override @Transactional
     public ReadUserDTO createUser(CreateUserDTO dto) throws IllegalAccessException, UnknownHostException {
         Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
+
         AppUser user = userMapper.mapToUser(dto);
+        user.setStatut(new Statut("USR-BLQ"));
         user = userRepo.save(user);
         logger.logg(AuthActions.CREATE_USER, null, user, AuthTables.USER_TABLE);
         AccountToken accountToken = new AccountToken(UUID.randomUUID().toString(), user);
@@ -108,7 +111,8 @@ public class UserService implements IUserService
         AppUser oldUser = new AppUser();BeanUtils.copyProperties(user, oldUser);
         user.setActive(true);
         user.setNotBlocked(true);
-        user.setEmail(dto.getEmail());
+        user.setStatut(new Statut("USR-ACT"));
+        //user.setEmail(dto.getEmail());
         user.setLastModificationDate(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setChangePasswordDate(LocalDateTime.now());
@@ -164,6 +168,7 @@ public class UserService implements IUserService
         if(user == null) return;
         if(!user.isNotBlocked()) return;
         user.setNotBlocked(false);
+        user.setStatut(new Statut("USR-BLQ"));
         logger.logg(AuthActions.LOCK_USER_ACCOUNT, oldUser, user, AuthTables.USER_TABLE);
     }
 
@@ -174,6 +179,8 @@ public class UserService implements IUserService
         if(user == null) return;
         if(user.isNotBlocked()) return;
         user.setNotBlocked(true);
+        if(user.isActive()) user.setStatut(new Statut("USR-ACT"));
+
         logger.logg(AuthActions.UNLOCK_USER_ACCOUNT, oldUser, user, AuthTables.USER_TABLE);
     }
 
@@ -211,26 +218,17 @@ public class UserService implements IUserService
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
         emailSenderService.sendAccountActivationEmail(email, username, emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken());
         emailNotification.setSent(true);
+        accountToken.setEmailSent(true);
         emailNotification = emailRepo.save(emailNotification);
+        if(!loadedUser.isActive() || !loadedUser.isNotBlocked()) loadedUser.setStatut(new Statut("USR-AACT"));
         logger.logg(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
     }
 
     @Override @Transactional
     public void sendAccountActivationEmail(Long userId) throws IllegalAccessException, UnknownHostException {
         AppUser loadedUser = this.userRepo.findById(userId).orElseThrow(()->new UsernameNotFoundException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
-        //if(!loadedUser.getEmail().equals(email)) {throw new AppException(SecurityErrorMsg.INVALID_USERNAME_OR_EMAIL_ERROR_MSG);}
-        if(loadedUser.isActive() && loadedUser.isNotBlocked()) {throw new AppException(SecurityErrorMsg.ALREADY_ACTIVATED_ACCOUNT_ERROR_MSG);}
-        AccountToken accountToken = accountTokenService.createAccountToken(loadedUser);
-        logger.logg(AuthActions.CREATE_ACCOUT_TOKEN, null, accountToken, AuthTables.ACCOUNT_TOKEN);
-
-        Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
-        EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(loadedUser.getEmail(), loadedUser.getEmail().split("@")[0], emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken() + "&userId=" + userId);
-        emailNotification.setSent(true);
-        accountToken.setEmailSent(true);
-        emailRepo.save(emailNotification);
-        logger.logg(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
-    }
+        this.sendAccountActivationEmail(loadedUser.getEmail());
+            }
 
     @Override @Transactional
     public void sendReinitialisePasswordEmail(String email) throws IllegalAccessException, UnknownHostException {
