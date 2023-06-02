@@ -7,6 +7,8 @@ import lombok.*;
 public class ReadUserDTO
 {
     private Long userId;
+    private String firstName;
+    private String lastName;
     private String password;
     private String email;
     private String tel;
