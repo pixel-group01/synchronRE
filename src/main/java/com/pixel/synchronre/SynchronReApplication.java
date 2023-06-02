@@ -32,8 +32,6 @@ public class SynchronReApplication {
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);
     }
-    @Bean @Order(1)
-
    @Bean(name = "commandLineRunner")
     public CommandLineRunner start(UserRepo userRepo, RoleRepo roleRepo, PasswordEncoder pe, StatutRepository staRepo, PaysRepository paysRepo,
                                    BrancheRepository braRepo, CouvertureRepository couRepo, CedRepo cedRepo, TypeRepo typeRepo, TypeParamRepo typeParamRepo,

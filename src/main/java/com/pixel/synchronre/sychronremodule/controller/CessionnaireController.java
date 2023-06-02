@@ -9,7 +9,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.Cess
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapperImpl;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
