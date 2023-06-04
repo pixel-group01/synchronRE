@@ -50,4 +50,4 @@ jobs:
           app-name: 'synchronre'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8ABBDC0250204ADE8528815A94FEBC84 }}
-          package: '*.war'
+          package: '*.jar'
