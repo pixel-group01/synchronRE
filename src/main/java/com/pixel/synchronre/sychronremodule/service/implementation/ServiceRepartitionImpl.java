@@ -60,7 +60,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final PlacementDocUploader placementDocUploader;
     private final EmailSenderService mailSenderService;
     private final IserviceBordereau bordService;
-    @Value("${synchronre.email}")
+    @Value("${spring.mail.username}")
     private String synchronreEmail;
 
     @Override
