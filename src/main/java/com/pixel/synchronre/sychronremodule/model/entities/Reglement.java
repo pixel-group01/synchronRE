@@ -25,6 +25,7 @@ public class Reglement {
   private String regReference;
   private LocalDate regDate;
   private BigDecimal regMontant;
+  private String regMontantLettre;
   private BigDecimal regCommission;
   private boolean regStatut;
   private String regMode;
