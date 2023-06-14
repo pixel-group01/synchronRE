@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2023-06-14T20:04:06 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cheque" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6fa6af22-fccf-48e2-b064-408e91641cc4">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="reg_id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[SELECT cessionnaire.ces_nom,reglement.reg_id,reglement.reg_montant,reglement.reg_montant_lettre
+FROM reglement,cessionnaire
+WHERE reglement.ces_id = cessionnaire.ces_id
+AND reglement.reg_id = $P{reg_id}]]>
+	</queryString>
+	<field name="ces_nom" class="java.lang.String"/>
+	<field name="reg_id" class="java.lang.Long"/>
+	<field name="reg_montant" class="java.math.BigDecimal"/>
+	<field name="reg_montant_lettre" class="java.lang.String"/>
+	<background>
+		<band height="70" splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="302" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField>
+				<reportElement x="470" y="13" width="191" height="20" uuid="dbe0743c-baf7-40a9-b73a-3034812e0db6"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{reg_montant})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="152" width="140" height="20" uuid="d5ace680-6254-4507-9221-a321bdbdc43c"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ABIDJAN "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="150" width="170" height="20" uuid="70f1ad49-bf4f-4a09-88eb-e8faa284a864"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="98" width="370" height="30" uuid="3876f781-007f-4023-9525-fe1795d0e1fe"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+					<paragraph lineSpacing="Double"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reg_montant_lettre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="130" width="530" height="20" uuid="0103cb65-6f14-469f-bee7-2d14c30511ce"/>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
