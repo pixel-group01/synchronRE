@@ -36,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_PAIEMENT;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SOLDE;
@@ -78,6 +80,9 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
         paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
+        String formattedNumber = numberFormat.format(paiement.getRegMontant());
+        paiement.setRegMontantTemp(formattedNumber);
         paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
         logService.logg(action, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
