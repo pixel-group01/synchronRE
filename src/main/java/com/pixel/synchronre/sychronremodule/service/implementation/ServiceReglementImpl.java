@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.ReglementActions;
@@ -35,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_PAIEMENT;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SOLDE;
@@ -76,6 +79,10 @@ public class ServiceReglementImpl implements IserviceReglement {
         String action = this.getTypeRegActionOnCreate(PAIEMENT, dto.getAffId(), dto.getSinId());
         paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
+        paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
+        String formattedNumber = numberFormat.format(paiement.getRegMontant());
+        paiement.setRegMontantTemp(formattedNumber);
         paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
         logService.logg(action, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
@@ -96,6 +103,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         String action = this.getTypeRegActionOnCreate(REVERSEMENT, dto.getAffId(), dto.getSinId());
         reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
+        reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
         logService.logg(action, null, reversement, SynchronReTables.REGLEMENT);
         reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
@@ -116,6 +124,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(typeReg));
+        paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
         paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
         logService.logg(action, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setSinistre(sinRepo.findById(dto.getSinId()).orElse(new Sinistre(dto.getSinId())));

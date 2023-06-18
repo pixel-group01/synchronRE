@@ -5,8 +5,10 @@ import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class ReportController
     private final JasperReportConfig jrConfig;
     private final RepartitionRepository repRepo;
     private final AffaireRepository affRepo;
+    private final ReglementRepository regRepo;
     private final AbstractDocumentService docService;
 
     @GetMapping("/note-cession/{plaId}")
@@ -123,5 +126,15 @@ public class ReportController
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params);
         docService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
+    }
+
+    @GetMapping("/cheque/{regId}")
+    public void generateCheque(HttpServletResponse response, @PathVariable Long regId) throws Exception
+    {
+        Reglement reglement =  regRepo.findById(regId).orElseThrow(()-> new AppException(("Règlement introuvable")));
+        Map<String, Object> params = new HashMap<>();
+        params.put("reg_id", reglement.getRegId());
+        byte[] reportBytes = jrService.generateReport(jrConfig.cheque, params);
+        docService.displayPdf(response, reportBytes, "Cheque");
     }
 }

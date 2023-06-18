@@ -43,7 +43,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private final AffaireRepository affRepo;
     private final IServiceMouvement mvtService;
     private final EmailSenderService mailSenderService;
-    @Value("${synchronre.email}")
+    @Value("${spring.mail.username}")
     private String synchronreEmail;
 
     @Override @Transactional

@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Maven: ch.qos.logback:logback-classic:1.4.6">
+    <archive path="C:/Users/USER/.m2/repository1/ch/qos/logback/logback-classic/1.4.6/logback-classic-1.4.6.jar" />
+  </library>
+  <library name="Maven: ch.qos.logback:logback-core:1.4.6">
+    <archive path="C:/Users/USER/.m2/repository1/ch/qos/logback/logback-core/1.4.6/logback-core-1.4.6.jar" />
+  </library>
+  <library name="Maven: com.fasterxml:classmate:1.5.1">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/core/jackson-annotations/2.14.2/jackson-annotations-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-core:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/core/jackson-core/2.14.2/jackson-core-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.core:jackson-databind:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/core/jackson-databind/2.14.2/jackson-databind-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/datatype/jackson-datatype-jdk8/2.14.2/jackson-datatype-jdk8-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.14.2/jackson-datatype-jsr310-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/module/jackson-module-parameter-names/2.14.2/jackson-module-parameter-names-2.14.2.jar" />
+  </library>
+  <library name="Maven: com.sun.istack:istack-commons-runtime:4.1.1">
+    <archive path="C:/Users/USER/.m2/repository1/com/sun/istack/istack-commons-runtime/4.1.1/istack-commons-runtime-4.1.1.jar" />
+  </library>
+  <library name="Maven: com.zaxxer:HikariCP:5.0.1">
+    <archive path="C:/Users/USER/.m2/repository1/com/zaxxer/HikariCP/5.0.1/HikariCP-5.0.1.jar" />
+  </library>
+  <library name="Maven: io.micrometer:micrometer-commons:1.10.5">
+    <archive path="C:/Users/USER/.m2/repository1/io/micrometer/micrometer-commons/1.10.5/micrometer-commons-1.10.5.jar" />
+  </library>
+  <library name="Maven: io.micrometer:micrometer-observation:1.10.5">
+    <archive path="C:/Users/USER/.m2/repository1/io/micrometer/micrometer-observation/1.10.5/micrometer-observation-1.10.5.jar" />
+  </library>
+  <library name="Maven: jakarta.activation:jakarta.activation-api:2.1.1">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/activation/jakarta.activation-api/2.1.1/jakarta.activation-api-2.1.1.jar" />
+  </library>
+  <library name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/annotation/jakarta.annotation-api/2.1.1/jakarta.annotation-api-2.1.1.jar" />
+  </library>
+  <library name="Maven: jakarta.inject:jakarta.inject-api:2.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/inject/jakarta.inject-api/2.0.0/jakarta.inject-api-2.0.0.jar" />
+  </library>
+  <library name="Maven: jakarta.persistence:jakarta.persistence-api:3.1.0">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/persistence/jakarta.persistence-api/3.1.0/jakarta.persistence-api-3.1.0.jar" />
+  </library>
+  <library name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.1">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.jar" />
+  </library>
+  <library name="Maven: jakarta.xml.bind:jakarta.xml.bind-api:4.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/xml/bind/jakarta.xml.bind-api/4.0.0/jakarta.xml.bind-api-4.0.0.jar" />
+  </library>
+  <library name="Maven: net.bytebuddy:byte-buddy:1.12.23">
+    <archive path="C:/Users/USER/.m2/repository1/net/bytebuddy/byte-buddy/1.12.23/byte-buddy-1.12.23.jar" />
+  </library>
+  <library name="Maven: org.antlr:antlr4-runtime:4.10.1">
+    <archive path="C:/Users/USER/.m2/repository1/org/antlr/antlr4-runtime/4.10.1/antlr4-runtime-4.10.1.jar" />
+  </library>
+  <library name="Maven: org.apache.logging.log4j:log4j-api:2.19.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/logging/log4j/log4j-api/2.19.0/log4j-api-2.19.0.jar" />
+  </library>
+  <library name="Maven: org.apache.logging.log4j:log4j-to-slf4j:2.19.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/logging/log4j/log4j-to-slf4j/2.19.0/log4j-to-slf4j-2.19.0.jar" />
+  </library>
+  <library name="Maven: org.apache.tomcat.embed:tomcat-embed-core:10.1.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/tomcat/embed/tomcat-embed-core/10.1.7/tomcat-embed-core-10.1.7.jar" />
+  </library>
+  <library name="Maven: org.apache.tomcat.embed:tomcat-embed-el:10.1.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/tomcat/embed/tomcat-embed-el/10.1.7/tomcat-embed-el-10.1.7.jar" />
+  </library>
+  <library name="Maven: org.apache.tomcat.embed:tomcat-embed-websocket:10.1.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/tomcat/embed/tomcat-embed-websocket/10.1.7/tomcat-embed-websocket-10.1.7.jar" />
+  </library>
+  <library name="Maven: org.aspectj:aspectjweaver:1.9.19">
+    <archive path="C:/Users/USER/.m2/repository1/org/aspectj/aspectjweaver/1.9.19/aspectjweaver-1.9.19.jar" />
+  </library>
+  <library name="Maven: org.checkerframework:checker-qual:3.5.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/checkerframework/checker-qual/3.5.0/checker-qual-3.5.0.jar" />
+  </library>
+  <library name="Maven: org.eclipse.angus:angus-activation:2.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/eclipse/angus/angus-activation/2.0.0/angus-activation-2.0.0.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:jaxb-core:4.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/glassfish/jaxb/jaxb-core/4.0.2/jaxb-core-4.0.2.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:jaxb-runtime:4.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/glassfish/jaxb/jaxb-runtime/4.0.2/jaxb-runtime-4.0.2.jar" />
+  </library>
+  <library name="Maven: org.glassfish.jaxb:txw2:4.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/glassfish/jaxb/txw2/4.0.2/txw2-4.0.2.jar" />
+  </library>
+  <library name="Maven: org.hibernate.common:hibernate-commons-annotations:6.0.6.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/hibernate/common/hibernate-commons-annotations/6.0.6.Final/hibernate-commons-annotations-6.0.6.Final.jar" />
+  </library>
+  <library name="Maven: org.hibernate.orm:hibernate-core:6.1.7.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/hibernate/orm/hibernate-core/6.1.7.Final/hibernate-core-6.1.7.Final.jar" />
+  </library>
+  <library name="Maven: org.jboss:jandex:2.4.2.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/jboss/jandex/2.4.2.Final/jandex-2.4.2.Final.jar" />
+  </library>
+  <library name="Maven: org.jboss.logging:jboss-logging:3.5.0.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/jboss/logging/jboss-logging/3.5.0.Final/jboss-logging-3.5.0.Final.jar" />
+  </library>
+  <library name="Maven: org.postgresql:postgresql:42.5.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/postgresql/postgresql/42.5.4/postgresql-42.5.4.jar" />
+  </library>
+  <library name="Maven: org.projectlombok:lombok:1.18.26">
+    <archive path="C:/Users/USER/.m2/repository1/org/projectlombok/lombok/1.18.26/lombok-1.18.26.jar" />
+  </library>
+  <library name="Maven: org.slf4j:jul-to-slf4j:2.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/slf4j/jul-to-slf4j/2.0.7/jul-to-slf4j-2.0.7.jar" />
+  </library>
+  <library name="Maven: org.slf4j:slf4j-api:2.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/slf4j/slf4j-api/2.0.7/slf4j-api-2.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot/3.0.5/spring-boot-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-autoconfigure/3.0.5/spring-boot-autoconfigure-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-aop:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-aop/3.0.5/spring-boot-starter-aop-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-data-jpa:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-data-jpa/3.0.5/spring-boot-starter-data-jpa-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-jdbc:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-jdbc/3.0.5/spring-boot-starter-jdbc-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-json:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-json/3.0.5/spring-boot-starter-json-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-logging:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-logging/3.0.5/spring-boot-starter-logging-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.hibernate.validator:hibernate-validator:8.0.0.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/hibernate/validator/hibernate-validator/8.0.0.Final/hibernate-validator-8.0.0.Final.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-tomcat:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-tomcat/3.0.5/spring-boot-starter-tomcat-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-web:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-web/3.0.5/spring-boot-starter-web-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.data:spring-data-commons:3.0.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/data/spring-data-commons/3.0.4/spring-data-commons-3.0.4.jar" />
+  </library>
+  <library name="Maven: org.springframework.data:spring-data-jpa:3.0.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/data/spring-data-jpa/3.0.4/spring-data-jpa-3.0.4.jar" />
+  </library>
+  <library name="Maven: jakarta.validation:jakarta.validation-api:3.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/jakarta/validation/jakarta.validation-api/3.0.2/jakarta.validation-api-3.0.2.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-validation:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-validation/3.0.5/spring-boot-starter-validation-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-aspects:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-aspects/6.0.7/spring-aspects-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-beans:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-beans/6.0.7/spring-beans-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-context:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-context/6.0.7/spring-context-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-core:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-core/6.0.7/spring-core-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-expression:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-expression/6.0.7/spring-expression-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-jcl:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-jcl/6.0.7/spring-jcl-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-jdbc:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-jdbc/6.0.7/spring-jdbc-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-orm:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-orm/6.0.7/spring-orm-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-tx:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-tx/6.0.7/spring-tx-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-webmvc:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-webmvc/6.0.7/spring-webmvc-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-web:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-web/6.0.7/spring-web-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.yaml:snakeyaml:1.33">
+    <archive path="C:/Users/USER/.m2/repository1/org/yaml/snakeyaml/1.33/snakeyaml-1.33.jar" />
+  </library>
+  <library name="Maven: org.mapstruct:mapstruct:1.5.3.Final">
+    <archive path="C:/Users/USER/.m2/repository1/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-mail:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-mail/3.0.5/spring-boot-starter-mail-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter-security:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter-security/3.0.5/spring-boot-starter-security-3.0.5.jar" />
+  </library>
+  <library name="Maven: io.jsonwebtoken:jjwt-impl:0.11.5">
+    <archive path="C:/Users/USER/.m2/repository1/io/jsonwebtoken/jjwt-impl/0.11.5/jjwt-impl-0.11.5.jar" />
+  </library>
+  <library name="Maven: org.flywaydb:flyway-core:9.5.1">
+    <archive path="C:/Users/USER/.m2/repository1/org/flywaydb/flyway-core/9.5.1/flyway-core-9.5.1.jar" />
+  </library>
+  <library name="Maven: net.sf.jasperreports:jasperreports:6.12.2">
+    <archive path="C:/Users/USER/.m2/repository1/net/sf/jasperreports/jasperreports/6.12.2/jasperreports-6.12.2.jar" />
+  </library>
+  <library name="Maven: org.springframework.boot:spring-boot-starter:3.0.5">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/boot/spring-boot-starter/3.0.5/spring-boot-starter-3.0.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.security:spring-security-core:6.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/security/spring-security-core/6.0.2/spring-security-core-6.0.2.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-context-support:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-context-support/6.0.7/spring-context-support-6.0.7.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-spring-web:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-spring-web/3.0.0/springfox-spring-web-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.eclipse.jdt.core.compiler:ecj:4.4.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/eclipse/jdt/core/compiler/ecj/4.4.2/ecj-4.4.2.jar" />
+  </library>
+  <library name="Maven: com.google.zxing:javase:3.4.1">
+    <archive path="C:/Users/USER/.m2/repository1/com/google/zxing/javase/3.4.1/javase-3.4.1.jar" />
+  </library>
+  <library name="Maven: bouncycastle:bcmail-jdk14:138">
+    <archive path="C:/Users/USER/.m2/repository1/bouncycastle/bcmail-jdk14/138/bcmail-jdk14-138.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-swagger2:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-swagger2/3.0.0/springfox-swagger2-3.0.0.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-bean-validators:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-bean-validators/3.0.0/springfox-bean-validators-3.0.0.jar" />
+  </library>
+  <library name="Maven: io.jsonwebtoken:jjwt-jackson:0.11.5">
+    <archive path="C:/Users/USER/.m2/repository1/io/jsonwebtoken/jjwt-jackson/0.11.5/jjwt-jackson-0.11.5.jar" />
+  </library>
+  <library name="Maven: org.springframework.security:spring-security-web:6.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/security/spring-security-web/6.0.2/spring-security-web-6.0.2.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-data-rest:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-data-rest/3.0.0/springfox-data-rest-3.0.0.jar" />
+  </library>
+  <library name="Maven: io.swagger:swagger-annotations:1.5.20">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/swagger-annotations/1.5.20/swagger-annotations-1.5.20.jar" />
+  </library>
+  <library name="Maven: javax.inject:javax.inject:1">
+    <archive path="C:/Users/USER/.m2/repository1/javax/inject/javax.inject/1/javax.inject-1.jar" />
+  </library>
+  <library name="Maven: org.codehaus.castor:castor-core:1.4.1">
+    <archive path="C:/Users/USER/.m2/repository1/org/codehaus/castor/castor-core/1.4.1/castor-core-1.4.1.jar" />
+  </library>
+  <library name="Maven: org.springframework.plugin:spring-plugin-metadata:2.0.0.RELEASE">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/plugin/spring-plugin-metadata/2.0.0.RELEASE/spring-plugin-metadata-2.0.0.RELEASE.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-spring-webflux:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-spring-webflux/3.0.0/springfox-spring-webflux-3.0.0.jar" />
+  </library>
+  <library name="Maven: commons-logging:commons-logging:1.1.1">
+    <archive path="C:/Users/USER/.m2/repository1/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" />
+  </library>
+  <library name="Maven: org.apache.commons:commons-collections4:4.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/commons/commons-collections4/4.2/commons-collections4-4.2.jar" />
+  </library>
+  <library name="Maven: commons-digester:commons-digester:2.1">
+    <archive path="C:/Users/USER/.m2/repository1/commons-digester/commons-digester/2.1/commons-digester-2.1.jar" />
+  </library>
+  <library name="Maven: commons-collections:commons-collections:3.2.2">
+    <archive path="C:/Users/USER/.m2/repository1/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar" />
+  </library>
+  <library name="Maven: org.jfree:jfreechart:1.0.19">
+    <archive path="C:/Users/USER/.m2/repository1/org/jfree/jfreechart/1.0.19/jfreechart-1.0.19.jar" />
+  </library>
+  <library name="Maven: org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/plugin/spring-plugin-core/2.0.0.RELEASE/spring-plugin-core-2.0.0.RELEASE.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-swagger-common:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-swagger-common/3.0.0/springfox-swagger-common-3.0.0.jar" />
+  </library>
+  <library name="Maven: commons-beanutils:commons-beanutils:1.9.4">
+    <archive path="C:/Users/USER/.m2/repository1/commons-beanutils/commons-beanutils/1.9.4/commons-beanutils-1.9.4.jar" />
+  </library>
+  <library name="Maven: org.springframework.security:spring-security-config:6.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/security/spring-security-config/6.0.2/spring-security-config-6.0.2.jar" />
+  </library>
+  <library name="Maven: io.swagger:swagger-models:1.5.20">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/swagger-models/1.5.20/swagger-models-1.5.20.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-schema:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-schema/3.0.0/springfox-schema-3.0.0.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-swagger-ui:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-swagger-ui/3.0.0/springfox-swagger-ui-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bcmail-jdk14:1.38">
+    <archive path="C:/Users/USER/.m2/repository1/org/bouncycastle/bcmail-jdk14/1.38/bcmail-jdk14-1.38.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bcprov-jdk14:1.38">
+    <archive path="C:/Users/USER/.m2/repository1/org/bouncycastle/bcprov-jdk14/1.38/bcprov-jdk14-1.38.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-core:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-core/3.0.0/springfox-core-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.eclipse.angus:jakarta.mail:1.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/eclipse/angus/jakarta.mail/1.0.0/jakarta.mail-1.0.0.jar" />
+  </library>
+  <library name="Maven: org.springframework.security:spring-security-crypto:6.0.2">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/security/spring-security-crypto/6.0.2/spring-security-crypto-6.0.2.jar" />
+  </library>
+  <library name="Maven: commons-io:commons-io:2.11.0">
+    <archive path="C:/Users/USER/.m2/repository1/commons-io/commons-io/2.11.0/commons-io-2.11.0.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-spring-webmvc:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-spring-webmvc/3.0.0/springfox-spring-webmvc-3.0.0.jar" />
+  </library>
+  <library name="Maven: com.electronwill.night-config:toml:3.6.6">
+    <archive path="C:/Users/USER/.m2/repository1/com/electronwill/night-config/toml/3.6.6/toml-3.6.6.jar" />
+  </library>
+  <library name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2">
+    <archive path="C:/Users/USER/.m2/repository1/com/fasterxml/jackson/dataformat/jackson-dataformat-yaml/2.14.2/jackson-dataformat-yaml-2.14.2.jar" />
+  </library>
+  <library name="Maven: org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/springdoc/springdoc-openapi-starter-webmvc-ui/2.0.4/springdoc-openapi-starter-webmvc-ui-2.0.4.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-spi:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-spi/3.0.0/springfox-spi-3.0.0.jar" />
+  </library>
+  <library name="Maven: com.github.jai-imageio:jai-imageio-core:1.4.0">
+    <archive path="C:/Users/USER/.m2/repository1/com/github/jai-imageio/jai-imageio-core/1.4.0/jai-imageio-core-1.4.0.jar" />
+  </library>
+  <library name="Maven: io.swagger.core.v3:swagger-models:2.1.2">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/core/v3/swagger-models/2.1.2/swagger-models-2.1.2.jar" />
+  </library>
+  <library name="Maven: com.mysql:mysql-connector-j:8.0.32">
+    <archive path="C:/Users/USER/.m2/repository1/com/mysql/mysql-connector-j/8.0.32/mysql-connector-j-8.0.32.jar" />
+  </library>
+  <library name="Maven: com.beust:jcommander:1.78">
+    <archive path="C:/Users/USER/.m2/repository1/com/beust/jcommander/1.78/jcommander-1.78.jar" />
+  </library>
+  <library name="Maven: com.google.zxing:core:3.4.1">
+    <archive path="C:/Users/USER/.m2/repository1/com/google/zxing/core/3.4.1/core-3.4.1.jar" />
+  </library>
+  <library name="Maven: com.lowagie:itext:2.1.7.js4">
+    <archive path="C:/Users/USER/.m2/repository1/com/lowagie/itext/2.1.7.js4/itext-2.1.7.js4.jar" />
+  </library>
+  <library name="Maven: org.apache.commons:commons-lang3:3.12.0">
+    <archive path="C:/Users/USER/.m2/repository1/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar" />
+  </library>
+  <library name="Maven: io.jsonwebtoken:jjwt-api:0.11.5">
+    <archive path="C:/Users/USER/.m2/repository1/io/jsonwebtoken/jjwt-api/0.11.5/jjwt-api-0.11.5.jar" />
+  </library>
+  <library name="Maven: org.codehaus.castor:castor-xml:1.4.1">
+    <archive path="C:/Users/USER/.m2/repository1/org/codehaus/castor/castor-xml/1.4.1/castor-xml-1.4.1.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-boot-starter:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-boot-starter/3.0.0/springfox-boot-starter-3.0.0.jar" />
+  </library>
+  <library name="Maven: org.jfree:jcommon:1.0.23">
+    <archive path="C:/Users/USER/.m2/repository1/org/jfree/jcommon/1.0.23/jcommon-1.0.23.jar" />
+  </library>
+  <library name="Maven: org.springframework:spring-aop:6.0.7">
+    <archive path="C:/Users/USER/.m2/repository1/org/springframework/spring-aop/6.0.7/spring-aop-6.0.7.jar" />
+  </library>
+  <library name="Maven: org.bouncycastle:bctsp-jdk14:1.38">
+    <archive path="C:/Users/USER/.m2/repository1/org/bouncycastle/bctsp-jdk14/1.38/bctsp-jdk14-1.38.jar" />
+  </library>
+  <library name="Maven: bouncycastle:bcprov-jdk14:138">
+    <archive path="C:/Users/USER/.m2/repository1/bouncycastle/bcprov-jdk14/138/bcprov-jdk14-138.jar" />
+  </library>
+  <library name="Maven: io.swagger.core.v3:swagger-annotations:2.1.2">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/core/v3/swagger-annotations/2.1.2/swagger-annotations-2.1.2.jar" />
+  </library>
+  <library name="Maven: io.springfox:springfox-oas:3.0.0">
+    <archive path="C:/Users/USER/.m2/repository1/io/springfox/springfox-oas/3.0.0/springfox-oas-3.0.0.jar" />
+  </library>
+  <library name="Maven: com.electronwill.night-config:core:3.6.6">
+    <archive path="C:/Users/USER/.m2/repository1/com/electronwill/night-config/core/3.6.6/core-3.6.6.jar" />
+  </library>
+  <library name="Maven: org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/springdoc/springdoc-openapi-starter-webmvc-api/2.0.4/springdoc-openapi-starter-webmvc-api-2.0.4.jar" />
+  </library>
+  <library name="Maven: org.springdoc:springdoc-openapi-starter-common:2.0.4">
+    <archive path="C:/Users/USER/.m2/repository1/org/springdoc/springdoc-openapi-starter-common/2.0.4/springdoc-openapi-starter-common-2.0.4.jar" />
+  </library>
+  <library name="Maven: io.swagger.core.v3:swagger-core-jakarta:2.2.8">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/core/v3/swagger-core-jakarta/2.2.8/swagger-core-jakarta-2.2.8.jar" />
+  </library>
+  <library name="Maven: io.swagger.core.v3:swagger-annotations-jakarta:2.2.8">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/core/v3/swagger-annotations-jakarta/2.2.8/swagger-annotations-jakarta-2.2.8.jar" />
+  </library>
+  <library name="Maven: io.swagger.core.v3:swagger-models-jakarta:2.2.8">
+    <archive path="C:/Users/USER/.m2/repository1/io/swagger/core/v3/swagger-models-jakarta/2.2.8/swagger-models-jakarta-2.2.8.jar" />
+  </library>
+  <library name="Maven: org.webjars:swagger-ui:4.18.1">
+    <archive path="C:/Users/USER/.m2/repository1/org/webjars/swagger-ui/4.18.1/swagger-ui-4.18.1.jar" />
+  </library>
+  <library name="Maven: org.webjars:webjars-locator-core:0.52">
+    <archive path="C:/Users/USER/.m2/repository1/org/webjars/webjars-locator-core/0.52/webjars-locator-core-0.52.jar" />
+  </library>
+  <library name="Maven: io.github.classgraph:classgraph:4.8.149">
+    <archive path="C:/Users/USER/.m2/repository1/io/github/classgraph/classgraph/4.8.149/classgraph-4.8.149.jar" />
+  </library>
+</eclipse-userlibraries>
+

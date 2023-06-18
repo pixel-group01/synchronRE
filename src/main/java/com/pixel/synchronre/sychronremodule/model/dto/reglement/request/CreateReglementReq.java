@@ -28,6 +28,11 @@ public class CreateReglementReq
     @PositiveOrZero(message = "Le montant du paiement doit être un nombre positif")
     private BigDecimal regMontant;
 
+
+    private String regMontantTemp;
+
+    private String regMontantLettre;
+
     @NotNull(message = "Veuillez saisir la date du paiement")
     @PastOrPresent(message = "Veuiilez saisir une date antérieur à aujourd'hui")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

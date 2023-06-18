@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-05-02T11:58:52 -->
+<!-- 2023-06-15T18:01:20 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -155,6 +155,7 @@
 		<queryString language="SQL">
 			<![CDATA[SELECT repartition.aff_id,
        repartition.rep_capital,
+       regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
        repartition.rep_taux,
        repartition.rep_sous_commission,
        repartition.rep_taux_com_ced,
@@ -163,13 +164,16 @@
        repartition.cessionnaire_id,
        repartition.rep_interlocuteur,
        repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
+       regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
        repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
+       regexp_replace(to_char(repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_cedante1,
        repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
+       regexp_replace(to_char(repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_courtage1 ,
        (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
+       regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1 ,
        cessionnaire.ces_nom,
        affaire.aff_activite,
        affaire.aff_assure,
-       affaire.aff_capital_initial,
        affaire.aff_code,
        affaire.aff_date_echeance,
        affaire.aff_date_effet,
@@ -192,6 +196,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
+		<field name="rep_capital1" class="java.lang.String"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
@@ -200,13 +205,16 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<field name="cessionnaire_id" class="java.lang.Long"/>
 		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="prime_cedee" class="java.math.BigDecimal"/>
+		<field name="prime_cedee1" class="java.lang.String"/>
 		<field name="com_cedante" class="java.math.BigDecimal"/>
+		<field name="com_cedante1" class="java.lang.String"/>
 		<field name="com_courtage" class="java.math.BigDecimal"/>
+		<field name="com_courtage1" class="java.lang.String"/>
 		<field name="prime_nette_cedee" class="java.math.BigDecimal"/>
+		<field name="prime_nette_cedee1" class="java.lang.String"/>
 		<field name="ces_nom" class="java.lang.String"/>
 		<field name="aff_activite" class="java.lang.String"/>
 		<field name="aff_assure" class="java.lang.String"/>
-		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
 		<field name="aff_code" class="java.lang.String"/>
 		<field name="aff_date_echeance" class="java.sql.Date"/>
 		<field name="aff_date_effet" class="java.sql.Date"/>
@@ -224,6 +232,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<queryString language="SQL">
 			<![CDATA[SELECT repartition.aff_id,
     repartition.rep_capital,
+    regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
     repartition.rep_taux,
     repartition.rep_sous_commission,
     repartition.rep_taux_com_ced,
@@ -252,6 +261,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
+		<field name="rep_capital1" class="java.lang.String"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
@@ -276,6 +286,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<queryString language="SQL">
 			<![CDATA[SELECT repartition.aff_id,
     repartition.rep_capital,
+    regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
     repartition.rep_taux,
 	param_cession_legale.param_ces_leg_libelle,
     repartition.rep_sous_commission,
@@ -307,6 +318,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
+		<field name="rep_capital1" class="java.lang.String"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
 		<field name="param_ces_leg_libelle" class="java.lang.String"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
@@ -339,11 +351,14 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
        affaire.aff_assure,
        affaire.fac_numero_police,
        affaire.aff_capital_initial,
+       regexp_replace(to_char(affaire.aff_capital_initial::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS aff_capital_initial1 ,
        affaire.aff_code,
        affaire.aff_date_echeance,
        affaire.aff_date_effet,
        affaire.fac_prime,
+      regexp_replace(to_char(affaire.fac_prime::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_prime1 ,
        affaire.fac_smp_lci,
+       regexp_replace(to_char(affaire.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
        affaire.cedente_id,
        cedante.ced_nom_filiale,
        couverture.cou_libelle,
@@ -373,11 +388,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="aff_assure" class="java.lang.String"/>
 	<field name="fac_numero_police" class="java.lang.String"/>
 	<field name="aff_capital_initial" class="java.math.BigDecimal"/>
+	<field name="aff_capital_initial1" class="java.lang.String"/>
 	<field name="aff_code" class="java.lang.String"/>
 	<field name="aff_date_echeance" class="java.sql.Date"/>
 	<field name="aff_date_effet" class="java.sql.Date"/>
 	<field name="fac_prime" class="java.math.BigDecimal"/>
+	<field name="fac_prime1" class="java.lang.String"/>
 	<field name="fac_smp_lci" class="java.math.BigDecimal"/>
+	<field name="fac_smp_lci1" class="java.lang.String"/>
 	<field name="cedente_id" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
@@ -640,7 +658,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true" >
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="204" y="172" width="347" height="19" forecolor="#FA2F28" uuid="963a7416-5c54-477c-b7de-a847bcf76421">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -648,8 +666,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
-
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0", java.text.DecimalFormatSymbols.getInstance(java.util.Locale.getDefault())).format($F{fac_prime})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fac_prime1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="206" y="226" width="348" height="17" uuid="49668e4b-0ee9-4f9c-a65d-deb7187af95c">
@@ -659,7 +676,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{fac_smp_lci})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{fac_smp_lci1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="205" y="207" width="347" height="16" uuid="2072ad40-25b6-40c1-82c4-76d517474bff">
@@ -669,7 +686,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{aff_capital_initial})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{aff_capital_initial1}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="354" y="113" width="195" height="37" uuid="95aed40c-6fdb-4808-81c4-ffe754fe0f31">
@@ -837,7 +854,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{rep_capital})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table 1_TH" height="19" rowSpan="1">
@@ -849,7 +866,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{prime_nette_cedee})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{prime_nette_cedee1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:columnHeader style="Table 1_CH" height="19" rowSpan="1">
@@ -861,7 +878,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{prime_cedee})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{prime_cedee1}]]></textFieldExpression>
 							</textField>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="19" rowSpan="1">
@@ -873,7 +890,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{com_courtage})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{com_courtage1}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="19">
@@ -885,7 +902,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{com_cedante})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{com_cedante1}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -1053,7 +1070,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{rep_capital})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -1115,7 +1132,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="Times New Roman" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($F{rep_capital})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
