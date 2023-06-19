@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class SinMapper
-{
+{//
     @Autowired protected IJwtService jwtService;
     @Autowired protected RepartitionRepository repRepo;
     @Autowired protected SinRepo sinRepo;
