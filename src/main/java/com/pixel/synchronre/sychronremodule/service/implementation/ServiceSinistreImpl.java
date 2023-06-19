@@ -5,6 +5,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sychronremodule.model.constants.SinStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
@@ -113,9 +114,9 @@ public class ServiceSinistreImpl implements IServiceSinistre
     }
 
     @Override
-    public Page<SinistreDetailsResp> searchSinistre(String key, Pageable pageable)
+    public Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable)
     {
-        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, jwtService.getConnectedUserCesId(), Arrays.asList(), pageable);
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, jwtService.getConnectedUserCesId(), staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllASinistres : staCodes, pageable);
         return sinPage;
     }
 

@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path ="/sinistres")
@@ -31,7 +32,7 @@ public class SinistreController
 
     @GetMapping(path = "/list")
     public Page<SinistreDetailsResp> searchReglement(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return sinService.searchSinistre(key,PageRequest.of(page, size));
+        return sinService.searchSinistre(key, new ArrayList<>(), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/etat-comptable/{sinId}")

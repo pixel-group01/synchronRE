@@ -2,7 +2,6 @@ package com.pixel.synchronre.sychronremodule.model.dto.reglement.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateRepartitionReq;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -34,7 +33,7 @@ public @interface SeuilRegMontantSin
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(dto.getRegMontant()) <= 0 ;
+            return comptaSinistreService.calculateResteAPayerBySin(dto.getSinId()).compareTo(dto.getRegMontant()) <= 0 ;
         }
     }
 
@@ -48,7 +47,7 @@ public @interface SeuilRegMontantSin
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaSinistreService.calculateResteARegleBySin(dto.getSinId()).compareTo(dto.getRepCapital()) <= 0;
+            return comptaSinistreService.calculateResteAPayerBySin(dto.getSinId()).compareTo(dto.getRepCapital()) <= 0;
         }
     }
 }

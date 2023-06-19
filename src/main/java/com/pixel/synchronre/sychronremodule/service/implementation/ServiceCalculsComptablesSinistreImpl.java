@@ -19,7 +19,7 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
 
 
     @Override
-    public BigDecimal calculateMtARegleBySin(Long sinId)
+    public BigDecimal calculateMtAPayerBySin(Long sinId)
     {
         BigDecimal mtSinistre = sinRepo.getMtSinistre(sinId);
         mtSinistre = mtSinistre == null ? ZERO : mtSinistre;
@@ -27,26 +27,26 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     }
 
     @Override
-    public BigDecimal calculateMtDejaRegleBySin(Long sinId)
+    public BigDecimal calculateMtDejaPayeBySin(Long sinId)
     {
-        BigDecimal mtDejaRegle = sinRepo.calculateMtDejaRegle(sinId);
+        BigDecimal mtDejaRegle = sinRepo.calculateMtDejaPayeBySin(sinId);
         return mtDejaRegle == null ? ZERO : mtDejaRegle;
     }
 
     @Override
-    public BigDecimal calculateResteARegleBySin(Long sinId)
+    public BigDecimal calculateResteAPayerBySin(Long sinId)
     {
         BigDecimal mtSinistre = sinRepo.getMtSinistre(sinId);
         mtSinistre = mtSinistre == null ? ZERO : mtSinistre;
-        return mtSinistre.subtract(this.calculateMtDejaRegleBySin(sinId));
+        return mtSinistre.subtract(this.calculateMtDejaPayeBySin(sinId));
     }
 
     @Override
-    public BigDecimal calculateTauxDeReglementSinistre(Long sinId)
+    public BigDecimal calculateTauxDePaiementSinistre(Long sinId)
     {
-        BigDecimal mtSinistre = this.calculateMtARegleBySin(sinId);
+        BigDecimal mtSinistre = this.calculateMtAPayerBySin(sinId);
         if(mtSinistre.compareTo(ZERO) == 0 ) throw new AppException("Le montant du sinistre est null");
-        return this.calculateMtDejaRegleBySin(sinId)
+        return this.calculateMtDejaPayeBySin(sinId)
                 .divide(mtSinistre, 2, RoundingMode.HALF_UP)
                 .multiply(CENT);
     }
@@ -54,32 +54,32 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
 
 
     @Override
-    public BigDecimal calculateMtARegleBySinAndCes(Long sinId, Long cesId)
+    public BigDecimal calculateMtAPayerBySinAndCes(Long sinId, Long cesId)
     {
         BigDecimal mtAReglerBySinAndCes = sinRepo.calculateMtAReglerBySinAndCes(sinId, cesId);
         return mtAReglerBySinAndCes == null ? ZERO : mtAReglerBySinAndCes;
     }
 
     @Override
-    public BigDecimal calculateMtDejaReglerBySinAndCes(Long sinId, Long cesId)
+    public BigDecimal calculateMtDejaPayeBySinAndCes(Long sinId, Long cesId)
     {
         BigDecimal mtDejaReglerBySinAndCes = sinRepo.calculateMtDejaReglerBySinAndCes(sinId, cesId);
         return  mtDejaReglerBySinAndCes == null ? ZERO : mtDejaReglerBySinAndCes;
     }
 
     @Override
-    public BigDecimal calculateRestAReglerBySinAndCes(Long sinId, Long cesId)
+    public BigDecimal calculateRestAPayerBySinAndCes(Long sinId, Long cesId)
     {
-        return this.calculateMtARegleBySinAndCes(sinId, cesId)
-                .subtract(this.calculateMtDejaReglerBySinAndCes(sinId, cesId));
+        return this.calculateMtAPayerBySinAndCes(sinId, cesId)
+                .subtract(this.calculateMtDejaPayeBySinAndCes(sinId, cesId));
     }
 
     @Override
-    public BigDecimal calculateTauxDeReglementSinistreBySinAndCes(Long sinId, Long cesId)
+    public BigDecimal calculateTauxDePaiementSinistreBySinAndCes(Long sinId, Long cesId)
     {
-        BigDecimal mtAReglerBySinAndCes = this.calculateMtARegleBySinAndCes(sinId, cesId);
+        BigDecimal mtAReglerBySinAndCes = this.calculateMtAPayerBySinAndCes(sinId, cesId);
         if(mtAReglerBySinAndCes.compareTo(ZERO) == 0) throw new AppException("La part sinistre du cessionnaire est null");
-        return this.calculateMtDejaReglerBySinAndCes(sinId, cesId)
+        return this.calculateMtDejaPayeBySinAndCes(sinId, cesId)
                 .divide(mtAReglerBySinAndCes, 2, RoundingMode.HALF_UP)
                 .multiply(CENT);
     }
@@ -132,51 +132,67 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
         return null;
     }
 
+
     @Override
-    public BigDecimal calculateMtSinistreTotalAReglerByCes(Long cesId) {
+    public BigDecimal calculateMtSinistreTotalDejaReverseBySin(Long sinId)
+    {
+        BigDecimal mtDejaReverse = sinRepo.calculateMtDejaReverseBySin(sinId);
+        return mtDejaReverse == null ? ZERO : mtDejaReverse;
+    }
+
+    @Override
+    public BigDecimal calculateResteSinistreTotalAReverser(Long sinId)
+    {
+        BigDecimal mtDejaPaye = sinRepo.calculateMtDejaPayeBySin(sinId);
+        BigDecimal mtDejaReverse = sinRepo.calculateMtDejaReverseBySin(sinId);
+        return mtDejaPaye == null ? ZERO : mtDejaPaye.subtract(mtDejaReverse == null ? ZERO : mtDejaReverse);
+    }
+
+    @Override
+    public BigDecimal calculateMtSinistreTotalAPayerByCes(Long cesId) {
         return null;
     }
 
     @Override
-    public BigDecimal calculateMtSinistreTotalDejaReglerByCes(Long cesId) {
+    public BigDecimal calculateMtSinistreTotalDejaPayeByCes(Long cesId) {
         return null;
     }
 
     @Override
-    public BigDecimal calculateResteSinistreTotalAReglerByCes(Long cesId) {
+    public BigDecimal calculateResteSinistreTotalAPayerByCes(Long cesId) {
         return null;
     }
 
     @Override
-    public BigDecimal calculateTauxDeReglementSinistreByCes(Long cesId) {
+    public BigDecimal calculateTauxDePaiementSinistreByCes(Long cesId) {
         return null;
     }
 
 
     @Override
-    public BigDecimal calculateMtSinistreTotalARegle(Long exeCode)
+    public BigDecimal calculateMtSinistreTotalAPayer(Long exeCode)
     {
         BigDecimal mtTotalSinistreByExercice = sinRepo.calculateMtTotalSinistreByExercice(exeCode);
         return mtTotalSinistreByExercice == null ? ZERO : mtTotalSinistreByExercice;
     }
 
     @Override
-    public BigDecimal calculateMtSinistreTotalDejaRegle(Long exeCode)
+    public BigDecimal calculateMtSinistreTotalDejaPaye(Long exeCode)
     {
         BigDecimal mtTotalSinistreDejaReglerByExercice = sinRepo.calculateMtTotalSinistreDejaReglerByExercice(exeCode);
         return mtTotalSinistreDejaReglerByExercice == null ? ZERO : mtTotalSinistreDejaReglerByExercice;
     }
 
     @Override
-    public BigDecimal calculateResteSinistreTotalARegler(Long exeCode) {
-        return this.calculateMtSinistreTotalARegle(exeCode).subtract(this.calculateMtSinistreTotalDejaRegle(exeCode));
+    public BigDecimal calculateResteSinistreTotalAPayer(Long exeCode) {
+        return this.calculateMtSinistreTotalAPayer(exeCode).subtract(this.calculateMtSinistreTotalDejaPaye(exeCode));
     }
 
     @Override
-    public BigDecimal calculateTauxDeReglementSinistreByExercice(Long exeCode) {
-        BigDecimal mtTotalSinistreByExercice = this.calculateMtSinistreTotalARegle(exeCode);
+    public BigDecimal calculateTauxDePaiementSinistreByExercice(Long exeCode) {
+        BigDecimal mtTotalSinistreByExercice = this.calculateMtSinistreTotalAPayer(exeCode);
         if(mtTotalSinistreByExercice.compareTo(ZERO) == 0) throw new AppException("La montant total des sinistres de l'exercice est null");
-        return this.calculateMtSinistreTotalDejaRegle(exeCode).divide(mtTotalSinistreByExercice, 2, RoundingMode.HALF_UP)
+        return this.calculateMtSinistreTotalDejaPaye(exeCode).divide(mtTotalSinistreByExercice, 2, RoundingMode.HALF_UP)
                 .multiply(CENT);
 
     }
@@ -184,29 +200,29 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
 
 
     @Override
-    public BigDecimal calculateMtSinistreTotalAReglerByCes(Long cesId, Long exeCode)
+    public BigDecimal calculateMtSinistreTotalAPayerByCes(Long cesId, Long exeCode)
     {
         BigDecimal MtTotalARegleByCes = sinRepo.calculateMtSinistreAReglerByCesAndExercice(cesId, exeCode);
         return MtTotalARegleByCes == null ? ZERO : MtTotalARegleByCes;
     }
     @Override
-    public BigDecimal calculateMtSinistreTotalDejaReglerByCes(Long cesId, Long exeCode) {
+    public BigDecimal calculateMtSinistreTotalDejaPayeByCes(Long cesId, Long exeCode) {
         BigDecimal MtTotalARegleByCes = sinRepo.calculateMtSinistreDejaRegleByCesAndExercice(cesId, exeCode);
         return MtTotalARegleByCes == null ? ZERO : MtTotalARegleByCes;
     }
 
     @Override
-    public BigDecimal calculateResteSinistreTotalAReglerByCes(Long cesId, Long exeCode) {
-        return this.calculateMtSinistreTotalAReglerByCes(cesId, exeCode).subtract(this.calculateMtSinistreTotalDejaReglerByCes(cesId, exeCode));
+    public BigDecimal calculateResteSinistreTotalAPayerByCes(Long cesId, Long exeCode) {
+        return this.calculateMtSinistreTotalAPayerByCes(cesId, exeCode).subtract(this.calculateMtSinistreTotalDejaPayeByCes(cesId, exeCode));
     }
 
     @Override
-    public BigDecimal calculateTauxDeReglementSinistreByCes(Long cesId, Long exeCode)
+    public BigDecimal calculateTauxDePaiementSinistreByCes(Long cesId, Long exeCode)
     {
-        BigDecimal MtTotalARegleByCesAndExercice = this.calculateMtSinistreTotalAReglerByCes(cesId, exeCode);
+        BigDecimal MtTotalARegleByCesAndExercice = this.calculateMtSinistreTotalAPayerByCes(cesId, exeCode);
         if(MtTotalARegleByCesAndExercice == null) throw new AppException("Le montant sinistre total à regler par le cessionnaire au cours de l'exercice " + exeCode + " est null");
 
-        return this.calculateMtSinistreTotalDejaReglerByCes(cesId, exeCode)
+        return this.calculateMtSinistreTotalDejaPayeByCes(cesId, exeCode)
                 .divide(MtTotalARegleByCesAndExercice, 2, RoundingMode.HALF_UP)
                 .multiply(CENT);
     }

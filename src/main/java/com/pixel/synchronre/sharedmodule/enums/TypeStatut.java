@@ -6,5 +6,6 @@ public enum TypeStatut
     AFFAIRE,
     REGLEMENT,
     PLACEMENT,
-    USER;
+    USER,
+    PARTAGE;
 }

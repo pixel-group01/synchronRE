@@ -6,22 +6,17 @@ import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,9 +47,9 @@ public abstract class SinMapper
     @Mapping(target = "affActivite", source = "affaire.affActivite")
     @Mapping(target = "affCapitalInitial", source = "affaire.affCapitalInitial")
 
-    @Mapping(target = "dejaRegle", expression = "java(sinComptaService.calculateMtDejaRegleBySin(sin.getSinId()))")
-    @Mapping(target = "resteARegler", expression = "java(sinComptaService.calculateMtARegleBySin(sin.getSinId()))")
-    @Mapping(target = "tauxDeReglement", expression = "java(sinComptaService.calculateTauxDeReglementSinistre(sin.getSinId()))")
+    @Mapping(target = "dejaRegle", expression = "java(sinComptaService.calculateMtDejaPayeBySin(sin.getSinId()))")
+    @Mapping(target = "resteARegler", expression = "java(sinComptaService.calculateMtAPayerBySin(sin.getSinId()))")
+    @Mapping(target = "tauxDeReglement", expression = "java(sinComptaService.calculateTauxDePaiementSinistre(sin.getSinId()))")
 
     @Mapping(target = "detailsEtatComptableSinistres", expression = "java(this.getDetailsEtatComptables(sin.getSinId()))")
     public abstract EtatComptableSinistreResp mapToEtatComptableSinistre(Sinistre sin);
@@ -74,10 +69,10 @@ public abstract class SinMapper
 
         BeanUtils.copyProperties(ces, details);
 
-        details.setMtTotalARegler(sinComptaService.calculateMtARegleBySinAndCes(sinId, cesId));
-        details.setMtDejaRegle(sinComptaService.calculateMtDejaReglerBySinAndCes(sinId, cesId));
-        details.setMtResteARegler(sinComptaService.calculateRestAReglerBySinAndCes(sinId, cesId));
-        details.setTauxDeReglement(sinComptaService.calculateTauxDeReglementSinistreBySinAndCes(sinId, cesId));
+        details.setMtTotalARegler(sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId));
+        details.setMtDejaRegle(sinComptaService.calculateMtDejaPayeBySinAndCes(sinId, cesId));
+        details.setMtResteARegler(sinComptaService.calculateRestAPayerBySinAndCes(sinId, cesId));
+        details.setTauxDeReglement(sinComptaService.calculateTauxDePaiementSinistreBySinAndCes(sinId, cesId));
 
         return details;
     }

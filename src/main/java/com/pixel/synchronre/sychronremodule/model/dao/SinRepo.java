@@ -60,7 +60,10 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
     List<Cessionnaire> getCessionnaireBySinId(Long sinId);
 
     @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true")
-    BigDecimal calculateMtDejaRegle(Long sinId);
+    BigDecimal calculateMtDejaPayeBySin(Long sinId);
+
+    @Query("select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.typeReglement.uniqueCode = 'reversements' and r.regStatut = true")
+    BigDecimal calculateMtDejaReverseBySin(Long sinId);
 
     @Query("""
         select (s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId 

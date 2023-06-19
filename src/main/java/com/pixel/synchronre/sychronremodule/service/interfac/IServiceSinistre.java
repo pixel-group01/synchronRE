@@ -8,12 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IServiceSinistre
 {
     SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException;
     SinistreDetailsResp updateSinistre(UpdateSinistreReq dto) throws UnknownHostException;
-    Page<SinistreDetailsResp> searchSinistre(String key, Pageable pageable);
+    Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable);
 
     EtatComptableSinistreResp getEtatComptable(Long sinId);
 }

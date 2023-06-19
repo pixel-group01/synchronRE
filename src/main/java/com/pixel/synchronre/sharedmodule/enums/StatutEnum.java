@@ -14,6 +14,7 @@ public enum StatutEnum
     EN_ATTENTE_DE_PAIEMENT("APAI", "En attente de paiement"),
     EN_COURS_DE_PAIEMENT("CPAI", "En cours de paiement"),
     EN_COURS_DE_REVERSEMENT("CREV", "En cours de reversement"),
+    EN_COURS_DE_PAIEMENT_REVERSEMENT("CPAI-CREV", "En cours de paiement et de reversement"),
     SOLDE("SOLD", "Règlement soldée"),
     EN_ATTENTE_D_ARCHIVAGE("AARC", "En attente d'archivage"),
     ARCHIVE("ARC", "Archivé"),
@@ -26,6 +27,8 @@ public enum StatutEnum
     ANNULE("ANNULE", "Annulé"),
     MODIFIE("MOD", "Modifié"),
     MAIL("MAIL", "Mail envoyé"),
+    CREV("CREV", "En cours de reversement"),
+    CPAI_CREV("CPAI-CREV", "En cours paiement et de reversement"),
     ACCEPTE("ACCEPTE", "Accepté");
 
     public String staCode;
