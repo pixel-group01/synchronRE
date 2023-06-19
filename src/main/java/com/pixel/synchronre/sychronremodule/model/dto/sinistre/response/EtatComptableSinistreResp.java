@@ -22,10 +22,11 @@ public class EtatComptableSinistreResp
     private BigDecimal affCapitalInitial;
 
     private BigDecimal dejaRegle;
-    private BigDecimal restARegle;
+    private BigDecimal resteARegler;
     private BigDecimal tauxDeReglement;
     private List<DetailsEtatComptableSinistre> detailsEtatComptableSinistres;
 
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     public class DetailsEtatComptableSinistre
     {
         private Long cesId;

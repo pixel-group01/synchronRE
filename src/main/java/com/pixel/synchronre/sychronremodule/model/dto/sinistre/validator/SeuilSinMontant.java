@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 @Documented
 public @interface SeuilSinMontant
 {
-    String message() default "sinMontant::Le montant du sinistre ne peut excéder le capital de l'affaire";
+    String message() default "sinMontant::Le montant du sinistre ne peut excéder le montant du sinistre maximum";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
@@ -36,10 +36,10 @@ public @interface SeuilSinMontant
         public boolean isValid(CreateSinistreReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            BigDecimal affCapital = affRepo.getCapitalInitial(dto.getAffId());
-            if(affCapital == null) return true;
+            BigDecimal facSmpLci = affRepo.getFacSmpLci(dto.getAffId());
+            if(facSmpLci == null) return true;
             if(dto.getSinMontant100() == null) return true;
-            return  dto.getSinMontant100().compareTo(affCapital)<=0;
+            return  dto.getSinMontant100().compareTo(facSmpLci)<=0;
         }
     }
 
@@ -52,10 +52,10 @@ public @interface SeuilSinMontant
         public boolean isValid(UpdateSinistreReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            BigDecimal affCapital = affRepo.getCapitalInitial(dto.getAffId());
-            if(affCapital == null) return true;
+            BigDecimal facSmpLci = affRepo.getFacSmpLci(dto.getAffId());
+            if(facSmpLci == null) return true;
             if(dto.getSinMontant100() == null) return true;
-            return  dto.getSinMontant100().compareTo(affCapital)<=0;
+            return  dto.getSinMontant100().compareTo(facSmpLci)<=0;
         }
     }
 }

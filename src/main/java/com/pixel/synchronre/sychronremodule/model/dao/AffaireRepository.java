@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.Facul
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,6 +25,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
     @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     BigDecimal getCapitalInitial(Long affId);
+
+    @Query("select coalesce(a.facSmpLci, 0)  from Affaire a where a.affId = ?1")
+    BigDecimal getFacSmpLci(Long affId);
 
     @Query("select r from Affaire r where r.affId = ?1")
     Optional<Affaire> findById(Long affId);
@@ -72,6 +76,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
     @Query("select a.affCode from Affaire a where a.affId = ?1")
     String getAffCode(Long affId);
+
+    @Query("select s.affaire from Sinistre s where s.sinId = ?1")
+    Optional<Affaire> getAffaireBySinId(Long sinId);
 
     //@Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
     //BigDecimal getTauxCommissionReassureur(Long affId);

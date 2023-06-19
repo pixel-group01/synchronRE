@@ -14,6 +14,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSinistreReq;
+import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
@@ -116,5 +117,12 @@ public class ServiceSinistreImpl implements IServiceSinistre
     {
         Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, jwtService.getConnectedUserCesId(), Arrays.asList(), pageable);
         return sinPage;
+    }
+
+    @Override
+    public EtatComptableSinistreResp getEtatComptable(Long sinId) {
+        Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
+        sinistre.setAffaire(affRepo.findById(sinistre.getAffaire().getAffId()).orElseThrow(()->new AppException("Affaire introuvable")));
+        return sinMapper.mapToEtatComptableSinistre(sinistre);
     }
 }

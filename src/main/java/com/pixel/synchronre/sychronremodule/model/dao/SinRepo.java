@@ -65,7 +65,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
     @Query("""
         select (s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId 
         where s.sinId = ?1 and r.cessionnaire.cesId = ?2 
-        and r.type = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISE'
+        and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
     """)
     BigDecimal calculateMtAReglerBySinAndCes(Long sinId, Long cesId);
 
@@ -91,7 +91,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
     @Query("""
         select (s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100 from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId
         where r.cessionnaire.cesId = ?1 and a.exercice = ?2
-        and r.type = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISE'
+        and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISE'
     """)
     BigDecimal calculateMtSinistreAReglerByCesAndExercice(Long cesId, Long exeCode);
 

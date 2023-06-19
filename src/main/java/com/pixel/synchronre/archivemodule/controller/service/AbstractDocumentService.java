@@ -125,7 +125,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 	}
 
 	@Bean
-	@DependsOn("commandLineRunner")
+	//@DependsOn("commandLineRunner")
 	CommandLineRunner createSystemDirectories(TypeRepo typeRepo)
 	{
 		return(args)->

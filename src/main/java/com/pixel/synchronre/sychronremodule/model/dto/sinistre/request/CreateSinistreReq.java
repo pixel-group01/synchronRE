@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @SeuilSinMontant
 @CoherentDates(message = "sinDateSurvenance::La date de survenance ne peut être ultérieure à la date de déclaration")
-@SinistreNotTooLate(message = "sinDateSurvenance::La date de survenance du sinistre est n'est pas prise en charge par les termes du contrat")
+@SinistreNotTooLate(message = "sinDateSurvenance::La date de survenance du sinistre n'est pas prise en charge par les termes du contrat")
 public class CreateSinistreReq
 {
     @NotNull(message = "Veuillez saisir le montant du sinistre")

@@ -12,10 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
@@ -156,5 +153,6 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     Repartition findValidByAffIdAndPclId(Long affId, Long pclId);
 
 
-
+    @Query("select r.cessionnaire.cesId from Repartition r where r.affaire.affId = (select s.affaire.affId from Sinistre s where s.sinId = ?1) and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
+    List<Long> getCesIdsBySinId(Long sinId);
 }

@@ -70,7 +70,7 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     @Override
     public BigDecimal calculateRestAReglerBySinAndCes(Long sinId, Long cesId)
     {
-        return this.calculateMtDejaReglerBySinAndCes(sinId, cesId)
+        return this.calculateMtARegleBySinAndCes(sinId, cesId)
                 .subtract(this.calculateMtDejaReglerBySinAndCes(sinId, cesId));
     }
 
