@@ -26,7 +26,7 @@ public class EtatComptableSinistreResp
     private BigDecimal tauxDeReglement;
     private List<DetailsEtatComptableSinistre> detailsEtatComptableSinistres;
 
-    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor //Getter, Setter and constuctors
     public class DetailsEtatComptableSinistre
     {
         private Long cesId;
