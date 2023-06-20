@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.math.BigDecimal;
 import java.util.*;
 
-
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
     @Query("select r.repSousCommission from Repartition r where r.repId = ?1")
