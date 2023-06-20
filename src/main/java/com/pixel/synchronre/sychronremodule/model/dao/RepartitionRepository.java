@@ -154,5 +154,5 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
 
     @Query("select r.cessionnaire.cesId from Repartition r where r.affaire.affId = (select s.affaire.affId from Sinistre s where s.sinId = ?1) and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
-    List<Long> getCesIdsBySinId(Long sinId);
+    List<Long> getCesIdsBySinId(Long sinId);//
 }
