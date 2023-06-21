@@ -70,7 +70,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         where s.sinId = ?1 and r.cessionnaire.cesId = ?2 
         and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
     """)
-    BigDecimal calculateMtAReglerBySinAndCes(Long sinId, Long cesId);
+    BigDecimal calculateMtAPayerBySinAndCes(Long sinId, Long cesId);
 
     @Query("""
         select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'

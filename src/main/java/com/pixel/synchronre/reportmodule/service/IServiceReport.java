@@ -11,7 +11,5 @@ import java.util.Map;
 
 public interface IServiceReport
 {
-    byte[] generateReport(String reportName, Map<String, Object> params) throws Exception;
-
-
+    byte[] generateReport(String reportName, Map<String, Object> params, List<Object> data, String qrText) throws Exception;
 }

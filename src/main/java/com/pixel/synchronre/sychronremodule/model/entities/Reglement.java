@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -49,5 +50,60 @@ public class Reglement {
 
   public Reglement(Long regId) {
     this.regId = regId;
+  }
+
+  public Long getSinId()
+  {
+    if(sinistre != null ) return sinistre.getSinId();
+    return null;
+  }
+
+  public Long getAffId()
+  {
+    if(affaire != null && affaire.getAffId() != null) return affaire.getAffId();
+    if(sinistre != null && sinistre.getAffaire() != null && sinistre.getAffaire().getAffId() != null) return sinistre.getAffaire().getAffId();
+    return null;
+  }
+
+  public String getAffCode()
+  {
+    if(affaire != null) return affaire.getAffCode();
+    if(sinistre != null && sinistre.getAffaire() != null) return sinistre.getAffaire().getAffCode();
+    return null;
+  }
+
+
+  public String getAffAssure()
+  {
+    if(affaire != null) return affaire.getAffAssure();
+    if(sinistre != null && sinistre.getAffaire() != null) return sinistre.getAffaire().getAffAssure();
+    return null;
+  }
+
+  public String getAffActivite()
+  {
+    if(affaire != null) return affaire.getAffActivite();
+    if(sinistre != null && sinistre.getAffaire() != null) return sinistre.getAffaire().getAffActivite();
+    return null;
+  }
+
+  public LocalDate getAffDateEffet()
+  {
+    if(affaire != null) return affaire.getAffDateEffet();
+    if(sinistre != null && sinistre.getAffaire() != null) return sinistre.getAffaire().getAffDateEffet();
+    return null;
+  }
+
+  public LocalDate getAffDateEcheance()
+  {
+    if(affaire != null) return affaire.getAffDateEcheance();
+    if(sinistre != null && sinistre.getAffaire() != null) return sinistre.getAffaire().getAffDateEcheance();
+    return null;
+  }
+
+  public Long getCesId()
+  {
+    if(cessionnaire != null ) return cessionnaire.getCesId();
+    return null;
   }
 }

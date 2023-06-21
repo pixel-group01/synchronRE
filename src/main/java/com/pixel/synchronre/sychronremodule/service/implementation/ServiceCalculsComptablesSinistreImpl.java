@@ -56,8 +56,8 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     @Override
     public BigDecimal calculateMtAPayerBySinAndCes(Long sinId, Long cesId)
     {
-        BigDecimal mtAReglerBySinAndCes = sinRepo.calculateMtAReglerBySinAndCes(sinId, cesId);
-        return mtAReglerBySinAndCes == null ? ZERO : mtAReglerBySinAndCes;
+        BigDecimal mtAPayerBySinAndCes = sinRepo.calculateMtAPayerBySinAndCes(sinId, cesId);
+        return mtAPayerBySinAndCes == null ? ZERO : mtAPayerBySinAndCes;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     }
 
     @Override
-    public BigDecimal calculateRestAPayerBySinAndCes(Long sinId, Long cesId)
+    public BigDecimal calculateResteAPayerBySinAndCes(Long sinId, Long cesId)
     {
         return this.calculateMtAPayerBySinAndCes(sinId, cesId)
                 .subtract(this.calculateMtDejaPayeBySinAndCes(sinId, cesId));
@@ -141,7 +141,7 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     }
 
     @Override
-    public BigDecimal calculateResteSinistreTotalAReverser(Long sinId)
+    public BigDecimal calculateMtSinistreEnAttenteDeAReversement(Long sinId)
     {
         BigDecimal mtDejaPaye = sinRepo.calculateMtDejaPayeBySin(sinId);
         BigDecimal mtDejaReverse = sinRepo.calculateMtDejaReverseBySin(sinId);

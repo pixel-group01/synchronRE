@@ -27,7 +27,7 @@ public class CreateFacultativeReq
     private String affActivite;
 
     @NotNull(message = "Veuillez saisir la date de prise d'effet de l'affaire")
-    @FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
+    //@FutureOrPresent(message = "La date d'effet de l'affaire doit être une date ultérieure à aujourd'hui")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate affDateEffet;
 

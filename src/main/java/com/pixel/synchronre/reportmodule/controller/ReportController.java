@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,11 +46,12 @@ public class ReportController
             //Affichage du cachet en fonction d'une expression dans l'etat
         if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
             params.put("param_visible", "true");
-            }else{
+        }
+        else{
             params.put("param_visible", "false");
         }
             //fin de la manip
-        byte[] reportBytes = jrService.generateReport(jrConfig.noteCession, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteCession, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-de-cession");
     }
 
@@ -71,14 +73,13 @@ public class ReportController
             params.put("param_visible", "false");
         }
 
-        byte[] reportBytes = jrService.generateReport(jrConfig.noteDebit, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteDebit, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-de-debit");
     }
 
     @GetMapping("/note-de-credit/{affId}/{cesId}")
     public void generateNoteCredit(HttpServletResponse response, @PathVariable Long affId, @PathVariable Long cesId) throws Exception
     {
-
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
@@ -87,10 +88,9 @@ public class ReportController
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", jrConfig.imagesLocation);
-        byte[] reportBytes = jrService.generateReport(jrConfig.noteCredit, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteCredit, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-de-credit");
     }
-
 
     @GetMapping("/note-cession-sinistre/{plaId}")
     public void generateNoteCessionSinistre(HttpServletResponse response, @PathVariable Long plaId) throws Exception
@@ -110,10 +110,9 @@ public class ReportController
         }else{
             params.put("param_visible", "false");
         }
-        byte[] reportBytes = jrService.generateReport(jrConfig.noteCessionSinistre, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteCessionSinistre, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-cession-sinistre");
     }
-
 
     @GetMapping("/note-debit-sinistre/{affId}")
     public void generateNoteDebitSinistre(HttpServletResponse response, @PathVariable Long affId) throws Exception
@@ -124,7 +123,7 @@ public class ReportController
         params.put("aff_assure", affaire.getAffAssure());
         params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("param_image", jrConfig.imagesLocation);
-        byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.noteDebitSinistre, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-Debit-Sinistre");
     }
 
@@ -134,7 +133,7 @@ public class ReportController
         Reglement reglement =  regRepo.findById(regId).orElseThrow(()-> new AppException(("Règlement introuvable")));
         Map<String, Object> params = new HashMap<>();
         params.put("reg_id", reglement.getRegId());
-        byte[] reportBytes = jrService.generateReport(jrConfig.cheque, params);
+        byte[] reportBytes = jrService.generateReport(jrConfig.cheque, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Cheque");
     }
 }

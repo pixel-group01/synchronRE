@@ -51,9 +51,11 @@ public abstract class SinMapper
     @Mapping(target = "resteARegler", expression = "java(sinComptaService.calculateMtAPayerBySin(sin.getSinId()))")
     @Mapping(target = "tauxDeReglement", expression = "java(sinComptaService.calculateTauxDePaiementSinistre(sin.getSinId()))")
 
+    @Mapping(target = "mtDejaReverse", expression = "java(sinComptaService.calculateMtSinistreTotalDejaReverseBySin(sin.getSinId()))")
+    @Mapping(target = "mtEnAttenteDeReversement", expression = "java(sinComptaService.calculateMtSinistreEnAttenteDeAReversement(sin.getSinId()))")
+
     @Mapping(target = "detailsEtatComptableSinistres", expression = "java(this.getDetailsEtatComptables(sin.getSinId()))")
     public abstract EtatComptableSinistreResp mapToEtatComptableSinistre(Sinistre sin);
-
 
     protected List<EtatComptableSinistreResp.DetailsEtatComptableSinistre> getDetailsEtatComptables(Long sinId)
     {
@@ -71,7 +73,7 @@ public abstract class SinMapper
 
         details.setMtTotalARegler(sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId));
         details.setMtDejaRegle(sinComptaService.calculateMtDejaPayeBySinAndCes(sinId, cesId));
-        details.setMtResteARegler(sinComptaService.calculateRestAPayerBySinAndCes(sinId, cesId));
+        details.setMtResteARegler(sinComptaService.calculateResteAPayerBySinAndCes(sinId, cesId));
         details.setTauxDeReglement(sinComptaService.calculateTauxDePaiementSinistreBySinAndCes(sinId, cesId));
 
         return details;

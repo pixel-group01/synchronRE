@@ -1,15 +1,12 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.controller.service.ReglementDocUploader;
-import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.ReglementActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
@@ -61,7 +58,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final String REVERSEMENT = "reversements";
 
 
-    @Override
+    @Override @Transactional
     public ReglementDetailsResp createReglementAffaire(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
         switch (typeReg)
@@ -77,7 +74,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
-        paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
+        //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
         paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
@@ -90,7 +87,6 @@ public class ServiceReglementImpl implements IserviceReglement {
         if(!hasReglement) {
             mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_PAIEMENT.staCode, null));
         }
-        if(dto.getRegDocReqs() == null) return reglementMapper.mapToReglementDetailsResp(paiement);
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
 
@@ -100,7 +96,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal restAReverser = comptaAffaireService.calculateRestAReverser(dto.getAffId());
         if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
-        reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
+        //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
         reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
@@ -111,10 +107,9 @@ public class ServiceReglementImpl implements IserviceReglement {
         if(restARegler.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {
             mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), SOLDE.staCode, null));
         }
-        if(dto.getRegDocReqs() == null) return reglementMapper.mapToReglementDetailsResp(reversement);
         return reglementMapper.mapToReglementDetailsResp(reversement);
     }
-
+    @Override @Transactional
     public ReglementDetailsResp createReglementSinistre(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
         switch (typeReg)
@@ -125,12 +120,13 @@ public class ServiceReglementImpl implements IserviceReglement {
         }
     }
 
+    @Override @Transactional
     public ReglementDetailsResp createPaiementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
         boolean hasPaiement = regRepo.sinistreHasReglement(dto.getSinId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
-        paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
+        //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
         paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
         paiement = regRepo.save(paiement);
@@ -146,12 +142,13 @@ public class ServiceReglementImpl implements IserviceReglement {
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
 
+    @Override @Transactional
     public ReglementDetailsResp createReversementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
         boolean hasReversement = regRepo.sinistreHasReglement(dto.getSinId(), REVERSEMENT);
         Reglement reversement = reglementMapper.mapToReglement(dto);
 
-        reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
+        //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
         reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement);
@@ -172,7 +169,7 @@ public class ServiceReglementImpl implements IserviceReglement {
             }
 
         }
-        BigDecimal restAReverser = comptaSinistreService.calculateResteSinistreTotalAReverser(dto.getSinId());
+        BigDecimal restAReverser = comptaSinistreService.calculateMtSinistreEnAttenteDeAReversement(dto.getSinId());
 
         // Si le reste à payer et le reste à reverser sont égaux à zero
         if(restAPayer.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {

@@ -25,10 +25,17 @@ public class ReglementDetailsResp {
     private BigDecimal dejaRegle;
     private BigDecimal resteARegler;
 
+    private BigDecimal mtAffaireDejaPaye;
+    private BigDecimal mtAffaireRestantAPayer;
+
     private Long sinId;
     private String sinCode;
     private BigDecimal sinMontant100;
     private LocalDate sinDateSurvenance;
     private LocalDate sinDateDeclaration;
     private String sinCommentaire;
+    private BigDecimal mtSinDejaPaye;
+    private BigDecimal mtSinResteAPayer;
+    private BigDecimal mtSinDejaReverse;
+    private BigDecimal mtSinEnAttenteDeReversement;
 }

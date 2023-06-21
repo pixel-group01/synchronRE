@@ -26,7 +26,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@RestController @Validated
 @RequiredArgsConstructor
 @RequestMapping(path ="/{typeReg}")
 @ResponseStatus(HttpStatus.OK)
@@ -37,23 +37,23 @@ public class ReglementController
     private final RepartitionRepository repRepo;
     private final FacultativeMapper affMapper;
 
-    @PostMapping(path = "/affaire/create") @Validated({REG_AFF_GROUP.class})
-    public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Valid CreateReglementReq dto) throws UnknownHostException {
+    @PostMapping(path = "/affaire/create")
+    public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Validated({REG_AFF_GROUP.class}) CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglementAffaire(typeReg,dto);
     }
 
-    @PutMapping(path = "/affaire/update") @Validated({REG_AFF_GROUP.class})
-    public ReglementDetailsResp updateReglementAffaire(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
+    @PutMapping(path = "/affaire/update")
+    public ReglementDetailsResp updateReglementAffaire(@RequestBody @Validated({REG_AFF_GROUP.class}) UpdateReglementReq dto) throws UnknownHostException {
         return regService.updateReglement(dto);
     }
 
-    @PostMapping(path = "/sinistre/create") @Validated({REG_SIN_GROUP.class})
-    public ReglementDetailsResp createReglementSinistre(@PathVariable String typeReg, @RequestPart @Valid CreateReglementReq dto) throws UnknownHostException {
+    @PostMapping(path = "/sinistre/create")
+    public ReglementDetailsResp createReglementSinistre(@PathVariable String typeReg, @RequestBody @Validated({REG_SIN_GROUP.class}) CreateReglementReq dto) throws UnknownHostException {
         return regService.createReglementSinistre(typeReg,dto);
     }
 
-    @PutMapping(path = "/sinistre/update") @Validated({REG_SIN_GROUP.class})
-    public ReglementDetailsResp updateReglementSinistre(@RequestBody @Valid UpdateReglementReq dto) throws UnknownHostException {
+    @PutMapping(path = "/sinistre/update")
+    public ReglementDetailsResp updateReglementSinistre(@RequestBody @Validated({REG_SIN_GROUP.class}) UpdateReglementReq dto) throws UnknownHostException {
         return regService.updateReglement(dto);
     }
 

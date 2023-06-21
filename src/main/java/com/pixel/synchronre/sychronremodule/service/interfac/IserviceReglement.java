@@ -23,6 +23,12 @@ public interface IserviceReglement
     ReglementDetailsResp createReglementSinistre(String typeReg, CreateReglementReq dto) throws UnknownHostException;
 
 
+    @Transactional
+    ReglementDetailsResp createPaiementSinistre(CreateReglementReq dto) throws UnknownHostException;
+
+    @Transactional
+    ReglementDetailsResp createReversementSinistre(CreateReglementReq dto) throws UnknownHostException;
+
     ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException;
     Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typRegUniqueCode, Pageable pageable);
 }

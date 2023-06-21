@@ -17,7 +17,7 @@ public class SynchronReApplication {
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);
     }
-   @Bean(name = "commandLineRunner")
+   //@Bean(name = "commandLineRunner")
     public CommandLineRunner start(TypeLoader typeLoader, AdminLoader adminLoader, StatutLoader statutLoader,
                                    DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,

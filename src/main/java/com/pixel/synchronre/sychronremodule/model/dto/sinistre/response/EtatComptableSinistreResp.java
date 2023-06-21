@@ -14,7 +14,7 @@ public class EtatComptableSinistreResp
     private BigDecimal sinMontant100;
     private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
-    private LocalDate  sinDateDeclaration;
+    private LocalDate sinDateDeclaration;
     private String sinCommentaire;
     private String affCode;
     private String affAssure;
@@ -24,6 +24,9 @@ public class EtatComptableSinistreResp
     private BigDecimal dejaRegle;
     private BigDecimal resteARegler;
     private BigDecimal tauxDeReglement;
+
+    private BigDecimal mtDejaReverse;
+    private BigDecimal mtEnAttenteDeReversement;
     private List<DetailsEtatComptableSinistre> detailsEtatComptableSinistres;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor //Getter, Setter and constuctors

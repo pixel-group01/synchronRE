@@ -27,8 +27,6 @@ public class UpdateReglementReq {
     @PositiveOrZero(message = "Le montant du paiement doit être un nombre positif")
     private BigDecimal regMontant;
 
-    private String regMontantLettre;
-
     @NotNull(message = "Veuillez saisir la date du paiement")
     @FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
