@@ -39,4 +39,10 @@ public class SinistreController
     public EtatComptableSinistreResp getEtatComptable(@PathVariable Long sinId) throws UnknownHostException {
         return sinService.getEtatComptable(sinId);
     }
+
+    @PutMapping(path = "/transmettre/{sinId}")
+    public void transmettreSinistreAuCourtier(@PathVariable Long sinId) throws UnknownHostException
+    {
+        sinService.transmettreSinistreAuCourtier(sinId);
+    }
 }

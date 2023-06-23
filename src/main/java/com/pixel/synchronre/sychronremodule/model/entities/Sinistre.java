@@ -26,6 +26,8 @@ public class Sinistre
     private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate  sinDateDeclaration;
+    private BigDecimal sinMontantTotAffaire;
+    private String sinMontantTotAffaireLettre;
     private String sinCommentaire;
 
     @ManyToOne @JoinColumn(name = "aff_id")
