@@ -80,6 +80,13 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("select s.affaire from Sinistre s where s.sinId = ?1")
     Optional<Affaire> getAffaireBySinId(Long sinId);
 
+    @Query("""
+        select sum(r.repCapital) from Repartition r join r.affaire a on r.affaire.affId = a.affId 
+        where a.affId = ?1 and r.type.uniqueCode = 'REP_PLA' 
+         and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
+    """)
+    BigDecimal calculateMtotAPayerByCesByAff(Long affId);
+
     //@Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
     //BigDecimal getTauxCommissionReassureur(Long affId);
 

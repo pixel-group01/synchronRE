@@ -17,4 +17,6 @@ public interface IServiceSinistre
     Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable);
 
     EtatComptableSinistreResp getEtatComptable(Long sinId);
+
+    void transmettreSinistreAuCourtier(Long sinId) throws UnknownHostException;
 }

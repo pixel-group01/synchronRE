@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-06-16T14:43:35 -->
+<!-- 2023-06-23T03:18:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Debit_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -361,7 +361,8 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
                 couverture.cou_libelle,
                 branche.bran_libelle,
                 sinistre.sin_montant100,
-                sinistre.sin_code
+                sinistre.sin_code,
+                UPPER(sinistre.sin_montant_tot_affaire_lettre) as sin_montant_tot_affaire_lettre
 FROM affaire,
      cedante,
      couverture,
@@ -390,6 +391,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="bran_libelle" class="java.lang.String"/>
 	<field name="sin_montant100" class="java.math.BigDecimal"/>
 	<field name="sin_code" class="java.lang.String"/>
+	<field name="sin_montant_tot_affaire_lettre" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -760,6 +762,13 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
 			</image>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="2" y="315" width="548" height="45" uuid="cd62f046-3209-48c6-97f8-863a9df722bf"/>
+				<textElement markup="html">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Arrêté  la présente  note à la somme de <b>Francs CFA " +$F{sin_montant_tot_affaire_lettre}+ "</b>"]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

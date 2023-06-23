@@ -73,6 +73,13 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
     BigDecimal calculateMtAPayerBySinAndCes(Long sinId, Long cesId);
 
     @Query("""
+        select sum(r.repCapital) from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId 
+        where s.sinId = ?1 and r.type.uniqueCode = 'REP_SIN' 
+         and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
+    """)
+    BigDecimal calculateMtotAPayerBySinAndAff(Long sinId);
+
+    @Query("""
         select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'
 """)
     BigDecimal calculateMtDejaReglerBySinAndCes(Long sinId, Long cesId);
