@@ -44,7 +44,7 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
             r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
             r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
             s.staLibelle, r.cessionnaire.cesInterlocuteur)
-        from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and r.repStaCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
+        from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and s.staCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
 """)
     List<CessionnaireListResp> findByAffId(Long affId);
 

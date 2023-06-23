@@ -91,7 +91,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinistre.setStatut(sinStatut);
         sinistre = sinRepo.save(sinistre);
         Long sinId = sinistre.getSinId();
-        //cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
+        cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
@@ -114,8 +114,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Sinistre oldSin = sinCopier.copy(sinistre);
         BeanUtils.copyProperties(dto, sinistre);
         sinistre = sinRepo.save(sinistre);
-//        if(oldSin.getSinMontant100().compareTo(dto.getSinMontant100()) != 0 || oldSin.getSinMontantHonoraire().compareTo(dto.getSinMontantHonoraire()) != 0)
-//           cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, dto.getSinId(), ces));
+       if(oldSin.getSinMontant100().compareTo(dto.getSinMontant100()) != 0 || oldSin.getSinMontantHonoraire().compareTo(dto.getSinMontantHonoraire()) != 0)
+          cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, dto.getSinId(), ces));
         logService.logg(SynchronReActions.UPDATE_SINISTRE, oldSin, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }
