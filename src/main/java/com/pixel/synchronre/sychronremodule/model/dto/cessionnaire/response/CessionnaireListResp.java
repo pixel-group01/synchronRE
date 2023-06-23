@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response;
 
-
 import lombok.*;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder

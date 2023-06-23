@@ -19,6 +19,7 @@ public class Repartition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repId;
     private BigDecimal repCapital;
+    private String repCapitalLettre;
     private BigDecimal repTaux;
     private BigDecimal repSousCommission;
     private BigDecimal repTauxComCed;
@@ -39,6 +40,9 @@ public class Repartition {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @ManyToOne @JoinColumn(name = "sin_id")
+    private Sinistre sinistre;
 
     public Repartition(Long repId) {
         this.repId = repId;

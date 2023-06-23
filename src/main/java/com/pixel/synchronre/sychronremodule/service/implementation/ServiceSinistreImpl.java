@@ -4,13 +4,17 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.SinStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
@@ -18,8 +22,10 @@ import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSin
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSinistre;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +34,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
@@ -45,8 +52,32 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private final AffaireRepository affRepo;
     private final IServiceMouvement mvtService;
     private final EmailSenderService mailSenderService;
+    private  final CessionnaireRepository cesRepo;
+    private final IServiceCalculsComptablesSinistre sinComptaService;
+    private final TypeRepo typeRepo;
+    private final RepartitionRepository repRepo;
     @Value("${spring.mail.username}")
     private String synchronreEmail;
+
+    private void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
+    {
+        Long cesId = ces.getCesId();
+        BigDecimal repCaptital = sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId);
+        Repartition sinRep = new Repartition();
+
+        sinRep.setSinistre(new Sinistre(sinId));
+        sinRep.setRepStatut(true);
+        sinRep.setRepCapital(repCaptital);
+        sinRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(repCaptital.doubleValue()));
+        sinRep.setType(typeRepo.findByUniqueCode("REP_SIN"));
+        sinRep.setRepInterlocuteur(ces.getCesInterlocuteur());
+
+        Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(aff.getAffId(), "REP_PLA", cesId);
+        if(placement == null) throw new AppException("Placement introuvable");
+        sinRep.setRepTaux(repRepo.getTauRep(placement.getRepId()));
+        sinRep.setCessionnaire(new Cessionnaire(cesId));
+        repRepo.save(sinRep);
+    }
 
     @Override @Transactional
     public SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException
@@ -59,6 +90,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Statut sinStatut = isCourtier ? new Statut(TRANSMIS.staCode) : new Statut(SAISIE.staCode);
         sinistre.setStatut(sinStatut);
         sinistre = sinRepo.save(sinistre);
+        Long sinId = sinistre.getSinId();
+        //cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
@@ -76,10 +109,13 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public SinistreDetailsResp updateSinistre(UpdateSinistreReq dto) throws UnknownHostException
     {
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         Sinistre sinistre = sinRepo.findById(dto.getSinId()).orElseThrow(()->new AppException("Sinistre introuvable"));
         Sinistre oldSin = sinCopier.copy(sinistre);
         BeanUtils.copyProperties(dto, sinistre);
         sinistre = sinRepo.save(sinistre);
+//        if(oldSin.getSinMontant100().compareTo(dto.getSinMontant100()) != 0 || oldSin.getSinMontantHonoraire().compareTo(dto.getSinMontantHonoraire()) != 0)
+//           cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, dto.getSinId(), ces));
         logService.logg(SynchronReActions.UPDATE_SINISTRE, oldSin, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }

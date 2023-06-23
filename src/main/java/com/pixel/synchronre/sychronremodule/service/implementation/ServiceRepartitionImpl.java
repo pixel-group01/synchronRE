@@ -6,6 +6,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
@@ -66,6 +67,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
         Repartition rep = repMapper.mapToRepartition(dto);
+        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         rep = repRepo.save(rep);
         logService.logg(RepartitionActions.CREATE_REPARTITION, null, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
@@ -88,7 +90,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             rep = repMapper.mapToCesLegRepartition(dto);
         }
-
+        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         rep = repRepo.save(rep);
         logService.logg(existByAffaireAndPcl ? RepartitionActions.UPDATE_CES_LEG_REPARTITION : RepartitionActions.CREATE_CES_LEG_REPARTITION, oldRep , rep, SynchronReTables.REPARTITION);
         rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
@@ -123,7 +125,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             rep = repMapper.mapToPartCedRepartition(dto);
         }
-
+        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         rep = repRepo.save(rep);
         logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
@@ -181,8 +183,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
         rep.setAffaire(new Affaire(dto.getAffId()));
         rep.setParamCessionLegale(new ParamCessionLegale(dto.getParamCesLegalId()));
-        logService.logg(RepartitionActions.UPDATE_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
+        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         repRepo.save(rep);
+        logService.logg(RepartitionActions.UPDATE_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
+
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
