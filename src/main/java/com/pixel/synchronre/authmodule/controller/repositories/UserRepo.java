@@ -47,8 +47,8 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         select new com.pixel.synchronre.authmodule.model.dtos.appuser.ListUserDTO(
         a.userId, a.firstName, a.lastName, ced.cedNomFiliale, ced.cedSigleFiliale, ces.cesNom, ces.cesSigle,
         a.email, a.tel, a.active, a.notBlocked) 
-        from AppUser a left join Cedante ced left join Cessionnaire ces on a.visibilityId = ced.cedId and a.cesId = ces.cesId
-        where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
+        from AppUser a left join Cedante ced left join Cessionnaire ces on a.cesId = ces.cesId and ced.cessionnaire.cesId = ces.cesId
+        where (a.visibilityId = ced.cedId) and (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(a.lastName, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedNomFiliale, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedSigleFiliale, '') ) as string))) >0
@@ -63,7 +63,7 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         )       
         and (:cedId is null or :cedId = ced.cedId) 
         and (:cesId is null or :cesId = ces.cesId) 
-        and a.statut.staCode in :staCodes
+        and (a.statut.staCode is null or a.statut.staCode in :staCodes)
 """)
     Page<ListUserDTO> searchUsers(@Param("key") String key,
                                   @Param("cedId") Long cedId,
