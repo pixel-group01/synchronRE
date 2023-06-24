@@ -1,12 +1,13 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
+import com.pixel.synchronre.authmodule.controller.repositories.*;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrivilegeMapper;
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
+import com.pixel.synchronre.authmodule.model.dtos.approle.ReadRoleDTO;
+import com.pixel.synchronre.authmodule.model.dtos.approle.RoleMapper;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.*;
 import com.pixel.synchronre.authmodule.model.entities.*;
-import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.RoleToFunctionAssRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IFunctionService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,8 @@ public class FunctionService implements IFunctionService
     private final UserRepo userRepo;
     private final FncMapper fncMapper;
     private final AssMapper assMapper;
+    private final PrivilegeMapper prvMapper;
+    private final RoleMapper roleMapper;
     private final ILogService logger;
     private final ObjectCopier<AppFunction> functionCopier;
     private final ObjectCopier<AppUser> userCopier;
@@ -183,8 +187,24 @@ public class FunctionService implements IFunctionService
     }
 
     @Override @Transactional
-    public ReadFncDTO updateFunction(UpdateFncDTO dto) {
+    public ReadFncDTO updateFunction(UpdateFncDTO dto)
+    {
+        //TODO A implementer
         return null;
+    }
+
+    @Override
+    public ReadFncDTO getActiveCurrentFunction(Long userId)
+    {
+        Long currentFncId = this.getActiveCurrentFunctionId(userId);
+        if(currentFncId == null) return null;
+        AppFunction function = functionRepo.findById(currentFncId).orElseThrow(()->new AppException("Fonction introuvable"));
+        ReadFncDTO readFncDTO = fncMapper.mapToReadFncDto(function);
+        List<ReadPrvDTO> prvDtos = ptfRepo.getFncPrivileges(currentFncId).stream().map(prvMapper::mapToReadPrivilegeDTO).collect(Collectors.toList());
+        List<ReadRoleDTO> roleDtos = rtfRepo.getFncRoles(currentFncId).stream().map(roleMapper::mapToReadRoleDTO).collect(Collectors.toList());
+                readFncDTO.setPrivileges(prvDtos);
+        readFncDTO.setRoles(roleDtos);
+        return readFncDTO;
     }
 
     private void treatRolesAssignation(RoleAssSpliterDTO roleAssSpliterDTO, Long fncId, LocalDate startsAt, LocalDate endsAt)

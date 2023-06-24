@@ -121,6 +121,7 @@ public class UserService implements IUserService
         token.setUsageDate(LocalDateTime.now());
         token.setAlreadyUsed(true);
         ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
+        readUserDTO.setStatus(this.getUserStatus(dto.getUserId()));
         return readUserDTO;
     }
 
@@ -128,9 +129,11 @@ public class UserService implements IUserService
     public ReadUserDTO updateUser(UpdateUserDTO dto) throws UnknownHostException {
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
-        user.setTel(dto.getTel());
+        BeanUtils.copyProperties(dto, user);
         logger.logg(AuthActions.UPDATE_USER, oldUser, user, AuthTables.USER_TABLE);
-        return userMapper.mapToReadUserDTO(user);
+        ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
+        readUserDTO.setStatus(this.getUserStatus(dto.getUserId()));
+        return readUserDTO;
     }
 
     @Override @Transactional
@@ -142,7 +145,9 @@ public class UserService implements IUserService
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         user.setChangePasswordDate(LocalDateTime.now());
         logger.logg(AuthActions.CHANGE_PASSWORD, oldUser, user, AuthTables.USER_TABLE);
-        return userMapper.mapToReadUserDTO(user);
+        ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
+        readUserDTO.setStatus(this.getUserStatus(dto.getUserId()));
+        return readUserDTO;
     }
 
     @Override @Transactional
@@ -158,7 +163,9 @@ public class UserService implements IUserService
         token.setUsageDate(LocalDateTime.now());
         token.setAlreadyUsed(true);
         logger.loggOffConnection(AuthActions.REINIT_PASSWORD, dto.getEmail(),oldToken, token, AuthTables.ACCOUNT_TOKEN);
-        return userMapper.mapToReadUserDTO(user);
+        ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
+        readUserDTO.setStatus(this.getUserStatus(user.getUserId()));
+        return readUserDTO;
     }
 
     @Override @Transactional
@@ -278,6 +285,7 @@ public class UserService implements IUserService
         Long cedId = jwtService.getConnectedUserCedId();
         Long cesId = jwtService.getConnectedUserCesId();
         userStaCodes = userStaCodes == null || userStaCodes.isEmpty() ? staRepo.getStaCodesByTypeStatut(TypeStatut.USER) : userStaCodes;
+
         return userRepo.searchUsers(key, cedId, cesId, userStaCodes, pageable);
     }
 
@@ -294,6 +302,16 @@ public class UserService implements IUserService
         createFncDTO.setFncStatus(1);
         createFncDTO.setUserId(user.getUserId());
         functionService.createFnc(createFncDTO);
+        user.setStatus(this.getUserStatus(user.getUserId()));
         return user;
+    }
+
+    @Override
+    public ReadUserDTO getUserInfos(Long userId)
+    {
+        ReadUserDTO user = userRepo.findReadUserDto(userId);
+        user.setStatus(this.getUserStatus(userId));
+        user.setCurrentFnc(functionService.getActiveCurrentFunction(userId));
+        return null;
     }
 }

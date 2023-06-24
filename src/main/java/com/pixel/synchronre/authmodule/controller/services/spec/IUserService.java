@@ -45,5 +45,5 @@ public interface IUserService
     ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException;
 
 
-
+    ReadUserDTO getUserInfos(Long userId);
 }

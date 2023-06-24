@@ -9,4 +9,6 @@ public class UpdateUserDTO
     @ExistingUserId
     private Long userId;
     private String tel;
+    private String firstName;
+    private String lastName;
 }

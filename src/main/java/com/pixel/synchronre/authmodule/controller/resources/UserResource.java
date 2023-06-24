@@ -21,6 +21,11 @@ public class UserResource
     private final IUserService userService;
     private final IJwtService jwtService;
 
+    @GetMapping(path = "/infos/{userId}")
+    public ReadUserDTO getUserInfos(@PathVariable Long userId) throws UnknownHostException {
+        return userService.getUserInfos(userId);
+    }
+
     @PostMapping(path = "/open/login")
     public AuthResponseDTO login(@RequestBody @Valid LoginDTO dto) throws UnknownHostException {
         return userService.login(dto);

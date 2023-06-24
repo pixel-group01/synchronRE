@@ -48,7 +48,7 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         a.userId, a.firstName, a.lastName, ced.cedNomFiliale, ced.cedSigleFiliale, ces.cesNom, ces.cesSigle,
         a.email, a.tel, a.active, a.notBlocked) 
         from AppUser a left join Cedante ced left join Cessionnaire ces on a.cesId = ces.cesId and ced.cessionnaire.cesId = ces.cesId
-        where (a.visibilityId = ced.cedId) and (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
+        where (a.visibilityId = ced.cedId or a.cesId = ces.cesId) and (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(a.lastName, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedNomFiliale, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedSigleFiliale, '') ) as string))) >0
@@ -70,4 +70,13 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
                                   @Param("cesId") Long cesId,
                                   @Param("staCodes") List<String> staCode,
                                   Pageable pageable);
+
+    @Query("""
+        select new com.pixel.synchronre.authmodule.model.dtos.appuser.ReadUserDTO(
+            u.userId, u.firstName, u.lastName, null, u.email, u.active, u.notBlocked
+        ) 
+        from AppUser u where u.userId = ?1
+    """)
+    ReadUserDTO findReadUserDto(Long userId);
+
 }

@@ -20,4 +20,5 @@ public interface IFunctionService
     AppFunction setFunctionAuthorities(SetAuthoritiesToFunctionDTO dto);
     ReadFncDTO updateFunction(UpdateFncDTO dto);
 
+    ReadFncDTO getActiveCurrentFunction(Long userId);
 }
