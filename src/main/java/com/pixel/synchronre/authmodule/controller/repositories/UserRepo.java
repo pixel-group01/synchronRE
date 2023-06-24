@@ -68,6 +68,6 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
     Page<ListUserDTO> searchUsers(@Param("key") String key,
                                   @Param("cedId") Long cedId,
                                   @Param("cesId") Long cesId,
-                                  @Param("staCode") List<String> staCode,
+                                  @Param("staCodes") List<String> staCode,
                                   Pageable pageable);
 }

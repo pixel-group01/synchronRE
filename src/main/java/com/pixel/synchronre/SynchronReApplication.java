@@ -29,7 +29,7 @@ public class SynchronReApplication {
                                   ,AffaireRepository affRepo, StatutRepository statutRepo)
     {
         return args->{
-            /*typeLoader.load();
+            typeLoader.load();
             adminLoader.load();
             statutLoader.load();
             deviseLoader.load();
@@ -38,7 +38,7 @@ public class SynchronReApplication {
             paysLoader.load();
             pclLoader.load();
             exerciceLoader.load();
-            cedCesAffLoader.load();*/
+            cedCesAffLoader.load();
         };
     }
 }

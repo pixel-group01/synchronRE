@@ -281,7 +281,7 @@ public class UserService implements IUserService
         return userRepo.searchUsers(key, cedId, cesId, userStaCodes, pageable);
     }
 
-    @Override
+    @Override @Transactional
     public ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
         CreateUserDTO userDto = dto.getCreateUserDTO();
         ReadUserDTO  user = this.createUser(userDto);
