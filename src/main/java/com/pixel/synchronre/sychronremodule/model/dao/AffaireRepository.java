@@ -85,7 +85,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         where a.affId = ?1 and r.type.uniqueCode = 'REP_PLA' 
          and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
     """)
-    BigDecimal calculateMtotAPayerByCesByAff(Long affId);
+    BigDecimal calculateMtotAPayerByCesByAff(Long affId); // capital100*(1-ccm)
 
     //@Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
     //BigDecimal getTauxCommissionReassureur(Long affId);
