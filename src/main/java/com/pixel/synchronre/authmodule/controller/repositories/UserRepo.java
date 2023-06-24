@@ -73,8 +73,8 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
 
     @Query("""
         select new com.pixel.synchronre.authmodule.model.dtos.appuser.ReadUserDTO(
-            u.userId, u.firstName, u.lastName, null, u.email, u.active, u.notBlocked
-        ) 
+            u.userId, u.firstName, u.lastName, '', u.email, u.tel, u.active, u.notBlocked
+        )
         from AppUser u where u.userId = ?1
     """)
     ReadUserDTO findReadUserDto(Long userId);

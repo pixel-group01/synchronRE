@@ -202,7 +202,7 @@ public class FunctionService implements IFunctionService
         ReadFncDTO readFncDTO = fncMapper.mapToReadFncDto(function);
         List<ReadPrvDTO> prvDtos = ptfRepo.getFncPrivileges(currentFncId).stream().map(prvMapper::mapToReadPrivilegeDTO).collect(Collectors.toList());
         List<ReadRoleDTO> roleDtos = rtfRepo.getFncRoles(currentFncId).stream().map(roleMapper::mapToReadRoleDTO).collect(Collectors.toList());
-                readFncDTO.setPrivileges(prvDtos);
+        readFncDTO.setPrivileges(prvDtos);
         readFncDTO.setRoles(roleDtos);
         return readFncDTO;
     }

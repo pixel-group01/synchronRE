@@ -130,6 +130,7 @@ public class UserService implements IUserService
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
         BeanUtils.copyProperties(dto, user);
+        userRepo.save(user);
         logger.logg(AuthActions.UPDATE_USER, oldUser, user, AuthTables.USER_TABLE);
         ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
         readUserDTO.setStatus(this.getUserStatus(dto.getUserId()));
@@ -312,6 +313,6 @@ public class UserService implements IUserService
         ReadUserDTO user = userRepo.findReadUserDto(userId);
         user.setStatus(this.getUserStatus(userId));
         user.setCurrentFnc(functionService.getActiveCurrentFunction(userId));
-        return null;
+        return user;
     }
 }
