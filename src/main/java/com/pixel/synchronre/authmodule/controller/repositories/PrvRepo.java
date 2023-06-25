@@ -1,5 +1,7 @@
 package com.pixel.synchronre.authmodule.controller.repositories;
 
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrvByTypeDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,4 +78,20 @@ public interface PrvRepo extends JpaRepository<AppPrivilege, Long>
     ) 
     """)
     Set<Long> getFunctionPrvIds(Long fctId);
+
+    @Query("""
+            select new com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO
+            (
+                p.privilegeId, p.privilegeCode, p.privilegeName, p.prvType.name
+            ) from AppPrivilege p where p.prvType.typeId = ?1
+             """)
+    Set<ReadPrvDTO> getTypePriveleges(Long typeId);
+
+    @Query("""
+            select new com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrvByTypeDTO
+            (
+                p.prvType.typeId, p.prvType.name, p.prvType.uniqueCode
+            ) from AppPrivilege p where p.prvType.typeId = ?1
+             """)
+    Set<PrvByTypeDTO> getPrvByTypeDTOS(Long typeId);
 }

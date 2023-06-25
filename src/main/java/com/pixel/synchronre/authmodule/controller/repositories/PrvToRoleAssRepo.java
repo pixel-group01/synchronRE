@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.controller.repositories;
 
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.model.entities.PrvToRoleAss;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,6 +30,13 @@ public interface PrvToRoleAssRepo extends JpaRepository<PrvToRoleAss, Long>
 
     @Query("select p.privilege.privilegeId from PrvToRoleAss p where p.role.roleId in ?1 and p.assStatus = 1  and current_date between coalesce(p.startsAt, current_date ) and coalesce(p.endsAt, current_date)")
     Set<Long> findActivePrvIdsForRoles(Set<Long> roleIds);
+
+    @Query("""
+    select new com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO(
+        p.privilege.privilegeId, p.privilege.privilegeCode, p.privilege.privilegeName, p.privilege.prvType.name )
+    from PrvToRoleAss p where p.role.roleId in ?1 and p.assStatus = 1  and current_date between coalesce(p.startsAt, current_date ) and coalesce(p.endsAt, current_date)
+    """)
+    Set<ReadPrvDTO> findActivePrivilegesForRoles(Set<Long> roleIds);
 
     @Query("select p.privilege.privilegeId from PrvToRoleAss p where p.role.roleId = ?1 and p.assStatus = 1 and current_date between coalesce(p.startsAt, current_date) and coalesce(p.endsAt, current_date) and p.privilege.privilegeId not in ?2")
     Set<Long> findPrvIdsForRoleNotIn(Long roleId, Set<Long> prvIdsToBeSet);
@@ -63,5 +71,5 @@ public interface PrvToRoleAssRepo extends JpaRepository<PrvToRoleAss, Long>
     boolean roleHasAnyPrivilege(long roleId, List<Long> prvIds);
 
     @Query("select (count(p.privilegeId)>0) from AppPrivilege p where exists (select ptrAss from PrvToRoleAss ptrAss where ptrAss.privilege.privilegeId = ?1 and ptrAss.role.roleId in ?2 and ptrAss.assStatus = 1 and coalesce(ptrAss.startsAt, current_date ) <= current_date and coalesce(ptrAss.endsAt, current_date) >= current_date)")
-    Set<Long> prvBelongToAnyRole(Set<Long> roleIds);
+    boolean prvBelongToAnyRole(long prvId, Set<Long> roleIds);
 }

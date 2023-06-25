@@ -170,7 +170,7 @@ public class FunctionService implements IFunctionService
     }
 
     @Override @Transactional
-    public AppFunction setFunctionAuthorities(SetAuthoritiesToFunctionDTO dto)
+    public ReadFncDTO setFunctionAuthorities(SetAuthoritiesToFunctionDTO dto)
     {
         AppFunction function  = functionRepo.findById(dto.getFncId()).orElse(null);
         if(function == null) return null;
@@ -183,14 +183,20 @@ public class FunctionService implements IFunctionService
         treatRolesAssignation(roleAssSpliterDTO, fncId, startsAt, endsAt);
 
         this.treatPrvsAssignation(prvAssSpliterDTO, fncId, dto.getStartsAt(), dto.getEndsAt());
-        return function;
+
+        return fncMapper.mapToReadFncDto(function);
     }
 
     @Override @Transactional
     public ReadFncDTO updateFunction(UpdateFncDTO dto)
     {
-        //TODO A implementer
-        return null;
+        AppFunction function  = functionRepo.findById(dto.getFncId()).orElse(null);
+        if(function == null) return null;
+        function.setName(dto.getName());
+        function.setStartsAt(dto.getStartsAt());
+        function.setEndsAt(dto.getEndsAt());
+        ReadFncDTO readFncDTO = this.setFunctionAuthorities(new SetAuthoritiesToFunctionDTO(dto.getFncId(),dto.getStartsAt(), dto.getEndsAt(), dto.getRoleIds(), dto.getPrvIds()));
+        return readFncDTO;
     }
 
     @Override

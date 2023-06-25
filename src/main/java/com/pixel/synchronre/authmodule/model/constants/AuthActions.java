@@ -33,9 +33,14 @@ public class AuthActions
     public static final String REMOVE_ROLE_TO_FNC = "Retrait d'un rôle à une fonction";
     public static final String RESTORE_ROLE_TO_FNC = "Restaurer le role d'une fonction";
     public static final String CHANGE_ROLE_TO_FNC_VALIDITY_PERIOD = "Changement de la période de validité d'une assignation de rôle à fonction";
-    public static final String ASSIGNATION_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED = "Restauration et activation de la période de validité d'une assignation de rôle à fonction";
+    public static final String ASSIGNATION_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED = "Restauration et changement de la période de validité d'une assignation de rôle à fonction";
+    public static final String PRV_TO_ROL_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED = "Restauration du privilège d'un rôle et changement de la période de validité";
     public static final String REMOVE_PRV_TO_FNC = "Retrait d'un privilège à une fonction";
     public static final String REVOKE_PRV_TO_FNC = "Revocation d'un privilège à une fonction";
     public static final String RESTORE_PRV_TO_FNC = "Restauration d'un privilège à un rôle";
     public static final String CHANGE_PRV_TO_FNC_VALIDITY_PERIOD = "Changement de la période de validité d'une assignation de rôle privilège à fonction";
+    public static final String REMOVE_PRV_TO_ROL = "Retrait d'un privilège à un rôle";
+    public static final String CHANGE_PRV_TO_ROL_VALIDITY_PERIOD = "Changement de la période de validité de l'assignation d'un privilège à une rôle";
+    public static final String RESTORE_PRV_TO_ROL = "Restauration du privilège d'un rôle";
+    public static final String ADD_PRV_TO_ROL = "Ajout d'un privilège à un rôle";
 }

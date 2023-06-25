@@ -30,10 +30,16 @@ public class FunctionResource
          return functionService.updateFunction(dto);
     }
 
-    @GetMapping(path = "/get-current-fnc-for-user/{userId}")
+    @GetMapping(path = "/get-current-fncId-for-user/{userId}")
     public Long getActiveCurrentFunctionId(@PathVariable Long userId)
     {
         return functionService.getActiveCurrentFunctionId(userId);
+    }
+
+    @GetMapping(path = "/get-current-fnc-for-user/{userId}")
+    public ReadFncDTO getActiveCurrentFunction(@PathVariable Long userId)
+    {
+        return functionService.getActiveCurrentFunction(userId);
     }
 
     @PutMapping(path = "/set-fnc-as-default/{fncId}")
@@ -53,7 +59,7 @@ public class FunctionResource
     }
 
     @PutMapping(path = "/set-authorities")
-    public AppFunction setFunctionAuthorities(@RequestBody SetAuthoritiesToFunctionDTO dto)
+    public ReadFncDTO setFunctionAuthorities(@RequestBody SetAuthoritiesToFunctionDTO dto)
     {
         return functionService.setFunctionAuthorities(dto);
     }

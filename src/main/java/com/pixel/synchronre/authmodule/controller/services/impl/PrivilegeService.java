@@ -1,6 +1,7 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IPrivilegeService;
+import com.pixel.synchronre.authmodule.model.dtos.appprivilege.*;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
@@ -8,12 +9,10 @@ import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.CreatePrivilegeDTO;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrivilegeMapper;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.SelectedPrvDTO;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,11 +33,10 @@ import java.util.stream.Collectors;
 public class PrivilegeService implements IPrivilegeService
 {
     private final PrvRepo prvRepo;
-    private final PrvToFunctionAssRepo prvAssRepo;
     private final PrvToRoleAssRepo prvToRoleAssRepo;
     private final PrivilegeMapper prvMapper;
-    private final IJwtService jwtService;
     private final ILogService logger;
+    private final TypeRepo typeRepo;
 
     @Override @Transactional
     public ReadPrvDTO createPrivilege(CreatePrivilegeDTO dto) throws UnknownHostException {
@@ -82,5 +80,21 @@ public class PrivilegeService implements IPrivilegeService
         prvIds = prvIds.stream().filter(prvId->!prvIdsToBeRetired.contains(prvId)).collect(Collectors.toSet());
         selectedPrvIds.addAll(prvIds);
         return prvRepo.findAll().stream().map(prv->new SelectedPrvDTO(prv.getPrivilegeId(), prv.getPrivilegeCode(), prv.getPrivilegeName(), selectedPrvIds.contains(prv.getPrivilegeId()), ownedPrvIds.contains(prv.getPrivilegeId()))).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<PrvByTypeDTO> getPrivlegesByTypeId(Long typeId)
+    {
+        Set<PrvByTypeDTO> prvByTypeDTOS = prvRepo.getPrvByTypeDTOS(typeId);
+
+        prvByTypeDTOS.forEach(prv->prv.setPrivileges(prvRepo.getTypePriveleges(typeId)));
+        return prvByTypeDTOS;
+    }
+
+    @Override
+    public Set<PrvByTypeDTO> getAllPrivlegesGroupesByType()
+    {
+        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().flatMap(id->this.getPrivlegesByTypeId(id).stream()).collect(Collectors.toSet());
+        return PrvByTypeDTOs;
     }
 }

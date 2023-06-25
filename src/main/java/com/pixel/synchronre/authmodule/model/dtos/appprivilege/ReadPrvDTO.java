@@ -11,4 +11,11 @@ public class ReadPrvDTO
     private String prvTypeName;
     private Long clientId;
     private String clientName;
+
+    public ReadPrvDTO(Long privilegeId, String privilegeCode, String privilegeName, String prvTypeName) {
+        this.privilegeId = privilegeId;
+        this.privilegeCode = privilegeCode;
+        this.privilegeName = privilegeName;
+        this.prvTypeName = prvTypeName;
+    }
 }

@@ -17,7 +17,7 @@ public interface IFunctionService
     void setFunctionAsDefault(Long fncId) throws UnknownHostException;
     void revokeFunction(Long fncId) throws UnknownHostException;
     void restoreFunction(Long fncId) throws UnknownHostException;
-    AppFunction setFunctionAuthorities(SetAuthoritiesToFunctionDTO dto);
+    ReadFncDTO setFunctionAuthorities(SetAuthoritiesToFunctionDTO dto);
     ReadFncDTO updateFunction(UpdateFncDTO dto);
 
     ReadFncDTO getActiveCurrentFunction(Long userId);
