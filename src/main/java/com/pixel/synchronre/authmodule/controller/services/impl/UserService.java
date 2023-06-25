@@ -23,6 +23,7 @@ import com.pixel.synchronre.notificationmodule.model.entities.EmailNotification;
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import lombok.RequiredArgsConstructor;
@@ -286,7 +287,7 @@ public class UserService implements IUserService
         Long cedId = jwtService.getConnectedUserCedId();
         Long cesId = jwtService.getConnectedUserCesId();
         userStaCodes = userStaCodes == null || userStaCodes.isEmpty() ? staRepo.getStaCodesByTypeStatut(TypeStatut.USER) : userStaCodes;
-
+        key = key == null ? "" : StringUtils.stripAccentsToUpperCase(key);
         return userRepo.searchUsers(key, cedId, cesId, userStaCodes, pageable);
     }
 

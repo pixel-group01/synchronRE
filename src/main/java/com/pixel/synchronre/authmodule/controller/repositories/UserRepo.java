@@ -47,8 +47,8 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         select new com.pixel.synchronre.authmodule.model.dtos.appuser.ListUserDTO(
         a.userId, a.firstName, a.lastName, ced.cedNomFiliale, ced.cedSigleFiliale, ces.cesNom, ces.cesSigle,
         a.email, a.tel, a.active, a.notBlocked) 
-        from AppUser a left join Cedante ced left join Cessionnaire ces on a.cesId = ces.cesId and ced.cessionnaire.cesId = ces.cesId
-        where (a.visibilityId = ced.cedId or a.cesId = ces.cesId) and (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
+        from AppUser a left join Cedante ced on a.visibilityId = ced.cedId left join Cessionnaire ces 
+        where a.cesId = ces.cesId and (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(a.firstName, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(a.lastName, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedNomFiliale, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(ced.cedSigleFiliale, '') ) as string))) >0
@@ -78,5 +78,4 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         from AppUser u where u.userId = ?1
     """)
     ReadUserDTO findReadUserDto(Long userId);
-
 }
