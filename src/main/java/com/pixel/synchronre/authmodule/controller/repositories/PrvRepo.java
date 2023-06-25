@@ -94,4 +94,7 @@ public interface PrvRepo extends JpaRepository<AppPrivilege, Long>
             ) from AppPrivilege p where p.prvType.typeId = ?1
              """)
     Set<PrvByTypeDTO> getPrvByTypeDTOS(Long typeId);
+
+    @Query("select p.privilegeCode from AppPrivilege p where p.privilegeId in ?1")
+    Set<String> getPrvCodesByPrvIds(Set<Long> prvIds);
 }

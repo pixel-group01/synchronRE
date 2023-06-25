@@ -2,7 +2,10 @@ package com.pixel.synchronre.authmodule.controller.services.impl;
 
 import com.pixel.synchronre.authmodule.controller.repositories.MenuRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IMenuService;
+import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
+import com.pixel.synchronre.authmodule.controller.services.spec.IFunctionService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IMenuMutatorService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IPrivilegeService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
 import com.pixel.synchronre.authmodule.model.dtos.menu.CreateMenuDTO;
@@ -22,32 +25,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
-public class MenuService implements IMenuService
+public class MenuMutatorService implements IMenuMutatorService
 {
     private final MenuRepo menuRepo;
     private final PrvRepo prvRepo;
     private final MenuMapper menuMapper;
     private final ILogService logger;
-
-    @Override
-    public boolean menuHasPrv(String menuCode, String prvCode)
-    {
-        return menuRepo.menuHasPrivilege(menuCode, prvCode);
-    }
-
-    @Override
-    public boolean prvCanSeeMenu(String prvCode, String menuCode) {
-        return menuRepo.menuHasPrivilege(menuCode, prvCode);
-    }
-
-    @Override
-    public boolean fncCanSeeMenu(Long fncId, String menuCode) {
-        Set<Long> fncPrvIds = prvRepo.getFunctionPrvIds(fncId);
-        Set<Long> menuPrvIds = this.getMenuPrvIds(menuCode);
-        if(fncPrvIds == null || menuPrvIds == null) return false;
-        fncPrvIds.retainAll(menuPrvIds);
-        return !fncPrvIds.isEmpty();
-    }
 
     @Override @Transactional
     public Menu createMenu(CreateMenuDTO dto) throws UnknownHostException {
@@ -95,16 +78,5 @@ public class MenuService implements IMenuService
         menu.setPrvsCodesChain(Arrays.stream(codeChain.split(Menu.chainSeparator)).filter(code->!prvCodesToRemove.contains(code)).collect(Collectors.joining(Menu.chainSeparator)));
         menu = menuRepo.save(menu);
         logger.logg(AuthActions.RMV_PRV_TO_MENU, oldMenu, menu, "menu");
-    }
-
-    @Override
-    public Set<String> getMenuPrvCodes(String menuCode) {
-        String prvCodeChain = menuRepo.getPrvsCodesByMenuCode(menuCode);
-        return  prvCodeChain == null ? new HashSet<>() : new HashSet<>(Arrays.asList(prvCodeChain.split(",")));
-    }
-
-    @Override
-    public Set<Long> getMenuPrvIds(String menuCode) {
-        return  menuRepo.getMenuPrvIdsByMenuCodes(this.getMenuPrvCodes(menuCode));
     }
 }

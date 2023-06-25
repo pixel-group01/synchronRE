@@ -1,6 +1,7 @@
 package com.pixel.synchronre.authmodule.controller.resources;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IRoleService;
+import com.pixel.synchronre.authmodule.model.dtos.asignation.PrvsToRoleDTO;
 import jakarta.validation.Valid;
 import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
 import com.pixel.synchronre.authmodule.model.dtos.approle.CreateRoleDTO;
@@ -20,8 +21,13 @@ public class RoleResource
     private final RoleRepo roleRepo;
 
     @PostMapping(path = "/create")
-    public ReadRoleDTO createrole(@RequestBody @Valid CreateRoleDTO dto) throws UnknownHostException, IllegalAccessException {
+    public ReadRoleDTO createRole(@RequestBody @Valid CreateRoleDTO dto) throws UnknownHostException, IllegalAccessException {
         return roleService.createRole(dto);
+    }
+
+    @PutMapping(path = "/set-privileges")
+    public ReadRoleDTO setPrivileges(@RequestBody @Valid PrvsToRoleDTO dto) throws UnknownHostException, IllegalAccessException {
+        return roleService.setRolePrivileges(dto);
     }
 
     @GetMapping(path = "/search")

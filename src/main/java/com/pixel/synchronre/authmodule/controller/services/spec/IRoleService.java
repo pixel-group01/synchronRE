@@ -15,5 +15,5 @@ public interface IRoleService
     Page<ReadRoleDTO> searchRoles(String searchKey, Pageable pageable);
 
     @Transactional
-    void setRolePrivileges(PrvsToRoleDTO dto);
+    ReadRoleDTO setRolePrivileges(PrvsToRoleDTO dto);
 }

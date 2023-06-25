@@ -1,10 +1,8 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
 import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IAssService;
-import com.pixel.synchronre.authmodule.controller.services.spec.IRoleService;
 import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IRoleService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
 import com.pixel.synchronre.authmodule.model.dtos.approle.CreateRoleDTO;
@@ -15,6 +13,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.model.entities.AppRole;
 import com.pixel.synchronre.authmodule.model.entities.PrvToRoleAss;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +66,8 @@ public class RoleService implements IRoleService
     }
 
     @Override @Transactional
-    public void setRolePrivileges(PrvsToRoleDTO dto) {
+    public ReadRoleDTO setRolePrivileges(PrvsToRoleDTO dto) {
+        AppRole role = roleRepo.findById(dto.getRoleId()).orElseThrow(()->new AppException("Role introuvable"));
         Long roleId = dto.getRoleId(); Set<Long> prvIds = dto.getPrvIds() == null ? new HashSet<>(Collections.singletonList(0L)) : dto.getPrvIds().size() == 0 ? new HashSet<>(Collections.singletonList(0L)) : dto.getPrvIds();
         LocalDate startsAt = dto.getStartsAt(); LocalDate endsAt =  dto.getEndsAt();
         Set<Long> prvIdsToBeRemoved = prvToRoleAssRepo.findPrvIdsForRoleNotIn(roleId, prvIds); //
@@ -144,5 +144,8 @@ public class RoleService implements IRoleService
                 e.printStackTrace();
             }
         });
+        ReadRoleDTO readRoleDTO = roleMapper.mapToReadRoleDTO(role);
+        readRoleDTO.setPrivileges(prvToRoleAssRepo.findActivePrivilegesForRoles(Collections.singleton(role.getRoleId())));
+        return readRoleDTO;
     }
 }

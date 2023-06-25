@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Set;
 
 public interface MenuRepo extends JpaRepository<Menu, Long>
@@ -13,14 +14,16 @@ public interface MenuRepo extends JpaRepository<Menu, Long>
     @Query("""
     select (count(m.menuId)>0) from Menu m where m.menuCode = ?1 and 
     (?2 =  m.prvsCodesChain or 
-        locate(concat(?2, '{#}') , m.prvsCodesChain) = 1 or 
-        locate(concat('{#}', ?2, '{#}') , m.prvsCodesChain) > 1 or 
-        locate(concat('{#}', ?2), m.prvsCodesChain) = length(m.prvsCodesChain) - length(concat('{#}', ?2)) + 1) and 
+        locate(concat(?2, '::') , m.prvsCodesChain) = 1 or 
+        locate(concat('::', ?2, '::') , m.prvsCodesChain) > 1 or 
+        locate(concat('::', ?2), m.prvsCodesChain) = length(m.prvsCodesChain) - length(concat('::', ?2)) + 1) and 
     m.status = 'ACTIVE'
     """)
     boolean menuHasPrivilege(String menuCode, String prvCode);
 
-    @Query("select FUNCTION('string_to_array', m.prvsCodesChain, '{#}') from Menu m where m.menuCode = ?1")
+
+
+    @Query("select FUNCTION('string_to_array', m.prvsCodesChain, '::') from Menu m where m.menuCode = ?1")
     String getPrvsCodesByMenuCode(String menuCode);
 
     @Query("select m from Menu m where m.menuCode = ?1")

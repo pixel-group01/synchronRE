@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -27,5 +29,11 @@ public class Menu
     @Enumerated(EnumType.STRING)
     private PersStatus status;
     @Transient
-    public static final String chainSeparator = "{#}";
+    public static final String chainSeparator = "::";
+
+    public List<String> getPrvsCodes()
+    {
+        if(this.prvsCodesChain == null) return new ArrayList<>();
+        return Arrays.asList(this.prvsCodesChain.split(Menu.chainSeparator));
+    }
 }

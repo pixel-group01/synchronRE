@@ -1,7 +1,8 @@
 package com.pixel.synchronre.authmodule.controller.resources;
 
 import com.pixel.synchronre.authmodule.controller.repositories.MenuRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IMenuService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IMenuMutatorService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IMenuReaderService;
 import com.pixel.synchronre.authmodule.model.dtos.menu.CreateMenuDTO;
 import jakarta.validation.Valid;
 import com.pixel.synchronre.authmodule.model.dtos.menu.PrvToMenuDTO;
@@ -12,17 +13,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController @RequestMapping("/menu")
 public class MenuResource
 {
-    private final IMenuService menuService;
+    private final IMenuReaderService menmenuReaderService;
+    private final IMenuMutatorService menuMutatorService;
     private final MenuRepo menuRepo;
 
     @PostMapping(path = "/create-menu")
     public Menu createMenu(@RequestBody @Valid CreateMenuDTO dto) throws UnknownHostException, IllegalAccessException {
-        return menuService.createMenu(dto);
+        return menuMutatorService.createMenu(dto);
+    }
+
+    @GetMapping(path = "/by-fncId/{fncId}")
+    public Set<Menu> getMenuByFncId(@PathVariable Long fncId)
+    {
+        return menmenuReaderService.getMenusByFncId(fncId);
     }
 
     @GetMapping(path = "/search")
@@ -31,22 +40,22 @@ public class MenuResource
     }
 
     @GetMapping(path = "/fnc-can-see-menu/{fncId}/{nemuCode}")
-    public boolean FncCanSeeMenu(@PathVariable Long fncId, @PathVariable String nemuCode) throws UnknownHostException, IllegalAccessException {
-        return menuService.fncCanSeeMenu(fncId, nemuCode);
+    public boolean FncCanSeeMenu(@PathVariable Long fncId, @PathVariable String nemuCode){
+        return menmenuReaderService.fncCanSeeMenu(fncId, nemuCode);
     }
 
     @GetMapping(path = "/prv-can-see-menu/{prvCode}/{nemuCode}")
-    public boolean prvCanSeeMenu(@PathVariable String prvCode, @PathVariable String menuCode) throws UnknownHostException, IllegalAccessException {
-        return menuService.prvCanSeeMenu(prvCode, menuCode);
+    public boolean prvCanSeeMenu(@PathVariable String prvCode, @PathVariable String menuCode){
+        return menmenuReaderService.prvCanSeeMenu(prvCode, menuCode);
     }
 
     @PostMapping(path = "/add-prv-to-menu")
     public void addPrvToMenu(@RequestBody @Valid PrvToMenuDTO dto) throws UnknownHostException, IllegalAccessException {
-        menuService.addPrvToMenu(dto);
+        menuMutatorService.addPrvToMenu(dto);
     }
 
     @PostMapping(path = "/rmv-prv-to-menu")
     public void removePrvToMenu(@RequestBody @Valid PrvToMenuDTO dto) throws UnknownHostException, IllegalAccessException {
-        menuService.removePrvToMenu(dto);
+        menuMutatorService.removePrvToMenu(dto);
     }
 }

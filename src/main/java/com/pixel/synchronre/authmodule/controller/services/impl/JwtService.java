@@ -3,6 +3,8 @@ package com.pixel.synchronre.authmodule.controller.services.impl;
 import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IMenuMutatorService;
+import com.pixel.synchronre.authmodule.controller.services.spec.IMenuReaderService;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
@@ -37,6 +39,7 @@ public class JwtService implements IJwtService
     private final UserRepo userRepo;
     private final CedRepo cedRepo;
     private final CessionnaireRepository cesRepo;
+    private final IMenuReaderService menuService;
 
     @Override
     public AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId)
@@ -62,6 +65,7 @@ public class JwtService implements IJwtService
         extraClaims.put("tel", user.getTel());
         extraClaims.put("prenom", user.getLastName());
         extraClaims.put("authorities", userDetails.getAuthorities().stream().map(auth->auth.getAuthority()).collect(Collectors.toSet()));
+        extraClaims.put("menus",menuService.getMenusByFncId(functionId));
         extraClaims.put("visibilityId", visibilityIds == null ? null : visibilityIds.size() != 1 ? null : new ArrayList<>(visibilityIds).get(0));
         extraClaims.put("functionId", functionId);
         extraClaims.put("connectionId", connectionId);

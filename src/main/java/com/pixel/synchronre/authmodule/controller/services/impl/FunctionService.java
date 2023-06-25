@@ -206,10 +206,10 @@ public class FunctionService implements IFunctionService
         if(currentFncId == null) return null;
         AppFunction function = functionRepo.findById(currentFncId).orElseThrow(()->new AppException("Fonction introuvable"));
         ReadFncDTO readFncDTO = fncMapper.mapToReadFncDto(function);
-        List<ReadPrvDTO> prvDtos = ptfRepo.getFncPrivileges(currentFncId).stream().map(prvMapper::mapToReadPrivilegeDTO).collect(Collectors.toList());
-        List<ReadRoleDTO> roleDtos = rtfRepo.getFncRoles(currentFncId).stream().map(roleMapper::mapToReadRoleDTO).collect(Collectors.toList());
-        readFncDTO.setPrivileges(prvDtos);
-        readFncDTO.setRoles(roleDtos);
+        //List<ReadPrvDTO> prvDtos = ptfRepo.getFncPrivileges(currentFncId).stream().map(prvMapper::mapToReadPrivilegeDTO).collect(Collectors.toList());
+        //List<ReadRoleDTO> roleDtos = rtfRepo.getFncRoles(currentFncId).stream().map(roleMapper::mapToReadRoleDTO).collect(Collectors.toList());
+        //readFncDTO.setPrivileges(prvDtos);
+        //readFncDTO.setRoles(roleDtos);
         return readFncDTO;
     }
 

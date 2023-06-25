@@ -7,7 +7,7 @@ import com.pixel.synchronre.authmodule.model.entities.Menu;
 import java.net.UnknownHostException;
 import java.util.Set;
 
-public interface IMenuService
+public interface IMenuReaderService
 {
     boolean menuHasPrv(String menuCode, String prvCode);
     boolean prvCanSeeMenu(String prvCode, String menuCode);
@@ -16,9 +16,9 @@ public interface IMenuService
 
     Set<Long> getMenuPrvIds(String menuCode);
 
+    Set<Menu> getMenusByFncId(Long fncId);
+
     boolean fncCanSeeMenu(Long fncId, String menuCode);
 
-    Menu createMenu(CreateMenuDTO dto) throws UnknownHostException;
-    void addPrvToMenu(PrvToMenuDTO dto) throws UnknownHostException;
-    void removePrvToMenu(PrvToMenuDTO dto) throws UnknownHostException;
+
 }
