@@ -17,7 +17,7 @@ public interface IPrivilegeService
     Page<ReadPrvDTO> searchPrivileges(String searchKey, Pageable pageable);
     List<SelectedPrvDTO> getSelectedPrvs(Set<Long> roleIds);
     List<SelectedPrvDTO> getSelectedPrvs(Long prAssId, Set<Long> oldRoleIds, Set<Long> roleIds, Set<Long> prvIds);
-    Set<PrvByTypeDTO> getPrivlegesByTypeId(Long typeId);
+    PrvByTypeDTO getPrivlegesByTypeId(Long typeId);
 
     Set<PrvByTypeDTO> getAllPrivlegesGroupesByType();
 }

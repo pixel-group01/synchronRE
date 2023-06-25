@@ -4,14 +4,14 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IPrivilegeServic
 import com.pixel.synchronre.authmodule.model.dtos.appprivilege.*;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -83,18 +84,18 @@ public class PrivilegeService implements IPrivilegeService
     }
 
     @Override
-    public Set<PrvByTypeDTO> getPrivlegesByTypeId(Long typeId)
+    public PrvByTypeDTO getPrivlegesByTypeId(Long typeId)
     {
-        Set<PrvByTypeDTO> prvByTypeDTOS = prvRepo.getPrvByTypeDTOS(typeId);
-
-        prvByTypeDTOS.forEach(prv->prv.setPrivileges(prvRepo.getTypePriveleges(typeId)));
-        return prvByTypeDTOS;
+        Type type = typeRepo.findById(typeId).orElseThrow(()->new AppException("Type in trouvable"));
+        PrvByTypeDTO prvByTypeDTO = new PrvByTypeDTO(typeId, type.getName(), type.getUniqueCode());
+        prvByTypeDTO.setPrivileges(prvRepo.getTypePriveleges(typeId));
+        return prvByTypeDTO;
     }
 
     @Override
     public Set<PrvByTypeDTO> getAllPrivlegesGroupesByType()
     {
-        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().flatMap(id->this.getPrivlegesByTypeId(id).stream()).collect(Collectors.toSet());
+        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().map(id->this.getPrivlegesByTypeId(id)).filter(Objects::nonNull).collect(Collectors.toSet());
         return PrvByTypeDTOs;
     }
 }
