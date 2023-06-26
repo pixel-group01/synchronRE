@@ -10,10 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IServiceDevise {
 
     DeviseDetailsResp createDevise(CreateDeviseReq dto) throws UnknownHostException;
     DeviseDetailsResp updateDevise(UpdateDeviseReq dto) throws UnknownHostException;
-    Page<DeviseListResp> searchDevise(String key, Pageable pageable);
+    List<DeviseListResp> searchDevise(String key);
 }

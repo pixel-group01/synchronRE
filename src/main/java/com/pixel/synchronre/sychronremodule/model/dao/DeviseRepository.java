@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface DeviseRepository extends JpaRepository<Devise, String> {
 
     @Query("select (count(d) > 0) from Devise d where d.devCode= ?1")
@@ -24,6 +26,6 @@ public interface DeviseRepository extends JpaRepository<Devise, String> {
                                          and dv.statut.staCode = 'ACT' order by dv.devCode 
                                             
 """)
-    Page<DeviseListResp> searchDevises(String key, Pageable pageable);
+    List<DeviseListResp> searchDevises(String key);
 
 }

@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/devises")
@@ -42,7 +43,7 @@ public class DeviseController {
 
 
     @GetMapping(path = "/list")
-    public Page<DeviseListResp> searchDevises(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        return deviseService.searchDevise(key, PageRequest.of(page, size));
+    public List<DeviseListResp> searchDevises(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        return deviseService.searchDevise(key);
     }
 }

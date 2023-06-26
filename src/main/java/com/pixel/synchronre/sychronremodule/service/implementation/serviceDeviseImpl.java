@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 
 @Service
@@ -58,7 +59,7 @@ public class serviceDeviseImpl implements IServiceDevise {
     }
 
     @Override
-    public Page<DeviseListResp> searchDevise(String key, Pageable pageable) {
-        return devRepo.searchDevises(StringUtils.stripAccentsToUpperCase(key), pageable);
+    public List<DeviseListResp> searchDevise(String key) {
+        return devRepo.searchDevises(StringUtils.stripAccentsToUpperCase(key));
     }
 }
