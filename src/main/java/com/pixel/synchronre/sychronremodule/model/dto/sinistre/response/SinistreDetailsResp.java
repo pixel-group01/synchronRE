@@ -11,9 +11,11 @@ public class SinistreDetailsResp
     private Long sinId;
     private String sinCode;
     private BigDecimal sinMontant100;
+    private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate sinDateDeclaration;
     private String sinCommentaire;
+    private String affId;
     private String affCode;
     private String affAssure;
     private String affActivite;

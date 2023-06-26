@@ -36,6 +36,7 @@ public abstract class SinMapper
     @Mapping(target = "affaire", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     public abstract Sinistre mapToSinistre(CreateSinistreReq dto);
 
+    @Mapping(target = "affId", source = "affaire.affId")
     @Mapping(target = "affCode", source = "affaire.affCode")
     @Mapping(target = "affAssure", source = "affaire.affAssure")
     @Mapping(target = "affActivite", source = "affaire.affActivite")
