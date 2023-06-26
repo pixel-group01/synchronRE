@@ -43,7 +43,7 @@ public class DeviseController {
 
 
     @GetMapping(path = "/list")
-    public List<DeviseListResp> searchDevises(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public List<DeviseListResp> searchDevises(@RequestParam(defaultValue = "") String key) throws UnknownHostException {
         return deviseService.searchDevise(key);
     }
 }
