@@ -8,6 +8,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.Sinistr
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,13 +20,16 @@ import java.time.LocalDate;
 public class UpdateSinistreReq
 {
     @ExistingSinId
+    @NotNull(message = "L'ID du sinistre ne peut être null")
     Long sinId;
     @NotNull(message = "Veuillez saisir le montant du sinistre")
     private BigDecimal sinMontant100;
     private BigDecimal sinMontantHonoraire;
     @PastOrPresent(message = "La date de survenance du sinistre ne peut être future")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate sinDateSurvenance;
     @PastOrPresent(message = "La date de déclaration du sinistre ne peut être future")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;
     @ExistingAffId
