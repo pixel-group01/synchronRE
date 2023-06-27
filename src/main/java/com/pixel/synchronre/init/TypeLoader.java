@@ -42,7 +42,7 @@ public class TypeLoader implements Loader
 
         Type photo = new Type(16l, TypeGroup.DOCUMENT, "PHT", "Photo", PersStatus.ACTIVE, null, "user");
 
-        Type docReglement = new Type(17l, TypeGroup.DOCUMENT, "DOC_REG", "Document de règlement", PersStatus.ACTIVE, null, "reglement");
+
         Type recuReglement = new Type(18l, TypeGroup.DOCUMENT, "RECU_REG", "Recu de règlement", PersStatus.ACTIVE, null, "reglement");
         Type chequeRegelemnt = new Type(19l, TypeGroup.DOCUMENT, "CHEQ", "Chèque de règlement", PersStatus.ACTIVE, null, "reglement");
         Type bordereauVirement = new Type(20l, TypeGroup.DOCUMENT, "BORD_VIR", "Bordereau de virement", PersStatus.ACTIVE, null, "reglement");
@@ -70,9 +70,12 @@ public class TypeLoader implements Loader
         Type noteCreditTraite = new Type(31l, TypeGroup.DOCUMENT, "NOT_CRED_TRAI", "Note de crédit en traité", PersStatus.ACTIVE, null, "placement");
 
         typeRepo.saveAll(Arrays.asList(t1,t2,t3, t4, t7,t8,fil,rea, paiement, reversement, facType, trai, photo,
-                virement,Chèque, docReglement, recuReglement, chequeRegelemnt,
+                virement,Chèque, recuReglement, chequeRegelemnt,
                 bordereauVirement, noteCessionFac, noteCessionTraite, noteCessionSin, noteDebitFac, noteDebitTraite,
                 noteDebitSin, noteCreditFac, noteCreditTraite));
+
+        Type docReglement = new Type(null, TypeGroup.DOCUMENT, "DOC_REG", "Document de règlement", PersStatus.ACTIVE, null, "reglement");
+        docReglement = typeRepo.save(docReglement);
 
         ordreVirement = typeRepo.save(ordreVirement);
         typeParamRepo.save(new TypeParam(null, docReglement, recuReglement, PersStatus.ACTIVE));
