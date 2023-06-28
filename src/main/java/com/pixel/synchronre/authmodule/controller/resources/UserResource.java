@@ -9,13 +9,14 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
-@RestController @RequestMapping("/users")
+@RestController @RequestMapping("/users") @ResponseStatus(HttpStatus.OK)
 public class UserResource
 {
     private final IUserService userService;
