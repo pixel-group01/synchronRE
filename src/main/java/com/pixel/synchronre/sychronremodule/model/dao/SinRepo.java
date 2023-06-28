@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.statut.staCode, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.statut.staLibelle, '') ) as string))) >0
         ) 
+       
         and (:fncId is null or :fncId = fnc.id)
         and (:userId is null or :userId = u.userId)
         and (:cedId is null or :cedId = ced.cedId)

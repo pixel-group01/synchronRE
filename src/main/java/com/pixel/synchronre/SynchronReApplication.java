@@ -22,7 +22,7 @@ public class SynchronReApplication {
         SpringApplication.run(SynchronReApplication.class, args);
     }
    @Bean(name = "commandLineRunner")
-    public CommandLineRunner start(TypeLoader typeLoader, AdminLoader adminLoader, StatutLoader statutLoader,
+    public CommandLineRunner start(TypeLoader typeLoader, FoldersIniter foldersIniter, AdminLoader adminLoader, StatutLoader statutLoader,
                                    DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,
                                    CedCesAffLoader cedCesAffLoader, ExerciceLoader exerciceLoader, CessionnaireRepository cesRepo
@@ -30,6 +30,7 @@ public class SynchronReApplication {
     {
         return args->{
             typeLoader.load();
+            foldersIniter.load();
             adminLoader.load();
             statutLoader.load();
             deviseLoader.load();

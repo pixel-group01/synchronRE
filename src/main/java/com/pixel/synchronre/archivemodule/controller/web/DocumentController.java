@@ -3,19 +3,25 @@ package com.pixel.synchronre.archivemodule.controller.web;
 import com.pixel.synchronre.archivemodule.controller.repositories.DocumentRepository;
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller @RequiredArgsConstructor @RequestMapping(path = "/documents")
 public class DocumentController
 {
     private final AbstractDocumentService docService;
     private final DocumentRepository docRepo;
+    private final TypeRepo typeRepo;
 
     @PostMapping(path = "/download")
     public byte[] downloadDocument(@PathVariable Long docId) throws Exception {

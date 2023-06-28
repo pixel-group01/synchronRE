@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 import java.util.UUID;
 
 @Component @RequiredArgsConstructor
@@ -99,8 +101,11 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		}
 	}
 
+	@Transactional
 	public void uploadDocument(UploadDocReq dto) {
-		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode());
+		if(dto.getDocUniqueCode() == null ) throw new AppException("Le type de document ne peut être null");
+		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode().toUpperCase(Locale.ROOT));
+		if(docType == null || docType.getTypeGroup() != TypeGroup.DOCUMENT)  throw new AppException("Ce type de document n'est pris en charge par le système");;
 		Document doc = mapToDocument(dto);
 		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
 		doc.setDocPath(path);
@@ -122,25 +127,5 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		outStream.write(fileBytes);
 		outStream.flush();
 		outStream.close();
-	}
-
-	@Bean
-	//@DependsOn("commandLineRunner")
-	CommandLineRunner createSystemDirectories(TypeRepo typeRepo)
-	{
-		return(args)->
-		{
-			File agtUploadDir= new File(DocumentsConstants.UPLOADS_DIR);
-			if(!agtUploadDir.exists()) agtUploadDir.mkdirs();
-			typeRepo.findByTypeGroup(TypeGroup.DOCUMENT).forEach(type->
-			{
-				String objectFolder = type.getObjectFolder();
-				typeRepo.findUniqueCodesByObjectFolder(objectFolder).forEach(uc->
-				{
-					File typeDir = new File(DocumentsConstants.UPLOADS_DIR  + "\\" + objectFolder + "\\" + type.getUniqueCode()) ;
-					if(!typeDir.exists()) typeDir.mkdirs();
-				});
-			});
-		};
 	}
 }

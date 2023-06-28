@@ -77,12 +77,7 @@ public class ReglementController
         return regService.searchReglement(key, null,sinId,typeReg, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/type-documents")
-    public List<ReadTypeDTO> getTypeDocumentReglement(@RequestParam(defaultValue = "") String key, @PathVariable String typeReg, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
-        Type typeDocReg = typeRepo.findByUniqueCode("DOC_REG");
-        if(typeDocReg == null) return new ArrayList<>();
-        return typeRepo.findSousTypeOf(typeDocReg.getTypeId());
-    }
+
 
     @GetMapping(path ="/details")
     public EtatComptableAffaire.DetailsEtatComptable getDetailCession(@RequestParam Long affId, @RequestParam Long cesId)

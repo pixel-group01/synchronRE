@@ -31,7 +31,7 @@ public @interface ExistingSinId
         @Override
         public boolean isValid(Long sinId, ConstraintValidatorContext context)
         {
-            return sinRepo.existsById(sinId);
+            return sinId == null ? true :sinRepo.existsById(sinId);
         }
     }
 }

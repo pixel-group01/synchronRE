@@ -77,6 +77,16 @@ public class TypeLoader implements Loader
         Type docReglement = new Type(null, TypeGroup.DOCUMENT, "DOC_REG", "Document de règlement", PersStatus.ACTIVE, null, "reglement");
         docReglement = typeRepo.save(docReglement);
 
+        Type docAffaire = new Type(null, TypeGroup.DOCUMENT, "DOC_AFF", "Document d'affaire", PersStatus.ACTIVE, null, "affaire");
+        docAffaire = typeRepo.save(docAffaire);
+
+        Type docSinistre = new Type(null, TypeGroup.DOCUMENT, "DOC_SIN", "Document de sinistre", PersStatus.ACTIVE, null, "sinistre");
+        docSinistre = typeRepo.save(docSinistre);
+
+        Type pvConstat = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "PV_CONST", "Procès verbal de constat", PersStatus.ACTIVE, null, "sinistre"));
+
+        typeParamRepo.save(new TypeParam(null, docSinistre, pvConstat, PersStatus.ACTIVE));
+
         ordreVirement = typeRepo.save(ordreVirement);
         typeParamRepo.save(new TypeParam(null, docReglement, recuReglement, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docReglement, chequeRegelemnt, PersStatus.ACTIVE));
