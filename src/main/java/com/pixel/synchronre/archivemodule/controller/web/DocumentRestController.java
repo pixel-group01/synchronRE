@@ -4,6 +4,8 @@ import com.pixel.synchronre.archivemodule.controller.repositories.DocumentReposi
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.controller.service.DocServiceProvider;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
+import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
+import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
@@ -42,5 +44,35 @@ public class DocumentRestController
         if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         UploadDocReq dto = new UploadDocReq(objectId, typeDocUniqueCode.toUpperCase(Locale.ROOT), docNum, docDescription, file);
         docUploader.uploadDocument(dto);
+    }
+
+    @GetMapping(path = "/affaire/{affId}")
+    public List<ReadDocDTO> getAffDocs(@PathVariable Long affId)
+    {
+        return docRepo.getAllDocsForObject(affId, null, null, null, null);
+    }
+
+    @GetMapping(path = "/placement/{plaId}")
+    public List<ReadDocDTO> getPlaDocs(@PathVariable Long plaId)
+    {
+        return docRepo.getAllDocsForObject(null, plaId, null, null, null);
+    }
+
+    @GetMapping(path = "/reglement/{regId}")
+    public List<ReadDocDTO> getRegDocs(@PathVariable Long regId)
+    {
+        return docRepo.getAllDocsForObject(null, null, regId, null, null);
+    }
+
+    @GetMapping(path = "/sinistre/{sinId}")
+    public List<ReadDocDTO> getSinDocs(@PathVariable Long sinId)
+    {
+        return docRepo.getAllDocsForObject(null, null, null, sinId, null);
+    }
+
+    @GetMapping(path = "/user/{userId}")
+    public List<ReadDocDTO> getUserDocs(@PathVariable Long userId)
+    {
+        return docRepo.getAllDocsForObject(null, null, null, null, userId);
     }
 }
