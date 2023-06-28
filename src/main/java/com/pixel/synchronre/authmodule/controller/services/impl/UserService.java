@@ -111,7 +111,7 @@ public class UserService implements IUserService
     @Override @Transactional
     public ReadUserDTO activateAccount(ActivateAccountDTO dto) throws UnknownHostException
     {
-        AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
+        AppUser user = userRepo.findByEmail(dto.getEmail()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = new AppUser();BeanUtils.copyProperties(user, oldUser);
         user.setActive(true);
         user.setNotBlocked(true);
@@ -125,7 +125,7 @@ public class UserService implements IUserService
         token.setUsageDate(LocalDateTime.now());
         token.setAlreadyUsed(true);
         ReadUserDTO readUserDTO = userMapper.mapToReadUserDTO(user);
-        readUserDTO.setStatus(this.getUserStatus(dto.getUserId()));
+        readUserDTO.setStatus(this.getUserStatus(user.getUserId()));
         return readUserDTO;
     }
 

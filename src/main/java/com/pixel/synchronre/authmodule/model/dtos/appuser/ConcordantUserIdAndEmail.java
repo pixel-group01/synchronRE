@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ConcordantUserIdAndEmail.ConcordantUserIdAndEmailValidatorOnAccountActivation.class, ConcordantUserIdAndEmail.ConcordantUserIdAndEmailValidatorOnChangingPassword.class})
+@Constraint(validatedBy = {ConcordantUserIdAndEmail.ConcordantUserIdAndEmailValidatorOnChangingPassword.class})
 @Documented
 public @interface ConcordantUserIdAndEmail
 {
@@ -20,7 +20,7 @@ public @interface ConcordantUserIdAndEmail
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
-    @Component @RequiredArgsConstructor
+    /*@Component @RequiredArgsConstructor
     class ConcordantUserIdAndEmailValidatorOnAccountActivation implements ConstraintValidator <ConcordantUserIdAndEmail, ActivateAccountDTO>
     {
         private final UserRepo userRepo;
@@ -30,7 +30,7 @@ public @interface ConcordantUserIdAndEmail
             Long userId = dto.getUserId(); String email = dto.getEmail();
             return userId == null || email == null ? false : userRepo.existsByUserIdAndEmail(userId, email);
         }
-    }
+    }*/
 
     @Component @RequiredArgsConstructor
     class ConcordantUserIdAndEmailValidatorOnChangingPassword implements ConstraintValidator <ConcordantUserIdAndEmail, ChangePasswordDTO>

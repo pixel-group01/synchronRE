@@ -9,12 +9,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@ValidToken(message = "activationToken::Lien invalide") @ConcordantPassword @ConcordantUserIdAndEmail
-
+@ValidToken(message = "activationToken::Lien invalide") @ConcordantPassword //@ConcordantUserIdAndEmail
 public class ActivateAccountDTO
 {
-    @ExistingUserId
-    private Long userId;
     @NotBlank(message = "L'email ne peut être nul")
     @Email(message = "L'email  n'est pas valide")
     private String email;

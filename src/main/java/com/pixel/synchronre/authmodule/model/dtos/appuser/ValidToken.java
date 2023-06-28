@@ -38,7 +38,7 @@ public @interface ValidToken
         @Override
         public boolean isValid(ActivateAccountDTO dto, ConstraintValidatorContext context)
         {
-            return tokenRepo.existsByTokenAndUserId(dto.getActivationToken(), dto.getUserId());
+            return tokenRepo.existsByTokenAndUserEmail(dto.getActivationToken(), dto.getEmail());
         }
     }
 

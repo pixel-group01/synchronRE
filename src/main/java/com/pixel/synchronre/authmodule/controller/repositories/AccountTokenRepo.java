@@ -22,4 +22,7 @@ public interface AccountTokenRepo extends JpaRepository<AccountToken, Long>
 
     @Query("select (count(t)>0) from AccountToken t where t.user.userId = ?1 and t.alreadyUsed = false and t.expirationDate <= current_timestamp and t.expirationDate = (select max(t2.expirationDate) from AccountToken t2 where t2.user.userId = ?1)")
     boolean lastActivationTokenHasExpired(Long userId);
+
+    @Query("select t.user.userId from AccountToken t where t.token = ?1")
+    Long getUserIdByToken(String token);
 }
