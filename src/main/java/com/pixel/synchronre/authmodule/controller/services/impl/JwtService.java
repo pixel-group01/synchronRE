@@ -199,7 +199,7 @@ public class JwtService implements IJwtService
     {
         HttpServletRequest request = HttpServletManager.getCurrentHttpRequest();
         if(request == null) return null;
-        return request.getHeader("Authorization").substring("Bearer ".length());
+        return request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").substring("Bearer ".length());
     }
 
     @Override

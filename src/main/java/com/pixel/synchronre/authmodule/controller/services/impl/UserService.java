@@ -102,7 +102,7 @@ public class UserService implements IUserService
         accountToken = tokenRepo.save(accountToken);
 
         EmailNotification emailNotification = new EmailNotification(user, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(user.getEmail(), user.getEmail(), emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken());
+        emailSenderService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), emailServiceConfig.getActivateAccountLink() + "/token=" + accountToken.getToken());
         emailNotification.setSent(true);
         emailRepo.save(emailNotification);
         accountToken.setEmailSent(true);
@@ -217,23 +217,26 @@ public class UserService implements IUserService
         return user == null ? null : userMapper.mapToReadUserDTO(user);
     }
 
-    @Override //@Transactional
+    @Override @Transactional
     public void sendAccountActivationEmail(String email) throws IllegalAccessException, UnknownHostException {
-        String username = email.split("@")[0];
+        boolean isNotLoggedIn = jwtService.getCurrentJwt() == null;
         AppUser loadedUser = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(SecurityErrorMsg.USERNAME_NOT_FOUND_ERROR_MSG));
-        if(!loadedUser.getEmail().equals(email)) {throw new AppException(SecurityErrorMsg.INVALID_USERNAME_OR_EMAIL_ERROR_MSG);}
+        String username = loadedUser.getFirstName();
+        //if(!loadedUser.getEmail().equals(email)) {throw new AppException(SecurityErrorMsg.INVALID_USERNAME_OR_EMAIL_ERROR_MSG);}
         if(loadedUser.isActive() && loadedUser.isNotBlocked()) {throw new AppException(SecurityErrorMsg.ALREADY_ACTIVATED_ACCOUNT_ERROR_MSG);}
         AccountToken accountToken = accountTokenService.createAccountToken(loadedUser);
-        logger.logg(AuthActions.CREATE_ACCOUT_TOKEN, null, accountToken, AuthTables.ACCOUNT_TOKEN);
+        if(isNotLoggedIn) logger.loggOffConnection(AuthActions.CREATE_ACCOUT_TOKEN, email,null, accountToken, AuthTables.ACCOUNT_TOKEN);
+        if(!isNotLoggedIn) logger.logg(AuthActions.CREATE_ACCOUT_TOKEN, null, accountToken, AuthTables.ACCOUNT_TOKEN);
 
-        Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
+        Long actorUserId = userRepo.getUserIdByEmail(isNotLoggedIn ? loadedUser.getEmail() : jwtService.extractUsername());
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(email, username, emailServiceConfig.getActivateAccountLink() + "?token=" + accountToken.getToken());
+        emailSenderService.sendAccountActivationEmail(email, username, emailServiceConfig.getActivateAccountLink() + "/token=" + accountToken.getToken());
         emailNotification.setSent(true);
         accountToken.setEmailSent(true);
         emailNotification = emailRepo.save(emailNotification);
         if(!loadedUser.isActive() || !loadedUser.isNotBlocked()) loadedUser.setStatut(new Statut("USR-AACT"));
-        logger.logg(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
+        if(isNotLoggedIn) logger.loggOffConnection(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, email, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
+        if(!isNotLoggedIn) logger.logg(AuthActions.SEND_ACCOUNT_ACTIVATION_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
     }
 
     @Override @Transactional
@@ -244,18 +247,19 @@ public class UserService implements IUserService
 
     @Override @Transactional
     public void sendReinitialisePasswordEmail(String email) throws IllegalAccessException, UnknownHostException {
-        String username = email.split("@")[0];
+
         AppUser loadedUser = this.userRepo.findByEmail(email).orElseThrow(()->new UsernameNotFoundException(SecurityErrorMsg.USERNAME_NOT_FOUND_ERROR_MSG));
+        String username = loadedUser.getFirstName();
         if(!loadedUser.getEmail().equals(email)) {throw new AppException(SecurityErrorMsg.INVALID_USERNAME_OR_EMAIL_ERROR_MSG);}
         AccountToken accountToken = accountTokenService.createAccountToken(loadedUser);
-        logger.logg(AuthActions.CREATE_ACCOUT_TOKEN, null, accountToken, AuthTables.ACCOUNT_TOKEN);
+        logger.loggOffConnection(AuthActions.CREATE_ACCOUT_TOKEN, loadedUser.getEmail(), null, accountToken, AuthTables.ACCOUNT_TOKEN);
 
-        EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), userRepo.getUserIdByEmail(jwtService.extractUsername()));
-        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink() + "?token=" + accountToken.getToken() + "&userId=" + loadedUser.getUserId());
+        EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), loadedUser.getUserId());
+        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink() + "/token=" + accountToken.getToken());
         emailNotification.setSent(true);
         accountToken.setEmailSent(true);
         emailRepo.save(emailNotification);
-        logger.logg(AuthActions.SEND_REINIT_PASSWORD_EMAIL, null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
+        logger.loggOffConnection(AuthActions.SEND_REINIT_PASSWORD_EMAIL, loadedUser.getEmail(), null, emailNotification, AuthTables.EMAIL_NOTIFICATION);
     }
 
     @Override @Transactional
