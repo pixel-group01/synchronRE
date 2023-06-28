@@ -4,6 +4,7 @@ import com.pixel.synchronre.archivemodule.controller.repositories.DocumentReposi
 import com.pixel.synchronre.archivemodule.model.constants.DocumentsConstants;
 import com.pixel.synchronre.archivemodule.model.dtos.DocMapper;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
+import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
@@ -27,6 +28,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -101,7 +103,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		}
 	}
 
-	@Transactional
+	@Transactional @Override
 	public void uploadDocument(UploadDocReq dto) {
 		if(dto.getDocUniqueCode() == null ) throw new AppException("Le type de document ne peut être null");
 		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode().toUpperCase(Locale.ROOT));
@@ -128,4 +130,11 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		outStream.flush();
 		outStream.close();
 	}
+
+	@Override
+	public List<ReadDocDTO> getAllDocsForObject(Long affId, Long plaId, Long regId, Long sinId, Long userId)
+	{
+		return docRepo.getAllDocsForObject(affId, plaId, regId, sinId, userId);
+	}
+
 }
