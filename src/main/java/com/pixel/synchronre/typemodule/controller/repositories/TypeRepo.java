@@ -109,4 +109,17 @@ public interface TypeRepo extends JpaRepository<Type, Long>
 
     @Query("select t.uniqueCode from Type t where t.objectFolder = ?1")
     List<String> findUniqueCodesByObjectFolder(String objectFolder);
+
+    @Query("select (count(t.typeParamId)>0) from TypeParam t where t.child.typeId = ?1")
+    boolean typeHasAnyParent(Long typeId);
+
+    @Query("select (count(t.typeParamId)>0) from TypeParam t where t.child.typeId = ?1 and t.child.typeGroup = ?2")
+    boolean typeHasAnyParent(Long typeId, TypeGroup typeGroup);
+
+    @Query("select t from Type t where t.typeGroup = ?1 and t.status = 'ACTIVE' and (select count(tp.typeParamId) from TypeParam tp where tp.child.typeId = t.typeId and tp.status = 'ACTIVE') = 0")
+    List<Type> findBaseTypes(TypeGroup typeGroup);
+
+    @Query("select tp.child from TypeParam tp where tp.parent.typeId = ?1 and tp.status = 'ACTIVE'")
+    List<Type> getChildren(Long typeId);
+
 }

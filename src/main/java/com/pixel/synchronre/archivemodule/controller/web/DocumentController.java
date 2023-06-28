@@ -23,7 +23,7 @@ public class DocumentController
     private final DocumentRepository docRepo;
     private final TypeRepo typeRepo;
 
-    @PostMapping(path = "/download")
+    @GetMapping(path = "/download")
     public byte[] downloadDocument(@PathVariable Long docId) throws Exception {
         Document doc = docRepo.findById(docId).orElse(null);
         if(doc == null) return null;
@@ -31,7 +31,7 @@ public class DocumentController
         return docService.downloadFile(docPath);
     }
 
-    @PostMapping(path = "/display")
+    @GetMapping(path = "/display/{docId}")
     void displayDocument(HttpServletResponse response, @PathVariable Long docId) throws Exception {
         Document doc = docRepo.findById(docId).orElse(null);
         if(doc == null) return;

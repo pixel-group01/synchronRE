@@ -27,15 +27,15 @@ public class Document
 
 	@ManyToOne @JoinColumn(name = "TYPE_ID")
 	private Type docType;
-	@ManyToOne @JoinColumn(name = "USER_ID")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "USER_ID")
 	private AppUser user;
-	@ManyToOne @JoinColumn(name = "AFF_ID")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "AFF_ID")
 	private Affaire affaire;
-	@ManyToOne @JoinColumn(name = "PLA_ID")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "PLA_ID")
 	private Repartition placement;
-	@ManyToOne @JoinColumn(name = "REG_ID")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "REG_ID")
 	private Reglement reglement;
-	@ManyToOne @JoinColumn(name = "SIN_ID")
+	@ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "SIN_ID")
 	private Sinistre sinistre;
 
 	@CreationTimestamp

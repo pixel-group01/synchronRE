@@ -123,10 +123,10 @@ public class ServiceSinistreImpl implements IServiceSinistre
 
      public void transmettreSinistreAuCourtier(Long sinId) throws UnknownHostException {
         Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
-        BigDecimal mtTotSinAff = sinRepo.calculateMtotAPayerBySinAndAff(sinId);
+        //BigDecimal mtTotSinAff = sinRepo.calculateMtotAPayerBySinAndAff(sinId);
         sinistre.setStatut(new Statut(TRANSMIS.staCode));
-        sinistre.setSinMontantTotAffaire(mtTotSinAff);
-        sinistre.setSinMontantTotAffaireLettre(ConvertMontantEnLettres.convertir(mtTotSinAff.longValue()));
+        //sinistre.setSinMontantTotAffaire(mtTotSinAff);
+        //sinistre.setSinMontantTotAffaireLettre(ConvertMontantEnLettres.convertir(mtTotSinAff.longValue()));
         sinRepo.save(sinistre);
         logService.saveLog(SinistreActions.TRANSMETTRE_SINISTRE);
     }

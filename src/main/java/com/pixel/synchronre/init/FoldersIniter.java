@@ -45,15 +45,18 @@ public class FoldersIniter implements Loader
 
     @Override
     public void load() {
-        File agtUploadDir= new File(DocumentsConstants.UPLOADS_DIR);
-        if(!agtUploadDir.exists()) agtUploadDir.mkdirs();
-        typeRepo.findByTypeGroup(TypeGroup.DOCUMENT).forEach(type->
+        File docUploadDir= new File(DocumentsConstants.UPLOADS_DIR);
+        if(!docUploadDir.exists()) docUploadDir.mkdirs();
+        typeRepo.findBaseTypes(TypeGroup.DOCUMENT).forEach(type->
         {
-            String objectFolder = type.getObjectFolder();
-            typeRepo.findUniqueCodesByObjectFolder(objectFolder).forEach(uc->
+            String baseFolder = DocumentsConstants.UPLOADS_DIR  + "\\" + type.getObjectFolder();
+            File baseDir = new File(baseFolder);
+            if(!baseDir.exists()) baseDir.mkdirs();
+
+            typeRepo.getChildren(type.getTypeId()).forEach(child->
             {
-                File typeDir = new File(DocumentsConstants.UPLOADS_DIR  + "\\" + objectFolder + "\\" + type.getUniqueCode()) ;
-                if(!typeDir.exists()) typeDir.mkdirs();
+                File objectDir = new File(baseFolder + "\\" + child.getUniqueCode());
+                if(!objectDir.exists()) objectDir.mkdirs();
             });
         });
     }

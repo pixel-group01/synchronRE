@@ -35,11 +35,11 @@ public class DocumentRestController
         return typeRepo.findSousTypeOf(typeDoc.getTypeId());
     }
 
-    @PostMapping(path = "/{typeDocUniqueCode}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void getTypeDocumentReglement(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @PathVariable String typeDocUniqueCode) throws UnknownHostException
+    @PostMapping(path = "/{groupDocUniqueCode}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void getTypeDocumentReglement(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @RequestParam String typeDocUniqueCode, @PathVariable String groupDocUniqueCode) throws UnknownHostException
     {
-        AbstractDocumentService docUploader = docdocServiceProvider.getDocUploader(typeDocUniqueCode);
-        if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");;
+        AbstractDocumentService docUploader = docdocServiceProvider.getDocUploader(groupDocUniqueCode);
+        if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         UploadDocReq dto = new UploadDocReq(objectId, typeDocUniqueCode.toUpperCase(Locale.ROOT), docNum, docDescription, file);
         docUploader.uploadDocument(dto);
     }
