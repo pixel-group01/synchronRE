@@ -24,6 +24,7 @@ import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +66,7 @@ public class UserService implements IUserService
     private final ObjectCopier<AppUser> userCopier;
     private final StatutRepository staRepo;
     private final IFunctionService functionService;
+    private final CedRepo cedRepo;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
@@ -92,6 +94,7 @@ public class UserService implements IUserService
         Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
 
         AppUser user = userMapper.mapToUser(dto);
+        if(dto.getCesId() == null && dto.getVisibilityId() != null) user.setCesId(cedRepo.getCedanteCesId(dto.getVisibilityId()));
         user.setStatut(new Statut("USR-BLQ"));
         user = userRepo.save(user);
         logger.logg(AuthActions.CREATE_USER, null, user, AuthTables.USER_TABLE);
