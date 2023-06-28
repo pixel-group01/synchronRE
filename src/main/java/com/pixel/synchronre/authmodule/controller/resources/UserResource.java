@@ -88,12 +88,12 @@ public class UserResource
         userService.reinitialisePassword(dto);
     }
 
-    @PutMapping(path = "/send-reinit-password-email/{email}")
+    @PutMapping(path = "/open/send-reinit-password-email/{email}")
     public void sendReinitPasswordEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendReinitialisePasswordEmail(email);
     }
 
-    @PutMapping(path = "/send-acitivation-email/{email}")
+    @PutMapping(path = "/open/send-acitivation-email/{email}")
     public void sendActivationEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendAccountActivationEmail(email);
     }
