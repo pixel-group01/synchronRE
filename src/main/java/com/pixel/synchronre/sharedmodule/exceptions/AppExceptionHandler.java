@@ -55,4 +55,11 @@ public class AppExceptionHandler
         errorMessages.add(errMsg);
         return errorMessages;
     }
+
+    @ExceptionHandler()
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public void handleAuthException(Exception exception)
+    {
+        exception.printStackTrace();
+    }
 }
