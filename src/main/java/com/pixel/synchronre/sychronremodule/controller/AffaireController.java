@@ -37,7 +37,7 @@ import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
 @RestController
 @RequestMapping("/affaires")
-@RequiredArgsConstructor
+@RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 public class AffaireController
 {
     private final IserviceFacultative facService;

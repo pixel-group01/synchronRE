@@ -9,12 +9,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-@RestController @RequiredArgsConstructor
+@RestController @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 @RequestMapping(path ="/sinistres")
 public class SinistreController
 {

@@ -11,11 +11,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 
-@RestController
+@RestController @ResponseStatus(HttpStatus.OK)
 @RequiredArgsConstructor
 @RequestMapping("/pays")
 public class PaysController {

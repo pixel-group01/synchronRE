@@ -10,13 +10,14 @@ import com.pixel.synchronre.authmodule.model.entities.Menu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.Set;
 
 @RequiredArgsConstructor
-@RestController @RequestMapping("/menu")
+@RestController @RequestMapping("/menu") @ResponseStatus(HttpStatus.OK)
 public class MenuResource
 {
     private final IMenuReaderService menmenuReaderService;

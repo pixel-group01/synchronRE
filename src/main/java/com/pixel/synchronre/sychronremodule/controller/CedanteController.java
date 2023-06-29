@@ -8,11 +8,12 @@ import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 
-@RestController @RequiredArgsConstructor
+@RestController @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 @RequestMapping(path = "/cedentes")
 public class CedanteController
 {

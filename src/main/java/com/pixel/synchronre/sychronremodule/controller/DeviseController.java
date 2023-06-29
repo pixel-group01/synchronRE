@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 import java.util.List;
 
-@RestController
+@RestController @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/devises")
 @RequiredArgsConstructor
 public class DeviseController {

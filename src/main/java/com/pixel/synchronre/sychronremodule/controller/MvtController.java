@@ -2,12 +2,10 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-@RestController @RequiredArgsConstructor @RequestMapping(path = "/mouvements")
+@RestController @RequiredArgsConstructor @RequestMapping(path = "/mouvements") @ResponseStatus(HttpStatus.OK)
 public class MvtController
 {
     private MouvementRepository mvtRepo;

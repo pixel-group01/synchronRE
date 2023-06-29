@@ -9,6 +9,7 @@ import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller @RequiredArgsConstructor @RequestMapping(path = "/documents")
+@Controller @RequiredArgsConstructor @RequestMapping(path = "/documents") @ResponseStatus(HttpStatus.OK)
 public class DocumentController
 {
     private final AbstractDocumentService docService;

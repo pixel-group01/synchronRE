@@ -8,13 +8,14 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.SetAuthoritiesToFunctionDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.Set;
 
 @RestController @RequiredArgsConstructor
-@RequestMapping(path = "/functions")
+@RequestMapping(path = "/functions") @ResponseStatus(HttpStatus.OK)
 public class FunctionResource
 {
     private final IFunctionService functionService;

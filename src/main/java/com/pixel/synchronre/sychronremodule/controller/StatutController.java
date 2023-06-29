@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 
-@RestController
+@RestController @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/statuts")
 @RequiredArgsConstructor
 public class StatutController {

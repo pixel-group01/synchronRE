@@ -13,12 +13,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.util.List;
 
-@RestController
+@RestController @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/exercices")
 @RequiredArgsConstructor
 public class ExerciceController {
