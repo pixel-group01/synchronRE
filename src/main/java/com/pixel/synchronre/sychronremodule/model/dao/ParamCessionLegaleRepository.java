@@ -12,15 +12,34 @@ import java.util.List;
 
 public interface ParamCessionLegaleRepository extends JpaRepository<ParamCessionLegale, Long> {
 
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(pr.paramCesLegId, pr.paramCesLegLibelle, pr.paramCesLegCapital, 
+        pr.paramCesLegTaux,pr.pays.paysNom, pr.pays.paysCode) 
+        from ParamCessionLegale pr where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.paramCesLegLibelle, '') ) as string)) ) >0                                    
+                                         or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.pays.paysNom, '') ) as string)) ) >0 ) 
+                                         and pr.statut.staCode = 'ACT' order  by pr.pays.paysCode, pr.numOrdre    
+""")
+    Page<ParamCessionLegaleListResp> searchParams(String key, Pageable pageable);
+
+
     @Query("select count(pcl.paramCesLegId) from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1)")
     Long countByAffId(Long affId);
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(
-    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOdre)
-    from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1) order by pcl.numOdre
+    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre)
+    from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1) order by pcl.numOrdre
     """)
     List<ParamCessionLegaleListResp> findByAffId(Long affId);
+
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(
+    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre)
+    from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1) order by pcl.numOrdre
+    """)
+    List<ParamCessionLegaleListResp> findByPaysCode(String paysCode);
+
 
     @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where pcl.pays.paysCode = ?1 and ?1 = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?2)")
     boolean existsByPaysAndAffaire(Long paysId, Long affId);

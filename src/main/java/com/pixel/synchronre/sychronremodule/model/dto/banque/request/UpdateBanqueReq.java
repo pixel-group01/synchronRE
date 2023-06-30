@@ -17,6 +17,9 @@ public class UpdateBanqueReq
     @NotNull(message = "Veuillez saisir le code de la banque")
     @Length(message = "Le code de la banque doit contenir au moins deux caractères", min = 2)
     private String banCode;
+    @NotBlank(message = "Veuillez saisir le numero de compte")
+    @NotNull(message = "Veuillez saisir le numero de compte")
+    private String banNumCompte;
     @NotBlank(message = "Veuillez saisir le nom de la banque")
     @NotNull(message = "Veuillez saisir le nom de la banque")
     private String banLibelle;

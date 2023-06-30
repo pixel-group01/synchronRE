@@ -50,7 +50,7 @@ public class CreateFacultativeReq
     private BigDecimal affCapitalInitial;
 
     @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
-    @Positive(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre strictement positif")
+    @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
     private BigDecimal facSmpLci;
 
     @NotNull(message = "Veuillez saisir le montant de la prime")
