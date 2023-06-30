@@ -102,7 +102,7 @@ public class UserService implements IUserService
         accountToken = tokenRepo.save(accountToken);
 
         EmailNotification emailNotification = new EmailNotification(user, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), emailServiceConfig.getActivateAccountLink() + "/token=" + accountToken.getToken());
+        emailSenderService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), emailServiceConfig.getActivateAccountLink() + "/" + accountToken.getToken());
         emailNotification.setSent(true);
         emailRepo.save(emailNotification);
         accountToken.setEmailSent(true);
@@ -230,7 +230,7 @@ public class UserService implements IUserService
 
         Long actorUserId = userRepo.getUserIdByEmail(isNotLoggedIn ? loadedUser.getEmail() : jwtService.extractUsername());
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), actorUserId);
-        emailSenderService.sendAccountActivationEmail(email, username, emailServiceConfig.getActivateAccountLink() + "/token=" + accountToken.getToken());
+        emailSenderService.sendAccountActivationEmail(email, username, emailServiceConfig.getActivateAccountLink() + "/" + accountToken.getToken());
         emailNotification.setSent(true);
         accountToken.setEmailSent(true);
         emailNotification = emailRepo.save(emailNotification);
@@ -255,7 +255,7 @@ public class UserService implements IUserService
         logger.loggOffConnection(AuthActions.CREATE_ACCOUT_TOKEN, loadedUser.getEmail(), null, accountToken, AuthTables.ACCOUNT_TOKEN);
 
         EmailNotification emailNotification = new EmailNotification(loadedUser, SecurityConstants.ACCOUNT_ACTIVATION_REQUEST_OBJECT, accountToken.getToken(), loadedUser.getUserId());
-        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink() + "/token=" + accountToken.getToken());
+        emailSenderService.sendReinitialisePasswordEmail(email, username, emailServiceConfig.getReinitPasswordLink() + "/" + accountToken.getToken());
         emailNotification.setSent(true);
         accountToken.setEmailSent(true);
         emailRepo.save(emailNotification);
@@ -265,7 +265,7 @@ public class UserService implements IUserService
     @Override @Transactional
     public void clickLink(String token) throws UnknownHostException {
         Optional<AccountToken> accountToken$ = tokenRepo.findByToken(token);
-        if(!accountToken$.isPresent()) return; //throw new AppException(UNKNOWN_ACCOUNT_TOKEN_ERROR_MSG);
+        if(!accountToken$.isPresent()) return; //tCohrow new AppException(UNKNOWN_ACCOUNT_TOKEN_ERROR_MSG);
         EmailNotification notification = emailRepo.findByToken(accountToken$.get().getToken()).orElse(null);
         EmailNotification oldNotification = new EmailNotification();BeanUtils.copyProperties(notification, oldNotification);
         if(notification != null)
