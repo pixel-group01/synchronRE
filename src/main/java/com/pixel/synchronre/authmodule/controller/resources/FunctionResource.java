@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.FncMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.SetAuthoritiesToFunctionDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
@@ -55,9 +56,9 @@ public class FunctionResource
     }
 
     @PutMapping(path = "/set-fnc-as-default/{fncId}")
-    public void setFunctionAsDefault(@PathVariable Long fncId) throws UnknownHostException
+    public AuthResponseDTO setFunctionAsDefault(@PathVariable Long fncId) throws UnknownHostException
     {
-        functionService.setFunctionAsDefault(fncId);
+        return functionService.setFunctionAsDefault(fncId);
     }
     @PutMapping(path = "/revoke/{fncId}")
     public void revokeFunction(@PathVariable Long fncId) throws UnknownHostException

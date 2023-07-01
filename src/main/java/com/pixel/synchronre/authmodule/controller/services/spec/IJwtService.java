@@ -13,6 +13,7 @@ public interface IJwtService
 {
     AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId);
     AuthResponseDTO generateJwt(String username, Map<String, Object> extraClaims);
+
     String extractUsername(String jwt);
     String extractUsername();
     String extractConnectionId();

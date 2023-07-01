@@ -1,11 +1,13 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
 import com.pixel.synchronre.authmodule.controller.repositories.*;
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrivilegeMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
 import com.pixel.synchronre.authmodule.model.dtos.approle.ReadRoleDTO;
 import com.pixel.synchronre.authmodule.model.dtos.approle.RoleMapper;
+import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.*;
 import com.pixel.synchronre.authmodule.model.entities.*;
 import com.pixel.synchronre.authmodule.controller.services.spec.IFunctionService;
@@ -15,9 +17,12 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.FncMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,10 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,14 +43,13 @@ public class FunctionService implements IFunctionService
     private final UserRepo userRepo;
     private final FncMapper fncMapper;
     private final AssMapper assMapper;
-    private final PrivilegeMapper prvMapper;
-    private final RoleMapper roleMapper;
     private final ILogService logger;
     private final ObjectCopier<AppFunction> functionCopier;
     private final ObjectCopier<AppUser> userCopier;
     private final ObjectCopier<RoleToFncAss> rtfCopier;
-    private final ObjectCopier<PrvToRoleAss> ptrCopier;
     private final ObjectCopier<PrvToFunctionAss> ptfCopier;
+    private final UserDetailsService uds;
+    private final IJwtService jwtService;
     @Override
     public Long getActiveCurrentFunctionId(Long userId)
     {
@@ -116,10 +117,10 @@ public class FunctionService implements IFunctionService
     }
 
     @Override @Transactional
-    public void setFunctionAsDefault(Long fncId) throws UnknownHostException
+    public AuthResponseDTO setFunctionAsDefault(Long fncId) throws UnknownHostException
     {
-        AppFunction function  = functionRepo.findById(fncId).orElse(null);
-        if(function == null) return;
+        AppFunction function  = functionRepo.findById(fncId).orElseThrow(()->new AppException("Fonction inconnue"));
+
         functionRepo.findActiveByUser(function.getUser().getUserId()).forEach(fnc->
         {
             if(!fnc.getId().equals(fncId) && fnc.getFncStatus() == 1)
@@ -134,7 +135,7 @@ public class FunctionService implements IFunctionService
                 }
             }
         });
-        if(function.getFncStatus() == 1) return;
+        if(function.getFncStatus() == 1) return null;
         AppFunction oldFnc = functionCopier.copy(function);
         function.setFncStatus(1);
         logger.logg(AuthActions.SET_FNC_AS_NONE_DEFAULT, oldFnc, function, AuthTables.FUNCTION);
@@ -146,6 +147,8 @@ public class FunctionService implements IFunctionService
         user.setCurrentFunctionId(fncId);
         user = userRepo.save(user);
         logger.logg(AuthActions.SET_USER_DEFAULT_FNC_ID, oldUser, user, AuthTables.USER_TABLE);
+        UserDetails userDetails = uds.loadUserByUsername(user.getEmail());
+        return jwtService.generateJwt(userDetails, UUID.randomUUID().toString());
     }
 
     @Override @Transactional
