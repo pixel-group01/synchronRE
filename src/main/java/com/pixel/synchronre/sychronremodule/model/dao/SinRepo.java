@@ -37,7 +37,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         and (:fncId is null or :fncId = fnc.id)
         and (:userId is null or :userId = u.userId)
         and (:cedId is null or :cedId = ced.cedId)
-        and s.statut.staCode in :staCodes
+        and s.statut.staCode in :staCodes order by s.sinId desc
            """)
     Page<SinistreDetailsResp> searchSinistres(@Param("key") String key,
                                               @Param("fncId") Long fncId,

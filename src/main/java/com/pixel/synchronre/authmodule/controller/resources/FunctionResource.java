@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/functions") @ResponseStatus(HttpStatus.OK)
@@ -75,14 +77,14 @@ public class FunctionResource
     }
 
     @GetMapping(path = "/active-fnc-for-user/{userId}")
-    public Set<AppFunction> getActiveFunctionsForUser(@PathVariable Long userId)
+    public List<ReadFncDTO> getActiveFunctionsForUser(@PathVariable Long userId)
     {
-        return functionRepo.findActiveByUser(userId);
+        return functionRepo.findActiveByUser(userId).stream().map(fncMapper::mapToReadFncDto).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/all-fnc-for-user/{userId}")
-    public Set<AppFunction> getUsersAllFunctions(@PathVariable Long userId)
+    public List<ReadFncDTO> getUsersAllFunctions(@PathVariable Long userId)
     {
-        return functionRepo.findAllByUser(userId);
+        return functionRepo.findAllByUser(userId).stream().map(fncMapper::mapToReadFncDto).collect(Collectors.toList());
     }
 }
