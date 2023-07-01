@@ -9,11 +9,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class CreaterUserAndFunctionDTO
 {
     @Valid
     private CreateUserDTO createUserDTO;
     @Valid
-    private CreateInitialFncDTO createInitialFncDTO;
+    private List<CreateInitialFncDTO> createInitialFncDTO;
 }

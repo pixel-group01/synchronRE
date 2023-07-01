@@ -302,17 +302,30 @@ public class UserService implements IUserService
     public ReadUserDTO createUserAndFunction(CreaterUserAndFunctionDTO dto) throws UnknownHostException, IllegalAccessException {
         CreateUserDTO userDto = dto.getCreateUserDTO();
         ReadUserDTO  user = this.createUser(userDto);
+
+        List<CreateInitialFncDTO> createInitialFncDTOs = dto.getCreateInitialFncDTO();
+
+        createInitialFncDTOs.forEach(createInitialFncDTO -> {
+            try {
+                this.createUserInitialFonction(userDto, user, createInitialFncDTO);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        });
+
+        user.setStatus(this.getUserStatus(user.getUserId()));
+        return user;
+    }
+
+    private void createUserInitialFonction(CreateUserDTO userDto, ReadUserDTO user, CreateInitialFncDTO dto) throws UnknownHostException {
         CreateFncDTO createFncDTO = new CreateFncDTO();
-        CreateInitialFncDTO createInitialFncDTO = dto.getCreateInitialFncDTO();
-        BeanUtils.copyProperties(createInitialFncDTO, createFncDTO);
+        BeanUtils.copyProperties(dto, createFncDTO);
 
         createFncDTO.setVisibilityId(userDto.getVisibilityId());
         createFncDTO.setCesId(userDto.getCesId());
         createFncDTO.setFncStatus(1);
         createFncDTO.setUserId(user.getUserId());
         functionService.createFnc(createFncDTO);
-        user.setStatus(this.getUserStatus(user.getUserId()));
-        return user;
     }
 
     @Override
