@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Bordereau {
@@ -15,6 +16,8 @@ public class Bordereau {
     private Long BordId;
     @Column(unique = true)
     private String bordNum;
+    private String bordStatut;
+    private BigDecimal bordMtTotNoteDebit;
     @ManyToOne @JoinColumn(name = "repId")
     private Repartition repartition;
     @ManyToOne @JoinColumn(name = "affId")
