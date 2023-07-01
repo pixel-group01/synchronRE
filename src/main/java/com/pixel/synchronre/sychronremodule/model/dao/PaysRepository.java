@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface PaysRepository extends JpaRepository<Pays, Long> {
+public interface PaysRepository extends JpaRepository<Pays, String> {
 
     @Query("select (count(p) > 0) from Pays p where p.paysCode= ?1")
     boolean existsByPaysCode(String paysCode);
