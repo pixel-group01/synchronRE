@@ -17,7 +17,7 @@ public interface BanqueRepository extends JpaRepository<Banque, Long> {
 
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp(b.banId, b.banCode, b.banLibelle, b.banLibelleAbrege, 
+        select new com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp(b.banId, b.banCode,b.banNumCompte, b.banLibelle, b.banLibelleAbrege, 
         b.statut.staLibelle) 
         from Banque b where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banCode, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banLibelle, '') ) as string)) ) >0 
@@ -26,3 +26,4 @@ public interface BanqueRepository extends JpaRepository<Banque, Long> {
 """)
     Page<BanqueListResp> searchBanques(String key, Pageable pageable);
 }
+

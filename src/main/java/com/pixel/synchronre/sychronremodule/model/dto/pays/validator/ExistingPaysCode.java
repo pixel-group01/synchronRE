@@ -14,23 +14,23 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingPaysId.ExistingBanIddValidator.class})
+@Constraint(validatedBy = {ExistingPaysCode.ExistingBanIddValidator.class})
 @Documented
-public @interface ExistingPaysId
+public @interface ExistingPaysCode
 {
-    String message() default "L'identifiant du pays est introuvable";
+    String message() default "Code pays introuvable";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class ExistingBanIddValidator implements ConstraintValidator<ExistingPaysId, Long>
+    class ExistingBanIddValidator implements ConstraintValidator<ExistingPaysCode, String>
     {
         private final PaysRepository paysRepo;
         @Override
-        public boolean isValid(Long paysId, ConstraintValidatorContext context)
+        public boolean isValid(String paysCode, ConstraintValidatorContext context)
         {
-            return paysRepo.existsById(paysId);
+            return paysRepo.existsById(paysCode);
         }
     }
 }

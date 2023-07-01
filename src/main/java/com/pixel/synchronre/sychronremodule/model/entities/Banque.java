@@ -20,6 +20,7 @@ public class Banque {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long banId;
   private String banCode;
+  private String banNumCompte;
   private String banLibelle;
   private String banLibelleAbrege;
   @CreationTimestamp

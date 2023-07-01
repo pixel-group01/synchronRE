@@ -14,4 +14,13 @@ public class ParamCessionLegaleListResp
     private String staLibelle;
     private String paysCode;
     private Long numOrdre;
+
+    public ParamCessionLegaleListResp(Long paramCesLegId, String paramCesLegLibelle, BigDecimal paramCesLegCapital, BigDecimal paramCesLegTaux, String paysNom, String paysCode) {
+        this.paramCesLegId = paramCesLegId;
+        this.paramCesLegLibelle = paramCesLegLibelle;
+        this.paramCesLegCapital = paramCesLegCapital;
+        this.paramCesLegTaux = paramCesLegTaux;
+        this.paysNom = paysNom;
+        this.paysCode = paysCode;
+    }
 }

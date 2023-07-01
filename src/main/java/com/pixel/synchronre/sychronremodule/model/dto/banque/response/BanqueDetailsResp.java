@@ -7,6 +7,7 @@ public class BanqueDetailsResp
 {
     private Long banId;
     private String banCode;
+    private String banNumCompte;
     private String banLibelle;
     private String banLibelleAbrege;
 }

@@ -10,4 +10,5 @@ public class PaysListResp
     private String paysIndicatif;
     private String paysNom;
     private String statutLibelle;
+    private String devCode;
 }

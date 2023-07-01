@@ -73,19 +73,26 @@ public class AdminLoader implements Loader
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now());
 
-        userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur));
+        AppUser useradmin1 = new AppUser(10l, "N’GUESSAN", "Yao Yavo Basile", null, 4l,
+                pe.encode("KD@f8z73t@"), "Basile.nguessan@groupensia.com", "0505893546",
+                true, true, null, LocalDateTime.now(), LocalDateTime.now(),
+                LocalDateTime.now());
+        //useradmin1 = userRepo.save(useradmin1);
+
+        userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur, useradmin1));
 
         AppFunction fncUserci = new AppFunction(1l, 1l, 4l, "Acteur de saisie NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncUserbn = new AppFunction(2l, 2l, 4l, "Acteur de saisie NSIA-BN", userbn, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncUsertg = new AppFunction(3l, 3l, 4l, "Acteur de saisie NSIA-TG", usertg, 1, LocalDate.now(), LocalDate.now().plusYears(1));
 
         AppFunction functionAdmin = new AppFunction(4l, null, 4l, "Administrateur SyncrhoneRe", useradmin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+        AppFunction functionAdmin1 = new AppFunction(10l, null, 4l, "Administrateur SyncrhoneRe", useradmin1, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncAgentSaisie = new AppFunction(5l, null, 4l, "Acteur de saisie NelsonRE", userSaisienre, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncObservateur = new AppFunction(6l, null, 4l, "Observateur SynchronRE", userObservateur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncValidateur = new AppFunction(7l, null, 4l, "Acteur de Validation", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncComptable = new AppFunction(8l, null, 4l, "Comptable NelsonRE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncSouscripteur = new AppFunction(9l, null, 5l, "Souscripteur NelsonRE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
-        fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin, fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur));
+        fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin,fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur, functionAdmin1));
 
         AppPrivilege agentSaisie = prvRepo.save(new AppPrivilege(null, "SAISIE", "AGENT_DE_SAISIE", new Type(4l)));
         AppPrivilege validateur = prvRepo.save(new AppPrivilege(null, "VALIDATEUR", "VALIDATEUR", new Type(4l)));
@@ -98,13 +105,14 @@ public class AdminLoader implements Loader
         PrvToFunctionAss saisiAssbn = new PrvToFunctionAss(agentSaisie, fncUserbn); saisiAssbn.setAssStatus(1); saisiAssbn.setStartsAt(LocalDate.now()); saisiAssbn.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss saisiAsstg = new PrvToFunctionAss(agentSaisie, fncUsertg); saisiAsstg.setAssStatus(1); saisiAsstg.setStartsAt(LocalDate.now()); saisiAsstg.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss adminAss = new PrvToFunctionAss(roleAdmin, functionAdmin); adminAss.setAssStatus(1); adminAss.setStartsAt(LocalDate.now()); adminAss.setEndsAt(LocalDate.now().plusYears(1));
+        PrvToFunctionAss admin1Ass = new PrvToFunctionAss(roleAdmin, functionAdmin1); admin1Ass.setAssStatus(1); admin1Ass.setStartsAt(LocalDate.now()); admin1Ass.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss saisiAss = new PrvToFunctionAss(agentSaisie, fncAgentSaisie); saisiAss.setAssStatus(1); saisiAss.setStartsAt(LocalDate.now()); saisiAss.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss obsAss = new PrvToFunctionAss(observateur, fncObservateur); obsAss.setAssStatus(1); obsAss.setStartsAt(LocalDate.now()); obsAss.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss validAss = new PrvToFunctionAss(validateur, fncValidateur); validAss.setAssStatus(1); validAss.setStartsAt(LocalDate.now()); validAss.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss comptableAss = new PrvToFunctionAss(comptable, fncComptable); comptableAss.setAssStatus(1); comptableAss.setStartsAt(LocalDate.now()); comptableAss.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss sousCripteurAss = new PrvToFunctionAss(souscripteur, fncSouscripteur); sousCripteurAss.setAssStatus(1); sousCripteurAss.setStartsAt(LocalDate.now()); sousCripteurAss.setEndsAt(LocalDate.now().plusYears(1));
 
-        ptfRepo.saveAll(Arrays.asList(saisiAssci, saisiAssbn, saisiAsstg, adminAss, saisiAss, obsAss, validAss, comptableAss, sousCripteurAss));
+        ptfRepo.saveAll(Arrays.asList(saisiAssci, saisiAssbn, saisiAsstg, adminAss,admin1Ass, saisiAss, obsAss, validAss, comptableAss, sousCripteurAss));
 
         //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
@@ -112,9 +120,10 @@ public class AdminLoader implements Loader
 
         userci.setCurrentFunctionId(1l); userbn.setCurrentFunctionId(2l); usertg.setCurrentFunctionId(3l);
         useradmin.setCurrentFunctionId(4l); userSaisienre.setCurrentFunctionId(5l); userObservateur.setCurrentFunctionId(6l);
+        useradmin1.setCurrentFunctionId(4l); userSaisienre.setCurrentFunctionId(5l); userObservateur.setCurrentFunctionId(6l);
         userValidateur.setCurrentFunctionId(7l); userComptable.setCurrentFunctionId(8l); userSouscripteur.setCurrentFunctionId(9l);
 
-        userRepo.saveAll(Arrays.asList(userci, userbn, usertg, useradmin, userSaisienre, userObservateur, userValidateur, userComptable, userSouscripteur));
+        userRepo.saveAll(Arrays.asList(userci, userbn, usertg, useradmin,useradmin1, userSaisienre, userObservateur, userValidateur, userComptable, userSouscripteur));
 
 
     }
