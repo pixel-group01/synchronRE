@@ -1,12 +1,9 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
+import com.pixel.synchronre.context.SpringContext;
 import com.pixel.synchronre.authmodule.controller.repositories.*;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrivilegeMapper;
-import com.pixel.synchronre.authmodule.model.dtos.appprivilege.ReadPrvDTO;
-import com.pixel.synchronre.authmodule.model.dtos.approle.ReadRoleDTO;
-import com.pixel.synchronre.authmodule.model.dtos.approle.RoleMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.*;
 import com.pixel.synchronre.authmodule.model.entities.*;
@@ -17,26 +14,29 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.FncMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
-import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class FunctionService implements IFunctionService
-{
+public class FunctionService implements IFunctionService{
+
+    @Lazy
+    private UserDetailsService uds;
+
     private final FunctionRepo functionRepo;
     private final RoleToFunctionAssRepo rtfRepo;
     private final PrvToFunctionAssRepo ptfRepo;
@@ -48,8 +48,8 @@ public class FunctionService implements IFunctionService
     private final ObjectCopier<AppUser> userCopier;
     private final ObjectCopier<RoleToFncAss> rtfCopier;
     private final ObjectCopier<PrvToFunctionAss> ptfCopier;
-    private final UserDetailsService uds;
     private final IJwtService jwtService;
+
     @Override
     public Long getActiveCurrentFunctionId(Long userId)
     {
