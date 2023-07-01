@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.UnknownHostException;
 
 @RestController @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
-@RequestMapping(path = "/cedentes")
+@RequestMapping(path = "/cedantes")
 public class CedanteController
 {
     private final ICedanteService cedService;
@@ -31,7 +31,7 @@ public class CedanteController
     }
 
     @GetMapping(path = "/list")
-    public Page<ReadCedanteDTO> searchCedente(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<ReadCedanteDTO> searchCedente(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100000") int size) throws UnknownHostException {
         return cedService.searchCedente(key, PageRequest.of(page, size));
     }
 }

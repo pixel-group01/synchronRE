@@ -78,4 +78,7 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
         from AppUser u where u.userId = ?1
     """)
     ReadUserDTO findReadUserDto(Long userId);
+
+    @Query("select u.cesId from AppUser u where u.userId = ?1")
+    Long getUserCesId(Long userId);
 }

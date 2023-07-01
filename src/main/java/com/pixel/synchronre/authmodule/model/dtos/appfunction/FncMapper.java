@@ -2,6 +2,7 @@ package com.pixel.synchronre.authmodule.model.dtos.appfunction;
 
 import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.RoleToFunctionAssRepo;
+import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IMenuMutatorService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IMenuReaderService;
 import com.pixel.synchronre.authmodule.model.dtos.appprivilege.PrivilegeMapper;
@@ -19,10 +20,11 @@ public abstract class FncMapper
     @Autowired protected PrivilegeMapper prvMapper;
     @Autowired protected RoleMapper roleMapper;
     @Autowired protected IMenuReaderService menuService;
-
+    @Autowired protected UserRepo userRepo;
 
     @Mapping(target = "user", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(dto.getUserId()))")
     @Mapping(target = "fncStatus", expression = "java(2)")
+    @Mapping(target = "cesId", expression = "java(dto.getCesId() == null ? userRepo.getUserCesId(dto.getUserId()) : dto.getCesId())")
     public abstract AppFunction mapToFunction(CreateFncDTO dto);
 
     @Mapping(target = "userId", source = "user.userId")

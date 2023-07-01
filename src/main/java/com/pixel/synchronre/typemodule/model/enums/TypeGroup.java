@@ -14,6 +14,7 @@ public enum TypeGroup
     MOUVEMENT("TYP_MVT", "TYPE-MOUVEMENT"),
     TYPE_PRV("TYP_PRV", "TYPE-PRIVILEGE"),
     DOCUMENT("TYP_DOC", "TYPE-DOCUMENT"),
+    CESSIONNAIRE("TYP_CES", "TYPE-CESSIONNAIRE"), //Cessionnaire, courtier
     MODE_REGLEMENT("TYP_MOD_REG", "MODE_REGLEMENT");
     private String groupCode;
     private String groupName;

@@ -78,7 +78,7 @@ public class AffaireController
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
         cedId = cedId == null ? jwtService.getConnectedUserCedId() : cedId;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId, jwtService.getConnectedUserCesId(), AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
         //List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return facPages;
     }
@@ -90,7 +90,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode), exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -102,7 +102,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -115,7 +115,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabSaisieCed, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), AffStatutGroup.tabSaisieCed, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -129,7 +129,7 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), null, AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -143,7 +143,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabSaisieSous, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, AffStatutGroup.tabSaisieSous, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -164,7 +164,7 @@ public class AffaireController
                                                                      @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, jwtService.getConnectedUserCesId(),AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId, AffStatutGroup.tabEnCoursPla, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -176,7 +176,7 @@ public class AffaireController
                                                                @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId, jwtService.getConnectedUserCesId(),Arrays.asList("VAL"), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId, Arrays.asList("VAL"), exeCode, PageRequest.of(page, size));
 
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
@@ -191,7 +191,7 @@ public class AffaireController
                                                          @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, jwtService.getConnectedUserId(), null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -203,7 +203,7 @@ public class AffaireController
                                                         @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,null, Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, jwtService.getConnectedUserFunctionId(), null, null,Arrays.asList(ARCHIVE.staCode), exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -216,7 +216,7 @@ public class AffaireController
                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null,AffStatutGroup.tabArchives, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), AffStatutGroup.tabArchives, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -229,7 +229,7 @@ public class AffaireController
                                                                 @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, null,  jwtService.getConnectedUserCesId(), AffStatutGroup.tabEnCoursPaiement, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, null, AffStatutGroup.tabEnCoursPaiement, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -242,7 +242,7 @@ public class AffaireController
                                                                             @RequestParam(defaultValue = "10") int size)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(),  null, AffStatutGroup.tabEnCoursPaiement, exeCode, PageRequest.of(page, size));
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, jwtService.getConnectedUserCedId(), AffStatutGroup.tabEnCoursPaiement, exeCode, PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -256,7 +256,7 @@ public class AffaireController
         mvtService.createMvtAffaire(new MvtReq(affId, EN_ATTENTE_DE_PLACEMENT.staCode, null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 jwtService.getConnectedUserCedId(),
-                null, Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(page, size));
+                Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(page, size));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -270,7 +270,7 @@ public class AffaireController
         mvtService.createMvtAffaire(new MvtReq(dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 affRepo.getAffCedId(dto.getObjectId()),
-                null, Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+                Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
 
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
@@ -284,7 +284,7 @@ public class AffaireController
     {
         mvtService.createMvtAffaire(new MvtReq(affId, EN_COURS_DE_PAIEMENT.staCode,null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId,
-                jwtService.getConnectedUserCesId(), Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+                Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
@@ -297,8 +297,7 @@ public class AffaireController
     {
         mvtService.createMvtAffaire(new MvtReq(affId, ARCHIVE.staCode,null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId
-                ,jwtService.getConnectedUserCesId(),
-                Arrays.asList(EN_COURS_DE_PAIEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
+                ,Arrays.asList(EN_COURS_DE_PAIEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
 
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
