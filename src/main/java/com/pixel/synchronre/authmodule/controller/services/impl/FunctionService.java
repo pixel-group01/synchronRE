@@ -213,6 +213,14 @@ public class FunctionService implements IFunctionService
         return readFncDTO;
     }
 
+    @Override
+    public ReadFncDTO getFunctioninfos(Long foncId)
+    {
+        AppFunction function = functionRepo.findById(foncId).orElseThrow(()-> new AppException("Fonction introuvable"));
+        ReadFncDTO readFncDTO = fncMapper.mapToReadFncDto(function);
+        return readFncDTO;
+    }
+
     private void treatRolesAssignation(RoleAssSpliterDTO roleAssSpliterDTO, Long fncId, LocalDate startsAt, LocalDate endsAt)
     {
         roleAssSpliterDTO.getRoleIdsToBeRemoved().forEach(id->

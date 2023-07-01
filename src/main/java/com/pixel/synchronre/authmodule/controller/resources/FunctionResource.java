@@ -2,11 +2,13 @@ package com.pixel.synchronre.authmodule.controller.resources;
 
 import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IFunctionService;
+import com.pixel.synchronre.authmodule.model.dtos.appfunction.FncMapper;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.SetAuthoritiesToFunctionDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ public class FunctionResource
 {
     private final IFunctionService functionService;
     private final FunctionRepo functionRepo;
+    private final FncMapper fncMapper;
 
     @PostMapping(path = "/create")
     public ReadFncDTO createFunction(@RequestBody CreateFncDTO dto) throws UnknownHostException {
@@ -29,6 +32,12 @@ public class FunctionResource
     @PutMapping(path = "/update")
     public ReadFncDTO updateFunction(@RequestBody UpdateFncDTO dto) throws UnknownHostException {
          return functionService.updateFunction(dto);
+    }
+
+    @GetMapping(path = "/infos/{foncId}")
+    public ReadFncDTO getFoncInfos(@PathVariable Long foncId) throws UnknownHostException
+    {
+        return functionService.getFunctioninfos(foncId);
     }
 
     @GetMapping(path = "/get-current-fncId-for-user/{userId}")

@@ -21,4 +21,6 @@ public interface IFunctionService
     ReadFncDTO updateFunction(UpdateFncDTO dto);
 
     ReadFncDTO getActiveCurrentFunction(Long userId);
+
+    ReadFncDTO getFunctioninfos(Long foncId);
 }

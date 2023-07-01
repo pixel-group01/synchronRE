@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {UniqueRoleName.UniqueRoleNameValidatorOnCreate.class})
+@Constraint(validatedBy = {UniqueRoleName.UniqueRoleNameValidatorOnCreate.class, UniqueRoleName.UniqueRoleNameValidatorOnUpdate.class})
 @Documented
 public @interface UniqueRoleName
 {
