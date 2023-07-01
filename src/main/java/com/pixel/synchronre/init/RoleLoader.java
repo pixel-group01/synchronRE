@@ -17,6 +17,28 @@ public class RoleLoader implements Loader
     public void load()
     {
         AppRole roleOpeSai = roleRepo.save(new AppRole(null, "ROL-OPE-SAI", "Opérateur de saisie global"));
+        AppRole roleOpeSaiFac = roleRepo.save(new AppRole(null, "ROL-OPE-SAI-FAC", "Opérateur de saisie fac"));
+        AppRole roleOpeSaiTrai = roleRepo.save(new AppRole(null, "ROL-OPE-SAI-TRAI", "Opérateur de saisie traité"));
+        AppRole roleOpeSaiSin = roleRepo.save(new AppRole(null, "ROL-OPE-SAI-SIN", "Opérateur de saisie sinistre"));
+        AppRole roleVal = roleRepo.save(new AppRole(null, "ROL-VAL", "Validateur global"));
+        AppRole roleValFac = roleRepo.save(new AppRole(null, "ROL-VAL-FAC", "Validateur fac"));
+        AppRole roleValTrai = roleRepo.save(new AppRole(null, "ROL-VAL-TRAI", "Validateur traité"));
+        AppRole roleValSin = roleRepo.save(new AppRole(null, "ROL-VAL-SIN", "Validateur sinistre"));
+        AppRole roleObs = roleRepo.save(new AppRole(null, "ROL-OBS", "Observateur global"));
+        AppRole roleObsFac = roleRepo.save(new AppRole(null, "ROL-OBS-FAC", "Observateur fac"));
+        AppRole roleObsTrai = roleRepo.save(new AppRole(null, "ROL-OBS-TRAI", "Observateur traité"));
+        AppRole roleObsSin = roleRepo.save(new AppRole(null, "ROL-OBS-SIN", "Observateur sinistre"));
+        AppRole roleObsCompta = roleRepo.save(new AppRole(null, "ROL-OBS-COMPTA", "Observateur comptable"));
+        AppRole roleObsTech = roleRepo.save(new AppRole(null, "ROL-OBS-TECH", "Observateur technique"));
+        AppRole roleObsFonc = roleRepo.save(new AppRole(null, "ROL-OBS-FONC", "Observateur fonctionnel"));
+        AppRole roleAdm = roleRepo.save(new AppRole(null, "ROL-ADM", "Administrateur global"));
+        AppRole roleAdmTech = roleRepo.save(new AppRole(null, "ROL-ADM-TECH", "Administrateur technique"));
+        AppRole roleAdmFonc = roleRepo.save(new AppRole(null, "ROL-ADM-FONC", "Administrateur fonctionnel"));
+        AppRole roleCompta = roleRepo.save(new AppRole(null, "ROL-COMPTA", "Comptable"));
+        AppRole roleComptaFac = roleRepo.save(new AppRole(null, "ROL-COMPTA-FAC", "Comptable fac"));
+        AppRole roleComptaTrai = roleRepo.save(new AppRole(null, "ROL-COMPTA-TRAI", "Comptable traité"));
+        AppRole roleComptaSin = roleRepo.save(new AppRole(null, "ROL-COMPTA-SIN", "Comptable sinistre"));
+        AppRole roleDev = roleRepo.save(new AppRole(null, "ROL-DEV", "Developpeur"));
 
     }
 }
