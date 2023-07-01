@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.sinistre.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.CoherentDates;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.validator.ExistingSinId;
@@ -26,10 +27,10 @@ public class UpdateSinistreReq
     private BigDecimal sinMontant100;
     private BigDecimal sinMontantHonoraire;
     @PastOrPresent(message = "La date de survenance du sinistre ne peut être future")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate sinDateSurvenance;
     @PastOrPresent(message = "La date de déclaration du sinistre ne peut être future")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate  sinDateDeclaration;
     private String sinCommentaire;
     @ExistingAffId
