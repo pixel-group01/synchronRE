@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,7 +92,8 @@ public class PrivilegeService implements IPrivilegeService
     @Override
     public Set<PrvByTypeDTO> getAllPrivlegesGroupesByType()
     {
-        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().map(id->this.getPrivlegesByTypeId(id)).filter(Objects::nonNull).collect(Collectors.toSet());
+        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().map(id->this.getPrivlegesByTypeId(id)).filter(Objects::nonNull)
+                .sorted(Comparator.comparing(PrvByTypeDTO::getTypeName)).collect(Collectors.toSet());
         return PrvByTypeDTOs;
     }
 }
