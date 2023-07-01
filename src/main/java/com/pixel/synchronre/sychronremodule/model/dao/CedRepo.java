@@ -24,7 +24,7 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO(c.cedId, c.cedNomFiliale, c.cedSigleFiliale, c.cedTel, c.cedEmail, 
-        c.cedAdressePostale,c.cedFax, c.cedSituationGeo, c.cedStatut.staLibelle) 
+        c.cedAdressePostale,c.cedFax, c.cedSituationGeo, c.cedStatut.staLibelle, c.pays.paysNom, c.pays.paysCode) 
         from Cedante c where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedEmail, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedTel, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cedSigleFiliale, '') ) as string)) ) >0 

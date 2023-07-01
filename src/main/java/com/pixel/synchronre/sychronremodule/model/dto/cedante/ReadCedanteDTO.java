@@ -14,4 +14,6 @@ public class ReadCedanteDTO
     private String cedFax;
     private String cedSituationGeo;
     private String cedStatut;
+    private String paysNom;
+    private String paysCode;
 }
