@@ -16,6 +16,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Banque;
 import com.pixel.synchronre.sychronremodule.model.entities.Pays;
 import com.pixel.synchronre.sychronremodule.service.interfac.IservicePays;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,15 +43,12 @@ public class servicePaysImpl implements IservicePays {
 
     @Override
     public PaysDetailsResp updatePays(UpdatePaysReq dto) throws UnknownHostException {
-        Pays pay = paysMapper.mapToUpdatePaysReq(dto);
-        Pays oldPays = payCopier.copy(pay);
-        if(paysRepo.existsByPaysCode(dto.getPaysCode())){
-            pay.setPaysIndicatif(dto.getPaysIndicatif());
-            pay.setPaysNom(dto.getPaysNom());
-        }
-        pay =  paysRepo.save(pay);
-        logService.logg(SynchronReActions.UPDATE_PAYS, oldPays, pay, SynchronReTables.PAYS);
-        return paysMapper.mapToPaysDetails(pay);
+        Pays pays = paysRepo.findById(dto.getPaysCode()).orElseThrow(()->new AppException("Code pays introuvable"));
+        Pays oldPays = payCopier.copy(pays);
+        BeanUtils.copyProperties(dto, pays);
+        pays =  paysRepo.save(pays);
+        logService.logg(SynchronReActions.UPDATE_PAYS, oldPays, pays, SynchronReTables.PAYS);
+        return paysMapper.mapToPaysDetails(pays);
     }
 
     @Override
