@@ -19,5 +19,5 @@ public interface IPrivilegeService
     List<SelectedPrvDTO> getSelectedPrvs(Long prAssId, Set<Long> oldRoleIds, Set<Long> roleIds, Set<Long> prvIds);
     PrvByTypeDTO getPrivlegesByTypeId(Long typeId);
 
-    Set<PrvByTypeDTO> getAllPrivlegesGroupesByType();
+    List<PrvByTypeDTO> getAllPrivlegesGroupesByType();
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -36,7 +37,7 @@ public class PrvResource
     }
 
     @GetMapping(path = "/grouped-by-type")
-    public Set<PrvByTypeDTO> getAllPrivilegesGroupedByType(){
+    public List<PrvByTypeDTO> getAllPrivilegesGroupedByType(){
         return prvService.getAllPrivlegesGroupesByType();
     }
 
