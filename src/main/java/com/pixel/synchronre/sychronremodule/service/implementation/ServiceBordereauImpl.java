@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
@@ -21,8 +22,11 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     @Override
     public Bordereau createBordereau(Long plaId)
     {
+        Long affId =  repRepo.repartFindByRep(plaId);
         Bordereau bordereau = new Bordereau();
         bordereau.setRepartition(new Repartition(plaId));
+        bordereau.setAffaire(new Affaire(affId));
+        bordereau.setBordStatut(StatutEnum.SOLDE.staCode);
         bordereau = bordRepo.save(bordereau);
         bordereau.setBordNum(this.generateBordNum(bordereau.getBordId(), plaId));
        bordRepo.save(bordereau);
