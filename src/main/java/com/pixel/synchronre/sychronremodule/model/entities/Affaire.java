@@ -66,7 +66,7 @@ public class Affaire {
         this.affId = affId;
     }
 
-    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance,Exercice exercice) {
+    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance,Exercice exercice,String affStatutCreation) {
         this.affCapitalInitial = affCapitalInitial;
         this.affCode = affCode;
         this.affAssure = affAssure;
@@ -74,6 +74,7 @@ public class Affaire {
         this.affDateEffet = affDateEffet;
         this.affDateEcheance = affDateEcheance;
         this.exercice=exercice;
+        this.affStatutCreation=affStatutCreation;
     }
 
 
