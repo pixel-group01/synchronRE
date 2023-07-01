@@ -43,4 +43,5 @@ public class AuthActions
     public static final String CHANGE_PRV_TO_ROL_VALIDITY_PERIOD = "Changement de la période de validité de l'assignation d'un privilège à une rôle";
     public static final String RESTORE_PRV_TO_ROL = "Restauration du privilège d'un rôle";
     public static final String ADD_PRV_TO_ROL = "Ajout d'un privilège à un rôle";
+    public static final String UPDATE_ROL = "Modification de rôle";
 }

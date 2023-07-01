@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -31,12 +32,12 @@ public class PrvResource
     }
 
     @GetMapping(path = "/search")
-    public Page<ReadPrvDTO> searchPrv(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int num, @RequestParam(defaultValue = "2") int size){
+    public Page<ReadPrvDTO> searchPrv(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int num, @RequestParam(defaultValue = "10000") int size){
         return prvService.searchPrivileges(key, PageRequest.of(num, size));
     }
 
     @GetMapping(path = "/grouped-by-type")
-    public Set<PrvByTypeDTO> getAllPrivilegesGroupedByType(){
+    public List<PrvByTypeDTO> getAllPrivilegesGroupedByType(){
         return prvService.getAllPrivlegesGroupesByType();
     }
 

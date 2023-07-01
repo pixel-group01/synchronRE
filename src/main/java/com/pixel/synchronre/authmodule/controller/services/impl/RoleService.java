@@ -41,6 +41,7 @@ public class RoleService implements IRoleService
     private final RoleRepo roleRepo;
     private final RoleMapper roleMapper;
     private final ILogService logger;
+    private final ObjectCopier<AppRole> roleCopier;
 
     private final PrvToRoleAssRepo prvToRoleAssRepo;
     private final ObjectCopier<PrvToRoleAss> ptrCopier;
@@ -51,7 +52,7 @@ public class RoleService implements IRoleService
         AppRole role = roleMapper.mapToRole(dto);
         role = roleRepo.save(role);
         logger.logg(AuthActions.CREATE_ROLE, null, role, AuthTables.ROLE_TABLE);
-        this.setRolePrivileges(new PrvsToRoleDTO(role.getRoleId(), dto.getPrvIds(), null, null, true));
+        this.setRolePrivileges(new PrvsToRoleDTO(role.getRoleId(), role.getRoleName(), role.getRoleCode(),dto.getPrvIds(), null, null, true));
         ReadRoleDTO readRoleDTO = roleMapper.mapToReadRoleDTO(role);
         readRoleDTO.setPrivileges(prvToRoleAssRepo.findActivePrivilegesForRoles(Collections.singleton(role.getRoleId())));
         return readRoleDTO;
@@ -66,7 +67,16 @@ public class RoleService implements IRoleService
     }
 
     @Override @Transactional
-    public ReadRoleDTO setRolePrivileges(PrvsToRoleDTO dto) {
+    public ReadRoleDTO updateRole(PrvsToRoleDTO dto) throws UnknownHostException {
+        AppRole role = roleRepo.findById(dto.getRoleId()).orElseThrow(()->new AppException("Role introuvable"));
+        AppRole oldRole = roleCopier.copy(role);
+        role.setRoleCode(dto.getRoleCode()); role.setRoleName(dto.getRoleName());
+        role = roleRepo.save(role);
+        logger.logg(AuthActions.UPDATE_ROL, oldRole, role, AuthTables.ROLE_TABLE);
+        return this.setRolePrivileges(dto);
+    }
+
+    private ReadRoleDTO setRolePrivileges(PrvsToRoleDTO dto) {
         AppRole role = roleRepo.findById(dto.getRoleId()).orElseThrow(()->new AppException("Role introuvable"));
         Long roleId = dto.getRoleId(); Set<Long> prvIds = dto.getPrvIds() == null ? new HashSet<>(Collections.singletonList(0L)) : dto.getPrvIds().size() == 0 ? new HashSet<>(Collections.singletonList(0L)) : dto.getPrvIds();
         LocalDate startsAt = dto.getStartsAt(); LocalDate endsAt =  dto.getEndsAt();

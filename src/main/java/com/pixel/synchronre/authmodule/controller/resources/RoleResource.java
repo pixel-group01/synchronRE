@@ -26,9 +26,9 @@ public class RoleResource
         return roleService.createRole(dto);
     }
 
-    @PutMapping(path = "/set-privileges")
+    @PutMapping(path = "/update")
     public ReadRoleDTO setPrivileges(@RequestBody @Valid PrvsToRoleDTO dto) throws UnknownHostException, IllegalAccessException {
-        return roleService.setRolePrivileges(dto);
+        return roleService.updateRole(dto);
     }
 
     @GetMapping(path = "/search")

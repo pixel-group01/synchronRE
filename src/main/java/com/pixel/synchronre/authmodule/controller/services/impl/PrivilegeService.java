@@ -90,10 +90,10 @@ public class PrivilegeService implements IPrivilegeService
     }
 
     @Override
-    public Set<PrvByTypeDTO> getAllPrivlegesGroupesByType()
+    public List<PrvByTypeDTO> getAllPrivlegesGroupesByType()
     {
-        Set<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().map(id->this.getPrivlegesByTypeId(id)).filter(Objects::nonNull)
-                .sorted(Comparator.comparing(PrvByTypeDTO::getTypeName)).collect(Collectors.toSet());
+        List<PrvByTypeDTO> PrvByTypeDTOs = typeRepo.findTypeIdsByTypeGroup(TypeGroup.TYPE_PRV).stream().map(id->this.getPrivlegesByTypeId(id)).filter(Objects::nonNull)
+                .sorted(Comparator.comparing(PrvByTypeDTO::getTypeName)).collect(Collectors.toList());
         return PrvByTypeDTOs;
     }
 }

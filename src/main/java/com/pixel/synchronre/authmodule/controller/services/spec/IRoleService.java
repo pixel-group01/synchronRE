@@ -15,5 +15,5 @@ public interface IRoleService
     Page<ReadRoleDTO> searchRoles(String searchKey, Pageable pageable);
 
     @Transactional
-    ReadRoleDTO setRolePrivileges(PrvsToRoleDTO dto);
+    ReadRoleDTO updateRole(PrvsToRoleDTO dto) throws UnknownHostException;
 }
