@@ -22,22 +22,22 @@ public class SinistreController
     private final IServiceSinistre sinService;
 
     @PostMapping(path = "/create")
-    public SinistreDetailsResp createReglement(@RequestBody @Valid CreateSinistreReq dto) throws UnknownHostException {
+    public SinistreDetailsResp createSinistre(@RequestBody @Valid CreateSinistreReq dto) throws UnknownHostException {
         return sinService.createSinistre(dto);
     }
 
     @PutMapping(path = "/update")
-    public SinistreDetailsResp updateReglement(@RequestBody @Valid UpdateSinistreReq dto) throws UnknownHostException {
+    public SinistreDetailsResp updateSinistre(@RequestBody @Valid UpdateSinistreReq dto) throws UnknownHostException {
         return sinService.updateSinistre(dto);
     }
 
     @GetMapping(path = "/list")
-    public Page<SinistreDetailsResp> searchReglement(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<SinistreDetailsResp> searchSinistre(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return sinService.searchSinistre(key, new ArrayList<>(), PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/etat-comptable/{sinId}")
-    public EtatComptableSinistreResp getEtatComptable(@PathVariable Long sinId) throws UnknownHostException {
+    public EtatComptableSinistreResp getEtatComptableSinistre(@PathVariable Long sinId) throws UnknownHostException {
         return sinService.getEtatComptable(sinId);
     }
 

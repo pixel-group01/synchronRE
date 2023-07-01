@@ -38,7 +38,7 @@ public class CedanteService implements ICedanteService
         Cedante cedante = cedMapper.mapToCedente(dto);
         cedante = cedRepo.save(cedante);
         logService.logg(SynchronReActions.CREATE_CEDENTE, null, cedante, SynchronReTables.CEDENTE);
-        cedante.setCessionnaire(cesRepo.findById(dto.getCedCesId()).orElse(new Cessionnaire(dto.getCedCesId())));
+        //cedante.setCessionnaire(cesRepo.findById(dto.getCedCesId()).orElse(new Cessionnaire(dto.getCedCesId())));
         return cedMapper.mapToReadCedenteDTO(cedante);
     }
 

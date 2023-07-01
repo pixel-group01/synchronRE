@@ -35,6 +35,9 @@ public class TypeLoader implements Loader
         Type reglement_sinistre = typeRepo.save(new Type(null, TypeGroup.TYPE_REGLEMENT, "REG-SIN", "Reglement Sinistre", PersStatus.ACTIVE, null, null));
 
 
+        Type typeCessionnaire= typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "CES", "Cessionnaire", PersStatus.ACTIVE, null, null));
+        Type typeCourtier = typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "COURT", "Courtier", PersStatus.ACTIVE, null, null));
+
         Type fil= typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null));
         Type rea = typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null));
         Type facType= typeRepo.save(new Type(null, TypeGroup.TYPE_AFFAIRE, "FAC", "Facultative", PersStatus.ACTIVE, null, null));
@@ -87,5 +90,20 @@ public class TypeLoader implements Loader
         Type pvConstat = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "PV_CONST", "Procès verbal de constat", PersStatus.ACTIVE, null, "sinistre"));
         typeParamRepo.save(new TypeParam(null, docSinistre, noteDebitSin, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docSinistre, pvConstat, PersStatus.ACTIVE));
+
+
+        //Type de privilege
+        Type prvUserType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-USER", "Utilisateur", PersStatus.ACTIVE, null, null));
+        Type prvFoncType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-FONC", "Fonction", PersStatus.ACTIVE, null, null));
+        Type prvPrvType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PRV", "Privilège", PersStatus.ACTIVE, null, null));
+        Type prvRolType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-ROL", "Rôle", PersStatus.ACTIVE, null, null));
+        Type prvFacType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-FAC", "Affaire FAC", PersStatus.ACTIVE, null, null));
+        Type prvTraiType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-TRAI", "Traté", PersStatus.ACTIVE, null, null));
+        Type prvParamType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PARAM", "Paramètre", PersStatus.ACTIVE, null, null));
+        //Type prvPlaType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PLA", "Placement", PersStatus.ACTIVE, null, null));
+        Type prvComptaType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-COMPTA", "Comptabilité", PersStatus.ACTIVE, null, null));
+        Type prvDevType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-DEV", "Développeur", PersStatus.ACTIVE, null, null));
+        Type prvRepType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-REP", "Repartition", PersStatus.ACTIVE, null, null));
+        Type prvSinType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-SIN", "Sinistre", PersStatus.ACTIVE, null, null));
     }
 }

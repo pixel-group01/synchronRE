@@ -56,7 +56,6 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         and (:fncId is null or :fncId = fnc.id) 
         and (:userId is null or :userId = u.userId) 
         and (:cedId is null or :cedId = ced.cedId) 
-        and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId) 
         and (:exeCode is null or :exeCode = f.exercice.exeCode) 
         and s.staCode in :staCodes 
 """)
@@ -64,7 +63,6 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
                                              @Param("fncId") Long fncId,
                                              @Param("userId") Long userId,
                                              @Param("cedId") Long cedId,
-                                             @Param("cedCesId") Long cedCesId,
                                              @Param("staCodes") List<String> staCodes,
                                              @Param("exeCode")Long exeCode, Pageable pageable);
 

@@ -33,11 +33,6 @@ public class RepartitionController
     private final ParamCessionLegaleRepository pclRepo;
     private final RepartitionRepository repRepo;
 
-    @PostMapping(path = "/create")
-    public RepartitionDetailsResp createRep(@Valid @RequestBody CreateRepartitionReq dto) throws UnknownHostException {
-        return repService.createRepartition(dto);
-    }
-
     @GetMapping(path = "/get-ced-leg-update-dto/{affId}")
     public CreateCedLegRepartitionReq  CedLegDtoForUpdate(@PathVariable Long affId) throws UnknownHostException {
         return repService.getCedLegRepartitionDTO(affId);
@@ -49,7 +44,7 @@ public class RepartitionController
         repService.deletePlacement(repId);
     }
 
-    @PostMapping(path = "/create-cession-legale-repartition")
+    /*@PostMapping(path = "/create-cession-legale-repartition")
     public List<RepartitionDetailsResp> createCesLegRep(@Valid @RequestBody List<CreateCesLegReq> dtos) throws UnknownHostException {
         return repService.createCesLegRepartitions(dtos);
     }
@@ -57,7 +52,7 @@ public class RepartitionController
     @PostMapping(path = "/create-part-cedante-repartition")
     public RepartitionDetailsResp createPartCedRep(@Valid @RequestBody CreatePartCedRepartitionReq dto) throws UnknownHostException {
         return repService.createPartCedRepartition(dto);
-    }
+    }*/
 
     @PostMapping(path = "/create-cedante-legale-repartition")
     public RepartitionDetailsResp createCedLegRep(@Valid @RequestBody CreateCedLegRepartitionReq dto) throws UnknownHostException {

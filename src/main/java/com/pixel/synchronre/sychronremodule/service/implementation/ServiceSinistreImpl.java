@@ -157,7 +157,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable)
     {
-        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, jwtService.getConnectedUserCesId(), staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllASinistres : staCodes, pageable);
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllASinistres : staCodes, pageable);
         return sinPage;
     }
 

@@ -37,14 +37,12 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         and (:fncId is null or :fncId = fnc.id)
         and (:userId is null or :userId = u.userId)
         and (:cedId is null or :cedId = ced.cedId)
-        and (:cedCesId is null or :cedCesId = ced.cessionnaire.cesId)
         and s.statut.staCode in :staCodes
            """)
     Page<SinistreDetailsResp> searchSinistres(@Param("key") String key,
                                               @Param("fncId") Long fncId,
                                               @Param("userId") Long userId,
                                               @Param("cedId") Long cedId,
-                                              @Param("cedCesId") Long cedCesId,
                                               @Param("staCodes") List<String> staCodes, Pageable pageable);
 
     @Query("select s.sinMontant100 from Sinistre s where s.sinId = ?1")

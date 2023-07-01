@@ -5,6 +5,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.authmodule.model.entities.PrvToFunctionAss;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 public class AdminLoader implements Loader
 {
     private final UserRepo userRepo;
-    private final RoleRepo roleRepo;
+    private final TypeRepo typeRepo;
     private final PasswordEncoder pe;
     private final PrvRepo prvRepo;
     private final FunctionRepo fncRepo;
@@ -27,15 +28,6 @@ public class AdminLoader implements Loader
     @Override
     public void load()
     {
-        AppPrivilege agentSaisie = new AppPrivilege(1l, "SAISIE", "AGENT_DE_SAISIE", new Type(4l));
-        AppPrivilege validateur = new AppPrivilege(2l, "VALIDATEUR", "VALIDATEUR", new Type(4l));
-        AppPrivilege observateur = new AppPrivilege(3l, "OBSERVATEUR", "OBSERVATEUR", new Type(4l));
-        AppPrivilege roleAdmin = new AppPrivilege(4l, "ADMIN", "ADMINISTRATEUR", new Type(4l));
-        AppPrivilege comptable = new AppPrivilege(5l, "COMPTABLE", "COMPTABLE", new Type(4l));
-        AppPrivilege souscripteur = new AppPrivilege(6l, "SOUSCRIPTEUR", "SOUSCRIPTEUR", new Type(4l));
-
-        prvRepo.saveAll(Arrays.asList(agentSaisie, validateur, observateur, roleAdmin, comptable, souscripteur));
-
         AppUser useradmin = new AppUser(1l, "admin", "admin", null, 4l,
                 pe.encode("1234"), "admin@gmail.com", "1234",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
@@ -101,6 +93,13 @@ public class AdminLoader implements Loader
         AppFunction fncComptable = new AppFunction(8l, null, 4l, "Comptable NelsonRE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncSouscripteur = new AppFunction(9l, null, 5l, "Souscripteur NelsonRE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin,fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur, functionAdmin1));
+
+        AppPrivilege agentSaisie = prvRepo.save(new AppPrivilege(null, "SAISIE", "AGENT_DE_SAISIE", new Type(4l)));
+        AppPrivilege validateur = prvRepo.save(new AppPrivilege(null, "VALIDATEUR", "VALIDATEUR", new Type(4l)));
+        AppPrivilege observateur = prvRepo.save(new AppPrivilege(null, "OBSERVATEUR", "OBSERVATEUR", new Type(4l)));
+        AppPrivilege roleAdmin = prvRepo.save(new AppPrivilege(null, "ADMIN", "ADMINISTRATEUR", new Type(4l)));
+        AppPrivilege comptable = prvRepo.save(new AppPrivilege(null, "COMPTABLE", "COMPTABLE", new Type(4l)));
+        AppPrivilege souscripteur = prvRepo.save(new AppPrivilege(null, "SOUSCRIPTEUR", "SOUSCRIPTEUR", new Type(4l)));
 
         PrvToFunctionAss saisiAssci = new PrvToFunctionAss(agentSaisie, fncUserci); saisiAssci.setAssStatus(1); saisiAssci.setStartsAt(LocalDate.now()); saisiAssci.setEndsAt(LocalDate.now().plusYears(1));
         PrvToFunctionAss saisiAssbn = new PrvToFunctionAss(agentSaisie, fncUserbn); saisiAssbn.setAssStatus(1); saisiAssbn.setStartsAt(LocalDate.now()); saisiAssbn.setEndsAt(LocalDate.now().plusYears(1));

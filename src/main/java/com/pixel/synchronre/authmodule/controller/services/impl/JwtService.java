@@ -56,7 +56,7 @@ public class JwtService implements IJwtService
         Long cedId = function == null ? null : function.getVisibilityId();
         Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
 
-        Long cesId = function == null ? null : function.getCesId();
+        Long cesId = function == null ? null : function.getCesId(); user.getCesId();
         Cessionnaire ces = cesId == null ? null : cesRepo.findById(cesId).orElse(null);
         Long userId = user.getUserId();
         extraClaims.put("userId", userId);
@@ -229,8 +229,8 @@ public class JwtService implements IJwtService
     @Override
     public Long getConnectedUserCesId()
     {
-        Long cedId = this.getConnectedUserCedId();
-        return cedId == null ? null : cedRepo.getCedCesId(cedId);
+        Long userId = this.getConnectedUserId();
+        return userRepo.getUserCesId(userId);
     }
 
     @Override
