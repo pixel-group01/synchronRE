@@ -32,7 +32,7 @@ public @interface UniqueRoleName
     }
 
     @Component @RequiredArgsConstructor
-    class UniqueRoleNameValidatorOnUpdate implements ConstraintValidator<UniqueRoleCode, PrvsToRoleDTO>
+    class UniqueRoleNameValidatorOnUpdate implements ConstraintValidator<UniqueRoleName, PrvsToRoleDTO>
     {
         private final RoleRepo roleRepo;
         @Override
