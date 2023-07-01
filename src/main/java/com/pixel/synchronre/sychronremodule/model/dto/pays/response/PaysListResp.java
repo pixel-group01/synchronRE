@@ -11,4 +11,5 @@ public class PaysListResp
     private String paysNom;
     private String statutLibelle;
     private String devCode;
+    private String devLibelle;
 }

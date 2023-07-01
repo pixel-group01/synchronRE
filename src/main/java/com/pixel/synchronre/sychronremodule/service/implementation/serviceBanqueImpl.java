@@ -47,6 +47,7 @@ public class serviceBanqueImpl implements IserviceBanque {
         ban.setBanCode(dto.getBanCode());
         ban.setBanLibelle(dto.getBanLibelle());
         ban.setBanLibelleAbrege(dto.getBanLibelleAbrege());
+        ban.setBanNumCompte(dto.getBanNumCompte());
         ban = banRepo.save(ban);
         logService.logg(SynchronReActions.UPDATE_BANQUE, oldBanque, ban, SynchronReTables.BANQUE);
         return banMapper.mapBanqueDetailsRespToBanque(ban);
