@@ -15,6 +15,7 @@ import java.util.Set;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ReadFncDTO
 {
+    private Long id;
     private Long visibilityId;
     private String name;
     private Long userId;
