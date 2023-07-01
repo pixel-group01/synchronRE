@@ -1,6 +1,7 @@
 package com.pixel.synchronre.authmodule.model.dtos.approle;
 
 import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
+import com.pixel.synchronre.authmodule.model.dtos.asignation.PrvsToRoleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface UniqueRoleName
 {
-    String message() default "Rôle déjà créé";
+    String message() default "Ce nom de rôle est déjà attribué";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
@@ -27,6 +28,16 @@ public @interface UniqueRoleName
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
             return !roleRepo.existsByName(value);
+        }
+    }
+
+    @Component @RequiredArgsConstructor
+    class UniqueRoleNameValidatorOnUpdate implements ConstraintValidator<UniqueRoleCode, PrvsToRoleDTO>
+    {
+        private final RoleRepo roleRepo;
+        @Override
+        public boolean isValid(PrvsToRoleDTO dto, ConstraintValidatorContext context) {
+            return !roleRepo.existsByName(dto.getRoleCode(), dto.getRoleId());
         }
     }
 }
