@@ -10,7 +10,7 @@ public class CouvertureListResp
     private Long couId;
     private String couLibelle;
     private String couLibelleAbrege;
+    private Long branId;
     private String brancheLibelle;
     private String staLibelle;
-
 }

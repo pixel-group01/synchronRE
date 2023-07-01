@@ -20,7 +20,7 @@ public interface PaysRepository extends JpaRepository<Pays, String> {
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(p.paysCode, p.paysIndicatif, p.paysNom,  
-        p.statut.staLibelle) 
+        p.statut.staLibelle,p.devise.devCode) 
         from Pays p where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(p.paysCode, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(p.paysIndicatif, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(p.paysNom, '') ) as string)) ) >0 ) 

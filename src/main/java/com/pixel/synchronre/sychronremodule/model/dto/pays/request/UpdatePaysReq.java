@@ -20,4 +20,7 @@ public class UpdatePaysReq
     @NotBlank(message = "Veuillez saisir le libellé du pays")
     @NotNull(message = "Veuillez saisir le le libellé du pays")
     private String paysNom;
+    @NotBlank(message = "Veuillez selectionnez la devise du pays")
+    @NotNull(message = "Veuillez selectionnez la devise du pays")
+    private String devCode;
 }

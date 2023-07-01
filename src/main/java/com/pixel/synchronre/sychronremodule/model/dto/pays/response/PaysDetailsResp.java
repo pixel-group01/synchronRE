@@ -9,4 +9,5 @@ public class PaysDetailsResp
     private String paysCode;
     private String paysIndicatif;
     private String paysNom;
+    private String devCode;
 }
