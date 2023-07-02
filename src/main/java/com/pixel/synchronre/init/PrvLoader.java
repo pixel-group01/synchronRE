@@ -20,6 +20,7 @@ public class PrvLoader implements Loader
         AppPrivilege getStatFac = prvRepo.save(new AppPrivilege(null, "GET-STAT-FAC", "Consulter les statistiques sur les facultatives", typeRepo.findByUniqueCode("PRV-STAT")));
         AppPrivilege getStatSin = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN", "Consulter les statistiques sur les sinistres", typeRepo.findByUniqueCode("PRV-STAT")));
         AppPrivilege getStatAdm = prvRepo.save(new AppPrivilege(null, "GET-STAT-ADM", "Consulter les statistiques d'administration", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatParam = prvRepo.save(new AppPrivilege(null, "GET-STAT-PARAM", "Consulter les statistiques des données paramètres", typeRepo.findByUniqueCode("PRV-STAT")));
 
 
         AppPrivilege getUserDet = prvRepo.save(new AppPrivilege(null, "GET-USER-DET", "Consulter les informations sur un utilisateurs", typeRepo.findByUniqueCode("PRV-USER")));
@@ -71,7 +72,7 @@ public class PrvLoader implements Loader
         AppPrivilege crtCes = prvRepo.save(new AppPrivilege(null, "CRT-CES", "Enregistrer un cessionnaire", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege updCes = prvRepo.save(new AppPrivilege(null, "UPD-CES", "Modifier un cessionnaire", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege getCesLst = prvRepo.save(new AppPrivilege(null, "GET-CES-LST", "Consulter la liste des cessionnaires", typeRepo.findByUniqueCode("PRV-PARAM")));
-        AppPrivilege getCesAffLst = prvRepo.save(new AppPrivilege(null, "GET-CES-AFF-LST", "Consulter la liste des cessionnaires sur une affaire", typeRepo.findByUniqueCode("PRV-PARAM")));
+        AppPrivilege getCesAffLst = prvRepo.save(new AppPrivilege(null, "GET-CES-AFF-LST", "Consulter la liste des cessionnaires sur une affaire", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege crtCouv = prvRepo.save(new AppPrivilege(null, "CRT-COUV", "Enregistrer une couverture", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege updCouv = prvRepo.save(new AppPrivilege(null, "UPD-COUV", "Modifier une couverture", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege getCouvLst = prvRepo.save(new AppPrivilege(null, "GET-COUV-LST", "Consulter la liste des couvertures", typeRepo.findByUniqueCode("PRV-PARAM")));
@@ -90,6 +91,12 @@ public class PrvLoader implements Loader
         AppPrivilege getPlaRetMsg = prvRepo.save(new AppPrivilege(null, "GET-PLA-RET-MSG", "Consulter le motif de retour d'un placement", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege crtPaiFac = prvRepo.save(new AppPrivilege(null, "CRT-PAI-FAC", "Enregistrer un paiement sur une affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
         AppPrivilege crtRevFac = prvRepo.save(new AppPrivilege(null, "CRT-REV-FAC", "Enregistrer un reversement sur une affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
+
+        AppPrivilege getRegFacLst = prvRepo.save(new AppPrivilege(null, "GET-REG-FAC-LST", "Consulter la liste des règlements sur affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
+        AppPrivilege getRegTraiLst = prvRepo.save(new AppPrivilege(null, "GET-REG-TRAI-LST", "Consulter la liste des règlements sur traité", typeRepo.findByUniqueCode("PRV-COMPTA")));
+        AppPrivilege getRegSinLst = prvRepo.save(new AppPrivilege(null, "GET-REG-SIN-LST", "Consulter la liste des règlements sur sinistre", typeRepo.findByUniqueCode("PRV-COMPTA")));
+
+
         AppPrivilege getPaiFacLst = prvRepo.save(new AppPrivilege(null, "GET-PAI-FAC-LST", "Consulter la liste des paiements sur une affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
         AppPrivilege getRevFacLst = prvRepo.save(new AppPrivilege(null, "GET-REV-FAC-LST", "Consulter la liste des reversements sur une affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
         AppPrivilege updPaiFac = prvRepo.save(new AppPrivilege(null, "UPD-PAI-FAC", "Modifier un paiement sur une affaire facultative", typeRepo.findByUniqueCode("PRV-COMPTA")));
@@ -123,6 +130,13 @@ public class PrvLoader implements Loader
         AppPrivilege delSin = prvRepo.save(new AppPrivilege(null, "DEL-SIN", "Supprimer un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege transSin = prvRepo.save(new AppPrivilege(null, "TRANS-SIN", "Transmettre un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege getSinLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-LST", "Consulter la liste des sinistres", typeRepo.findByUniqueCode("PRV-SIN")));
+        AppPrivilege getSinFacLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-FAC-LST", "Consulter la liste des sinistres sur affaire facultative", typeRepo.findByUniqueCode("PRV-SIN")));
+        AppPrivilege getSinTraiLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-TRAI-LST", "Consulter la liste des sinistres sur traité", typeRepo.findByUniqueCode("PRV-SIN")));
+
+
+
+
+
         AppPrivilege getEtaComptSin = prvRepo.save(new AppPrivilege(null, "GET-ETA-COMPT-SIN", "Consulter la situation comptable d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege valSin = prvRepo.save(new AppPrivilege(null, "VAL-SIN", "Valider un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege retSin = prvRepo.save(new AppPrivilege(null, "RET-SIN", "retourner un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
