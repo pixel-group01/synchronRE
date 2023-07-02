@@ -71,6 +71,15 @@ public class PrvLoader implements Loader
         AppPrivilege getCedLst = prvRepo.save(new AppPrivilege(null, "GET-CED-LST", "Consulter la liste des Cedantes", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege crtCes = prvRepo.save(new AppPrivilege(null, "CRT-CES", "Enregistrer un cessionnaire", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege updCes = prvRepo.save(new AppPrivilege(null, "UPD-CES", "Modifier un cessionnaire", typeRepo.findByUniqueCode("PRV-PARAM")));
+
+        AppPrivilege getCesLegParam = prvRepo.save(new AppPrivilege(null, "GET-CES-LEG-PARAM-LST", "Consulter la liste des paramètres de cession légale", typeRepo.findByUniqueCode("PRV-PARAM")));
+        AppPrivilege crtCesLegParam = prvRepo.save(new AppPrivilege(null, "CRT-CES-LEG-PARAM", "Enregistrer un paramètre de cession légale", typeRepo.findByUniqueCode("PRV-PARAM")));
+        AppPrivilege updCesLegParam = prvRepo.save(new AppPrivilege(null, "UPD-CES-LEG-PARAM", "Modifier un paramètre de cession légale", typeRepo.findByUniqueCode("PRV-PARAM")));
+
+
+
+
+
         AppPrivilege getCesLst = prvRepo.save(new AppPrivilege(null, "GET-CES-LST", "Consulter la liste des cessionnaires", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege getCesAffLst = prvRepo.save(new AppPrivilege(null, "GET-CES-AFF-LST", "Consulter la liste des cessionnaires sur une affaire", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege crtCouv = prvRepo.save(new AppPrivilege(null, "CRT-COUV", "Enregistrer une couverture", typeRepo.findByUniqueCode("PRV-PARAM")));
