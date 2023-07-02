@@ -1,22 +1,10 @@
 package com.pixel.synchronre.init;
 
-import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
-import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
-import com.pixel.synchronre.authmodule.model.entities.PrvToFunctionAss;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @Service @RequiredArgsConstructor
 public class PrvLoader implements Loader
@@ -27,6 +15,13 @@ public class PrvLoader implements Loader
     @Override
     public void load()
     {
+
+        AppPrivilege getStatTrai = prvRepo.save(new AppPrivilege(null, "GET-STAT-TRAI", "Consulter les statistiques sur les traités", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatFac = prvRepo.save(new AppPrivilege(null, "GET-STAT-FAC", "Consulter les statistiques sur les facultatives", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatSin = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN", "Consulter les statistiques sur les sinistres", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatAdm = prvRepo.save(new AppPrivilege(null, "GET-STAT-ADM", "Consulter les statistiques d'administration", typeRepo.findByUniqueCode("PRV-STAT")));
+
+
         AppPrivilege getUserDet = prvRepo.save(new AppPrivilege(null, "GET-USER-DET", "Consulter les informations sur un utilisateurs", typeRepo.findByUniqueCode("PRV-USER")));
         AppPrivilege crtUserFnc = prvRepo.save(new AppPrivilege(null, "CRT-USER-FNC", "Créer un utilisateur", typeRepo.findByUniqueCode("PRV-USER")));
         AppPrivilege getUserLst = prvRepo.save(new AppPrivilege(null, "GET-USER-LST", "Voir la liste des utilisateurs", typeRepo.findByUniqueCode("PRV-USER")));
@@ -45,6 +40,7 @@ public class PrvLoader implements Loader
         AppPrivilege getPrvLst = prvRepo.save(new AppPrivilege(null, "GET-PRV-LST", "Consulter la liste des privilèges", typeRepo.findByUniqueCode("PRV-PRV")));
         AppPrivilege crtRol = prvRepo.save(new AppPrivilege(null, "CRT-ROL", "Créer un rôle", typeRepo.findByUniqueCode("PRV-ROL")));
         AppPrivilege getRolLst = prvRepo.save(new AppPrivilege(null, "GET-ROL-LST", "Consulter la liste des rôles", typeRepo.findByUniqueCode("PRV-ROL")));
+        AppPrivilege updRolLst = prvRepo.save(new AppPrivilege(null, "UPD-ROL", "Modifier un rôle", typeRepo.findByUniqueCode("PRV-ROL")));
         AppPrivilege getFacLst = prvRepo.save(new AppPrivilege(null, "GET-FAC-LST", "Consulter liste des affaires facultative", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege getFacCSai = prvRepo.save(new AppPrivilege(null, "GET-FAC-C-SAI", "Consulter liste des fac en cours de saisie", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege getFacCPla = prvRepo.save(new AppPrivilege(null, "GET-FAC-C-PLA", "Consulter liste des fac en cours de placement", typeRepo.findByUniqueCode("PRV-FAC")));

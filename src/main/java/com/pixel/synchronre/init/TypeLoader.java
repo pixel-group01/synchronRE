@@ -93,6 +93,8 @@ public class TypeLoader implements Loader
 
 
         //Type de privilege
+
+        Type prvStatType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-STAT", "Statistique", PersStatus.ACTIVE, null, null));
         Type prvUserType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-USER", "Utilisateur", PersStatus.ACTIVE, null, null));
         Type prvFoncType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-FONC", "Fonction", PersStatus.ACTIVE, null, null));
         Type prvPrvType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PRV", "Privilège", PersStatus.ACTIVE, null, null));

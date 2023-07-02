@@ -24,7 +24,7 @@ public class MenuResource
     private final IMenuMutatorService menuMutatorService;
     private final MenuRepo menuRepo;
 
-    @PostMapping(path = "/create-menu")
+    @PostMapping(path = "/create")
     public Menu createMenu(@RequestBody @Valid CreateMenuDTO dto) throws UnknownHostException, IllegalAccessException {
         return menuMutatorService.createMenu(dto);
     }

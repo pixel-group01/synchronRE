@@ -249,6 +249,7 @@ public class FunctionService implements IFunctionService{
                 rtfAss.setAssStatus(1); rtfAss.setStartsAt(startsAt); rtfAss.setEndsAt(endsAt);
                 rtfAss.setRole(new AppRole(id));
                 rtfAss.setFunction(new AppFunction(fncId));
+                rtfRepo.save(rtfAss);
                 try {
                     logger.logg(AuthActions.ADD_ROLE_TO_FNC, null, rtfAss, AuthTables.ASS);
                 } catch (UnknownHostException e) {
@@ -259,6 +260,7 @@ public class FunctionService implements IFunctionService{
             {
                 RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
                 rtfAss.setAssStatus(1);
+                rtfRepo.save(rtfAss);
                 try {
                     logger.logg(AuthActions.RESTORE_ROLE_TO_FNC, oldRtfAss, rtfAss, AuthTables.ASS);
                 } catch (UnknownHostException e) {

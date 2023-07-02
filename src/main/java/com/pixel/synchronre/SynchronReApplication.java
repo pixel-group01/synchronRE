@@ -25,8 +25,8 @@ public class SynchronReApplication {
                                   ,PrvLoader prvLoader, RoleLoader roleLoader,MenuLoader menuLoader)
     {
         return args->{
-            menuLoader.load();
             typeLoader.load();
+            menuLoader.load();
             foldersIniter.load();
             roleLoader.load();
             prvLoader.load();
