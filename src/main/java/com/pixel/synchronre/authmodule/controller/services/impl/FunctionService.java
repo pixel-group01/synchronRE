@@ -17,6 +17,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Lazy;
@@ -35,7 +36,7 @@ import java.util.*;
 public class FunctionService implements IFunctionService{
 
     @Lazy
-    private UserDetailsService uds;
+    @Autowired private UserDetailsService uds;
 
     private final FunctionRepo functionRepo;
     private final RoleToFunctionAssRepo rtfRepo;

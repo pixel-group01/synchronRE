@@ -4,6 +4,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.*;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateInitialFncDTO;
+import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.LoginDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.*;
 import com.pixel.synchronre.authmodule.model.entities.AccountToken;
@@ -44,8 +45,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor @Slf4j
@@ -304,28 +308,34 @@ public class UserService implements IUserService
         ReadUserDTO  user = this.createUser(userDto);
 
         List<CreateInitialFncDTO> createInitialFncDTOs = dto.getCreateInitialFncDTO();
+        if(createInitialFncDTOs == null || createInitialFncDTOs.isEmpty()) return user;
 
-        createInitialFncDTOs.forEach(createInitialFncDTO -> {
+        ReadFncDTO readFncDTO = createInitialFncDTOs.stream().map(createInitialFncDTO -> {
+
             try {
-                this.createUserInitialFonction(userDto, user, createInitialFncDTO);
+                return this.createUserInitialFonction(userDto, user, createInitialFncDTO);
             } catch (UnknownHostException e) {
                 e.printStackTrace();
+                return null;
             }
-        });
+        }).filter(isCurrentFunction).collect(Collectors.toList()).stream().findFirst().get();
 
         user.setStatus(this.getUserStatus(user.getUserId()));
+        user.setCurrentFnc(readFncDTO);
         return user;
     }
 
-    private void createUserInitialFonction(CreateUserDTO userDto, ReadUserDTO user, CreateInitialFncDTO dto) throws UnknownHostException {
+    private Predicate<ReadFncDTO> isCurrentFunction = (readFncDTO)->readFncDTO != null && readFncDTO.getFncStatus() == 1;
+
+    private ReadFncDTO createUserInitialFonction(CreateUserDTO userDto, ReadUserDTO user, CreateInitialFncDTO dto) throws UnknownHostException {
         CreateFncDTO createFncDTO = new CreateFncDTO();
         BeanUtils.copyProperties(dto, createFncDTO);
 
         createFncDTO.setVisibilityId(userDto.getVisibilityId());
         createFncDTO.setCesId(userDto.getCesId());
-        createFncDTO.setFncStatus(1);
+        //createFncDTO.setFncStatus(1);
         createFncDTO.setUserId(user.getUserId());
-        functionService.createFnc(createFncDTO);
+        return functionService.createFnc(createFncDTO);
     }
 
     @Override
