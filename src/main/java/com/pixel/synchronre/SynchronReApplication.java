@@ -22,9 +22,10 @@ public class SynchronReApplication {
                                    DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,
                                    CedCesAffLoader cedCesAffLoader, ExerciceLoader exerciceLoader, CessionnaireRepository cesRepo
-                                  ,PrvLoader prvLoader, RoleLoader roleLoader)
+                                  ,PrvLoader prvLoader, RoleLoader roleLoader,MenuLoader menuLoader)
     {
         return args->{
+            menuLoader.load();
             typeLoader.load();
             foldersIniter.load();
             roleLoader.load();

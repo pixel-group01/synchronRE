@@ -1,6 +1,6 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
-import com.pixel.synchronre.context.SpringContext;
+
 import com.pixel.synchronre.authmodule.controller.repositories.*;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;

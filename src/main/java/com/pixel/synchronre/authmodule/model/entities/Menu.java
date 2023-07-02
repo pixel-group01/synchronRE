@@ -36,4 +36,12 @@ public class Menu
         if(this.prvsCodesChain == null) return new ArrayList<>();
         return Arrays.asList(this.prvsCodesChain.split(Menu.chainSeparator));
     }
+
+    public Menu(Long menuId, String menuCode, String name, String prvsCodesChain, PersStatus status) {
+        this.menuId = menuId;
+        this.menuCode = menuCode;
+        this.name = name;
+        this.prvsCodesChain = prvsCodesChain;
+        this.status = status;
+    }
 }
