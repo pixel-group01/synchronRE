@@ -1,10 +1,15 @@
 package com.pixel.synchronre.logmodule.controller.service;
 
+import com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
 import com.pixel.synchronre.logmodule.model.entities.Log;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ILogService
@@ -25,4 +30,6 @@ public interface ILogService
     Log logLoginOrLogout(String username, String action) throws UnknownHostException;
 
     List<LogDetails> saveLogDetails(Object oldObject, Object newObject, Log log, String tableName, boolean offConnection);
+
+    Page<ConnexionList> getConnextionLogs(Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
 }

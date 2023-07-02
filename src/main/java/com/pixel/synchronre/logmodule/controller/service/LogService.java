@@ -2,7 +2,10 @@ package com.pixel.synchronre.logmodule.controller.service;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.logmodule.controller.repositories.LogDetailsRepo;
+import com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
+import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
+import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import jakarta.persistence.Id;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
@@ -11,6 +14,9 @@ import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.repositories.LogRepo;
 import com.pixel.synchronre.logmodule.model.entities.Log;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +37,7 @@ public class LogService implements ILogService
     private final IJwtService jwtService;
     private final LogDetailsRepo histoRepo;
     private final FunctionRepo functionRepo;
+    private final CedRepo cedRepo;
     //private final HistoService histoService;
 
 
@@ -149,6 +157,23 @@ public class LogService implements ILogService
             return null;
         }).collect(Collectors.toList());
         return histoRepo.saveAll(histos);
+    }
+
+    @Override
+    public Page<ConnexionList> getConnextionLogs(Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
+    {
+        debut = debut == null ? LocalDate.now() : debut; fin = fin == null ? LocalDate.now() : fin;
+        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(userId, debut, fin.plusDays(1), pageable);
+        List<ConnexionList> connexionlist = connexionPage.stream().peek(this::setCedanteonConnection).collect(Collectors.toList());
+
+        return new PageImpl<>(connexionlist, pageable, connexionPage.getTotalElements());
+    }
+
+    private void setCedanteonConnection(ConnexionList connection)
+    {
+        Cedante ced = cedRepo.getCedandteByUserId(connection.getUserId());
+        connection.setCedName(ced == null ? null : ced.getCedNomFiliale());
+        connection.setCedSigle(ced == null ? null : ced.getCedSigleFiliale());
     }
 
     private String getEntityId(Object obj)

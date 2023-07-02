@@ -77,9 +77,6 @@ public class PrvLoader implements Loader
         AppPrivilege updCesLegParam = prvRepo.save(new AppPrivilege(null, "UPD-CES-LEG-PARAM", "Modifier un paramètre de cession légale", typeRepo.findByUniqueCode("PRV-PARAM")));
 
 
-
-
-
         AppPrivilege getCesLst = prvRepo.save(new AppPrivilege(null, "GET-CES-LST", "Consulter la liste des cessionnaires", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege getCesAffLst = prvRepo.save(new AppPrivilege(null, "GET-CES-AFF-LST", "Consulter la liste des cessionnaires sur une affaire", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege crtCouv = prvRepo.save(new AppPrivilege(null, "CRT-COUV", "Enregistrer une couverture", typeRepo.findByUniqueCode("PRV-PARAM")));
