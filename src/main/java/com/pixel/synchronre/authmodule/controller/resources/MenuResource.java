@@ -30,7 +30,7 @@ public class MenuResource
     }
 
     @GetMapping(path = "/by-fncId/{fncId}")
-    public Set<Menu> getMenuByFncId(@PathVariable Long fncId)
+    public Set<Menu.MenuResp> getMenuByFncId(@PathVariable Long fncId)
     {
         return menmenuReaderService.getMenusByFncId(fncId);
     }

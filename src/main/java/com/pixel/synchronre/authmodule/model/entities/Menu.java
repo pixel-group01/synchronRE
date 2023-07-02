@@ -44,4 +44,11 @@ public class Menu
         this.prvsCodesChain = prvsCodesChain;
         this.status = status;
     }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    public class MenuResp
+    {
+        private String menuCode;
+        private String name;
+    }
 }

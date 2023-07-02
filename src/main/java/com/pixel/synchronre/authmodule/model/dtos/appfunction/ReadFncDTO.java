@@ -25,5 +25,5 @@ public class ReadFncDTO
     protected LocalDate endsAt;
     private List<ReadRoleDTO> roles;
     private List<ReadPrvDTO> privileges;
-    private Set<Menu> menus;
+    private Set<Menu.MenuResp> menus;
 }
