@@ -52,13 +52,13 @@ public class MenuReaderService implements IMenuReaderService
     }
 
     @Override
-    public Set<Menu.MenuResp> getMenusByFncId(Long fncId)
+    public Set<String> getMenusByFncId(Long fncId)
     {
         Set<Long> prvIds = ptfRepo.getFncPrvIds(fncId);
         Set<String> prvCodes = prvRepo.getPrvCodesByPrvIds(prvIds);
-        Set<Menu.MenuResp> menus = menuRepo.findAll().stream()
+        Set<String> menus = menuRepo.findAll().stream()
                 .filter(m->m.getPrvsCodes().stream().anyMatch(menuCode->prvCodes.contains(menuCode)))
-                .map(m->new Menu().new MenuResp(m.getMenuCode(), m.getName()))
+                .map(m->"MENU_" + m.getMenuCode())
                 .collect(Collectors.toSet());
         return menus;
     }

@@ -16,7 +16,7 @@ public interface IMenuReaderService
 
     Set<Long> getMenuPrvIds(String menuCode);
 
-    Set<Menu.MenuResp> getMenusByFncId(Long fncId);
+    Set<String> getMenusByFncId(Long fncId);
 
     boolean fncCanSeeMenu(Long fncId, String menuCode);
 

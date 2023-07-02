@@ -56,6 +56,11 @@ public class JwtService implements IJwtService
         Long cedId = function == null ? null : function.getVisibilityId();
         Cedante ced = cedId == null ? null : cedRepo.findById(cedId).orElse(null);
 
+        Set<String> menus = menuService.getMenusByFncId(functionId);
+        Set<String> authorities = userDetails.getAuthorities().stream().map(auth->auth.getAuthority()).collect(Collectors.toSet());
+        Set<String> authAndMenus = new HashSet<String>(authorities);
+        authAndMenus.addAll(menus);
+
         Long cesId = function == null ? null : function.getCesId(); user.getCesId();
         Cessionnaire ces = cesId == null ? null : cesRepo.findById(cesId).orElse(null);
         Long userId = user.getUserId();
@@ -64,8 +69,8 @@ public class JwtService implements IJwtService
         extraClaims.put("nom", user.getFirstName());
         extraClaims.put("tel", user.getTel());
         extraClaims.put("prenom", user.getLastName());
-        extraClaims.put("authorities", userDetails.getAuthorities().stream().map(auth->auth.getAuthority()).collect(Collectors.toSet()));
-        extraClaims.put("menus",menuService.getMenusByFncId(functionId));
+        extraClaims.put("authorities", authAndMenus);
+        extraClaims.put("menus", menus);
         extraClaims.put("visibilityId", visibilityIds == null ? null : visibilityIds.size() != 1 ? null : new ArrayList<>(visibilityIds).get(0));
         extraClaims.put("functionId", functionId);
         extraClaims.put("connectionId", connectionId);
