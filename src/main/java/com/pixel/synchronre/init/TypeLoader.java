@@ -100,7 +100,7 @@ public class TypeLoader implements Loader
         Type prvPrvType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PRV", "Privilège", PersStatus.ACTIVE, null, null));
         Type prvRolType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-ROL", "Rôle", PersStatus.ACTIVE, null, null));
         Type prvFacType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-FAC", "Affaire FAC", PersStatus.ACTIVE, null, null));
-        Type prvTraiType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-TRAI", "Traté", PersStatus.ACTIVE, null, null));
+        Type prvTraiType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-TRAI", "Traité", PersStatus.ACTIVE, null, null));
         Type prvParamType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PARAM", "Paramètre", PersStatus.ACTIVE, null, null));
         //Type prvPlaType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-PLA", "Placement", PersStatus.ACTIVE, null, null));
         Type prvComptaType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-COMPTA", "Comptabilité", PersStatus.ACTIVE, null, null));

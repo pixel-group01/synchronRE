@@ -85,8 +85,8 @@ public class UserResource
     }
 
     @PutMapping(path = "/open/reinit-password")
-    public void reinitPassword(@RequestBody @Valid ReinitialisePasswordDTO dto ) throws UnknownHostException, IllegalAccessException {
-        userService.reinitialisePassword(dto);
+    public ReadUserDTO reinitPassword(@RequestBody @Valid ReinitialisePasswordDTO dto ) throws UnknownHostException, IllegalAccessException {
+        return userService.reinitialisePassword(dto);
     }
 
     @PutMapping(path = "/open/send-reinit-password-email/{email}")
