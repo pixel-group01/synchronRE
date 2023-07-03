@@ -36,4 +36,7 @@ public interface RoleRepo extends JpaRepository<AppRole, Long>
     select rtf.role.roleName from RoleToFncAss rtf where rtf.assStatus = 1 and rtf.function.id = ?1 and current_date between coalesce(rtf.startsAt, current_date) and coalesce(rtf.endsAt, current_date ) 
     """)
     Set<String> getFunctionRoleNames(Long fncId);
+
+    @Query("select r from AppRole r where r.roleCode = ?1")
+    AppRole findByRoleCode(String s);
 }

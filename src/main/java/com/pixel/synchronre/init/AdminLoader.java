@@ -1,10 +1,7 @@
 package com.pixel.synchronre.init;
 
 import com.pixel.synchronre.authmodule.controller.repositories.*;
-import com.pixel.synchronre.authmodule.model.entities.AppFunction;
-import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
-import com.pixel.synchronre.authmodule.model.entities.PrvToFunctionAss;
+import com.pixel.synchronre.authmodule.model.entities.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +16,8 @@ import java.util.Arrays;
 public class AdminLoader implements Loader
 {
     private final UserRepo userRepo;
-    private final TypeRepo typeRepo;
+    private final RoleRepo roleRepo;
+    private final RoleToFunctionAssRepo rtfRepo;
     private final PasswordEncoder pe;
     private final PrvRepo prvRepo;
     private final FunctionRepo fncRepo;
@@ -28,6 +26,7 @@ public class AdminLoader implements Loader
     @Override
     public void load()
     {
+        /*
         AppUser useradmin = new AppUser(1l, "admin", "admin", null, 4l,
                 pe.encode("1234"), "admin@gmail.com", "1234",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
@@ -71,17 +70,17 @@ public class AdminLoader implements Loader
         AppUser userSouscripteur = new AppUser(9l, "Gossé", "Gossé Maxim", null, 4l,
                 pe.encode("1234"), "souscripteur@gmail.com", "123456783",
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
-                LocalDateTime.now());
+                LocalDateTime.now());*/
 
-        AppUser useradmin1 = new AppUser(10l, "N’GUESSAN", "Yao Yavo Basile", null, 4l,
+        AppUser useradmin1 = userRepo.save(new AppUser(10l, "N’GUESSAN", "Yao Yavo Basile", null, 4l,
                 pe.encode("KD@f8z73t@"), "Basile.nguessan@groupensia.com", "0505893546",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
-                LocalDateTime.now());
+                LocalDateTime.now()));
         //useradmin1 = userRepo.save(useradmin1);
 
-        userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur, useradmin1));
+        //userRepo.saveAll(Arrays.asList(useradmin, userci, userbn, usertg, userSaisienre, userValidateur, userObservateur, userComptable, userSouscripteur, useradmin1));
 
-        AppFunction fncUserci = new AppFunction(1l, 1l, 4l, "Acteur de saisie NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1));
+        /*AppFunction fncUserci = new AppFunction(1l, 1l, 4l, "Acteur de saisie NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncUserbn = new AppFunction(2l, 2l, 4l, "Acteur de saisie NSIA-BN", userbn, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncUsertg = new AppFunction(3l, 3l, 4l, "Acteur de saisie NSIA-TG", usertg, 1, LocalDate.now(), LocalDate.now().plusYears(1));
 
@@ -92,39 +91,17 @@ public class AdminLoader implements Loader
         AppFunction fncValidateur = new AppFunction(7l, null, 4l, "Acteur de Validation", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncComptable = new AppFunction(8l, null, 4l, "Comptable NelsonRE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1));
         AppFunction fncSouscripteur = new AppFunction(9l, null, 5l, "Souscripteur NelsonRE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1));
-        fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin,fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur, functionAdmin1));
+        fncRepo.saveAll(Arrays.asList(fncUserci, fncUserbn, fncUsertg,functionAdmin,fncAgentSaisie, fncObservateur, fncValidateur, fncComptable, fncSouscripteur, functionAdmin1));*/
 
-        AppPrivilege agentSaisie = prvRepo.save(new AppPrivilege(null, "SAISIE", "AGENT_DE_SAISIE", new Type(4l)));
-        AppPrivilege validateur = prvRepo.save(new AppPrivilege(null, "VALIDATEUR", "VALIDATEUR", new Type(4l)));
-        AppPrivilege observateur = prvRepo.save(new AppPrivilege(null, "OBSERVATEUR", "OBSERVATEUR", new Type(4l)));
-        AppPrivilege roleAdmin = prvRepo.save(new AppPrivilege(null, "ADMIN", "ADMINISTRATEUR", new Type(4l)));
-        AppPrivilege comptable = prvRepo.save(new AppPrivilege(null, "COMPTABLE", "COMPTABLE", new Type(4l)));
-        AppPrivilege souscripteur = prvRepo.save(new AppPrivilege(null, "SOUSCRIPTEUR", "SOUSCRIPTEUR", new Type(4l)));
+        AppUser userDev = userRepo.save(new AppUser(null, "Développeur", "Synchrone-Re", null, 4l,
+                pe.encode("KD@fgfysh458@"), "pixelgroup09@gmail.com", "0505050505",
+                true, true, null, LocalDateTime.now(), LocalDateTime.now(),
+                LocalDateTime.now()));
 
-        PrvToFunctionAss saisiAssci = new PrvToFunctionAss(agentSaisie, fncUserci); saisiAssci.setAssStatus(1); saisiAssci.setStartsAt(LocalDate.now()); saisiAssci.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss saisiAssbn = new PrvToFunctionAss(agentSaisie, fncUserbn); saisiAssbn.setAssStatus(1); saisiAssbn.setStartsAt(LocalDate.now()); saisiAssbn.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss saisiAsstg = new PrvToFunctionAss(agentSaisie, fncUsertg); saisiAsstg.setAssStatus(1); saisiAsstg.setStartsAt(LocalDate.now()); saisiAsstg.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss adminAss = new PrvToFunctionAss(roleAdmin, functionAdmin); adminAss.setAssStatus(1); adminAss.setStartsAt(LocalDate.now()); adminAss.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss admin1Ass = new PrvToFunctionAss(roleAdmin, functionAdmin1); admin1Ass.setAssStatus(1); admin1Ass.setStartsAt(LocalDate.now()); admin1Ass.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss saisiAss = new PrvToFunctionAss(agentSaisie, fncAgentSaisie); saisiAss.setAssStatus(1); saisiAss.setStartsAt(LocalDate.now()); saisiAss.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss obsAss = new PrvToFunctionAss(observateur, fncObservateur); obsAss.setAssStatus(1); obsAss.setStartsAt(LocalDate.now()); obsAss.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss validAss = new PrvToFunctionAss(validateur, fncValidateur); validAss.setAssStatus(1); validAss.setStartsAt(LocalDate.now()); validAss.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss comptableAss = new PrvToFunctionAss(comptable, fncComptable); comptableAss.setAssStatus(1); comptableAss.setStartsAt(LocalDate.now()); comptableAss.setEndsAt(LocalDate.now().plusYears(1));
-        PrvToFunctionAss sousCripteurAss = new PrvToFunctionAss(souscripteur, fncSouscripteur); sousCripteurAss.setAssStatus(1); sousCripteurAss.setStartsAt(LocalDate.now()); sousCripteurAss.setEndsAt(LocalDate.now().plusYears(1));
-
-        ptfRepo.saveAll(Arrays.asList(saisiAssci, saisiAssbn, saisiAsstg, adminAss,admin1Ass, saisiAss, obsAss, validAss, comptableAss, sousCripteurAss));
-
-        //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
-        //AppFunction function = new AppFunction(1l, null, 4l, "Administrateur SyncrhoneRe", admin, 1, LocalDate.now(), LocalDate.now().plusYears(1));
-
-
-        userci.setCurrentFunctionId(1l); userbn.setCurrentFunctionId(2l); usertg.setCurrentFunctionId(3l);
-        useradmin.setCurrentFunctionId(4l); userSaisienre.setCurrentFunctionId(5l); userObservateur.setCurrentFunctionId(6l);
-        useradmin1.setCurrentFunctionId(4l); userSaisienre.setCurrentFunctionId(5l); userObservateur.setCurrentFunctionId(6l);
-        userValidateur.setCurrentFunctionId(7l); userComptable.setCurrentFunctionId(8l); userSouscripteur.setCurrentFunctionId(9l);
-
-        userRepo.saveAll(Arrays.asList(userci, userbn, usertg, useradmin,useradmin1, userSaisienre, userObservateur, userValidateur, userComptable, userSouscripteur));
-
-
+        AppFunction fncDev = fncRepo.save(new AppFunction(null, null, 4l, "Développeur synchrone-Re", userDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userDev.setCurrentFunctionId(fncDev.getId());
+        userRepo.save(userDev);
+        AppRole roleDev = roleRepo.findByRoleCode("ROL-DEV");
+        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleDev, fncDev));
     }
 }

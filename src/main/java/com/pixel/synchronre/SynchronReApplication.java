@@ -28,8 +28,8 @@ public class SynchronReApplication {
             typeLoader.load();
             menuLoader.load();
             foldersIniter.load();
-            roleLoader.load();
             prvLoader.load();
+            roleLoader.load();
             adminLoader.load();
             statutLoader.load();
             deviseLoader.load();

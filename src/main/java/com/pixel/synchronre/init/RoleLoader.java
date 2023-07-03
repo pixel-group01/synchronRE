@@ -1,16 +1,23 @@
 package com.pixel.synchronre.init;
 
+import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
+import com.pixel.synchronre.authmodule.controller.repositories.PrvToFunctionAssRepo;
+import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
 import com.pixel.synchronre.authmodule.model.entities.AppRole;
+import com.pixel.synchronre.authmodule.model.entities.PrvToRoleAss;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service @RequiredArgsConstructor
 public class RoleLoader implements Loader
 {
-    private final TypeRepo typeRepo;
+    private final PrvToRoleAssRepo ptrRepo;
+    private final PrvRepo prvRepo;
     private final RoleRepo roleRepo;
 
     @Override
@@ -40,5 +47,6 @@ public class RoleLoader implements Loader
         AppRole roleComptaSin = roleRepo.save(new AppRole(null, "ROL-COMPTA-SIN", "Comptable sinistre"));
         AppRole roleDev = roleRepo.save(new AppRole(null, "ROL-DEV", "Developpeur"));
 
+        prvRepo.findAll().forEach(prv->ptrRepo.save(new PrvToRoleAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), prv, roleDev)));
     }
 }
