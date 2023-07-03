@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface PrvRepo extends JpaRepository<AppPrivilege, Long>
@@ -97,4 +98,7 @@ public interface PrvRepo extends JpaRepository<AppPrivilege, Long>
 
     @Query("select p.privilegeCode from AppPrivilege p where p.privilegeId in ?1")
     Set<String> getPrvCodesByPrvIds(Set<Long> prvIds);
+
+    @Query("select p from AppPrivilege p where p.privilegeCode in ?1")
+    List<AppPrivilege> findByPrvCodes(List<String> asList);
 }
