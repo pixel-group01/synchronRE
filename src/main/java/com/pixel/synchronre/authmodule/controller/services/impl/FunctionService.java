@@ -35,8 +35,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class FunctionService implements IFunctionService{
 
-    @Lazy
-    @Autowired private UserDetailsService uds;
+    @Lazy @Autowired private UserDetailsService uds;
 
     private final FunctionRepo functionRepo;
     private final RoleToFunctionAssRepo rtfRepo;

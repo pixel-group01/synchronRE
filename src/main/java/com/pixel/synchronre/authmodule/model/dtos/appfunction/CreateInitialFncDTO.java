@@ -1,6 +1,6 @@
 package com.pixel.synchronre.authmodule.model.dtos.appfunction;
 
-import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,9 @@ import java.util.Set;
 public class CreateInitialFncDTO
 {
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected LocalDate startsAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     protected LocalDate endsAt;
     private Set<Long> roleIds;
     private Set<Long> prvIds;
