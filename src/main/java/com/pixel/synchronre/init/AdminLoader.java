@@ -111,7 +111,7 @@ public class AdminLoader implements Loader
         AppFunction functionAdmin1 = fncRepo.save(new AppFunction(null, null, 4l, "Administrateur SyncrhoneRe", useradmin1, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         useradmin1.setCurrentFunctionId(functionAdmin1.getId());
         userRepo.save(useradmin1);
-        AppRole roleAdmin = roleRepo.findByRoleCode("ROL-ADMIN");
+        AppRole roleAdmin = roleRepo.findByRoleCode("ROL-ADM");
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(1), roleAdmin, functionAdmin1));
     }
 }
