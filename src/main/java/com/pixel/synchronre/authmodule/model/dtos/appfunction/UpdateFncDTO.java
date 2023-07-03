@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.model.dtos.appfunction;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ExistingFncId;
 import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.CoherentDates;
@@ -19,7 +20,9 @@ public class UpdateFncDTO
     private Long userId;
     private Long visibilityId;
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate startsAt;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endsAt;
     private Set<Long> roleIds = new HashSet<>();
     private Set<Long> prvIds = new HashSet<>();
