@@ -103,7 +103,6 @@ public class AdminLoader implements Loader
         AppRole roleDev = roleRepo.findByRoleCode("ROL-DEV");
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleDev, fncDev));
 
-
         AppUser useradmin1 = userRepo.save(new AppUser(null, "N’GUESSAN", "Yao Yavo Basile", null, 4l,
                 pe.encode("KD@f8z73t@"), "Basile.nguessan@groupensia.com", "0505893546",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
