@@ -4,6 +4,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.logmodule.controller.repositories.LogDetailsRepo;
 import com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import jakarta.persistence.Id;
@@ -160,20 +161,23 @@ public class LogService implements ILogService
     }
 
     @Override
-    public Page<ConnexionList> getConnextionLogs(Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
+    public Page<ConnexionList> getConnextionLogs(String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
+        key = key==null ? "" : StringUtils.stripAccentsToUpperCase(key);
+        key = key.replace("'", "''");
         debut = debut == null ? LocalDate.now() : debut; fin = fin == null ? LocalDate.now() : fin;
-        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(userId, debut, fin.plusDays(1), pageable);
-        List<ConnexionList> connexionlist = connexionPage.stream().peek(this::setCedanteonConnection).collect(Collectors.toList());
-
-        return new PageImpl<>(connexionlist, pageable, connexionPage.getTotalElements());
+        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(Collections.singletonList("Login"), key,userId, debut, fin.plusDays(1), null, pageable);
+        return connexionPage ;
     }
 
-    private void setCedanteonConnection(ConnexionList connection)
+    @Override
+    public Page<ConnexionList> getConnexionActionLogs(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
-        Cedante ced = cedRepo.getCedandteByUserId(connection.getUserId());
-        connection.setCedName(ced == null ? null : ced.getCedNomFiliale());
-        connection.setCedSigle(ced == null ? null : ced.getCedSigleFiliale());
+        key = key==null ? "" : StringUtils.stripAccentsToUpperCase(key);
+        key = key.replace("'", "''");
+        debut = debut == null ? LocalDate.now() : debut; fin = fin == null ? LocalDate.now() : fin;
+        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(logRepo.getAllActionTypes(), key,userId, debut, fin.plusDays(1), connId, pageable);
+        return connexionPage ;
     }
 
     private String getEntityId(Object obj)

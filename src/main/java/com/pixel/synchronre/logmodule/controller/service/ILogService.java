@@ -31,5 +31,7 @@ public interface ILogService
 
     List<LogDetails> saveLogDetails(Object oldObject, Object newObject, Log log, String tableName, boolean offConnection);
 
-    Page<ConnexionList> getConnextionLogs(Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
+    Page<ConnexionList> getConnextionLogs(String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
+
+    Page<ConnexionList> getConnexionActionLogs(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
 }

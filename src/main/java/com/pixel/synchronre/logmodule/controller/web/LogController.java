@@ -25,7 +25,7 @@ public class LogController {
     private final ILogService logService;
     private final LogMapper logMapper;
 
-    @GetMapping("/connexionList")
+    @GetMapping("/connexion-list")
     public Page<ConnexionList> getConnexionList(@RequestParam(defaultValue = "") String key,
                                                 @RequestParam(required = false) Long userId,
                                                 @RequestParam(required = false) @JsonFormat(pattern = "dd/MM/yyyy") LocalDate debut,
@@ -33,6 +33,18 @@ public class LogController {
                                                 @RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "20") int size)
     {
-        return this.logService.getConnextionLogs(userId, debut, fin, PageRequest.of(page, size));
+        return this.logService.getConnextionLogs(key,userId, debut, fin, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/connexion-actions")
+    public Page<ConnexionList> getConnexionActions(@RequestParam(defaultValue = "") String key,
+                                                @RequestParam(required = false) Long userId,
+                                                   @RequestParam String connId,
+                                                @RequestParam(required = false) @JsonFormat(pattern = "dd/MM/yyyy") LocalDate debut,
+                                                @RequestParam(required = false) @JsonFormat(pattern = "dd/MM/yyyy")LocalDate fin,
+                                                @RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "20") int size)
+    {
+        return this.logService.getConnexionActionLogs(connId, key,userId, debut, fin, PageRequest.of(page, size));
     }
 }
