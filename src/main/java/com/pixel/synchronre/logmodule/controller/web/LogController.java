@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/logs")
@@ -46,5 +47,24 @@ public class LogController {
                                                 @RequestParam(defaultValue = "20") int size)
     {
         return this.logService.getConnexionActionLogs(connId, key,userId, debut, fin, PageRequest.of(page, size));
+    }
+
+
+    @GetMapping("/system-errors")
+    public Page<ConnexionList> getSystemErrors(@RequestParam(defaultValue = "") String key,
+                                                   @RequestParam(required = false) Long userId,
+                                                   @RequestParam(required = false) String connId,
+                                                   @RequestParam(required = false) @JsonFormat(pattern = "dd/MM/yyyy") LocalDate debut,
+                                                   @RequestParam(required = false) @JsonFormat(pattern = "dd/MM/yyyy")LocalDate fin,
+                                                   @RequestParam(defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "20") int size)
+    {
+        return this.logService.getSystemErrors(connId, key,userId, debut, fin, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/system-errors/delete")
+    public void deleteSystemErrors(@RequestParam List<Long> errorIds)
+    {
+        logService.deleteSystemErrors(errorIds);
     }
 }

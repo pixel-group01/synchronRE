@@ -2,6 +2,7 @@ package com.pixel.synchronre.logmodule.model.dtos.response;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
@@ -26,7 +27,10 @@ public class ConnexionList {
     private String cedName;
     private String cedSigle;
 
-    public ConnexionList(Long userId, String userEmail, String firstName, String lastName, String action, LocalDateTime actionDateTime, String ipAddress, String hostName, String connectionId, Long foncId, String foncName) {
+    private String errorMessage;
+    private String stackTrace;
+
+    public ConnexionList(Long userId, String userEmail, String firstName, String lastName, String action, LocalDateTime actionDateTime, String ipAddress, String hostName, String connectionId, Long foncId, String foncName, String cedName, String cedSigle) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.firstName = firstName;
@@ -38,5 +42,7 @@ public class ConnexionList {
         this.connectionId = connectionId;
         this.foncId = foncId;
         this.foncName = foncName;
+        this.cedName = cedName;
+        this.cedSigle = cedSigle;
     }
 }

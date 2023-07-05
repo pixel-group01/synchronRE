@@ -20,6 +20,10 @@ public interface ILogService
     Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName) throws UnknownHostException;
 
     Log saveLog(String action) throws UnknownHostException;
+
+    @Transactional
+    Log saveLogError(String errorMsg, String stackTrace) throws UnknownHostException;
+
     Log saveLog(String action, String token) throws UnknownHostException;
 
     @Transactional
@@ -33,5 +37,9 @@ public interface ILogService
 
     Page<ConnexionList> getConnextionLogs(String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
 
+    Page<ConnexionList> getSystemErrors(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
+
     Page<ConnexionList> getConnexionActionLogs(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable);
+
+    void deleteSystemErrors(List<Long> errorIds);
 }

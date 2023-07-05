@@ -65,6 +65,14 @@ public class LogService implements ILogService
         return this.saveLog(action, jwtService.getCurrentJwt());
     }
 
+    @Override @Transactional
+    public Log saveLogError(String errorMsg, String stackTrace) throws UnknownHostException {
+        Log logErreur = this.saveLog("SYSTEM_ERROR", jwtService.getCurrentJwt());
+        logErreur.setErrorMessage(errorMsg);
+        logErreur.setStackTrace(stackTrace);
+        return logErreur;
+    }
+
 
     @Override @Transactional
     public Log saveLog(String action, String token) throws UnknownHostException {
@@ -163,21 +171,35 @@ public class LogService implements ILogService
     @Override
     public Page<ConnexionList> getConnextionLogs(String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
-        key = key==null ? "" : StringUtils.stripAccentsToUpperCase(key);
-        key = key.replace("'", "''");
-        debut = debut == null ? LocalDate.now() : debut; fin = fin == null ? LocalDate.now() : fin;
-        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(Collections.singletonList("Login"), key,userId, debut, fin.plusDays(1), null, pageable);
-        return connexionPage ;
+        return this.getConnexionList(Collections.singletonList("Login"), null,key,userId, debut, fin.plusDays(1), pageable) ;
+    }
+
+    @Override
+    public Page<ConnexionList> getSystemErrors(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
+    {
+        return this.getConnexionList(Collections.singletonList("SYSTEM_ERROR"), connId,key,userId, debut, fin.plusDays(1), pageable) ;
     }
 
     @Override
     public Page<ConnexionList> getConnexionActionLogs(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
+        List<String> actions = logRepo.getAllActionTypes().stream().filter(action->!"SYSTEM_ERROR".equals(action)).collect(Collectors.toList());
+        return this.getConnexionList(actions, connId,key,userId, debut, fin.plusDays(1), pageable) ;
+    }
+
+    @Override
+    public void deleteSystemErrors(List<Long> errorIds) {
+        if(errorIds == null || errorIds.isEmpty()) return;
+        errorIds.forEach(id->logRepo.deleteById(id));
+    }
+
+    private Page<ConnexionList> getConnexionList(List<String> actions, String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
+    {
         key = key==null ? "" : StringUtils.stripAccentsToUpperCase(key);
         key = key.replace("'", "''");
         debut = debut == null ? LocalDate.now() : debut; fin = fin == null ? LocalDate.now() : fin;
-        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(logRepo.getAllActionTypes(), key,userId, debut, fin.plusDays(1), connId, pageable);
-        return connexionPage ;
+        Page<ConnexionList> connexionPage = logRepo.getConnnexionLogs(actions, key,userId, debut, fin.plusDays(1), connId, pageable);
+        return connexionPage;
     }
 
     private String getEntityId(Object obj)

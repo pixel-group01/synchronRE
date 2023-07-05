@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sharedmodule.exceptions;
 
+import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
@@ -11,14 +13,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestControllerAdvice
+@RestControllerAdvice @RequiredArgsConstructor
 public class AppExceptionHandler
 {
+    private final ILogService logService;
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public List<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException err)
@@ -58,8 +64,12 @@ public class AppExceptionHandler
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleAuthException(Exception exception)
-    {
+    public void handleAuthException(Exception exception) throws UnknownHostException {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        exception.printStackTrace(pw);
+        String stacktrace = sw.toString();
+        logService.saveLogError(exception.getMessage(), stacktrace);
         exception.printStackTrace();
     }
 }
