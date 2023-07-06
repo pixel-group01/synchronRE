@@ -171,20 +171,20 @@ public class LogService implements ILogService
     @Override
     public Page<ConnexionList> getConnextionLogs(String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
-        return this.getConnexionList(Collections.singletonList("Login"), null,key,userId, debut, fin.plusDays(1), pageable) ;
+        return this.getConnexionList(Collections.singletonList("Login"), null,key,userId, debut, fin, pageable) ;
     }
 
     @Override
     public Page<ConnexionList> getSystemErrors(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
-        return this.getConnexionList(Collections.singletonList("SYSTEM_ERROR"), connId,key,userId, debut, fin.plusDays(1), pageable) ;
+        return this.getConnexionList(Collections.singletonList("SYSTEM_ERROR"), connId,key,userId, debut, fin, pageable) ;
     }
 
     @Override
     public Page<ConnexionList> getConnexionActionLogs(String connId, String key, Long userId, LocalDate debut, LocalDate fin, Pageable pageable)
     {
         List<String> actions = logRepo.getAllActionTypes().stream().filter(action->!"SYSTEM_ERROR".equals(action)).collect(Collectors.toList());
-        return this.getConnexionList(actions, connId,key,userId, debut, fin.plusDays(1), pageable) ;
+        return this.getConnexionList(actions, connId,key,userId, debut, fin, pageable) ;
     }
 
     @Override
