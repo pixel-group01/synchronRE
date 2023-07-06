@@ -40,6 +40,7 @@ public class LogService implements ILogService
     private final FunctionRepo functionRepo;
     private final CedRepo cedRepo;
     //private final HistoService histoService;
+    /* */
 
 
     @Override @Transactional
