@@ -82,6 +82,7 @@ public class FunctionService implements IFunctionService{
         logger.logg(AuthActions.CREATE_FNC, null, function, AuthTables.FUNCTION);
         Set<Long> roleIds = dto.getRoleIds() == null ? new HashSet<>() : dto.getRoleIds();
         Set<Long> prvIds = dto.getPrvIds() == null ? new HashSet<>() : dto.getPrvIds();
+
         roleIds.forEach(id->
         {
             RoleToFncAss roleToFunctionAss = new RoleToFncAss();
@@ -98,7 +99,8 @@ public class FunctionService implements IFunctionService{
             }
         });
 
-        prvIds.forEach(id->
+        PrvAssSpliterDTO prvAssSpliterDTO = assMapper.mapToPrvAssSpliterDTO(prvIds, roleIds, fncId, dto.getStartsAt(), dto.getEndsAt(), false);
+        prvAssSpliterDTO.getPrvIdsToBeAddedAsNew().forEach(id->
         {
             PrvToFunctionAss prvToFunctionAss = new PrvToFunctionAss();
             prvToFunctionAss.setAssStatus(1);
