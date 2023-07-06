@@ -32,7 +32,7 @@ public class RoleResource
     }
 
     @GetMapping(path = "/search")
-    public Page<ReadRoleDTO> searchrole(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException, IllegalAccessException {
+    public Page<ReadRoleDTO> searchrole(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100Aug") int size) throws UnknownHostException, IllegalAccessException {
         return roleService.searchRoles(key, PageRequest.of(page, size));
     }
 
