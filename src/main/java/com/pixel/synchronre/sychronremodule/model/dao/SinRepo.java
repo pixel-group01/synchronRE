@@ -79,7 +79,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         where s.sinId = ?1 and r.type.uniqueCode = 'REP_SIN' 
          and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
     """)
-    BigDecimal calculateMtotAPayerBySinAndAff(Long sinId); //Le montant total à payer sur un sinistre peut s'obtenir en faisant la somme du sinMontant100 et des honoraires
+    BigDecimal calculateMtotPlacement(Long sinId); //Le montant total à payer sur un sinistre peut s'obtenir en faisant la somme du sinMontant100 et des honoraires
                                                             //sinMontant100 + sinMontantHonoraire
     @Query("""
         select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'

@@ -16,6 +16,9 @@ public interface IServiceSinistre
     SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException;
     SinistreDetailsResp updateSinistre(UpdateSinistreReq dto) throws UnknownHostException;
     Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable);
+
+    Page<SinistreDetailsResp> searchSinFacArch(String key, Pageable pageable);
+
     Page<SinistreDetailsResp> searchSinFacSaisiByCedante(String key, Pageable pageable);
     Page<SinistreDetailsResp> searchSinFacTransmiByCedante(String key, Pageable pageable);
 
@@ -27,7 +30,7 @@ public interface IServiceSinistre
 
     EtatComptableSinistreResp getEtatComptable(Long sinId);
 
-    void transmettreSinistreAuCourtier(Long sinId) throws UnknownHostException;
+    Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException;
 
     Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable);
 }

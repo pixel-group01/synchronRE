@@ -12,7 +12,6 @@ import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
@@ -23,12 +22,12 @@ import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSinistre;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,9 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
@@ -61,6 +58,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private final String TRAITE_UNIQUE_CODE = "TRAITE";
     @Value("${spring.mail.username}")
     private String synchronreEmail;
+    private final IserviceExercie exeService;
 
     private void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
     {
@@ -96,6 +94,9 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Long sinId = sinistre.getSinId();
         cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
+        BigDecimal mtTotSinPlacement = sinRepo.calculateMtotPlacement(sinId);
+        sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
+        sinistre.setSinMontantTotPlacementLettre(ConvertMontantEnLettres.convertir(mtTotSinPlacement.doubleValue()));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
@@ -124,15 +125,14 @@ public class ServiceSinistreImpl implements IServiceSinistre
     }
 
 
-     public void transmettreSinistreAuCourtier(Long sinId) throws UnknownHostException {
-        Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
-        //BigDecimal mtTotSinAff = sinRepo.calculateMtotAPayerBySinAndAff(sinId);
-        sinistre.setStatut(new Statut(TRANSMIS.staCode));
-        //sinistre.setSinMontantTotAffaire(mtTotSinAff);
-        //sinistre.setSinMontantTotAffaireLettre(ConvertMontantEnLettres.convertir(mtTotSinAff.longValue()));
-        sinRepo.save(sinistre);
-        logService.saveLog(SinistreActions.TRANSMETTRE_SINISTRE);
-    }
+     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException
+     {
+         boolean isCourtier = jwtService.UserIsCourtier() ;
+         String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
+         mvtService.createMvtSinistre(new MvtReq(sinId, newStatut, null));
+         Page<SinistreDetailsResp> sinPages = this.searchSinFacSaisiByCedante("", PageRequest.of(0, returnPageSize));
+         return sinPages;
+     }
 
     void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
@@ -167,6 +167,12 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable) {
         Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabAllSinistres, pageable);
+        return sinPage;
+    }
+
+    @Override
+    public Page<SinistreDetailsResp> searchSinFacArch(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabArchive, pageable);
         return sinPage;
     }
 

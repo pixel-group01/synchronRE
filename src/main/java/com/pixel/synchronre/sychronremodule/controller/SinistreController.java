@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
@@ -10,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,6 +64,13 @@ public class SinistreController
         return sinService.searchSinFacSuivi(key, PageRequest.of(page, size));
     }
 
+    @GetMapping(path = "/facultative/arch")
+    public Page<SinistreDetailsResp> searchSinFacArch(@RequestParam(defaultValue = "") String key,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacArch(key, PageRequest.of(page, size));
+    }
+
     @PostMapping(path = "/create")
     public SinistreDetailsResp createSinistre(@RequestBody @Valid CreateSinistreReq dto) throws UnknownHostException {
         return sinService.createSinistre(dto);
@@ -92,8 +97,8 @@ public class SinistreController
     }
 
     @PutMapping(path = "/transmettre/{sinId}")
-    public void transmettreSinistreAuCourtier(@PathVariable Long sinId) throws UnknownHostException
+    public void transmettreSinistreAuCourtier(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        sinService.transmettreSinistreAuCourtier(sinId);
+        sinService.transmettreSinistreAuSouscripteur(sinId, size);
     }
 }

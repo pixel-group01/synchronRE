@@ -19,6 +19,13 @@ public class AppRole
     private String roleCode;
     @Column(unique = true)
     private String roleName;
+    private String prvAuthorizedTypes;
+
+    public AppRole(Long roleId, String roleCode, String roleName) {
+        this.roleId = roleId;
+        this.roleCode = roleCode;
+        this.roleName = roleName;
+    }
 
     public AppRole(Long roleId) {
         this.roleId = roleId;
