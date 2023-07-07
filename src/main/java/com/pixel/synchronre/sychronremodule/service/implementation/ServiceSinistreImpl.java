@@ -6,15 +6,13 @@ import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderSe
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.constants.SinStatutGroup;
-import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
@@ -30,6 +28,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +38,7 @@ import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
@@ -87,7 +88,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de déclarer un sinistre sur une affaire non réalisée ou en instance");
         boolean isCourtier = jwtService.UserIsCourtier();
         Sinistre sinistre = sinMapper.mapToSinistre(dto);
-        Statut sinStatut = isCourtier ? new Statut(TRANSMIS.staCode) : new Statut(SAISIE.staCode);
+        Statut sinStatut = isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode);
         sinistre.setStatut(sinStatut);
         sinistre = sinRepo.save(sinistre);
         Long sinId = sinistre.getSinId();
@@ -157,9 +158,18 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable)
     {
-        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllASinistres : staCodes, pageable);
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllSinistres : staCodes, pageable);
         return sinPage;
     }
+
+    @Override
+   public Page<SinistreDetailsResp> searchSinistreSaisiByCedante(String key, List<String> staCodes, Pageable pageable)
+   {
+       Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabSaisie : staCodes, pageable);
+       return sinPage;
+   }
+
+
 
     @Override
     public EtatComptableSinistreResp getEtatComptable(Long sinId) {

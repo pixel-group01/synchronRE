@@ -35,7 +35,7 @@ public class CedCesAffLoader implements Loader
         Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", "ESSOH Fernand",FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 
-/*
+
         //Cedantes
         Cedante nsiaci = cedRepo.save(new Cedante(null, "NSIA CI", "NSIA-CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI","YOUIN Salif", new Pays("CIV"),new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         Cedante nsiabn = cedRepo.save(new Cedante(null, "NSIA BN", "NSIA-BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN","Coulibaly Lenimama", new Pays("BNN"), new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
@@ -66,6 +66,6 @@ public class CedCesAffLoader implements Loader
         Facultative fac = new Facultative(aff1, "AFF-004", new BigDecimal(50000000), new BigDecimal(50000000));
         facRepo.save(fac);
 
- */
+
     }
 }

@@ -54,9 +54,12 @@ public class StatutLoader implements Loader
         Statut usrAact = new Statut("USR-AACT", "Utilisateur en attente d'activation", "Utilisateur en attente d'activation", TypeStatut.USER, LocalDateTime.now(), LocalDateTime.now());
         Statut usrAla = new Statut("USR-ALA", "Utilisateur en attente d'un lien d'activation", "Utilisateur en attente d'un lien d'activation", TypeStatut.USER, LocalDateTime.now(), LocalDateTime.now());
         //Statut usrBlq = new Statut("USR-UKN", "Utilisateur bloqué", "Utilisateur bloqué", TypeStatut.USER, LocalDateTime.now(), LocalDateTime.now());
+        Statut retourVal = new Statut("RET-VAL", "Retourné(e) par le validateur", "Retourné(e) par le validateur", TypeStatut.PARTAGE, LocalDateTime.now(), LocalDateTime.now());
+        Statut retourCompta = new Statut("RET-COMPTA", "Retourné(e) par le comptable", "Retourné(e) par le comptable", TypeStatut.PARTAGE, LocalDateTime.now(), LocalDateTime.now());
+
         staRepo.saveAll(Arrays.asList(s1, s2, s3, s4, s5, s6, s7, s8,s9,S10,S11,
                 s12,S13,S14, s15,S16,S17, s18, s19, s20, s21, s22,
-                staMail, crev, cpai_crev, usrBlq, usrAct,  usrAact, usrAla));
+                staMail, crev, cpai_crev, usrBlq, usrAct,  usrAact, usrAla,retourVal,retourCompta));
 
     }
 }

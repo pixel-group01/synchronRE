@@ -28,7 +28,7 @@ public class AssLoader implements Loader
     {
         AppRole roleAdmin = roleRepo.findByRoleCode("ROL-ADM");
 
-        List<AppPrivilege> prvsAdmin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-TRAI", "GET-STAT-FAC", "GET-STAT-SIN", "GET-STAT-ADM", "GET-STAT-PARAM", "GET-USER-DET", "CRT-USER-FNC", "GET-USER-LST", "UPD-USER", "BLQ-USER", "UBLQ-USER", "SEND-ACT-MAIL", "CRT-FNC", "UPD-FNC", "SET-FNC-DFLT", "RVK-FNC", "RSTR-FNC", "GET-ACT-FNC-LST", "GET-ALL-FNC-LST", "CRT-PRV", "GET-PRV-LST", "CRT-ROL", "GET-ROL-LST", "UPD-ROL", "CRT-BANK", "UPD-BANK", "GET-BANK-LST", "CRT-BRAN", "UPD-BRAN", "GET-BRAN-LST", "CRT-CED", "UPD-CED", "GET-CED-LST", "CRT-CES", "UPD-CES", "GET-CES-LEG-PARAM-LST", "CRT-CES-LEG-PARAM", "UPD-CES-LEG-PARAM", "GET-CES-LST", "CRT-COUV", "UPD-COUV", "GET-COUV-LST", "CRT-DEV", "UPD-DEV", "GET-DEV-LST", "CRT-EXE", "UPD-EXE", "GET-EXE-LST", "CRT-PAY", "UPD-PAY", "GET-PAY-LST"));
+        List<AppPrivilege> prvsAdmin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-TRAI", "GET-STAT-FAC", "GET-STAT-SIN", "GET-STAT-ADM", "GET-STAT-PARAM", "GET-USER-DET", "CRT-USER-FNC", "GET-USER-LST", "UPD-USER", "BLQ-USER", "UBLQ-USER", "SEND-ACT-MAIL", "CRT-FNC", "UPD-FNC", "SET-FNC-DFLT", "RVK-FNC", "RSTR-FNC", "GET-ACT-FNC-LST", "GET-ALL-FNC-LST", "CRT-PRV", "GET-PRV-LST", "CRT-ROL", "GET-ROL-LST", "UPD-ROL", "CRT-BANK", "UPD-BANK", "GET-BANK-LST", "CRT-BRAN", "UPD-BRAN", "GET-BRAN-LST", "CRT-CED", "UPD-CED", "GET-CED-LST", "CRT-CES", "UPD-CES", "GET-CES-LEG-PARAM-LST", "CRT-CES-LEG-PARAM", "UPD-CES-LEG-PARAM", "GET-CES-LST", "CRT-COUV", "UPD-COUV", "GET-COUV-LST", "CRT-DEV", "UPD-DEV", "GET-DEV-LST", "CRT-EXE", "UPD-EXE", "GET-EXE-LST", "CRT-PAY", "UPD-PAY", "GET-PAY-LST","GET-LOG-HISTO"));
         prvsAdmin.forEach(prv->this.addPrvToRole(prv, roleAdmin));
 
         AppRole roleAdminTech = roleRepo.findByRoleCode("ROL-ADM-TECH");
@@ -48,8 +48,10 @@ public class AssLoader implements Loader
         prvOpeSaisieSin.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieSin));
 
         AppRole roleOpeSaisieTrai = roleRepo.findByRoleCode("ROL-OPE-SAI-TRAI");
-        List<AppPrivilege> prvOpeSaisieTrai = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-TRAI"));
+        List<AppPrivilege> prvOpeSaisieTrai = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-TRAI","GET- TRAI-LST","GET-TRAI-C-SAI"));
         prvOpeSaisieTrai.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieTrai));
+
+
 
 
 

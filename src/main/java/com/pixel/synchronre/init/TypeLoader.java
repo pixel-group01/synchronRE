@@ -107,5 +107,8 @@ public class TypeLoader implements Loader
         Type prvDevType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-DEV", "Développeur", PersStatus.ACTIVE, null, null));
         Type prvRepType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-REP", "Repartition", PersStatus.ACTIVE, null, null));
         Type prvSinType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-SIN", "Sinistre", PersStatus.ACTIVE, null, null));
+
+
+
     }
 }

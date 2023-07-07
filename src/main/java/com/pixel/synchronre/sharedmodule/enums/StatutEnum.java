@@ -29,6 +29,8 @@ public enum StatutEnum
     MAIL("MAIL", "Mail envoyé"),
     CREV("CREV", "En cours de reversement"),
     CPAI_CREV("CPAI-CREV", "En cours paiement et de reversement"),
+    RETOURNER_VALIDATEUR("RET-VAL", "Retourné(e) par le validateur"),
+    RETOURNER_COMPTABLE("RET-COMPTA", "Retourné(e) par le comptable"),
     ACCEPTE("ACCEPTE", "Accepté");
 
     public String staCode;

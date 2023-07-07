@@ -42,6 +42,7 @@ public class PrvLoader implements Loader
         AppPrivilege crtRol = prvRepo.save(new AppPrivilege(null, "CRT-ROL", "Créer un rôle", typeRepo.findByUniqueCode("PRV-ROL")));
         AppPrivilege getRolLst = prvRepo.save(new AppPrivilege(null, "GET-ROL-LST", "Consulter la liste des rôles", typeRepo.findByUniqueCode("PRV-ROL")));
         AppPrivilege updRolLst = prvRepo.save(new AppPrivilege(null, "UPD-ROL", "Modifier un rôle", typeRepo.findByUniqueCode("PRV-ROL")));
+        //FAC
         AppPrivilege getFacLst = prvRepo.save(new AppPrivilege(null, "GET-FAC-LST", "Consulter liste des affaires facultative", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege getFacCSai = prvRepo.save(new AppPrivilege(null, "GET-FAC-C-SAI", "Consulter liste des fac en cours de saisie", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege getFacCPla = prvRepo.save(new AppPrivilege(null, "GET-FAC-C-PLA", "Consulter liste des fac en cours de placement", typeRepo.findByUniqueCode("PRV-FAC")));
@@ -60,6 +61,10 @@ public class PrvLoader implements Loader
         AppPrivilege markFacRea = prvRepo.save(new AppPrivilege(null, "MARK-FAC-REA", "Marquer une affaire facultative comme réalisée", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege markFacNonRea = prvRepo.save(new AppPrivilege(null, "MARK-FAC-NON-REA", "Marquer une affaire facultative comme non réalisée", typeRepo.findByUniqueCode("PRV-FAC")));
         AppPrivilege addDocFac = prvRepo.save(new AppPrivilege(null, "ADD-DOC-FAC", "Joindre une pièce à une affaire facultative", typeRepo.findByUniqueCode("PRV-FAC")));
+        //TRAI
+        AppPrivilege getTraiLst = prvRepo.save(new AppPrivilege(null, "GET- TRAI-LST", "Consulter liste des Traités", typeRepo.findByUniqueCode("PRV-TRAI")));
+        AppPrivilege getTraiCSai = prvRepo.save(new AppPrivilege(null, "GET-TRAI-C-SAI", "Consulter liste des Traités en cours de saisie", typeRepo.findByUniqueCode("PRV-TRAI")));
+        //
         AppPrivilege crtBank = prvRepo.save(new AppPrivilege(null, "CRT-BANK", "Enregistrer une banque", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege updBank = prvRepo.save(new AppPrivilege(null, "UPD-BANK", "Modifier une banque", typeRepo.findByUniqueCode("PRV-PARAM")));
         AppPrivilege getBankLst = prvRepo.save(new AppPrivilege(null, "GET-BANK-LST", "Consulter la liste des banques", typeRepo.findByUniqueCode("PRV-PARAM")));
@@ -140,9 +145,6 @@ public class PrvLoader implements Loader
         AppPrivilege getSinTraiLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-TRAI-LST", "Consulter la liste des sinistres sur traité", typeRepo.findByUniqueCode("PRV-SIN")));
 
 
-
-
-
         AppPrivilege getEtaComptSin = prvRepo.save(new AppPrivilege(null, "GET-ETA-COMPT-SIN", "Consulter la situation comptable d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege valSin = prvRepo.save(new AppPrivilege(null, "VAL-SIN", "Valider un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege retSin = prvRepo.save(new AppPrivilege(null, "RET-SIN", "retourner un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
@@ -154,5 +156,10 @@ public class PrvLoader implements Loader
         AppPrivilege sendNotDebSin = prvRepo.save(new AppPrivilege(null, "SEND-NOT-DEB-SIN", "Envoyer Note de débit d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege sendNotCredSin = prvRepo.save(new AppPrivilege(null, "SEND-NOT-CRED-SIN", "Envoyer la note de crédit d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege sendNotCesSin = prvRepo.save(new AppPrivilege(null, "SEND-NOT-CES-SIN", "Envoyer la note de cession d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
+
+        //LOG
+        AppPrivilege getLogHisto = prvRepo.save(new AppPrivilege(null, "GET-LOG-HISTO", "Consulter l'historique de connexion", typeRepo.findByUniqueCode("PRV-ADM")));
+        AppPrivilege getLogSystem = prvRepo.save(new AppPrivilege(null, "GET-LOG-SYST", "Consulter le log système", typeRepo.findByUniqueCode("PRV-DEV")));
+        AppPrivilege delLogSystem = prvRepo.save(new AppPrivilege(null, "DEL-LOG-SYST", "Supprimer le log système", typeRepo.findByUniqueCode("PRV-DEV")));
     }
 }
