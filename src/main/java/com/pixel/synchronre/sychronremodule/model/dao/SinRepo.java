@@ -23,7 +23,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp(
         s.sinId, s.sinMontant100, s.sinMontantHonoraire, s.sinDateSurvenance, s.sinDateDeclaration, s.sinCommentaire, aff.affId, aff.affCode, aff.affAssure, aff.affActivite, aff.affCapitalInitial) 
-        from Sinistre s left join s.statut st left join s.affaire aff left join s.userCreator u left join s.functionCreator fnc left join aff.cedante ced
+        from  Sinistre s left join s.statut st left join s.affaire aff left join s.userCreator u left join s.functionCreator fnc left join aff.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(aff.affCode, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(aff.affAssure, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(aff.affActivite, '') ) as string))) >0
@@ -37,12 +37,14 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         and (:fncId is null or :fncId = fnc.id)
         and (:userId is null or :userId = u.userId)
         and (:cedId is null or :cedId = ced.cedId)
+        and (:affTypeCode = aff.affType.uniqueCode)
         and s.statut.staCode in :staCodes order by s.sinId desc
            """)
     Page<SinistreDetailsResp> searchSinistres(@Param("key") String key,
                                               @Param("fncId") Long fncId,
                                               @Param("userId") Long userId,
                                               @Param("cedId") Long cedId,
+                                              @Param("affTypeCode") String affTypeCode,
                                               @Param("staCodes") List<String> staCodes, Pageable pageable);
 
     @Query("select s.sinMontant100 from Sinistre s where s.sinId = ?1")

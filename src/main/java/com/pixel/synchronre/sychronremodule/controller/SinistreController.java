@@ -24,14 +24,49 @@ public class SinistreController
     private final IServiceSinistre sinService;
 
     //Tab saisie par la cedante : affiche les sinistres saisies par la cedante
-    @GetMapping(path = "/saisi-by-cedante")
+    @GetMapping(path = "/facultative/saisi-by-cedante")
     public Page<SinistreDetailsResp> searchSinistreByCedante(@RequestParam(defaultValue = "") String key,
                                                              @RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "20") int size){
-        return sinService.searchSinistreSaisiByCedante(key, new ArrayList<>(), PageRequest.of(page, size));
+        return sinService.searchSinFacSaisiByCedante(key, PageRequest.of(page, size));
     }
 
-                                                            @PostMapping(path = "/create")
+    @GetMapping(path = "/facultative/transmis-by-cedante")
+    public Page<SinistreDetailsResp> searchSinFacTransmisByCedante(@RequestParam(defaultValue = "") String key,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacTransmiByCedante(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/attente-validation")
+    public Page<SinistreDetailsResp> searchSinFacAttentevalidation(@RequestParam(defaultValue = "") String key,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacAttenteValidation(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/en-reglement")
+    public Page<SinistreDetailsResp> searchSinFacEnReglement(@RequestParam(defaultValue = "") String key,
+                                                                   @RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacAttenteValidation(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/solde")
+    public Page<SinistreDetailsResp> searchSinFacSolde(@RequestParam(defaultValue = "") String key,
+                                                             @RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacSolde(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/facultative/suivi")
+    public Page<SinistreDetailsResp> searchSinFacSuivi(@RequestParam(defaultValue = "") String key,
+                                                       @RequestParam(defaultValue = "0") int page,
+                                                       @RequestParam(defaultValue = "20") int size){
+        return sinService.searchSinFacSuivi(key, PageRequest.of(page, size));
+    }
+
+    @PostMapping(path = "/create")
     public SinistreDetailsResp createSinistre(@RequestBody @Valid CreateSinistreReq dto) throws UnknownHostException {
         return sinService.createSinistre(dto);
     }
@@ -45,13 +80,14 @@ public class SinistreController
     public Page<SinistreDetailsResp> searchSinistre(@RequestParam(defaultValue = "") String key,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "10") int size)
-            throws UnknownHostException {
+    {
         return sinService.searchSinistre(key, new ArrayList<>(), PageRequest.of(page, size));
     }
 
 
     @GetMapping(path = "/etat-comptable/{sinId}")
-    public EtatComptableSinistreResp getEtatComptableSinistre(@PathVariable Long sinId) throws UnknownHostException {
+    public EtatComptableSinistreResp getEtatComptableSinistre(@PathVariable Long sinId)
+    {
         return sinService.getEtatComptable(sinId);
     }
 

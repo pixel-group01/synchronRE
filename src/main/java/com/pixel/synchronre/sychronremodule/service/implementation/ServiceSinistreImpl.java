@@ -57,6 +57,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private final IServiceCalculsComptablesSinistre sinComptaService;
     private final TypeRepo typeRepo;
     private final RepartitionRepository repRepo;
+    private final String FAC_UNIQUE_CODE = "FAC";
+    private final String TRAITE_UNIQUE_CODE = "TRAITE";
     @Value("${spring.mail.username}")
     private String synchronreEmail;
 
@@ -158,18 +160,46 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable)
     {
-        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllSinistres : staCodes, pageable);
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, null, FAC_UNIQUE_CODE, staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabAllSinistres : staCodes, pageable);
         return sinPage;
     }
 
     @Override
-   public Page<SinistreDetailsResp> searchSinistreSaisiByCedante(String key, List<String> staCodes, Pageable pageable)
+    public Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabAllSinistres, pageable);
+        return sinPage;
+    }
+
+    @Override
+   public Page<SinistreDetailsResp> searchSinFacSaisiByCedante(String key, Pageable pageable)
    {
-       Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), staCodes == null || staCodes.isEmpty() ? SinStatutGroup.tabSaisie : staCodes, pageable);
+       Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabSaisie, pageable);
        return sinPage;
    }
 
+    @Override
+    public Page<SinistreDetailsResp> searchSinFacTransmiByCedante(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabAtrans, pageable);
+        return sinPage;
+    }
 
+    @Override
+    public Page<SinistreDetailsResp> searchSinFacAttenteValidation(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabAValidation, pageable);
+        return sinPage;
+    }
+
+    @Override
+    public Page<SinistreDetailsResp> searchSinFacEnReglement(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabEnReglement, pageable);
+        return sinPage;
+    }
+
+    @Override
+    public Page<SinistreDetailsResp> searchSinFacSolde(String key, Pageable pageable) {
+        Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabSolde, pageable);
+        return sinPage;
+    }
 
     @Override
     public EtatComptableSinistreResp getEtatComptable(Long sinId) {

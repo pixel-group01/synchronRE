@@ -11,8 +11,8 @@ public class SinStatutGroup
     public static final List<String> tabAtrans = Arrays.asList(SAISIE_CRT.staCode,TRANSMIS.staCode,RETOURNE.staCode,RETOURNER_VALIDATEUR.staCode);
     public static final List<String> tabAValidation = Arrays.asList(EN_ATTENTE_DE_VALIDATION.staCode,RETOURNER_COMPTABLE.staCode);
     public static final List<String> tabEnReglement = Arrays.asList(EN_ATTENTE_DE_PAIEMENT.staCode, EN_COURS_DE_PAIEMENT.staCode,EN_COURS_DE_REVERSEMENT.staCode,EN_COURS_DE_PAIEMENT_REVERSEMENT.staCode);
-    public List<String> tabSolde = Arrays.asList(SOLDE.staCode);
-    public List<String> tabArchive = Arrays.asList(ARCHIVE.staCode);
+    public static final List<String> tabSolde = Arrays.asList(SOLDE.staCode);
+    public static final List<String> tabArchive = Arrays.asList(ARCHIVE.staCode);
     public static final List<String> tabAllSinistres = Arrays.asList(
             SAISIE.staCode,SAISIE_CRT.staCode,RETOURNE.staCode,
             TRANSMIS.staCode,RETOURNE.staCode,RETOURNER_VALIDATEUR.staCode,
