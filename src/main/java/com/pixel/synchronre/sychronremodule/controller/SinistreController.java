@@ -101,4 +101,11 @@ public class SinistreController
     {
         sinService.transmettreSinistreAuSouscripteur(sinId, size);
     }
+
+
+    @PutMapping(path = "/trans-validation/{sinId}")
+    public void transmettreSinistrePourValidation(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        sinService.transmettreSinistreAuValidateur(sinId, size);
+    }
 }
