@@ -125,8 +125,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     }
 
     @Override
-     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException
-     {
+     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) {
          boolean isCourtier = jwtService.UserIsCourtier() ;
          String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
          mvtService.createMvtSinistre(new MvtReq(sinId, newStatut, null));
@@ -134,17 +133,16 @@ public class ServiceSinistreImpl implements IServiceSinistre
          return sinPages;
      }
     @Override
-    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException
-    {
+    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) {
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_VALIDATION.staCode, null));
-        Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
     public  Page<SinistreDetailsResp> retournerALaCedante(Long sinId, int returnPageSize)
     {
         mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNE.staCode, null));
-        Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
@@ -158,7 +156,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     public  Page<SinistreDetailsResp> retournerAuValidateur(Long sinId, int returnPageSize)
     {
         mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNER_COMPTABLE.staCode, null));
-        Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacEnReglement("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
