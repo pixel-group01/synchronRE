@@ -49,7 +49,7 @@ public abstract class SinMapper
     @Mapping(target = "affCapitalInitial", source = "affaire.affCapitalInitial")
 
     @Mapping(target = "dejaRegle", expression = "java(sinComptaService.calculateMtDejaPayeBySin(sin.getSinId()))")
-    @Mapping(target = "resteARegler", expression = "java(sinComptaService.calculateMtAPayerBySin(sin.getSinId()))")
+    @Mapping(target = "resteARegler", expression = "java(sinComptaService.calculateResteAPayerBySin(sin.getSinId()))")
     @Mapping(target = "tauxDeReglement", expression = "java(sinComptaService.calculateTauxDePaiementSinistre(sin.getSinId()))")
 
     @Mapping(target = "mtDejaReverse", expression = "java(sinComptaService.calculateMtSinistreTotalDejaReverseBySin(sin.getSinId()))")
@@ -80,3 +80,4 @@ public abstract class SinMapper
         return details;
     }
 }
+//calculateMtTotalSinistre

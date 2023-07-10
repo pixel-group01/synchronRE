@@ -9,7 +9,10 @@ public interface IServiceCalculsComptablesSinistre
     BigDecimal calculateResteSinistreTotalAPayer(Long exeCode);
     BigDecimal calculateTauxDePaiementSinistreByExercice(Long exeCode);
 
-    BigDecimal calculateMtAPayerBySin(Long sinId);
+    BigDecimal calculateMtTotalSinistre(Long sinId);
+
+    BigDecimal calculateMtTotalCessionnairesSurSinistre(Long sinId);
+
     BigDecimal calculateMtDejaPayeBySin(Long sinId);
     BigDecimal calculateResteAPayerBySin(Long sinId);
     BigDecimal calculateTauxDePaiementSinistre(Long sinId);

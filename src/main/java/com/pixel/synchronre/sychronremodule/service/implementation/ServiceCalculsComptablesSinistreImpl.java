@@ -19,12 +19,21 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
 
 
     @Override
-    public BigDecimal calculateMtAPayerBySin(Long sinId)
+    public BigDecimal calculateMtTotalSinistre(Long sinId)
     {
         BigDecimal mtSinistre = sinRepo.getMtSinistre(sinId);
         mtSinistre = mtSinistre == null ? ZERO : mtSinistre;
         return mtSinistre;
     }
+
+    @Override
+    public BigDecimal calculateMtTotalCessionnairesSurSinistre(Long sinId)
+    {
+        BigDecimal mtTotalCessionnaires = sinRepo.calculateMtTotalCessionnairesSurSinistre(sinId);
+        mtTotalCessionnaires = mtTotalCessionnaires == null ? ZERO : mtTotalCessionnaires;
+        return mtTotalCessionnaires;
+    }
+
 
     @Override
     public BigDecimal calculateMtDejaPayeBySin(Long sinId)
@@ -36,16 +45,15 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     @Override
     public BigDecimal calculateResteAPayerBySin(Long sinId)
     {
-        BigDecimal mtSinistre = sinRepo.getMtSinistre(sinId);
-        mtSinistre = mtSinistre == null ? ZERO : mtSinistre;
+        BigDecimal mtSinistre = this.calculateMtTotalCessionnairesSurSinistre(sinId);
         return mtSinistre.subtract(this.calculateMtDejaPayeBySin(sinId));
     }
 
     @Override
     public BigDecimal calculateTauxDePaiementSinistre(Long sinId)
     {
-        BigDecimal mtSinistre = this.calculateMtAPayerBySin(sinId);
-        if(mtSinistre.compareTo(ZERO) == 0 ) throw new AppException("Le montant du sinistre est null");
+        BigDecimal mtSinistre = this.calculateMtTotalCessionnairesSurSinistre(sinId);
+        if(mtSinistre.compareTo(ZERO) == 0 ) throw new AppException("L'affaire n'a fait l'objet d'aucun placement");
         return this.calculateMtDejaPayeBySin(sinId)
                 .divide(mtSinistre, 2, RoundingMode.HALF_UP)
                 .multiply(CENT);

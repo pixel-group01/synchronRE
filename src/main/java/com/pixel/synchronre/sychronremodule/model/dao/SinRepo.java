@@ -47,7 +47,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
                                               @Param("affTypeCode") String affTypeCode,
                                               @Param("staCodes") List<String> staCodes, Pageable pageable);
 
-    @Query("select s.sinMontant100 from Sinistre s where s.sinId = ?1")
+    @Query("select s.sinMontant100 + s.sinMontantHonoraire from Sinistre s where s.sinId = ?1")
     BigDecimal getMtSinistre(Long sinId);
 
     @Query("select s.affaire from Sinistre s where s.sinId = ?1")
@@ -80,6 +80,13 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
          and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE'
     """)
     BigDecimal calculateMtotPlacement(Long sinId); //Le montant total à payer sur un sinistre peut s'obtenir en faisant la somme du sinMontant100 et des honoraires
+
+   @Query("""
+    select sum((s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100) from Sinistre s join s.affaire a join Repartition r 
+    on r.affaire.affId = a.affId where r.type.uniqueCode = 'REP_PLA' and r.repStatut = true 
+    and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE' and s.sinId = ?1
+""")
+   BigDecimal calculateMtTotalCessionnairesSurSinistre(Long sinId);
                                                             //sinMontant100 + sinMontantHonoraire
     @Query("""
         select sum(r.regMontant) from Reglement r where r.sinistre.sinId = ?1 and r.cessionnaire.cesId = ?2 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'

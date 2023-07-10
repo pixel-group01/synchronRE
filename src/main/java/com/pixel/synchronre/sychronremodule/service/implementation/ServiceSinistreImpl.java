@@ -94,7 +94,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Long sinId = sinistre.getSinId();
         cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
-        BigDecimal mtTotSinPlacement = sinRepo.calculateMtotPlacement(sinId);
+        BigDecimal mtTotSinPlacement = sinComptaService.calculateMtTotalCessionnairesSurSinistre(sinId);
         sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
         sinistre.setSinMontantTotPlacementLettre(ConvertMontantEnLettres.convertir(mtTotSinPlacement.doubleValue()));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
