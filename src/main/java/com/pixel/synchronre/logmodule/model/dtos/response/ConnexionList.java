@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class ConnexionList {
+    private Long id;
     private Long userId;
     private String userEmail;
     private String firstName;

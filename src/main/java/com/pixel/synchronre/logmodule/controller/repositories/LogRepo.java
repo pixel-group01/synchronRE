@@ -14,7 +14,7 @@ import java.util.List;
 public interface LogRepo extends JpaRepository<Log, Long>
 {
     @Query("""
-        select new com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList(
+        select new com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList(l.id,
         l.userId, l.userEmail, u.firstName, u.lastName, l.action, l.actionDateTime, 
         l.ipAddress, l.hostName, l.connectionId, f.id, f.name, c.cedNomFiliale, c.cedSigleFiliale, l.errorMessage, l.stackTrace)
         from Log l left join l.function f left join f.user u left join Cedante c on (c.cedId = u.visibilityId or c.cedId is null) where 
