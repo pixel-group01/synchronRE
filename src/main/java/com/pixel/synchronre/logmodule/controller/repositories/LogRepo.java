@@ -26,7 +26,7 @@ public interface LogRepo extends JpaRepository<Log, Long>
            or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.cedNomFiliale, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.cedSigleFiliale, '') ) as string))) >0
         )
-        and l.action in :actions and l.connectionId = coalesce(:connId, l.connectionId)
+        and l.action in :actions and (:connId is null or :connId = l.connectionId)
         and (:userId is null or :userId = l.userId) and l.actionDateTime between coalesce(:debut, current_date) and coalesce(:fin, current_date)
         order by l.actionDateTime desc
 """)
