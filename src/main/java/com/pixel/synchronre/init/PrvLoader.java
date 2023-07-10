@@ -2,6 +2,8 @@ package com.pixel.synchronre.init;
 
 import com.pixel.synchronre.authmodule.controller.repositories.PrvRepo;
 import com.pixel.synchronre.authmodule.model.entities.AppPrivilege;
+import com.pixel.synchronre.logmodule.controller.repositories.LogRepo;
+import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ public class PrvLoader implements Loader
 {
     private final TypeRepo typeRepo;
     private final PrvRepo prvRepo;
+    private final LogRepo logRepo;
 
     @Override
     public void load()
@@ -136,6 +139,7 @@ public class PrvLoader implements Loader
         AppPrivilege updPla = prvRepo.save(new AppPrivilege(null, "UPD-PLA", "Modifier un placement", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege transPla = prvRepo.save(new AppPrivilege(null, "TRANS-PLA", "Transmettre un placement pour validation", typeRepo.findByUniqueCode("PRV-REP")));
         AppPrivilege updRep = prvRepo.save(new AppPrivilege(null, "UPD-REP", "Modifier une repartition", typeRepo.findByUniqueCode("PRV-REP")));
+        //SINISTRE FAC
         AppPrivilege crtSin = prvRepo.save(new AppPrivilege(null, "CRT-SIN", "Enregistrer un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege updSin = prvRepo.save(new AppPrivilege(null, "UPD-SIN", "Modifier un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege delSin = prvRepo.save(new AppPrivilege(null, "DEL-SIN", "Supprimer un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
@@ -143,6 +147,7 @@ public class PrvLoader implements Loader
         AppPrivilege getSinLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-LST", "Consulter la liste des sinistres", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege getSinFacLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-FAC-LST", "Consulter la liste des sinistres sur affaire facultative", typeRepo.findByUniqueCode("PRV-SIN")));
         AppPrivilege getSinTraiLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-TRAI-LST", "Consulter la liste des sinistres sur traité", typeRepo.findByUniqueCode("PRV-SIN")));
+
 
 
         AppPrivilege getEtaComptSin = prvRepo.save(new AppPrivilege(null, "GET-ETA-COMPT-SIN", "Consulter la situation comptable d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN")));
@@ -161,5 +166,11 @@ public class PrvLoader implements Loader
         AppPrivilege getLogHisto = prvRepo.save(new AppPrivilege(null, "GET-LOG-HISTO", "Consulter l'historique de connexion", typeRepo.findByUniqueCode("PRV-ADM")));
         AppPrivilege getLogSystem = prvRepo.save(new AppPrivilege(null, "GET-LOG-SYST", "Consulter le log système", typeRepo.findByUniqueCode("PRV-DEV")));
         AppPrivilege delLogSystem = prvRepo.save(new AppPrivilege(null, "DEL-LOG-SYST", "Supprimer le log système", typeRepo.findByUniqueCode("PRV-DEV")));
+
+        Log log1 = logRepo.save(new Log(1L,
+                "Caused by: org.hibernate.exception.DataException: could not execute statement\\n\" +\n" +
+                        "\"\\tat org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:101) ~[hibernate-core-6.1.7.Final.jar:6.1.7.Final]\\n",
+                "Caused by: org.hibernate.exception.DataException: could not execute statement\\n\" +\n" +
+                        "\"\\tat org.hibernate.internal.SessionImpl.flushBeforeTransactionCompletion(SessionImpl.java:2234) ~[hibernate-core-6.1.7.Final.jar:6.1.7.Final]"));
     }
 }

@@ -62,7 +62,7 @@ public class LogController {
         return this.logService.getSystemErrors(connId, key,userId, debut, fin, PageRequest.of(page, size));
     }
 
-    @GetMapping("/system-errors/delete")
+    @DeleteMapping("/system-errors/delete")
     public void deleteSystemErrors(@RequestParam List<Long> errorIds)
     {
         logService.deleteSystemErrors(errorIds);

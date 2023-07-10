@@ -4,9 +4,11 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.logmodule.controller.repositories.LogDetailsRepo;
 import com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
+import com.pixel.synchronre.sharedmodule.utilities.HttpServletManager;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
+import jakarta.mail.MessageContext;
 import jakarta.persistence.Id;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
@@ -14,6 +16,8 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.repositories.LogRepo;
 import com.pixel.synchronre.logmodule.model.entities.Log;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -80,7 +84,7 @@ public class LogService implements ILogService
         InetAddress Ip=InetAddress.getLocalHost();
         Log log = jwtService.getUserInfosFromJwt(token);
         log.setAction(action);
-        log.setIpAddress(Ip.getHostAddress());
+        log.setIpAddress(HttpServletManager.getClientIpAddressIfServletRequestExist());
         log.setMacAddress(Ip.getAddress());
         log.setHostName(Ip.getHostName());
         return logRepo.save(log);
@@ -101,7 +105,7 @@ public class LogService implements ILogService
         log.setFunction(fncIds == null || fncIds.size() !=1 ? null : new AppFunction(new ArrayList<>(fncIds).get(0)));
 
         log.setAction(action);
-        log.setIpAddress(Ip.getHostAddress());
+        log.setIpAddress(HttpServletManager.getClientIpAddressIfServletRequestExist());
         log.setMacAddress(Ip.getAddress());
         log.setHostName(Ip.getHostName());
         return logRepo.save(log);
@@ -118,7 +122,7 @@ public class LogService implements ILogService
         log.setAction(action);
         log.setConnectionId(connectionId);
 
-        log.setIpAddress(Ip.getHostAddress());
+        log.setIpAddress(HttpServletManager.getClientIpAddressIfServletRequestExist());
         log.setMacAddress(Ip.getAddress());
         log.setHostName(Ip.getHostName());
 

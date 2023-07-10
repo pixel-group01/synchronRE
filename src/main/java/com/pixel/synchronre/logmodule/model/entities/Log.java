@@ -35,4 +35,10 @@ public class Log
     private String stackTrace;
     @Transient
     private List<LogDetails> logDetails;
+
+    public Log(Long userId, String errorMessage, String stackTrace) {
+        this.userId = userId;
+        this.errorMessage = errorMessage;
+        this.stackTrace = stackTrace;
+    }
 }

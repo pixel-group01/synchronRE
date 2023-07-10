@@ -23,10 +23,12 @@ public class ExerciceLoader implements Loader
     public void load()
     {
         //Exercice
-        Exercice exe0 = new Exercice(2020L,"Gestion 2020",false,new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Exercice exe1 = new Exercice(2021L,"Gestion 2021",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
-        Exercice exe2 = new Exercice(2022L,"Gestion 2022",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
-        Exercice exe3 = new Exercice(2023L,"Gestion 2023",true,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
+        Exercice exe0 = new Exercice(2020L,"2020",false,new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
+        Exercice exe1 = new Exercice(2021L,"2021",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
+        Exercice exe2 = new Exercice(2022L,"2022",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
+        Exercice exe3 = new Exercice(2023L,"2023",true,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
         exeRepo.saveAll(Arrays.asList(exe0,exe1,exe2,exe3));
+
+
     }
 }
