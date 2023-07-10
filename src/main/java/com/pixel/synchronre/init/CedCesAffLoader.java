@@ -44,7 +44,7 @@ public class CedCesAffLoader implements Loader
         cedRepo.saveAll(Arrays.asList(nsiaci, nsiabn, nsiatg));
 
         //Affaires
-        Affaire affnsiaci = new Affaire(new BigDecimal(30000000),"AFF-001", "SNDI", "Affaire NSIA-CI (DEV)", LocalDate.now(), LocalDate.of(2024, 12, 05),new Exercice(2020L),"REALISEE",14L);
+        Affaire affnsiaci = new Affaire(new BigDecimal(30000000),"AFF-001", "SNDI", "Affaire NSIA-CI (DEV)", LocalDate.now(), LocalDate.of(2024, 12, 05),new Exercice(2020L),"REALISEE");
         affnsiaci.setStatut(new Statut("SAI"));
         affnsiaci.setCedante(nsiaci);
         Facultative facnsiaci = new Facultative(affnsiaci, "AFF-001", new BigDecimal(30000000), new BigDecimal(30000000));
