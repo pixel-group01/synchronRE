@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-06-16T14:25:22 -->
+<!-- 2023-07-10T18:21:28 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -366,7 +366,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Times New Roman" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
@@ -390,7 +390,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Réassureur : "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
@@ -400,7 +400,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Interlocuteur : " +$F{rep_interlocuteur}]]></textFieldExpression>
 			</textField>
@@ -410,7 +410,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Monnaie : " +$F{dev_libelle}]]></textFieldExpression>
 			</textField>
@@ -460,7 +460,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Montant du sinistre (100%)]]></text>
 			</staticText>
@@ -470,7 +470,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Times New Roman"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Activités :  "+$F{aff_activite}]]></textFieldExpression>
 			</textField>
@@ -480,7 +480,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Assuré : "+$F{aff_assure}]]></textFieldExpression>
 			</textField>
@@ -490,7 +490,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Police N° : "+$F{fac_numero_police}]]></textFieldExpression>
 			</textField>
@@ -500,7 +500,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Capitaux Totaux assurés]]></text>
 			</staticText>
@@ -510,7 +510,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Top">
-					<font fontName="Times New Roman" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Branche :]]></text>
 			</staticText>
@@ -519,7 +519,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" isBold="true"/>
+					<font fontName="SansSerif" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Filiale :]]></text>
 			</staticText>
@@ -529,7 +529,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman"/>
+					<font fontName="SansSerif"/>
 				</textElement>
 				<textFieldExpression><![CDATA["N°  FAC : "+$F{aff_code}]]></textFieldExpression>
 			</textField>
@@ -538,7 +538,9 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -547,7 +549,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fac_smp_lci1}]]></textFieldExpression>
 			</textField>
@@ -557,7 +559,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sin_montant1001}]]></textFieldExpression>
 			</textField>
@@ -566,7 +568,9 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
-				<textElement verticalAlignment="Top"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{bran_libelle}]]></textFieldExpression>
 			</textField>
 			<componentElement>
@@ -599,7 +603,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<pen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
+									<font fontName="SansSerif" size="12"/>
 								</textElement>
 								<text><![CDATA[ Engagement Réassureur]]></text>
 							</staticText>
@@ -609,7 +613,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<staticText>
 								<reportElement x="0" y="0" width="194" height="19" uuid="c5ad354a-140f-484a-9d91-411be9205c80"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="12"/>
+									<font fontName="SansSerif" size="12"/>
 								</textElement>
 								<text><![CDATA[Sinistre à payer]]></text>
 							</staticText>
@@ -623,7 +627,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" uuid="69e48c4c-088d-4a4d-a76e-dcc5fbd84448"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="SansSerif" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_taux} + " % "]]></textFieldExpression>
 							</textField>
@@ -641,7 +645,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="SansSerif" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{montant_averser1}]]></textFieldExpression>
 							</textField>
@@ -650,7 +654,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField>
 								<reportElement x="0" y="0" width="170" height="19" uuid="bb1414fe-3a64-4be3-8efd-3a323a9e52ed"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="Times New Roman" size="11"/>
+									<font fontName="SansSerif" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{total_averser1}]]></textFieldExpression>
 							</textField>
@@ -704,7 +708,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="true"/>
+					<font fontName="SansSerif" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Période de garantie  :  " +new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet} ) + "   au   "  +new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
 			</textField>
@@ -713,7 +717,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
@@ -732,7 +736,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Top">
-					<font fontName="Times New Roman" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Avis du sinistre   :   "  + $F{sin_commentaire}]]></textFieldExpression>
 			</textField>
