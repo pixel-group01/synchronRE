@@ -47,7 +47,7 @@ public class SinistreController
     public Page<SinistreDetailsResp> searchSinFacEnReglement(@RequestParam(defaultValue = "") String key,
                                                                    @RequestParam(defaultValue = "0") int page,
                                                                    @RequestParam(defaultValue = "20") int size){
-        return sinService.searchSinFacAttenteValidation(key, PageRequest.of(page, size));
+        return sinService.searchSinFacEnReglement(key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/facultative/solde")
@@ -110,7 +110,7 @@ public class SinistreController
     }
 
     @PutMapping(path = "/valider/{sinId}")
-    public void valide(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    public void valider(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.valide(sinId, size);
     }
