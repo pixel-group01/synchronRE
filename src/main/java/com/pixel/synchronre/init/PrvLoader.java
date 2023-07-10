@@ -167,10 +167,5 @@ public class PrvLoader implements Loader
         AppPrivilege getLogSystem = prvRepo.save(new AppPrivilege(null, "GET-LOG-SYST", "Consulter le log système", typeRepo.findByUniqueCode("PRV-DEV")));
         AppPrivilege delLogSystem = prvRepo.save(new AppPrivilege(null, "DEL-LOG-SYST", "Supprimer le log système", typeRepo.findByUniqueCode("PRV-DEV")));
 
-        Log log1 = logRepo.save(new Log(1L,
-                "Caused by: org.hibernate.exception.DataException: could not execute statement\\n\" +\n" +
-                        "\"\\tat org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:101) ~[hibernate-core-6.1.7.Final.jar:6.1.7.Final]\\n",
-                "Caused by: org.hibernate.exception.DataException: could not execute statement\\n\" +\n" +
-                        "\"\\tat org.hibernate.internal.SessionImpl.flushBeforeTransactionCompletion(SessionImpl.java:2234) ~[hibernate-core-6.1.7.Final.jar:6.1.7.Final]"));
     }
 }
