@@ -141,6 +141,14 @@ public class ServiceSinistreImpl implements IServiceSinistre
         return sinPages;
     }
 
+    public  Page<SinistreDetailsResp> valide(Long sinId, int returnPageSize) throws UnknownHostException
+    {
+        mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
+        return sinPages;
+    }
+
+
     void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());

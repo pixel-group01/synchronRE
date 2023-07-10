@@ -108,4 +108,10 @@ public class SinistreController
     {
         sinService.transmettreSinistreAuValidateur(sinId, size);
     }
+
+    @PutMapping(path = "/valider/{sinId}")
+    public void valide(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        sinService.valide(sinId, size);
+    }
 }
