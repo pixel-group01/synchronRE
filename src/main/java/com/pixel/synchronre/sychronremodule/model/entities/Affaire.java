@@ -77,5 +77,15 @@ public class Affaire {
         this.affStatutCreation=affStatutCreation;
     }
 
+    public Affaire(BigDecimal affCapitalInitial, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance,Exercice exercice,String affStatutCreation,Long affType) {
+        this.affCapitalInitial = affCapitalInitial;
+        this.affCode = affCode;
+        this.affAssure = affAssure;
+        this.affActivite = affActivite;
+        this.affDateEffet = affDateEffet;
+        this.affDateEcheance = affDateEcheance;
+        this.exercice=exercice;
+        this.affStatutCreation=affStatutCreation;
+    }
 
 }
