@@ -33,7 +33,14 @@ public interface IServiceSinistre
     Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException;
 
     Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException;
-    Page<SinistreDetailsResp> valide(Long sinId, int returnPageSize) throws UnknownHostException;
+
+    Page<SinistreDetailsResp> retournerALaCedante(Long sinId, int returnPageSize);
+
+    Page<SinistreDetailsResp> retournerAuSouscripteur(Long sinId, int returnPageSize);
+
+    Page<SinistreDetailsResp> retournerAuValidateur(Long sinId, int returnPageSize);
+
+    Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException;
 
     Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable);
 }

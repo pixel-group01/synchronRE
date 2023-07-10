@@ -96,22 +96,40 @@ public class SinistreController
         return sinService.getEtatComptable(sinId);
     }
 
-    @PutMapping(path = "/transmettre/{sinId}")
+    @PutMapping(path = "/sinistres/transmettre-au-courtier/{sinId}")
     public void transmettreSinistreAuCourtier(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.transmettreSinistreAuSouscripteur(sinId, size);
     }
 
 
-    @PutMapping(path = "/trans-validation/{sinId}")
+    @PutMapping(path = "/transmettre-pour-validation/{sinId}")
     public void transmettreSinistrePourValidation(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.transmettreSinistreAuValidateur(sinId, size);
     }
 
+    @PutMapping(path = "/retourner-a-cedante/{sinId}")
+    public void retournerALaCedante(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        sinService.retournerALaCedante(sinId, size);
+    }
+
+    @PutMapping(path = "/retourner-au-souscripteur/{sinId}")
+    public void retournerAuSouscripteur(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        sinService.retournerAuSouscripteur(sinId, size);
+    }
+
+    @PutMapping(path = "/retourner-au-validateur/{sinId}")
+    public void retournerAuValidateur(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        sinService.retournerAuValidateur(sinId, size);
+    }
+
     @PutMapping(path = "/valider/{sinId}")
     public void valider(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        sinService.valide(sinId, size);
+        sinService.valider(sinId, size);
     }
 }
