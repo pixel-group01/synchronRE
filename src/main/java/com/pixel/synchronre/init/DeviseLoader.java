@@ -21,7 +21,7 @@ public class DeviseLoader implements Loader
     @Override
     public void load()
     {
-        Devise dev0 = new Devise ("XOF",  "Franc CFA", "F CFA", "XOF", new Statut("ACT"));
+        Devise dev0 = new Devise ("XOF",  "XOF", "XOF", "XOF", new Statut("ACT"));
         Devise dev1 = new Devise ("AED",  "Dirham EMIRAT ", "Dirham EMIRAT ", null,  new Statut("ACT"));
         Devise dev2 = new Devise ("AOA",  "Angolan kwanza", "Angolan kwanza", null,  new Statut("ACT"));
         Devise dev3 = new Devise ("BDT",  "Taka Bangladesh", "Taka Bangladesh", null,  new Statut("ACT"));
@@ -75,7 +75,7 @@ public class DeviseLoader implements Loader
         Devise dev51 = new Devise ("QAR",  "Riyal du Qatar", "Riyal du Qatar", null,  new Statut("ACT"));
         Devise dev52 = new Devise ("SZL ",  "Swaziland Lilan", "Swaziland Lilan", null,  new Statut("ACT"));
         Devise dev53 = new Devise ("RWF",  "Franc Rwandais", "Franc Rwandais", null, new Statut("ACT"));
-        Devise dev54 = new Devise ("XAF",  "Franc CFA", "F CFA", "XAF", new Statut("ACT"));
+        Devise dev54 = new Devise ("XAF",  "XAF", "XAF", "XAF", new Statut("ACT"));
         devRepo.saveAll(Arrays.asList(dev0,dev1,dev2,dev3,dev4,dev5,dev6,dev7,dev8,dev9,dev10,dev11,dev12,dev13,dev14,dev15,dev16,dev17,dev18,dev19,dev20,dev21,dev22,dev23,dev24,dev25,dev26,dev27,dev28,dev29,dev30,dev31,dev32,dev33,dev34,dev35,dev36,dev37,dev38,dev39,dev40,dev41,dev42,dev43,dev44,dev45,dev46,dev47,dev48,dev49,dev50,dev51,dev52,dev53,dev54));
 
     }
