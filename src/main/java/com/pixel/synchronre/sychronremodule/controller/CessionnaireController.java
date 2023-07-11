@@ -44,7 +44,7 @@ public class CessionnaireController
     }
 
     @GetMapping(path = "/by-affaire/{affId}")
-    public List<CessionnaireListResp> findCessionnairesByAffaire(Long affId)
+    public List<CessionnaireListResp> findCessionnairesByAffaire(@PathVariable Long affId)
     {
         return cessRepo.findByAffId(affId);
     }
