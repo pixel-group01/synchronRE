@@ -23,7 +23,7 @@ public interface LogRepo extends JpaRepository<Log, Long>
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(u.lastName, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(l.action, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(f.name, '') ) as string))) >0
-           or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.cedNomFiliale, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.cedNomFiliale, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(c.cedSigleFiliale, '') ) as string))) >0
         )
         and l.action in :actions and (:connId is null or :connId = l.connectionId)

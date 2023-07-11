@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
@@ -110,21 +111,21 @@ public class SinistreController
     }
 
     @PutMapping(path = "/retourner-a-cedante/{sinId}")
-    public void retournerALaCedante(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    public void retournerALaCedante(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "") String motif, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        sinService.retournerALaCedante(sinId, size);
+        sinService.retournerALaCedante(dto, size);
     }
 
     @PutMapping(path = "/retourner-au-souscripteur/{sinId}")
-    public void retournerAuSouscripteur(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    public void retournerAuSouscripteur(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        sinService.retournerAuSouscripteur(sinId, size);
+        sinService.retournerAuSouscripteur(dto, size);
     }
 
     @PutMapping(path = "/retourner-au-validateur/{sinId}")
-    public void retournerAuValidateur(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    public void retournerAuValidateur(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
-        sinService.retournerAuValidateur(sinId, size);
+        sinService.retournerAuValidateur(dto, size);
     }
 
     @PutMapping(path = "/valider/{sinId}")

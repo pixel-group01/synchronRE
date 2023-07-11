@@ -24,6 +24,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
@@ -139,23 +141,29 @@ public class ServiceSinistreImpl implements IServiceSinistre
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerALaCedante(Long sinId, int returnPageSize)
+    public  Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto,  int returnPageSize)
     {
-        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNE.staCode, null));
+        String motif = dto.getMvtObservation();
+        if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
+        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNE.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerAuSouscripteur(Long sinId, int returnPageSize)
+    public  Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize)
     {
-        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNER_VALIDATEUR.staCode, null));
+        String motif = dto.getMvtObservation();
+        if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
+        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerAuValidateur(Long sinId, int returnPageSize)
+    public  Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize)
     {
-        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNER_COMPTABLE.staCode, null));
+        String motif = dto.getMvtObservation();
+        if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
+        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_COMPTABLE.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacEnReglement("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
