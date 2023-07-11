@@ -124,24 +124,43 @@ public class ServiceSinistreImpl implements IServiceSinistre
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }
 
-
-     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException
-     {
+    @Override
+     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) {
          boolean isCourtier = jwtService.UserIsCourtier() ;
          String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
          mvtService.createMvtSinistre(new MvtReq(sinId, newStatut, null));
          Page<SinistreDetailsResp> sinPages = this.searchSinFacSaisiByCedante("", PageRequest.of(0, returnPageSize));
          return sinPages;
      }
-
-    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException
-    {
+    @Override
+    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) {
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_VALIDATION.staCode, null));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
+        return sinPages;
+    }
+    @Override
+    public  Page<SinistreDetailsResp> retournerALaCedante(Long sinId, int returnPageSize)
+    {
+        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNE.staCode, null));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
+        return sinPages;
+    }
+    @Override
+    public  Page<SinistreDetailsResp> retournerAuSouscripteur(Long sinId, int returnPageSize)
+    {
+        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNER_VALIDATEUR.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
-
-    public  Page<SinistreDetailsResp> valide(Long sinId, int returnPageSize) throws UnknownHostException
+    @Override
+    public  Page<SinistreDetailsResp> retournerAuValidateur(Long sinId, int returnPageSize)
+    {
+        mvtService.createMvtSinistre(new MvtReq(sinId, RETOURNER_COMPTABLE.staCode, null));
+        Page<SinistreDetailsResp> sinPages = this.searchSinFacEnReglement("", PageRequest.of(0, returnPageSize));
+        return sinPages;
+    }
+    @Override
+    public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException
     {
         mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
