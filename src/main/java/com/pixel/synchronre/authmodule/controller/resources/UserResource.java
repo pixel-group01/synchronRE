@@ -75,13 +75,15 @@ public class UserResource
     }
 
     @PutMapping(path = "/block/{userId}")
-    public void blockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
+    public boolean blockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
         userService.blockAccount(userId);
+        return true;
     }
 
     @PutMapping(path = "/unblock/{userId}")
-    public void unblockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
+    public boolean unblockAccount(@PathVariable @Valid long userId ) throws UnknownHostException, IllegalAccessException {
         userService.unBlockAccount(userId);
+        return true;
     }
 
     @PutMapping(path = "/open/reinit-password")
@@ -90,18 +92,21 @@ public class UserResource
     }
 
     @PutMapping(path = "/open/send-reinit-password-email/{email}")
-    public void sendReinitPasswordEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
+    public boolean sendReinitPasswordEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendReinitialisePasswordEmail(email);
+        return true;
     }
 
     @PutMapping(path = "/open/send-acitivation-email/{email}")
-    public void sendActivationEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
+    public boolean sendActivationEmail(@PathVariable @Valid String email ) throws UnknownHostException, IllegalAccessException {
         userService.sendAccountActivationEmail(email);
+        return true;
     }
 
     @GetMapping(path = "/open/click-link/{token}")
-    public void clickLink(@PathVariable @Valid String token ) throws UnknownHostException, IllegalAccessException {
+    public boolean clickLink(@PathVariable @Valid String token ) throws UnknownHostException, IllegalAccessException {
         userService.clickLink(token);
+        return true;
     }
 
     @GetMapping(path = "/token-introspection")
