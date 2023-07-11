@@ -52,7 +52,7 @@ public class AssLoader implements Loader
         prvOpeSaisieTrai.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieTrai));
 
         AppRole roleValidateurFac = roleRepo.findByRoleCode("ROL-VAL-FAC");
-        List<AppPrivilege> prvValidateurFac = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-FAC","GET-FAC-LST","GET-FAC-C-REG","GET-FAC-ARCH","GET-FAC-HIST","VAL-FAC"));
+        List<AppPrivilege> prvValidateurFac = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-FAC","GET-FAC-LST","GET-FAC-C-REG","GET-FAC-ARCH","GET-FAC-HIST","VAL-FAC","VAL-PLA"));
         prvValidateurFac.forEach(prv->this.addPrvToRole(prv, roleValidateurFac));
 
         AppRole roleComptableFac = roleRepo.findByRoleCode("ROL-COMPTA-FAC");
