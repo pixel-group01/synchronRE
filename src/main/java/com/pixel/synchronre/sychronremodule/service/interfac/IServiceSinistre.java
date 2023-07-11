@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSinistreReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
@@ -34,11 +35,11 @@ public interface IServiceSinistre
 
     Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException;
 
-    Page<SinistreDetailsResp> retournerALaCedante(Long sinId, int returnPageSize);
+    Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto, int returnPageSize);
 
-    Page<SinistreDetailsResp> retournerAuSouscripteur(Long sinId, int returnPageSize);
+    Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize);
 
-    Page<SinistreDetailsResp> retournerAuValidateur(Long sinId, int returnPageSize);
+    Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize);
 
     Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException;
 
