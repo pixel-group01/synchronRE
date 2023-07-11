@@ -58,21 +58,21 @@ public class AdminLoader implements Loader
 
         //Operateur de saisie FAC CI
         AppRole roleSaisieFacNsiaCi = roleRepo.findByRoleCode("ROL-OPE-SAI-FAC");
-        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, null, 4l, "Opérateur de saisie FAC NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, 4l, "Opérateur de saisie FAC NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userci);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaCi, fncSaiFacCI));
         //
 
 
         //User NSIA BENIN
-        AppUser userbn = userRepo.save(new AppUser(null, "userbn", "userbn", 1l, 4l,
+        AppUser userbn = userRepo.save(new AppUser(null, "userbn", "userbn", 2l, 4l,
                 pe.encode("1234"), "userbn@gmail.com", "userbn-tel",
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now()));
 
         //Operateur de saisie FAC BENIN
         AppRole roleSaisieFacNsiaBn = roleRepo.findByRoleCode("ROL-OPE-SAI-FAC");
-        AppFunction fncSaiFacBN = fncRepo.save(new AppFunction(null, null, 4l, "Opérateur de saisie FAC NSIA-BENIN", userbn, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSaiFacBN = fncRepo.save(new AppFunction(null, 2L, 4l, "Opérateur de saisie FAC NSIA-BENIN", userbn, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userbn);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaBn, fncSaiFacBN));
 
@@ -83,7 +83,7 @@ public class AdminLoader implements Loader
                 LocalDateTime.now()));
         //Operateur de saisie FAC TOGO
         AppRole roleSaisieFacNsiaTg = roleRepo.findByRoleCode("ROL-OPE-SAI-FAC");
-        AppFunction fncSaiFactg = fncRepo.save(new AppFunction(null, null, 4l, "Opérateur de saisie FAC NSIA-TOGO", usertg, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSaiFactg = fncRepo.save(new AppFunction(null, 3L, 4l, "Opérateur de saisie FAC NSIA-TOGO", usertg, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(usertg);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaTg, fncSaiFactg));
 
