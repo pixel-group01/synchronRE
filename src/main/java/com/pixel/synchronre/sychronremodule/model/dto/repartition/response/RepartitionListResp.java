@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.response;
 
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import lombok.*;
 
 import java.math.BigDecimal;

@@ -30,6 +30,7 @@ public @interface ExistingRepId
         @Override
         public boolean isValid(Long repId, ConstraintValidatorContext context)
         {
+            if(repId == null) return true;
             return repRepo.existsById(repId);
         }
     }

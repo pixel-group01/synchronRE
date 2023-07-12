@@ -59,13 +59,13 @@ public class AffaireController
 
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto) throws MethodArgumentNotValidException, UnknownHostException {
+    public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto) throws UnknownHostException {
         return facService.createFacultative(dto);
     }
 
     @PutMapping("/facultative/update")
     @ResponseStatus(HttpStatus.CREATED)
-    public FacultativeDetailsResp saveAffaire(@RequestBody @Valid UpdateFacultativeReq dto) throws MethodArgumentNotValidException, UnknownHostException {
+    public FacultativeDetailsResp updateAffaire(@RequestBody @Valid UpdateFacultativeReq dto) throws UnknownHostException {
         return facService.updateFacultative(dto);
     }
 
@@ -263,12 +263,11 @@ public class AffaireController
 
     @PutMapping(path = "/facultative/retourner")
     public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtReq dto,
-                                                      @RequestParam(defaultValue = "") String key,
                                                       @RequestParam(defaultValue = "0") int page,
                                                       @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null,
                 affRepo.getAffCedId(dto.getObjectId()),
                 Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
 
@@ -278,12 +277,11 @@ public class AffaireController
 
     @PutMapping(path = "/facultative/valider/{affId}")
     public Page<FacultativeListResp> validerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
-                                                    @RequestParam(defaultValue = "") String key,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "10") int size)
     {
         mvtService.createMvtAffaire(new MvtReq(affId, EN_COURS_DE_PAIEMENT.staCode,null));
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId,
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null, cedId,
                 Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());

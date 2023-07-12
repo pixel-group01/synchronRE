@@ -177,4 +177,10 @@ public class RepartitionController
     void accepterPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.accepterPlacement(plaId);
     }
+
+    @GetMapping(path = "/get-update-rep-dto/{affId}")
+    public UpdateCedLegRepartitionReq getUpdateCedLegRepartitionReq(@PathVariable Long affId)
+    {
+        return this.repService.getUpdateCedLegDTO(affId);
+    }
 }

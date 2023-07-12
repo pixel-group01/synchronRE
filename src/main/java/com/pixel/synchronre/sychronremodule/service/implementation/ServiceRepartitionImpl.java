@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static java.math.BigDecimal.ZERO;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +64,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     @Value("${spring.mail.username}")
     private String synchronreEmail;
+
+    private final ParamCessionLegaleRepository pclRepoo;
 
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
@@ -116,7 +119,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition oldRep = null;
         if(existsByAffaireAndTypeRep)
         {
-            rep = repRepo.findByAffaireAndTypeCed(dto.getAffId(), "REP_CED");
+            rep = repRepo.findByAffaireAndTypeRep(dto.getAffId(), "REP_CED").get(0);
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTaux(dto.getRepTaux());
@@ -475,6 +478,38 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public UpdateCedLegRepartitionReq getUpdateCedLegDTO(Long affId)
+    {
+        Affaire aff = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire inexistante"));
+        Repartition repCed = repRepo.findByAffaireAndTypeRep(affId, "REP_CED").get(0);
+        List<UpdateCesLegReq> pclReps =repRepo.findUpdateCesLegReqByAffaireAndTypeRep(affId);
+        List<Long> acceptedPclIds = pclReps.stream().map(r->r.getParamCesLegalId()).collect(Collectors.toList());
+
+        List<UpdateCesLegReq> noneAcceptedPclReps = pclRepoo.findByAffId(affId).stream()
+                .filter(pcl->!acceptedPclIds.contains(pcl.getParamCesLegId()))
+                .map(pcl->this.mapToUpdateCesLegReq(pcl, aff, false)).collect(Collectors.toList());
+
+        pclReps.addAll(noneAcceptedPclReps);
+
+        return repMapper.mapToUpdateCedLegRepartitionReq(aff, repCed, pclReps);
+    }
+
+    private UpdateCesLegReq mapToUpdateCesLegReq(ParamCessionLegaleListResp pcl, Affaire aff, boolean accepted)
+    {
+        BigDecimal capitalInit = aff.getAffCapitalInitial();
+        BigDecimal repCapital = capitalInit == null ? ZERO : capitalInit.multiply(pcl.getParamCesLegTaux()).divide(new BigDecimal(100), 2,RoundingMode.HALF_UP);
+        UpdateCesLegReq rep = new UpdateCesLegReq();
+        rep.setRepTaux(pcl.getParamCesLegTaux());
+        rep.setRepCapital(repCapital);
+        rep.setRepId(null);
+        rep.setAffId(aff.getAffId());
+        rep.setAccepte(accepted);
+        rep.setParamCesLegalId(pcl.getParamCesLegId());
+        rep.setParamCesLegLibelle(pcl.getParamCesLegLibelle());
+        return rep;
     }
 
 
