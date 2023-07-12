@@ -119,27 +119,27 @@ public class RepartitionController
     public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux,
                                                              @RequestParam(required = false) BigDecimal tauxCmsRea,
                                                              @RequestParam(required = false) BigDecimal tauxCmsCourtage,
-                                                             @RequestParam(required = false) Long repIdToExclude)
+                                                             @RequestParam(required = false) Long repIdToUpdate)
     {
-        return repService.calculateRepByTaux(affId, taux, tauxCmsRea, tauxCmsCourtage, repIdToExclude);
+        return repService.calculateRepByTaux(affId, taux, tauxCmsRea, tauxCmsCourtage, repIdToUpdate);
     }
 
     @GetMapping(path = "/calculate/by-taux-besoin/{affId}/{tauxBesoin}")
     public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin,
                                                                    @RequestParam(required = false) BigDecimal tauxCmsRea,
                                                                    @RequestParam(required = false) BigDecimal tauxCmsCourtage,
-                                                                   @RequestParam(required = false) Long repIdToExclude)
+                                                                   @RequestParam(required = false) Long repIdToUpdate)
     {
-        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin, tauxCmsRea, tauxCmsCourtage, repIdToExclude);
+        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin, tauxCmsRea, tauxCmsCourtage, repIdToUpdate);
     }
 
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
     public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital,
                                                                 @RequestParam(required = false) BigDecimal tauxCmsRea,
                                                                 @RequestParam(required = false) BigDecimal tauxCmsCourtage,
-                                                                @RequestParam(required = false) Long repIdToExclude)
+                                                                @RequestParam(required = false) Long repIdToUpdate)
     {
-        return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage, repIdToExclude);
+        return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage, repIdToUpdate);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
