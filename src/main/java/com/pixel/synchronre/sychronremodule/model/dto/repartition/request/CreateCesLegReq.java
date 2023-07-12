@@ -31,16 +31,6 @@ public class CreateCesLegReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-    @NotNull(message = "Veuillez saisir le taux")
-    @PositiveOrZero(message = "Le taux doit être un nombre positif")
-    @Max(value = 100)
-    @SeuilRepTauBesoinFac
-    private BigDecimal repTauxBesoinFac;
-
-    @NotNull(message = "Veuillez saisir la sous commission")
-    @PositiveOrZero(message = "La sous commission doit être un nombre positif")
-    private BigDecimal repSousCommission; //TODO A Valider
-
     @ExistingAffId @NotNull(message = "Veuillez choisir l'affaire'")
     private Long affId;
     @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")

@@ -176,6 +176,26 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
+    public BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude)
+    {
+        BigDecimal resteARepartir = this.calculateRestARepartir(affId);
+        if(repIdToExclude == null) return resteARepartir;
+        BigDecimal repCapitalToExclude = repRepo.getRepCapitalByRepId(repIdToExclude);
+        repCapitalToExclude = repCapitalToExclude == null ? ZERO : repCapitalToExclude;
+        return resteARepartir.add(repCapitalToExclude);
+    }
+
+    @Override
+    public BigDecimal calculateDejaRepartir(Long affId, Long repIdToExclude)
+    {
+        BigDecimal dejaReparti = this.calculateDejaRepartir(affId);
+        if(repIdToExclude == null) return dejaReparti;
+        BigDecimal repCapitalToExclude = repRepo.getRepCapitalByRepId(repIdToExclude);
+        repCapitalToExclude = repCapitalToExclude == null ? ZERO : repCapitalToExclude;
+        return dejaReparti.subtract(repCapitalToExclude);
+    }
+
+    @Override
     public BigDecimal calculateTauxDeReversement(Long affId)
     {
         BigDecimal mtTotalAReverseAuxCes = this.calculateMtTotalAReverseAuxCes(affId);

@@ -8,6 +8,7 @@ public interface IServiceCalculsComptables
 
     BigDecimal calculateDejaRepartir(Long affId);
 
+
     BigDecimal calculateTauxDejaRepartir(Long affId);
     BigDecimal calculateTauxRestARepartir(Long affId);
 
@@ -35,6 +36,6 @@ public interface IServiceCalculsComptables
     BigDecimal calculateTauxDeReglement(Long affId);
 
 
-
-
+    BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude);
+    BigDecimal calculateDejaRepartir(Long affId, Long repIdToExclude);
 }

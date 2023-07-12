@@ -59,6 +59,17 @@ public class RepartitionController
         return repService.createCedLegRepartition(dto);
     }
 
+    @GetMapping(path = "/get-update-cedante-legal-dto/{affId}")
+    public UpdateCedLegRepartitionReq getUpdateCedLegRepartitionReq(@PathVariable Long affId)
+    {
+        return this.repService.getUpdateCedLegDTO(affId);
+    }
+
+    @PutMapping(path = "/update-cedante-legale")
+    public RepartitionDetailsResp jupdateCedLegRepartition(@PathVariable UpdateCedLegRepartitionReq dto) throws UnknownHostException {
+        return this.repService.updateCedLegRepartition(dto);
+    }
+
     @PostMapping(path = "/create-placement")
     public RepartitionDetailsResp createPladRep(@Valid @RequestBody CreatePlaRepartitionReq dto) throws UnknownHostException {
         return repService.createPlaRepartition(dto);
@@ -105,21 +116,30 @@ public class RepartitionController
     }
 
     @GetMapping(path = "/calculate/by-taux/{affId}/{taux}")
-    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculRepartitionRespByTaux(@PathVariable @ExistingAffId Long affId, @PathVariable BigDecimal taux,
+                                                             @RequestParam(required = false) BigDecimal tauxCmsRea,
+                                                             @RequestParam(required = false) BigDecimal tauxCmsCourtage,
+                                                             @RequestParam(required = false) Long repIdToExclude)
     {
-        return repService.calculateRepByTaux(affId, taux, tauxCmsRea, tauxCmsCourtage);
+        return repService.calculateRepByTaux(affId, taux, tauxCmsRea, tauxCmsCourtage, repIdToExclude);
     }
 
     @GetMapping(path = "/calculate/by-taux-besoin/{affId}/{tauxBesoin}")
-    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculRepartitionRespByTauxBesoin(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal tauxBesoin,
+                                                                   @RequestParam(required = false) BigDecimal tauxCmsRea,
+                                                                   @RequestParam(required = false) BigDecimal tauxCmsCourtage,
+                                                                   @RequestParam(required = false) Long repIdToExclude)
     {
-        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin, tauxCmsRea, tauxCmsCourtage);
+        return repService.calculateRepByTauxBesoinFac(affId, tauxBesoin, tauxCmsRea, tauxCmsCourtage, repIdToExclude);
     }
 
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
-    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital, @RequestParam(required = false) BigDecimal tauxCmsRea, @RequestParam(required = false) BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital,
+                                                                @RequestParam(required = false) BigDecimal tauxCmsRea,
+                                                                @RequestParam(required = false) BigDecimal tauxCmsCourtage,
+                                                                @RequestParam(required = false) Long repIdToExclude)
     {
-        return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage);
+        return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage, repIdToExclude);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
@@ -176,11 +196,5 @@ public class RepartitionController
     @PutMapping(path = "/accepter-placement/{plaId}")
     void accepterPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.accepterPlacement(plaId);
-    }
-
-    @GetMapping(path = "/get-update-rep-dto/{affId}")
-    public UpdateCedLegRepartitionReq getUpdateCedLegRepartitionReq(@PathVariable Long affId)
-    {
-        return this.repService.getUpdateCedLegDTO(affId);
     }
 }

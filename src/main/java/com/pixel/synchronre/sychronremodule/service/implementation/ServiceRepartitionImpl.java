@@ -146,6 +146,43 @@ public class ServiceRepartitionImpl implements IserviceRepartition
          return repartitionDetailsResp;
     }
 
+    @Override @Transactional
+    public RepartitionDetailsResp updateCedLegRepartition(UpdateCedLegRepartitionReq dto) throws UnknownHostException {
+        Repartition cedRep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("L'ID de la répartition de type part cédante est inconnu"));
+        Repartition oldCedRep = repCopier.copy(cedRep);
+        cedRep.setRepTaux(dto.getRepTaux());
+        cedRep.setRepCapital(dto.getRepCapital());
+        cedRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+        repRepo.save(cedRep);
+        dto.getUpdateCesLegReqs().stream().filter(pclRep->pclRep.isAccepte()).peek(pclRepDto-> this.updatePclReps(pclRepDto));
+        logService.logg(RepartitionActions.CREATE_CED_REPARTITION, oldCedRep, cedRep, SynchronReTables.REPARTITION);
+        return repMapper.mapToRepartitionDetailsResp(cedRep);
+    }
+
+    private void updatePclReps(UpdateCesLegReq pclRepDto)
+    {
+        Repartition pclRep ;
+        if(pclRepDto.getRepId() != null)
+        {
+            pclRep = repRepo.findById(pclRepDto.getRepId()).orElseThrow(()->new AppException("Repartition de type cession légale introuvable"));
+            Repartition oldPclRep = repCopier.copy(pclRep);
+            pclRep.setRepTaux(pclRepDto.getRepTaux());
+            pclRep.setRepCapital(pclRepDto.getRepCapital());
+            pclRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(pclRepDto.getRepCapital().doubleValue()));
+            repRepo.save(pclRep);
+        }
+        else
+        {
+            CreateCesLegReq createCesLegReq = new CreateCesLegReq(pclRepDto.getRepCapital(), pclRepDto.getRepTaux(), pclRepDto.getAffId(), pclRepDto.getParamCesLegalId(), true);
+            try {
+                this.createCesLegRepartition(createCesLegReq);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+                throw new AppException("Une erreur est survenue lors de l'enregistrement");
+            }
+        }
+    }
+
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
     {
@@ -200,12 +237,12 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude)
     {
         if(capital.compareTo(ZERO)<0) throw new AppException("Le capital doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(aff == null) return null;
-        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
         restARepartir = restARepartir == null ? ZERO : restARepartir;
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
@@ -239,14 +276,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude)
     {
         if(taux.compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         
         if(aff == null) return null;
-        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
-        restARepartir = restARepartir == null ? ZERO : restARepartir;
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
 
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
@@ -267,14 +303,14 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
 
     @Override
-    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage)
+    public CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude)
     {
         if(tauxBesoin.compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(tauxBesoin.compareTo(CENT)>0) throw new AppException("Le taux de repartition ne doit pas exéder 100% du besoin fac");
 
         if(aff == null) return null;
-        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId);
+        BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
         restARepartir = restARepartir == null ? ZERO : restARepartir;
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
@@ -331,7 +367,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public List<ParamCessionLegaleListResp> getCesLegParam(Long affId)
     {
         return pclRepo.findByAffId(affId).stream()
-            .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux(), null, null).getCapital()))
+            .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux(), null, null, null).getCapital()))
             .collect(Collectors.toList());
     }
 

@@ -1,11 +1,10 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCesLegReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreatePartCedRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreatePlaRepartitionReq;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
@@ -13,13 +12,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class RepartitionMapper {
     @Autowired protected TypeRepo typeRepo;
     @Autowired protected ParamCessionLegaleRepository pclRepo;
     @Autowired protected IServiceCalculsComptables comptaService;
+    @Autowired protected RepartitionRepository repRepo;
     public abstract Repartition mapToRepartition(CreateRepartitionReq dto);
 
     @Mapping(target = "affId", source = "affaire.affId")
@@ -52,4 +52,17 @@ public abstract class RepartitionMapper {
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     @Mapping(target = "repTauxComCed", expression = "java(dto.getRepSousCommission().subtract(dto.getRepTauxComCourt()))")
     public abstract Repartition mapToPlaRepartition(CreatePlaRepartitionReq dto);
+
+
+    /*@Mapping(target = "affId", source = "affaire.affId")
+    @Mapping(target = "paramCesLegalId", source = "paramCessionLegale.paramCesLegId")
+    @Mapping(target = "paramCesLegLibelle", source = "paramCessionLegale.paramCesLegLibelle")
+    //@Mapping(target = "repTauxBesoinFac", expression = "java(this.calculateTauxBesoinFac(rep.aff, rep.getRepTaux()))")
+    @Mapping(target = "accepte", expression = "java(repRepo.repExistsByAffaireAndPcl(rep.getAffaire().getAffId(), rep.getRepId()))")
+    public abstract UpdateCesLegReq mapToUpdateCesLegReq(Repartition rep);*/
+
+    public abstract UpdateCedLegRepartitionReq mapToUpdateCedLegRepartitionReq(Affaire aff, Repartition repCed, List<UpdateCesLegReq> updateCesLegReqs);
+
+
+
 }
