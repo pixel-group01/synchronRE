@@ -24,6 +24,9 @@ public class PrvLoader implements Loader
         AppPrivilege getStatSin = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN", "Consulter les statistiques sur les sinistres", typeRepo.findByUniqueCode("PRV-STAT")));
         AppPrivilege getStatAdm = prvRepo.save(new AppPrivilege(null, "GET-STAT-ADM", "Consulter les statistiques d'administration", typeRepo.findByUniqueCode("PRV-STAT")));
         AppPrivilege getStatParam = prvRepo.save(new AppPrivilege(null, "GET-STAT-PARAM", "Consulter les statistiques des données paramètres", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatSinFac = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN-FAC", "Consulter les statistiques sur les  sinistres des affaires facultatives", typeRepo.findByUniqueCode("PRV-STAT")));
+        AppPrivilege getStatSinTrai = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN-TRAI", "Consulter les statistiques sur les  sinistres des traités", typeRepo.findByUniqueCode("PRV-STAT")));
+
 
 
         AppPrivilege getUserDet = prvRepo.save(new AppPrivilege(null, "GET-USER-DET", "Consulter les informations sur un utilisateurs", typeRepo.findByUniqueCode("PRV-USER")));

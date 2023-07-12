@@ -110,19 +110,19 @@ public class SinistreController
         sinService.transmettreSinistreAuValidateur(sinId, size);
     }
 
-    @PutMapping(path = "/retourner-a-cedante/{sinId}")
+    @PutMapping(path = "/retourner-a-cedante")
     public void retournerALaCedante(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "") String motif, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.retournerALaCedante(dto, size);
     }
 
-    @PutMapping(path = "/retourner-au-souscripteur/{sinId}")
+    @PutMapping(path = "/retourner-au-souscripteur")
     public void retournerAuSouscripteur(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.retournerAuSouscripteur(dto, size);
     }
 
-    @PutMapping(path = "/retourner-au-validateur/{sinId}")
+    @PutMapping(path = "/retourner-au-validateur")
     public void retournerAuValidateur(@Valid @RequestBody MvtReq dto, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
     {
         sinService.retournerAuValidateur(dto, size);
