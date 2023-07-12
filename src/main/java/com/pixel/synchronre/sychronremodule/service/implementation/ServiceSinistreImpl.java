@@ -145,7 +145,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     {
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
-        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNE.staCode, null));
+        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNE.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
@@ -154,7 +154,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     {
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
-        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, null));
+        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
