@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
@@ -56,7 +57,14 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     boolean existsByAffaireAndTypeRep(Long affId, String typeUniqueCode);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2")
-    Repartition findByAffaireAndTypeCed(Long affId, String rep_ced);
+    List<Repartition> findByAffaireAndTypeRep(Long affId, String typeRep);
+
+    @Query("""
+            select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq(
+            r.repId, r.repCapital, r.repTaux, r.affaire.affId, r.paramCessionLegale.paramCesLegId, true, r.paramCessionLegale.paramCesLegLibelle) 
+            from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CES_LEG'
+            """)
+    List<UpdateCesLegReq> findUpdateCesLegReqByAffaireAndTypeRep(Long affId);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     Optional<Repartition> repartFindByAffaire(Long affId);
@@ -157,4 +165,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.cessionnaire.cesId from Repartition r where r.affaire.affId = (select s.affaire.affId from Sinistre s where s.sinId = ?1) and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
     List<Long> getCesIdsBySinId(Long sinId);//
+
+    @Query("select (count(r.repId)>0) from Repartition r where r.repId = ?1 and r.affaire.affId = ?2 and r.type.uniqueCode = ?3")
+    boolean existsByRepIdAndAffIdAndTypeRep(Long repId, Long affId, String rep_ces_leg);
+
+    //List<Repartition> findByAffaireAndTypeRep(Long affId, String rep_ced);
 }

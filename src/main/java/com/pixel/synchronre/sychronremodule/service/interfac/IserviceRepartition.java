@@ -75,4 +75,6 @@ public interface IserviceRepartition {
     void accepterPlacement(Long plaId) throws UnknownHostException;
 
     void validerPlacement(List<Long> plaIds);
+
+    UpdateCedLegRepartitionReq getUpdateCedLegDTO(Long affId);
 }
