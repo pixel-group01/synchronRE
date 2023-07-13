@@ -158,7 +158,7 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/valider-placements")
-    void validerPlacements(@RequestParam List<Long> plaIds) throws UnknownHostException {
+    void validerPlacements(@RequestParam List<Long> plaIds) {
         repService.validerPlacement(plaIds);
     }
 

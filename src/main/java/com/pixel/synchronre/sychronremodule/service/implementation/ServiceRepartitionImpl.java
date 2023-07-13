@@ -529,8 +529,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 .map(pcl->this.mapToUpdateCesLegReq(pcl, aff, false)).collect(Collectors.toList());
 
         pclReps.addAll(noneAcceptedPclReps);
-
-        return repMapper.mapToUpdateCedLegRepartitionReq(aff, repCed, pclReps);
+        UpdateCedLegRepartitionReq updateCedLegRepartitionReq =  repMapper.mapToUpdateCedLegRepartitionReq(aff, repCed, pclReps);
+        updateCedLegRepartitionReq.setBesoinFac(comptaService.calculateRestARepartir(affId));
+        return updateCedLegRepartitionReq;
     }
 
     private UpdateCesLegReq mapToUpdateCesLegReq(ParamCessionLegaleListResp pcl, Affaire aff, boolean accepted)
