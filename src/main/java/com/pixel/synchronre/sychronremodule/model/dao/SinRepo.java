@@ -22,7 +22,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp(
-        s.sinId, s.sinMontant100, s.sinMontantHonoraire, s.sinDateSurvenance, s.sinDateDeclaration, s.sinCommentaire, aff.affId, aff.affCode, aff.affAssure, aff.affActivite, aff.affCapitalInitial) 
+        s.sinId, s.sinMontant100, s.sinMontantHonoraire, s.sinDateSurvenance, s.sinDateDeclaration, s.sinCommentaire, aff.affId, aff.affCode, aff.affAssure, aff.affActivite, aff.affCapitalInitial,s.statut.staCode,s.statut.staLibelle) 
         from  Sinistre s left join s.statut st left join s.affaire aff left join s.userCreator u left join s.functionCreator fnc left join aff.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(aff.affCode, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(aff.affAssure, '') ) as string))) >0
