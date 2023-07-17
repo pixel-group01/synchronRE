@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-07-10T17:45:43 -->
+<!-- 2023-07-17T14:34:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Credit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b258cd63-2ea2-4241-8959-d0231463b3ee">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -322,7 +322,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="S" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[N° Police  :]]></text>
 			</staticText>
@@ -331,7 +331,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement>
-					<font fontName="S" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[Activités : ]]></text>
 			</staticText>
@@ -358,7 +358,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="S" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<text><![CDATA[Branche  :]]></text>
 			</staticText>
@@ -394,7 +394,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="S" size="12"/>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{bran_libelle}]]></textFieldExpression>
 			</textField>
