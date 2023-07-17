@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MvtMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,20 +24,24 @@ public class MvtController
     }
 
     @GetMapping(path = "/sinistre/get-message-retour-comptable/{sinId}")
-    String getMessageRetourComptaForSinistre(@PathVariable Long sinId)
+    MvtMessage getMessageRetourComptaForSinistre(@PathVariable Long sinId)
     {
-        return mvtRepo.getMvtMessage(null, null, sinId, "RET-COMPTA");
+        String  msg = mvtRepo.getMvtMessage(null, null, sinId, "RET-COMPTA");
+        return new MvtMessage(msg);
     }
 
     @GetMapping(path = "/sinistre/get-message-retour-validateur/{sinId}")
-    String getMessageRetourValidateurForSinistre(@PathVariable Long sinId)
+    MvtMessage getMessageRetourValidateurForSinistre(@PathVariable Long sinId)
     {
-        return mvtRepo.getMvtMessage(null, null, sinId, "RET-VAL");
+        String msg =  mvtRepo.getMvtMessage(null, null, sinId, "RET-VAL");
+        return new MvtMessage(msg);
     }
 
     @GetMapping(path = "/sinistre/get-message-retour-souscripteur/{sinId}")
-    String getMessageRetourSouscripteurForSinistre(@PathVariable Long sinId)
+    MvtMessage getMessageRetourSouscripteurForSinistre(@PathVariable Long sinId)
     {
-        return mvtRepo.getMvtMessage(null, null, sinId, "RET");
+        String msg = mvtRepo.getMvtMessage(null, null, sinId, "RET");
+        return new MvtMessage(msg);
     }
+
 }

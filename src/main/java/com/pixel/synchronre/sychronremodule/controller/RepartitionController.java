@@ -66,7 +66,7 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/update-cedante-legale")
-    public RepartitionDetailsResp jupdateCedLegRepartition(@PathVariable UpdateCedLegRepartitionReq dto) throws UnknownHostException {
+    public RepartitionDetailsResp updateCedLegRepartition(@RequestBody UpdateCedLegRepartitionReq dto) throws UnknownHostException {
         return this.repService.updateCedLegRepartition(dto);
     }
 
