@@ -24,8 +24,10 @@ public class SinistreDetailsResp
     private BigDecimal dejaRegle;
     private BigDecimal restARegle;
     private BigDecimal tauxDeReglement;
+    private String staCode;
+    private String staLibelle;
 
-    public SinistreDetailsResp(Long sinId, BigDecimal sinMontant100, BigDecimal sinMontantHonoraire, LocalDate sinDateSurvenance, LocalDate sinDateDeclaration, String sinCommentaire, Long affId, String affCode,  String affAssure, String affActivite, BigDecimal affCapitalInitial) {
+    public SinistreDetailsResp(Long sinId, BigDecimal sinMontant100, BigDecimal sinMontantHonoraire, LocalDate sinDateSurvenance, LocalDate sinDateDeclaration, String sinCommentaire, Long affId, String affCode,  String affAssure, String affActivite, BigDecimal affCapitalInitial,String staCode,String staLibelle) {
         this.sinId = sinId;
         this.sinMontant100 = sinMontant100;
         this.sinMontantHonoraire = sinMontantHonoraire;
@@ -37,6 +39,8 @@ public class SinistreDetailsResp
         this.affAssure = affAssure;
         this.affActivite = affActivite;
         this.affCapitalInitial = affCapitalInitial;
+        this.staCode=staCode;
+        this.staLibelle=staLibelle;
     }
 
 

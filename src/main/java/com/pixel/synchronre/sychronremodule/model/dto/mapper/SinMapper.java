@@ -41,6 +41,8 @@ public abstract class SinMapper
     @Mapping(target = "affAssure", source = "affaire.affAssure")
     @Mapping(target = "affActivite", source = "affaire.affActivite")
     @Mapping(target = "affCapitalInitial", source = "affaire.affCapitalInitial")
+    @Mapping(target = "staCode", source = "statut.staCode")
+    @Mapping(target = "staLibelle", source = "statut.staLibelle")
     public abstract SinistreDetailsResp mapToSinistreDetailsResp(Sinistre sinistre);
 
     @Mapping(target = "affCode", source = "affaire.affCode")
