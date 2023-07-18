@@ -34,7 +34,7 @@ public @interface SeuilRegMontant
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRegMontant()) <= 0 ;
+            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRegMontant()) >= 0 ;
         }
     }
 
@@ -48,7 +48,7 @@ public @interface SeuilRegMontant
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRepCapital()) <= 0;
+            return comptaService.calculateRestARegler(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
         }
     }
 }
