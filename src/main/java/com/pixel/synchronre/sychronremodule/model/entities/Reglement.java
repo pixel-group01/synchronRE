@@ -25,7 +25,6 @@ public class Reglement {
   private Long regId;
   private String regReference;
   private LocalDate regDate;
-  //private String regMontantTemp;
   private BigDecimal regMontant;
   private String regMontantLettre;
   private BigDecimal regCommission;
