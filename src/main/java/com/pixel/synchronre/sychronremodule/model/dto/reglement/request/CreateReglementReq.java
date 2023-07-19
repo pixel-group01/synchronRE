@@ -45,7 +45,6 @@ public class CreateReglementReq
     @NotNull(message = "Veuillez selectionner le mode reglement")
     private String regMode;
 
-    @NotNull(message = "Veuillez choisir le sinistre", groups = {REG_SIN_GROUP.class})
     private Long cesId;
 }
 
