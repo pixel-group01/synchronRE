@@ -5,8 +5,8 @@ import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentSer
 import com.pixel.synchronre.archivemodule.controller.service.DocServiceProvider;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
-import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class DocumentRestController
 {
     private final DocumentRepository docRepo;
     private final TypeRepo typeRepo;
-    private final DocServiceProvider docdocServiceProvider;
+    private final DocServiceProvider docServiceProvider;
 
     @GetMapping(path = "/{typeDocUniqueCode}/types")
     public List<ReadTypeDTO> getTypeDocumentReglement(@PathVariable String typeDocUniqueCode) throws UnknownHostException {
@@ -38,12 +39,21 @@ public class DocumentRestController
         return typeRepo.findSousTypeOf(typeDoc.getTypeId());
     }
 
-    @PostMapping(path = "/{groupDocUniqueCode}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void getTypeDocumentReglement(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @RequestParam String typeDocUniqueCode, @PathVariable String groupDocUniqueCode) throws UnknownHostException
-    {
-        AbstractDocumentService docUploader = docdocServiceProvider.getDocUploader(groupDocUniqueCode);
+    @PostMapping(path = "/{groupDocUniqueCode}/upload2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void uploadDocument(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @RequestParam String typeDocUniqueCode, @PathVariable String groupDocUniqueCode) throws IOException {
+        AbstractDocumentService docUploader = docServiceProvider.getDocUploader(groupDocUniqueCode);
+        String base64FileString = Base64ToFileConverter.convertToBase64UrlString(file);
         if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         UploadDocReq dto = new UploadDocReq(objectId, typeDocUniqueCode.toUpperCase(Locale.ROOT), docNum, docDescription, file);
+        docUploader.uploadDocument(dto);
+    }
+
+    @PostMapping(path = "/{groupDocUniqueCode}/upload")
+    public void uploadDocument(@RequestBody UploadDocReq dto, @PathVariable String groupDocUniqueCode) throws UnknownHostException
+    {
+        AbstractDocumentService docUploader = docServiceProvider.getDocUploader(groupDocUniqueCode);
+        if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
+        dto.setFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension()));
         docUploader.uploadDocument(dto);
     }
 

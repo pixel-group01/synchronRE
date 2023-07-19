@@ -25,7 +25,7 @@ public class CreateReglementReq
     private String regReference;
 
     @NotNull(message = "Veuillez saisir le montant du paiement")
-    @PositiveOrZero(message = "Le montant du paiement doit être un nombre positif")
+    @Positive(message = "Le montant du paiement doit être un nombre positif")
     private BigDecimal regMontant;
 
     @NotNull(message = "Veuillez saisir la date du paiement")

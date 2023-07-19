@@ -23,4 +23,14 @@ public class UploadDocReq
     private String docDescription;
     //@ValidFileSize
     private MultipartFile file;
+    private String base64UrlFile;
+    private String extension;
+
+    public UploadDocReq(Long objecId, String docUniqueCode, String docNum, String docDescription, MultipartFile file) {
+        this.objecId = objecId;
+        this.docUniqueCode = docUniqueCode;
+        this.docNum = docNum;
+        this.docDescription = docDescription;
+        this.file = file;
+    }
 }

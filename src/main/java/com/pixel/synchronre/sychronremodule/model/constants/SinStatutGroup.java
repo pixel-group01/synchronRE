@@ -8,7 +8,7 @@ import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 public class SinStatutGroup
 {
     public static final List<String> tabSaisie = Arrays.asList(SAISIE.staCode,RETOURNE.staCode);
-    public static final List<String> tabAtrans = Arrays.asList(SAISIE_CRT.staCode,TRANSMIS.staCode,RETOURNE.staCode,RETOURNER_VALIDATEUR.staCode);
+    public static final List<String> tabAtrans = Arrays.asList(SAISIE_CRT.staCode,TRANSMIS.staCode,RETOURNER_VALIDATEUR.staCode);
     public static final List<String> tabAValidation = Arrays.asList(EN_ATTENTE_DE_VALIDATION.staCode,RETOURNER_COMPTABLE.staCode);
     public static final List<String> tabEnReglement = Arrays.asList(VALIDE.staCode,EN_ATTENTE_DE_PAIEMENT.staCode, EN_COURS_DE_PAIEMENT.staCode,EN_COURS_DE_REVERSEMENT.staCode,EN_COURS_DE_PAIEMENT_REVERSEMENT.staCode);
     public static final List<String> tabSolde = Arrays.asList(SOLDE.staCode);

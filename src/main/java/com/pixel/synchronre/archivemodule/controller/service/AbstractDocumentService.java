@@ -14,10 +14,6 @@ import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -115,7 +111,6 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		uploadFile(dto.getFile(), doc.getDocPath());
 	}
 
-
 	@Override
 	public void displayPdf(HttpServletResponse response, byte[] fileBytes, String displayName)  throws Exception
 	{
@@ -136,5 +131,4 @@ public abstract class AbstractDocumentService implements IServiceDocument
 	{
 		return docRepo.getAllDocsForObject(affId, plaId, regId, sinId, userId);
 	}
-
 }
