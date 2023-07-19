@@ -67,7 +67,7 @@ public class ReglementController
         return regService.searchReglement(key, affId, null,typeReg, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/sinistre/list/{affId}")
+    @GetMapping(path = "/sinistre/list/{sinId}")
     public Page<ReglementListResp> searchReglementSinistre(@RequestParam(defaultValue = "") String key,
                                                    @PathVariable Long sinId,
                                                    @PathVariable String typeReg,
