@@ -17,6 +17,7 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,12 @@ public abstract class SinMapper
     @Mapping(target = "mtEnAttenteDeReversement", expression = "java(sinComptaService.calculateMtSinistreEnAttenteDeAReversement(sin.getSinId()))")
 
     @Mapping(target = "detailsEtatComptableSinistres", expression = "java(this.getDetailsEtatComptables(sin.getSinId()))")
+    @Mapping(target = "sinMontantTotalCessionnaires", expression = "java(sinComptaService.calculateMtTotalCessionnairesSurSinistre(sin.getSinId()))")
+    @Mapping(target = "sinTauxMontantCessionnaires", expression = "java(sinComptaService.calculateTauxMtCessionnairesSurSinistre(sin.getSinId()))")
     public abstract EtatComptableSinistreResp mapToEtatComptableSinistre(Sinistre sin);
+
+    private BigDecimal sinMontantTotalCessionnaires;
+    private BigDecimal sinTauxMontantCessionnaires;
 
     protected List<EtatComptableSinistreResp.DetailsEtatComptableSinistre> getDetailsEtatComptables(Long sinId)
     {

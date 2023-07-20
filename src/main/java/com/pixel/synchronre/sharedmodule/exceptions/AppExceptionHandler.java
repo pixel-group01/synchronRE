@@ -69,7 +69,8 @@ public class AppExceptionHandler
         PrintWriter pw = new PrintWriter(sw);
         exception.printStackTrace(pw);
         String stacktrace = sw.toString();
-        logService.saveLogError(exception.getMessage(), stacktrace);
         exception.printStackTrace();
+        logService.saveLogError(exception.getMessage(), stacktrace);
+
     }
 }

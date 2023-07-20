@@ -30,6 +30,7 @@ public class Log
     private String connectionId;
     @ManyToOne @JoinColumn(name = "FUNC_ID")
     private AppFunction function;
+    @Column(length = 500000)
     private String errorMessage;
     @Column(length = 500000)
     private String stackTrace;

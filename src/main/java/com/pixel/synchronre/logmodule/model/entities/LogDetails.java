@@ -16,7 +16,9 @@ public class LogDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String objectId;
+    @Column(length = 100000)
     private String newValue;
+    @Column(length = 100000)
     private String oldValue;
     private String columnName;
     private String connectionId;

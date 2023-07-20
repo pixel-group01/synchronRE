@@ -12,6 +12,7 @@ public interface IServiceCalculsComptablesSinistre
     BigDecimal calculateMtTotalSinistre(Long sinId);
 
     BigDecimal calculateMtTotalCessionnairesSurSinistre(Long sinId);
+    BigDecimal calculateTauxMtCessionnairesSurSinistre(Long sinId);
 
     BigDecimal calculateMtDejaPayeBySin(Long sinId);
     BigDecimal calculateResteAPayerBySin(Long sinId);
