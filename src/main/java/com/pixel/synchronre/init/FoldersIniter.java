@@ -60,5 +60,4 @@ public class FoldersIniter implements Loader
             });
         });
     }
-
 }
