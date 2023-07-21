@@ -327,7 +327,7 @@ public class AffaireController
         dto.setDocNum(UUID.randomUUID().toString());
         dto.setDocUniqueCode(docType);
         dto.setFile(file);
-        dto.setObjecId(affId);
+        dto.setObjectId(affId);
         dto.setDocDescription(docType);
         docService.uploadDocument(dto);
     }
