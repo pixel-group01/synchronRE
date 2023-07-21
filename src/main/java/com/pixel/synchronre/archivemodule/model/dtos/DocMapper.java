@@ -14,23 +14,23 @@ public abstract class DocMapper
 
     @Mapping(target = "docDescription", expression = "java(\"Photo de profil\")")
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
-    @Mapping(target = "user", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(dto.getObjecId()))")
+    @Mapping(target = "user", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(dto.getObjectId()))")
     public abstract Document mapToPhotoDoc(UploadDocReq dto);
 
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
-    @Mapping(target = "reglement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Reglement(dto.getObjecId()))")
+    @Mapping(target = "reglement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Reglement(dto.getObjectId()))")
     public abstract Document mapToReglementDoc(UploadDocReq dto);
 
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
-    @Mapping(target = "placement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Repartition(dto.getObjecId()))")
+    @Mapping(target = "placement", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Repartition(dto.getObjectId()))")
     public abstract Document mapToPlacementDoc(UploadDocReq dto);
 
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
-    @Mapping(target = "affaire", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getObjecId()))")
+    @Mapping(target = "affaire", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getObjectId()))")
     public abstract Document mapToAffaireDoc(UploadDocReq dto);
 
     @Mapping(target = "docType", expression = "java(typeRepo.findByUniqueCode(dto.getDocUniqueCode()))")
-    @Mapping(target = "sinistre", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Sinistre(dto.getObjecId()))")
+    @Mapping(target = "sinistre", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Sinistre(dto.getObjectId()))")
     @Mapping(target = "file", expression = "java(com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()))")
     public abstract Document mapToSinistreDoc(UploadDocReq dto);
 

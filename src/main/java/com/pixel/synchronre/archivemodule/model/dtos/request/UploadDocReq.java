@@ -1,6 +1,5 @@
 package com.pixel.synchronre.archivemodule.model.dtos.request;
 
-import com.pixel.synchronre.archivemodule.model.dtos.validator.ValidDocType;
 import com.pixel.synchronre.archivemodule.model.dtos.validator.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class UploadDocReq
     @ExistingRepId(groups = {OnRegUpload.class})
     @ExistingPlaId(groups = {OnPlaUpload.class})
     @ExistingAffId(groups = {OnAffUpload.class})*/
-    private Long objecId;
+    private Long objectId;
     //@ValidDocType
     private String docUniqueCode;
     private String docNum;
@@ -27,7 +26,7 @@ public class UploadDocReq
     private String extension;
 
     public UploadDocReq(Long objecId, String docUniqueCode, String docNum, String docDescription, MultipartFile file) {
-        this.objecId = objecId;
+        this.objectId = objecId;
         this.docUniqueCode = docUniqueCode;
         this.docNum = docNum;
         this.docDescription = docDescription;
