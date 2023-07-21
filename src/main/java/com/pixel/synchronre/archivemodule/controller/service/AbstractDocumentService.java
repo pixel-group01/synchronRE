@@ -66,7 +66,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		if(!typeRepo.existsByUniqueCode(typeCode)) return "";
 		String uuid = UUID.randomUUID().toString().substring(0, 9);
 
-		return DocumentsConstants.UPLOADS_DIR + "\\" + objectFolder+ "\\" +typeCode + "\\"+
+		return DocumentsConstants.UPLOADS_DIR + File.separator + objectFolder+ File.separator  +typeCode + File.separator +
 				StringUtils.stripAccents(objectName).replace(" ", "_") + uuid + "." + FilenameUtils.getExtension(file.getOriginalFilename());
 	}
 
