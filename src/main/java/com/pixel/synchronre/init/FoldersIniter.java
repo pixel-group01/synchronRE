@@ -49,13 +49,13 @@ public class FoldersIniter implements Loader
         if(!docUploadDir.exists()) docUploadDir.mkdirs();
         typeRepo.findBaseTypes(TypeGroup.DOCUMENT).forEach(type->
         {
-            String baseFolder = DocumentsConstants.UPLOADS_DIR  + "\\" + type.getObjectFolder();
+            String baseFolder = DocumentsConstants.UPLOADS_DIR  + File.separator + type.getObjectFolder();
             File baseDir = new File(baseFolder);
             if(!baseDir.exists()) baseDir.mkdirs();
 
             typeRepo.getChildren(type.getTypeId()).forEach(child->
             {
-                File objectDir = new File(baseFolder + "\\" + child.getUniqueCode());
+                File objectDir = new File(baseFolder + File.separator + child.getUniqueCode());
                 if(!objectDir.exists()) objectDir.mkdirs();
             });
         });

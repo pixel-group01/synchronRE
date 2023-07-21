@@ -1,13 +1,12 @@
 package com.pixel.synchronre.archivemodule.model.constants;
 
-import org.springframework.beans.factory.annotation.Value;
-
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
 public class DocumentsConstants
 {
-	public static final String UPLOADS_DIR = System.getProperty("user.home") + "\\workspace\\synchronRe\\docs\\uploads";
+	public static final String UPLOADS_DIR = System.getProperty("user.home")+ File.separator + "workspace/synchronRe/docs/uploads";
 
 	public static final long UPLOAD_MAX_SIZE = 5 * 1024 * 1024;
 	public static final List<String> PHOTO_AUTHORIZED_TYPE = Arrays.asList("jpeg", "jpg", "png");
