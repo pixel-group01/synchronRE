@@ -66,14 +66,12 @@ public class TypeLoader implements Loader
         Type docPlacement = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "DOC_PLA", "Document de placement", PersStatus.ACTIVE, null, "placement"));
         Type noteCessionFac = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CES_FAC", "Note de cession facultative", PersStatus.ACTIVE, null, "placement"));
         Type noteCessionTraite = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CES_TRAI", "Note de cession en traité", PersStatus.ACTIVE, null, "placement"));
-        Type noteCessionSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CES_SIN", "Note de cession sur sinistre", PersStatus.ACTIVE, null, "placement"));
         Type noteDebitFac = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_DEB_FAC", "Note de débit en facultative", PersStatus.ACTIVE, null, "placement"));
         Type noteDebitTraite = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_DEB_TRAI", "Note de débit en traité", PersStatus.ACTIVE, null, "placement"));
         Type noteCreditFac = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CRED_FAC", "Note de crédit en facultative", PersStatus.ACTIVE, null, "placement"));
         Type noteCreditTraite = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CRED_TRAI", "Note de crédit en traité", PersStatus.ACTIVE, null, "placement"));
         typeParamRepo.save(new TypeParam(null, docPlacement, noteCessionFac, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docPlacement, noteCessionTraite, PersStatus.ACTIVE));
-        typeParamRepo.save(new TypeParam(null, docPlacement, noteCessionSin, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docPlacement, noteDebitFac, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docPlacement, noteDebitTraite, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docPlacement, noteCreditFac, PersStatus.ACTIVE));
@@ -86,11 +84,13 @@ public class TypeLoader implements Loader
 
         //Doc sinistre
         Type docSinistre = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "DOC_SIN", "Document de sinistre", PersStatus.ACTIVE, null, "sinistre"));
-        Type noteDebitSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_DEB_SIN", "Note de débit sur sinistre", PersStatus.ACTIVE, null, "placement"));
+        Type noteDebitSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_DEB_SIN", "Note de débit sur sinistre", PersStatus.ACTIVE, null, "sinistre"));
         Type pvConstat = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "PV_CONST", "Procès verbal de constat", PersStatus.ACTIVE, null, "sinistre"));
+        Type noteCessionSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CES_SIN", "Note de cession sur sinistre", PersStatus.ACTIVE, null, "sinistre"));
+
         typeParamRepo.save(new TypeParam(null, docSinistre, noteDebitSin, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docSinistre, pvConstat, PersStatus.ACTIVE));
-
+        typeParamRepo.save(new TypeParam(null, docSinistre, noteCessionSin, PersStatus.ACTIVE));
 
         //Type de privilege
 
