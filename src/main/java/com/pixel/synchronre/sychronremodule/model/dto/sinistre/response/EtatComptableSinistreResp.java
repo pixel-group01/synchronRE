@@ -13,6 +13,8 @@ public class EtatComptableSinistreResp
     private String sinCode;
     private BigDecimal sinMontant100;
     private BigDecimal sinMontantHonoraire;
+    private BigDecimal sinMontantTotalCessionnaires;
+    private BigDecimal sinTauxMontantCessionnaires;
     private LocalDate sinDateSurvenance;
     private LocalDate sinDateDeclaration;
     private String sinCommentaire;

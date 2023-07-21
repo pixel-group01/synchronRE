@@ -34,6 +34,16 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
         return mtTotalCessionnaires;
     }
 
+    @Override
+    public BigDecimal calculateTauxMtCessionnairesSurSinistre(Long sinId)
+    {
+        BigDecimal mtTotalSinistre = this.calculateMtTotalSinistre(sinId);
+        if(mtTotalSinistre == null || mtTotalSinistre.doubleValue() == 0) return CENT;
+        BigDecimal mtTotalCessionnaires = this.calculateMtTotalCessionnairesSurSinistre(sinId);
+        mtTotalCessionnaires = mtTotalCessionnaires == null ? ZERO : mtTotalCessionnaires;
+        return mtTotalCessionnaires.divide(mtTotalSinistre, 2, RoundingMode.HALF_UP);
+    }
+
 
     @Override
     public BigDecimal calculateMtDejaPayeBySin(Long sinId)

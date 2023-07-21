@@ -40,7 +40,7 @@ public @interface SeuilRegMontantSin
             {
                 return comptaSinistreService.calculateMtSinistreEnAttenteDeAReversement(dto.getSinId()).compareTo(dto.getRegMontant()) >= 0;
             }
-            return comptaSinistreService.calculateResteAPayerBySinAndCes(dto.getSinId(), dto.getCesId()).compareTo(dto.getRegMontant()) >= 0 ;
+            return comptaSinistreService.calculateResteAPayerBySin(dto.getSinId()).compareTo(dto.getRegMontant()) >= 0 ;
         }
     }
 
