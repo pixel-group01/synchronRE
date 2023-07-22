@@ -32,7 +32,8 @@ public class FacultativeListResp
     private Long exeCode;
     private boolean placementTermine;
 
-    public FacultativeListResp(Long affId, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance, String facNumeroPolice, BigDecimal facCapitaux, BigDecimal facSmpLci, BigDecimal facPrime, String affStatutCreation, String devCode, Long cedanteId, String statutCode, String staLibelle, String couLibelle, String cedNomFiliale, String cedSigleFiliale, Long exeCode) {
+    public FacultativeListResp(Long affId, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance, String facNumeroPolice, BigDecimal facCapitaux, BigDecimal facSmpLci, BigDecimal facPrime, String affStatutCreation, String devCode, Long cedanteId, String statutCode, String staLibelle, Long couId,
+            String couLibelle, Long branId, String branLibelle, String cedNomFiliale, String cedSigleFiliale, Long exeCode) {
         this.affId = affId;
         this.affCode = affCode;
         this.affAssure = affAssure;
@@ -48,7 +49,10 @@ public class FacultativeListResp
         this.cedanteId = cedanteId;
         this.statutCode = statutCode;
         this.staLibelle = staLibelle;
+        this.couId = couId;
         this.couLibelle = couLibelle;
+        this.branId = branId;
+        this.branLibelle = branLibelle;
         this.cedNomFiliale = cedNomFiliale;
         this.cedSigleFiliale = cedSigleFiliale;
         this.exeCode = exeCode;
