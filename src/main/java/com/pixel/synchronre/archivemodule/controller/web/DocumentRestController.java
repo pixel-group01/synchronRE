@@ -94,7 +94,7 @@ public class DocumentRestController
         return docRepo.getAllDocsForObject(null, null, null, null, userId);
     }
 
-    @GetMapping(path = "/display/{docId}")
+    @GetMapping(path = "/get-base64-url/{docId}")
     public Base64FileDto displayDocument(@PathVariable Long docId) throws Exception
     {
         Document doc = docRepo.findById(docId).orElse(null);
