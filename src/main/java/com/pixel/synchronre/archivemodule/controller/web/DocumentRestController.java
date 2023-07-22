@@ -40,21 +40,23 @@ public class DocumentRestController
     }
 
     @PostMapping(path = "/{groupDocUniqueCode}/upload2", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadDocument(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @RequestParam String typeDocUniqueCode, @PathVariable String groupDocUniqueCode) throws IOException {
+    public boolean uploadDocument(@RequestParam MultipartFile file, @RequestParam Long objectId, @RequestParam String docNum, @RequestParam String docDescription, @RequestParam String typeDocUniqueCode, @PathVariable String groupDocUniqueCode) throws IOException {
         AbstractDocumentService docUploader = docServiceProvider.getDocUploader(groupDocUniqueCode);
         String base64FileString = Base64ToFileConverter.convertToBase64UrlString(file);
         if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         UploadDocReq dto = new UploadDocReq(objectId, typeDocUniqueCode.toUpperCase(Locale.ROOT), docNum, docDescription, file);
         docUploader.uploadDocument(dto);
+        return true;
     }
 
     @PostMapping(path = "/{groupDocUniqueCode}/upload")
-    public void uploadDocument(@RequestBody UploadDocReq dto, @PathVariable String groupDocUniqueCode) throws UnknownHostException
+    public boolean uploadDocument(@RequestBody UploadDocReq dto, @PathVariable String groupDocUniqueCode) throws UnknownHostException
     {
         AbstractDocumentService docUploader = docServiceProvider.getDocUploader(groupDocUniqueCode);
         if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         dto.setFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension()));
         docUploader.uploadDocument(dto);
+        return true;
     }
 
     @GetMapping(path = "/affaire/{affId}")
