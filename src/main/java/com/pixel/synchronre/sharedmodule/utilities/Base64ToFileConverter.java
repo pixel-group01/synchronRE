@@ -24,6 +24,11 @@ public class Base64ToFileConverter
         String base64UrlEncodedString = Base64.getUrlEncoder().encodeToString(fileBytes);
         return base64UrlEncodedString;
     }
+
+    public static String convertBytesToBase64UrlString(byte[] fileBytes) throws IOException {
+        String base64UrlEncodedString = Base64.getUrlEncoder().encodeToString(fileBytes);
+        return base64UrlEncodedString;
+    }
 }
 
  class InMemoryMultipartFile implements MultipartFile {

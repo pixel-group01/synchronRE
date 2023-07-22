@@ -4,14 +4,18 @@ import com.pixel.synchronre.archivemodule.controller.repositories.DocumentReposi
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.controller.service.DocServiceProvider;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
+import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
+import com.pixel.synchronre.archivemodule.model.entities.Document;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +33,7 @@ public class DocumentRestController
     private final DocumentRepository docRepo;
     private final TypeRepo typeRepo;
     private final DocServiceProvider docServiceProvider;
+    private final AbstractDocumentService docService;
 
     @GetMapping(path = "/{typeDocUniqueCode}/types")
     public List<ReadTypeDTO> getTypeDocumentReglement(@PathVariable String typeDocUniqueCode) throws UnknownHostException {
@@ -88,4 +93,17 @@ public class DocumentRestController
     {
         return docRepo.getAllDocsForObject(null, null, null, null, userId);
     }
+
+    @GetMapping(path = "/display/{docId}")
+    public Base64FileDto displayDocument(@PathVariable Long docId) throws Exception
+    {
+        Document doc = docRepo.findById(docId).orElse(null);
+        if(doc == null) return null;
+        String docPath = doc.getDocPath();
+        byte[] docBytes = docService.downloadFile(docPath);
+        String base64UrlString = Base64ToFileConverter.convertBytesToBase64UrlString(docBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64UrlString);
+    }
+
+
 }

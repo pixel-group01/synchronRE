@@ -3,6 +3,7 @@ package com.pixel.synchronre.archivemodule.controller.web;
 import com.pixel.synchronre.archivemodule.controller.repositories.DocumentRepository;
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
+import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
@@ -34,7 +35,7 @@ public class DocumentController
     }
 
     @GetMapping(path = "/display/{docId}")
-    void displayDocument(HttpServletResponse response, @PathVariable Long docId) throws Exception {
+    void displayDocument2(HttpServletResponse response, @PathVariable Long docId) throws Exception {
         Document doc = docRepo.findById(docId).orElse(null);
         if(doc == null) return;
         String docPath = doc.getDocPath();
@@ -43,4 +44,6 @@ public class DocumentController
 
         docService.displayPdf(response, docBytes, name);
     }
+
+
 }
