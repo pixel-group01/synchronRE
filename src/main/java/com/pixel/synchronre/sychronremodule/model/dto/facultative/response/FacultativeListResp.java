@@ -23,7 +23,10 @@ public class FacultativeListResp
     private Long cedanteId;
     private String statutCode;
     private String staLibelle;
+    private Long couId;
     private String couLibelle;
+    private Long branId;
+    private String branLibelle;
     private String cedNomFiliale;
     private String cedSigleFiliale;
     private Long exeCode;

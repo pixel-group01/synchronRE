@@ -117,7 +117,5 @@ public class AdminLoader implements Loader
         AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, 4l, "Comptable Nelson RE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userComptable);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
-
-
     }
 }
