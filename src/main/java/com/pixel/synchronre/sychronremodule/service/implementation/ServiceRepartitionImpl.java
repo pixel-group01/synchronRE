@@ -520,7 +520,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public UpdateCedLegRepartitionReq getUpdateCedLegDTO(Long affId)
     {
         Affaire aff = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire inexistante"));
-        Repartition repCed = repRepo.findByAffaireAndTypeRep(affId, "REP_CED").get(0);
+        List<Repartition> repCeds = repRepo.findByAffaireAndTypeRep(affId, "REP_CED");
+        Repartition repCed = repCeds == null ||repCeds.isEmpty() ? null : repCeds.get(0);
         List<UpdateCesLegReq> pclReps =repRepo.findUpdateCesLegReqByAffaireAndTypeRep(affId);
         List<Long> acceptedPclIds = pclReps.stream().map(r->r.getParamCesLegalId()).collect(Collectors.toList());
 
