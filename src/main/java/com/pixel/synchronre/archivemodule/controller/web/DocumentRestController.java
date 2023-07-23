@@ -16,6 +16,8 @@ import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -65,33 +67,48 @@ public class DocumentRestController
     }
 
     @GetMapping(path = "/affaire/{affId}")
-    public List<ReadDocDTO> getAffDocs(@PathVariable Long affId)
+    public Page<ReadDocDTO> getAffDocs(@PathVariable Long affId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "") String key)
     {
-        return docRepo.getAllDocsForObject(affId, null, null, null, null);
+        return docService.getAllDocsForObject(affId, null, null, null, null, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/placement/{plaId}")
-    public List<ReadDocDTO> getPlaDocs(@PathVariable Long plaId)
+    public Page<ReadDocDTO> getPlaDocs(@PathVariable Long plaId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "") String key)
     {
-        return docRepo.getAllDocsForObject(null, plaId, null, null, null);
+        return docService.getAllDocsForObject(null, plaId, null, null, null, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/reglement/{regId}")
-    public List<ReadDocDTO> getRegDocs(@PathVariable Long regId)
+    public Page<ReadDocDTO> getRegDocs(@PathVariable Long regId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "") String key)
     {
-        return docRepo.getAllDocsForObject(null, null, regId, null, null);
+        return docService.getAllDocsForObject(null, null, regId, null, null, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/sinistre/{sinId}")
-    public List<ReadDocDTO> getSinDocs(@PathVariable Long sinId)
+    public Page<ReadDocDTO> getSinDocs(@PathVariable Long sinId,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "") String key)
     {
-        return docRepo.getAllDocsForObject(null, null, null, sinId, null);
+        return docService.getAllDocsForObject(null, null, null, sinId, null, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/user/{userId}")
-    public List<ReadDocDTO> getUserDocs(@PathVariable Long userId)
+    public Page<ReadDocDTO> getUserDocs(@PathVariable Long userId,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size,
+                                        @RequestParam(defaultValue = "") String key)
     {
-        return docRepo.getAllDocsForObject(null, null, null, null, userId);
+        return docService.getAllDocsForObject(null, null, null, null, userId, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/get-base64-url/{docId}")

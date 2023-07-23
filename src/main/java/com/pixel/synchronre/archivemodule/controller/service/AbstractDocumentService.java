@@ -14,6 +14,8 @@ import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -127,8 +129,9 @@ public abstract class AbstractDocumentService implements IServiceDocument
 	}
 
 	@Override
-	public List<ReadDocDTO> getAllDocsForObject(Long affId, Long plaId, Long regId, Long sinId, Long userId)
+	public Page<ReadDocDTO> getAllDocsForObject(Long affId, Long plaId, Long regId, Long sinId, Long userId, String key, Pageable pageable)
 	{
-		return docRepo.getAllDocsForObject(affId, plaId, regId, sinId, userId);
+		key = key == null || key.trim().equals("") ? "" : StringUtils.stripAccentsToUpperCase(key);
+		return docRepo.getAllDocsForObject(affId, plaId, regId, sinId, userId, key, pageable);
 	}
 }
