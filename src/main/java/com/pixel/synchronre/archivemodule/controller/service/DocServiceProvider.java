@@ -24,7 +24,7 @@ public class DocServiceProvider
 
         return switch (typeDoc.getUniqueCode())
                 {
-                    case "DOC-AFF"->affDocUploader;
+                    case "DOC_AFF"->affDocUploader;
                     case "DOC_REG"->regDocUploader;
                     case "DOC_SIN"->sinDocUploader;
                     default -> null;
