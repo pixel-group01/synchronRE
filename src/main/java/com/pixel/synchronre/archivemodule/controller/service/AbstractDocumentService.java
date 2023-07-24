@@ -14,7 +14,6 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
@@ -35,7 +34,6 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -119,7 +117,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 
 		uploadFile(dto.getFile(), doc.getDocPath());
 		doc = docRepo.save(doc);
-		logService.logg(ArchiveActions.UPLOAD_FILE, null, doc, ArchiveTable.DOCUMENT);
+		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, null, doc, ArchiveTable.DOCUMENT);
 		return true;
 	}
 
@@ -148,13 +146,13 @@ public abstract class AbstractDocumentService implements IServiceDocument
 			doc.setDocPath(path);
 			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
 		}
-		else if(!oldBase64UrlFile.equals(dto.getBase64UrlFile()))
+		else if(!oldBase64UrlFile.equals(dto.getBase64UrlFile().replace("+", "-").replace("/", "_")))
 		{
 			String path = generatePath(dto.getFile(), newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
 			doc.setDocPath(path);
 			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
 		}
-		logService.logg(ArchiveActions.DELETE_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
+		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
 		this.deleteFile(doc.getDocPath());
 		return true;
 	}
