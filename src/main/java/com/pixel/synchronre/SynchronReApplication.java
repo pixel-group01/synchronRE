@@ -26,13 +26,13 @@ public class SynchronReApplication {
     {
         return args->{
             typeLoader.load();
+            statutLoader.load();
             menuLoader.load();
             foldersIniter.load();
             prvLoader.load();
             roleLoader.load();
             adminLoader.load();
             assLoader.load();
-            statutLoader.load();
             deviseLoader.load();
             brancheLoader.load();
             couvertureLoader.load();

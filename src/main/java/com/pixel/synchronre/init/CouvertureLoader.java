@@ -29,3 +29,4 @@ public class CouvertureLoader implements Loader
         couRepo.saveAll(Arrays.asList(c1, c2, c3));
     }
 }
+

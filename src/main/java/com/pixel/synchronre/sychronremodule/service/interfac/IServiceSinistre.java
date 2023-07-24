@@ -16,6 +16,9 @@ public interface IServiceSinistre
 
     SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException;
     SinistreDetailsResp updateSinistre(UpdateSinistreReq dto) throws UnknownHostException;
+
+    void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException;
+
     Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable);
 
     Page<SinistreDetailsResp> searchSinFacArch(String key, Pageable pageable);
