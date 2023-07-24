@@ -12,7 +12,7 @@ public class ReadDocDTO
 	private String docDescription;
 	private String docPath;
 	private Long docTypeId;
-	private String docTypeUniqueCode;
+	private String docUniqueCode;
 	private String docTypeName;
 
 }

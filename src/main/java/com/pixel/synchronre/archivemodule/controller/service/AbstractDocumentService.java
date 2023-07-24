@@ -14,7 +14,6 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
@@ -35,7 +34,6 @@ import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -114,12 +112,12 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode().toUpperCase(Locale.ROOT)).orElseThrow(()->new AppException("Type de document inconnu"));
 		if(docType == null || docType.getTypeGroup() != TypeGroup.DOCUMENT)  throw new AppException("Ce type de document n'est pris en charge par le système");;
 		Document doc = mapToDocument(dto);
-		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), docType.getName());
 		doc.setDocPath(path);
 
 		uploadFile(dto.getFile(), doc.getDocPath());
 		doc = docRepo.save(doc);
-		logService.logg(ArchiveActions.UPLOAD_FILE, null, doc, ArchiveTable.DOCUMENT);
+		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, null, doc, ArchiveTable.DOCUMENT);
 		return true;
 	}
 
@@ -144,18 +142,20 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		if(doc.getDocType().getTypeId().longValue() != newType.getTypeId().longValue())
 		{
 			doc.setDocType(newType);
-			String path = generatePath(dto.getFile(), newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+			MultipartFile file = Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension());
+			String path = generatePath(file, newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
 			doc.setDocPath(path);
-			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
+			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), path);
 		}
-		else if(!oldBase64UrlFile.equals(dto.getBase64UrlFile()))
+		else if(!oldBase64UrlFile.equals(dto.getBase64UrlFile().replace("+", "-").replace("/", "_")))
 		{
-			String path = generatePath(dto.getFile(), newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+			MultipartFile file = Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension());
+			String path = generatePath(file, newType.getObjectFolder(), dto.getDocUniqueCode(), newType.getName());
 			doc.setDocPath(path);
-			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
+			uploadFile(file, path);
 		}
-		logService.logg(ArchiveActions.DELETE_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
-		this.deleteFile(doc.getDocPath());
+		this.deleteFile(oldDoc.getDocPath());
+		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
 		return true;
 	}
 

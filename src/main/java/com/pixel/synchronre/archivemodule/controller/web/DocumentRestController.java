@@ -14,10 +14,8 @@ import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -73,8 +71,8 @@ public class DocumentRestController
         return docService.updateDocument(dto);
     }
 
-    @PutMapping(path = "/delete/{docId}")
-    public boolean updateDocument(@PathVariable Long docId) throws IOException {
+    @DeleteMapping(path = "/delete/{docId}")
+    public boolean deleteDocument(@PathVariable Long docId) throws IOException {
         return docService.deleteDocument(docId);
     }
 
@@ -133,6 +131,4 @@ public class DocumentRestController
         String base64UrlString = Base64ToFileConverter.convertBytesToBase64UrlString(docBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64UrlString);
     }
-
-
 }
