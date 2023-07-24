@@ -71,8 +71,8 @@ public class DocumentRestController
         return docService.updateDocument(dto);
     }
 
-    @PutMapping(path = "/delete/{docId}")
-    public boolean updateDocument(@PathVariable Long docId) throws IOException {
+    @DeleteMapping(path = "/delete/{docId}")
+    public boolean deleteDocument(@PathVariable Long docId) throws IOException {
         return docService.deleteDocument(docId);
     }
 
