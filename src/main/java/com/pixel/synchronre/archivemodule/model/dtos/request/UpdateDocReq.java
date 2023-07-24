@@ -18,8 +18,8 @@ public class UpdateDocReq
     private String docNum;
     private String docDescription;
     private MultipartFile file;
-    @ValidFileExtension
     private String base64UrlFile;
+    @ValidFileExtension
     private String extension;
 
     public UpdateDocReq(Long docId, String docUniqueCode, String docNum, String docDescription, MultipartFile file) {
