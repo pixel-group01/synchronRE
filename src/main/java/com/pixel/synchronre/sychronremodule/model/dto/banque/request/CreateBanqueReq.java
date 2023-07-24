@@ -17,6 +17,8 @@ public class CreateBanqueReq
     @NotBlank(message = "Veuillez saisir le numero de compte")
     @NotNull(message = "Veuillez saisir le numero de compte")
     private String banNumCompte;
+    private String banIban;
+    private String banCodeBic;
     @NotBlank(message = "Veuillez saisir le nom de la banque")
     @NotNull(message = "Veuillez saisir le nom de la banque")
     private String banLibelle;

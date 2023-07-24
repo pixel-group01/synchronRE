@@ -30,12 +30,15 @@ public class CedCesAffLoader implements Loader
         Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ","COULIBALY Lenimama Ibrahima", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire nre = new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ","ADOU Venance", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ","YOUIN Salif", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ","KONAN Laurent", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", "ESSOH Fernand",FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
+        cesRepo.save(nre);
+
+
 
 
         //Cedantes
@@ -45,28 +48,28 @@ public class CedCesAffLoader implements Loader
         cedRepo.saveAll(Arrays.asList(nsiaci, nsiabn, nsiatg));
 
         //Affaires
-        Affaire affnsiaci = new Affaire(new BigDecimal(30000000),"AFF-001", "SNDI", "Affaire NSIA-CI (DEV)", LocalDate.now(), LocalDate.of(2024, 12, 05),new Exercice(2020L),"REALISEE");
-        affnsiaci.setStatut(new Statut("SAI"));
-        affnsiaci.setCedante(nsiaci);
-        Facultative facnsiaci = new Facultative(affnsiaci, "AFF-001", new BigDecimal(30000000), new BigDecimal(30000000));
-        facRepo.save(facnsiaci);
-
-        Affaire affnsiabn = new Affaire(new BigDecimal(20000000),"AFF-002", "DGMP", "Affaire NSIA-BN (Marchés Publics)", LocalDate.now(), LocalDate.of(2025, 10, 05),new Exercice(2022L),"REALISEE");
-        affnsiabn.setStatut(new Statut("SAI"));
-        affnsiabn.setCedante(nsiabn);
-        Facultative facaffnsiabn = new Facultative(affnsiabn, "AFF-002", new BigDecimal(20000000), new BigDecimal(20000000));
-        facRepo.save(facaffnsiabn);
-
-        Affaire affnsiatg = new Affaire(new BigDecimal(40000000),"AFF-003", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2028, 11, 02),new Exercice(2023L),"REALISEE");
-        affnsiatg.setStatut(new Statut("SAI"));
-        affnsiatg.setCedante(nsiatg);
-        Facultative facaffnsiatg = new Facultative(affnsiatg, "AFF-003", new BigDecimal(40000000), new BigDecimal(40000000));
-        facRepo.save(facaffnsiatg);
-
-        Affaire aff1 = new Affaire(new BigDecimal(50000000),"AFF-004", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2023, 10, 05),new Exercice(2023L),"REALISEE");
-        aff1.setStatut(new Statut("SAI"));
-        Facultative fac = new Facultative(aff1, "AFF-004", new BigDecimal(50000000), new BigDecimal(50000000));
-        facRepo.save(fac);
+//        Affaire affnsiaci = new Affaire(new BigDecimal(30000000),"AFF-001", "SNDI", "Affaire NSIA-CI (DEV)", LocalDate.now(), LocalDate.of(2024, 12, 05),new Exercice(2020L),"REALISEE");
+//        affnsiaci.setStatut(new Statut("SAI"));
+//        affnsiaci.setCedante(nsiaci);
+//        Facultative facnsiaci = new Facultative(affnsiaci, "AFF-001", new BigDecimal(30000000), new BigDecimal(30000000));
+//        facRepo.save(facnsiaci);
+//
+//        Affaire affnsiabn = new Affaire(new BigDecimal(20000000),"AFF-002", "DGMP", "Affaire NSIA-BN (Marchés Publics)", LocalDate.now(), LocalDate.of(2025, 10, 05),new Exercice(2022L),"REALISEE");
+//        affnsiabn.setStatut(new Statut("SAI"));
+//        affnsiabn.setCedante(nsiabn);
+//        Facultative facaffnsiabn = new Facultative(affnsiabn, "AFF-002", new BigDecimal(20000000), new BigDecimal(20000000));
+//        facRepo.save(facaffnsiabn);
+//
+//        Affaire affnsiatg = new Affaire(new BigDecimal(40000000),"AFF-003", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2028, 11, 02),new Exercice(2023L),"REALISEE");
+//        affnsiatg.setStatut(new Statut("SAI"));
+//        affnsiatg.setCedante(nsiatg);
+//        Facultative facaffnsiatg = new Facultative(affnsiatg, "AFF-003", new BigDecimal(40000000), new BigDecimal(40000000));
+//        facRepo.save(facaffnsiatg);
+//
+//        Affaire aff1 = new Affaire(new BigDecimal(50000000),"AFF-004", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2023, 10, 05),new Exercice(2023L),"REALISEE");
+//        aff1.setStatut(new Statut("SAI"));
+//        Facultative fac = new Facultative(aff1, "AFF-004", new BigDecimal(50000000), new BigDecimal(50000000));
+//        facRepo.save(fac);
 
 
     }

@@ -170,13 +170,16 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException
     {
-        mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
+        //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
+        mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
+        envoyerNoteCessionSinistreEtNoteDebit1(sinId);
         return sinPages;
+
     }
 
-
-    void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException {
+    @Override
+    public void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
@@ -194,10 +197,32 @@ public class ServiceSinistreImpl implements IServiceSinistre
             sinistre.setStatut(new Statut(EN_ATTENTE_DE_PAIEMENT.staCode));
         });
 
-
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
     logService.saveLog(SinistreActions.TRANSMETTRE_NOTE_CESSION_SINISTRE_ET_NOTE_DEBIT);
     }
+
+    public void envoyerNoteCessionSinistreEtNoteDebit1(Long sinId) throws UnknownHostException {
+        Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
+        String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
+        if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
+        Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
+
+        List<Cessionnaire> cessionnaires = sinRepo.getCessionnaireBySinId(sinId);
+        if(cessionnaires == null || cessionnaires.size() == 0) throw new AppException("Aucun cessionnaire sur cette affaire");
+        cessionnaires.forEach(ces->
+        {
+            try {
+                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, "Note de cession sinistre");
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            //sinistre.setStatut(new Statut(EN_ATTENTE_DE_PAIEMENT.staCode));
+        });
+
+        //mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
+        logService.saveLog(SinistreActions.TRANSMETTRE_NOTE_CESSION_SINISTRE_ET_NOTE_DEBIT);
+    }
+
 
     @Override
     public Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable)
