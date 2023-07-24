@@ -35,11 +35,11 @@ public class SynchronReApplication {
             assLoader.load();
             deviseLoader.load();
             brancheLoader.load();
-            couvertureLoader.load();
+            //couvertureLoader.load();
             paysLoader.load();
             pclLoader.load();
             exerciceLoader.load();
-            cedCesAffLoader.load();
+            //cedCesAffLoader.load();
         };
     }
 }

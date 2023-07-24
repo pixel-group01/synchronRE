@@ -23,7 +23,7 @@ public class BrancheLoader implements Loader
     public void load()
     {
         Branche b1 = new Branche(1L, "VIE", "VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Branche b2 = new Branche(2L, "NVI", "Non Vie", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Branche b2 = new Branche(2L, "NON VIE", "NON VIE", LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         braRepo.saveAll(Arrays.asList(b1, b2));
     }
 }
