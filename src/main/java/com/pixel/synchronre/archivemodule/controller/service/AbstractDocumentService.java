@@ -153,7 +153,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
 		}
 		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
-		this.deleteFile(doc.getDocPath());
+		//this.deleteFile(doc.getDocPath());
 		return true;
 	}
 
