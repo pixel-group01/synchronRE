@@ -72,7 +72,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinRep.setRepStatut(true);
         sinRep.setRepCapital(repCaptital);
         sinRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(repCaptital.doubleValue()));
-        sinRep.setType(typeRepo.findByUniqueCode("REP_SIN"));
+        sinRep.setType(typeRepo.findByUniqueCode("REP_SIN").orElseThrow(()->new AppException("Type de document inconnu")));
         sinRep.setRepInterlocuteur(ces.getCesInterlocuteur());
 
         Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(aff.getAffId(), "REP_PLA", cesId);

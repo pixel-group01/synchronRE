@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ValidFileExtension.ValidFileExtensionValidator.class, ValidFileExtension.ValidFileExtensionValidatorOnDTO.class})
+@Constraint(validatedBy = {ValidFileExtension.ValidFileExtensionValidator.class,
+        ValidFileExtension.ValidFileExtensionValidatorOnDTO.class, ValidFileExtension.ValidFileExtensionValidatorOnBase64Url.class})
 @Documented
 public @interface ValidFileExtension
 {
@@ -34,6 +35,17 @@ public @interface ValidFileExtension
             if(file == null) return true;
             if(file.getOriginalFilename().equals("")) return true;
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+            List<String> authorizedExtensions =  DocumentsConstants.DOCUMENT_AUTHORIZED_TYPE.stream().map(String::toLowerCase).collect(Collectors.toList());
+            return authorizedExtensions.contains(extension.toLowerCase()) ;
+        }
+    }
+
+    @Component @RequiredArgsConstructor
+    class ValidFileExtensionValidatorOnBase64Url implements ConstraintValidator<ValidFileExtension, String>
+    {
+        @Override
+        public boolean isValid(String extension, ConstraintValidatorContext context)
+        {
             List<String> authorizedExtensions =  DocumentsConstants.DOCUMENT_AUTHORIZED_TYPE.stream().map(String::toLowerCase).collect(Collectors.toList());
             return authorizedExtensions.contains(extension.toLowerCase()) ;
         }

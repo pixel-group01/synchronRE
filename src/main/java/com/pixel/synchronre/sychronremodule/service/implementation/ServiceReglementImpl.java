@@ -75,7 +75,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
         //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
-        paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
+        paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
         //NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
         //String formattedNumber = numberFormat.format(paiement.getRegMontant());
@@ -97,7 +97,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
-        reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
+        reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
         logService.logg(ReglementActions.CREATE_REVERSEMENT_AFFAIRE, null, reversement, SynchronReTables.REGLEMENT);
@@ -127,7 +127,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
         //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
-        paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT));
+        paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
         paiement = regRepo.save(paiement);
         logService.logg(ReglementActions.CREATE_PAIEMENT_SINISTRE, null, paiement, SynchronReTables.REGLEMENT);
@@ -149,7 +149,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement reversement = reglementMapper.mapToReglement(dto);
 
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
-        reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT));
+        reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement);
         logService.logg(ReglementActions.CREATE_REVERSEMENT_SINISTRE, null, reversement, SynchronReTables.REGLEMENT);

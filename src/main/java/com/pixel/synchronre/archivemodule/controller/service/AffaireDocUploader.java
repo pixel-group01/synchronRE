@@ -4,14 +4,16 @@ import com.pixel.synchronre.archivemodule.controller.repositories.DocumentReposi
 import com.pixel.synchronre.archivemodule.model.dtos.DocMapper;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
+import com.pixel.synchronre.logmodule.controller.service.ILogService;
+import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.springframework.stereotype.Component;
 
 @Component(value = "affaire")
 public class AffaireDocUploader extends AbstractDocumentService
 {
-	public AffaireDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo) {
-		super(typeRepo, docMapper, docRepo);
+	public AffaireDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo,  ILogService logService) {
+		super(typeRepo, docMapper, docRepo, logService);
 	}
 	@Override
 	protected Document mapToDocument(UploadDocReq dto) {

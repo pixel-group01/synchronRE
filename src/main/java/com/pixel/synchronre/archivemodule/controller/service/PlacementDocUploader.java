@@ -4,13 +4,14 @@ import com.pixel.synchronre.archivemodule.controller.repositories.DocumentReposi
 import com.pixel.synchronre.archivemodule.model.dtos.DocMapper;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
+import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.springframework.stereotype.Component;
 
 @Component("placement")
 public class PlacementDocUploader extends AbstractDocumentService {
-	public PlacementDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo) {
-		super(typeRepo, docMapper, docRepo);
+	public PlacementDocUploader(TypeRepo typeRepo, DocMapper docMapper, DocumentRepository docRepo, ILogService logService) {
+		super(typeRepo, docMapper, docRepo, logService);
 	}
 
 	@Override

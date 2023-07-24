@@ -1,6 +1,7 @@
 package com.pixel.synchronre.init;
 
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
@@ -26,14 +27,14 @@ public class CedCesAffLoader implements Loader
     {
         //Cessionnaires
         BigDecimal FIVE = new BigDecimal(5);
-        Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ","COULIBALY Lenimama Ibrahima", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ","ADOU Venance", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ","YOUIN Salif", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ","KONAN Laurent", FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
-        Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", "ESSOH Fernand",FIVE, typeRepo.findByUniqueCode("CES"), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces1 = new Cessionnaire(1l, "AVENI-RE", "ARE", "are@gmail.com", "123546", "123456879", "are", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces3 = new Cessionnaire(3l, "NCA-RE", "NCARE", "ncare@gmail.com", "ncare-tel", "ncare-cel", "ncare", "ABJ","COULIBALY Lenimama Ibrahima", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces2 = new Cessionnaire(2l, "GRAND-RE", "GRE", "gre@gmail.com", "gre-tel", "gre-cel", "gre", "ABJ","ATSIN Ghislain Hermann", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire nre = new Cessionnaire(4l, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces5 = new Cessionnaire(5l, "SCA INTER A RE SOLUTION RE", "SCARE", "sca@gmail.com", "12354685", "123456825", "are", "ABJ","ADOU Venance", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces6 = new Cessionnaire(6l, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ","YOUIN Salif", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces7 = new Cessionnaire(7l, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ","KONAN Laurent", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
+        Cessionnaire ces8 = new Cessionnaire(8l, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ", "ESSOH Fernand",FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT"));
         cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3, nre,ces5, ces6, ces7, ces8));
 
 

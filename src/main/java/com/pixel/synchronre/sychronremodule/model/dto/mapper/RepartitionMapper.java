@@ -36,18 +36,18 @@ public abstract class RepartitionMapper {
     public abstract RepartitionDetailsResp mapToRepartitionDetailsResp(Repartition res);
 
     @Mapping(target = "repStatut", expression = "java(true)")
-    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_CES_LEG\"))")
+    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_CES_LEG\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type de document inconnu\")))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     @Mapping(target = "paramCessionLegale", expression = "java(dto.getParamCesLegalId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(dto.getParamCesLegalId()))")
     public abstract Repartition mapToCesLegRepartition(CreateCesLegReq dto);
 
     @Mapping(target = "repStatut", expression = "java(true)")
-    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_CED\"))")
+    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_CED\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type de document inconnu\")))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     public abstract Repartition mapToPartCedRepartition(CreatePartCedRepartitionReq dto);
 
     @Mapping(target = "repStatut", expression = "java(true)")
-    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_PLA\"))")
+    @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_PLA\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type de document inconnu\")))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     @Mapping(target = "repTauxComCed", expression = "java(dto.getRepSousCommission().subtract(dto.getRepTauxComCourt()))")
@@ -57,7 +57,7 @@ public abstract class RepartitionMapper {
     /*@Mapping(target = "affId", source = "affaire.affId")
     @Mapping(target = "paramCesLegalId", source = "paramCessionLegale.paramCesLegId")
     @Mapping(target = "paramCesLegLibelle", source = "paramCessionLegale.paramCesLegLibelle")
-    //@Mapping(target = "repTauxBesoinFac", expression = "java(this.calculateTauxBesoinFac(rep.aff, rep.getRepTaux()))")
+    @Mapping(target = "repTauxBesoinFac", expression = "java(this.calculateTauxBesoinFac(rep.aff, rep.getRepTaux()))")
     @Mapping(target = "accepte", expression = "java(repRepo.repExistsByAffaireAndPcl(rep.getAffaire().getAffId(), rep.getRepId()))")
     public abstract UpdateCesLegReq mapToUpdateCesLegReq(Repartition rep);*/
 

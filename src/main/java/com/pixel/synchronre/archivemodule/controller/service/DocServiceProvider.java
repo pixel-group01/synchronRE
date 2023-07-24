@@ -1,5 +1,6 @@
 package com.pixel.synchronre.archivemodule.controller.service;
 
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
@@ -18,7 +19,7 @@ public class DocServiceProvider
     public AbstractDocumentService getDocUploader(String typeDocUniqueCode)
     {
         if(typeDocUniqueCode == null) return null;
-        Type typeDoc = typeRepo.findByUniqueCode(typeDocUniqueCode.toUpperCase());
+        Type typeDoc = typeRepo.findByUniqueCode(typeDocUniqueCode.toUpperCase()).orElseThrow(()->new AppException("Type de document inconnu"));
         if(typeDoc == null || typeDoc.getTypeGroup() != TypeGroup.DOCUMENT) return null;
 
         return switch (typeDoc.getUniqueCode())

@@ -1,5 +1,6 @@
 package com.pixel.synchronre.archivemodule.controller.service;
 
+import com.pixel.synchronre.archivemodule.model.dtos.request.UpdateDocReq;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
 import com.pixel.synchronre.archivemodule.model.entities.Document;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.List;
 
 public interface IServiceDocument
@@ -17,7 +20,13 @@ public interface IServiceDocument
 	byte[] downloadFile(String filePAth);
 
     @Transactional
-    void uploadDocument(UploadDocReq dto);
+	boolean uploadDocument(UploadDocReq dto) throws UnknownHostException;
+
+	@Transactional
+	boolean deleteDocument(Long docId) throws UnknownHostException;
+
+	@Transactional
+    boolean updateDocument(UpdateDocReq dto) throws IOException;
 
     void displayPdf(HttpServletResponse response, byte[] reportBytes, String displayName)  throws Exception;
 	boolean deleteFile(String filePath);

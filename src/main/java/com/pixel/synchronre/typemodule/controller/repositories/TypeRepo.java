@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface TypeRepo extends JpaRepository<Type, Long>
 {
@@ -99,7 +100,7 @@ public interface TypeRepo extends JpaRepository<Type, Long>
     @Query("select (count(t)>0) from Type t where t.typeGroup = ?1 and t.uniqueCode = ?2 and t.status = 'ACTIVE'")
     boolean typeGroupHasChild(TypeGroup typeGroup, String uniqueCode);
 
-    Type findByUniqueCode(String uniqueCode);
+    Optional<Type> findByUniqueCode(String uniqueCode);
 
     @Query("select t.typeId from Type t where t.uniqueCode = ?1")
     Long findTypeIdByUniqueCode(String uniqueCode);

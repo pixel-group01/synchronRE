@@ -3,6 +3,8 @@ package com.pixel.synchronre.sharedmodule.utilities;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 public class Base64ToFileConverter
@@ -29,6 +31,12 @@ public class Base64ToFileConverter
         String base64UrlEncodedString = Base64.getUrlEncoder().encodeToString(fileBytes);
         return base64UrlEncodedString;
     }
+
+
+        public static String getBase64UrlFromPath(String filePath) throws IOException {
+            return convertBytesToBase64UrlString(Files.readAllBytes(Paths.get(filePath)));
+        }
+
 }
 
  class InMemoryMultipartFile implements MultipartFile {

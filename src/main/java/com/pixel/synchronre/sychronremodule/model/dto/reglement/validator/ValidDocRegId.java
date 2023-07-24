@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reglement.validator;
 
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.validation.Constraint;
@@ -29,7 +30,7 @@ public @interface ValidDocRegId
         @Override
         public boolean isValid(Long typeId, ConstraintValidatorContext context)
         {
-            Type typeDoc = typeRepo.findByUniqueCode("DOC_REG");
+            Type typeDoc = typeRepo.findByUniqueCode("DOC_REG").orElseThrow(()->new AppException("Type de document inconnu"));
             return typeRepo.isSousTypeOf(typeDoc.getTypeId(), typeId);
         }
     }

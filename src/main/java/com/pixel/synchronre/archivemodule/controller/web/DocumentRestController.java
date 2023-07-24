@@ -3,6 +3,7 @@ package com.pixel.synchronre.archivemodule.controller.web;
 import com.pixel.synchronre.archivemodule.controller.repositories.DocumentRepository;
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.controller.service.DocServiceProvider;
+import com.pixel.synchronre.archivemodule.model.dtos.request.UpdateDocReq;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.archivemodule.model.dtos.response.ReadDocDTO;
@@ -14,6 +15,7 @@ import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.Page;
@@ -39,7 +41,7 @@ public class DocumentRestController
 
     @GetMapping(path = "/{typeDocUniqueCode}/types")
     public List<ReadTypeDTO> getTypeDocumentReglement(@PathVariable String typeDocUniqueCode) throws UnknownHostException {
-        Type typeDoc = typeDocUniqueCode == null ? null : typeRepo.findByUniqueCode(typeDocUniqueCode.toUpperCase());
+        Type typeDoc = typeDocUniqueCode == null ? null : typeRepo.findByUniqueCode(typeDocUniqueCode.toUpperCase()).orElseThrow(()->new AppException("Type de document inconnu"));
         if(typeDoc == null) return new ArrayList<>();
         if(typeDoc.getTypeGroup() != TypeGroup.DOCUMENT) return new ArrayList<>();
 
@@ -64,6 +66,16 @@ public class DocumentRestController
         dto.setFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension()));
         docUploader.uploadDocument(dto);
         return true;
+    }
+
+    @PutMapping(path = "/update")
+    public boolean updateDocument(@Valid @RequestBody UpdateDocReq dto) throws IOException {
+        return docService.updateDocument(dto);
+    }
+
+    @PutMapping(path = "/delete/{docId}")
+    public boolean updateDocument(@PathVariable Long docId) throws IOException {
+        return docService.deleteDocument(docId);
     }
 
     @GetMapping(path = "/affaire/{affId}")
