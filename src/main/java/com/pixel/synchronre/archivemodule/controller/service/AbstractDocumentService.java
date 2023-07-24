@@ -112,7 +112,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		Type docType = typeRepo.findByUniqueCode(dto.getDocUniqueCode().toUpperCase(Locale.ROOT)).orElseThrow(()->new AppException("Type de document inconnu"));
 		if(docType == null || docType.getTypeGroup() != TypeGroup.DOCUMENT)  throw new AppException("Ce type de document n'est pris en charge par le système");;
 		Document doc = mapToDocument(dto);
-		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+		String path = generatePath(dto.getFile(), docType.getObjectFolder(), dto.getDocUniqueCode(), docType.getName());
 		doc.setDocPath(path);
 
 		uploadFile(dto.getFile(), doc.getDocPath());
@@ -142,18 +142,20 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		if(doc.getDocType().getTypeId().longValue() != newType.getTypeId().longValue())
 		{
 			doc.setDocType(newType);
-			String path = generatePath(dto.getFile(), newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+			MultipartFile file = Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension());
+			String path = generatePath(file, newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
 			doc.setDocPath(path);
-			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
+			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), path);
 		}
 		else if(!oldBase64UrlFile.equals(dto.getBase64UrlFile().replace("+", "-").replace("/", "_")))
 		{
-			String path = generatePath(dto.getFile(), newType.getObjectFolder(), dto.getDocUniqueCode(), doc.getDocDescription());
+			MultipartFile file = Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension());
+			String path = generatePath(file, newType.getObjectFolder(), dto.getDocUniqueCode(), newType.getName());
 			doc.setDocPath(path);
-			uploadFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), dto.getExtension()), doc.getDocPath());
+			uploadFile(file, path);
 		}
+		this.deleteFile(oldDoc.getDocPath());
 		logService.logg(ArchiveActions.UPLOAD_DOCUMENT, doc, new Document(), ArchiveTable.DOCUMENT);
-		//this.deleteFile(doc.getDocPath());
 		return true;
 	}
 
