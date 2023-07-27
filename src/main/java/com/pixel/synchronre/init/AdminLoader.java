@@ -79,7 +79,7 @@ public class AdminLoader implements Loader
         userRepo.save(userci);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieSinNsiaCi, fncSaiSinCI));
 
-        //
+
 
 
         //User NSIA BENIN
