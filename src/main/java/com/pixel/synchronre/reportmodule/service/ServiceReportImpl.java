@@ -85,7 +85,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteCession(Long plaId) throws Exception
+    public byte[] generateNoteCessionFac(Long plaId) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
@@ -106,7 +106,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteDebit(Long affId) throws Exception
+    public byte[] generateNoteDebitFac(Long affId) throws Exception
     {
         Repartition repart = repRepo.repartFindByAffaire(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
 
@@ -128,7 +128,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteCredit(Long affId, Long cesId) throws Exception
+    public byte[] generateNoteCreditFac(Long affId, Long cesId) throws Exception
     {
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");

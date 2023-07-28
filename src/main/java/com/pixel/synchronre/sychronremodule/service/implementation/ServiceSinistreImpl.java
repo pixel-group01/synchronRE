@@ -190,7 +190,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         cessionnaires.forEach(ces->
         {
             try {
-                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, "Note de cession sinistre");
+                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, ces.getCesId(), "Note de cession sinistre");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -214,7 +214,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         cessionnaires.forEach(ces->
         {
             try {
-                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, "Note de cession sinistre");
+                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, ces.getCesId(), "Note de cession sinistre");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (Exception e) {

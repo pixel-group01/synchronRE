@@ -3,6 +3,10 @@ package com.pixel.synchronre.notificationmodule.controller.services;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.notificationmodule.model.dto.EmailAttachment;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import jakarta.activation.DataSource;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +20,6 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,6 +32,9 @@ public class EmailSenderServiceImpl implements EmailSenderService
     private final HTMLEmailBuilder htmlEmailBuilder;
     private final EmailServiceConfig emailServiceConfig;
     private final IServiceReport reportService;
+    private final RepartitionRepository repRepo;
+    private final AffaireRepository affRepo;
+    private final SinRepo sinRepo;
     @Value("${auth.server.address}")
     private String authServerAddress;
     @Value("${synchronre.server.address}")
@@ -95,19 +101,52 @@ public class EmailSenderServiceImpl implements EmailSenderService
     }
 
     @Override
-    public void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception
+    public void sendNoteCessionFacEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception
     {
-        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode);
-        byte[] report = reportService.generateNoteCession(plaId);
+        String message = this.htmlEmailBuilder.buildNoteCessionFacEmail(interlocName, affCode);
+        byte[] report = reportService.generateNoteCessionFac(plaId);
         EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
         this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }
+    @Override
+    public void sendNoteDebitFacEmail(String senderMail, String receiverMail, String interlocName, Long affId) throws Exception {
+        String affCode = affRepo.getAffCode(affId);
+        String message = this.htmlEmailBuilder.buildNoteDebitFacEmail(receiverMail, affCode);
+        byte[] report = reportService.generateNoteDebitFac(affId);
+        EmailAttachment attachment = new EmailAttachment("Note de débit facultative", report, "application/pdf");
+        this.sendEmailWithAttachments( senderMail,  receiverMail,  "Note de débit facultative de l'affaire N° " + affCode,  message, Collections.singletonList(attachment));
+    }
 
     @Override
-    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String NoteCession) throws Exception {
-        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode);
-        byte[] report = reportService.generateNoteCessionSinistre(sinId);
-        EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
-        this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession sinistre et note de débit",  message, Collections.singletonList(attachment));
+    public void sendNoteCreditFacEmail(String senderMail, String receiverMail, String interlocName, Long affId, Long cesId) throws Exception {
+        String affCode = affRepo.getAffCode(affId);
+        String message = this.htmlEmailBuilder.buildNoteDebitFacEmail(receiverMail, affCode);
+        byte[] report = reportService.generateNoteCreditFac(affId, cesId);
+        EmailAttachment attachment = new EmailAttachment("Note de crédit facultative", report, "application/pdf");
+        this.sendEmailWithAttachments( senderMail,  receiverMail,  "Note de crédit facultative de l'affaire N° " + affCode,  message, Collections.singletonList(attachment));
+    }
+
+    @Override
+    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String noteCession) throws Exception {
+        String message = this.htmlEmailBuilder.buildNoteCessionEtDeDebitSinistreEmail(cesInterlocuteur, sinRepo.getSinCode(sinId));
+        Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(affRepo.getAffIdByAffCode(affCode), "REP_PLA", cesId);
+        byte[] report = reportService.generateNoteCessionSinistre(placement.getRepId());
+        EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
+        this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
+    }
+
+
+
+
+    @Override
+    public void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName, Long affId) throws Exception {
+
+    }
+
+
+
+    @Override
+    public void sendCheque(String senderMail, String receiverMail, String interlocName, Long regId) throws Exception {
+
     }
 }

@@ -15,11 +15,9 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
@@ -31,7 +29,6 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import com.pixel.synchronre.typemodule.model.entities.Type;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -502,7 +499,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         Cessionnaire cessionnaire = repRepo.getCessionnaireByRepId(plaId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
-        mailSenderService.sendNoteCessionEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
+        mailSenderService.sendNoteCessionFacEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
         placement.setRepStaCode(new Statut(MAIL.staCode));
         mvtService.createMvtPlacement(new MvtReq(plaId, MAIL.staCode, null));
         logService.saveLog(RepartitionActions.TRANSMETTRE_NOTE_CESSION);
@@ -611,6 +608,4 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         rep.setParamCesLegLibelle(pcl.getParamCesLegLibelle());
         return rep;
     }
-
-
 }
