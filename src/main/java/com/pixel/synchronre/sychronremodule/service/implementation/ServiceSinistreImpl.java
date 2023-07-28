@@ -173,7 +173,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
-        envoyerNoteCessionSinistreEtNoteDebit1(sinId);
+        //envoyerNoteCessionSinistreEtNoteDebit1(sinId);
         return sinPages;
 
     }
