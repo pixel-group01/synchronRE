@@ -11,10 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 @ValidFileExtension
 public class UploadDocReq
 {
-    /*@ExistingUserId(groups = {OnUSerUpload.class})
-    @ExistingRepId(groups = {OnRegUpload.class})
-    @ExistingPlaId(groups = {OnPlaUpload.class})
-    @ExistingAffId(groups = {OnAffUpload.class})*/
     private Long objectId;
     //@ValidDocType
     private String docUniqueCode;

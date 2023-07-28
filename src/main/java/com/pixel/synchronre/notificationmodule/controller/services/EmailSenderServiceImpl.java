@@ -97,15 +97,15 @@ public class EmailSenderServiceImpl implements EmailSenderService
     @Override
     public void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception
     {
-        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode, synchronreAdress + "/reports/note-cession/" + plaId);
+        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode);
         byte[] report = reportService.generateNoteCession(plaId);
         EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
         this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }
 
     @Override
-    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws Exception {
-        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode, synchronreAdress + "/reports/note-cession-sinistre/" + sinId, synchronreAdress + "/reports/note-debit-sinistre/" + sinId);
+    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String NoteCession) throws Exception {
+        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode);
         byte[] report = reportService.generateNoteCessionSinistre(sinId);
         EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
         this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession sinistre et note de débit",  message, Collections.singletonList(attachment));
