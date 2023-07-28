@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
+import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.validator.ExistingParamCesLegId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
 import jakarta.validation.constraints.NotNull;
@@ -29,4 +30,17 @@ public class UpdateCesLegReq
     private Long paramCesLegalId;
     private boolean accepte;
     private String paramCesLegLibelle;
+
+    public UpdateCesLegReq(ParamCessionLegaleListResp pcl, Long repId, BigDecimal repCapital, Long affId, boolean  accepte)
+    {
+        this.repId = repId;
+        this.repCapital = repCapital;
+        this.affId = affId;
+        if(pcl != null) {
+            this.repTaux = pcl.getParamCesLegTaux();
+            this.paramCesLegalId = pcl.getParamCesLegId();
+            this.accepte = accepte;
+            this.paramCesLegLibelle = pcl.getParamCesLegLibelle();
+        }
+    }
 }

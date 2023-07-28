@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
-
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import org.springframework.data.domain.Page;
@@ -8,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ParamCessionLegaleRepository extends JpaRepository<ParamCessionLegale, Long> {
@@ -46,4 +46,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("select (count(pcl.paramCesLegId)>0) from ParamCessionLegale  pcl where (select pcl2.pays.paysCode from ParamCessionLegale pcl2 where pcl2.paramCesLegId = ?1) = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?2)")
     boolean existsByPclIdAndAffaire(Long pclId, Long affId);
+
+    @Query("select sum(pcl.paramCesLegTaux) from ParamCessionLegale pcl where pcl.paramCesLegId in ?1 and pcl.statut.staCode = 'ACT'")
+    BigDecimal getSommeTauxParamCessionLegal(List<Long> pclIds);
 }
