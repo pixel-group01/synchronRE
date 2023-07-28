@@ -1,13 +1,21 @@
 package com.pixel.synchronre.notificationmodule.controller.services;
 
 
+import com.pixel.synchronre.notificationmodule.model.dto.EmailAttachment;
+import org.springframework.scheduling.annotation.Async;
+
+import java.util.List;
+
 public interface EmailSenderService
 {
+    @Async
+    void sendEmailWithAttachments(String senderMail, String receiverMail, String mailObject, String message, List<EmailAttachment> attachments) throws IllegalAccessException;
+
     void sendEmail(String senderMail, String receiverMail, String mailObject, String message) throws IllegalAccessException;
     void sendReinitialisePasswordEmail(String receiverMail, String recipientUsername, String link) throws IllegalAccessException;
     void sendAccountActivationEmail(String receiverMail, String recipientUsername, String activationLink) throws IllegalAccessException;
 
-    void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws IllegalAccessException;
+    void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception;
 
     default String buildHtmlEmail(String receiverName, String link)
     {
@@ -79,7 +87,7 @@ public interface EmailSenderService
                 "</div></div>";
     }
 
-    void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws IllegalAccessException;
+    void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws Exception;
 
 
     //void sendConfirmationEmail(String receiverMail, String link) throws IllegalAccessException;

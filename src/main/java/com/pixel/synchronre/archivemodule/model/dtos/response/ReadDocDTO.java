@@ -9,6 +9,7 @@ public class ReadDocDTO
 {
 	private Long docId;
 	private String docNum;
+	private String docName;
 	private String docDescription;
 	private String docPath;
 	private Long docTypeId;

@@ -4,7 +4,7 @@ public interface HTMLEmailBuilder
 {
     String buildAccountActivationHTMLEmail(String recipientUsername, String link);
     String buildPasswordReinitialisationHTMLEmail(String recipientUsername, String link);
-    String buildNoteCessionEmail(String recipientUsername, String affCode, String link);
+    String buildNoteCessionEmail(String recipientUsername, String affCode);
 
-    String buildNoteCessionSinistreEtNoteDebitEmail(String cesEmail, String cesInterlocuteur, String affCode, String s, String s1);
+    String buildNoteCessionSinistreEtNoteDebitEmail(String cesEmail, String cesInterlocuteur, String affCode);
 }

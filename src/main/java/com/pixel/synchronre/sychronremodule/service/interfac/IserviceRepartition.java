@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,9 @@ public interface IserviceRepartition {
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
     CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
 
+    CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto);
+
+
     void deletePlacement(Long repId) throws UnknownHostException;
 
     CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId);
@@ -56,7 +60,7 @@ public interface IserviceRepartition {
     void transmettreNoteDeCession(List<Long> plaId);
 
     @Transactional
-    void transmettreNoteDeCession(Long plaId) throws IllegalAccessException, UnknownHostException;
+    void transmettreNoteDeCession(Long plaId) throws Exception;
 
     @Transactional
     void refuserPlacement(Long plaId, String motif) throws UnknownHostException;

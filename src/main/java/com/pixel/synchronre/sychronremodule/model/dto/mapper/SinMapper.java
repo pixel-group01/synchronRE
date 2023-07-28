@@ -63,9 +63,6 @@ public abstract class SinMapper
     @Mapping(target = "sinTauxMontantCessionnaires", expression = "java(sinComptaService.calculateTauxMtCessionnairesSurSinistre(sin.getSinId()))")
     public abstract EtatComptableSinistreResp mapToEtatComptableSinistre(Sinistre sin);
 
-    private BigDecimal sinMontantTotalCessionnaires;
-    private BigDecimal sinTauxMontantCessionnaires;
-
     protected List<EtatComptableSinistreResp.DetailsEtatComptableSinistre> getDetailsEtatComptables(Long sinId)
     {
         return repRepo.getCesIdsBySinId(sinId).stream()
@@ -73,18 +70,15 @@ public abstract class SinMapper
                 .collect(Collectors.toList());
     }
 
-    private EtatComptableSinistreResp.DetailsEtatComptableSinistre getDetailsEtatComptableSinistre(Long sinId, Long cesId)
+    public EtatComptableSinistreResp.DetailsEtatComptableSinistre getDetailsEtatComptableSinistre(Long sinId, Long cesId)
     {
         Cessionnaire ces = cesRepo.findById(cesId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
         EtatComptableSinistreResp.DetailsEtatComptableSinistre details = new EtatComptableSinistreResp().new DetailsEtatComptableSinistre();
-
         BeanUtils.copyProperties(ces, details);
-
         details.setMtTotalARegler(sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId));
         details.setMtDejaRegle(sinComptaService.calculateMtDejaPayeBySinAndCes(sinId, cesId));
         details.setMtResteARegler(sinComptaService.calculateResteAPayerBySinAndCes(sinId, cesId));
         details.setTauxDeReglement(sinComptaService.calculateTauxDePaiementSinistreBySinAndCes(sinId, cesId));
-
         return details;
     }
 }

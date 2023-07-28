@@ -1,6 +1,10 @@
 package com.pixel.synchronre.notificationmodule.controller.services;
 
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
+import com.pixel.synchronre.notificationmodule.model.dto.EmailAttachment;
+import com.pixel.synchronre.reportmodule.service.IServiceReport;
+import jakarta.activation.DataSource;
+import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +16,10 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Slf4j
@@ -20,12 +28,39 @@ public class EmailSenderServiceImpl implements EmailSenderService
     private final JavaMailSender javaMailSender;
     private final HTMLEmailBuilder htmlEmailBuilder;
     private final EmailServiceConfig emailServiceConfig;
+    private final IServiceReport reportService;
     @Value("${auth.server.address}")
     private String authServerAddress;
     @Value("${synchronre.server.address}")
     private String synchronreAdress;
     @Value("${front.adress}")
     private String frontAddress;
+
+    @Override @Async
+    public void sendEmailWithAttachments(String senderMail, String receiverMail, String mailObject, String message, List<EmailAttachment> attachments) throws IllegalAccessException {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "utf-8");
+            mimeMessageHelper.setText(message, true); // Second parameter true means that the message will be an HTML message
+            mimeMessageHelper.setTo(receiverMail);
+            mimeMessage.setSubject(mailObject);
+            mimeMessage.setFrom(senderMail);
+
+            // Add attachments to the email
+            if (attachments != null && !attachments.isEmpty()) {
+                for (EmailAttachment attachment : attachments) {
+                    DataSource dataSource = new ByteArrayDataSource(attachment.getContent(), attachment.getContentType());
+                    mimeMessageHelper.addAttachment(attachment.getFilename(), dataSource);
+                }
+            }
+
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new IllegalAccessException("Error while sending email");
+        }
+    }
+
 
     @Override
     @Async
@@ -60,15 +95,19 @@ public class EmailSenderServiceImpl implements EmailSenderService
     }
 
     @Override
-    public void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws IllegalAccessException
+    public void sendNoteCessionEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception
     {
-        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode, synchronreAdress + "/reports/note-cession/" + plaId);
-        this.sendEmail( senderMail,  receiverMail,  mailObject,  message);
+        String message = this.htmlEmailBuilder.buildNoteCessionEmail(interlocName, affCode);
+        byte[] report = reportService.generateNoteCession(plaId);
+        EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
+        this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }
 
     @Override
-    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String note_de_cession_sinistre) throws IllegalAccessException {
-        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode, synchronreAdress + "/reports/note-cession-sinistre/" + sinId, synchronreAdress + "/reports/note-debit-sinistre/" + sinId);
-        this.sendEmail( synchronreEmail,  cesEmail,  "Note de cession sinistre et note de débit",  message);
+    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, String NoteCession) throws Exception {
+        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEtNoteDebitEmail(cesEmail,cesInterlocuteur, affCode);
+        byte[] report = reportService.generateNoteCessionSinistre(sinId);
+        EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
+        this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession sinistre et note de débit",  message, Collections.singletonList(attachment));
     }
 }

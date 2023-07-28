@@ -137,6 +137,7 @@ public abstract class AbstractDocumentService implements IServiceDocument
 		Document oldDoc = docCopier.copy(doc);
 		doc.setDocNum(dto.getDocNum());
 		doc.setDocDescription(dto.getDocDescription());
+		doc.setDocName(dto.getDocName());
 		String oldBase64UrlFile = Base64ToFileConverter.getBase64UrlFromPath(doc.getDocPath());
 		Type newType = typeRepo.findByUniqueCode(dto.getDocUniqueCode()).orElseThrow(()->new AppException("Type de document inconnu"));
 		if(doc.getDocType().getTypeId().longValue() != newType.getTypeId().longValue())

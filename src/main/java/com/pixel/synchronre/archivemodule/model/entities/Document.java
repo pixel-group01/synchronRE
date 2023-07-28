@@ -22,6 +22,8 @@ public class Document
 	@SequenceGenerator(name = "DOC_ID_GEN", sequenceName = "DOC_ID_GEN")
 	private Long docId;
 	private String docNum;
+	private String docName;
+	@Column(length = 10000)
 	private String docDescription;
 	private String docPath;
 

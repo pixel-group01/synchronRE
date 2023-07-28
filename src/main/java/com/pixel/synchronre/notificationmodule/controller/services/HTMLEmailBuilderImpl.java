@@ -147,7 +147,7 @@ public class HTMLEmailBuilderImpl implements HTMLEmailBuilder {
     }
 
     @Override
-    public String buildNoteCessionEmail(String recipientUsername, String affCode, String link) {
+    public String buildNoteCessionEmail(String recipientUsername, String affCode) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -203,7 +203,7 @@ public class HTMLEmailBuilderImpl implements HTMLEmailBuilder {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Bonjour " + recipientUsername + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Veuillez cliquer sur le lien suivant pour télécharger le bordereau de cession de l'affaire N°" + affCode +"<br/> </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + link + "\">Télécharger la note de cession</a> </p></blockquote>" +
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Bonjour " + recipientUsername + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Veuillez recevoir en pièce jointe le bordereau de cession de l'affaire N°" + affCode +"<br/> </p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">" +
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
@@ -217,7 +217,7 @@ public class HTMLEmailBuilderImpl implements HTMLEmailBuilder {
     }
 
     @Override
-    public String buildNoteCessionSinistreEtNoteDebitEmail(String cesEmail, String cesInterlocuteur, String affCode, String noteCessionLink, String noteDebitLink) {
+    public String buildNoteCessionSinistreEtNoteDebitEmail(String cesEmail, String cesInterlocuteur, String affCode) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
                 "\n" +
                 "<span style=\"display:none;font-size:1px;color:#fff;max-height:0\"></span>\n" +
@@ -273,9 +273,7 @@ public class HTMLEmailBuilderImpl implements HTMLEmailBuilder {
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +
                 "      <td style=\"font-family:Helvetica,Arial,sans-serif;font-size:19px;line-height:1.315789474;max-width:560px\">\n" +
                 "        \n" +
-                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Bonjour " + cesInterlocuteur + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Veuillez cliquer sur le lien suivant pour télécharger les notes de débit et de cession du sinistre N°" +affCode +"<br/> "+
-                "</p><blockquote style=\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\"><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + noteCessionLink + "\">Télécharger la note de cession sinistre</a> </p></blockquote><br/>" +
-                "</p><blockquote style=\\\"Margin:0 0 20px 0;border-left:10px solid #b1b4b6;padding:15px 0 0.1px 15px;font-size:19px;line-height:25px\\\"><p style=\\\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> <a href=\"" + noteDebitLink + "\">Télécharger la note de débit</a> </p></blockquote><br/>"+
+                "            <p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\">Bonjour " + cesInterlocuteur + ",</p><p style=\"Margin:0 0 20px 0;font-size:19px;line-height:25px;color:#0b0c0c\"> Veuillez recevoir en pièce jointe les notes de débit et de cession du sinistre N°" +affCode +"<br/> "+
                 "        \n" +
                 "      </td>\n" +
                 "      <td width=\"10\" valign=\"middle\"><br></td>\n" +

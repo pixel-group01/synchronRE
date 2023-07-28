@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.Exis
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
@@ -136,10 +137,15 @@ public class RepartitionController
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
     public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital,
                                                                 @RequestParam(required = false) BigDecimal tauxCmsRea,
-                                                                @RequestParam(required = false) BigDecimal tauxCmsCourtage,
-                                                                @RequestParam(required = false) Long repIdToUpdate)
+                                                                @RequestParam(required = false) BigDecimal tauxCmsCourtage, @RequestParam(required = false) Long repIdToUpdate)
     {
         return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage, repIdToUpdate);
+    }
+
+    @PostMapping(path = "/calculate")
+    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@RequestBody CalculationRepartitionReqDto dto)
+    {
+        return repService.calculateRepByDto(dto);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
@@ -168,7 +174,7 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/envoyer-note-cession/{plaId}")
-    void envoyerNoteCession(@PathVariable Long plaId) throws IllegalAccessException, UnknownHostException {
+    void envoyerNoteCession(@PathVariable Long plaId) throws Exception {
         repService.transmettreNoteDeCession(plaId);
     }
 

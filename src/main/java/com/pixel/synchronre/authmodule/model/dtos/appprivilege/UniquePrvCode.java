@@ -26,7 +26,7 @@ public @interface UniquePrvCode
         private final PrvRepo prvRepo;
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
-            return false;//!prvRepo.alreadyExistsByCode(value);
+            return !prvRepo.existsByCode(value);
         }
     }
 }
