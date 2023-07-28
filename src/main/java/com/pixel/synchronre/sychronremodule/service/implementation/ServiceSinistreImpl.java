@@ -193,6 +193,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
                 mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, "Note de cession sinistre");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             sinistre.setStatut(new Statut(EN_ATTENTE_DE_PAIEMENT.staCode));
         });
@@ -214,6 +216,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
             try {
                 mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, "Note de cession sinistre");
             } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             //sinistre.setStatut(new Statut(EN_ATTENTE_DE_PAIEMENT.staCode));

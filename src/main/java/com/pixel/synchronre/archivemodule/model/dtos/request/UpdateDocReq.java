@@ -16,6 +16,7 @@ public class UpdateDocReq
     private Long docId;
     private String docUniqueCode;
     private String docNum;
+    private String docName;
     private String docDescription;
     private MultipartFile file;
     private String base64UrlFile;

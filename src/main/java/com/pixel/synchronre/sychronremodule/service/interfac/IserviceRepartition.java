@@ -56,7 +56,7 @@ public interface IserviceRepartition {
     void transmettreNoteDeCession(List<Long> plaId);
 
     @Transactional
-    void transmettreNoteDeCession(Long plaId) throws IllegalAccessException, UnknownHostException;
+    void transmettreNoteDeCession(Long plaId) throws Exception;
 
     @Transactional
     void refuserPlacement(Long plaId, String motif) throws UnknownHostException;

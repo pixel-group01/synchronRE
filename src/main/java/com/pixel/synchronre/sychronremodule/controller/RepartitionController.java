@@ -168,7 +168,7 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/envoyer-note-cession/{plaId}")
-    void envoyerNoteCession(@PathVariable Long plaId) throws IllegalAccessException, UnknownHostException {
+    void envoyerNoteCession(@PathVariable Long plaId) throws Exception {
         repService.transmettreNoteDeCession(plaId);
     }
 

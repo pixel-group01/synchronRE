@@ -395,6 +395,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                     e.printStackTrace();
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -429,12 +431,14 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 this.transmettreNoteDeCession(plaId);
             } catch (IllegalAccessException | UnknownHostException e) {
                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }
 
     @Override @Transactional
-    public void transmettreNoteDeCession(Long plaId) throws IllegalAccessException, UnknownHostException {
+    public void transmettreNoteDeCession(Long plaId) throws Exception {
         Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
@@ -485,7 +489,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         placement.setRepStaCode(new Statut(EN_ATTENTE_DE_VALIDATION.staCode));
         logService.logg(RepartitionActions.UPDATE_PLA_REPARTITION, oldPlacement, placement, SynchronReTables.REPARTITION);
         if(dto.getAvisModificationCession() != null)
-            placementDocUploader.uploadDocument(new UploadDocReq(dto.getPlaId(), "AVI_MOD_CES", null ,"Avis de modification de cession",dto.getAvisModificationCession()));
+            placementDocUploader.uploadDocument(new UploadDocReq(dto.getPlaId(), "AVI_MOD_CES", null , "Avis de modification de cession", "Avis de modification de cession",dto.getAvisModificationCession()));
         mvtService.createMvtPlacement(new MvtReq(dto.getPlaId(), EN_ATTENTE_DE_VALIDATION.staCode, null));
     }
 
