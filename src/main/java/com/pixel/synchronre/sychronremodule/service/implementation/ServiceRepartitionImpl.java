@@ -327,8 +327,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return resp;
     }
 
-    //@Override
-    public void deletePlacementOld(Long repId) throws UnknownHostException
+    @Override
+    public void deletePlacement(Long repId) throws UnknownHostException
     {
         boolean plaExists = repRepo.placementExists(repId);
         if(plaExists)
@@ -340,17 +340,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 repRepo.deleteById(repId);
                 logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
             }
-        }
-    }
-    @Override
-    public void deletePlacement(Long repId) throws UnknownHostException
-    {
-        boolean plaExists = repRepo.placementExists(repId);
-        if(plaExists)
-        {
-            Repartition placement = repRepo.findById(repId).orElse(null);
-            placement.setRepStatut(false);
-            repRepo.save(placement);
         }
     }
 
