@@ -124,4 +124,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
         select sum(r.regMontant) from Reglement r where r.sinistre.sinId is not null and r.sinistre.affaire.cedante.cedId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'reversements' and r.sinistre.affaire.affStatutCreation = 'REALISEE'
 """)
     BigDecimal calculateMtSinistreTotalDejaReverserByCed(Long cedId);
+
+    @Query("select s.sinCode from Sinistre s where s.sinId = ?1")
+    String getSinCode(Long sinId);
 }

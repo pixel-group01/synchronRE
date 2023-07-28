@@ -14,11 +14,11 @@ public interface IServiceReport
 {
     byte[] generateReport(String reportName, Map<String, Object> params, List<Object> data, String qrText) throws Exception;
 
-    byte[] generateNoteCession(Long plaId) throws Exception;
+    byte[] generateNoteCessionFac(Long plaId) throws Exception;
 
-    byte[] generateNoteDebit(Long affId) throws Exception;
+    byte[] generateNoteDebitFac(Long affId) throws Exception;
 
-    byte[] generateNoteCredit(Long affId, @PathVariable Long cesId) throws Exception;
+    byte[] generateNoteCreditFac(Long affId, @PathVariable Long cesId) throws Exception;
 
     byte[] generateNoteCessionSinistre(Long plaId) throws Exception;
 

@@ -1,26 +1,11 @@
 package com.pixel.synchronre.reportmodule.controller;
 
-import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
 import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
-import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
-import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController @RequestMapping(path = "/reports") @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 public class ReportRestController
@@ -30,7 +15,7 @@ public class ReportRestController
     @GetMapping("/note-cession-fac/{plaId}")
     public Base64FileDto generateNoteCession(@PathVariable Long plaId) throws Exception
     {
-        byte[] reportBytes = jrService.generateNoteCession(plaId);
+        byte[] reportBytes = jrService.generateNoteCessionFac(plaId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
         return new Base64FileDto(base64Url);
     }
@@ -39,7 +24,7 @@ public class ReportRestController
     public Base64FileDto generateNoteDebit(@PathVariable Long affId) throws Exception
     {
 
-        byte[] reportBytes = jrService.generateNoteDebit(affId);
+        byte[] reportBytes = jrService.generateNoteDebitFac(affId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
         return new Base64FileDto(base64Url);
     }
@@ -47,7 +32,7 @@ public class ReportRestController
     @GetMapping("/note-de-credit-fac/{affId}/{cesId}")
     public Base64FileDto generateNoteCredit(@PathVariable Long affId, @PathVariable Long cesId) throws Exception
     {
-        byte[] reportBytes = jrService.generateNoteCredit(affId, cesId);
+        byte[] reportBytes = jrService.generateNoteCreditFac(affId, cesId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
         return new Base64FileDto(base64Url);
     }

@@ -444,7 +444,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         Cessionnaire cessionnaire = repRepo.getCessionnaireByRepId(plaId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
-        mailSenderService.sendNoteCessionEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
+        mailSenderService.sendNoteCessionFacEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
         placement.setRepStaCode(new Statut(MAIL.staCode));
         mvtService.createMvtPlacement(new MvtReq(plaId, MAIL.staCode, null));
         logService.saveLog(RepartitionActions.TRANSMETTRE_NOTE_CESSION);
@@ -553,6 +553,4 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         rep.setParamCesLegLibelle(pcl.getParamCesLegLibelle());
         return rep;
     }
-
-
 }

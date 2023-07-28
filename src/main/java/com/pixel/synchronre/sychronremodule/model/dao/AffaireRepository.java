@@ -85,6 +85,9 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     """)
     BigDecimal calculateMtotAPayerByCesByAff(Long affId); // capital100*(1-ccm)
 
+    @Query("select a.affId from Affaire a where a.affCode = ?1")
+    Long getAffIdByAffCode(String affCode);
+
     //@Query("select aff.affTauxCommissionReassureur from Affaire aff where aff.affId = ?1")
     //BigDecimal getTauxCommissionReassureur(Long affId);
 

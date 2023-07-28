@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-07-10T18:21:28 -->
+<!-- 2023-07-28T18:57:18 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -280,6 +280,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
        affaire.fac_prime,
        affaire.fac_smp_lci,
         regexp_replace(to_char(affaire.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
+        sinistre.sin_id,
        sinistre.sin_commentaire,
        affaire.cedente_id,
        sinistre.sin_montant100,
@@ -308,7 +309,7 @@ WHERE affaire.couverture_id = couverture.cou_id
   AND bordereau.rep_id = repartition.rep_id
   AND affaire.aff_id = sinistre.aff_id
   AND affaire.aff_statut_creation = 'REALISEE'
-  AND affaire.aff_id = $P{aff_id}
+  AND sinistre.sin_id = $P{aff_id}
   AND repartition.cessionnaire_id = $P{ces_id}]]>
 	</queryString>
 	<field name="aff_id" class="java.lang.Long"/>
@@ -322,11 +323,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="fac_prime" class="java.math.BigDecimal"/>
 	<field name="fac_smp_lci" class="java.math.BigDecimal"/>
 	<field name="fac_smp_lci1" class="java.lang.String"/>
+	<field name="sin_id" class="java.lang.Long"/>
 	<field name="sin_commentaire" class="java.lang.String"/>
 	<field name="cedente_id" class="java.lang.Long"/>
 	<field name="sin_montant100" class="java.math.BigDecimal"/>
 	<field name="sin_montant1001" class="java.lang.String"/>
-	<field name="COLUMN_16" class="java.lang.String"/>
+	<field name="COLUMN_17" class="java.lang.String"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
 	<field name="bran_libelle" class="java.lang.String"/>
