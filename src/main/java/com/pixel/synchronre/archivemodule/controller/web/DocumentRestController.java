@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@RestController @RequiredArgsConstructor @RequestMapping(path = "/documents/update") @ResponseStatus(HttpStatus.OK)
+@RestController @RequiredArgsConstructor @RequestMapping(path = "/documents") @ResponseStatus(HttpStatus.OK)
 public class DocumentRestController
 {
     private final DocumentRepository docRepo;
