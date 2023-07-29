@@ -19,4 +19,16 @@ public class CalculationRepartitionReqDto
     private List<Long> pclIds;
     //private List<RepDto> traites;
     private Long repIdToBeModified;
+
+    private BigDecimal retentionCapital;
+    private BigDecimal retentionTaux;
+    private Long retentionRepId;
+
+    private BigDecimal xlCapital;
+    private BigDecimal xlTaux;
+    private Long xlRepId;
+
+    private BigDecimal facobCapital;
+    private BigDecimal facobTaux;
+    private Long facobRepId;
 }

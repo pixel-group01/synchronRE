@@ -35,7 +35,7 @@ public abstract class RepartitionMapper {
     @Mapping(target = "repStaCode", source = "repStaCode.staCode")
     public abstract RepartitionDetailsResp mapToRepartitionDetailsResp(Repartition res);
 
-    @Mapping(target = "repStatut", expression = "java(true)")
+    @Mapping(target = "repStatut", source = "accepte")
     @Mapping(target = "type", expression = "java( typeRepo.findByUniqueCode(\"REP_CES_LEG\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type de document inconnu\")))")
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     @Mapping(target = "paramCessionLegale", expression = "java(dto.getParamCesLegalId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(dto.getParamCesLegalId()))")

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class UpdatePlaRepartitionReq
 {
     @ExistingPlaId
-    private Long plaId;
+    private Long repId;
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
     private BigDecimal repCapital;

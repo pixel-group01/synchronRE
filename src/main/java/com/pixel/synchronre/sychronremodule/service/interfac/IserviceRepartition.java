@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Calcu
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +70,7 @@ public interface IserviceRepartition {
     void annulerPlacement(Long plaId) throws UnknownHostException;
 
     @Transactional
-    void modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException;
+    Repartition modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException;
 
     @Transactional
     void accepterPlacement(Long plaId) throws UnknownHostException;
