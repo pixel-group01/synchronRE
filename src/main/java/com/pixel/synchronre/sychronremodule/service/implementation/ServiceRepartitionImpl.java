@@ -88,14 +88,16 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             rep = repRepo.findByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId());
             oldRep = repCopier.copy(rep);
-            rep.setRepCapital(dto.getRepCapital());
-            rep.setRepTaux(dto.getRepTaux());
+            rep.setRepStatut(dto.isAccepte());
         }
         else
         {
             rep = repMapper.mapToCesLegRepartition(dto);
+            rep.setRepCapital(dto.getRepCapital());
+            rep.setRepTaux(dto.getRepTaux());
+            rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         }
-        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+
         rep = repRepo.save(rep);
         logService.logg(existByAffaireAndPcl ? RepartitionActions.UPDATE_CES_LEG_REPARTITION : RepartitionActions.CREATE_CES_LEG_REPARTITION, oldRep , rep, SynchronReTables.REPARTITION);
         rep.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
@@ -176,7 +178,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
         else
         {
-            CreateCesLegReq createCesLegReq = new CreateCesLegReq(pclRepDto.getRepCapital(), pclRepDto.getRepTaux(), pclRepDto.getAffId(), pclRepDto.getParamCesLegalId(), true);
+            CreateCesLegReq createCesLegReq = new CreateCesLegReq(pclRepDto.getRepCapital(), pclRepDto.getRepTaux(), pclRepDto.getAffId(), pclRepDto.getParamCesLegalId(), pclRepDto.isAccepte());
             try {
                 this.createCesLegRepartition(createCesLegReq);
             } catch (UnknownHostException e) {
@@ -364,7 +366,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         else if(dto.getRepTaux() != null)
         {
             if(dto.getRepTaux().compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
-            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux().divide(CENT, 2, RoundingMode.HALF_UP));
+            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 10, RoundingMode.HALF_UP);
             if(repCapital.compareTo(besoinFacRestant)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
             besoinFacRestant = besoinFacRestant.subtract(repCapital);
             resp.setRepCapital(repCapital);
@@ -530,7 +532,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException {
+    public Repartition modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException {
         Long affId = repRepo.getAffIdByRepId(dto.getPlaId());
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
@@ -547,6 +549,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(dto.getAvisModificationCession() != null)
             placementDocUploader.uploadDocument(new UploadDocReq(dto.getPlaId(), "AVI_MOD_CES", null , "Avis de modification de cession", "Avis de modification de cession",dto.getAvisModificationCession()));
         mvtService.createMvtPlacement(new MvtReq(dto.getPlaId(), EN_ATTENTE_DE_VALIDATION.staCode, null));
+        return placement;
     }
 
     @Override @Transactional

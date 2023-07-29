@@ -195,7 +195,7 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/modifier-placement")
-    void modifierPlacement(@RequestBody UpdatePlaRepartitionReq dto) throws UnknownHostException {
+    void modifierPlacement(@RequestBody @Valid UpdatePlaRepartitionReq dto) throws UnknownHostException {
         repService.modifierPlacement(dto);
     }
 
