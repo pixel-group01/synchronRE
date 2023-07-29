@@ -73,7 +73,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         Affaire oldFac = affCopier.copy(affaire);
-        //fac.setFacCapitaux(dto.getFacCapitaux());
+        affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
         affaire.setFacPrime(dto.getFacPrime());
         affaire.setFacSmpLci(dto.getFacSmpLci());
         affaire.setAffActivite(dto.getAffActivite());
