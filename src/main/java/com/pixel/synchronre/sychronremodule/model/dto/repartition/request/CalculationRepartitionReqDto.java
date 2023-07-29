@@ -18,5 +18,17 @@ public class CalculationRepartitionReqDto
     //private SimpleRepDto partCedante;
     private List<Long> pclIds;
     //private List<RepDto> traites;
-    private Long repIdToBeModified;
+    private Long repIdToUpdate;
+
+    private BigDecimal retentionCapital;
+    private BigDecimal retentionTaux;
+    private Long retentionRepId;
+
+    private BigDecimal xlCapital;
+    private BigDecimal xlTaux;
+    private Long xlRepId;
+
+    private BigDecimal facobCapital;
+    private BigDecimal facobTaux;
+    private Long facobRepId;
 }
