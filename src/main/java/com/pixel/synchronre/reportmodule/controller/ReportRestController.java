@@ -16,7 +16,7 @@ public class ReportRestController
     public Base64FileDto generateNoteCession(@PathVariable Long plaId) throws Exception
     {
         byte[] reportBytes = jrService.generateNoteCessionFac(plaId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 
@@ -25,7 +25,7 @@ public class ReportRestController
     {
 
         byte[] reportBytes = jrService.generateNoteDebitFac(affId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 
@@ -33,7 +33,7 @@ public class ReportRestController
     public Base64FileDto generateNoteCredit(@PathVariable Long affId, @PathVariable Long cesId) throws Exception
     {
         byte[] reportBytes = jrService.generateNoteCreditFac(affId, cesId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 
@@ -41,7 +41,7 @@ public class ReportRestController
     public Base64FileDto generateNoteCessionSinistre(@PathVariable Long plaId) throws Exception
     {
         byte[] reportBytes = jrService.generateNoteCessionSinistre(plaId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 
@@ -49,7 +49,7 @@ public class ReportRestController
     public Base64FileDto generateNoteDebitSinistre(@PathVariable Long affId) throws Exception
     {
         byte[] reportBytes = jrService.generateNoteDebitSinistre(affId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 
@@ -57,7 +57,7 @@ public class ReportRestController
     public Base64FileDto generateCheque(@PathVariable Long regId) throws Exception
     {
         byte[] reportBytes = jrService.generateCheque(regId);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url);
     }
 }
