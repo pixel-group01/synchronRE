@@ -602,7 +602,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         UpdateCesLegReq rep = new UpdateCesLegReq();
         rep.setRepTaux(pcl.getParamCesLegTaux());
         rep.setRepCapital(repCapital);
-        rep.setRepId(null);
+        rep.setRepId(repRepo.getRepIdByAffIdAndPclId(aff.getAffId(), pcl.getParamCesLegId()));
         rep.setAffId(aff.getAffId());
         rep.setAccepte(accepted);
         rep.setParamCesLegalId(pcl.getParamCesLegId());
