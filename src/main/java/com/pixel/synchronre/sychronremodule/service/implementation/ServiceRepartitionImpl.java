@@ -20,6 +20,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
@@ -329,18 +330,38 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
+    public CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto) {
+        return null;
+    }
+
+
+    //@Override
+//    public void deletePlacement(Long repId) throws UnknownHostException
+//    {
+//        boolean plaExists = repRepo.placementExists(repId);
+//        if(plaExists)
+//        {
+//            Repartition placement = repRepo.findById(repId).orElse(null);
+//            if(placement != null)
+//            {
+//                Repartition oldPlacement = repCopier.copy(placement);
+//                repRepo.deleteById(repId);
+//                logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
+//            }
+//        }
+//    }
+
+    @Override
     public void deletePlacement(Long repId) throws UnknownHostException
     {
         boolean plaExists = repRepo.placementExists(repId);
         if(plaExists)
         {
             Repartition placement = repRepo.findById(repId).orElse(null);
-            if(placement != null)
-            {
-                Repartition oldPlacement = repCopier.copy(placement);
-                repRepo.deleteById(repId);
-                logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
-            }
+            Repartition oldPlacement = repCopier.copy(placement);
+            placement.setRepStatut(false);
+            repRepo.save(placement);
+            logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
         }
     }
 
