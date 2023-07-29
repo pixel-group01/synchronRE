@@ -61,7 +61,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("""
             select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq(
-            r.repId, r.repCapital, r.repTaux, r.affaire.affId, r.paramCessionLegale.paramCesLegId, true, r.paramCessionLegale.paramCesLegLibelle) 
+            r.repId, r.repCapital, r.repTaux, r.affaire.affId, r.paramCessionLegale.paramCesLegId, r.repStatut, r.paramCessionLegale.paramCesLegLibelle) 
             from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CES_LEG'
             """)
     List<UpdateCesLegReq> findUpdateCesLegReqByAffaireAndTypeRep(Long affId);

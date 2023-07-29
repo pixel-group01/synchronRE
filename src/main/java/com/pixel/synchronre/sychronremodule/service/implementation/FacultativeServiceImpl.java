@@ -32,10 +32,9 @@ import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.SAISIE_CRT;
 @Service
 @RequiredArgsConstructor
 public class FacultativeServiceImpl implements IserviceFacultative {
-    private final FacultativeRepository facRepo;
     private final AffaireRepository affRepo;
     private final FacultativeMapper facultativeMapper;
-    private final ObjectCopier<Facultative> facCopier;
+    private final ObjectCopier<Affaire> affCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
     private final StatutRepository staRepo;
@@ -72,18 +71,20 @@ public class FacultativeServiceImpl implements IserviceFacultative {
 
     @Override @Transactional
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
-        Facultative fac = facRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
-        Facultative oldFac = facCopier.copy(fac);
-        //fac.setFacCapitaux(dto.getFacCapitaux());
-        fac.setFacPrime(dto.getFacPrime());
-        fac.setFacSmpLci(dto.getFacSmpLci());
-        fac.setAffActivite(dto.getAffActivite());
-        fac.setAffAssure(dto.getAffAssure());
-        fac.setAffDateEcheance(dto.getAffDateEcheance());
-        fac.setAffDateEffet(dto.getAffDateEffet());
-        fac=facRepo.save(fac);
-        logService.logg(SynchronReActions.UPDATE_FAC, oldFac, fac, SynchronReTables.AFFAIRE);
-        return facultativeMapper.mapToFacultativeDetailsResp(fac);
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
+        affaire.setFacPrime(dto.getFacPrime());
+        affaire.setFacSmpLci(dto.getFacSmpLci());
+        affaire.setAffActivite(dto.getAffActivite());
+        affaire.setAffAssure(dto.getAffAssure());
+        affaire.setAffDateEcheance(dto.getAffDateEcheance());
+        affaire.setAffDateEffet(dto.getAffDateEffet());
+        if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
+        if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
+        affaire=affRepo.save(affaire);
+        logService.logg(SynchronReActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        return facultativeMapper.mapToFacultativeDetailsResp(affaire);
     }
 
     @Override

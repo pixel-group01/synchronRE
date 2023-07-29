@@ -17,6 +17,7 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public abstract class FacultativeMapper
     @Autowired protected RepartitionRepository repRepo;
     @Autowired protected CessionnaireRepository cesRepo;
     @Autowired protected TypeRepo typeRepo;
+    @Autowired protected IServiceCalculsComptables comptaAffaireService;
 
     @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
@@ -74,6 +76,14 @@ public abstract class FacultativeMapper
     @Mapping(target = "couLibelle", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouLibelle())")
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
+
+
+
+    @Mapping(target = "branId", source = "couverture.branche.branId")
+    @Mapping(target = "branLibelle", source = "couverture.branche.branLibelle")
+    @Mapping(target = "couId", source = "couverture.couId")
+    @Mapping(target = "exeCode", source = "exercice.exeCode")
+    @Mapping(target = "placementTermine", expression = "java(this.placementIsFinished(aff.getAffId()))")
     public abstract FacultativeDetailsResp mapToFacultativeDetailsResp(Affaire aff);
 
     @Mapping(target = "mtTotalCmsCedante", expression = "java(comptaService.calculateMtTotaleCmsCed(aff.getAffId()))")
@@ -95,6 +105,13 @@ public abstract class FacultativeMapper
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
     @Mapping(target = "mtTotalPrimeBruteCes", expression = "java(repRepo.calculateMtPrimeBruteByAffaire(aff.getAffId()))")
     public abstract EtatComptableAffaire mapToEtatComptableAffaire(Affaire aff);
+
+    protected boolean placementIsFinished(Long affId)
+    {
+        BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
+        besFac = besFac == null ? BigDecimal.ZERO : besFac;
+        return besFac.compareTo(BigDecimal.ZERO) == 0;
+    }
 
     protected List<EtatComptableAffaire.DetailsEtatComptable> getDetailsEtatComptables(Long affId)
     {

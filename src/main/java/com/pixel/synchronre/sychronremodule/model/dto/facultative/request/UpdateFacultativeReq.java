@@ -46,7 +46,7 @@ public class UpdateFacultativeReq
 
     @NotNull(message = "Veuillez saisir le capital de l'affaire")
     @PositiveOrZero(message = "Le capital de l'affaire doit être un nombre positif")
-    private BigDecimal facCapitaux;
+    private BigDecimal affCapitalInitial;
 
     @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
@@ -56,7 +56,7 @@ public class UpdateFacultativeReq
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
     private BigDecimal facPrime;
     @ExistingCedId
-    private Long cedenteId;
+    private Long cedId;
     @ExistingCouId
     protected Long couvertureId;
 }

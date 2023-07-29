@@ -31,6 +31,16 @@ public class FacultativeDetailsResp
     private BigDecimal restARepartir;
     private BigDecimal capitalDejaReparti;
 
+    private Long branId;
+    private String branLibelle;
+    private Long couId;
+    private Long exeCode;
+    private boolean placementTermine;
+
     private EtatComptableAffaire etatComptable;
+
+    //staLibelle
+    //couId
+    //branId
 
 }

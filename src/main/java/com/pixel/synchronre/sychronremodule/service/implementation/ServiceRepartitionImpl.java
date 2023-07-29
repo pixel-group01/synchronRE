@@ -154,7 +154,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         cedRep.setRepCapital(dto.getRepCapital());
         cedRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
         repRepo.save(cedRep);
-        dto.getUpdateCesLegReqs().stream().filter(pclRep->pclRep.isAccepte()).peek(pclRepDto-> this.updatePclReps(pclRepDto));
+        dto.getUpdateCesLegReqs().stream().peek(pclRepDto-> this.updatePclReps(pclRepDto));
         logService.logg(RepartitionActions.CREATE_CED_REPARTITION, oldCedRep, cedRep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(cedRep);
     }
@@ -166,9 +166,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             pclRep = repRepo.findById(pclRepDto.getRepId()).orElseThrow(()->new AppException("Repartition de type cession légale introuvable"));
             Repartition oldPclRep = repCopier.copy(pclRep);
-            pclRep.setRepTaux(pclRepDto.getRepTaux());
-            pclRep.setRepCapital(pclRepDto.getRepCapital());
-            pclRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(pclRepDto.getRepCapital().doubleValue()));
+            pclRep.setRepStatut(pclRepDto.isAccepte());
+            //pclRep.setRepTaux(pclRepDto.getRepTaux());
+            //pclRep.setRepCapital(pclRepDto.getRepCapital());
+            //pclRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(pclRepDto.getRepCapital().doubleValue()));
             repRepo.save(pclRep);
         }
         else
@@ -527,7 +528,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         List<Repartition> repCeds = repRepo.findByAffaireAndTypeRep(affId, "REP_CED");
         Repartition repCed = repCeds == null ||repCeds.isEmpty() ? null : repCeds.get(0);
         List<UpdateCesLegReq> pclReps =repRepo.findUpdateCesLegReqByAffaireAndTypeRep(affId);
-        List<Long> acceptedPclIds = pclReps.stream().map(r->r.getParamCesLegalId()).collect(Collectors.toList());
+        List<Long> acceptedPclIds = pclReps.stream().filter(r->r.isAccepte()).map(r->r.getParamCesLegalId()).collect(Collectors.toList());
 
         List<UpdateCesLegReq> noneAcceptedPclReps = pclRepoo.findByAffId(affId).stream()
                 .filter(pcl->!acceptedPclIds.contains(pcl.getParamCesLegId()))
@@ -546,7 +547,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         UpdateCesLegReq rep = new UpdateCesLegReq();
         rep.setRepTaux(pcl.getParamCesLegTaux());
         rep.setRepCapital(repCapital);
-        rep.setRepId(null);
+        rep.setRepId(repRepo.getRepIdByAffIdAndPclId(aff.getAffId(), pcl.getParamCesLegId()));
         rep.setAffId(aff.getAffId());
         rep.setAccepte(accepted);
         rep.setParamCesLegalId(pcl.getParamCesLegId());
