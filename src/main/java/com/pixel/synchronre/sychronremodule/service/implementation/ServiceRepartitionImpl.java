@@ -331,7 +331,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override
     public CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto)
-    {
+    {//
         if(dto == null) throw new AppException("Veuillez fournir les données d'entrée");
         if(dto.getAffId() == null) throw new AppException("Veuillez fournir l'ID de l'affaire");
         Affaire aff = affRepo.findById(dto.getAffId()).orElse(null);
