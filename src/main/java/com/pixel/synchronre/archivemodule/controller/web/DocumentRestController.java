@@ -129,6 +129,6 @@ public class DocumentRestController
         String docPath = doc.getDocPath();
         byte[] docBytes = docService.downloadFile(docPath);
         String base64UrlString = Base64ToFileConverter.convertBytesToBase64UrlString(docBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64UrlString);
+        return new Base64FileDto(base64UrlString, docBytes);
     }
 }

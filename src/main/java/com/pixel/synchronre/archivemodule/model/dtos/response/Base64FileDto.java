@@ -9,4 +9,5 @@ import lombok.Setter;
 public class Base64FileDto
 {
     private String base64UrlString;
+    private byte [] bytes;
 }

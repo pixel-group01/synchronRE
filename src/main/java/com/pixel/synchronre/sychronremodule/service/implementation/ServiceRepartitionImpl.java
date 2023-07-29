@@ -533,11 +533,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override @Transactional
     public Repartition modifierPlacement(UpdatePlaRepartitionReq dto) throws UnknownHostException {
-        Long affId = repRepo.getAffIdByRepId(dto.getPlaId());
+        Long affId = repRepo.getAffIdByRepId(dto.getRepId());
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
         if(affStatutCrea != null && affStatutCrea.equals("NON_REALISEE"))  throw new AppException("Impossible de modifier ce placement car l'affaire est non réalisée");
-        Repartition placement = repRepo.findPlacementById(dto.getPlaId()).orElseThrow(()->new AppException("Placement introuvable"));
+        Repartition placement = repRepo.findPlacementById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
         Repartition oldPlacement = repCopier.copy(placement);
         placement.setRepCapital(dto.getRepCapital());
         placement.setRepTaux(dto.getRepTaux());
@@ -547,8 +547,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         placement.setRepStaCode(new Statut(EN_ATTENTE_DE_VALIDATION.staCode));
         logService.logg(RepartitionActions.UPDATE_PLA_REPARTITION, oldPlacement, placement, SynchronReTables.REPARTITION);
         if(dto.getAvisModificationCession() != null)
-            placementDocUploader.uploadDocument(new UploadDocReq(dto.getPlaId(), "AVI_MOD_CES", null , "Avis de modification de cession", "Avis de modification de cession",dto.getAvisModificationCession()));
-        mvtService.createMvtPlacement(new MvtReq(dto.getPlaId(), EN_ATTENTE_DE_VALIDATION.staCode, null));
+            placementDocUploader.uploadDocument(new UploadDocReq(dto.getRepId(), "AVI_MOD_CES", null , "Avis de modification de cession", "Avis de modification de cession",dto.getAvisModificationCession()));
+        mvtService.createMvtPlacement(new MvtReq(dto.getRepId(), EN_ATTENTE_DE_VALIDATION.staCode, null));
         return placement;
     }
 

@@ -17,7 +17,7 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteCessionFac(plaId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
     @GetMapping("/note-de-debit-fac/{affId}")
@@ -26,7 +26,7 @@ public class ReportRestController
 
         byte[] reportBytes = jrService.generateNoteDebitFac(affId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
     @GetMapping("/note-de-credit-fac/{affId}/{cesId}")
@@ -34,7 +34,7 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteCreditFac(affId, cesId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
     @GetMapping("/note-cession-sinistre/{plaId}")
@@ -42,7 +42,7 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteCessionSinistre(plaId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
     @GetMapping("/note-debit-sinistre/{affId}")
@@ -50,7 +50,7 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteDebitSinistre(affId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
     @GetMapping("/cheque/{regId}")
@@ -58,6 +58,6 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateCheque(regId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url);
+        return new Base64FileDto(base64Url, reportBytes);
     }
 }
