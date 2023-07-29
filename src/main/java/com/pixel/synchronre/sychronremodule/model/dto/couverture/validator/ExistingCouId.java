@@ -31,6 +31,7 @@ public @interface ExistingCouId
         @Override
         public boolean isValid(Long couId, ConstraintValidatorContext context)
         {
+            if(couId == null) return true;
             return couvRepo.existsById(couId);
         }
     }

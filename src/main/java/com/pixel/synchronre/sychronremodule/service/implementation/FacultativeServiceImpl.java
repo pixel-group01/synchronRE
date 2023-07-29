@@ -72,7 +72,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
     @Override @Transactional
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
-        Affaire oldFac = affCopier.copy(affaire);
+        Affaire oldAffaire = affCopier.copy(affaire);
         affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
         affaire.setFacPrime(dto.getFacPrime());
         affaire.setFacSmpLci(dto.getFacSmpLci());
@@ -80,8 +80,10 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         affaire.setAffAssure(dto.getAffAssure());
         affaire.setAffDateEcheance(dto.getAffDateEcheance());
         affaire.setAffDateEffet(dto.getAffDateEffet());
+        if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
+        if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
-        logService.logg(SynchronReActions.UPDATE_FAC, oldFac, affaire, SynchronReTables.AFFAIRE);
+        logService.logg(SynchronReActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
         return facultativeMapper.mapToFacultativeDetailsResp(affaire);
     }
 

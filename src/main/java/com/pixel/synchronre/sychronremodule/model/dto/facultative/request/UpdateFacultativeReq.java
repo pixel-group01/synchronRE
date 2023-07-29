@@ -56,7 +56,7 @@ public class UpdateFacultativeReq
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
     private BigDecimal facPrime;
     @ExistingCedId
-    private Long cedenteId;
+    private Long cedId;
     @ExistingCouId
     protected Long couvertureId;
 }
