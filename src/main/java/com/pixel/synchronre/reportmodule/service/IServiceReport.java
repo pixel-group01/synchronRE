@@ -1,12 +1,7 @@
 package com.pixel.synchronre.reportmodule.service;
 
-import jakarta.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.io.File;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
