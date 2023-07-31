@@ -392,12 +392,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(plaExists)
         {
             Repartition placement = repRepo.findById(repId).orElse(null);
-            if(placement != null)
-            {
-                Repartition oldPlacement = repCopier.copy(placement);
-                repRepo.deleteById(repId);
-                logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
-            }
+            Repartition oldPlacement = repCopier.copy(placement);
+            placement.setRepStatut(false);
+            repRepo.save(placement);
+            logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
         }
     }
 
