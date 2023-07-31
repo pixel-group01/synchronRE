@@ -173,12 +173,13 @@ public class RepartitionController
         repService.retournerPlacement(plaId, motif);
     }
 
-    @PutMapping(path = "/envoyer-note-cession/{plaId}")
-    void envoyerNoteCession(@PathVariable Long plaId) throws Exception {
+    @PutMapping(path = "/envoyer-note-cession-fac/{plaId}")
+    boolean envoyerNoteCession(@PathVariable Long plaId) throws Exception {
         repService.transmettreNoteDeCession(plaId);
+        return true;
     }
 
-    @PutMapping(path = "/envoyer-notes-cession")
+    @PutMapping(path = "/envoyer-notes-cession-fac")
     void envoyerNoteCession(@RequestParam List<Long> plaIds)
     {
         repService.transmettreNoteDeCession(plaIds);

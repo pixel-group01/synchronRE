@@ -331,5 +331,10 @@ public class AffaireController
         dto.setDocDescription(docType);
         docService.uploadDocument(dto);
     }
+
+    @PutMapping(path = "/envoyer-note-debit-fac/{affId}")
+    boolean envoyerNoteCession(@PathVariable Long affId) throws Exception {
+        return affService.senNoteDebitFac(affId);
+    }
 }
 
