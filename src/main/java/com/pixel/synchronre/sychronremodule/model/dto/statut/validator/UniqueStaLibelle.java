@@ -1,9 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.statut.validator;
 
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
-import com.pixel.synchronre.sychronremodule.model.dao.BanqueRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.ExistingBanId;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.request.CreateStatutReq;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.request.UpdateStatutReq;
 import jakarta.validation.Constraint;

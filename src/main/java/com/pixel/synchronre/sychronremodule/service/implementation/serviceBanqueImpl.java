@@ -42,9 +42,8 @@ public class serviceBanqueImpl implements IserviceBanque {
 
     @Override  @Transactional
     public BanqueDetailsResp updateBanque(UpdateBanqueReq dto) throws UnknownHostException {
-        Banque ban = banRepo.findById(dto.getBanId()).orElseThrow(()->new AppException("Banque introuvable"));
+        Banque ban = banRepo.findById(dto.getBanNumCompte()).orElseThrow(()->new AppException("Banque introuvable"));
         Banque oldBanque = banCopier.copy(ban);
-        ban.setBanCode(dto.getBanCode());
         ban.setBanLibelle(dto.getBanLibelle());
         ban.setBanLibelleAbrege(dto.getBanLibelleAbrege());
         ban.setBanNumCompte(dto.getBanNumCompte());

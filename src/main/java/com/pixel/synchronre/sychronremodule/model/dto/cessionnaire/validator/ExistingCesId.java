@@ -1,8 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator;
 
-import com.pixel.synchronre.authmodule.model.dtos.asignation.ExistingAssId;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanCode;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

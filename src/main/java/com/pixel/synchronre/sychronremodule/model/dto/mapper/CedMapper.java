@@ -26,6 +26,7 @@ public abstract class CedMapper
     @Mapping(target = "cedUserCreator",  expression = "java(jwtService.getConnectedUserId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "cedFonCreator",  expression = "java(jwtService.getConnectedUserFunctionId()==null? null : new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     //@Mapping(target = "cessionnaire", expression = "java(dto.getCedCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCedCesId()))")
+    @Mapping(target = "banque",  expression = "java(dto.getBanNumCompte()==null? null : new com.pixel.synchronre.sychronremodule.model.entities.Banque(dto.getBanNumCompte()))")
     public abstract Cedante mapToCedente(CreateCedanteDTO dto);
 
     public Cedante mapToCedente(UpdateCedanteDTO dto)
@@ -37,5 +38,10 @@ public abstract class CedMapper
     }
 
     @Mapping(target = "cedStatut", expression = "java(ced.getCedStatut().getStaCode())")
+    @Mapping(target = "banNumCompte", expression = "java(ced.getBanque().getBanNumCompte())")
+    @Mapping(target = "banIban", expression = "java(ced.getBanque().getBanIban())")
+    @Mapping(target = "banCodeBic", expression = "java(ced.getBanque().getBanCodeBic())")
+    @Mapping(target = "banLibelle", expression = "java(ced.getBanque().getBanLibelle())")
+    @Mapping(target = "banLibelleAbrege", expression = "java(ced.getBanque().getBanLibelleAbrege())")
     public abstract ReadCedanteDTO mapToReadCedenteDTO(Cedante ced);
 }

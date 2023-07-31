@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 @Entity
 public class Banque {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long banId;
-  private String banCode;
+  //@GeneratedValue(strategy = GenerationType.IDENTITY)
+  //private Long banId;
+  //private String banCode;
   private String banNumCompte;
   private String banIban;
   private String banCodeBic;
@@ -32,4 +32,8 @@ public class Banque {
   @ManyToOne
   @JoinColumn(name = "banStatut")
   private Statut statut;
+
+  public Banque(String banNumCompte) {
+    this.banNumCompte = banNumCompte;
+  }
 }

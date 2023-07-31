@@ -35,4 +35,7 @@ public class UpdateCedanteDTO
     private String cedSituationGeo;
     private String cedInterlocuteur;
     private String cedStatut;
+    @NotBlank(message = "Veuillez selectionner le numéro de compte")
+    @NotNull(message = "Veuillez selectionner le numéro de compte")
+    private String banNumCompte;
 }
