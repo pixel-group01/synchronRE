@@ -174,8 +174,9 @@ public class RepartitionController
     }
 
     @PutMapping(path = "/envoyer-note-cession/{plaId}")
-    void envoyerNoteCession(@PathVariable Long plaId) throws Exception {
+    boolean envoyerNoteCession(@PathVariable Long plaId) throws Exception {
         repService.transmettreNoteDeCession(plaId);
+        return true;
     }
 
     @PutMapping(path = "/envoyer-notes-cession")

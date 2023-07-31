@@ -24,7 +24,6 @@ public class UpdatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")
     private BigDecimal repSousCommission; //TODO A Valider

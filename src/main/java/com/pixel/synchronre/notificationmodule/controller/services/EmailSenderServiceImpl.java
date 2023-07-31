@@ -105,7 +105,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     {
         String message = this.htmlEmailBuilder.buildNoteCessionFacEmail(interlocName, affCode);
         byte[] report = reportService.generateNoteCessionFac(plaId);
-        EmailAttachment attachment = new EmailAttachment("Note de cession facultative", report, "application/pdf");
+        EmailAttachment attachment = new EmailAttachment("Note_de_cession_facultative.pdf", report, "application/pdf");
         this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }
     @Override
@@ -113,7 +113,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
         String affCode = affRepo.getAffCode(affId);
         String message = this.htmlEmailBuilder.buildNoteDebitFacEmail(receiverMail, affCode);
         byte[] report = reportService.generateNoteDebitFac(affId);
-        EmailAttachment attachment = new EmailAttachment("Note de débit facultative", report, "application/pdf");
+        EmailAttachment attachment = new EmailAttachment("Note_de_débit_facultative.pdf", report, "application/pdf");
         this.sendEmailWithAttachments( senderMail,  receiverMail,  "Note de débit facultative de l'affaire N° " + affCode,  message, Collections.singletonList(attachment));
     }
 
