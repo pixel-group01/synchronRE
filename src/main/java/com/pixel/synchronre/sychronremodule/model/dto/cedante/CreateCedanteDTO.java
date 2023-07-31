@@ -37,6 +37,9 @@ public class CreateCedanteDTO
     private String cedInterlocuteur;
     @UniquePaysCode
     private String paysCode;
+    @NotBlank(message = "Veuillez selectionner le numéro de compte")
+    @NotNull(message = "Veuillez selectionner le numéro de compte")
+    private String banNumCompte;
     /*@ExistingUserId
     private Long cedUserCreator;
     @ExistingFncId

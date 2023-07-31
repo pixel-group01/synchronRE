@@ -7,18 +7,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 
-public interface BanqueRepository extends JpaRepository<Banque, Long> {
+public interface BanqueRepository extends JpaRepository<Banque, String> {
 
-    @Query("select (count(b) > 0) from Banque b where upper(b.banCode) = upper(?1)")
-    boolean alreadyExistsByCode(String banCode);
+    @Query("select (count(b) > 0) from Banque b where upper(b.banNumCompte) = upper(?1)")
+    boolean alreadyExistsByNumCompte(String banNumCompte);
 
-    @Query("select (count(b) > 0) from Banque b where b.banCode = ?1 and b.banId <> ?2")
-    boolean alreadyExistsByCode(String banCode, Long banId);
+//    @Query("select (count(b) > 0) from Banque b where b.banCode = ?1 and b.banId <> ?2")
+//    boolean alreadyExistsByCode(String banCode, Long banId);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp(b.banId, b.banCode,b.banNumCompte,b.banIban,b.banCodeBic, b.banLibelle, b.banLibelleAbrege, 
+        select new com.pixel.synchronre.sychronremodule.model.dto.banque.response.BanqueListResp(b.banNumCompte,b.banIban,b.banCodeBic, b.banLibelle, b.banLibelleAbrege, 
         b.statut.staLibelle) 
-        from Banque b where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banCode, '') ) as string)) ) >0 
+        from Banque b where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banNumCompte, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banNumCompte, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banIban, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(b.banCodeBic, '') ) as string)) ) >0 

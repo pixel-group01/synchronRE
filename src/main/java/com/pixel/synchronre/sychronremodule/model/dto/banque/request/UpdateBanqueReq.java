@@ -1,22 +1,20 @@
 package com.pixel.synchronre.sychronremodule.model.dto.banque.request;
 
-import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.ExistingBanId;
-import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanCode;
+import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanNumCompte;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
-@UniqueBanCode(message ="banCode::Le code de cette banque est déjà utilisée")
+@UniqueBanNumCompte(message ="banCode::Le code de cette banque est déjà utilisée")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class UpdateBanqueReq
 {
-    @ExistingBanId
-    private Long banId;
-    @NotBlank(message = "Veuillez saisir le code de la banque")
-    @NotNull(message = "Veuillez saisir le code de la banque")
-    @Length(message = "Le code de la banque doit contenir au moins deux caractères", min = 2)
-    private String banCode;
+//    @ExistingBanId
+//    private Long banId;
+//    @NotBlank(message = "Veuillez saisir le code de la banque")
+//    @NotNull(message = "Veuillez saisir le code de la banque")
+//    @Length(message = "Le code de la banque doit contenir au moins deux caractères", min = 2)
+//    private String banCode;
     @NotBlank(message = "Veuillez saisir le numero de compte")
     @NotNull(message = "Veuillez saisir le numero de compte")
     private String banNumCompte;

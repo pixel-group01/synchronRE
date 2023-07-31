@@ -13,23 +13,23 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ExistingBanId.ExistingBanIddValidator.class})
+@Constraint(validatedBy = {ExistingBanNumCompte.ExistingBanNumCompteValidator.class})
 @Documented
-public @interface ExistingBanId
+public @interface ExistingBanNumCompte
 {
-    String message() default "Identitifiant de la banque introuvable";
+    String message() default "Numero de compte introuvable";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class ExistingBanIddValidator implements ConstraintValidator<ExistingBanId, Long>
+    class ExistingBanNumCompteValidator implements ConstraintValidator<ExistingBanNumCompte, String>
     {
         private final BanqueRepository banRepo;
         @Override
-        public boolean isValid(Long banId, ConstraintValidatorContext context)
+        public boolean isValid(String banNumCompte, ConstraintValidatorContext context)
         {
-            return banRepo.existsById(banId);
+            return banRepo.existsById(banNumCompte);
         }
     }
 }

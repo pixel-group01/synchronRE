@@ -3,7 +3,6 @@ package com.pixel.synchronre.sychronremodule.model.dto.couverture.validator;
 
 
 import com.pixel.synchronre.sychronremodule.model.dao.CouvertureRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.banque.validator.UniqueBanCode;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

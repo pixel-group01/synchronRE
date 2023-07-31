@@ -16,4 +16,9 @@ public class ReadCedanteDTO
     private String cedStatut;
     private String paysNom;
     private String paysCode;
+    private String banNumCompte;
+    private String banIban;
+    private String banCodeBic;
+    private String banLibelle;
+    private String banLibelleAbrege;
 }
