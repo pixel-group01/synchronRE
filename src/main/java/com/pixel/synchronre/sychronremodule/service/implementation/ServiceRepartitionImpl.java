@@ -292,7 +292,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
         
-        BigDecimal capital = capitalInit.multiply(taux.divide(CENT, 2, RoundingMode.HALF_UP));
+        BigDecimal capital = capitalInit.multiply(taux).divide(CENT, 2, RoundingMode.HALF_UP);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
@@ -351,6 +351,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
         if(dto.getRepCapital() != null && dto.getRepTaux() != null)
         {
+            if(dto.getRepCapital().compareTo(ZERO)<0) throw new AppException("Le capital de repartition doit être un nombre strictement positif");
+            if(dto.getRepCapital().compareTo(besoinFacRestant)>0) throw new AppException("Le capitaal ne peut exéder le reste à repartir (" + NumberFormat.getInstance().format(besoinFacRestant.doubleValue()) +")");
+
+            if(dto.getRepTaux().compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
+            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 10, RoundingMode.HALF_UP);
+            if(repCapital.compareTo(besoinFacRestant)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
+
             resp.setRepCapital(dto.getRepCapital());
             resp.setRepTaux(dto.getRepTaux());
         }
@@ -408,7 +415,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             boolean accepte = repRepo.existsValidByAffIdAndPclId(affId,pcl.getParamCesLegId());
             CreateCesLegReq cesLegReq =  new CreateCesLegReq();
-            cesLegReq.setRepCapital(accepte ? repRepo.findValidByAffIdAndPclId(affId, pcl.getParamCesLegId()).getRepCapital() : pcl.getParamCesLegTaux().multiply(affaire.getAffCapitalInitial()));
+            cesLegReq.setRepCapital(accepte ? repRepo.findValidByAffIdAndPclId(affId, pcl.getParamCesLegId()).getRepCapital() : pcl.getParamCesLegTaux().multiply(affaire.getAffCapitalInitial()).divide(CENT, 2, RoundingMode.HALF_UP));
             cesLegReq.setRepTaux(pcl.getParamCesLegTaux());
             cesLegReq.setAffId(affId);
             cesLegReq.setParamCesLegalId(pcl.getParamCesLegId());

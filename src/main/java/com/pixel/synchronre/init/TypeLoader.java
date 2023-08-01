@@ -24,6 +24,12 @@ public class TypeLoader implements Loader
         Type t3 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null, null));
         Type t4 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_SIN", "Répartition de type sinistre", PersStatus.ACTIVE, null, null));
 
+        Type retention = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_RETENTION", "Répartition de type retention traité", PersStatus.ACTIVE, null, null));
+        Type facob = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_FACOB", "Répartition de type traité FACOB", PersStatus.ACTIVE, null, null));
+        Type xl = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_XL", "Répartition de type traité XL", PersStatus.ACTIVE, null, null));
+
+
+
         //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
         //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
         //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
