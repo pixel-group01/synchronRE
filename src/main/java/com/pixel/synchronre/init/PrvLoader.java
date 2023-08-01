@@ -28,6 +28,10 @@ public class PrvLoader implements Loader
         AppPrivilege getStatSinFac = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN-FAC", "Consulter les statistiques sur les  sinistres des affaires facultatives", typeRepo.findByUniqueCode("PRV-STAT").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege getStatSinTrai = prvRepo.save(new AppPrivilege(null, "GET-STAT-SIN-TRAI", "Consulter les statistiques sur les  sinistres des traités", typeRepo.findByUniqueCode("PRV-STAT").orElseThrow(()->new AppException("Type de document inconnu"))));
 
+        AppPrivilege getFacLstCompta = prvRepo.save(new AppPrivilege(null, "GET-FAC-LST-COMPTA", "Consulter liste des affaires facultative par le comptable", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
+        AppPrivilege getSinLstCompta = prvRepo.save(new AppPrivilege(null, "GET-SIN-LST-COMPTA", "Consulter la liste des sinistres par le comptable", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
+
+
 
 
         AppPrivilege getUserDet = prvRepo.save(new AppPrivilege(null, "GET-USER-DET", "Consulter les informations sur un utilisateurs", typeRepo.findByUniqueCode("PRV-USER").orElseThrow(()->new AppException("Type de document inconnu"))));
