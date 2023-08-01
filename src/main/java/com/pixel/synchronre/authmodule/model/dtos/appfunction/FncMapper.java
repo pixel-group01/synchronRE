@@ -25,6 +25,7 @@ public abstract class FncMapper
     @Mapping(target = "user", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(dto.getUserId()))")
     @Mapping(target = "fncStatus", expression = "java(2)")
     @Mapping(target = "cesId", expression = "java(dto.getCesId() == null ? userRepo.getUserCesId(dto.getUserId()) : dto.getCesId())")
+    @Mapping(target = "visibilityId", source = "cedId")
     public abstract AppFunction mapToFunction(CreateFncDTO dto);
 
     @Mapping(target = "userId", source = "user.userId")

@@ -13,6 +13,7 @@ import java.util.Set;
 public class CreateFncDTO
 {
     private Long visibilityId;// Id de la cédante. Dans un autre projet ça peut désigner l'ID d'une autre entité
+    private Long cedId;
     private Long cesId; // Id du cessionnaire //Seulement valable dans le cadre du projet SynchronRE
     private String name;
     @ExistingUserId
