@@ -84,11 +84,9 @@ public class TypeLoader implements Loader
 
         //Doc sinistre
         Type docSinistre = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "DOC_SIN", "Document de sinistre", PersStatus.ACTIVE, null, "sinistre"));
-        Type noteDebitSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_DEB_SIN", "Note de débit sur sinistre", PersStatus.ACTIVE, null, "sinistre"));
         Type pvConstat = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "PV_CONST", "Procès verbal de constat", PersStatus.ACTIVE, null, "sinistre"));
-        Type noteCessionSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "NOT_CES_SIN", "Note de cession sur sinistre", PersStatus.ACTIVE, null, "sinistre"));
+        Type noteCessionSin = typeRepo.save(new Type(null, TypeGroup.DOCUMENT, "RAP_EXP", "Rapport de l'expert", PersStatus.ACTIVE, null, "sinistre"));
 
-        typeParamRepo.save(new TypeParam(null, docSinistre, noteDebitSin, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docSinistre, pvConstat, PersStatus.ACTIVE));
         typeParamRepo.save(new TypeParam(null, docSinistre, noteCessionSin, PersStatus.ACTIVE));
 

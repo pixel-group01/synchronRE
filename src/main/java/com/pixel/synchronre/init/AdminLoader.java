@@ -36,14 +36,14 @@ public class AdminLoader implements Loader
 
 
         //Nelson RE
-       // BigDecimal FIVE = new BigDecimal(5);
-        //Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
+        BigDecimal FIVE = new BigDecimal(5);
+        Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
        //Developpeur
-        AppUser userDev = userRepo.save(new AppUser(null, "Développeur", "Synchrone-Re", null, 4L,
+        AppUser userDev = userRepo.save(new AppUser(null, "Développeur", "Synchrone-Re", null, nelsonRe.getCesId(),
                 pe.encode("KD@fgfysh458@"), "pixelgroup09@gmail.com", "0505050505",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                 LocalDateTime.now()));
-        AppFunction fncDev = fncRepo.save(new AppFunction(null, null, 4L, "Développeur synchrone-Re", userDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncDev = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Développeur synchrone-Re", userDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userDev.setCurrentFunctionId(fncDev.getId());
         userRepo.save(userDev);
         AppRole roleDev = roleRepo.findByRoleCode("ROL-DEV");
@@ -63,17 +63,17 @@ public class AdminLoader implements Loader
 
 
 //        //user NSIA COTE D'IVOIRE
-        AppUser userci = userRepo.save(new AppUser(null, "userci", "userci", 1L, 4l,
+        AppUser userci = userRepo.save(new AppUser(null, "userci", "userci", 1L, nelsonRe.getCesId(),
                 pe.encode("1234"), "userci@gmail.com", "userci-tel",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                 LocalDateTime.now()));
 //
 //        //Operateur de saisie FAC CI
-//        AppRole roleSaisieFacNsiaCi = roleRepo.findByRoleCode("ROL-OPE-SAI");
-//        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, 4l, "Opérateur de saisie FAC NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
-//        userRepo.save(userci);
-//        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaCi, fncSaiFacCI));
-//
+        AppRole roleSaisieFacNsiaCi = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
+        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, nelsonRe.getCesId(), "Opérateur de saisie Sinistre NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userRepo.save(userci);
+        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaCi, fncSaiFacCI));
+
 //
 //
 //        //User NSIA BENIN
@@ -100,38 +100,38 @@ public class AdminLoader implements Loader
 //        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaTg, fncSaiFactg));
 //
 //        //SOUSCRIPTEUR
-//        AppUser userSouscripteur = userRepo.save(new AppUser(null, "souscripteur", "souscripteur", null, 4L,
-//                pe.encode("1234"), "souscripteur@gmail.com", "123456783",
-//                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
-//                LocalDateTime.now()));
+        AppUser userSouscripteur = userRepo.save(new AppUser(null, "souscripteur", "souscripteur", null, nelsonRe.getCesId(),
+                pe.encode("1234"), "souscripteur@gmail.com", "123456783",
+                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
+                LocalDateTime.now()));
 //        //Souscripteur Nelson RE
-//        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-OPE-SAI-FAC");
-//        AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, 4L, "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
-//        userRepo.save(userSouscripteur);
-//        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
+        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
+        AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userRepo.save(userSouscripteur);
+        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
 //        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
 //        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteurSaisiSin, fncSouscripteur));
-//
+
 //        //Validateur NelsonRE
-//        AppUser userValidateur = userRepo.save(new AppUser(null, "Validateur", "Validateur", null, 4L,
-//                pe.encode("1234"), "validateur@gmail.com", "1234567",
-//                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
-//                LocalDateTime.now()));
-//        AppRole roleValidateur = roleRepo.findByRoleCode("ROL-VAL");
-//        AppFunction fncValidateur = fncRepo.save(new AppFunction(null, null, 4l, "Validateur Nelson RE", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
-//        userRepo.save(userValidateur);
-//        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleValidateur, fncValidateur));
-//
+        AppUser userValidateur = userRepo.save(new AppUser(null, "Validateur", "Validateur", null, nelsonRe.getCesId(),
+                pe.encode("1234"), "validateur@gmail.com", "1234567",
+                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
+                LocalDateTime.now()));
+        AppRole roleValidateur = roleRepo.findByRoleCode("ROL-VAL-SIN");
+        AppFunction fncValidateur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Validateur Nelson RE", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userRepo.save(userValidateur);
+        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleValidateur, fncValidateur));
+
 //
 //        //Comptable NelsonRE
-//        AppUser userComptable = userRepo.save(new AppUser(null, "Comptable", "Comptable", null, 4l,
-//                pe.encode("1234"), "comptable@gmail.com", "12345588",
-//                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
-//                LocalDateTime.now()));
-//        AppRole roleComptable = roleRepo.findByRoleCode("ROL-COMPTA");
-//        AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, 4l, "Comptable Nelson RE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
-//        userRepo.save(userComptable);
-//        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
+        AppUser userComptable = userRepo.save(new AppUser(null, "Comptable", "Comptable", null, nelsonRe.getCesId(),
+                pe.encode("1234"), "comptable@gmail.com", "12345588",
+                true, true, null, LocalDateTime.now(),LocalDateTime.now(),
+                LocalDateTime.now()));
+        AppRole roleComptable = roleRepo.findByRoleCode("ROL-COMPTA-SIN");
+        AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Comptable Nelson RE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userRepo.save(userComptable);
+        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
 
 
     }

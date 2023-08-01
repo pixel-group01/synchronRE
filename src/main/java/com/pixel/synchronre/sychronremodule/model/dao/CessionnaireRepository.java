@@ -35,7 +35,8 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesSituationGeo, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesNom, '') ) as string)) ) >0 ) 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesInterlocuteur, '') ) as string)) ) >0 
-                                         and c.statut.staCode = 'ACT'     
+                                         and c.statut.staCode = 'ACT'
+                                         and c.type.uniqueCode = 'CES'
 """)
     Page<CessionnaireListResp> searchCessionnaires(String key, Pageable pageable);
 
