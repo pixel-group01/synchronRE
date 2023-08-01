@@ -59,6 +59,7 @@ public class DocumentRestController
     @PostMapping(path = "/{groupDocUniqueCode}/upload")
     public boolean uploadDocument(@RequestBody UploadDocReq dto, @PathVariable String groupDocUniqueCode) throws UnknownHostException
     {
+        groupDocUniqueCode = groupDocUniqueCode == null || groupDocUniqueCode.trim().equals("") ? groupDocUniqueCode : groupDocUniqueCode.replace("-", "_");
         AbstractDocumentService docUploader = docServiceProvider.getDocUploader(groupDocUniqueCode);
         if(docUploader == null)  throw new AppException("Ce type de document n'est pas pris en charge par le système");
         dto.setFile(Base64ToFileConverter.convertToFile(dto.getBase64UrlFile(), "." + dto.getExtension()));
