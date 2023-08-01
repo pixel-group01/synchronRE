@@ -90,4 +90,11 @@ public class ReportRestController
         byte[] reportBytes = jrService.generateNoteCessionFac(plaId);
         docService.displayPdf(response, reportBytes, "Note-de-cession");
     }
+
+    @GetMapping("/display-note-de-credit-fac/{affId}/{cesId}")
+    public void generateNoteCredit(HttpServletResponse response, @PathVariable Long affId, @PathVariable Long cesId) throws Exception
+    {
+        byte[] reportBytes = jrService.generateNoteCreditFac(affId, cesId);
+        docService.displayPdf(response, reportBytes, "Note-de-credit");
+    }
 }
