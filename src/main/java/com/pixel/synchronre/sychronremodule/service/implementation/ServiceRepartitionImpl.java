@@ -255,8 +255,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 2, RoundingMode.HALF_UP));
-        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
+        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 20, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 20, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
 
@@ -292,13 +292,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
         
-        BigDecimal capital = capitalInit.multiply(taux).divide(CENT, 2, RoundingMode.HALF_UP);
+        BigDecimal capital = capitalInit.multiply(taux).divide(CENT, 20, RoundingMode.HALF_UP);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
         resp.setTaux(taux);
-        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 20, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
 
@@ -320,11 +320,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
         if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
 
-        BigDecimal capital = tauxBesoin.divide(CENT, 2, RoundingMode.HALF_UP).multiply(restARepartir);
+        BigDecimal capital = tauxBesoin.multiply(restARepartir).divide(CENT, 20, RoundingMode.HALF_UP);
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 2, RoundingMode.HALF_UP));
-        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 2, RoundingMode.HALF_UP));
+        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 20, RoundingMode.HALF_UP));
+        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 20, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
 
@@ -355,7 +355,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             if(dto.getRepCapital().compareTo(besoinFacRestant)>0) throw new AppException("Le capitaal ne peut exéder le reste à repartir (" + NumberFormat.getInstance().format(besoinFacRestant.doubleValue()) +")");
 
             if(dto.getRepTaux().compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
-            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 10, RoundingMode.HALF_UP);
+            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 20, RoundingMode.HALF_UP);
             if(repCapital.compareTo(besoinFacRestant)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
 
             resp.setRepCapital(dto.getRepCapital());
@@ -366,14 +366,14 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             if(dto.getRepCapital().compareTo(ZERO)<0) throw new AppException("Le capital de repartition doit être un nombre strictement positif");
             if(dto.getRepCapital().compareTo(besoinFacRestant)>0) throw new AppException("Le capitaal ne peut exéder le reste à repartir (" + NumberFormat.getInstance().format(besoinFacRestant.doubleValue()) +")");
             besoinFacRestant = besoinFacRestant.subtract(dto.getRepCapital());
-            BigDecimal repTaux = dto.getRepCapital().divide(capitalInit, 2, RoundingMode.HALF_UP).multiply(CENT);
+            BigDecimal repTaux = dto.getRepCapital().divide(capitalInit, 20, RoundingMode.HALF_UP).multiply(CENT);
             resp.setRepCapital(dto.getRepCapital());
             resp.setRepTaux(repTaux);
         }
         else if(dto.getRepTaux() != null)
         {
             if(dto.getRepTaux().compareTo(ZERO)<0) throw new AppException("Le taux de repartition doit être un nombre strictement positif");
-            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 10, RoundingMode.HALF_UP);
+            BigDecimal repCapital = capitalInit.multiply(dto.getRepTaux()).divide(CENT, 20, RoundingMode.HALF_UP);
             if(repCapital.compareTo(besoinFacRestant)>0) throw new AppException("Le taux de repartition ne doit pas exéder " + CENT.multiply(restARepartir).divide(capitalInit, 2, RoundingMode.HALF_UP) + "%");
             besoinFacRestant = besoinFacRestant.subtract(repCapital);
             resp.setRepCapital(repCapital);
@@ -385,7 +385,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
         List<Long> pclIds = dto.getPclIds() == null ? new ArrayList<>() : dto.getPclIds();
         List<UpdateCesLegReq> pclReps =  pclRepo.findByAffId(dto.getAffId()).stream()
-                .map(pcl->new UpdateCesLegReq(pcl,repRepo.getRepIdByAffIdAndPclId(dto.getAffId(), pcl.getParamCesLegId()), pcl.getParamCesLegTaux().multiply(capitalInit).divide(CENT, 2, RoundingMode.HALF_UP), dto.getAffId(),pclIds.contains(pcl.getParamCesLegId())))
+                .map(pcl->new UpdateCesLegReq(pcl,repRepo.getRepIdByAffIdAndPclId(dto.getAffId(), pcl.getParamCesLegId()), pcl.getParamCesLegTaux().multiply(capitalInit).divide(CENT, 20, RoundingMode.HALF_UP), dto.getAffId(),pclIds.contains(pcl.getParamCesLegId())))
                 .collect(Collectors.toList());
         resp.setParamCesLegs(pclReps);
         return resp;
@@ -415,7 +415,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             boolean accepte = repRepo.existsValidByAffIdAndPclId(affId,pcl.getParamCesLegId());
             CreateCesLegReq cesLegReq =  new CreateCesLegReq();
-            cesLegReq.setRepCapital(accepte ? repRepo.findValidByAffIdAndPclId(affId, pcl.getParamCesLegId()).getRepCapital() : pcl.getParamCesLegTaux().multiply(affaire.getAffCapitalInitial()).divide(CENT, 2, RoundingMode.HALF_UP));
+            cesLegReq.setRepCapital(accepte ? repRepo.findValidByAffIdAndPclId(affId, pcl.getParamCesLegId()).getRepCapital() : pcl.getParamCesLegTaux().multiply(affaire.getAffCapitalInitial()).divide(CENT, 20, RoundingMode.HALF_UP));
             cesLegReq.setRepTaux(pcl.getParamCesLegTaux());
             cesLegReq.setAffId(affId);
             cesLegReq.setParamCesLegalId(pcl.getParamCesLegId());
@@ -606,7 +606,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private UpdateCesLegReq mapToUpdateCesLegReq(ParamCessionLegaleListResp pcl, Affaire aff, boolean accepted)
     {
         BigDecimal capitalInit = aff.getAffCapitalInitial();
-        BigDecimal repCapital = capitalInit == null ? ZERO : capitalInit.multiply(pcl.getParamCesLegTaux()).divide(new BigDecimal(100), 2,RoundingMode.HALF_UP);
+        BigDecimal repCapital = capitalInit == null ? ZERO : capitalInit.multiply(pcl.getParamCesLegTaux()).divide(new BigDecimal(100), 20,RoundingMode.HALF_UP);
         UpdateCesLegReq rep = new UpdateCesLegReq();
         rep.setRepTaux(pcl.getParamCesLegTaux());
         rep.setRepCapital(repCapital);
