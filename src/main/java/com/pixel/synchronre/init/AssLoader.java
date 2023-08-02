@@ -59,7 +59,7 @@ public class AssLoader implements Loader
         prvOpeSaisieFac.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieFac));
 
         AppRole roleOpeSaisieSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
-        List<AppPrivilege> prvOpeSaisieSin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-SIN","CRT-SIN","UPD-SIN","DEL-SIN","TRANS-SIN","GET-SIN-LST","GET-SIN-FAC-LST","GET-SIN-TRAI-LST::GET-SIN-SAI-LST::GET-SIN-TRANS-LST::GET-SIN-AVAL-LST::GET-SIN-SOLD-LST::GET-SIN-SUIV-LST::GET-SIN-ARCH-LST"));
+        List<AppPrivilege> prvOpeSaisieSin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-SIN","CRT-SIN","UPD-SIN","DEL-SIN","TRANS-SIN","GET-SIN-LST","GET-SIN-FAC-LST","GET-SIN-TRAI-LST","GET-SIN-SAI-LST","GET-SIN-TRANS-LST","GET-SIN-AVAL-LST","GET-SIN-SOLD-LST","GET-SIN-SUIV-LST","GET-SIN-ARCH-LST","GET-SIN-REG-LST","GET-SIN-HISTO","GET-SIN-DET"));
         prvOpeSaisieSin.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieSin));
 
         AppRole roleOpeSaisieTrai = roleRepo.findByRoleCode("ROL-OPE-SAI-TRAI");
@@ -67,7 +67,7 @@ public class AssLoader implements Loader
         prvOpeSaisieTrai.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieTrai));
 
         AppRole roleValidateurFac = roleRepo.findByRoleCode("ROL-VAL-FAC");
-        List<AppPrivilege> prvValidateurFac = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-FAC","GET-FAC-LST","GET-FAC-C-REG","GET-FAC-ARCH","GET-FAC-HIST","VAL-FAC","VAL-PLA"));
+        List<AppPrivilege> prvValidateurFac = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-FAC","GET-FAC-LST","GET-FAC-C-REG","GET-FAC-ARCH","GET-FAC-HIST","VAL-FAC","VAL-PLA","GET-SIN-REG-LST","GET-SIN-HISTO","GET-SIN-DET"));
         prvValidateurFac.forEach(prv->this.addPrvToRole(prv, roleValidateurFac));
 
         AppRole roleComptableFac = roleRepo.findByRoleCode("ROL-COMPTA-FAC");
