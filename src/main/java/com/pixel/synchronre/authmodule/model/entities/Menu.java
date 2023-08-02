@@ -23,6 +23,7 @@ public class Menu
     private String menuCode;
     @Column(unique = true)
     private String name;
+    @Column(length=4000)
     private String prvsCodesChain;
     @Transient
     private List<String> prvsCodes;
