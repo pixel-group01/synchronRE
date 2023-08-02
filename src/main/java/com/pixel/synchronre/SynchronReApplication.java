@@ -41,5 +41,5 @@ public class SynchronReApplication {
             exerciceLoader.load();
             cedCesAffLoader.load();
         };
-    }
+     }
 }
