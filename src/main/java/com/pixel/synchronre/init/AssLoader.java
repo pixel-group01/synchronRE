@@ -81,7 +81,7 @@ public class AssLoader implements Loader
 //        prvOpeSaisieSinistres.forEach(prv->this.addPrvToRole(prv, roleOpeSaisieSinistres));
 
         AppRole roleValidateurSin = roleRepo.findByRoleCode("ROL-VAL-SIN");
-        List<AppPrivilege> prvValidateurSin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-SIN","GET-SIN-LST","GET-SIN-AVAL-LST","GET-SIN-SOLD-LST","GET-SIN-SUIV-LST","GET-SIN-ARCH-LST"));
+        List<AppPrivilege> prvValidateurSin = prvRepo.findByPrvCodes(Arrays.asList("GET-STAT-SIN","GET-SIN-AVAL-LST","GET-SIN-SOLD-LST","GET-SIN-SUIV-LST","GET-SIN-ARCH-LST"));
         prvValidateurSin.forEach(prv->this.addPrvToRole(prv, roleValidateurSin));
 
         AppRole roleComptableSin = roleRepo.findByRoleCode("ROL-COMPTA-SIN");
