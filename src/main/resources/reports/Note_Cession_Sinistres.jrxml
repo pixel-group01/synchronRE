@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-03T00:45:32 -->
+<!-- 2023-08-03T00:57:46 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -280,22 +280,23 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
        affaire.aff_date_effet,
        affaire.fac_prime,
        affaire.fac_smp_lci,
-        regexp_replace(to_char(affaire.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
-        sinistre.sin_id,
+       regexp_replace(to_char(affaire.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
+       sinistre.sin_id,
        sinistre.sin_commentaire,
        affaire.cedente_id,
        sinistre.sin_montant100,
        regexp_replace(to_char(sinistre.sin_montant100::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS sin_montant1001 ,
-       sinistre.sin_commentaire,
        cedante.ced_nom_filiale,
        couverture.cou_libelle,
        branche.bran_libelle,
+       cessionnaire.ces_nom,
        repartition.rep_interlocuteur,
        repartition.cessionnaire_id,
        bordereau.bord_num,
        devise.dev_libelle
 FROM affaire,
      cedante,
+     cessionnaire,
      couverture,
      branche,
      repartition,
@@ -307,6 +308,7 @@ WHERE affaire.couverture_id = couverture.cou_id
   AND couverture.bran_id = branche.bran_id
   AND affaire.aff_id = repartition.aff_id
   AND affaire.devise_code = devise.dev_code
+  AND repartition.cessionnaire_id = cessionnaire.ces_id
   AND bordereau.rep_id = repartition.rep_id
   AND affaire.aff_id = sinistre.aff_id
   AND affaire.aff_statut_creation = 'REALISEE'
@@ -329,10 +331,10 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="cedente_id" class="java.lang.Long"/>
 	<field name="sin_montant100" class="java.math.BigDecimal"/>
 	<field name="sin_montant1001" class="java.lang.String"/>
-	<field name="COLUMN_17" class="java.lang.String"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
 	<field name="bran_libelle" class="java.lang.String"/>
+	<field name="ces_nom" class="java.lang.String"/>
 	<field name="rep_interlocuteur" class="java.lang.String"/>
 	<field name="cessionnaire_id" class="java.lang.Long"/>
 	<field name="bord_num" class="java.lang.String"/>
@@ -395,7 +397,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Réassureur : "+$F{ced_nom_filiale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Réassureur : "+$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="13" y="25" width="307" height="19" uuid="d6be577a-e94e-466b-a4fd-b57ea86e64d9">
