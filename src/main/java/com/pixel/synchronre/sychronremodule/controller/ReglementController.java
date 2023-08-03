@@ -37,6 +37,7 @@ public class ReglementController
 
     @PostMapping(path = "/affaire/create")
     public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Validated({REG_AFF_GROUP.class}) CreateReglementReq dto) throws UnknownHostException {
+        dto.setTypeReg(typeReg);
         return regService.createReglementAffaire(typeReg,dto);
     }
 
