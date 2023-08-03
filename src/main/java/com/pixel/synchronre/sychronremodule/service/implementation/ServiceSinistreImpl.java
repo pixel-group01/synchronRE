@@ -168,7 +168,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException
+    public  Page<SinistreDetailsResp>  valider(Long sinId, int returnPageSize) throws UnknownHostException
     {
         //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
