@@ -140,13 +140,13 @@ public class SinistreController
         return true;
     }
 
-    @GetMapping(path = "/envoyer-note-cession-et-note-debit-sinistre/{sinId}")
+    @GetMapping(path = "/envoyer-note-cession-sinistre/{sinId}/{cesId}")
     public boolean envoyerNoteCessionSinistre(@PathVariable Long sinId, @PathVariable Long cesId) throws Exception {
         sinService.envoyerNoteCessionSinistre(sinId, cesId);
         return true;
     }
 
-    @GetMapping(path = "/envoyer-note-cession-et-note-debit-sinistre/{sinId}")
+    @GetMapping(path = "/envoyer-note-debit-sinistre/{sinId}")
     public boolean envoyerNoteDebitSinistre(@PathVariable Long sinId) throws Exception {
         sinService.envoyerNoteDebitSinistre(sinId);
         return true;
