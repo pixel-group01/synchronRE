@@ -46,6 +46,7 @@ public class CreateReglementReq
     private String regMode;
 
     private Long cesId;
+    private String typeReg;
 }
 
 

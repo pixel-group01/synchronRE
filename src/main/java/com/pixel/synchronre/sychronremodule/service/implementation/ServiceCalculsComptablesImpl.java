@@ -14,6 +14,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.math.BigDecimal.ZERO;
+
 @RequiredArgsConstructor @Service
 public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 {
@@ -116,7 +118,13 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         return  mtTotalAReverseAuxCes.subtract(dejaReverse);
     }
 
+    @Override
+    public BigDecimal calculateMtEnAttenteDeAReversement(Long affId) {
+        BigDecimal mtDejaPaye = this.calculateDejaRegle(affId);
+        BigDecimal mtDejaReverse = this.calculateDejaReverse(affId);
+        return mtDejaPaye == null ? ZERO : mtDejaPaye.subtract(mtDejaReverse == null ? ZERO : mtDejaReverse);
 
+    }
 
     @Override
     public BigDecimal calculateMtTotaleCms(Long affId) //Montant total de la commission du à la Cedante et au réassureur propriétaire de l'affaire (NelsonRE)

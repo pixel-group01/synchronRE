@@ -2,6 +2,8 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 
 import java.math.BigDecimal;
 
+import static java.math.BigDecimal.ZERO;
+
 public interface IServiceCalculsComptables
 {
     BigDecimal calculateRestARepartir(Long affId);
@@ -18,6 +20,7 @@ public interface IServiceCalculsComptables
     BigDecimal calculateMtTotalAReverseAuxCes(Long affId);
     BigDecimal calculateDejaReverse(Long affId);
     BigDecimal calculateRestAReverser(Long affId);
+    public BigDecimal calculateMtEnAttenteDeAReversement(Long affId);
     BigDecimal calculateTauxDeReversement(Long affId);
 
     BigDecimal calculateDejaReverseByCes(Long plaId);
