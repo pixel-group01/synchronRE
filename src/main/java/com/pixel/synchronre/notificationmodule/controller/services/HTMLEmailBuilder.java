@@ -11,6 +11,7 @@ public interface HTMLEmailBuilder
     //String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String noteCession
     //String buildNoteCessionSinistreEmail(String cesInterlocuteur, String affCode, Long sinId, Long cesId);
     //String buildNoteDebitSinistreEmail(String cesInterlocuteur, String affCode, Long sinId, Long cesId);
-    String buildNoteCessionEtDeDebitSinistreEmail(String cesInterlocuteur, String sinCode);
+    String buildNoteDeDebitSinistreEmail(String cesInterlocuteur, String sinCode);
+    String buildNoteCessionSinistreEmail(String cesInterlocuteur, String sinCode);
 
 }

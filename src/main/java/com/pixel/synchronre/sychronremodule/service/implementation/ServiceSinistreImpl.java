@@ -7,10 +7,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -24,7 +21,6 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +29,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
@@ -61,6 +56,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Value("${spring.mail.username}")
     private String synchronreEmail;
     private final IserviceExercie exeService;
+    private final CedRepo cedRepo;
 
     private void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
     {
@@ -168,17 +164,16 @@ public class ServiceSinistreImpl implements IServiceSinistre
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException
+    public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws Exception
     {
         //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
-        //envoyerNoteCessionSinistreEtNoteDebit1(sinId);
+        envoyerNoteCessionSinistreEtNoteDebit(sinId);
         return sinPages;
-
     }
 
-    @Override
+    /*@Override
     public void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
@@ -201,13 +196,16 @@ public class ServiceSinistreImpl implements IServiceSinistre
 
         mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
     logService.saveLog(SinistreActions.TRANSMETTRE_NOTE_CESSION_SINISTRE_ET_NOTE_DEBIT);
-    }
+    }*/
 
-    public void envoyerNoteCessionSinistreEtNoteDebit1(Long sinId) throws UnknownHostException {
+    public void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws Exception {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
+
+        Cedante cedante = cedRepo.getCedanteByAffId(affaire.getAffId());
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
         Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
+        mailSenderService.sendNoteDebitSinistreEmail(synchronreEmail, cedante.getCedEmail(), cedante.getCedSigleFiliale(), affaire.getAffId());
 
         List<Cessionnaire> cessionnaires = sinRepo.getCessionnaireBySinId(sinId);
         if(cessionnaires == null || cessionnaires.size() == 0) throw new AppException("Aucun cessionnaire sur cette affaire");
@@ -239,6 +237,20 @@ public class ServiceSinistreImpl implements IServiceSinistre
     public Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable) {
         Page<SinistreDetailsResp> sinPage = sinRepo.searchSinistres(key,null, null, jwtService.getConnectedUserCedId(), FAC_UNIQUE_CODE, SinStatutGroup.tabAllSinistres, pageable);
         return sinPage;
+    }
+
+    @Override
+    public void envoyerNoteCessionSinistre(Long sinId, Long cesId) throws Exception {
+        Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
+        Cessionnaire ces = cesRepo.findById(cesId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
+        mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, cesId, "Note de cession sinistre");
+    }
+
+    @Override
+    public void envoyerNoteDebitSinistre(Long sinId) throws Exception {
+        Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
+        Cedante cedante = cedRepo.getCedanteByAffId(affaire.getAffId());
+        mailSenderService.sendNoteDebitSinistreEmail(synchronreEmail, cedante.getCedEmail(), cedante.getCedSigleFiliale(), affaire.getAffId());
     }
 
     @Override

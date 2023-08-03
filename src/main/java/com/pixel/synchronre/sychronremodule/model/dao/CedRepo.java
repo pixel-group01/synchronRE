@@ -48,4 +48,7 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
 
     @Query("select a.cedante from Affaire a where a.affId = ?1")
     Cedante findByAffId(Long affId);
+
+    @Query("select a.cedante from Affaire a where a.affId =?1")
+    Cedante getCedanteByAffId(Long affId);
 }

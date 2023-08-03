@@ -128,7 +128,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
     @Override
     public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String noteCession) throws Exception {
-        String message = this.htmlEmailBuilder.buildNoteCessionEtDeDebitSinistreEmail(cesInterlocuteur, sinRepo.getSinCode(sinId));
+        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEmail(cesInterlocuteur, sinRepo.getSinCode(sinId));
         byte[] report = reportService.generateNoteCessionSinistre(sinId, cesId);
         EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
         this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
@@ -138,8 +138,12 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
 
     @Override
-    public void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName, Long affId) throws Exception {
-
+    public void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName, Long sinId) throws Exception
+    {
+        String message = this.htmlEmailBuilder.buildNoteDeDebitSinistreEmail(interlocName, sinRepo.getSinCode(sinId));
+        byte[] report = reportService.generateNoteDebitSinistre(sinId);
+        EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
+        this.sendEmailWithAttachments( senderMail,  receiverMail,  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
     }
 
 

@@ -54,4 +54,13 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
 
     @Query("select c.cesNom from Cessionnaire c where c.cesId = ?1")
     String getCesNameById(Long cedId);
+
+    @Query("""
+        select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
+            r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
+            r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
+            s.staLibelle, r.cessionnaire.cesInterlocuteur)
+        from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and s.staCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
+""")
+    List<CessionnaireListResp> findBySinId(Long sinId);
 }

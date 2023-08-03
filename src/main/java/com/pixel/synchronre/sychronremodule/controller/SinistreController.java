@@ -134,14 +134,26 @@ public class SinistreController
     }
 
     @PutMapping(path = "/valider/{sinId}")
-    public boolean valider(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    public boolean valider(@PathVariable Long sinId, @RequestParam(defaultValue = "10") int size) throws Exception
     {
         sinService.valider(sinId, size);
         return true;
     }
 
     @GetMapping(path = "/envoyer-note-cession-et-note-debit-sinistre/{sinId}")
-    public boolean envoyerNoteCessionEtNoteDebitSinistre(@PathVariable Long sinId) throws UnknownHostException {
+    public boolean envoyerNoteCessionSinistre(@PathVariable Long sinId, @PathVariable Long cesId) throws Exception {
+        sinService.envoyerNoteCessionSinistre(sinId, cesId);
+        return true;
+    }
+
+    @GetMapping(path = "/envoyer-note-cession-et-note-debit-sinistre/{sinId}")
+    public boolean envoyerNoteDebitSinistre(@PathVariable Long sinId) throws Exception {
+        sinService.envoyerNoteDebitSinistre(sinId);
+        return true;
+    }
+
+    @GetMapping(path = "/envoyer-note-cession-et-note-debit-sinistre/{sinId}")
+    public boolean envoyerNoteCessionEtNoteDebitSinistre(@PathVariable Long sinId) throws Exception {
         sinService.envoyerNoteCessionSinistreEtNoteDebit(sinId);
         return true;
     }

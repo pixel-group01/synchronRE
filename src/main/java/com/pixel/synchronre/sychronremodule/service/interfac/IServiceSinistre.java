@@ -17,7 +17,7 @@ public interface IServiceSinistre
     SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException;
     SinistreDetailsResp updateSinistre(UpdateSinistreReq dto) throws UnknownHostException;
 
-    void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException;
+    void envoyerNoteCessionSinistreEtNoteDebit(Long sinId) throws UnknownHostException, Exception;
 
     Page<SinistreDetailsResp> searchSinistre(String key, List<String> staCodes, Pageable pageable);
 
@@ -44,7 +44,11 @@ public interface IServiceSinistre
 
     Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize);
 
-    Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws UnknownHostException;
+    Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws Exception;
 
     Page<SinistreDetailsResp> searchSinFacSuivi(String key, Pageable pageable);
+
+    void envoyerNoteCessionSinistre(Long sinId, Long cesId) throws Exception;
+
+    void envoyerNoteDebitSinistre(Long sinId) throws Exception;
 }
