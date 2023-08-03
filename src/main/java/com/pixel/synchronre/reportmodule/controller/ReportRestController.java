@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteCessionFac(plaId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url, reportBytes);
+        Base64.getEncoder().encodeToString(reportBytes);
+        return new Base64FileDto(Base64.getEncoder().encodeToString(reportBytes), reportBytes);
     }
 
     @GetMapping("/note-de-debit-fac/{affId}")
@@ -53,18 +55,18 @@ public class ReportRestController
         return new Base64FileDto(base64Url, reportBytes);
     }
 
-    @GetMapping("/note-cession-sinistre/{plaId}")
-    public Base64FileDto generateNoteCessionSinistre(@PathVariable Long plaId) throws Exception
+    @GetMapping("/note-cession-sinistre/{sinId}/{cesId}")
+    public Base64FileDto generateNoteCessionSinistre(@PathVariable Long sinId, @PathVariable Long cesId) throws Exception
     {
-        byte[] reportBytes = jrService.generateNoteCessionSinistre(plaId);
+        byte[] reportBytes = jrService.generateNoteCessionSinistre(sinId, cesId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
     }
 
-    @GetMapping("/note-debit-sinistre/{affId}")
-    public Base64FileDto generateNoteDebitSinistre(@PathVariable Long affId) throws Exception
+    @GetMapping("/note-debit-sinistre/{sinId}")
+    public Base64FileDto generateNoteDebitSinistre(@PathVariable Long sinId) throws Exception
     {
-        byte[] reportBytes = jrService.generateNoteDebitSinistre(affId);
+        byte[] reportBytes = jrService.generateNoteDebitSinistre(sinId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
     }
@@ -96,5 +98,19 @@ public class ReportRestController
     {
         byte[] reportBytes = jrService.generateNoteCreditFac(affId, cesId);
         docService.displayPdf(response, reportBytes, "Note-de-credit");
+    }
+
+    @GetMapping("/display-note-de-debit-sinistre/{sinId}")
+    public void generateNoteDebitSinistre(HttpServletResponse response, @PathVariable Long sinId) throws Exception
+    {
+        byte[] reportBytes = jrService.generateNoteDebitSinistre(sinId);
+        docService.displayPdf(response, reportBytes, "Note-de-debit");
+    }
+
+    @GetMapping("/display-note-de-cession-sinistre/{sinId}/{cesId}")
+    public void generateNoteCessionSinistre(HttpServletResponse response, @PathVariable Long sinId, @PathVariable Long cesId) throws Exception
+    {
+        byte[] reportBytes = jrService.generateNoteCessionSinistre(sinId, cesId);
+        docService.displayPdf(response, reportBytes, "Note-de-cession");
     }
 }

@@ -33,8 +33,6 @@ public class AdminLoader implements Loader
     @Override
     public void load()
     {
-
-
         //Nelson RE
         BigDecimal FIVE = new BigDecimal(5);
         Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));

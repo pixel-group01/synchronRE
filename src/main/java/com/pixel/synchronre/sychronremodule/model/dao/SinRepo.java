@@ -127,4 +127,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
 
     @Query("select s.sinCode from Sinistre s where s.sinId = ?1")
     String getSinCode(Long sinId);
+
+    @Query("select s.statut.staCode from Sinistre s where s.sinId = ?1")
+    String getSinStatut(Long sinId);
 }

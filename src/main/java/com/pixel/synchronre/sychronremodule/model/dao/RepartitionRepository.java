@@ -176,4 +176,11 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     Long getRepIdByAffIdAndTypeRep(Long affId, String typeStaCode);
 
     //List<Repartition> findByAffaireAndTypeRep(Long affId, String rep_ced);
+
+    @Query("""
+        select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_RETENTION', 'REP_FACOB', 'REP_FACOB')
+        and r.repStatut = true
+    """)
+    BigDecimal calculateSommeCapitalTraiteByAffId(Long affId);
 }

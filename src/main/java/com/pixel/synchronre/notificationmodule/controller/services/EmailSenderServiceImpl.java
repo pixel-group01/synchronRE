@@ -129,8 +129,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     @Override
     public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String noteCession) throws Exception {
         String message = this.htmlEmailBuilder.buildNoteCessionEtDeDebitSinistreEmail(cesInterlocuteur, sinRepo.getSinCode(sinId));
-        Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(affRepo.getAffIdByAffCode(affCode), "REP_PLA", cesId);
-        byte[] report = reportService.generateNoteCessionSinistre(placement.getRepId());
+        byte[] report = reportService.generateNoteCessionSinistre(sinId, cesId);
         EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
         this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
     }

@@ -12,9 +12,11 @@ import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import jakarta.servlet.http.HttpServletResponse;
 import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,9 @@ public class ServiceReportImpl implements IServiceReport
     private final DataSource dataSource;
     private final AffaireRepository affRepo;
     private final RepartitionRepository repRepo;
-    private ReglementRepository regRepo;
+    private final SinRepo sinRepo;
+    private final ReglementRepository regRepo;
+
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
     {
@@ -143,37 +147,42 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteCessionSinistre(Long plaId) throws Exception
+    public byte[] generateNoteCessionSinistre(Long sinId, Long cesId) throws Exception
     {
-        Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
-        if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Affaire affaire = affRepo.getAffaireBySinId(sinId).orElseThrow(()-> new AppException("Affaire introuvable"));
+         Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
+        String sinStatut = sinistre.getStatut() == null ? null : sinistre.getStatut().getStaCode();
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", placement.getAffaire().getAffId());
-        params.put("aff_assure", placement.getAffaire().getAffAssure());
-        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
-        params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("aff_id", sinId);
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
+        params.put("ces_id", cesId);
         params.put("param_image", jrConfig.imagesLocation);
 
         //Affichage du cachet en fonction d'une expression dans l'etat
-        if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
+        if(sinStatut == null)params.put("param_visible", "false");
+        else if (sinStatut.equals("APAI") || sinStatut.equals("CPAI") || sinStatut.equals("RET-COMPTA") || sinStatut.equals("CPAI-CREV") || sinStatut.equals("CREV") || sinStatut.equals("SOLDE")){
             params.put("param_visible", "true");
         }else{
             params.put("param_visible", "false");
         }
-        byte[] reportBytes = this.generateReport(jrConfig.noteCessionSinistre, params, new ArrayList<>(), null);
+        String qrText = "Votre note de cession sur le sinistre N°" + sinistre.getSinCode() + " relatif à l'affaire N°" + affaire.getAffCode() + " pour le compte de l'assuré " + affaire.getAffAssure();
+        byte[] reportBytes = this.generateReport(jrConfig.noteCessionSinistre, params, new ArrayList<>(), qrText);
         return reportBytes;
     }
 
     @Override
-    public byte[] generateNoteDebitSinistre(Long affId) throws Exception
+    public byte[] generateNoteDebitSinistre(Long sinId) throws Exception
     {
-        Affaire affaire = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Affaire affaire = affRepo.getAffaireBySinId(sinId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        String sinCode = sinRepo.getSinCode(sinId);
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affaire.getAffId());
+        params.put("aff_id", sinId);
         params.put("aff_assure", affaire.getAffAssure());
-        params.put("fac_numero_police", affaire.getFacNumeroPolice());
+        params.put("fac_numero_police", sinCode);
         params.put("param_image", jrConfig.imagesLocation);
-        byte[] reportBytes = this.generateReport(jrConfig.noteDebitSinistre, params, new ArrayList<>(), null);
+        String qrText = "Votre note de débit sur le sinistre N°" + sinCode + " relatif à l'affaire N°" + affaire.getAffCode() + " pour le compte de l'assuré " + affaire.getAffAssure();
+        byte[] reportBytes = this.generateReport(jrConfig.noteDebitSinistre, params, new ArrayList<>(), qrText);
         return reportBytes;
     }
 
