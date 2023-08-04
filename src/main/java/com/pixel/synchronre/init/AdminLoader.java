@@ -102,8 +102,8 @@ public class AdminLoader implements Loader
                 pe.encode("1234"), "souscripteur@gmail.com", "123456783",
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now()));
-        //Souscripteur Nelson RE
-        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-OPE-SAI");
+//        //Souscripteur Nelson RE
+        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-SOUS");
         AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userSouscripteur);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
