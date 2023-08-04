@@ -22,6 +22,7 @@ import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,10 +73,11 @@ public class ServiceReportImpl implements IServiceReport
         qrText =  qrText != null ? qrText : "Application SynchronRE : Votre Demande de placement porte sur N° Affaire : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
         String resourcePath = "classpath:"+jrConfig.reportLocation + "/" + reportName;
-
+        Resource resource = resourceLoader.getResource(resourcePath);
+        System.out.println(resource.getURL());
         this.setQrCodeParam(parameters, qrText);
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(resourceLoader.getResource(resourcePath).getURL().getPath());
+        JasperReport jasperReport = JasperCompileManager.compileReport(resource.getInputStream());
         // Remplissez le rapport Jasper en utilisant la connexion JDBC
         Connection connection = dataSource.getConnection();
         JRBeanCollectionDataSource jrBeanCollectionDataSource = data == null || data.isEmpty() ? null : new JRBeanCollectionDataSource(data);
