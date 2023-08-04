@@ -107,8 +107,8 @@ public class AdminLoader implements Loader
         AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userSouscripteur);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
-        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
-        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteurSaisiSin, fncSouscripteur));
+//        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
+//        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteurSaisiSin, fncSouscripteur));
 
 //        //Validateur NelsonRE
         AppUser userValidateur = userRepo.save(new AppUser(null, "Validateur", "Validateur", null, nelsonRe.getCesId(),
