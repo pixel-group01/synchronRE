@@ -29,7 +29,7 @@ public class AdminLoader implements Loader
     private final PrvToFunctionAssRepo ptfRepo;
     private final CessionnaireRepository cesRepo;
     private final TypeRepo typeRepo;
-
+//
     @Override
     public void load()
     {
