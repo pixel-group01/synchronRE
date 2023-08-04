@@ -429,7 +429,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 			</textField>
 			<image>
 				<reportElement x="2" y="2" width="190" height="58" uuid="be1f93cf-1724-4550-b138-f29b8531ecd6"/>
-				<imageExpression><![CDATA[$P{param_image}+"logo_NELSONRE.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -850,7 +850,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<reportElement x="390" y="545" width="90" height="60" uuid="efd38a83-7177-4e4a-ab13-b4066f680633">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 		</band>
 	</detail>

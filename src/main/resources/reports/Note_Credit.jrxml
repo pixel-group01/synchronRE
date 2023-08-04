@@ -194,7 +194,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<reportElement x="178" y="3" width="159" height="64" uuid="f014caeb-d106-4590-aa46-b4249df00b39">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
-				<imageExpression><![CDATA[$P{param_image}+"logo_NELSONRE.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
 			</image>
 		</band>
 	</title>
