@@ -22,6 +22,7 @@ import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class ServiceReportImpl implements IServiceReport
     private final RepartitionRepository repRepo;
     private final SinRepo sinRepo;
     private final ReglementRepository regRepo;
+    private final ResourceLoader resourceLoader;
 
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
@@ -68,9 +71,11 @@ public class ServiceReportImpl implements IServiceReport
     {
         qrText =  qrText != null ? qrText : "Application SynchronRE : Votre Demande de placement porte sur N° Affaire : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
+        String resourcePath = "classpath:"+jrConfig.reportLocation + "/" + reportName;
+
         this.setQrCodeParam(parameters, qrText);
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(jrConfig.reportLocation + "/" + reportName);
+        JasperReport jasperReport = JasperCompileManager.compileReport(resourceLoader.getResource(resourcePath).getURL().getPath());
         // Remplissez le rapport Jasper en utilisant la connexion JDBC
         Connection connection = dataSource.getConnection();
         JRBeanCollectionDataSource jrBeanCollectionDataSource = data == null || data.isEmpty() ? null : new JRBeanCollectionDataSource(data);
@@ -88,9 +93,15 @@ public class ServiceReportImpl implements IServiceReport
         return reportBytes;
     }
 
+    private String getImagesPath() throws IOException {
+        String imageLocation = "classpath:"+jrConfig.imagesLocation ;
+        return resourceLoader.getResource(imageLocation).getURL().getPath();
+    }
+
     @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception
     {
+
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
@@ -98,7 +109,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_assure", placement.getAffaire().getAffAssure());
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
-        params.put("param_image", jrConfig.imagesLocation);
+        params.put("param_image", this.getImagesPath());
         if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
             params.put("param_visible", "true");
         }
@@ -118,7 +129,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_id", repart.getAffaire().getAffId());
         params.put("aff_assure", repart.getAffaire().getAffAssure());
         params.put("fac_numero_police", repart.getAffaire().getFacNumeroPolice());
-        params.put("param_image", jrConfig.imagesLocation);
+        params.put("param_image", this.getImagesPath());
 
         //Affichage du cachet en fonction d'une expression dans l'etat
         if (repart.getRepStaCode().getStaCode().equals("VAL") || repart.getRepStaCode().getStaCode().equals("MAIL")){
@@ -141,7 +152,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_assure", placement.getAffaire().getAffAssure());
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
-        params.put("param_image", jrConfig.imagesLocation);
+        params.put("param_image", this.getImagesPath());
         byte[] reportBytes = this.generateReport(jrConfig.noteCredit, params, new ArrayList<>(), null);
         return reportBytes;
     }
@@ -157,7 +168,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_assure", affaire.getAffAssure());
         params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("ces_id", cesId);
-        params.put("param_image", jrConfig.imagesLocation);
+        params.put("param_image", this.getImagesPath());
 
         //Affichage du cachet en fonction d'une expression dans l'etat
         if(sinStatut == null)params.put("param_visible", "false");
@@ -180,7 +191,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_id", sinId);
         params.put("aff_assure", affaire.getAffAssure());
         params.put("fac_numero_police", sinCode);
-        params.put("param_image", jrConfig.imagesLocation);
+        params.put("param_image", this.getImagesPath());
         String qrText = "Votre note de débit sur le sinistre N°" + sinCode + " relatif à l'affaire N°" + affaire.getAffCode() + " pour le compte de l'assuré " + affaire.getAffAssure();
         byte[] reportBytes = this.generateReport(jrConfig.noteDebitSinistre, params, new ArrayList<>(), qrText);
         return reportBytes;
