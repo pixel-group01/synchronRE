@@ -338,6 +338,12 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	<parameter name="param_image" class="java.lang.String">
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="logo_nre" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="visa" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
 	<parameter name="aff_id" class="java.lang.Long">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA[$P{aff_id}]]></defaultValueExpression>

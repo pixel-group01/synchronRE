@@ -29,10 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.sql.DataSource;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,6 +64,12 @@ public class ServiceReportImpl implements IServiceReport
         }
     }
 
+    private InputStream getImages(String path) throws IOException {
+        String resourcePath = "classpath:"+path ;
+        Resource resource = resourceLoader.getResource(resourcePath);
+        return resource.getInputStream();
+    }
+
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
@@ -76,6 +79,9 @@ public class ServiceReportImpl implements IServiceReport
         Resource resource = resourceLoader.getResource(resourcePath);
         System.out.println(resource.getURL());
         this.setQrCodeParam(parameters, qrText);
+        parameters.put("logo_nre", this.getImages(jrConfig.nreLogo));
+        parameters.put("logo_synchronre", this.getImages(jrConfig.synchronRelogo));
+        parameters.put("visa", this.getImages(jrConfig.visa));
 
         JasperReport jasperReport = JasperCompileManager.compileReport(resource.getInputStream());
         // Remplissez le rapport Jasper en utilisant la connexion JDBC
@@ -103,7 +109,6 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception
     {
-
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();

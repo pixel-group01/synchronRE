@@ -12,6 +12,13 @@ public class JasperReportConfig {
     @Value("${report.location.images}")
     public String imagesLocation;
 
+    @Value("${report.location.images.visa}")
+    public String visa;
+    @Value("${report.location.images.logonre}")
+    public String nreLogo;
+    @Value("${report.location.images.logosynchre}")
+    public String synchronRelogo;
+
     @Value("${report.location.note.cession}")
     public String noteCession;
 

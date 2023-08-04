@@ -337,9 +337,16 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<field name="ced_nom_filiale" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
 	</subDataset>
+
 	<parameter name="param_image" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logo_nre" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="visa" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
@@ -415,7 +422,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<band height="84" splitType="Stretch">
 			<image>
 				<reportElement x="111" y="3" width="190" height="67" uuid="a1be9f72-70eb-412c-b67b-a258a34cba59"/>
-				<imageExpression><![CDATA[$P{param_image}+"logo_NELSONRE.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="421" y="3" width="130" height="51" forecolor="#2D919C" uuid="5322a71a-21c6-4951-806c-c171ad9f8fad"/>
@@ -1173,7 +1180,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<reportElement x="7" y="568" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 		</band>
 	</detail>
