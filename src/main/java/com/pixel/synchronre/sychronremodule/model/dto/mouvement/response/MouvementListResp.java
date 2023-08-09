@@ -7,6 +7,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
@@ -20,10 +22,15 @@ public class MouvementListResp
     private String staLibelleLong;
     private String cedNomFiliale;
     private String cedSigleFiliale;
+    private Long sinId;
+    private String sinCode;
+    private BigDecimal sinMontant100;
+    private BigDecimal sinMontantHonoraire;
+    private LocalDate sinDateSurvenance;
+    private LocalDate  sinDateDeclaration;
     private String mvtObservation;
     private String userEmail;
     private String userFullNom;
     private String functionName;
     private LocalDateTime mvtDate;
-
 }

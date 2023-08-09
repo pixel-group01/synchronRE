@@ -6,17 +6,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MouvementRepository extends JpaRepository<Mouvement, Long>
 {
+
+
     @Query("""
             select new com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp(
-            m.mvtId, m.affaire.affId, m.affaire.affAssure, m.affaire.affActivite, m.statut.staLibelle, m.statut.staLibelleLong,
-            m.affaire.cedante.cedNomFiliale, m.affaire.cedante.cedSigleFiliale, m.mvtObservation,m.mvtUser.email,concat(m.mvtUser.firstName, ' ', m.mvtUser.lastName),m.mvtFunction.name, m.mvtDate)
-            From Mouvement m where m.affaire.affId = ?1 order by m.mvtDate desc""")
-    List<MouvementListResp> findByAffaire(Long affId);
+            m.mvtId, a.affId, a.affAssure, a.affActivite, m.statut.staLibelle, m.statut.staLibelleLong,
+            c.cedNomFiliale, c.cedSigleFiliale, 
+            s.sinId,s.sinCode,s.sinMontant100,s.sinMontantHonoraire,s.sinDateSurvenance,s.sinDateDeclaration,
+            m.mvtObservation,m.mvtUser.email,concat(m.mvtUser.firstName, ' ', m.mvtUser.lastName),m.mvtFunction.name, m.mvtDate)
+            From Mouvement m left join m.affaire a left join a.cedante c left join m.sinistre s where (a.affId = ?1 or ?1 is null) and (s.sinId = ?2 or ?2 is null)order by m.mvtDate desc""")
+    List<MouvementListResp> findMouvementById(Long affId, Long sinId);
 
     @Query("select m.mvtObservation from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET' and m.mvtDate = (select max(m.mvtDate) from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET')")
     String getMessageRetourForAffaire(Long affId);
@@ -41,19 +47,6 @@ public interface MouvementRepository extends JpaRepository<Mouvement, Long>
     String getMvtMessage(@Param("affId") Long affId, @Param("plaId") Long plaId, @Param("sinId") Long sinId, @Param("staCode") String staCode);
 
 
-    @Query("""
-    select new com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp(
-    m.mvtId, m.affaire.affId, m.affaire.affAssure, m.affaire.affActivite, m.statut.staLibelle, m.statut.staLibelleLong,
-    m.affaire.cedante.cedNomFiliale, m.affaire.cedante.cedSigleFiliale, m.mvtObservation,m.mvtUser.email,concat(m.mvtUser.firstName, ' ', m.mvtUser.lastName),m.mvtFunction.name, m.mvtDate)
-    From Mouvement m where m.placement.repId = ?1 order by m.mvtDate desc""")
-    List<MouvementListResp> findByPlacement(Long plaId);
-
-    @Query("""
-    select new com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp(
-    m.mvtId, m.affaire.affId, m.affaire.affAssure, m.affaire.affActivite, m.statut.staLibelle, m.statut.staLibelleLong,
-    m.affaire.cedante.cedNomFiliale, m.affaire.cedante.cedSigleFiliale, m.mvtObservation,m.mvtUser.email,concat(m.mvtUser.firstName, ' ', m.mvtUser.lastName),m.mvtFunction.name, m.mvtDate)
-    From Mouvement m where m.sinistre.sinId = ?1 order by m.mvtDate desc""")
-    List<MouvementListResp> findBySinistre(Long sinId);
 
 
 }

@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MvtMessage;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +15,11 @@ import java.util.List;
 public class MouvementController
 {
     private final MouvementRepository mvtRepo;
+    private final IServiceMouvement mvtService;
     @GetMapping(path = "/affaire/{affId}")
     List<MouvementListResp> findByAffaire(@PathVariable Long affId)
     {
-        return mvtRepo.findByAffaire(affId);
+        return mvtService.findMouvementById(affId,null);
     }
 
     @GetMapping(path = "/affaire/message-retour/{affId}")
