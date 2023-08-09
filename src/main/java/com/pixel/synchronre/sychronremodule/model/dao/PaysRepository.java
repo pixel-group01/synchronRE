@@ -18,6 +18,7 @@ public interface PaysRepository extends JpaRepository<Pays, String> {
 
 
 
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(p.paysCode, p.paysIndicatif, p.paysNom,  
         p.statut.staLibelle,p.devise.devCode,p.devise.devLibelle) 

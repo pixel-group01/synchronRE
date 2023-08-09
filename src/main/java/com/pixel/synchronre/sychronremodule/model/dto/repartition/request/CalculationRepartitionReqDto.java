@@ -13,22 +13,16 @@ public class CalculationRepartitionReqDto
 {
     private Long affId;
     private BigDecimal repCapital;
-    private BigDecimal repTaux;
-    private Long repId;
-    //private SimpleRepDto partCedante;
+    //private BigDecimal partCedante;
     private List<Long> pclIds;
-    //private List<RepDto> traites;
     private Long repIdToBeModified;
 
-    private BigDecimal retentionCapital;
-    private BigDecimal retentionTaux;
-    private Long retentionRepId;
+    private BigDecimal conservationCapital;
+    private Long conservationRepId;
 
     private BigDecimal xlCapital;
-    private BigDecimal xlTaux;
     private Long xlRepId;
 
     private BigDecimal facobCapital;
-    private BigDecimal facobTaux;
     private Long facobRepId;
 }

@@ -93,6 +93,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "resteARegler", expression = "java(comptaService.calculateRestARegler(aff.getAffId()))")
     @Mapping(target = "tauxDeReglement", expression = "java(comptaService.calculateTauxDeReglement(aff.getAffId()))")
     @Mapping(target = "dejaReverse", expression = "java(comptaService.calculateDejaReverse(aff.getAffId()))")
+    @Mapping(target = "mtAttenteReversement", expression = "java(comptaService.calculateMtEnAttenteDeAReversement(aff.getAffId()))")
     @Mapping(target = "resteAReverser", expression = "java(comptaService.calculateRestAReverser(aff.getAffId()))")
     @Mapping(target = "tauxDeReversement", expression = "java(comptaService.calculateTauxDeReversement(aff.getAffId()))")
     @Mapping(target = "detailsEtatComptables", expression = "java(this.getDetailsEtatComptables(aff.getAffId()))")
@@ -142,6 +143,7 @@ public abstract class FacultativeMapper
         //TODO dejaReverse resteAReverser tauxDeReversement
         details.setDejaReverse(comptaService.calculateDejaReverseByCes(plaId));
         details.setResteAReverser(comptaService.calculateRestAReverserbyCes(plaId));
+
         return details;
     }
 }

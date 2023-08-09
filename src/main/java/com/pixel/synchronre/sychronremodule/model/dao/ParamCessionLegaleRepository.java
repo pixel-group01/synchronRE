@@ -49,4 +49,10 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("select sum(pcl.paramCesLegTaux) from ParamCessionLegale pcl where pcl.paramCesLegId in ?1 and pcl.statut.staCode = 'ACT'")
     BigDecimal getSommeTauxParamCessionLegal(List<Long> pclIds);
+
+    @Query("select (count(pcl)>0) from ParamCessionLegale pcl where pcl.paramCesLegId = ?1 and pcl.paramType.uniqueCode = 'PCL_PF'")
+    boolean pclIsPf(Long pclId);
+
+    @Query("select (count(pcl)>0) from ParamCessionLegale pcl where pcl.paramCesLegId = ?1 and pcl.paramType.uniqueCode = 'PCL_SIMPLE'")
+    boolean pclIsSimple(Long pclId);
 }

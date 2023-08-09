@@ -36,6 +36,7 @@ public class EtatComptableAffaire
     private BigDecimal resteARegler;
     private BigDecimal tauxDeReglement;
     private BigDecimal dejaReverse;
+    private BigDecimal mtAttenteReversement;
     private BigDecimal resteAReverser;
     private BigDecimal tauxDeReversement;
     private List<DetailsEtatComptable> detailsEtatComptables;

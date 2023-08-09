@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.response;
 
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CalculationRepartitionReqDto;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.SimpleRepDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,10 +15,37 @@ public class CalculationRepartitionRespDto
     private Long affId;
     private BigDecimal repCapital;
     private BigDecimal repTaux;
-    private Long repId;
-    //private SimpleRepDto partCedante;
+    private List<UpdateCesLegReq> paramCesLegsPremierFranc;
+    private BigDecimal capitauxNetCL;
+
+    private BigDecimal conservationCapital;
+    private BigDecimal conservationTaux;
+    private BigDecimal conservationPrime;
+    private Long conservationRepId;
+
+    private BigDecimal xlCapital;
+    private BigDecimal xlTaux;
+    private BigDecimal xlPrime;
+    private Long xlRepId;
+
+    private BigDecimal facobCapital;
+    private BigDecimal facobTaux;
+    private BigDecimal facobPrime;
+    private Long facobRepId;
+
+    private BigDecimal bruteBesoinFac;
+    private BigDecimal bruteBesoinFacTaux;
+    private BigDecimal bruteBesoinFacPrime;
+
+
     private List<UpdateCesLegReq> paramCesLegs;
-    private BigDecimal besoinFac;
+
+    private BigDecimal besoinFacNetCL;
+    private BigDecimal besoinFacNetCLTaux;
+    private BigDecimal besoinFacNetCLPrime;
+
+
     private BigDecimal besoinFacRestant;
+    private BigDecimal besoinFac;
     //private List<RepDto> traites;
 }

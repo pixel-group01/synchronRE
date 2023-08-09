@@ -2,8 +2,6 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 
 import java.math.BigDecimal;
 
-import static java.math.BigDecimal.ZERO;
-
 public interface IServiceCalculsComptables
 {
     BigDecimal calculateRestARepartir(Long affId);

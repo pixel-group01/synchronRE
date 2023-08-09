@@ -39,7 +39,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
@@ -53,7 +53,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
@@ -68,7 +68,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
@@ -83,7 +83,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
@@ -98,7 +98,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }
@@ -113,7 +113,7 @@ public @interface CoherentCapitalAndTaux
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getCapitalInitial(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
+            BigDecimal gap = dto.getRepCapital().multiply(new BigDecimal(100)).divide(affRepo.getSmplci(dto.getAffId()), 2, RoundingMode.HALF_UP).subtract(dto.getRepTaux()).abs();
             return gap.compareTo(new BigDecimal(0.01))<=0;
         }
     }

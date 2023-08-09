@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,8 @@ public class ParamCessionLegale {
     private String paramCesLegLibelle;
     private BigDecimal paramCesLegCapital;
     private BigDecimal paramCesLegTaux;
+    @ManyToOne @JoinColumn(name = "type_id")
+    private Type paramType;
     @ManyToOne @JoinColumn(name = "pays_code")
     private Pays pays;
     @ManyToOne @JoinColumn(name = "paramStatut")

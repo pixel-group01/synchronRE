@@ -4,6 +4,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import lombok.RequiredArgsConstructor;
@@ -37,11 +38,14 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     public BigDecimal calculateRestARepartir(Long affId)
     {
         boolean affIdExists = affId != null && affRepo.existsById(affId);
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal dejaReparti = !affIdExists ? ZERO : repRepo.getRepartitionsByAffId(affId);
         dejaReparti = dejaReparti == null ? ZERO : dejaReparti;
-        BigDecimal capitalinit = !affIdExists ? ZERO : affRepo.getCapitalInitial(affId);
-        capitalinit = capitalinit == null ? ZERO : capitalinit;
-        return  capitalinit.subtract(dejaReparti) ;
+        BigDecimal smpLci = affaire.getFacSmpLci();
+        BigDecimal partCedante = affaire.getPartCedante();
+        smpLci = smpLci == null ? ZERO : smpLci;
+        partCedante = partCedante == null ? ZERO : partCedante;
+        return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti) ;
     }
 
     @Override
@@ -49,9 +53,9 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     {
         boolean affIdExists = affId != null && affRepo.existsById(affId);
         BigDecimal dejaReparti = this.calculateDejaRepartir(affId);
-        BigDecimal capitalinit = !affIdExists ? ZERO : affRepo.getCapitalInitial(affId);
-        capitalinit = capitalinit == null ? ZERO : capitalinit;
-        return dejaReparti.multiply(CENT).divide(capitalinit, 2, RoundingMode.HALF_UP);
+        BigDecimal smpLci = !affIdExists ? ZERO : affRepo.getSmplci(affId);
+        smpLci = smpLci == null ? ZERO : smpLci;
+        return dejaReparti.multiply(CENT).divide(smpLci, 2, RoundingMode.HALF_UP);
     }
 
     @Override
@@ -123,7 +127,6 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal mtDejaPaye = this.calculateDejaRegle(affId);
         BigDecimal mtDejaReverse = this.calculateDejaReverse(affId);
         return mtDejaPaye == null ? ZERO : mtDejaPaye.subtract(mtDejaReverse == null ? ZERO : mtDejaReverse);
-
     }
 
     @Override

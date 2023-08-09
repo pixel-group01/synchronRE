@@ -24,6 +24,8 @@ public class UpdateCesLegReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
+    private BigDecimal prime;
+
     @ExistingAffId @NotNull(message = "Veuillez choisir l'affaire'")
     private Long affId;
     @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")

@@ -36,6 +36,7 @@ public class Affaire {
     //private float facCapitaux;
     private BigDecimal facSmpLci; // Sinistre max
     private BigDecimal facPrime;
+    private BigDecimal partCedante; //montant de la smplci soumuise en réassurance
     protected String affStatutCreation; //Statut à la création de l'affaire ( Réalisée:REALISEE / En instance:INSTANCE / Non Réalisée:NON_REALISEE )
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;

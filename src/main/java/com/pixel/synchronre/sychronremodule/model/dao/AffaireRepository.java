@@ -23,8 +23,11 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("select a.affStatutCreation from Affaire a where a.affId = ?1")
     String getAffStatutCreation(Long affId);
 
-    @Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
-    BigDecimal getCapitalInitial(Long affId);
+    //@Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
+    //BigDecimal getCapitalInitial(Long affId);
+
+    @Query("select coalesce(a.facSmpLci, 0)  from Affaire a where a.affId = ?1")
+    BigDecimal getSmplci(Long affId);
 
     @Query("select coalesce(a.facSmpLci, 0)  from Affaire a where a.affId = ?1")
     BigDecimal getFacSmpLci(Long affId);
@@ -122,5 +125,6 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
      */
 
-
+    @Query("select a.cedante.pays.paysCode from Affaire a where a.affId = ?1)")
+    String getPaysCodebyAffId(Long affId);
 }
