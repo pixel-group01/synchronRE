@@ -1,10 +1,13 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MvtMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController @RequiredArgsConstructor @RequestMapping(path = "/mouvements") @ResponseStatus(HttpStatus.OK)
 public class MvtController
@@ -42,6 +45,12 @@ public class MvtController
     {
         String msg = mvtRepo.getMvtMessage(null, null, sinId, "RET");
         return new MvtMessage(msg);
+    }
+
+    @GetMapping(path = "/sinistre/get-histo/{sinId}")
+    List<MouvementListResp> findBySinistre(@PathVariable Long sinId)
+    {
+        return mvtRepo.findMouvementById(null,sinId);
     }
 
 }

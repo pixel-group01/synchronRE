@@ -58,17 +58,7 @@ public class ServiceMouvementImpl implements IServiceMouvement
 
 
     @Override
-    public List<MouvementListResp> findMvtAffaire(Long affId) {
-        return mvtRepo.findByAffaire(affId);
-    }
-
-    @Override
-    public List<MouvementListResp> findMvtPlacement(Long plaId) {
-        return mvtRepo.findByPlacement(plaId);
-    }
-
-    @Override
-    public List<MouvementListResp> findMvtSinistre(Long sinId) {
-        return mvtRepo.findBySinistre(sinId);
+    public List<MouvementListResp> findMouvementById(Long affId,Long sinId) {
+        return mvtRepo.findMouvementById(affId,sinId);
     }
 }

@@ -17,9 +17,5 @@ public interface IServiceMouvement
     @Transactional
     void createMvtSinistre(MvtReq dto);
 
-    List<MouvementListResp> findMvtAffaire(Long affId);
-
-    List<MouvementListResp> findMvtPlacement(Long plaId);
-
-    List<MouvementListResp> findMvtSinistre(Long sinId);
+    List<MouvementListResp> findMouvementById(Long affId,Long sinId);
 }
