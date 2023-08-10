@@ -32,7 +32,7 @@ public @interface LimitedNumberOfCesLeg
         {
             if (dto == null) return true;
             if (dto.getAffId() == null) return true;
-            return repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()) ||  repRepo.countCesLegByAffaire(dto.getAffId()) < pclRepo.countByAffId(dto.getAffId());
+            return repRepo.existsByAffIdAndPclId(dto.getAffId(), dto.getParamCesLegalId()) ||  repRepo.countCesLegByAffaire(dto.getAffId()) < pclRepo.countPossiblePclByAffId(dto.getAffId());
         }
     }
 }

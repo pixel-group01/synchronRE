@@ -36,6 +36,8 @@ public interface IserviceRepartition {
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
     CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
 
+    CalculationRepartitionRespDto calculateRepByAffId(Long affId, boolean modeUpdate);
+
     CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto);
 
 

@@ -14,7 +14,6 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -29,7 +28,6 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComp
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
-import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -42,12 +40,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.UnknownHostException;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
@@ -70,7 +66,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     @Value("${spring.mail.username}")
     private String synchronreEmail;
-    private final PaysRepository paysRepo;
+    private final DecimalFormat decimalFormat;
 
     private final ParamCessionLegaleRepository pclRepoo;
 
@@ -338,23 +334,69 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
+    public CalculationRepartitionRespDto calculateRepByAffId(Long affId, boolean modeUpdate)
+    {
+        if(affId == null) throw new AppException("Veuillez fournir l'ID de l'affaire");
+        Affaire aff = affRepo.findById(affId).orElse(null);
+        CalculationRepartitionReqDto dto = new CalculationRepartitionReqDto();
+        BigDecimal partCedante = aff.getPartCedante() != null ? aff.getPartCedante() : aff.getFacSmpLci();
+        dto.setAffId(affId);
+        dto.setPartCedante(partCedante);
+        if(modeUpdate)
+        {
+            List<Repartition> conservationsReps = repRepo.findByAffaireAndTypeRep(affId, "REP_CONSERVATION");
+            List<Repartition> facobReps = repRepo.findByAffaireAndTypeRep(affId, "REP_FACOB");
+            List<Repartition> xlReps = repRepo.findByAffaireAndTypeRep(affId, "REP_XL");
+
+            if(conservationsReps.size() > 1) throw new AppException("Plusieurs traités de type conservation sur la même affaire");
+            if(facobReps.size() > 1) throw new AppException("Plusieurs traités de type facob sur la même affaire");
+            if(xlReps.size() > 1) throw new AppException("Plusieurs traités xl sur la même affaire");
+
+            Repartition conservationsRep = conservationsReps.isEmpty() ? null : conservationsReps.get(0);
+            Repartition facobRep = facobReps.isEmpty() ? null : facobReps.get(0);
+            Repartition xlRep = xlReps.isEmpty() ? null : xlReps.get(0);
+
+            dto.setConservationRepId(conservationsRep == null ? null : conservationsRep.getRepId());
+            dto.setConservationCapital(conservationsRep == null ? null : conservationsRep.getRepCapital());
+
+            dto.setFacobRepId(facobRep == null ? null : facobRep.getRepId());
+            dto.setFacobCapital(facobRep == null ? null : facobRep.getRepCapital());
+
+            dto.setXlRepId(xlRep == null ? null : xlRep.getRepId());
+            dto.setXlCapital(xlRep == null ? null : xlRep.getRepCapital());
+            List<Long> effectivePclIdsOnAffaire =  pclRepo.findPclIdsOnAffaire(affId);
+            dto.setPclIds(effectivePclIdsOnAffaire);
+        }
+        if(!modeUpdate)
+        {
+            List<Long> possiblePclIds = pclRepo.findPossiblePclByAffId(affId).stream().map(ParamCessionLegaleListResp::getParamCesLegId).collect(Collectors.toList());
+            dto.setPclIds(possiblePclIds);
+        }
+        return calculateRepByDto(dto);
+    }
+
+    @Override
     public CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto)
     {
         if(dto == null) throw new AppException("Veuillez fournir les données d'entrée");
         if(dto.getAffId() == null) throw new AppException("Veuillez fournir l'ID de l'affaire");
         Affaire aff = affRepo.findById(dto.getAffId()).orElse(null);
+        String devise = aff.getDevise().getDevCode();
         if(aff == null) return null;
-        BigDecimal mtPartCedante = dto.getRepCapital() == null ? ZERO : dto.getRepCapital();
+        BigDecimal mtPartCedante = dto.getPartCedante() == null ? ZERO : dto.getPartCedante();
 
         BigDecimal smplCi = aff.getFacSmpLci() == null ? ZERO : aff.getFacSmpLci();
         if(smplCi.compareTo(ZERO) == 0) throw new AppException("La LCI de l'affaire est nulle");
+        if(mtPartCedante.compareTo(smplCi)>0) throw new AppException("Le montant de la part cédante ne peut excéder celui de la LCI (" + decimalFormat.format(smplCi) + devise +")");
         BigDecimal tauxPartCedante = mtPartCedante.multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
-        BigDecimal prime100 = aff.getFacPrime();
+        BigDecimal prime100 = aff.getFacPrime() == null ? ZERO : aff.getFacPrime();
         BigDecimal primePartCedante = tauxPartCedante.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal conservationCapital = dto.getConservationCapital() == null ? ZERO : dto.getConservationCapital();
+        BigDecimal facobCapital = dto.getFacobCapital() == null ? ZERO : dto.getFacobCapital();
+        BigDecimal xlCapital = dto.getXlCapital() == null ? ZERO : dto.getXlCapital();
 
-
-        String paysCode = affRepo.getPaysCodebyAffId(dto.getAffId());
-        List<Long> possiblePclIds = pclRepo.findByPaysCode(paysCode).stream().map(ParamCessionLegaleListResp::getParamCesLegId).collect(Collectors.toList());
+        //String paysCode = affRepo.getPaysCodebyAffId(dto.getAffId());
+        List<Long> possiblePclIds = pclRepo.findPossiblePclByAffId(dto.getAffId()).stream().map(ParamCessionLegaleListResp::getParamCesLegId).collect(Collectors.toList());
         List<Long> acceptedPclIds = dto.getPclIds() == null ? new ArrayList<>() : dto.getPclIds();
         List<Long> pclPflIds = possiblePclIds.stream().filter(pclId->pclRepo.pclIsPf(pclId)).collect(Collectors.toList());
         List<UpdateCesLegReq> paramCesLegsPremierFranc =
@@ -363,7 +405,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             ParamCessionLegale pcl = pclRepo.findById(pclId).orElseThrow(()->new AppException("Paramètre de cession légale introuvable"));
             BigDecimal pclOriginalTaux = pcl.getParamCesLegTaux();
             BigDecimal pclCapital = pclOriginalTaux.multiply(mtPartCedante).divide(CENT, 100, RoundingMode.HALF_UP);
-            BigDecimal pclNewtaux =  pclOriginalTaux.multiply(tauxPartCedante).divide(new BigDecimal(10000), 100, RoundingMode.HALF_UP);
+            BigDecimal pclNewtaux =  pclOriginalTaux.multiply(tauxPartCedante).divide(CENT, 100, RoundingMode.HALF_UP);
             BigDecimal pclPrime =  pclNewtaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
 
 
@@ -372,11 +414,12 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             Long repId = rep == null ? null : rep.getRepId();
 
 
-            updateCesLegReq.setParamCesLegLibelle(pcl.getParamCesLegLibelle() + pclOriginalTaux.doubleValue() + "%");
-            updateCesLegReq.setRepCapital(pclCapital);
+            updateCesLegReq.setAffId(dto.getAffId());
+            updateCesLegReq.setParamCesLegLibelle(pcl.getParamCesLegLibelle() + " "+ pclOriginalTaux.doubleValue() + "%");
+            updateCesLegReq.setRepCapital(pclCapital.setScale(0,RoundingMode.HALF_UP));
             updateCesLegReq.setRepId(repId);
-            updateCesLegReq.setRepTaux(pclNewtaux);
-            updateCesLegReq.setPrime(pclPrime);
+            updateCesLegReq.setRepTaux(pclNewtaux.setScale(2,RoundingMode.HALF_UP));
+            updateCesLegReq.setPrime(pclPrime.setScale(0,RoundingMode.HALF_UP));
             updateCesLegReq.setParamCesLegalId(pcl.getParamCesLegId());
             updateCesLegReq.setAccepte(acceptedPclIds.contains(pclId));
             return updateCesLegReq;
@@ -385,28 +428,25 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal mtClPf = paramCesLegsPremierFranc.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepCapital).reduce(ZERO, BigDecimal::add);
         BigDecimal capitauxNetCl = mtPartCedante.subtract(mtClPf);
 
-        BigDecimal conservationTaux = dto.getConservationCapital().divide(mtPartCedante, 100, RoundingMode.HALF_UP);
-        BigDecimal facobTaux = dto.getFacobCapital().divide(mtPartCedante, 100, RoundingMode.HALF_UP);
-        BigDecimal xlTaux = dto.getXlCapital().divide(mtPartCedante, 100, RoundingMode.HALF_UP);
+        BigDecimal conservationTaux = conservationCapital==null ? null : conservationCapital.multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
+        BigDecimal facobTaux = facobCapital == null ? null : facobCapital.multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
+        BigDecimal xlTaux =  xlCapital == null ? null : xlCapital.multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
 
-        BigDecimal conservationPrime = conservationTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
-        BigDecimal facobPrime = facobTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
-        BigDecimal xlPrime = xlTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal conservationPrime = conservationTaux == null ? null : conservationTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal facobPrime = facobTaux == null ? null : facobTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal xlPrime = xlCapital == null ? null : xlTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
 
 
-        List<Repartition> repConservations = repRepo.findByAffaireAndTypeRep(dto.getAffId(), "REP_CONSERVATION");
-        List<Repartition> repFacobs = repRepo.findByAffaireAndTypeRep(dto.getAffId(), "REP_FACOB");
-        List<Repartition> repXls = repRepo.findByAffaireAndTypeRep(dto.getAffId(), "REP_XL");
+        Repartition repConservation = dto.getConservationRepId() == null ? null : repRepo.findById(dto.getConservationRepId()).orElse(null);
+        Repartition repFacob = dto.getFacobRepId() == null ? null : repRepo.findById(dto.getFacobRepId()).orElse(null);
+        Repartition repXl = dto.getXlRepId() == null ? null : repRepo.findById(dto.getXlRepId()).orElse(null);
 
-        if(repConservations.size() > 1) throw new AppException("Plusieurs traités de type conservation cédante sur la même affaire");
-        if(repFacobs.size() > 1) throw new AppException("Plusieurs traités facob sur la même affaire");
-        if(repXls.size() > 1) throw new AppException("Plusieurs traités xl sur la même affaire");
+        //Repartition repConservation = repConservations.isEmpty() ? null : repConservations.get(0);
+        //Repartition repFacob = repFacobs.isEmpty() ? null :  repFacobs.get(0);
+        //Repartition repXl = repXls.isEmpty() ? null :  repXls.get(0);
 
-        Repartition repConservation = repConservations.isEmpty() ? null : repConservations.get(0);
-        Repartition repFacob = repFacobs.isEmpty() ? null :  repFacobs.get(0);
-        Repartition repXl = repXls.isEmpty() ? null :  repXls.get(0);
-
-        BigDecimal capitalTraites = Stream.of(repConservation, repFacob, repXl).filter(Objects::nonNull).map(Repartition::getRepCapital).reduce(ZERO, BigDecimal::add);
+        BigDecimal capitalTraites = conservationCapital.add(facobCapital).add(xlCapital);
+        if(capitalTraites.compareTo(capitauxNetCl)>0) throw new AppException("La somme des montants de traité ne peut exéder les capitaux nets de cessions légales");
         BigDecimal bruteBesoinFac = capitauxNetCl.subtract(capitalTraites);
         BigDecimal bruteBesoinFacTaux = bruteBesoinFac.multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
         BigDecimal bruteBesoinFacPrime = bruteBesoinFacTaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
@@ -419,7 +459,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                     ParamCessionLegale pcl = pclRepo.findById(pclId).orElseThrow(()->new AppException("Paramètre de cession légale introuvable"));
                     BigDecimal pclOriginalTaux = pcl.getParamCesLegTaux();
 
-                    BigDecimal pclNewtaux =  pclOriginalTaux.multiply(bruteBesoinFacTaux).divide(new BigDecimal(10000), 100, RoundingMode.HALF_UP);
+                    BigDecimal pclNewtaux =  pclOriginalTaux.multiply(bruteBesoinFacTaux).divide(CENT, 100, RoundingMode.HALF_UP);
                     BigDecimal pclCapital = pclNewtaux.multiply(smplCi).divide(CENT, 100, RoundingMode.HALF_UP);
                     BigDecimal pclPrime = pclNewtaux.multiply(prime100).divide(CENT, 100, RoundingMode.HALF_UP);
 
@@ -429,55 +469,65 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                     Long repId = rep == null ? null : rep.getRepId();
 
 
-                    updateCesLegReq.setParamCesLegLibelle(pcl.getParamCesLegLibelle() + pclOriginalTaux.doubleValue() + "%");
-                    updateCesLegReq.setRepCapital(pclCapital);
+                    updateCesLegReq.setAffId(dto.getAffId());
+                    updateCesLegReq.setParamCesLegLibelle(pcl.getParamCesLegLibelle()  + " "+  pclOriginalTaux.doubleValue() + "%");
+                    updateCesLegReq.setRepCapital(pclCapital.setScale(0, RoundingMode.HALF_UP));
                     updateCesLegReq.setRepId(repId);
-                    updateCesLegReq.setRepTaux(pclNewtaux);
-                    updateCesLegReq.setPrime(pclPrime);
+                    updateCesLegReq.setRepTaux(pclNewtaux.setScale(2, RoundingMode.HALF_UP));
+                    updateCesLegReq.setPrime(pclPrime.setScale(0, RoundingMode.HALF_UP));
                     updateCesLegReq.setParamCesLegalId(pcl.getParamCesLegId());
                     updateCesLegReq.setAccepte(acceptedPclIds.contains(pclId));
                     return updateCesLegReq;
                 }).collect(Collectors.toList());
 
-                BigDecimal mtClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepCapital).reduce(ZERO, BigDecimal::add);
-                BigDecimal tauxClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepTaux).reduce(ZERO, BigDecimal::add);
-                BigDecimal primeClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getPrime).reduce(ZERO, BigDecimal::add);
+        BigDecimal mtClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepCapital).reduce(ZERO, BigDecimal::add);
+        if(mtClSimple.compareTo(bruteBesoinFac)>0) throw new AppException("Veuillez réajuster les montants de traité ou retirer certaines cessions légales");
 
-                BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple);
-                BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple);
-                BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple);
+        BigDecimal tauxClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepTaux).reduce(ZERO, BigDecimal::add);
+        BigDecimal primeClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getPrime).reduce(ZERO, BigDecimal::add);
+
+        BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple);
+        BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple);
+        BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple);
+
+        BigDecimal mtPlacements = repRepo.calculateMtTotalPlacementbyAffaire(dto.getAffId());
+        mtPlacements = mtPlacements == null ? ZERO : mtPlacements;
+        if(mtPlacements.compareTo(besoinFacNetCL)>0) throw new AppException("Le besoin  fac net de cessions légales (" + decimalFormat.format(besoinFacNetCL) + devise +") doit être supérieur au montant des capitaux déjà placé (" + decimalFormat.format(mtPlacements)+ " " + devise +")");
+        BigDecimal besoinFac = besoinFacNetCL.subtract(mtPlacements);
 
         CalculationRepartitionRespDto resp = new CalculationRepartitionRespDto();
-        resp.setRepCapital(mtPartCedante);
-        resp.setRepTaux(tauxPartCedante);
+        resp.setAffId(dto.getAffId());
+        resp.setMtPartCedante(mtPartCedante.setScale(0, RoundingMode.HALF_UP));
+        resp.setTauxPartCedante(tauxPartCedante.setScale(2, RoundingMode.HALF_UP));
+        resp.setPrimePartCedante(primePartCedante.setScale(2, RoundingMode.HALF_UP));
         resp.setParamCesLegsPremierFranc(paramCesLegsPremierFranc);
-        resp.setCapitauxNetCL(capitauxNetCl);
+        resp.setCapitauxNetCL(capitauxNetCl.setScale(2, RoundingMode.HALF_UP));
 
-        resp.setConservationCapital(dto.getConservationCapital());
-        resp.setConservationTaux(conservationTaux);
-        resp.setConservationPrime(conservationPrime);
+        resp.setConservationCapital(conservationCapital.setScale(0, RoundingMode.HALF_UP));
+        resp.setConservationTaux(conservationTaux.setScale(2, RoundingMode.HALF_UP));
+        resp.setConservationPrime(conservationPrime.setScale(0, RoundingMode.HALF_UP));
         resp.setConservationRepId(repConservation == null ? null : repConservation.getRepId());
 
-        resp.setFacobCapital(dto.getFacobCapital());
-        resp.setFacobTaux(facobTaux);
-        resp.setFacobPrime(facobPrime);
+        resp.setFacobCapital(facobCapital.setScale(0, RoundingMode.HALF_UP));
+        resp.setFacobTaux(facobTaux.setScale(2, RoundingMode.HALF_UP));
+        resp.setFacobPrime(facobPrime.setScale(0, RoundingMode.HALF_UP));
         resp.setFacobRepId(repFacob == null ? null : repFacob.getRepId());
 
-        resp.setXlCapital(dto.getXlCapital());
-        resp.setXlTaux(xlTaux);
-        resp.setXlPrime(xlPrime);
+        resp.setXlCapital(xlCapital.setScale(0, RoundingMode.HALF_UP));
+        resp.setXlTaux(xlTaux.setScale(2, RoundingMode.HALF_UP));
+        resp.setXlPrime(xlPrime.setScale(0, RoundingMode.HALF_UP));
         resp.setXlRepId(repXl == null ? null : repXl.getRepId());
 
-        resp.setBruteBesoinFac(bruteBesoinFac);
-        resp.setBruteBesoinFacTaux(bruteBesoinFacTaux);
-        resp.setBruteBesoinFacPrime(bruteBesoinFacPrime);
+        resp.setBruteBesoinFac(bruteBesoinFac.setScale(0, RoundingMode.HALF_UP));
+        resp.setBruteBesoinFacTaux(bruteBesoinFacTaux.setScale(2, RoundingMode.HALF_UP));
+        resp.setBruteBesoinFacPrime(bruteBesoinFacPrime.setScale(0, RoundingMode.HALF_UP));
 
         resp.setParamCesLegs(paramCesLegs);
 
-        resp.setBesoinFacNetCL(besoinFacNetCL);
-        resp.setBesoinFacNetCLTaux(besoinFacNetCLTaux);
-        resp.setBesoinFacNetCLPrime(besoinFacNetCLPrime);
-
+        resp.setBesoinFacNetCL(besoinFacNetCL.setScale(0, RoundingMode.HALF_UP));
+        resp.setBesoinFacNetCLTaux(besoinFacNetCLTaux.setScale(2, RoundingMode.HALF_UP));
+        resp.setBesoinFacNetCLPrime(besoinFacNetCLPrime.setScale(0, RoundingMode.HALF_UP));
+        resp.setBesoinFac(besoinFac.setScale(0, RoundingMode.HALF_UP));
         /*
 
          */
@@ -504,7 +554,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId) {
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         CreateCedLegRepartitionReq dto = repRepo.getCedLegRepartitionDTO(affId);
-        List<ParamCessionLegaleListResp> pcls = this.pclRepo.findByAffId(affId);
+        List<ParamCessionLegaleListResp> pcls = this.pclRepo.findPossiblePclByAffId(affId);
         List<CreateCesLegReq> cesLegReqs = pcls.stream().map(pcl->
         {
             boolean accepte = repRepo.existsValidByAffIdAndPclId(affId,pcl.getParamCesLegId());
@@ -523,7 +573,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override
     public List<ParamCessionLegaleListResp> getCesLegParam(Long affId)
     {
-        return pclRepo.findByAffId(affId).stream()
+        return pclRepo.findPossiblePclByAffId(affId).stream()
             .peek(pcl->pcl.setParamCesLegCapital(this.calculateRepByTaux(affId, pcl.getParamCesLegTaux(), null, null, null).getCapital()))
             .collect(Collectors.toList());
     }
@@ -687,7 +737,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         List<UpdateCesLegReq> pclReps =repRepo.findUpdateCesLegReqByAffaireAndTypeRep(affId);
         List<Long> acceptedPclIds = pclReps.stream().filter(r->r.isAccepte()).map(r->r.getParamCesLegalId()).collect(Collectors.toList());
 
-        List<UpdateCesLegReq> noneAcceptedPclReps = pclRepo.findByAffId(affId).stream()
+        List<UpdateCesLegReq> noneAcceptedPclReps = pclRepo.findPossiblePclByAffId(affId).stream()
                 .filter(pcl->!acceptedPclIds.contains(pcl.getParamCesLegId()))
                 .map(pcl->this.mapToUpdateCesLegReq(pcl, aff, false)).collect(Collectors.toList());
 

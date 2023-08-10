@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.mapstruct.Mapping;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,8 +24,10 @@ public class Reglement {
   private Long regId;
   private String regReference;
   private LocalDate regDate;
+  @Column(precision = 50, scale = 20)
   private BigDecimal regMontant;
   private String regMontantLettre;
+  @Column(precision = 50, scale = 20)
   private BigDecimal regCommission;
   private boolean regStatut;
   private String regMode;

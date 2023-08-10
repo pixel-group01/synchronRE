@@ -17,11 +17,16 @@ public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repId;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repCapital;
     private String repCapitalLettre;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repTaux;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repSousCommission;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCed;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCourt;
     private String repInterlocuteur;
     private boolean repStatut;

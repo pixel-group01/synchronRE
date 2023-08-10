@@ -23,15 +23,15 @@ public class PaysLoader implements Loader
     @Override
     public void load()
     {
-        Pays ci = new Pays("CIV", "+225","Côte d'Ivoire",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays bn = new Pays("BNN", "+229","Benin",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays tg = new Pays("TGO", "+228","Togo",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays sen = new Pays("SEN","+221", "Sénegal",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays GAB = new Pays("GAB","+241", "Gabon",new Devise("XAF"), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays gui = new Pays("GUI","+224", "Guinée",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays BFO = new Pays("BFO","+226", "Burkina Faso",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays MAL = new Pays("MAL","+223", "Mali",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        Pays CMR = new Pays("CMR","+237", "Cameroun",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
-        paysRepo.saveAll(Arrays.asList(ci, bn, tg, sen,GAB, gui, BFO, MAL,CMR));
+        Pays ci = paysRepo.save(new Pays("CIV", "+225","Côte d'Ivoire",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays bn = paysRepo.save(new Pays("BNN", "+229","Benin",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays tg = paysRepo.save(new Pays("TGO", "+228","Togo",new Devise("XOF"),  new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays sen = paysRepo.save(new Pays("SEN","+221", "Sénegal",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays GAB = paysRepo.save(new Pays("GAB","+241", "Gabon",new Devise("XAF"), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays gui = paysRepo.save(new Pays("GUI","+224", "Guinée",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays BFO = paysRepo.save(new Pays("BFO","+226", "Burkina Faso",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays MAL = paysRepo.save(new Pays("MAL","+223", "Mali",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays CMR = paysRepo.save(new Pays("CMR","+237", "Cameroun",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        //paysRepo.saveAll(Arrays.asList(ci, bn, tg, sen,GAB, gui, BFO, MAL,CMR));
     }
 }

@@ -15,7 +15,9 @@ public class Facultative extends Affaire
 {
   private String facNumeroPolice;
   //private float facCapitaux;
+  @Column(precision = 50, scale = 20)
   private BigDecimal facSmpLci;
+  @Column(precision = 50, scale = 20)
   private BigDecimal facPrime;
 
 

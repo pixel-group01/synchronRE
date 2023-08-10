@@ -22,10 +22,13 @@ public class Sinistre
     @SequenceGenerator(name = "SIN_ID_GEN", sequenceName = "SIN_ID_GEN")
     private Long sinId;
     private String sinCode;
+    @Column(precision = 50, scale = 20)
     private BigDecimal sinMontant100;
+    @Column(precision = 50, scale = 20)
     private BigDecimal sinMontantHonoraire;
     private LocalDate sinDateSurvenance;
     private LocalDate  sinDateDeclaration;
+    @Column(precision = 50, scale = 20)
     private BigDecimal sinMontantTotPlacement;
     private String sinMontantTotPlacementLettre;
     private String sinCommentaire;

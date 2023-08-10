@@ -13,8 +13,9 @@ import java.util.List;
 public class CalculationRepartitionRespDto
 {
     private Long affId;
-    private BigDecimal repCapital;
-    private BigDecimal repTaux;
+    private BigDecimal mtPartCedante;
+    private BigDecimal tauxPartCedante;
+    private BigDecimal primePartCedante;
     private List<UpdateCesLegReq> paramCesLegsPremierFranc;
     private BigDecimal capitauxNetCL;
 

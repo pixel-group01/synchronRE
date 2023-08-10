@@ -10,7 +10,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Calcu
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
@@ -146,6 +144,12 @@ public class RepartitionController
     public CalculationRepartitionRespDto calculRepartitionRespByCapital(@RequestBody CalculationRepartitionReqDto dto)
     {
         return repService.calculateRepByDto(dto);
+    }
+
+    @GetMapping(path = "/calculate/{affId}")
+    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@PathVariable Long affId, @RequestParam boolean modeUpdate)
+    {
+        return repService.calculateRepByAffId(affId, modeUpdate);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
