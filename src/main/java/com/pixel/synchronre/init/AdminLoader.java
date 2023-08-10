@@ -103,9 +103,10 @@ public class AdminLoader implements Loader
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now()));
 //        //Souscripteur Nelson RE
-        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-SOUS");
+
         AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userSouscripteur);
+        AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-SOUS");
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
 //        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
 //        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteurSaisiSin, fncSouscripteur));

@@ -24,6 +24,8 @@ public class ServiceMouvementImpl implements IServiceMouvement
     private final AffaireRepository affRepo;
     private final RepartitionRepository repRepo;
     private final SinRepo sinRepo;
+    
+
 
     @Override @Transactional
     public void createMvtAffaire(MvtReq dto)
