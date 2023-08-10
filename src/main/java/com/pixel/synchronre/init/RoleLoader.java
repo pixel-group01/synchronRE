@@ -28,6 +28,7 @@ public class RoleLoader implements Loader
         AppRole roleOpeSaiTrai = roleRepo.save(new AppRole(null, "ROL-OPE-SAI-TRAI", "Opérateur de saisie traité"));
         AppRole roleOpeSaiSin = roleRepo.save(new AppRole(null, "ROL-OPE-SAI-SIN", "Opérateur de saisie sinistre"));
         AppRole roleVal = roleRepo.save(new AppRole(null, "ROL-VAL", "Validateur global"));
+        AppRole roleSous = roleRepo.save(new AppRole(null, "ROL-SOUS", "Souscripteur global"));
         AppRole roleValFac = roleRepo.save(new AppRole(null, "ROL-VAL-FAC", "Validateur fac"));
         AppRole roleValTrai = roleRepo.save(new AppRole(null, "ROL-VAL-TRAI", "Validateur traité"));
         AppRole roleValSin = roleRepo.save(new AppRole(null, "ROL-VAL-SIN", "Validateur sinistre"));
