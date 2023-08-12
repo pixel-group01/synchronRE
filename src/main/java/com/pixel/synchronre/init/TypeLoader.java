@@ -29,8 +29,6 @@ public class TypeLoader implements Loader
         Type facob = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_FACOB", "Répartition de type traité FACOB", PersStatus.ACTIVE, null, null));
         Type xl = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_XL", "Répartition de type traité XL", PersStatus.ACTIVE, null, null));
 
-
-
         //Type t4 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
         //Type t5 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);
         //Type t6 = new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG", "Répartition de type cession légale", PersStatus.ACTIVE, null, null);

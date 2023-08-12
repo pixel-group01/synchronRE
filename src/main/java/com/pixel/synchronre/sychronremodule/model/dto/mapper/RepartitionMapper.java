@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
@@ -13,6 +14,8 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring")
 public abstract class RepartitionMapper {
@@ -63,6 +66,14 @@ public abstract class RepartitionMapper {
 
     public abstract UpdateCedLegRepartitionReq mapToUpdateCedLegRepartitionReq(Affaire aff, Repartition repCed, List<UpdateCesLegReq> updateCesLegReqs);
 
+    @Mapping(target = "partCedante", source = "mtPartCedante")
+    @Mapping(target = "pclIds", expression = "java(this.getAcceptedPclIds(dto))")
+    public abstract CalculationRepartitionReqDto mapToCalculationRepartitionReqDto(CalculationRepartitionRespDto dto);
 
 
+    protected List<Long> getAcceptedPclIds(CalculationRepartitionRespDto dto)
+    {
+        return Stream.concat(dto.getParamCesLegsPremierFranc().stream(), dto.getParamCesLegs().stream())
+                .filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getParamCesLegalId).collect(Collectors.toList());
+    }
 }
