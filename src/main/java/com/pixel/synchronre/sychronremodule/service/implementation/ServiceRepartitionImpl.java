@@ -344,7 +344,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal loadedPartCedante = affaire.getPartCedante();
         BigDecimal dtoPartCedante = dto.getMtPartCedante();
         if(dtoPartCedante == null) throw  new AppException("Veuillez saisir le montant de la part cédante");
-        if( loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0)
+        if( (loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0) || loadedPartCedante == null)
         {
             affaire.setPartCedante(dtoPartCedante);
             logService.logg(AffaireActions.CHANGE_PART_CEDANTE, oldAffaire, affaire, SynchronReTables.AFFAIRE);
