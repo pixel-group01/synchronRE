@@ -9,11 +9,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @SpringBootApplication
 public class SynchronReApplication {
+
+    @Bean
+    public DecimalFormat decimalFormat()
+    {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator(' '); // Set white space as grouping separator
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);
+
+        return decimalFormat;
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);

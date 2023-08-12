@@ -119,6 +119,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.repCapital from Repartition r where r.repId = ?1")
     BigDecimal getRepCapitalByRepId(Long repId);
 
+    @Query("select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')")
+    BigDecimal calculateMtTotalPlacementbyAffaire(Long affId);
+
     @Query("select r.cessionnaire.cesEmail from Repartition r where r.repId = ?1")
     String getInterlocuteurEmail(Long plaId);
 

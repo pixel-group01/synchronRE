@@ -12,7 +12,7 @@ import java.util.List;
 public class CalculationRepartitionReqDto
 {
     private Long affId;
-    private BigDecimal repCapital;
+    private BigDecimal partCedante;
     //private BigDecimal partCedante;
     private List<Long> pclIds;
     private Long repIdToBeModified;

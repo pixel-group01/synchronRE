@@ -17,6 +17,7 @@ public class Bordereau {
     @Column(unique = true)
     private String bordNum;
     private String bordStatut;
+    @Column(precision = 50, scale = 20)
     private BigDecimal bordMtTotNoteDebit;
     @ManyToOne @JoinColumn(name = "repId")
     private Repartition repartition;
