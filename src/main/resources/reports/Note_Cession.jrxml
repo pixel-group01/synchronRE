@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-03T01:03:32 -->
+<!-- 2023-08-12T13:08:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -337,7 +337,6 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<field name="ced_nom_filiale" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
 	</subDataset>
-
 	<parameter name="param_image" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -451,7 +450,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="635" splitType="Stretch">
+		<band height="618" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="170" y="466" width="280" height="15" uuid="b044fa67-4de7-4964-9841-e6c6ea8900ef">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -1181,6 +1180,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="415" y="556" width="131" height="54" uuid="6a2a96c4-51e9-49a7-a313-002cd1234bec">
+					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
 			</image>
 		</band>
 	</detail>

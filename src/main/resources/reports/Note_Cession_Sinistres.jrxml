@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-03T00:57:46 -->
+<!-- 2023-08-12T13:08:04 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -131,8 +131,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.aff_statut_creation = 'REALISEE'
   AND sinistre.sin_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}
-GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repartition.rep_sous_commission, repartition.rep_taux_com_ced, repartition.rep_taux_com_court, repartition.typ_id, repartition.cessionnaire_id, repartition.rep_interlocuteur, repartition.rep_taux * sinistre.sin_montant100 / 100::numeric, regexp_replace(to_char(repartition.rep_taux * sinistre.sin_montant100 / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), cessionnaire.ces_nom, cedante.ced_nom_filiale, couverture.cou_libelle
-]]>
+GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repartition.rep_sous_commission, repartition.rep_taux_com_ced, repartition.rep_taux_com_court, repartition.typ_id, repartition.cessionnaire_id, repartition.rep_interlocuteur, repartition.rep_taux * sinistre.sin_montant100 / 100::numeric, regexp_replace(to_char(repartition.rep_taux * sinistre.sin_montant100 / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), cessionnaire.ces_nom, cedante.ced_nom_filiale, couverture.cou_libelle]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
@@ -737,7 +736,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="437" y="514" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+				<reportElement x="416" y="514" width="130" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
