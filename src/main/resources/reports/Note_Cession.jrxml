@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T14:38:58 -->
+<!-- 2023-08-12T18:11:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -450,7 +450,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="618" splitType="Stretch">
+		<band height="642" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="170" y="466" width="280" height="15" uuid="b044fa67-4de7-4964-9841-e6c6ea8900ef">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -1176,17 +1176,30 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="7" y="561" width="163" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+				<reportElement x="7" y="575" width="177" height="64" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="353" y="572" width="198" height="27" uuid="932a0c98-c776-49b1-96c0-bc8e7c18f058"/>
+				<reportElement x="340" y="552" width="211" height="19" uuid="932a0c98-c776-49b1-96c0-bc8e7c18f058">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3" y="556" width="277" height="19" uuid="195dafcb-429a-4f50-8f80-2fa8dfc3e85b">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NELSON RE CI  P/C  "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
