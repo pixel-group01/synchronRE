@@ -59,8 +59,7 @@ public class RepartitionController
     }
 
     @PostMapping(path = "/save")
-    public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto)
-    {
+    public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto) throws UnknownHostException {
         return this.repService.saveRep(dto);
     }
 
