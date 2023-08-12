@@ -9,6 +9,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
@@ -59,6 +60,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IServiceCalculsComptables comptaService;
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
+    private final ObjectCopier<Affaire>  affCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
     private final BigDecimal ZERO = BigDecimal.ZERO;
@@ -335,10 +337,19 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return resp;
     }
 
-    @Override
-    public CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto)
-    {
-        List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
+    @Override @Transactional
+    public CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException {
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        BigDecimal loadedPartCedante = affaire.getPartCedante();
+        BigDecimal dtoPartCedante = dto.getMtPartCedante();
+        if(dtoPartCedante == null) throw  new AppException("Veuillez saisir le montant de la part cédante");
+        if( loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0)
+        {
+            affaire.setPartCedante(dtoPartCedante);
+            logService.logg(AffaireActions.CHANGE_PART_CEDANTE, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        }
+            List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
         SimpleRepDto conservationDto = new SimpleRepDto(dto.getConservationCapital(), dto.getConservationTaux(), dto.getConservationRepId(), dto.getConservationPrime(), dto.getAffId());
         SimpleRepDto facobDto = new SimpleRepDto(dto.getFacobCapital(), dto.getFacobTaux(), dto.getFacobRepId(), dto.getFacobPrime(), dto.getAffId());
         SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getConservationRepId(), dto.getXlPrime(), dto.getAffId());
@@ -466,8 +477,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
 
     @Override
-    public CalculationRepartitionRespDto calculateRepByAffId(Long affId, boolean modeUpdate)
+    public CalculationRepartitionRespDto calculateRepByAffId(Long affId)
     {
+        boolean modeUpdate = repRepo.repartitionModeIsUpdate(affId);
         if(affId == null) throw new AppException("Veuillez fournir l'ID de l'affaire");
         Affaire aff = affRepo.findById(affId).orElse(null);
         CalculationRepartitionReqDto dto = new CalculationRepartitionReqDto();
@@ -477,7 +489,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         dto.setModeUpdate(modeUpdate);
         if(modeUpdate)
         {
-
             List<Repartition> conservationsReps = repRepo.findByAffaireAndTypeRep(affId, "REP_CONSERVATION");
             List<Repartition> facobReps = repRepo.findByAffaireAndTypeRep(affId, "REP_FACOB");
             List<Repartition> xlReps = repRepo.findByAffaireAndTypeRep(affId, "REP_XL");

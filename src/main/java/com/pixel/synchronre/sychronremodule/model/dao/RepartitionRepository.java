@@ -159,7 +159,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq(r.repCapital,  r.repTaux, r.repSousCommission, r.affaire.affId) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CED' and r.repStatut = true")
     CreateCedLegRepartitionReq getCedLegRepartitionDTO(Long affId);
 
-    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut =true")
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut = true and r.repStaCode not in ('REFUSE')")
     boolean existsValidByAffIdAndPclId(Long affId, Long pclId);
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut =true")
@@ -186,4 +186,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
         and r.repStatut = true
     """)
     BigDecimal calculateSommeCapitalTraiteByAffId(Long affId);
+
+    @Query("""
+        select r from Repartition r where r.type.uniqueCode not in ('REP_PLA') and r.repStatut = true and r.repStaCode not in ('REFUSE')
+""")
+    boolean repartitionModeIsUpdate(Long affId);
 }

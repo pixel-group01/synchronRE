@@ -151,9 +151,9 @@ public class RepartitionController
     }
 
     @GetMapping(path = "/calculate/{affId}")
-    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@PathVariable Long affId, @RequestParam(defaultValue = "false", required = false) boolean modeUpdate)
+    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@PathVariable Long affId)
     {
-        return repService.calculateRepByAffId(affId, modeUpdate);
+        return repService.calculateRepByAffId(affId);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")
