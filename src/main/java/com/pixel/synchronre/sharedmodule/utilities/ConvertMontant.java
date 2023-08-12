@@ -3,6 +3,8 @@ package com.pixel.synchronre.sharedmodule.utilities;
 
 import org.springframework.context.annotation.Configuration;
 
+import java.math.BigDecimal;
+
 @Configuration
 public class ConvertMontant {
 
@@ -114,7 +116,25 @@ public class ConvertMontant {
         return false;
     }
 
-    public static String NumberToLetter(long nombre) {
+    public static String numberToLetter(double nombre)
+    {
+        return numberToLetter(new BigDecimal(nombre));
+    }
+
+    public static String numberToLetter(BigDecimal nombre)
+    {
+        long partieEntiere = (long) nombre.doubleValue();
+        String partieEntiereLettre = numberToLetter(partieEntiere);
+        String decimalString = nombre.subtract(new BigDecimal(partieEntiere)).toString();
+        int decimalIndex = decimalString.indexOf(".");
+        if(decimalIndex<0 || decimalString.equals("0")) return partieEntiereLettre;
+        long partieDecimal = Integer.parseInt(decimalString.substring(decimalIndex + 1));
+        String partieDecimaleLettre = numberToLetter(partieDecimal);
+        String nombreLettre = partieEntiereLettre + " virgule " + partieDecimaleLettre;
+        return nombreLettre;
+    }
+
+    public static String numberToLetter(long nombre) {
         int n;
         long reste;
         long quotient;
@@ -161,11 +181,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "cent";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "cent" + " " + NumberToLetter(reste);
+                    numberToLetter = "cent" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
                     numberToLetter = Unite(quotient) + " cents";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = Unite(quotient) + " cent " + NumberToLetter(reste);
+                    numberToLetter = Unite(quotient) + " cent " + numberToLetter(reste);
                 break;
             case 4:
                 quotient = (long) Math.floor(nb / 1000);
@@ -173,11 +193,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "mille";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "mille" + " " + NumberToLetter(reste);
+                    numberToLetter = "mille" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille";
+                    numberToLetter = numberToLetter(quotient) + " mille";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " mille " + numberToLetter(reste);
                 break;
             case 5:
                 quotient = (long) Math.floor(nb / 1000);
@@ -185,11 +205,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "mille";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "mille" + " " + NumberToLetter(reste);
+                    numberToLetter = "mille" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille";
+                    numberToLetter = numberToLetter(quotient) + " mille";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " mille " + numberToLetter(reste);
                 break;
             case 6:
                 quotient = (long) Math.floor(nb / 1000);
@@ -197,11 +217,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "mille";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "mille" + " " + NumberToLetter(reste);
+                    numberToLetter = "mille" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille";
+                    numberToLetter = numberToLetter(quotient) + " mille";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " mille " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " mille " + numberToLetter(reste);
                 break;
             case 7:
                 quotient = (long) Math.floor(nb / 1000000);
@@ -209,11 +229,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un million";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un million" + " " + NumberToLetter(reste);
+                    numberToLetter = "un million" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions";
+                    numberToLetter = numberToLetter(quotient) + " millions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " millions " + numberToLetter(reste);
                 break;
             case 8:
                 quotient = (long) Math.floor(nb / 1000000);
@@ -221,11 +241,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un million";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un million" + " " + NumberToLetter(reste);
+                    numberToLetter = "un million" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions";
+                    numberToLetter = numberToLetter(quotient) + " millions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " millions " + numberToLetter(reste);
                 break;
             case 9:
                 quotient = (long) Math.floor(nb / 1000000);
@@ -233,11 +253,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un million";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un million" + " " + NumberToLetter(reste);
+                    numberToLetter = "un million" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions";
+                    numberToLetter = numberToLetter(quotient) + " millions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " millions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " millions " + numberToLetter(reste);
                 break;
             case 10:
                 quotient = (long) Math.floor(nb / 1000000000);
@@ -245,11 +265,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un milliard";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                    numberToLetter = "un milliard" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards";
+                    numberToLetter = numberToLetter(quotient) + " milliards";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " milliards " + numberToLetter(reste);
                 break;
             case 11:
                 quotient = (long) Math.floor(nb / 1000000000);
@@ -257,11 +277,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un milliard";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                    numberToLetter = "un milliard" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards";
+                    numberToLetter = numberToLetter(quotient) + " milliards";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " milliards " + numberToLetter(reste);
                 break;
             case 12:
                 quotient = (long) Math.floor(nb / 1000000000);
@@ -269,11 +289,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un milliard";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un milliard" + " " + NumberToLetter(reste);
+                    numberToLetter = "un milliard" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards";
+                    numberToLetter = numberToLetter(quotient) + " milliards";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " milliards " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " milliards " + numberToLetter(reste);
                 break;
             case 13:
                 quotient = (long) Math.floor(nb / 1000000000000L);
@@ -281,11 +301,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un billion";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                    numberToLetter = "un billion" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions";
+                    numberToLetter = numberToLetter(quotient) + " billions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " billions " + numberToLetter(reste);
                 break;
             case 14:
                 quotient = (long) Math.floor(nb / 1000000000000L);
@@ -293,11 +313,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un billion";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                    numberToLetter = "un billion" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions";
+                    numberToLetter = numberToLetter(quotient) + " billions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " billions " + numberToLetter(reste);
                 break;
             case 15:
                 quotient = (long) Math.floor(nb / 1000000000000L);
@@ -305,11 +325,11 @@ public class ConvertMontant {
                 if (quotient == 1 && reste == 0)
                     numberToLetter = "un billion";
                 if (quotient == 1 && reste != 0)
-                    numberToLetter = "un billion" + " " + NumberToLetter(reste);
+                    numberToLetter = "un billion" + " " + numberToLetter(reste);
                 if (quotient > 1 && reste == 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions";
+                    numberToLetter = numberToLetter(quotient) + " billions";
                 if (quotient > 1 && reste != 0)
-                    numberToLetter = NumberToLetter(quotient) + " billions " + NumberToLetter(reste);
+                    numberToLetter = numberToLetter(quotient) + " billions " + numberToLetter(reste);
                 break;
         }
         // respect de l'accord de quatre-vingt
