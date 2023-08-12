@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-07-17T14:34:43 -->
+<!-- 2023-08-12T13:21:57 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Credit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b258cd63-2ea2-4241-8959-d0231463b3ee">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -126,6 +126,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
+	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT distinct affaire.aff_id,
                 affaire.aff_activite,
@@ -713,17 +714,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<line>
-				<reportElement x="1" y="386" width="1" height="241" uuid="ccbcecb3-574e-4032-b544-87f1c2f30b7b">
+				<reportElement x="1" y="387" width="1" height="258" uuid="ccbcecb3-574e-4032-b544-87f1c2f30b7b">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="555" y="386" width="1" height="241" uuid="aa4e583c-d625-4b26-863d-f6c118449061">
+				<reportElement x="555" y="387" width="1" height="258" uuid="aa4e583c-d625-4b26-863d-f6c118449061">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
 			<staticText>
-				<reportElement x="334" y="569" width="214" height="22" uuid="26d61cb6-9eb0-4870-ae99-6d967956142e"/>
+				<reportElement x="334" y="565" width="214" height="22" uuid="26d61cb6-9eb0-4870-ae99-6d967956142e"/>
 				<textElement>
 					<font fontName="SansSerif" size="12" isBold="false" isUnderline="true"/>
 				</textElement>
@@ -739,7 +741,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Fait à Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="1" y="626" width="553" height="1" uuid="2f49184c-002d-4649-82c2-c4085f46a762">
+				<reportElement x="1" y="645" width="553" height="1" uuid="2f49184c-002d-4649-82c2-c4085f46a762">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
@@ -775,6 +777,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 			<image>
 				<reportElement x="12" y="543" width="97" height="77" uuid="75a354a2-39c4-42a0-8fad-fcb9f7e4ce1e"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="334" y="589" width="196" height="45" uuid="f4f5efc0-8f3f-4f68-b7a3-b34335c8422b">
+					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 		</band>
 	</detail>
