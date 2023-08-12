@@ -474,8 +474,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal partCedante = aff.getPartCedante() != null ? aff.getPartCedante() : aff.getFacSmpLci();
         dto.setAffId(affId);
         dto.setPartCedante(partCedante);
+        dto.setModeUpdate(modeUpdate);
         if(modeUpdate)
         {
+
             List<Repartition> conservationsReps = repRepo.findByAffaireAndTypeRep(affId, "REP_CONSERVATION");
             List<Repartition> facobReps = repRepo.findByAffaireAndTypeRep(affId, "REP_FACOB");
             List<Repartition> xlReps = repRepo.findByAffaireAndTypeRep(affId, "REP_XL");
@@ -635,6 +637,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal besoinFac = besoinFacNetCL.subtract(mtPlacements);
 
         CalculationRepartitionRespDto resp = new CalculationRepartitionRespDto();
+        resp.setModeUpdate(dto.isModeUpdate());
         resp.setAffId(dto.getAffId());
         resp.setMtPartCedante(mtPartCedante.setScale(0, RoundingMode.HALF_UP));
         resp.setTauxPartCedante(tauxPartCedante.setScale(2, RoundingMode.HALF_UP));

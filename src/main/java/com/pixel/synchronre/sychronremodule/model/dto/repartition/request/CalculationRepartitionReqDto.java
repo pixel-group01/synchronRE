@@ -25,4 +25,5 @@ public class CalculationRepartitionReqDto
 
     private BigDecimal facobCapital;
     private Long facobRepId;
+    private boolean modeUpdate;
 }

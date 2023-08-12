@@ -48,5 +48,5 @@ public class CalculationRepartitionRespDto
 
     private BigDecimal besoinFacRestant;
     private BigDecimal besoinFac;
-    //private List<RepDto> traites;
+    private boolean modeUpdate;
 }
