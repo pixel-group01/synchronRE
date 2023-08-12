@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T13:08:04 -->
+<!-- 2023-08-12T14:43:52 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -370,7 +370,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="567" splitType="Stretch">
+		<band height="599" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="166" y="300" width="293" height="15" uuid="b044fa67-4de7-4964-9841-e6c6ea8900ef">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -388,7 +388,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[LA CEDANTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="415" y="490" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
+				<reportElement x="408" y="492" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
@@ -735,12 +735,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<reportElement x="13" y="355" width="117" height="98" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
-			<image>
-				<reportElement x="416" y="514" width="130" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
-					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="9" y="46" width="311" height="21" uuid="6bec8b7c-3919-4862-8330-476c34e0ce50">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -750,6 +744,19 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["Avis du sinistre   :   "  + $F{sin_commentaire}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="360" y="539" width="191" height="27" uuid="91d53cd7-14af-41a9-a22c-257274d299d3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="2" y="521" width="177" height="59" uuid="3a104618-0a60-4899-b2de-082e93d6fbec">
+					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>

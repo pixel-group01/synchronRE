@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T13:08:14 -->
+<!-- 2023-08-12T14:38:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -461,14 +461,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="7" y="542" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
+				<reportElement x="7" y="537" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[LA CEDANTE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="415" y="526" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
+				<reportElement x="415" y="530" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
@@ -1176,17 +1176,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="7" y="568" width="91" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+				<reportElement x="7" y="561" width="163" height="50" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
-			<image>
-				<reportElement x="415" y="556" width="131" height="54" uuid="6a2a96c4-51e9-49a7-a313-002cd1234bec">
-					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$P{param_image}+"visa.png"]]></imageExpression>
-			</image>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="353" y="572" width="198" height="27" uuid="932a0c98-c776-49b1-96c0-bc8e7c18f058"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ced_nom_filiale}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
