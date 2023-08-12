@@ -6,9 +6,10 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
@@ -28,6 +29,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComp
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -44,6 +46,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 
@@ -53,9 +56,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 {
     private final RepartitionRepository repRepo;
     private final AffaireRepository affRepo;
+    private final TypeRepo typeRepo;
     private final IServiceCalculsComptables comptaService;
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
+    private final ObjectCopier<Affaire>  affCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
     private final BigDecimal ZERO = BigDecimal.ZERO;
@@ -73,12 +78,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
         Repartition rep = repMapper.mapToRepartition(dto);
-        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+        rep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
         rep = repRepo.save(rep);
         logService.logg(RepartitionActions.CREATE_REPARTITION, null, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
-
 
     private RepartitionDetailsResp createCesLegRepartition(CreateCesLegReq dto) throws UnknownHostException
     {
@@ -96,7 +100,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep = repMapper.mapToCesLegRepartition(dto);
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTaux(dto.getRepTaux());
-            rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+            rep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
         }
 
         rep = repRepo.save(rep);
@@ -133,7 +137,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             rep = repMapper.mapToPartCedRepartition(dto);
         }
-        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+        rep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
         rep = repRepo.save(rep);
         logService.logg(existsByAffaireAndTypeRep ? RepartitionActions.UPDATE_CED_REPARTITION : RepartitionActions.CREATE_CED_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         return repMapper.mapToRepartitionDetailsResp(rep);
@@ -157,7 +161,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition oldCedRep = repCopier.copy(cedRep);
         cedRep.setRepTaux(dto.getRepTaux());
         cedRep.setRepCapital(dto.getRepCapital());
-        cedRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+        cedRep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
         repRepo.save(cedRep);
         dto.getUpdateCesLegReqs().stream().peek(pclRepDto-> this.updatePclReps(pclRepDto));
         logService.logg(RepartitionActions.CREATE_CED_REPARTITION, oldCedRep, cedRep, SynchronReTables.REPARTITION);
@@ -229,7 +233,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
         rep.setAffaire(new Affaire(dto.getAffId()));
         rep.setParamCessionLegale(new ParamCessionLegale(dto.getParamCesLegalId()));
-        rep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(dto.getRepCapital().doubleValue()));
+        rep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
         repRepo.save(rep);
         logService.logg(RepartitionActions.UPDATE_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
 
@@ -333,15 +337,156 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return resp;
     }
 
-    @Override
-    public CalculationRepartitionRespDto calculateRepByAffId(Long affId, boolean modeUpdate)
+    @Override @Transactional
+    public CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException {
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        BigDecimal loadedPartCedante = affaire.getPartCedante();
+        BigDecimal dtoPartCedante = dto.getMtPartCedante();
+        if(dtoPartCedante == null) throw  new AppException("Veuillez saisir le montant de la part cédante");
+        if( loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0)
+        {
+            affaire.setPartCedante(dtoPartCedante);
+            logService.logg(AffaireActions.CHANGE_PART_CEDANTE, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        }
+            List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
+        SimpleRepDto conservationDto = new SimpleRepDto(dto.getConservationCapital(), dto.getConservationTaux(), dto.getConservationRepId(), dto.getConservationPrime(), dto.getAffId());
+        SimpleRepDto facobDto = new SimpleRepDto(dto.getFacobCapital(), dto.getFacobTaux(), dto.getFacobRepId(), dto.getFacobPrime(), dto.getAffId());
+        SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getConservationRepId(), dto.getXlPrime(), dto.getAffId());
+        List<UpdateCesLegReq> pclSimples = dto.getParamCesLegs();
+
+        pclPfs = this.savePclReps(pclPfs);
+        conservationDto = this.saveTraite(conservationDto, "REP_CONSERVATION");
+        facobDto = this.saveTraite(facobDto, "REP_FACOB");
+        facobDto = this.saveTraite(xlDto, "REP_XL");
+        pclSimples = this.savePclReps(pclSimples);
+
+        dto.setParamCesLegsPremierFranc(pclPfs);
+        dto.setConservationRepId(conservationDto.getRepId());
+        dto.setFacobRepId(facobDto.getRepId());
+        dto.setXlRepId(xlDto.getRepId());
+        dto.setParamCesLegs(pclSimples);
+        return dto;
+    }
+    private List<UpdateCesLegReq> savePclReps(List<UpdateCesLegReq> pclPfs)
     {
+        pclPfs = pclPfs.stream().map(this::savePclRep).collect(Collectors.toList());
+        return pclPfs;
+    }
+
+    private SimpleRepDto saveTraite(SimpleRepDto dto, String typeTraite)
+    {
+        if(dto.getRepId() == null && (dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0))
+            return dto;
+        Long repId = dto.getRepId();
+        List<Repartition> traiteReps = repRepo.findByAffaireAndTypeRep(dto.getAffId(), typeTraite);
+
+        if(traiteReps.size() > 1) throw new AppException("Plusieurs traités du même type sur la même affaire");
+
+        Repartition traiteRep = traiteReps.isEmpty() ? null : traiteReps.get(0);
+
+        String action="";
+        Repartition oldRep = null;
+        if(traiteRep == null)
+        {
+            Type repCesLegType = typeRepo.findByUniqueCode(typeTraite).orElseThrow(()->new AppException("Type introuvable : " + typeTraite));
+
+            traiteRep = new Repartition();
+            traiteRep.setAffaire(new Affaire(dto.getAffId()));
+            traiteRep.setType(repCesLegType);
+            action = switch (typeTraite)
+                    {
+                        case "REP_CONSERVATION"-> RepartitionActions.CREATE_CONSERVATION_REPARTITION;
+                        case "REP_FACOB"->RepartitionActions.CREATE_FACOB_REPARTITION;
+                        case "REP_XL"->RepartitionActions.CREATE_XL_REPARTITION;
+                        default -> "";
+                    };
+        }
+        else
+        {
+            //traiteRep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+            oldRep = repCopier.copy(traiteRep);
+            action = switch (typeTraite)
+                    {
+                        case "REP_CONSERVATION"-> RepartitionActions.UPDATE_CONSERVATION_REPARTITION;
+                        case "REP_FACOB"->RepartitionActions.UPDATE_FACOB_REPARTITION;
+                        case "REP_XL"->RepartitionActions.UPDATE_XL_REPARTITION;
+                        default -> "";
+                    };
+        }
+        traiteRep.setRepStatut(true);
+        traiteRep.setRepCapital(dto.getRepCapital());
+        traiteRep.setRepTaux(dto.getRepTaux());
+        traiteRep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
+
+        traiteRep.setRepPrime(dto.getRepPrime());
+        traiteRep = repRepo.save(traiteRep);
+        dto.setRepId(dto.getRepId());
+        try {
+            logService.logg(action, oldRep, traiteRep, SynchronReTables.REPARTITION);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return dto;
+    }
+
+    private UpdateCesLegReq savePclRep(UpdateCesLegReq pclDto)
+    {
+        Long pclRepId = pclDto.getRepId();
+        Repartition pclRep = repRepo.findByAffIdAndPclId(pclDto.getAffId(), pclDto.getParamCesLegalId());
+        //Repartition pclRep;
+        String action="";
+        Repartition oldRep = null;
+        if(pclRep == null)
+        {
+            if(pclDto.isAccepte())
+            {
+                pclRep = new Repartition();
+                pclRep.setAffaire(new Affaire(pclDto.getAffId()));
+                pclRep.setParamCessionLegale(new ParamCessionLegale(pclDto.getParamCesLegalId()));
+                Type repCesLegType = typeRepo.findByUniqueCode("REP_CES_LEG").orElseThrow(()->new AppException("Type introuvable : REP_CES_LEG"));
+                pclRep.setType(repCesLegType);
+                action = RepartitionActions.CREATE_CES_LEG_REPARTITION;
+            }
+            else
+            {
+                return pclDto;
+            }
+        }
+        else
+        {
+            //pclRep = repRepo.findById(pclDto.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+            oldRep = repCopier.copy(pclRep);
+            action = RepartitionActions.UPDATE_CES_LEG_REPARTITION;
+        }
+        pclRep.setRepStatut(pclDto.isAccepte());
+        pclRep.setRepCapital(pclDto.getRepCapital());
+        pclRep.setRepTaux(pclDto.getRepTaux());
+        pclRep.setRepCapitalLettre(ConvertMontant.numberToLetter(pclDto.getRepCapital()));
+
+        pclRep.setRepPrime(pclDto.getPrime());
+        pclRep = repRepo.save(pclRep);
+        pclDto.setRepId(pclRep.getRepId());
+        try {
+            logService.logg(action, oldRep, pclRep, SynchronReTables.REPARTITION);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return pclDto;
+    }
+
+
+    @Override
+    public CalculationRepartitionRespDto calculateRepByAffId(Long affId)
+    {
+        boolean modeUpdate = repRepo.repartitionModeIsUpdate(affId);
         if(affId == null) throw new AppException("Veuillez fournir l'ID de l'affaire");
         Affaire aff = affRepo.findById(affId).orElse(null);
         CalculationRepartitionReqDto dto = new CalculationRepartitionReqDto();
         BigDecimal partCedante = aff.getPartCedante() != null ? aff.getPartCedante() : aff.getFacSmpLci();
         dto.setAffId(affId);
         dto.setPartCedante(partCedante);
+        dto.setModeUpdate(modeUpdate);
         if(modeUpdate)
         {
             List<Repartition> conservationsReps = repRepo.findByAffaireAndTypeRep(affId, "REP_CONSERVATION");
@@ -373,6 +518,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             dto.setPclIds(possiblePclIds);
         }
         return calculateRepByDto(dto);
+    }
+
+    @Override
+    public CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionRespDto dto)
+    {
+        CalculationRepartitionReqDto reqDto = repMapper.mapToCalculationRepartitionReqDto(dto);
+        return this.calculateRepByDto(reqDto);
     }
 
     @Override
@@ -496,6 +648,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal besoinFac = besoinFacNetCL.subtract(mtPlacements);
 
         CalculationRepartitionRespDto resp = new CalculationRepartitionRespDto();
+        resp.setModeUpdate(dto.isModeUpdate());
         resp.setAffId(dto.getAffId());
         resp.setMtPartCedante(mtPartCedante.setScale(0, RoundingMode.HALF_UP));
         resp.setTauxPartCedante(tauxPartCedante.setScale(2, RoundingMode.HALF_UP));

@@ -58,6 +58,12 @@ public class RepartitionController
         return repService.createCedLegRepartition(dto);
     }
 
+    @PostMapping(path = "/save")
+    public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto)
+    {
+        return this.repService.saveRep(dto);
+    }
+
     @GetMapping(path = "/get-update-cedante-legal-dto/{affId}")
     public UpdateCedLegRepartitionReq getUpdateCedLegRepartitionReq(@PathVariable Long affId)
     {
@@ -73,8 +79,6 @@ public class RepartitionController
     public RepartitionDetailsResp createPladRep(@Valid @RequestBody CreatePlaRepartitionReq dto) throws UnknownHostException {
         return repService.createPlaRepartition(dto);
     }
-
-
 
     @PutMapping(path = "/update")
     public RepartitionDetailsResp updateRep(@Valid @RequestBody UpdateRepartitionReq dto) throws UnknownHostException {
@@ -141,15 +145,15 @@ public class RepartitionController
     }
 
     @PostMapping(path = "/calculate")
-    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@RequestBody CalculationRepartitionReqDto dto)
+    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@RequestBody CalculationRepartitionRespDto dto)
     {
         return repService.calculateRepByDto(dto);
     }
 
     @GetMapping(path = "/calculate/{affId}")
-    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@PathVariable Long affId, @RequestParam boolean modeUpdate)
+    public CalculationRepartitionRespDto calculRepartitionRespByCapital(@PathVariable Long affId)
     {
-        return repService.calculateRepByAffId(affId, modeUpdate);
+        return repService.calculateRepByAffId(affId);
     }
 
     @PutMapping(path = "/transmettre-placement-pour-validation/{plaId}")

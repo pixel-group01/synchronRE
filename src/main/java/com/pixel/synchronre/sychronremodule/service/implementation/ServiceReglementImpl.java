@@ -34,8 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 import static java.math.BigDecimal.ZERO;
@@ -76,7 +74,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
-        paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
+        paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
         //NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
         //String formattedNumber = numberFormat.format(paiement.getRegMontant());
         //paiement.setRegMontantTemp(formattedNumber);
@@ -98,7 +96,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement reversement = reglementMapper.mapToReglement(dto);
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
-        reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
+        reversement.setRegMontantLettre(ConvertMontant.numberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
         logService.logg(ReglementActions.CREATE_REVERSEMENT_AFFAIRE, null, reversement, SynchronReTables.REGLEMENT);
         reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
@@ -128,7 +126,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
-        paiement.setRegMontantLettre(ConvertMontant.NumberToLetter(paiement.getRegMontant().longValue()));
+        paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
         paiement = regRepo.save(paiement);
         logService.logg(ReglementActions.CREATE_PAIEMENT_SINISTRE, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setSinistre(sinRepo.findById(dto.getSinId()).orElse(new Sinistre(dto.getSinId())));
@@ -150,7 +148,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
-        reversement.setRegMontantLettre(ConvertMontant.NumberToLetter(reversement.getRegMontant().longValue()));
+        reversement.setRegMontantLettre(ConvertMontant.numberToLetter(reversement.getRegMontant().longValue()));
         reversement = regRepo.save(reversement);
         logService.logg(ReglementActions.CREATE_REVERSEMENT_SINISTRE, null, reversement, SynchronReTables.REGLEMENT);
         reversement.setSinistre(sinRepo.findById(dto.getSinId()).orElse(new Sinistre(dto.getSinId())));

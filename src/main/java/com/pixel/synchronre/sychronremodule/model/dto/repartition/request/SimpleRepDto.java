@@ -13,4 +13,6 @@ import java.math.BigDecimal;
         private BigDecimal repCapital;
         private BigDecimal repTaux;
         private Long repId;
+        private BigDecimal repPrime;
+        private Long affId;
     }

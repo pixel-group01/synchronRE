@@ -4,7 +4,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sharedmodule.utilities.ConvertMontantEnLettres;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
@@ -67,7 +67,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinRep.setSinistre(new Sinistre(sinId));
         sinRep.setRepStatut(true);
         sinRep.setRepCapital(repCaptital);
-        sinRep.setRepCapitalLettre(ConvertMontantEnLettres.convertir(repCaptital.doubleValue()));
+        sinRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCaptital));
         sinRep.setType(typeRepo.findByUniqueCode("REP_SIN").orElseThrow(()->new AppException("Type de document inconnu")));
         sinRep.setRepInterlocuteur(ces.getCesInterlocuteur());
 
@@ -94,7 +94,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         BigDecimal mtTotSinPlacement = sinComptaService.calculateMtTotalCessionnairesSurSinistre(sinId);
         sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
-        sinistre.setSinMontantTotPlacementLettre(ConvertMontantEnLettres.convertir(mtTotSinPlacement.doubleValue()));
+        sinistre.setSinMontantTotPlacementLettre(ConvertMontant.numberToLetter(mtTotSinPlacement));
         mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
