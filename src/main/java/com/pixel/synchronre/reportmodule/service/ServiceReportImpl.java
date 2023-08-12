@@ -73,7 +73,7 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
-        qrText =  qrText != null ? qrText : "Application SynchronRE : Votre Demande de placement porte sur N° Affaire : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
+        qrText =  qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
         String resourcePath = "classpath:"+jrConfig.reportLocation + "/" + reportName;
         Resource resource = resourceLoader.getResource(resourcePath);
