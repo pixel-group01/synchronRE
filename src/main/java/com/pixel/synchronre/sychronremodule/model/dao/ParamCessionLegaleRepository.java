@@ -33,7 +33,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
     List<ParamCessionLegaleListResp> findPossiblePclByAffId(Long affId);
 
     @Query("""
-        select r.paramCessionLegale.paramCesLegId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE')
+        select r.paramCessionLegale.paramCesLegId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_CES_LEG' and r.repStatut = true and (r.repStaCode.staCode not in ('REFUSE') or r.repStaCode.staCode is null)
     """)
     List<Long> findPclIdsOnAffaire(Long affId);
 

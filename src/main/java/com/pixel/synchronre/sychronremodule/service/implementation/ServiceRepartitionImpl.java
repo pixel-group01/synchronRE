@@ -360,6 +360,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         facobDto = this.saveTraite(facobDto, "REP_FACOB");
         facobDto = this.saveTraite(xlDto, "REP_XL");
         pclSimples = this.savePclReps(pclSimples);
+        mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
 
         dto.setParamCesLegsPremierFranc(pclPfs);
         dto.setConservationRepId(conservationDto.getRepId());

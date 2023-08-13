@@ -188,7 +188,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     BigDecimal calculateSommeCapitalTraiteByAffId(Long affId);
 
     @Query("""
-        select (count(r.repId)>0) from Repartition r where r.type.uniqueCode not in ('REP_PLA') and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in ('REFUSE'))
+        select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode not in ('REP_PLA') and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in ('REFUSE'))
 """)
     boolean repartitionModeIsUpdate(Long affId);
 }
