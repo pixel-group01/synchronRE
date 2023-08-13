@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T13:07:58 -->
+<!-- 2023-08-12T19:00:18 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -388,14 +388,20 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
                 affaire.aff_date_limite_paiement,
                 cedante.ced_nom_filiale,
                 couverture.cou_libelle,
-                branche.bran_libelle
+                branche.bran_libelle,
+                 banque.ban_num_compte,
+                banque.ban_code_bic,
+                banque.ban_iban,
+                banque.ban_libelle
 FROM affaire,
      cedante,
      couverture,
-     branche
+     branche,
+     banque
 WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND couverture.bran_id = branche.bran_id
+  AND cedante.ban_num_compte=banque.ban_num_compte
   AND affaire.aff_id= $P{aff_id}]]>
 	</queryString>
 	<field name="aff_id" class="java.lang.Long"/>
@@ -413,6 +419,10 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
 	<field name="bran_libelle" class="java.lang.String"/>
+	<field name="ban_num_compte" class="java.lang.String"/>
+	<field name="ban_code_bic" class="java.lang.String"/>
+	<field name="ban_iban" class="java.lang.String"/>
+	<field name="ban_libelle" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -595,9 +605,9 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="369" width="550" height="41" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
+				<reportElement x="4" y="449" width="550" height="41" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
 				<textElement textAlignment="Justified">
-					<font fontName="SansSerif" size="12" isBold="true"/>
+					<font fontName="SansSerif" size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[NELSON RE ne sera pas tenu responsable des consèquences, y compris l'annulation de la couverture qui peut resulter d'un retard ou d'une défaillance de votre part de payer la présente note à la date indiquée]]></text>
 			</staticText>
@@ -843,7 +853,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<image>
-				<reportElement x="33" y="442" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
+				<reportElement x="11" y="496" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
@@ -852,6 +862,35 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="0" y="379" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ban_libelle} + "  "+$F{ban_num_compte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="417" width="320" height="19" uuid="b088c375-698b-4aef-97c4-c014e7f1f4d0">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Code BIC :  "+$F{ban_code_bic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="399" width="320" height="19" uuid="812faed3-8198-4cae-a253-f0c93a44af6a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["IBAN : "+$F{ban_iban}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
