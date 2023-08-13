@@ -14,4 +14,5 @@ public class SynchronReTables {
     public static final String SINISTRE = "Sinistre";
     public static final String REPARTITION = "Repartition";
     public static final String DEVISE = "Devise";
+    public static final String INTERLOCUTEUR = "Interlocuteur";
 }
