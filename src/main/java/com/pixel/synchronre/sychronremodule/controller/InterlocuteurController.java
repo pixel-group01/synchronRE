@@ -35,7 +35,7 @@ public class InterlocuteurController
 
 
     @PutMapping(path = "/update")
-    public InterlocuteurListResp updateInterlocuteur(@RequestBody UpdateInterlocuteurReq dto) throws UnknownHostException {
+    public InterlocuteurListResp updateInterlocuteur(@RequestBody @Valid UpdateInterlocuteurReq dto) throws UnknownHostException {
         return interlocuteurService.updateInterlocuteur(dto);
     }
 

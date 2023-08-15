@@ -10,19 +10,19 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Long> {
 
-    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intEmail) = upper(?1)")
+    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intEmail) = upper(?1) and i.statut.staCode='ACT'")
     boolean alreadyExistsByEmail(String intEmail);
 
-    @Query("select (count(i) > 0) from Interlocuteur i where i.intEmail = ?1 and i.intId <> ?2")
+    @Query("select (count(i) > 0) from Interlocuteur i where i.intEmail = ?1 and i.intId <> ?2 and i.statut.staCode='ACT'")
     boolean alreadyExistsByEmail(String intEmail, Long intId);
 
-    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intTel) = upper(?1)")
+    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intTel) = upper(?1) and i.statut.staCode='ACT'")
     boolean alreadyExistsByTel(String intTel);
 
-    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intTel) = upper(?1) and i.intId <> ?2")
+    @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intTel) = upper(?1) and i.intId <> ?2 and i.statut.staCode='ACT'")
     boolean alreadyExistsByTel(String intTel, Long intId);
 
-    @Query("select (count(i.intId)>0) from Interlocuteur i where i.intId = ?1")
+    @Query("select (count(i.intId)>0) from Interlocuteur i where i.intId = ?1 and i.statut.staCode='ACT'")
     boolean interlocuteurExists(Long intId);
 
     @Query("""
