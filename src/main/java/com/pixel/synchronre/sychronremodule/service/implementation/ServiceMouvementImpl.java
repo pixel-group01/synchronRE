@@ -1,16 +1,20 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.MvtMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,7 +64,10 @@ public class ServiceMouvementImpl implements IServiceMouvement
 
 
     @Override
-    public List<MouvementListResp> findMouvementById(Long affId,Long sinId) {
-        return mvtRepo.findMouvementById(affId,sinId);
+    public Page<MouvementListResp> findMouvementById(Long affId,Long sinId ,Pageable pageable) {
+        return mvtRepo.findMouvementById(affId,sinId,pageable);
     }
+
+//    public Page<CouvertureListResp> searchCouverture(String key, Pageable pageable) {
+//        return  couvRepo.searchCouvertures(StringUtils.stripAccentsToUpperCase(key), pageable);
 }
