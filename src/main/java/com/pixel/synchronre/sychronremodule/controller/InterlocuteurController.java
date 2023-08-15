@@ -11,6 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.Upda
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +28,7 @@ public class InterlocuteurController
     private final InterlocuteurRepository interRepo;
     
     @PostMapping(path = "/create")
-    public InterlocuteurListResp createInterlocuteur(@RequestBody CreateInterlocuteurReq dto) throws UnknownHostException {
+    public InterlocuteurListResp createInterlocuteur(@RequestBody @Valid CreateInterlocuteurReq dto) throws UnknownHostException {
         return interlocuteurService.createInterlocuteur(dto);
     }
 
