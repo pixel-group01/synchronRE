@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.InterlocuteurRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.CreateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.UpdateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
@@ -29,6 +30,8 @@ public class InterlocuteurController
     public InterlocuteurListResp createInterlocuteur(@RequestBody CreateInterlocuteurReq dto) throws UnknownHostException {
         return interlocuteurService.createInterlocuteur(dto);
     }
+
+
 
     @PutMapping(path = "/update")
     public InterlocuteurListResp updateInterlocuteur(@RequestBody UpdateInterlocuteurReq dto) throws UnknownHostException {

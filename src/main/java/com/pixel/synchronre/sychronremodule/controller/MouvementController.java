@@ -1,11 +1,13 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MvtMessage;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -79,8 +81,8 @@ public class MouvementController
     }
 
     @GetMapping(path = "/sinistre/get-histo/{sinId}")
-    Page<MouvementListResp> findBySinistre(@PathVariable Long sinId, Pageable pageable)
+    Page<MouvementListResp> findBySinistre(@PathVariable Long sinId, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "15") int size)
     {
-        return mvtRepo.findMouvementById(null,sinId,pageable);
+        return mvtRepo.findMouvementById(null,sinId, PageRequest.of(page, size));
     }
 }
