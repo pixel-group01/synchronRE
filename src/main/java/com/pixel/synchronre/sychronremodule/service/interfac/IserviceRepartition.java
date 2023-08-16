@@ -34,6 +34,21 @@ public interface IserviceRepartition {
 
     CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
+
+    BigDecimal calculateSommeCapitauxCessionsLegalesPremierFranc(Long affId);
+
+    BigDecimal calculateCapitauxNetCL(Long affId);
+
+    BigDecimal calculateSommeCapitauxTraites(Long affId);
+
+    BigDecimal calculateBesoinFacBrut(Long affId);
+
+    BigDecimal calculateTauxBesoinFacBrut(Long affId);
+
+    BigDecimal calculateSommeCapitauxCLSimple(Long affId);
+
+    BigDecimal calculateBesoinFacNetCL(Long affId);
+
     CalculRepartitionResp calculateRepByTauxBesoinFac(Long affId, BigDecimal tauxBesoin, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
 
     CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException;

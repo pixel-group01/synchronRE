@@ -180,15 +180,36 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     //List<Repartition> findByAffaireAndTypeRep(Long affId, String rep_ced);
 
-    @Query("""
+    /*@Query("""
         select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
         and r.type.uniqueCode in ('REP_RETENTION', 'REP_FACOB', 'REP_FACOB')
         and r.repStatut = true
     """)
-    BigDecimal calculateSommeCapitalTraiteByAffId(Long affId);
+    BigDecimal calculateSommeCapitalTraiteByAffId(Long affId);*/
 
     @Query("""
         select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode not in ('REP_PLA') and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in ('REFUSE'))
 """)
     boolean repartitionModeIsUpdate(Long affId);
+
+    @Query("""
+        select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_CES_LEG') and r.paramCessionLegale.paramType.uniqueCode = 'PCL_PF'
+        and r.repStatut = true
+    """)
+    BigDecimal calculateSommeCapitauxCessionsLegalesPF(Long affId);
+
+    @Query("""
+        select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_CES_LEG') and r.paramCessionLegale.paramType.uniqueCode = 'PCL_SIMPLE'
+        and r.repStatut = true
+    """)
+    BigDecimal calculateSommeCapitauxCLSimple(Long affId);
+
+    @Query("""
+        select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_RETENTION', 'REP_FACOB', 'REP_FACOB')
+        and r.repStatut = true
+    """)
+    BigDecimal calculateSommeCapitauxTraites(Long affId);
 }
