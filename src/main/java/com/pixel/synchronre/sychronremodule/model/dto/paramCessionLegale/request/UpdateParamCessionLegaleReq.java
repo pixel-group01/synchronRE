@@ -20,4 +20,6 @@ public class UpdateParamCessionLegaleReq
     private BigDecimal paramCesLegTaux;
     @NotNull(message = "Veuillez saisir le pays")
     private String paysCode;
+    @NotNull(message = "Veuillez selectionner le type de la cession légale")
+    private Long typeId;
 }

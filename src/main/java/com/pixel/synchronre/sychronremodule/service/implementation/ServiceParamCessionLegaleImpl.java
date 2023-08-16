@@ -24,6 +24,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.sychronremodule.model.entities.Pays;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceParamCessionLegale;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,6 +55,7 @@ public class ServiceParamCessionLegaleImpl implements IserviceParamCessionLegale
         param.setParamCesLegLibelle(dto.getParamCesLegLibelle());
         param.setParamCesLegTaux(dto.getParamCesLegTaux());
         param.setPays(new Pays(dto.getPaysCode()));
+        param.setParamType(new Type(dto.getTypeId()));
         param = paramRepo.save(param);
         logService.logg(SynchronReActions.UPDATE_PARAM_CESSION_LEGALE, oldParam, param, SynchronReTables.PARAM_CESSION_LEGALE);
         return paramMapper.mapParamDetailsToParamCessionLegale(param);

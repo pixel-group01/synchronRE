@@ -17,6 +17,8 @@ public class CreateParamCessionLegaleReq
     private String paramCesLegLibelle;
     @NotNull(message = "Veuillez saisir le taux de la cession légale")
     private BigDecimal paramCesLegTaux;
+    @NotNull(message = "Veuillez selectionner le type de la cession légale")
+    private Long typeId;
     @NotNull(message = "Veuillez saisir le pays")
     private String paysCode;
 
