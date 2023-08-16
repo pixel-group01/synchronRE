@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T18:11:40 -->
+<!-- 2023-08-16T17:44:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -351,6 +351,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	<parameter name="ces_id" class="java.lang.Long"/>
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<parameter name="param_visible" class="java.lang.String"/>
+	<parameter name="interlocuteur" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT affaire.aff_id,
        affaire.aff_activite,
@@ -492,7 +493,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Interlocuteur : " +$F{rep_interlocuteur}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Interlocuteur : " +$P{interlocuteur}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="331" y="25" width="220" height="19" uuid="078daa03-13b5-467f-9492-94eb642c3ed7">
