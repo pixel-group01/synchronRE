@@ -9,10 +9,8 @@ import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
+import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
@@ -46,6 +44,7 @@ public class ServiceReportImpl implements IServiceReport
     private final SinRepo sinRepo;
     private final ReglementRepository regRepo;
     private final ResourceLoader resourceLoader;
+    private final InterlocuteurRepository interRepo;
 
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
@@ -107,7 +106,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteCessionFac(Long plaId) throws Exception
+    public byte[] generateNoteCessionFac(Long plaId, String interlocuteur) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
@@ -116,6 +115,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("aff_assure", placement.getAffaire().getAffAssure());
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("interlocuteur", interlocuteur);
         params.put("param_image", this.getImagesPath());
         if (placement.getRepStaCode().getStaCode().equals("VAL") || placement.getRepStaCode().getStaCode().equals("MAIL")){
             params.put("param_visible", "true");
@@ -212,5 +212,11 @@ public class ServiceReportImpl implements IServiceReport
         params.put("reg_id", reglement.getRegId());
         byte[] reportBytes = this.generateReport(jrConfig.cheque, params, new ArrayList<>(), null);
         return reportBytes;
+    }
+
+    @Override
+    public byte[] generateNoteCessionFac(Long plaId) throws Exception {
+        InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipal(plaId);
+        return this.generateNoteCessionFac(plaId, interlocuteur.getCesNom());
     }
 }

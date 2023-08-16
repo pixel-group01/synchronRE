@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Long> {
 
     @Query("select (count(i) > 0) from Interlocuteur i where upper(i.intEmail) = upper(?1) and i.statut.staCode='ACT'")
@@ -37,4 +39,31 @@ public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Lo
                                          and i.statut.staCode = 'ACT'     
 """)
     Page<InterlocuteurListResp> searchInterlocuteur(String key, Long cesId, Pageable pageable);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(i.intId, i.intNom, i.intPrenom, i.intTel, i.intEmail,i.cessionnaire.cesId,i.cessionnaire.cesNom,i.cessionnaire.cesSigle,i.statut.staCode) from Interlocuteur i where i.cessionnaire.cesId = ?1
+    """)
+    List<InterlocuteurListResp> getInterlocuteursByCessionnaire(Long cesId);
+
+    @Query("select r.autreInterlocuteurs from Repartition r where r.repId = ?1")
+    String getAutreInterlocuteursIdsByPlacement(Long repId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(
+        r.interlocuteurPrincipal.intId, r.interlocuteurPrincipal.intNom,
+        r.interlocuteurPrincipal.intPrenom, r.interlocuteurPrincipal.intTel, 
+        r.interlocuteurPrincipal.intEmail,r.interlocuteurPrincipal.cessionnaire.cesId,
+        r.interlocuteurPrincipal.cessionnaire.cesNom,r.interlocuteurPrincipal.cessionnaire.cesSigle,
+        r.interlocuteurPrincipal.statut.staCode) 
+        from Repartition r where r.repId = ?1
+""")
+    InterlocuteurListResp getInterlocuteursPrincipal(Long repId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(
+        i.intId, i.intNom, i.intPrenom, i.intTel, 
+        i.intEmail, i.cessionnaire.cesId, i.cessionnaire.cesNom, i.cessionnaire.cesSigle, 
+        i.statut.staCode) from Interlocuteur i where i = ?1
+""")
+    InterlocuteurListResp findInterlocuteursById(Long intId);
 }

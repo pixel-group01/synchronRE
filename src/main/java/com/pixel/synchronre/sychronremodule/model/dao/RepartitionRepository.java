@@ -31,7 +31,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp(
-        r.repId, r.repCapital, r.repTaux, r.repSousCommission, r.repTauxComCed, r.repTauxComCourt, r.repInterlocuteur, r.repStatut, a.affId,
+        r.repId, r.repCapital, r.repTaux, r.repSousCommission, r.repTauxComCed, r.repTauxComCourt, r.interlocuteurPrincipal.intNom, r.repStatut, a.affId,
         a.affCode, a.affAssure, a.affActivite, c.cesId, c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone
         ) from Repartition r left join r.cessionnaire c left join r.affaire a join r.type t
                                         where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(a.affCode, '') ) as string)) ) >0 

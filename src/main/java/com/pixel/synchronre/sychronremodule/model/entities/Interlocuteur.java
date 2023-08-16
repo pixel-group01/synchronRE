@@ -33,5 +33,7 @@ public class Interlocuteur {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-
+  public Interlocuteur(Long intId) {
+    this.intId = intId;
+  }
 }

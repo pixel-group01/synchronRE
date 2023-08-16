@@ -42,7 +42,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal dejaReparti = !affIdExists ? ZERO : repRepo.getRepartitionsByAffId(affId);
         dejaReparti = dejaReparti == null ? ZERO : dejaReparti;
         BigDecimal smpLci = affaire.getFacSmpLci();
-        BigDecimal partCedante = affaire.getPartCedante();
+        BigDecimal partCedante = affaire.getPartCedante() ;
         smpLci = smpLci == null ? ZERO : smpLci;
         partCedante = partCedante == null ? ZERO : partCedante;
         return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti) ;

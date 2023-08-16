@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
+import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.validator.ExistingIntId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -11,9 +12,10 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau  @CoherentCapitalAndTaux @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
+@SeuilRepCap @SeuilRepTau  /*@CoherentCapitalAndTaux*/ @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
 public class CreatePlaRepartitionReq
 {
     @NotNull(message = "Veuillez saisir le capital")
@@ -24,11 +26,10 @@ public class CreatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-    //@NotNull(message = "Veuillez saisir le taux")
-    //@PositiveOrZero(message = "Le taux doit être un nombre positif")
-    //@Max(value = 100)
-    //@SeuilRepTauBesoinFac
-    private BigDecimal repTauxBesoinFac;
+    @ExistingIntId @NotNull(message = "Veuillez selectionner l'interlocuteur principal")
+    private Long interlocuteurPrincipalId;
+
+    private List<Long> autreInterlocuteurIds;
 
     @NotNull(message = "Veuillez saisir la sous commission")
     @PositiveOrZero(message = "La sous commission doit être un nombre positif")

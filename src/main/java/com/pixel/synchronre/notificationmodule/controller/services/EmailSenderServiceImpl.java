@@ -104,7 +104,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     public void sendNoteCessionFacEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception
     {
         String message = this.htmlEmailBuilder.buildNoteCessionFacEmail(interlocName, affCode);
-        byte[] report = reportService.generateNoteCessionFac(plaId);
+        byte[] report = reportService.generateNoteCessionFac(plaId, interlocName);
         EmailAttachment attachment = new EmailAttachment("Note_de_cession_facultative.pdf", report, "application/pdf");
         this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }

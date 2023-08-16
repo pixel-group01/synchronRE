@@ -9,7 +9,7 @@ public interface IServiceReport
 {
     byte[] generateReport(String reportName, Map<String, Object> params, List<Object> data, String qrText) throws Exception;
 
-    byte[] generateNoteCessionFac(Long plaId) throws Exception;
+    byte[] generateNoteCessionFac(Long plaId, String interlocuteur) throws Exception;
 
     byte[] generateNoteDebitFac(Long affId) throws Exception;
 
@@ -20,4 +20,6 @@ public interface IServiceReport
     byte[] generateNoteDebitSinistre(Long sinId) throws Exception;
 
     byte[] generateCheque(Long regId) throws Exception;
+
+    byte[] generateNoteCessionFac(Long plaId) throws Exception;
 }

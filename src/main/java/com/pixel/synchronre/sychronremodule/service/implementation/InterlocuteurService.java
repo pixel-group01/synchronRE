@@ -6,24 +6,14 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.InterlocuteurRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.CreateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.UpdateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.InterlocuteurMapper;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.Interlocuteur;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service @RequiredArgsConstructor
 public class InterlocuteurService implements IServiceInterlocuteur
@@ -62,6 +57,21 @@ public class InterlocuteurService implements IServiceInterlocuteur
     @Override
     public Page<InterlocuteurListResp> searchInterlocuteur(String key, Long cesId, Pageable pageable) {
         return interRepo.searchInterlocuteur(StringUtils.stripAccentsToUpperCase(key), cesId, pageable);
+    }
+
+    @Override
+    public List<InterlocuteurListResp> getInterlocuteurByCessionnaire(Long cesId) {
+        return null;
+    }
+
+    @Override
+    public List<InterlocuteurListResp> getInterlocuteurByPlacement(Long repId)
+    {
+        InterlocuteurListResp interlocuteurPrincipal = interRepo.getInterlocuteursPrincipal(repId);
+        String autreIntIds = interRepo.getAutreInterlocuteursIdsByPlacement(repId);
+        if(autreIntIds == null || autreIntIds.trim().equals("")) return Collections.singletonList(interlocuteurPrincipal);
+        List<InterlocuteurListResp> interlocuteurs = Stream.concat(Stream.of(interlocuteurPrincipal), Arrays.stream(autreIntIds.split(",")).map(Long::valueOf).map(interRepo::findInterlocuteursById)).collect(Collectors.toList());
+        return interlocuteurs;
     }
 
     @Override

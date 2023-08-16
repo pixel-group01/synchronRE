@@ -13,6 +13,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,8 +55,9 @@ public abstract class RepartitionMapper {
     @Mapping(target = "affaire", expression = "java(dto.getAffId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffId()))")
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     @Mapping(target = "repTauxComCed", expression = "java(dto.getRepSousCommission().subtract(dto.getRepTauxComCourt()))")
+    @Mapping(target = "interlocuteurPrincipal", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Interlocuteur(dto.getInterlocuteurPrincipalId()))")
+    @Mapping(target = "autreInterlocuteurs", expression = "java(this.mapIntIdstoString(dto.getAutreInterlocuteurIds()))")
     public abstract Repartition mapToPlaRepartition(CreatePlaRepartitionReq dto);
-
 
     /*@Mapping(target = "affId", source = "affaire.affId")
     @Mapping(target = "paramCesLegalId", source = "paramCessionLegale.paramCesLegId")
@@ -75,5 +77,11 @@ public abstract class RepartitionMapper {
     {
         return Stream.concat(dto.getParamCesLegsPremierFranc().stream(), dto.getParamCesLegs().stream())
                 .filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getParamCesLegalId).collect(Collectors.toList());
+    }
+
+    protected String mapIntIdstoString(List<Long> intIds)
+    {
+        String stringIntIds = intIds == null ? "" : intIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+        return stringIntIds;
     }
 }

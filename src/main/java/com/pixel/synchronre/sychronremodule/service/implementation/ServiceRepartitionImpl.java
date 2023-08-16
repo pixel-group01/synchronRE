@@ -16,6 +16,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
@@ -25,10 +26,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Calcu
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +70,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Value("${spring.mail.username}")
     private String synchronreEmail;
     private final DecimalFormat decimalFormat;
+    private final IServiceInterlocuteur intService;
 
     private final ParamCessionLegaleRepository pclRepoo;
 
@@ -193,9 +192,47 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
     }
 
+    @Override @Transactional
+    public CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException {
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        BigDecimal loadedPartCedante = affaire.getPartCedante();
+        BigDecimal dtoPartCedante = dto.getMtPartCedante();
+        if(dtoPartCedante == null) throw  new AppException("Veuillez saisir le montant de la part cédante");
+        if( (loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0) || loadedPartCedante == null)
+        {
+            affaire.setPartCedante(dtoPartCedante);
+            logService.logg(AffaireActions.CHANGE_PART_CEDANTE, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        }
+        List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
+        SimpleRepDto conservationDto = new SimpleRepDto(dto.getConservationCapital(), dto.getConservationTaux(), dto.getConservationRepId(), dto.getConservationPrime(), dto.getAffId());
+        SimpleRepDto facobDto = new SimpleRepDto(dto.getFacobCapital(), dto.getFacobTaux(), dto.getFacobRepId(), dto.getFacobPrime(), dto.getAffId());
+        SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getConservationRepId(), dto.getXlPrime(), dto.getAffId());
+        List<UpdateCesLegReq> pclSimples = dto.getParamCesLegs();
+
+        pclPfs = this.savePclReps(pclPfs);
+        conservationDto = this.saveTraite(conservationDto, "REP_CONSERVATION");
+        facobDto = this.saveTraite(facobDto, "REP_FACOB");
+        facobDto = this.saveTraite(xlDto, "REP_XL");
+        pclSimples = this.savePclReps(pclSimples);
+        mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+
+        dto.setParamCesLegsPremierFranc(pclPfs);
+        dto.setConservationRepId(conservationDto.getRepId());
+        dto.setFacobRepId(facobDto.getRepId());
+        dto.setXlRepId(xlDto.getRepId());
+        dto.setParamCesLegs(pclSimples);
+        return dto;
+    }
+
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
     {
+        Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        BigDecimal smplCi = aff.getFacSmpLci();
+        if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
+        BigDecimal repTaux = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0 ? ZERO : dto.getRepCapital().multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
+        BigDecimal repPrime = aff.getFacPrime() == null ? ZERO : aff.getFacPrime().multiply(repTaux);
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
         boolean existsByAffaireAndTypeRepAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;
@@ -205,7 +242,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
-            rep.setRepTaux(dto.getRepTaux());
         }
         else
         {
@@ -215,6 +251,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             mvtService.createMvtPlacement(new MvtReq(rep.getRepId(), StatutEnum.SAISIE_CRT.staCode, null));
             bordService.createBordereau(rep.getRepId());
         }
+        rep.setRepTaux(repTaux);
+        rep.setRepPrime(repPrime);
         logService.logg(existsByAffaireAndTypeRepAndCesId ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         if(firstPlacement)
         {
@@ -255,13 +293,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
         if(capital.compareTo(restARepartir)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
         restARepartir = restARepartir == null ? ZERO : restARepartir;
-        BigDecimal capitalInit = aff.getAffCapitalInitial() == null ? ZERO : aff.getAffCapitalInitial();
-        if(restARepartir.compareTo(ZERO) <= 0 || capitalInit.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
+        BigDecimal smplCi = aff.getFacSmpLci() == null ? ZERO : aff.getFacSmpLci();
+        if(restARepartir.compareTo(ZERO) < 0 || smplCi.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);
 
         CalculRepartitionResp resp = new CalculRepartitionResp();
         resp.setCapital(capital);
-        resp.setTaux(capital.multiply(CENT).divide(capitalInit, 20, RoundingMode.HALF_UP));
-        resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 20, RoundingMode.HALF_UP));
+        resp.setTaux(capital.multiply(CENT).divide(smplCi, 2, RoundingMode.HALF_UP));
+        //resp.setTauxBesoinFac(capital.multiply(CENT).divide(restARepartir, 20, RoundingMode.HALF_UP));
         resp.setBesoinFac(restARepartir);
         resp.setBesoinFacRestant(restARepartir.subtract(capital));
 
@@ -273,8 +311,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         BigDecimal facPrime = aff.getFacPrime();
         if(facPrime == null || tauxCmsRea == null || tauxCmsCourtage == null) return resp;
 
-        BigDecimal cmsRea = facPrime.multiply(tauxCmsRea).divide(CENT, 2, RoundingMode.HALF_UP);
-        BigDecimal cmsCourtage = facPrime.multiply(tauxCmsCourtage).divide(CENT, 2, RoundingMode.HALF_UP);
+        BigDecimal cmsRea = facPrime.multiply(tauxCmsRea).divide(CENT, 0, RoundingMode.HALF_UP);
+        BigDecimal cmsCourtage = facPrime.multiply(tauxCmsCourtage).divide(CENT, 0, RoundingMode.HALF_UP);
         BigDecimal primeNetteCes = facPrime.subtract(cmsRea);
         BigDecimal cmsCedante = cmsRea.subtract(cmsCourtage);
         resp.setCmsRea(cmsRea);
@@ -337,38 +375,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         return resp;
     }
 
-    @Override @Transactional
-    public CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException {
-        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()-> new AppException("Affaire introuvable"));
-        Affaire oldAffaire = affCopier.copy(affaire);
-        BigDecimal loadedPartCedante = affaire.getPartCedante();
-        BigDecimal dtoPartCedante = dto.getMtPartCedante();
-        if(dtoPartCedante == null) throw  new AppException("Veuillez saisir le montant de la part cédante");
-        if( (loadedPartCedante != null && loadedPartCedante.compareTo(dtoPartCedante) != 0) || loadedPartCedante == null)
-        {
-            affaire.setPartCedante(dtoPartCedante);
-            logService.logg(AffaireActions.CHANGE_PART_CEDANTE, oldAffaire, affaire, SynchronReTables.AFFAIRE);
-        }
-            List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
-        SimpleRepDto conservationDto = new SimpleRepDto(dto.getConservationCapital(), dto.getConservationTaux(), dto.getConservationRepId(), dto.getConservationPrime(), dto.getAffId());
-        SimpleRepDto facobDto = new SimpleRepDto(dto.getFacobCapital(), dto.getFacobTaux(), dto.getFacobRepId(), dto.getFacobPrime(), dto.getAffId());
-        SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getConservationRepId(), dto.getXlPrime(), dto.getAffId());
-        List<UpdateCesLegReq> pclSimples = dto.getParamCesLegs();
-
-        pclPfs = this.savePclReps(pclPfs);
-        conservationDto = this.saveTraite(conservationDto, "REP_CONSERVATION");
-        facobDto = this.saveTraite(facobDto, "REP_FACOB");
-        facobDto = this.saveTraite(xlDto, "REP_XL");
-        pclSimples = this.savePclReps(pclSimples);
-        mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
-
-        dto.setParamCesLegsPremierFranc(pclPfs);
-        dto.setConservationRepId(conservationDto.getRepId());
-        dto.setFacobRepId(facobDto.getRepId());
-        dto.setXlRepId(xlDto.getRepId());
-        dto.setParamCesLegs(pclSimples);
-        return dto;
-    }
     private List<UpdateCesLegReq> savePclReps(List<UpdateCesLegReq> pclPfs)
     {
         pclPfs = pclPfs.stream().map(this::savePclRep).collect(Collectors.toList());
@@ -377,6 +383,14 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     private SimpleRepDto saveTraite(SimpleRepDto dto, String typeTraite)
     {
+        Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        BigDecimal smplCi = aff.getFacSmpLci();
+        BigDecimal mtPartCedante = aff.getPartCedante();
+        if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
+        mtPartCedante = mtPartCedante == null || mtPartCedante.compareTo(ZERO) == 0 ? smplCi : mtPartCedante;
+        BigDecimal repTaux = dto.getRepCapital() == null  ? ZERO : dto.getRepCapital().multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
+        BigDecimal repPrime = aff.getFacPrime() == null  ? ZERO : aff.getFacPrime().multiply(repTaux);
+
         if(dto.getRepId() == null && (dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0))
             return dto;
         Long repId = dto.getRepId();
@@ -417,10 +431,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
         traiteRep.setRepStatut(true);
         traiteRep.setRepCapital(dto.getRepCapital());
-        traiteRep.setRepTaux(dto.getRepTaux());
+        traiteRep.setRepTaux(repTaux);
         traiteRep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
 
-        traiteRep.setRepPrime(dto.getRepPrime());
+        traiteRep.setRepPrime(repPrime);
         traiteRep = repRepo.save(traiteRep);
         dto.setRepId(dto.getRepId());
         try {
@@ -460,12 +474,28 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             oldRep = repCopier.copy(pclRep);
             action = RepartitionActions.UPDATE_CES_LEG_REPARTITION;
         }
+
+        Affaire aff = affRepo.findById(pclDto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        BigDecimal smplCi = aff.getFacSmpLci();
+        if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
+        BigDecimal mtPartCedante = aff.getPartCedante() == null || aff.getPartCedante().compareTo(ZERO) == 0 ? smplCi : aff.getPartCedante();
+
+        BigDecimal tauxPartCedante = mtPartCedante.multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
+
+        ParamCessionLegale pcl = pclRepo.findById(pclDto.getParamCesLegalId()).orElseThrow(()->new AppException("Paramètre de cession légale introuvable"));
+        BigDecimal pclOriginalTaux = pcl.getParamCesLegTaux();
+        BigDecimal pclCapital = pclOriginalTaux.multiply(mtPartCedante).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal pclNewtaux =  pclOriginalTaux.multiply(tauxPartCedante).divide(CENT, 100, RoundingMode.HALF_UP);
+        BigDecimal pclPrime =  aff.getFacPrime() == null || aff.getFacPrime().compareTo(ZERO) == 0 ? ZERO : pclNewtaux.multiply(aff.getFacPrime()).divide(CENT, 100, RoundingMode.HALF_UP);
+
+
+
         pclRep.setRepStatut(pclDto.isAccepte());
-        pclRep.setRepCapital(pclDto.getRepCapital());
-        pclRep.setRepTaux(pclDto.getRepTaux());
+        pclRep.setRepCapital(pclCapital);
+        pclRep.setRepTaux(pclNewtaux);
         pclRep.setRepCapitalLettre(ConvertMontant.numberToLetter(pclDto.getRepCapital()));
 
-        pclRep.setRepPrime(pclDto.getPrime());
+        pclRep.setRepPrime(pclPrime);
         pclRep = repRepo.save(pclRep);
         pclDto.setRepId(pclRep.getRepId());
         try {
@@ -805,7 +835,19 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         Cessionnaire cessionnaire = repRepo.getCessionnaireByRepId(plaId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
-        mailSenderService.sendNoteCessionFacEmail(synchronreEmail, cessionnaire.getCesEmail(), cessionnaire.getCesInterlocuteur(),affaire.getAffCode(), plaId, "Note de cession");
+
+
+        List<InterlocuteurListResp> interlocuteurs = intService.getInterlocuteurByPlacement(plaId);
+        if(interlocuteurs == null || interlocuteurs.isEmpty())   throw new AppException("Aucun interlocuteur n'a été choisi pour ce placement");
+        interlocuteurs.forEach(interlocuteur->
+        {
+            try {
+                mailSenderService.sendNoteCessionFacEmail(synchronreEmail, interlocuteur.getIntEmail(), interlocuteur.getIntNom(),affaire.getAffCode(), plaId, "Note de cession");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         placement.setRepStaCode(new Statut(MAIL.staCode));
         mvtService.createMvtPlacement(new MvtReq(plaId, MAIL.staCode, null));
         logService.saveLog(RepartitionActions.TRANSMETTRE_NOTE_CESSION);

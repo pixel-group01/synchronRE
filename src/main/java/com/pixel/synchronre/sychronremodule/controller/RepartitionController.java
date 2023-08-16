@@ -138,7 +138,8 @@ public class RepartitionController
     @GetMapping(path = "/calculate/by-capital/{affId}/{capital}")
     public CalculRepartitionResp calculRepartitionRespByCapital(@PathVariable @ExistingAffId  Long affId, @PathVariable BigDecimal capital,
                                                                 @RequestParam(required = false) BigDecimal tauxCmsRea,
-                                                                @RequestParam(required = false) BigDecimal tauxCmsCourtage, @RequestParam(required = false) Long repIdToUpdate)
+                                                                @RequestParam(required = false) BigDecimal tauxCmsCourtage,
+                                                                @RequestParam(required = false) Long repIdToUpdate)
     {
         return repService.calculateRepByCapital(affId, capital,tauxCmsRea,tauxCmsCourtage, repIdToUpdate);
     }
