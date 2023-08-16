@@ -683,7 +683,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         resp.setAffId(dto.getAffId());
         resp.setMtPartCedante(mtPartCedante.setScale(0, RoundingMode.HALF_UP));
         resp.setTauxPartCedante(tauxPartCedante.setScale(2, RoundingMode.HALF_UP));
-        resp.setPrimePartCedante(primePartCedante.setScale(2, RoundingMode.HALF_UP));
+        resp.setPrimePartCedante(primePartCedante.setScale(0, RoundingMode.HALF_UP));
         resp.setParamCesLegsPremierFranc(paramCesLegsPremierFranc);
         resp.setCapitauxNetCL(capitauxNetCl.setScale(2, RoundingMode.HALF_UP));
 
