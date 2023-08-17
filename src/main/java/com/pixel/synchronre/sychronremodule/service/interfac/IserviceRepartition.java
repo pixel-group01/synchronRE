@@ -32,7 +32,7 @@ public interface IserviceRepartition {
     RepartitionDetailsResp updateRepartition(UpdateRepartitionReq dto) throws UnknownHostException;
     Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, List<String> staCodes, Pageable pageable);
 
-    CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
+    /*CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
 
     BigDecimal calculateSommeCapitauxCessionsLegalesPremierFranc(Long affId);
@@ -58,7 +58,8 @@ public interface IserviceRepartition {
     CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionRespDto dto);
 
     CalculationRepartitionRespDto calculateRepByDto(CalculationRepartitionReqDto dto);
-
+    UpdateCedLegRepartitionReq getUpdateCedLegDTO(Long affId);
+*/
 
     void deletePlacement(Long repId) throws UnknownHostException;
 
@@ -97,6 +98,4 @@ public interface IserviceRepartition {
     void accepterPlacement(Long plaId) throws UnknownHostException;
 
     void validerPlacement(List<Long> plaIds);
-
-    UpdateCedLegRepartitionReq getUpdateCedLegDTO(Long affId);
 }
