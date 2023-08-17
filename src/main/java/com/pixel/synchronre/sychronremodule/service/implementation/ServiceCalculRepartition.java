@@ -370,8 +370,6 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
         BigDecimal pclPrime =  aff.getFacPrime() == null || aff.getFacPrime().compareTo(ZERO) == 0 ? ZERO : pclNewtaux.multiply(aff.getFacPrime()).divide(CENT, 100, RoundingMode.HALF_UP);
 
-
-
         pclRep.setRepStatut(pclDto.isAccepte());
         pclRep.setRepCapital(pclCapital);
         pclRep.setRepTaux(pclNewtaux);
@@ -387,7 +385,6 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         }
         return pclDto;
     }
-
 
     @Override
     public CalculationRepartitionRespDto calculateRepByAffId(Long affId)
