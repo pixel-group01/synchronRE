@@ -364,7 +364,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
         ParamCessionLegale pcl = pclRepo.findById(pclDto.getParamCesLegalId()).orElseThrow(()->new AppException("Paramètre de cession légale introuvable"));
         BigDecimal pclOriginalTaux = pcl.getParamCesLegTaux();
-        boolean isPclPF = pclRepo.pclIsSimple(aff.getAffId());
+        boolean isPclPF = !pclRepo.pclIsSimple(pclDto.getParamCesLegalId());
         BigDecimal pclNewtaux =  pclOriginalTaux.multiply(isPclPF ? tauxPartCedante : tauxBesoinFacBrut).divide(CENT, 100, RoundingMode.HALF_UP);
         BigDecimal pclCapital = pclNewtaux.multiply(smplCi).divide(CENT, 100, RoundingMode.HALF_UP);
 

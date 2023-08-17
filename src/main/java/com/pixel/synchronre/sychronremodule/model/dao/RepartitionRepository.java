@@ -208,7 +208,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("""
         select sum(r.repCapital) from Repartition r where r.affaire.affId = ?1 
-        and r.type.uniqueCode in ('REP_RETENTION', 'REP_FACOB', 'REP_FACOB')
+        and r.type.uniqueCode in ('REP_CONSERVATION', 'REP_FACOB', 'REP_XL')
         and r.repStatut = true
     """)
     BigDecimal calculateSommeCapitauxTraites(Long affId);
