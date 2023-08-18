@@ -39,11 +39,6 @@ public class CreatePlaRepartitionReq
     @PositiveOrZero(message = "Le taux de commission de courtage doit être un nombre positif")
     private BigDecimal repTauxComCourt;
 
-    @NotBlank(message = "Veuillez saisir le nom de l'interlocuteur")
-    @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
-    @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
-    private String repInterlocuteur;
-
     @NotNull(message = "Veuillez selectionner le cessionnaire")
     @ExistingCesId
     private Long cesId;
