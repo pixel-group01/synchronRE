@@ -14,7 +14,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(pr.paramCesLegId, pr.paramCesLegLibelle, pr.paramCesLegCapital, 
-        pr.paramCesLegTaux,pr.pays.paysNom, pr.pays.paysCode) 
+        pr.paramCesLegTaux,pr.pays.paysNom, pr.pays.paysCode, pr.paramType.typeId, pr.paramType.name) 
         from ParamCessionLegale pr where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.paramCesLegLibelle, '') ) as string)) ) >0                                    
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(pr.pays.paysNom, '') ) as string)) ) >0 ) 
                                          and pr.statut.staCode = 'ACT' order  by pr.pays.paysCode, pr.numOrdre    
@@ -27,7 +27,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(
-    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre)
+    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre, pcl.paramType.typeId, pcl.paramType.name)
     from ParamCessionLegale pcl where pcl.pays.paysCode = (select a.cedante.pays.paysCode from Affaire a where a.affId = ?1) order by pcl.numOrdre
     """)
     List<ParamCessionLegaleListResp> findPossiblePclByAffId(Long affId);
@@ -40,7 +40,7 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp(
-    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre)
+    pcl.paramCesLegId, pcl.paramCesLegLibelle, pcl.paramCesLegCapital, pcl.paramCesLegTaux, pcl.pays.paysNom, pcl.statut.staLibelle, pcl.pays.paysCode, pcl.numOrdre, pcl.paramType.typeId, pcl.paramType.name)
     from ParamCessionLegale pcl where pcl.pays.paysCode = ?1 order by pcl.numOrdre
     """)
     List<ParamCessionLegaleListResp> findByPaysCode(String paysCode);
