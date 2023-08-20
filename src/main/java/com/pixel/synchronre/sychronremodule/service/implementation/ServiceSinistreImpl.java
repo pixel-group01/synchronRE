@@ -213,7 +213,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         cessionnaires.forEach(ces->
         {
             try {
-                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, ces.getCesId(), "Note de cession sinistre");
+                mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail,affaire.getAffCode(), sinId, ces.getCesId(), "Note de cession sinistre");
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -243,8 +243,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     @Override
     public void envoyerNoteCessionSinistre(Long sinId, Long cesId) throws Exception {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
-        Cessionnaire ces = cesRepo.findById(cesId).orElseThrow(()->new AppException("Cessionnaire introuvable"));
-        mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, ces.getCesEmail(), ces.getCesInterlocuteur(), affaire.getAffCode(), sinId, cesId, "Note de cession sinistre");
+        mailSenderService.sendNoteCessionSinistreEmail(synchronreEmail, affaire.getAffCode(), sinId, cesId, "Note de cession sinistre");
     }
 
     @Override

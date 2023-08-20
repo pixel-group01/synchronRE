@@ -35,7 +35,7 @@ public class AdminLoader implements Loader
     {
         //Nelson RE
         BigDecimal FIVE = new BigDecimal(5);
-        Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ","KOUSSI N'Guéssan Charlemargne", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
+        Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
        //Developpeur
         AppUser userDev = userRepo.save(new AppUser(null, "Développeur", "Synchrone-Re", null, nelsonRe.getCesId(),
                 pe.encode("KD@fgfysh458@"), "pixelgroup09@gmail.com", "0505050505",

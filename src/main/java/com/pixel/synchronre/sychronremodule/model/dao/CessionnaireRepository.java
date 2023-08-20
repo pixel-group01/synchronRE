@@ -22,19 +22,15 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
     @Query("select (count(c) > 0) from Cessionnaire c where upper(c.cesTelephone) = upper(?1) and c.cesId <> ?2")
     boolean alreadyExistsByTel(String tel, Long cesId);
 
-    @Query("select c.cesInterlocuteur from Cessionnaire c where c.cesId = ?1")
-    String getInterlocuteur(Long cesId);
-
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(c.cesId, c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, 
-        c.cesAdressePostale, c.cesSituationGeo, c.statut.staLibelle,c.cesInterlocuteur) 
+        c.cesAdressePostale, c.cesSituationGeo, c.statut.staLibelle) 
         from Cessionnaire  c where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesEmail, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesTelephone, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesSigle, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesCellulaire, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesSituationGeo, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesNom, '') ) as string)) ) >0 ) 
-                                         or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(c.cesInterlocuteur, '') ) as string)) ) >0 
                                          and c.statut.staCode = 'ACT'
                                          and c.type.uniqueCode = 'CES'
 """)
@@ -44,7 +40,7 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
         select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
             r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
             r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
-            s.staLibelle, r.cessionnaire.cesInterlocuteur)
+            s.staLibelle)
         from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and s.staCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
 """)
     List<CessionnaireListResp> findByAffId(Long affId);
@@ -59,7 +55,7 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
         select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
             r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
             r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
-            s.staLibelle, r.cessionnaire.cesInterlocuteur)
+            s.staLibelle)
         from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and s.staCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
 """)
     List<CessionnaireListResp> findBySinId(Long sinId);

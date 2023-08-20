@@ -10,6 +10,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class ReportRestController
     private final JasperReportConfig jrConfig;
     private final RepartitionRepository repRepo;
     private final AbstractDocumentService docService;
+    private final IServiceInterlocuteur interService;
 
     @GetMapping("/note-cession-fac/{plaId}")
     public Base64FileDto generateNoteCession(@PathVariable Long plaId) throws Exception

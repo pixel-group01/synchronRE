@@ -16,6 +16,7 @@ public interface IServiceReport
     byte[] generateNoteCreditFac(Long affId, @PathVariable Long cesId) throws Exception;
 
     byte[] generateNoteCessionSinistre(Long sinId, Long cesId) throws Exception;
+    byte[] generateNoteCessionSinistre(Long sinId, Long cesId, String interlocuteur) throws Exception;
 
     byte[] generateNoteDebitSinistre(Long sinId) throws Exception;
 

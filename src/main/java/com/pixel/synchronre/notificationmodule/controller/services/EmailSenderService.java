@@ -20,7 +20,7 @@ public interface EmailSenderService
     void sendNoteDebitFacEmail(String senderMail, String receiverMail, String interlocName,Long affId) throws Exception;
     void sendNoteCreditFacEmail(String senderMail, String receiverMail, String interlocName,Long affId, Long cesId) throws Exception;
 
-    void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String note_de_cession_sinistre) throws Exception;
+    void sendNoteCessionSinistreEmail(String synchronreEmail, String affCode, Long sinId, Long cesId, String note_de_cession_sinistre) throws Exception;
     void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName,Long affId) throws Exception;
 
     void sendCheque(String senderMail, String receiverMail, String interlocName,Long regId) throws Exception;

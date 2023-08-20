@@ -3,13 +3,12 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.validator.ExistingIntId;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentTauxCrtAndScms;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.util.List;

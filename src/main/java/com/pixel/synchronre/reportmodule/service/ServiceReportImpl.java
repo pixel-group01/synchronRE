@@ -11,10 +11,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
-import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import jakarta.servlet.http.HttpServletResponse;
 import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
@@ -165,7 +162,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateNoteCessionSinistre(Long sinId, Long cesId) throws Exception
+    public byte[] generateNoteCessionSinistre(Long sinId, Long cesId, String interlocuteur) throws Exception
     {
         Affaire affaire = affRepo.getAffaireBySinId(sinId).orElseThrow(()-> new AppException("Affaire introuvable"));
          Sinistre sinistre = sinRepo.findById(sinId).orElseThrow(()->new AppException("Sinistre introuvable"));
@@ -173,6 +170,7 @@ public class ServiceReportImpl implements IServiceReport
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", sinId);
         params.put("aff_assure", affaire.getAffAssure());
+        params.put("interlocuteur", interlocuteur);
         params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("ces_id", cesId);
         params.put("param_image", this.getImagesPath());
@@ -187,6 +185,14 @@ public class ServiceReportImpl implements IServiceReport
         String qrText = "Votre note de cession sur le sinistre N°" + sinistre.getSinCode() + " relatif à l'affaire N°" + affaire.getAffCode() + " pour le compte de l'assuré " + affaire.getAffAssure();
         byte[] reportBytes = this.generateReport(jrConfig.noteCessionSinistre, params, new ArrayList<>(), qrText);
         return reportBytes;
+    }
+
+    @Override
+    public byte[] generateNoteCessionSinistre(Long sinId, Long cesId) throws Exception
+    {
+        InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipalBySinAndCes(sinId, cesId);
+        if(interlocuteur == null) throw new AppException("L'interlocuteur principal est inconnu");
+        return this.generateNoteCessionSinistre(sinId, cesId, interlocuteur.getIntNom());
     }
 
     @Override
