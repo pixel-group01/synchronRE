@@ -66,4 +66,16 @@ public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Lo
         i.statut.staCode) from Interlocuteur i where i = ?1
 """)
     InterlocuteurListResp findInterlocuteursById(Long intId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(
+        r.interlocuteurPrincipal.intId, r.interlocuteurPrincipal.intNom,
+        r.interlocuteurPrincipal.intPrenom, r.interlocuteurPrincipal.intTel, 
+        r.interlocuteurPrincipal.intEmail,r.interlocuteurPrincipal.cessionnaire.cesId,
+        r.interlocuteurPrincipal.cessionnaire.cesNom,r.interlocuteurPrincipal.cessionnaire.cesSigle,
+        r.interlocuteurPrincipal.statut.staCode) 
+        from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId where s.sinId = ?1 
+        and r.cessionnaire.cesId = ?2 and r.repStatut = true and r.repStatut not in ('REFUSE') and r.type.uniqueCode = 'REP_PLA'                                                                
+        """)
+    InterlocuteurListResp getInterlocuteursPrincipalBySinAndCes(Long sinId, Long cesId);
 }

@@ -125,7 +125,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.cessionnaire.cesEmail from Repartition r where r.repId = ?1")
     String getInterlocuteurEmail(Long plaId);
 
-    @Query("select r.cessionnaire.cesInterlocuteur from Repartition r where r.repId = ?1")
+    @Query("select r.interlocuteurPrincipal.intNom from Repartition r where r.repId = ?1")
     String getInterlocuteur(Long plaId);
 
     @Query("select r.cessionnaire from Repartition r where r.repId = ?1")

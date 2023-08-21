@@ -3,10 +3,13 @@ package com.pixel.synchronre.notificationmodule.controller.services;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.notificationmodule.model.dto.EmailAttachment;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import jakarta.activation.DataSource;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +44,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     private String synchronreAdress;
     @Value("${front.adress}")
     private String frontAddress;
+    private final IServiceInterlocuteur interService;
 
     @Override @Async
     public void sendEmailWithAttachments(String senderMail, String receiverMail, String mailObject, String message, List<EmailAttachment> attachments) throws IllegalAccessException {
@@ -127,16 +131,28 @@ public class EmailSenderServiceImpl implements EmailSenderService
     }
 
     @Override
-    public void sendNoteCessionSinistreEmail(String synchronreEmail, String cesEmail, String cesInterlocuteur, String affCode, Long sinId, Long cesId, String noteCession) throws Exception {
-        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEmail(cesInterlocuteur, sinRepo.getSinCode(sinId));
-        byte[] report = reportService.generateNoteCessionSinistre(sinId, cesId);
-        EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
-        this.sendEmailWithAttachments( synchronreEmail,  cesEmail,  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
+    public void sendNoteCessionSinistreEmail(String synchronreEmail, String affCode, Long sinId, Long cesId, String noteCession) throws Exception {
+        List<InterlocuteurListResp> interlocuteurs = interService.getInterlocuteurByCessionnaire(cesId);
+
+        if(interlocuteurs == null || interlocuteurs.isEmpty()) throw new AppException("Aucun interlocuteur trouvé");
+        interlocuteurs.forEach(inter-> sendIndividualNoteCessionSinistreEmail(inter, synchronreEmail, sinId, cesId)
+        );
     }
 
+    private void sendIndividualNoteCessionSinistreEmail(InterlocuteurListResp inter, String synchronreEmail, Long sinId, Long cesId)
+    {
+        try {
+        String message = this.htmlEmailBuilder.buildNoteCessionSinistreEmail(inter.getIntNom(), sinRepo.getSinCode(sinId));
+        byte[] report = reportService.generateNoteCessionSinistre(sinId, cesId, inter.getIntNom());
+        EmailAttachment attachment = new EmailAttachment("Note de cession sinistre", report, "application/pdf");
 
-
-
+            this.sendEmailWithAttachments( synchronreEmail,  inter.getIntEmail(),  "Note de cession et de débit sinistre",  message, Collections.singletonList(attachment));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName, Long sinId) throws Exception
     {

@@ -24,7 +24,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
-import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -37,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.UnknownHostException;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,11 +47,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 {
     private final RepartitionRepository repRepo;
     private final AffaireRepository affRepo;
-    private final TypeRepo typeRepo;
-    private final IServiceCalculsComptables comptaService;
     private final RepartitionMapper repMapper;
     private final ObjectCopier<Repartition> repCopier;
-    private final ObjectCopier<Affaire>  affCopier;
     private final ILogService logService;
     private final IServiceMouvement mvtService;
     private final BigDecimal ZERO = BigDecimal.ZERO;
@@ -64,11 +59,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     @Value("${spring.mail.username}")
     private String synchronreEmail;
-    private final DecimalFormat decimalFormat;
     private final IServiceInterlocuteur intService;
     private final IserviceCalculRepartition calculRepartitionService;
-
-    private final ParamCessionLegaleRepository pclRepoo;
 
     @Override
     public RepartitionDetailsResp createRepartition(CreateRepartitionReq dto) throws UnknownHostException {
