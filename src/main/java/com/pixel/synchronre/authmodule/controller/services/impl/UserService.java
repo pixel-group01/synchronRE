@@ -27,7 +27,9 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -71,6 +73,7 @@ public class UserService implements IUserService
     private final StatutRepository staRepo;
     private final IFunctionService functionService;
     private final CedRepo cedRepo;
+    private final IserviceCessionnaire cesService;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
@@ -98,6 +101,12 @@ public class UserService implements IUserService
         Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
 
         AppUser user = userMapper.mapToUser(dto);
+        if(dto.getVisibilityId() == null)
+        {
+            Cessionnaire nre = cesService.getCourtier();
+            if(nre == null) throw new AppException("Impossible de trouver le courtier");
+            user.setCesId(nre.getCesId());
+        }
         //if(dto.getCesId() == null && dto.getVisibilityId() != null) user.setCesId(cedRepo.getCedanteCesId(dto.getVisibilityId()));
         user.setStatut(new Statut("USR-BLQ"));
         user = userRepo.save(user);

@@ -59,4 +59,7 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
         from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.repStatut = true and s.staCode not in('REFUSE') and r.type.uniqueCode = 'REP_PLA'
 """)
     List<CessionnaireListResp> findBySinId(Long sinId);
+
+    @Query("select c from Cessionnaire c where c.type.uniqueCode = 'COURT'")
+    List<Cessionnaire> getCourtiers();
 }

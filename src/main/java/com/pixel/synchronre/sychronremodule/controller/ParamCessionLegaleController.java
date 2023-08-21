@@ -1,18 +1,12 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.request.CreateParamCessionLegaleReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.request.UpdateParamCessionLegaleReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
-import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceParamCessionLegale;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -14,6 +14,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.Cess
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CessionnaireMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @Service @RequiredArgsConstructor
 public class serviceCessionnaireImpl implements IserviceCessionnaire
@@ -29,9 +32,12 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     private final CessionnaireMapper cesMapper;
     private final ObjectCopier<Cessionnaire> cesCopier;
     private final ILogService logService;
+    private final TypeRepo typeRepo;
     @Override @Transactional
     public CessionnaireDetailsResp createCessionnaire(CreateCessionnaireReq dto) throws UnknownHostException {
         Cessionnaire ces = cesMapper.mapToCessionnaire(dto);
+        Type type = typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type introuvable : CES"));
+        ces.setType(type);
         ces = cesRepo.save(ces);
         logService.logg(SynchronReActions.CREATE_CESSIONNAIRE, null, ces, SynchronReTables.CESSIONNAIRE);
         return cesMapper.mapToCessionnaireDetailsResp(ces);
@@ -56,5 +62,12 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     public Page<CessionnaireListResp> searchCessionnaire(String key, Pageable pageable)
     {
         return cesRepo.searchCessionnaires(StringUtils.stripAccentsToUpperCase(key), pageable);
+    }
+
+    @Override
+    public Cessionnaire getCourtier() {
+        List<Cessionnaire> cessionnaires = cesRepo.getCourtiers();
+        if(cessionnaires == null || cessionnaires.isEmpty()) throw new AppException("Aucun coutier détecté dans le système");
+        return cessionnaires.get(0);
     }
 }
