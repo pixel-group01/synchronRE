@@ -58,7 +58,7 @@ public class CedCesAffLoader implements Loader
 //        Facultative facnsiaci = new Facultative(affnsiaci, "AFF-001", new BigDecimal(30000000), new BigDecimal(30000000));
 //        facnsiaci.setFacSmpLci(new BigDecimal(30000000));
 //        facRepo.save(facnsiaci);
-//
+
 //        Affaire affnsiabn = new Affaire(new BigDecimal(20000000),"AFF-002", "DGMP", "Affaire NSIA-BN (Marchés Publics)", LocalDate.now(), LocalDate.of(2025, 10, 05),new Exercice(2023L),"REALISEE");
 //        affnsiabn.setStatut(new Statut("SAI"));
 //        affnsiabn.setCedante(nsiabn);

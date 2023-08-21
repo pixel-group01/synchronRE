@@ -31,8 +31,7 @@ public class SynchronReApplication {
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);
     }
-  @Bean(name = "commandLineRunner")
-   //@Profile("prod")
+  @Bean(name = "commandLineRunner") @Profile("dev")
     public CommandLineRunner start(TypeLoader typeLoader, FoldersIniter foldersIniter, AdminLoader adminLoader, StatutLoader statutLoader,
                                    DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,
