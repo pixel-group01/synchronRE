@@ -244,6 +244,23 @@ public class JwtService implements IJwtService
         return this.getConnectedUserCedId() == null;
     }
 
+    @Override
+    public boolean hasAnyAuthority(String... auth)
+    {
+        if(auth == null) return false;
+        Set<String> authList = Arrays.stream(auth).collect(Collectors.toSet());
+        Set<String> userAuthorities = this.getAuthorities();
+        boolean hasAnyAuthority =userAuthorities.stream().anyMatch(authList::contains);
+        return hasAnyAuthority;
+    }
+
+    @Override
+    public Set<String> getAuthorities()
+    {
+        Object authorities = this.getClaim("authorities");
+        return authorities == null ? new HashSet<>() : new HashSet<>((List<String>) authorities);
+    }
+
     class TokenStatus
     {
         private int status;

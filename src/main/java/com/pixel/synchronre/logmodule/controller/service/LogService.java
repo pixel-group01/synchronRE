@@ -1,26 +1,20 @@
 package com.pixel.synchronre.logmodule.controller.service;
 
+import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
+import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.repositories.LogDetailsRepo;
+import com.pixel.synchronre.logmodule.controller.repositories.LogRepo;
 import com.pixel.synchronre.logmodule.model.dtos.response.ConnexionList;
+import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
 import com.pixel.synchronre.sharedmodule.utilities.HttpServletManager;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
-import jakarta.mail.MessageContext;
 import jakarta.persistence.Id;
-import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
-import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
-import com.pixel.synchronre.logmodule.controller.repositories.LogRepo;
-import com.pixel.synchronre.logmodule.model.entities.Log;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -33,7 +27,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Service @RequiredArgsConstructor
 public class LogService implements ILogService
 {
@@ -42,10 +35,6 @@ public class LogService implements ILogService
     private final IJwtService jwtService;
     private final LogDetailsRepo histoRepo;
     private final FunctionRepo functionRepo;
-    private final CedRepo cedRepo;
-    //private final HistoService histoService;
-    /* */
-
 
     @Override @Transactional
     public Log logg(String action, Object oldObject, Object newObject, String tableName) throws UnknownHostException

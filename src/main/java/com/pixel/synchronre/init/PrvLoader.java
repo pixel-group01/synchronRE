@@ -181,7 +181,7 @@ public class PrvLoader implements Loader
         AppPrivilege msgSinSous = prvRepo.save(new AppPrivilege(null, "GET-SIN-MSG-SOUS", "Consulter le message de retour du souscripteur", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege updSin = prvRepo.save(new AppPrivilege(null, "UPD-SIN", "Modifier un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege delSin = prvRepo.save(new AppPrivilege(null, "DEL-SIN", "Supprimer un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
-        AppPrivilege transSin = prvRepo.save(new AppPrivilege(null, "TRANS-SIN", "Transmettre un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
+        AppPrivilege transSin = prvRepo.save(new AppPrivilege(null, "TRANS-SIN", "Transmettre un sinistre au souscripteur", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege getSinLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-LST", "Consulter la liste des sinistres", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege getSinFacLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-FAC-LST", "Consulter la liste des sinistres sur affaire facultative", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege getSinTraiLst = prvRepo.save(new AppPrivilege(null, "GET-SIN-TRAI-LST", "Consulter la liste des sinistres sur traité", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
@@ -190,7 +190,7 @@ public class PrvLoader implements Loader
 
         AppPrivilege getEtaComptSin = prvRepo.save(new AppPrivilege(null, "GET-ETA-COMPT-SIN", "Consulter la situation comptable d'un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege valSin = prvRepo.save(new AppPrivilege(null, "VAL-SIN", "Valider un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
-        AppPrivilege retSin = prvRepo.save(new AppPrivilege(null, "RET-SIN", "retourner un sinistre", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
+        AppPrivilege retSin = prvRepo.save(new AppPrivilege(null, "RET-SIN", "retourner un sinistre à la cédante", typeRepo.findByUniqueCode("PRV-SIN").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege editChq = prvRepo.save(new AppPrivilege(null, "EDIT-CHQ", "Éditer un chèque de reversement sur une affaire facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege sendNotDebFac = prvRepo.save(new AppPrivilege(null, "SEND-NOT-DEB-FAC", "Envoyer Note de débit d'une affaire facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege sendNotCredFac = prvRepo.save(new AppPrivilege(null, "SEND-NOT-CRED-FAC", "Envoyer la note de crédit d'une affaire facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
