@@ -7,20 +7,27 @@ import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.InterlocuteurRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.CreateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.UpdateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.InterlocuteurMapper;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Interlocuteur;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +41,7 @@ public class InterlocuteurService implements IServiceInterlocuteur
     private final InterlocuteurMapper interMapper;
     private final InterlocuteurRepository interRepo;
     private final ILogService logService;
+    private final RepartitionRepository repRepo;
     //private final IServiceMouvement mvtService;
     private final ObjectCopier<Interlocuteur> intCopier;
 
@@ -85,5 +93,31 @@ public class InterlocuteurService implements IServiceInterlocuteur
             interRepo.save(interlocuteur);
             logService.logg(SynchronReActions.DELETE_PLACEMENT, oldInterlocuteur, new Interlocuteur(),SynchronReTables.INTERLOCUTEUR);
         }
+    }
+
+    @Override
+    public Page<InterlocuteurListResp> searchInterlocuteurForPlacement(String key, Long plaId, Pageable pageable)
+    {
+        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
+        Interlocuteur interlocuteurPrincipal = placement.getInterlocuteurPrincipal();
+        if(interlocuteurPrincipal == null) throw new AppException("Aucun interlocuteur principal sur ce placement");
+        Long idInterlocuteurPrincipal =  interlocuteurPrincipal.getIntId();
+        String idAutreInterlocuteursString = placement.getAutreInterlocuteurs();
+        String[] idAutreInterlocuteursTab = idAutreInterlocuteursString == null ? null : idAutreInterlocuteursString.split(",");
+        List<String> idAutreInterlocuteursList = idAutreInterlocuteursTab == null || idAutreInterlocuteursTab.length == 0 ? new ArrayList<>() : Arrays.stream(idAutreInterlocuteursTab).toList();
+        List<Long> idAutreInterlocuteurs = idAutreInterlocuteursList.stream().filter(NumberUtils::isDigits).map(Long::parseLong).collect(Collectors.toList());
+
+        Page<InterlocuteurListResp> interlocuteurPageResps = interRepo.searchInterlocuteur(StringUtils.stripAccentsToUpperCase(key), placement.getCessionnaire().getCesId(), pageable);
+        List<InterlocuteurListResp> interlocuteurListResps = interlocuteurPageResps.stream().peek(inter->this.setSelectedOrPrincipal(inter, idInterlocuteurPrincipal, idAutreInterlocuteurs)).collect(Collectors.toList());
+
+        return new PageImpl<>(interlocuteurListResps, pageable, interlocuteurPageResps.getTotalElements());
+    }
+
+    private void setSelectedOrPrincipal(InterlocuteurListResp inter, Long idInterlocuteurPrincipal, List<Long> idAutreInterlocuteurs)
+    {
+        if(inter == null || inter.getIntId() == null || idInterlocuteurPrincipal == null) return;
+        inter.setPrincipal(inter.getIntId().equals(idInterlocuteurPrincipal));
+        if(idAutreInterlocuteurs == null || idAutreInterlocuteurs.isEmpty()) return;
+        inter.setSelected(idAutreInterlocuteurs.contains(inter.getIntId()));
     }
 }

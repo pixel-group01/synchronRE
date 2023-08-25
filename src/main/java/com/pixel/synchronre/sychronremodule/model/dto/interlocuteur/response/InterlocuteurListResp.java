@@ -31,4 +31,19 @@ public class InterlocuteurListResp
     private String cesNom;
     private String cesSigle;
     private String statut;
+
+    public InterlocuteurListResp(Long intId, String intNom, String intPrenom, String intTel, String intEmail, Long intCesId, String cesNom, String cesSigle, String statut) {
+        this.intId = intId;
+        this.intNom = intNom;
+        this.intPrenom = intPrenom;
+        this.intTel = intTel;
+        this.intEmail = intEmail;
+        this.intCesId = intCesId;
+        this.cesNom = cesNom;
+        this.cesSigle = cesSigle;
+        this.statut = statut;
+    }
+
+    private boolean isSelected;
+    private boolean isPrincipal;
 }

@@ -32,8 +32,6 @@ public class InterlocuteurController
         return interlocuteurService.createInterlocuteur(dto);
     }
 
-
-
     @PutMapping(path = "/update")
     public InterlocuteurListResp updateInterlocuteur(@RequestBody @Valid UpdateInterlocuteurReq dto) throws UnknownHostException {
         return interlocuteurService.updateInterlocuteur(dto);
@@ -42,6 +40,11 @@ public class InterlocuteurController
     @GetMapping(path = "/list/{cesId}")
     public Page<InterlocuteurListResp> searchInterlocuteur(@RequestParam(defaultValue = "") String key, @PathVariable Long cesId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100000") int size) throws UnknownHostException {
         return interlocuteurService.searchInterlocuteur(key, cesId, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/for-placement/{plaId}")
+    public Page<InterlocuteurListResp> searchInterlocuteursForPlacement(@RequestParam(defaultValue = "") String key, @PathVariable Long plaId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100000") int size) throws UnknownHostException {
+        return interlocuteurService.searchInterlocuteurForPlacement(key, plaId, PageRequest.of(page, size));
     }
 
     @DeleteMapping(path = "/delete-interlocuteur/{intId}")

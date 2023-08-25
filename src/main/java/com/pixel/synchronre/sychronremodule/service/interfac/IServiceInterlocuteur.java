@@ -4,6 +4,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.Crea
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.request.UpdateInterlocuteurReq;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
@@ -18,4 +19,5 @@ public interface IServiceInterlocuteur
     List<InterlocuteurListResp> getInterlocuteurByPlacement(Long repId);
     void deleteInterlocuteur(Long intId) throws UnknownHostException;
 
+    Page<InterlocuteurListResp> searchInterlocuteurForPlacement(String key, Long plaId, Pageable pageable);
 }
