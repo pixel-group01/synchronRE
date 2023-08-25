@@ -4,7 +4,9 @@ package com.pixel.synchronre.sychronremodule.model.dto.facultative.request;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.ExistingCedId;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.ExistingCouId;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ActiveExercice;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.NotNullSmpForAffaireRealise;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidEcheanceDate;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidStatutCreation;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -14,7 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@ValidEcheanceDate
+@ValidEcheanceDate @NotNullSmpForAffaireRealise
 public class CreateFacultativeReq
 {
     @NotBlank(message = "Veuillez saisir le nom de l'assuré")
@@ -32,7 +34,7 @@ public class CreateFacultativeReq
     private LocalDate affDateEffet;
 
     @NotNull(message = "Veuillez saisir la date d'échéance de l'affaire")
-    @FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
+    //@FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate affDateEcheance;
 
@@ -49,7 +51,7 @@ public class CreateFacultativeReq
     @PositiveOrZero(message = "Le capital de l'affaire doit être un nombre positif")
     private BigDecimal affCapitalInitial;
 
-    @NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
+    //@NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
     private BigDecimal facSmpLci;
 
@@ -59,6 +61,7 @@ public class CreateFacultativeReq
 
     @NotNull(message = "Veuillez définir le statut de l'affaire")
     @NotBlank(message = "Veuillez définir le statut de l'affaire")
+    @ValidStatutCreation
     protected String affStatutCreation;
 
     @ExistingCedId

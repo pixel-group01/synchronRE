@@ -77,8 +77,6 @@ public abstract class FacultativeMapper
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()))")
 
-
-
     @Mapping(target = "branId", source = "couverture.branche.branId")
     @Mapping(target = "branLibelle", source = "couverture.branche.branLibelle")
     @Mapping(target = "couId", source = "couverture.couId")

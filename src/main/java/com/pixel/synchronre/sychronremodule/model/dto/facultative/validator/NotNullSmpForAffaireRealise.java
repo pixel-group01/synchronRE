@@ -13,35 +13,40 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ValidEcheanceDate.ValidEcheanceDateValidator.class, ValidEcheanceDate.ValidEcheanceDateValidatorOnUpdate.class})
+@Constraint(validatedBy = {NotNullSmpForAffaireRealise.NotNullSmpForAffaireRealiseValidatorOnCreate.class,
+        NotNullSmpForAffaireRealise.NotNullSmpForAffaireRealiseValidatorOnUpdate.class})
 @Documented
-public @interface ValidEcheanceDate
+public @interface NotNullSmpForAffaireRealise
 {
-    String message() default "affDateEcheance::La date d'échéance doit être ultérieure à la date de prise d'effet";
+    String message() default "La SMP/LCI ne peut être nulle pour une affaire réalisée";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
     @Component
     @RequiredArgsConstructor
-    class ValidEcheanceDateValidator implements ConstraintValidator<ValidEcheanceDate, CreateFacultativeReq>
+    class NotNullSmpForAffaireRealiseValidatorOnCreate implements ConstraintValidator<ValidStatutCreation, CreateFacultativeReq>
     {
         @Override
         public boolean isValid(CreateFacultativeReq dto, ConstraintValidatorContext context)
         {
-            if (dto.getAffDateEffet() == null || dto.getAffDateEcheance() == null) return true;
-            return dto.getAffDateEffet().isEqual(dto.getAffDateEcheance()) || dto.getAffDateEffet().isBefore(dto.getAffDateEcheance());
+            String affStatutCreation = dto.getAffStatutCreation();
+            if (affStatutCreation == null) return true;
+
+            return (affStatutCreation.equals("REALISEE") && dto.getFacSmpLci() != null) || !affStatutCreation.equals("REALISEE");
         }
     }
 
     @Component
     @RequiredArgsConstructor
-    class ValidEcheanceDateValidatorOnUpdate implements ConstraintValidator<ValidEcheanceDate, UpdateFacultativeReq>
+    class NotNullSmpForAffaireRealiseValidatorOnUpdate implements ConstraintValidator<ValidStatutCreation, UpdateFacultativeReq>
     {
         @Override
         public boolean isValid(UpdateFacultativeReq dto, ConstraintValidatorContext context)
         {
-            if (dto.getAffDateEffet() == null || dto.getAffDateEcheance() == null) return true;
-            return dto.getAffDateEffet().isEqual(dto.getAffDateEcheance()) || dto.getAffDateEffet().isBefore(dto.getAffDateEcheance());
+            String affStatutCreation = dto.getAffStatutCreation();
+            if (affStatutCreation == null) return true;
+
+            return (affStatutCreation.equals("REALISEE") && dto.getFacSmpLci() != null) || !affStatutCreation.equals("REALISEE");
         }
     }
 }

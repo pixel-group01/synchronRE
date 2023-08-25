@@ -80,6 +80,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         affaire.setAffAssure(dto.getAffAssure());
         affaire.setAffDateEcheance(dto.getAffDateEcheance());
         affaire.setAffDateEffet(dto.getAffDateEffet());
+        affaire.setAffStatutCreation(dto.getAffStatutCreation());
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
