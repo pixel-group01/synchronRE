@@ -194,7 +194,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition oldRep = null;
         if(existsByAffaireAndTypeRepAndCesId)
         {
-            rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+            if(dto.getRepId() == null) throw new AppException("Veuillez fournir l'ID du placement");
+            rep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
+            //rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
         }

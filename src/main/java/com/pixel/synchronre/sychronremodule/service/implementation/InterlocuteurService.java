@@ -27,10 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -76,9 +73,17 @@ public class InterlocuteurService implements IServiceInterlocuteur
     public List<InterlocuteurListResp> getInterlocuteurByPlacement(Long repId)
     {
         InterlocuteurListResp interlocuteurPrincipal = interRepo.getInterlocuteursPrincipal(repId);
+        Long interlocuteurPrincipalId;
+        if(interlocuteurPrincipal == null) interlocuteurPrincipalId = null;
+        else interlocuteurPrincipalId = interlocuteurPrincipal.getIntId();
         String autreIntIds = interRepo.getAutreInterlocuteursIdsByPlacement(repId);
         if(autreIntIds == null || autreIntIds.trim().equals("")) return Collections.singletonList(interlocuteurPrincipal);
-        List<InterlocuteurListResp> interlocuteurs = Stream.concat(Stream.of(interlocuteurPrincipal), Arrays.stream(autreIntIds.split(",")).map(Long::valueOf).map(interRepo::findInterlocuteursById)).collect(Collectors.toList());
+        List<InterlocuteurListResp> interlocuteurs = Stream.concat(Stream.of(interlocuteurPrincipal),
+                Arrays.stream(autreIntIds.split(","))
+                        .filter(NumberUtils::isDigits)
+                        .map(Long::valueOf)
+                        .filter(intId->!Objects.equals(interlocuteurPrincipalId, intId))
+                        .map(interRepo::findInterlocuteursById)).collect(Collectors.toList());
         return interlocuteurs;
     }
 
@@ -105,7 +110,7 @@ public class InterlocuteurService implements IServiceInterlocuteur
         String idAutreInterlocuteursString = placement.getAutreInterlocuteurs();
         String[] idAutreInterlocuteursTab = idAutreInterlocuteursString == null ? null : idAutreInterlocuteursString.split(",");
         List<String> idAutreInterlocuteursList = idAutreInterlocuteursTab == null || idAutreInterlocuteursTab.length == 0 ? new ArrayList<>() : Arrays.stream(idAutreInterlocuteursTab).toList();
-        List<Long> idAutreInterlocuteurs = idAutreInterlocuteursList.stream().filter(NumberUtils::isDigits).map(Long::parseLong).collect(Collectors.toList());
+        List<Long> idAutreInterlocuteurs = idAutreInterlocuteursList.stream().filter(NumberUtils::isDigits).map(Long::parseLong).filter(id->!Objects.equals(interlocuteurPrincipal.getIntId(), id)).collect(Collectors.toList());
 
         Page<InterlocuteurListResp> interlocuteurPageResps = interRepo.searchInterlocuteur(StringUtils.stripAccentsToUpperCase(key), placement.getCessionnaire().getCesId(), pageable);
         List<InterlocuteurListResp> interlocuteurListResps = interlocuteurPageResps.stream().peek(inter->this.setSelectedOrPrincipal(inter, idInterlocuteurPrincipal, idAutreInterlocuteurs)).collect(Collectors.toList());

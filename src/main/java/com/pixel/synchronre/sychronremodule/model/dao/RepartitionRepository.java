@@ -72,10 +72,10 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.affaire.affId from Repartition r where r.repId = ?1 and r.type.uniqueCode = 'REP_PLA'")
     Long repartFindByRep(Long plaId);
 
-    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3 and r.repStatut =true")
     boolean existsByAffaireAndTypeRepAndCesId(Long affId, String uniqueCode, Long cesId);
 
-    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3")
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3 and r.repStatut =true")
     Repartition findByAffaireAndTypeRepAndCesId(Long affId, String typeRep, Long cesId);
 
     @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")

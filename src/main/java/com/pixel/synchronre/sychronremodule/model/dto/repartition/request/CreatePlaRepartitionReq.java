@@ -17,6 +17,7 @@ import java.util.List;
 @SeuilRepCap @SeuilRepTau  /*@CoherentCapitalAndTaux*/ @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
 public class CreatePlaRepartitionReq
 {
+    private Long repId;
     @NotNull(message = "Veuillez saisir le capital")
     @PositiveOrZero(message = "Le capital doit être un nombre positif")
     private BigDecimal repCapital;
