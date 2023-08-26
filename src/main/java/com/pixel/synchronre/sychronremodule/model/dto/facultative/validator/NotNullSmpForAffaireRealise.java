@@ -24,7 +24,7 @@ public @interface NotNullSmpForAffaireRealise
 
     @Component
     @RequiredArgsConstructor
-    class NotNullSmpForAffaireRealiseValidatorOnCreate implements ConstraintValidator<ValidStatutCreation, CreateFacultativeReq>
+    class NotNullSmpForAffaireRealiseValidatorOnCreate implements ConstraintValidator<NotNullSmpForAffaireRealise, CreateFacultativeReq>
     {
         @Override
         public boolean isValid(CreateFacultativeReq dto, ConstraintValidatorContext context)
@@ -38,7 +38,7 @@ public @interface NotNullSmpForAffaireRealise
 
     @Component
     @RequiredArgsConstructor
-    class NotNullSmpForAffaireRealiseValidatorOnUpdate implements ConstraintValidator<ValidStatutCreation, UpdateFacultativeReq>
+    class NotNullSmpForAffaireRealiseValidatorOnUpdate implements ConstraintValidator<NotNullSmpForAffaireRealise, UpdateFacultativeReq>
     {
         @Override
         public boolean isValid(UpdateFacultativeReq dto, ConstraintValidatorContext context)
