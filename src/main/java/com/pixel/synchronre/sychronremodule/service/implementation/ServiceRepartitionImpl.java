@@ -192,12 +192,23 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         boolean existsByAffaireAndTypeRepAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;
         Repartition oldRep = null;
-        if(existsByAffaireAndTypeRepAndCesId)
+        boolean modeUpdate = dto.getRepId() != null || existsByAffaireAndTypeRepAndCesId;
+
+        if(modeUpdate)
         {
-            if(dto.getRepId() == null) throw new AppException("Veuillez fournir l'ID du placement");
-            rep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
-            //rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
-            oldRep = repCopier.copy(rep);
+            if(dto.getRepId() != null)
+            {
+                rep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
+                oldRep = repCopier.copy(rep);
+                rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
+                rep.setAffaire(new Affaire(dto.getAffId()));
+            }
+            else // if(existsByAffaireAndTypeRepAndCesId)
+            {
+                if(dto.getRepId() == null) throw new AppException("Veuillez fournir l'ID du placement");
+                rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+                oldRep = repCopier.copy(rep);
+            }
             rep.setRepCapital(dto.getRepCapital());
             rep.setInterlocuteurPrincipal(new Interlocuteur(dto.getInterlocuteurPrincipalId()));
             String stringIntIds = dto.getAutreInterlocuteurIds() == null ? "" : dto.getAutreInterlocuteurIds() .stream().map(String::valueOf).collect(Collectors.joining(","));
@@ -213,7 +224,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
         rep.setRepTaux(repTaux);
         rep.setRepPrime(repPrime);
-        logService.logg(existsByAffaireAndTypeRepAndCesId ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
+        logService.logg(modeUpdate ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, oldRep, rep, SynchronReTables.REPARTITION);
         if(firstPlacement)
         {
             mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_PLACEMENT.staCode, null));
