@@ -199,6 +199,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             //rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
             oldRep = repCopier.copy(rep);
             rep.setRepCapital(dto.getRepCapital());
+            rep.setInterlocuteurPrincipal(new Interlocuteur(dto.getInterlocuteurPrincipalId()));
+            String stringIntIds = dto.getAutreInterlocuteurIds() == null ? "" : dto.getAutreInterlocuteurIds() .stream().map(String::valueOf).collect(Collectors.joining(","));
+            rep.setAutreInterlocuteurs(stringIntIds);
         }
         else
         {
