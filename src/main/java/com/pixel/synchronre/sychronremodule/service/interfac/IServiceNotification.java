@@ -1,6 +1,10 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationBody;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationsResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationUnitaire;
+
+import java.util.List;
 
 public interface IServiceNotification
 {
@@ -17,5 +21,6 @@ public interface IServiceNotification
     long countSinistreEnAttenteDeReglement();
     long countSinistreRetourneAuValidateur();
     long countSinistreEnCoursDeReglement();
-    NotificationResp getNotifications();
+    NotificationsResp getNotifications();
+    NotificationBody getNotificationUnitaires();
 }

@@ -2,13 +2,14 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sychronremodule.model.dao.NotificationRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationBody;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationsResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.NotificationUnitaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceNotification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 
 @Service @RequiredArgsConstructor
 public class ServiceNotificationImpl implements IServiceNotification
@@ -37,7 +38,8 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countAffairesEnAttenteDePlacement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PLA", "RET-FAC-CED");
-        return !hasAuthority ? 0 : notifRepo.countAffaires(Collections.singletonList("APLA"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority? 0 : notifRepo.countAffaires(Collections.singletonList("APLA"), null);
     }
 
     @Override
@@ -52,28 +54,32 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countAffairesEnAttenteDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-FAC", "CRT-REV-FAC");
-        return !hasAuthority ? 0 : notifRepo.countAffaires(Collections.singletonList("APAI"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countAffaires(Collections.singletonList("APAI"), null);
     }
 
     @Override
     public long countPlacementsEnAttenteDeValidation()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-PLA", "RET-PLA");
-        return !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("AVAL"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("AVAL"), null);
     }
 
     @Override
     public long countPlacementRetourneAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("ACPT-PLA", "ANL-PLA", "REFU-PLA","TRANS-PLA", "DLT-PLA");
-        return !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("RET"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("RET"), null);
     }
 
     @Override
     public long countSinistreTransmisAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("TRANS-SIN-VAL");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("TRA"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("TRA"), null);
     }
 
     @Override
@@ -88,41 +94,46 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreEnAttenteDeValidation()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-SIN", "RET-SIN-SOUS");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("AVAL"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("AVAL"), null);
     }
 
     @Override
     public long countSinistreRetournesAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("TRANS-SIN-VAL", "RET-SIN-CED");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-VAL"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-VAL"), null);
     }
 
     @Override
     public long countSinistreEnAttenteDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-SIN");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("APAI"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("APAI"), null);
     }
 
     @Override
     public long countSinistreRetourneAuValidateur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-SIN", "RET-SIN-SOUS");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-COMPTA"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-COMPTA"), null);
     }
 
     @Override
     public long countSinistreEnCoursDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN");
-        return !hasAuthority ? 0 : notifRepo.countSinistres(Arrays.asList("CPAI", "CPAI-CREV", "CREV"), null);
+        boolean isCourtier = jwtService.UserIsCourtier();
+        return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Arrays.asList("CPAI", "CPAI-CREV", "CREV"), null);
     }
 
     @Override
-    public NotificationResp getNotifications()
+    public NotificationsResp getNotifications()
     {
-        NotificationResp notification = new NotificationResp();
+        NotificationsResp notification = new NotificationsResp();
         notification.setTotalNotifications(this.countTotalNotifications());
         notification.setAffairesEnAttenteDePlacement(this.countAffairesEnAttenteDePlacement());
         notification.setAffairesRetourneesALaCedante(this.countAffairesRetourneesALaCedante());
@@ -135,7 +146,28 @@ public class ServiceNotificationImpl implements IServiceNotification
         notification.setSinistreRetournesAuSouscripteur(this.countSinistreRetournesAuSouscripteur());
         notification.setSinistreEnAttenteDeReglement(this.countSinistreEnAttenteDeReglement());
         notification.setSinistreRetourneAuValidateur(this.countSinistreRetourneAuValidateur());
-        notification.setSinistreEnCoursDeReversement(this.countSinistreEnCoursDeReglement());
+        notification.setSinistreEnCoursDeReglement(this.countSinistreEnCoursDeReglement());
       return notification;
+    }
+
+    @Override
+    public NotificationBody getNotificationUnitaires()
+    {
+        List<NotificationUnitaire> notificationUnitaires =new ArrayList<>();
+        //notificationUnitaires.add(new NotificationUnitaire("total", this.countTotalNotifications(), true, true,Collections.emptyList()));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de placement", this.countAffairesEnAttenteDePlacement(), true, false, Arrays.asList("CRT-PLA", "RET-FAC-CED")));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) retournées par le souscripteur", this.countAffairesRetourneesALaCedante(), false, true, Collections.emptyList()));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de règlement", this.countAffairesEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-FAC", "CRT-REV-FAC")));
+        notificationUnitaires.add(new NotificationUnitaire("Placement(s) en attente de validation", this.countPlacementsEnAttenteDeValidation(), true, false, Arrays.asList("VAL-PLA", "RET-PLA")));
+        notificationUnitaires.add(new NotificationUnitaire("Placement(s) retournés par le validateur", this.countPlacementRetourneAuSouscripteur(), true, false, Arrays.asList("ACPT-PLA", "ANL-PLA", "REFU-PLA","TRANS-PLA", "DLT-PLA")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) transmis par une cedante", this.countSinistreTransmisAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le souscripteur", this.countSinistreRetournesALaCedante(), false, true, Collections.emptyList()));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le validateur", this.countSinistreRetournesAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL", "RET-SIN-CED")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de validation", this.countSinistreEnAttenteDeValidation(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de règlement", this.countSinistreEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retourné par le comptable", this.countSinistreRetourneAuValidateur(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en cours de règlement", this.countSinistreEnCoursDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN")));
+        NotificationBody body = new NotificationBody(this.countTotalNotifications(), notificationUnitaires);
+        return body;
     }
 }

@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class NotificationResp
+public class NotificationsResp
 {
     private long totalNotifications;
     private long affairesEnAttenteDePlacement;
@@ -20,5 +20,5 @@ public class NotificationResp
     private long sinistreRetournesAuSouscripteur;
     private long sinistreEnAttenteDeReglement;
     private long sinistreRetourneAuValidateur;
-    private long sinistreEnCoursDeReversement;
+    private long sinistreEnCoursDeReglement;
 }
