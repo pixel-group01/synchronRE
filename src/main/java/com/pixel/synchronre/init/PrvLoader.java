@@ -63,6 +63,14 @@ public class PrvLoader implements Loader
         AppPrivilege crtFac = prvRepo.save(new AppPrivilege(null, "CRT-FAC", "Enregistrer affaires facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege updFac = prvRepo.save(new AppPrivilege(null, "UPD-FAC", "Modifier affaires facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege getFacDet = prvRepo.save(new AppPrivilege(null, "GET-FAC-DET", "Consulter détail affaire", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
+
+        AppPrivilege transFacToCompta = prvRepo.save(new AppPrivilege(null, "TRANS-FAC-COMPTA", "Transmettre une affaire à la comptabilité", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
+        AppPrivilege editNotDebFac = prvRepo.save(new AppPrivilege(null, "EDIT-NOT-DEB-FAC", "Imprimer note de débit fac", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
+
+
+        //TRANS-FAC-COMPTA : Transmettre une affaire à la comptabilité
+        //EDIT-NOT-DEB-FAC : imprimer note de débit fac
+
         //AppPrivilege sendFac = prvRepo.save(new AppPrivilege(null, "SEND-FAC", "Transmettre une affaires facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege crtPlaFac = prvRepo.save(new AppPrivilege(null, "CRT-PLA-FAC", "Enregistrer un placement sur une affaires facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
         AppPrivilege valFac = prvRepo.save(new AppPrivilege(null, "VAL-FAC", "Valider une affaire facultative", typeRepo.findByUniqueCode("PRV-FAC").orElseThrow(()->new AppException("Type de document inconnu"))));
