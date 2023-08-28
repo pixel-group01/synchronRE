@@ -63,7 +63,7 @@ public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Lo
         select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(
         i.intId, i.intNom, i.intPrenom, i.intTel, 
         i.intEmail, i.cessionnaire.cesId, i.cessionnaire.cesNom, i.cessionnaire.cesSigle, 
-        i.statut.staCode) from Interlocuteur i where i = ?1
+        i.statut.staCode) from Interlocuteur i where i.intId = ?1
 """)
     InterlocuteurListResp findInterlocuteursById(Long intId);
 
