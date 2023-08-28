@@ -214,7 +214,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             String stringIntIds = dto.getAutreInterlocuteurIds() == null ? "" : dto.getAutreInterlocuteurIds() .stream().map(String::valueOf).collect(Collectors.joining(","));
             rep.setAutreInterlocuteurs(stringIntIds);
         }
-        else
+        else // Create
         {
             rep = repMapper.mapToPlaRepartition(dto);
             rep.setRepStaCode(new Statut(StatutEnum.SAISIE_CRT.staCode));
