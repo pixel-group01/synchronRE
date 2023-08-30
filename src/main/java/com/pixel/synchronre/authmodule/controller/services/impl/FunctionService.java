@@ -199,6 +199,7 @@ public class FunctionService implements IFunctionService{
         if(function == null) return null;
         function.setName(dto.getName());
         function.setStartsAt(dto.getStartsAt());
+        function.setVisibilityId(dto.getVisibilityId());
         function.setEndsAt(dto.getEndsAt());
         ReadFncDTO readFncDTO = this.setFunctionAuthorities(new SetAuthoritiesToFunctionDTO(dto.getFncId(),dto.getStartsAt(), dto.getEndsAt(), dto.getRoleIds(), dto.getPrvIds()));
         return readFncDTO;
