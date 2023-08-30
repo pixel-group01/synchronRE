@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
+import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -253,6 +254,8 @@ public class AffaireController
                                                         @RequestParam(defaultValue = "") String key,
                                                         @RequestParam(defaultValue = "0") int page,
                                                         @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        String statutCreation = affRepo.getAffStatutCreation(affId);
+        if(!STATUT_CREATION.REALISEE.name().equals(statutCreation)) throw new AppException("Impossible de transmettre une affaire en intance ou non réalisée");
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.TRANSMETTRE_AU_SOUSCRIPTEUR, affId, EN_ATTENTE_DE_PLACEMENT.staCode, null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 jwtService.getConnectedUserCedId(),
@@ -277,7 +280,10 @@ public class AffaireController
     @PutMapping(path = "/facultative/valider/{affId}")
     public Page<FacultativeListResp> validerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
                                                     @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+                                                    @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+    {
+        String statutCreation = affRepo.getAffStatutCreation(affId);
+        if(!STATUT_CREATION.REALISEE.name().equals(statutCreation)) throw new AppException("Impossible de valider une affaire en intance ou non réalisée");
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.VALIDER_FAC, affId, EN_COURS_DE_PAIEMENT.staCode,null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null, cedId,
                 Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
