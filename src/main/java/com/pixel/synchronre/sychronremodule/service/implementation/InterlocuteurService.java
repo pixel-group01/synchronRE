@@ -80,10 +80,11 @@ public class InterlocuteurService implements IServiceInterlocuteur
         if(autreIntIds == null || autreIntIds.trim().equals("")) return Collections.singletonList(interlocuteurPrincipal);
         List<InterlocuteurListResp> interlocuteurs = Stream.concat(Stream.of(interlocuteurPrincipal),
                 Arrays.stream(autreIntIds.split(","))
-                        .filter(NumberUtils::isDigits)
-                        .map(Long::valueOf)
+                        .filter(intId->NumberUtils.isDigits(intId))
+                        .map(intId->Long.valueOf(intId))
                         .filter(intId->!Objects.equals(interlocuteurPrincipalId, intId))
-                        .map(interRepo::findInterlocuteursById)).collect(Collectors.toList());
+                        .map(intId->interRepo.findInterlocuteursById(intId)))
+                .collect(Collectors.toList());
         return interlocuteurs;
     }
 
