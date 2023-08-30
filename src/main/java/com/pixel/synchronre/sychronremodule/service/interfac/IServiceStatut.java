@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
 
-public interface StatutIservice {
+public interface IServiceStatut {
     StatutDetailsResp createStatut(CreateStatutReq dto) throws UnknownHostException;
     StatutDetailsResp updateStatut(UpdateStatutReq dto) throws UnknownHostException;
     Page<StatutListResp> searchStatut(String key, Pageable pageable);

@@ -8,16 +8,13 @@ import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.StatutRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.StatutMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.request.CreateStatutReq;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.request.UpdateStatutReq;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import com.pixel.synchronre.sychronremodule.service.interfac.StatutIservice;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatut;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +25,7 @@ import java.net.UnknownHostException;
 
 @Service
 @RequiredArgsConstructor
-public class StatutServiceImpl implements StatutIservice {
+public class StatutServiceImpl implements IServiceStatut {
     private final StatutRepository statRepo;
     private final StatutMapper statutMapper;
     private final ObjectCopier<Statut> staCopier;

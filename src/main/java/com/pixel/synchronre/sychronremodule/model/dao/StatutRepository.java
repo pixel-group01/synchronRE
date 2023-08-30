@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface StatutRepository extends JpaRepository<Statut, String>
 {
+    @Query("select s.staCode from Statut s where s.staCode not in ('SUP', 'SUPP')")
+    List<String> findActiveStaCodes();
+
     @Query("select s from Statut s where s.staCode = ?1")
     Statut findByStaCode(String staCode);
 

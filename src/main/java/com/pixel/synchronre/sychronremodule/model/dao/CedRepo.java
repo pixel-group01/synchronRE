@@ -8,8 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface CedRepo extends JpaRepository<Cedante, Long>
 {
+    @Query("select c.cedId from Cedante c")
+    List<Long> findAllIds();
     @Query("select (count(c) > 0) from Cedante c where upper(c.cedEmail) = upper(?1)")
     boolean alreadyExistsByEmail(String cedEmail);
 

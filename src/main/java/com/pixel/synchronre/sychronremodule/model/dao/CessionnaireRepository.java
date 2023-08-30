@@ -10,6 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long> {
+
+    @Query("select c.cesId from Cessionnaire c")
+    List<Long> findAllIds();
+
     @Query("select (count(c) > 0) from Cessionnaire c where upper(c.cesEmail) = upper(?1)")
     boolean alreadyExistsByEmail(String cesEmail);
 

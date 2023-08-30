@@ -1,8 +1,7 @@
 package com.pixel.synchronre;
 
 import com.pixel.synchronre.init.*;
-import com.pixel.synchronre.sychronremodule.model.dao.*;
-import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,9 +10,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @SpringBootApplication
 public class SynchronReApplication {

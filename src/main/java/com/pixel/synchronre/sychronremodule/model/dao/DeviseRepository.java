@@ -10,8 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface DeviseRepository extends JpaRepository<Devise, String> {
-
+public interface DeviseRepository extends JpaRepository<Devise, String>
+{
+    @Query("select d.devCode from Devise d")
+    List<String> findAllDevCodes();
     @Query("select (count(d) > 0) from Devise d where d.devCode= ?1")
     boolean existsDevCode(String devCode);
 

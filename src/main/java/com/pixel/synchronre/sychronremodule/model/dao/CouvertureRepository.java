@@ -8,8 +8,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface CouvertureRepository extends JpaRepository<Couverture, Long> {
+import java.util.List;
 
+public interface CouvertureRepository extends JpaRepository<Couverture, Long>
+{
+    @Query("select c.couId from Couverture c")
+    List<Long> findAllIds();
 
     @Query("select (count(c) > 0) from Couverture c where upper(c.couLibelleAbrege) = upper(?1)")
     boolean alreadyExistsByCouLibelleAbrege(String couLibelleAbrege);

@@ -3,7 +3,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.statut.request.CreateStatu
 import com.pixel.synchronre.sychronremodule.model.dto.statut.request.UpdateStatutReq;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
-import com.pixel.synchronre.sychronremodule.service.interfac.StatutIservice;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatut;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import java.net.UnknownHostException;
 @RequestMapping("/statuts")
 @RequiredArgsConstructor
 public class StatutController {
-    private final StatutIservice statutService;
+    private final IServiceStatut statutService;
     
     @PostMapping(path = "/create")
     public StatutDetailsResp createStatut(@RequestBody @Valid CreateStatutReq dto) throws UnknownHostException {

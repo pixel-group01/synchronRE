@@ -60,8 +60,8 @@ public class ExerciceServiceImpl implements IserviceExercie {
     @Override
     public Exercice getExerciceCourant()
     {
-        Exercice exo = exoRepo.getExeCourant().get(0);
-        if(exo == null) exo = exoRepo.getLastExo();
-        return exo;
+        List<Exercice> exoCourants = exoRepo.getExeCourant();
+        if(exoCourants == null || exoCourants.isEmpty()) return exoRepo.getLastExo();
+        return exoCourants.get(0);
     }
 }
