@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class MvtReq
 {
+    private String action;
     private Long objectId;
     private String staCode;
     private String mvtObservation;

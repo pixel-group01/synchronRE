@@ -98,7 +98,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
 
         pclSimples = this.savePclReps(pclSimples);
-        mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
 
         dto.setParamCesLegsPremierFranc(pclPfs);
         dto.setConservationRepId(conservationDto.getRepId());

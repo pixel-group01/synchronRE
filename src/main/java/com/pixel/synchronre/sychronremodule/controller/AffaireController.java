@@ -5,6 +5,7 @@ import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
+import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -251,9 +252,8 @@ public class AffaireController
     public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId,
                                                         @RequestParam(defaultValue = "") String key,
                                                         @RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "10") int size)
-    {
-        mvtService.createMvtAffaire(new MvtReq(affId, EN_ATTENTE_DE_PLACEMENT.staCode, null));
+                                                        @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.TRANSMETTRE_AU_SOUSCRIPTEUR, affId, EN_ATTENTE_DE_PLACEMENT.staCode, null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,
                 jwtService.getConnectedUserCedId(),
                 Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(page, size));
@@ -264,9 +264,8 @@ public class AffaireController
     @PutMapping(path = "/facultative/retourner")
     public Page<FacultativeListResp> retournerAffaire(@Valid @RequestBody MvtReq dto,
                                                       @RequestParam(defaultValue = "0") int page,
-                                                      @RequestParam(defaultValue = "10") int size)
-    {
-        mvtService.createMvtAffaire(new MvtReq(dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
+                                                      @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.RETOURNER_A_CEDANTE, dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null,
                 affRepo.getAffCedId(dto.getObjectId()),
                 Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
@@ -278,9 +277,8 @@ public class AffaireController
     @PutMapping(path = "/facultative/valider/{affId}")
     public Page<FacultativeListResp> validerAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
                                                     @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "10") int size)
-    {
-        mvtService.createMvtAffaire(new MvtReq(affId, EN_COURS_DE_PAIEMENT.staCode,null));
+                                                    @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.VALIDER_FAC, affId, EN_COURS_DE_PAIEMENT.staCode,null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null, cedId,
                 Arrays.asList(EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
@@ -291,9 +289,8 @@ public class AffaireController
     public Page<FacultativeListResp> archiverAffaire(@PathVariable Long affId, @RequestParam(required = false) Long cedId,
                                                      @RequestParam(defaultValue = "") String key,
                                                      @RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "10") int size)
-    {
-        mvtService.createMvtAffaire(new MvtReq(affId, ARCHIVE.staCode,null));
+                                                     @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.ARCHIVER, affId, ARCHIVE.staCode,null));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null, cedId
                 ,Arrays.asList(EN_COURS_DE_PAIEMENT.staCode), exoService.getExerciceCourant().getExeCode(), PageRequest.of(0, 10));
 

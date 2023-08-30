@@ -5,7 +5,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
@@ -14,7 +14,10 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.Facul
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
-import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
+import com.pixel.synchronre.sychronremodule.model.entities.Couverture;
+import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
@@ -52,8 +55,8 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         aff.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
         aff=affRepo.save(aff);
         aff.setAffCode(this.generateAffCode(aff.getAffId()));
-        logService.logg(SynchronReActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
-        mvtService.createMvtAffaire(new MvtReq(aff.getAffId(), aff.getStatut().getStaCode(), null));
+        logService.logg(AffaireActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.CREATE_FAC, aff.getAffId(), aff.getStatut().getStaCode(), null));
         aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
         return facultativeMapper.mapToFacultativeDetailsResp(aff);
@@ -84,7 +87,7 @@ public class FacultativeServiceImpl implements IserviceFacultative {
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
-        logService.logg(SynchronReActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
         return facultativeMapper.mapToFacultativeDetailsResp(affaire);
     }
 

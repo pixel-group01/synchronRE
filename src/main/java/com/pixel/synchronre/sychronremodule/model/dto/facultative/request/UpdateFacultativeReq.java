@@ -43,9 +43,9 @@ public class UpdateFacultativeReq
     //@FutureOrPresent(message = "Veuiilez saisir une date ultérieure à aujourd'hui")
     private LocalDate affDateEcheance;
 
-    @NotNull(message = "Veuillez saisir le numéro de police")
-    @NotBlank(message = "Veuillez saisir le numéro de police")
-    @Length(message = "Le code de la banque doit contenir au moins deux caractères", min = 2)
+    //@NotNull(message = "Veuillez saisir le numéro de police")
+    //@NotBlank(message = "Veuillez saisir le numéro de police")
+    //@Length(message = "Le code de la banque doit contenir au moins deux caractères", min = 2)
     private String facNumeroPolice;
 
     @NotNull(message = "Veuillez saisir le capital de l'affaire")

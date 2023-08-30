@@ -67,6 +67,8 @@ public class FunctionService implements IFunctionService{
     public ReadFncDTO createFnc(CreateFncDTO dto) throws UnknownHostException
     {
         AppFunction function = fncMapper.mapToFunction(dto);
+        Long visibilityId = userRepo.getVisibilityId(dto.getUserId());
+        function.setVisibilityId(visibilityId);
         boolean userHasFunction = functionRepo.userHasAnyAppFunction(dto.getUserId());
         function = functionRepo.save(function);
         Long fncId = function.getId();
@@ -197,9 +199,10 @@ public class FunctionService implements IFunctionService{
     {
         AppFunction function  = functionRepo.findById(dto.getFncId()).orElse(null);
         if(function == null) return null;
+        Long visibilityId = userRepo.getVisibilityId(dto.getUserId());
+        function.setVisibilityId(visibilityId);
         function.setName(dto.getName());
         function.setStartsAt(dto.getStartsAt());
-        function.setVisibilityId(dto.getVisibilityId());
         function.setEndsAt(dto.getEndsAt());
         ReadFncDTO readFncDTO = this.setFunctionAuthorities(new SetAuthoritiesToFunctionDTO(dto.getFncId(),dto.getStartsAt(), dto.getEndsAt(), dto.getRoleIds(), dto.getPrvIds()));
         return readFncDTO;

@@ -34,11 +34,6 @@ public class RepartitionController
     private final RepartitionRepository repRepo;
     private final IserviceCalculRepartition calculRepartitionService;
 
-    @GetMapping(path = "/get-ced-leg-update-dto/{affId}")
-    public CreateCedLegRepartitionReq  CedLegDtoForUpdate(@PathVariable Long affId) throws UnknownHostException {
-        return repService.getCedLegRepartitionDTO(affId);
-    }
-
     @DeleteMapping(path = "/delete-placement/{repId}")
     public void deletePlacement(@PathVariable Long repId) throws UnknownHostException
     {
@@ -55,10 +50,6 @@ public class RepartitionController
         return repService.createPartCedRepartition(dto);
     }*/
 
-    @PostMapping(path = "/create-cedante-legale-repartition")
-    public RepartitionDetailsResp createCedLegRep(@Valid @RequestBody CreateCedLegRepartitionReq dto) throws UnknownHostException {
-        return repService.createCedLegRepartition(dto);
-    }
 
     @PostMapping(path = "/save")
     public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto) throws UnknownHostException {
@@ -68,11 +59,6 @@ public class RepartitionController
     @PostMapping(path = "/create-placement")
     public RepartitionDetailsResp createPladRep(@Valid @RequestBody CreatePlaRepartitionReq dto) throws UnknownHostException {
         return repService.createPlaRepartition(dto);
-    }
-
-    @PutMapping(path = "/update")
-    public RepartitionDetailsResp updateRep(@Valid @RequestBody UpdateRepartitionReq dto) throws UnknownHostException {
-        return repService.updateRepartition(dto);
     }
 
     @GetMapping(path = "/list-placement-saisie/{affId}")
@@ -174,11 +160,6 @@ public class RepartitionController
     @PutMapping(path = "/annuler-placement/{plaId}")
     void annulerPlacement(@PathVariable Long plaId) throws UnknownHostException {
         repService.annulerPlacement(plaId);
-    }
-
-    @PutMapping(path = "/modifier-placement")
-    void modifierPlacement(@RequestBody @Valid UpdatePlaRepartitionReq dto) throws UnknownHostException {
-        repService.modifierPlacement(dto);
     }
 
     @PutMapping(path = "/accepter-placement/{plaId}")

@@ -6,17 +6,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.net.UnknownHostException;
 
 public interface IServiceMouvement
 {
     @Transactional
-    void createMvtAffaire(MvtReq dto);
+    void createMvtAffaire(MvtReq dto) throws UnknownHostException;
 
     @Transactional
-    void createMvtPlacement(MvtReq dto);
+    void createMvtPlacement(MvtReq dto) throws UnknownHostException;
 
     @Transactional
-    void createMvtSinistre(MvtReq dto);
+    void createMvtSinistre(MvtReq dto) throws UnknownHostException;
     Page<MouvementListResp> findMouvementById(Long affId, Long sinId , Pageable pageable);
 }

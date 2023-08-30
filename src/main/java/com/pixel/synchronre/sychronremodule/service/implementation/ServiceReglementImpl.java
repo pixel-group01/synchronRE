@@ -7,7 +7,9 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.ReglementActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
@@ -83,7 +85,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
 
         if(!hasReglement) {
-            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), EN_COURS_DE_PAIEMENT.staCode, null));
+            mvtService.createMvtAffaire(new MvtReq(AffaireActions.PAYER_FAC, dto.getAffId(), EN_COURS_DE_PAIEMENT.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
@@ -103,7 +105,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal restARegler = comptaAffaireService.calculateRestARegler(dto.getAffId());
 
         if(restARegler.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {
-            mvtService.createMvtAffaire(new MvtReq(dto.getAffId(), SOLDE.staCode, null));
+            mvtService.createMvtAffaire(new MvtReq(AffaireActions.REVERSER_FAC,dto.getAffId(), SOLDE.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(reversement);
     }
@@ -132,10 +134,10 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setSinistre(sinRepo.findById(dto.getSinId()).orElse(new Sinistre(dto.getSinId())));
         if(!hasPaiement)
         {
-            mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_PAIEMENT.staCode, null));
+            mvtService.createMvtSinistre(new MvtReq(SinistreActions.PAYER_SIN, dto.getSinId(), EN_COURS_DE_PAIEMENT.staCode, null));
         }
         if(comptaSinistreService.calculateResteAPayerBySin(dto.getSinId()).compareTo(ZERO) == 0) {
-            mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_REVERSEMENT.staCode, null));
+            mvtService.createMvtSinistre(new MvtReq(SinistreActions.PAYER_SIN, dto.getSinId(), EN_COURS_DE_REVERSEMENT.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(paiement);
     }
@@ -159,11 +161,11 @@ public class ServiceReglementImpl implements IserviceReglement {
             //Si les paiements sont terminés
             if(restAPayer.compareTo(ZERO) == 0)
             {
-                mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_REVERSEMENT.staCode, null));
+                mvtService.createMvtSinistre(new MvtReq(SinistreActions.REVERSER_SIN,dto.getSinId(), EN_COURS_DE_REVERSEMENT.staCode, null));
             }
             else //Si les paiements ne sont pas terminés
             {
-                mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), EN_COURS_DE_PAIEMENT_REVERSEMENT.staCode, null));
+                mvtService.createMvtSinistre(new MvtReq(SinistreActions.REVERSER_SIN,dto.getSinId(), EN_COURS_DE_PAIEMENT_REVERSEMENT.staCode, null));
             }
 
         }
@@ -171,7 +173,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         // Si le reste à payer et le reste à reverser sont égaux à zero
         if(restAPayer.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {
-            mvtService.createMvtSinistre(new MvtReq(dto.getSinId(), SOLDE.staCode, null));
+            mvtService.createMvtSinistre(new MvtReq(SinistreActions.REVERSER_SIN,dto.getSinId(), SOLDE.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(reversement);
     }

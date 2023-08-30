@@ -38,11 +38,11 @@ public interface IServiceSinistre
 
     Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException;
 
-    Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto, int returnPageSize);
+    Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto, int returnPageSize) throws UnknownHostException;
 
-    Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize);
+    Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize) throws UnknownHostException;
 
-    Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize);
+    Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize) throws UnknownHostException;
 
     Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws Exception;
 

@@ -18,13 +18,11 @@ public class SynchronReActions
     public static final String UPDATE_PARAM_CESSION_LEGALE = "Modification d'un paramètre de cession légale";
     public static final String CREATE_PAYS = "Création d'un pays";
     public static final String UPDATE_PAYS = "Modification d'un pays";
-    public static final String CREATE_FAC = "Création d'une affaire facultative";
-    public static final String UPDATE_FAC = "Modification d'une affaire facultative";
 
 
 
-    public static final String CREATE_SINISTRE = "Création d'un sinistre";
-    public static final String UPDATE_SINISTRE = "Mise à jour d'un sinistre";
+
+
     public static final String DELETE_PLACEMENT = "Suppression d'un placement";
     public static final String CREATE_EXERCICE = "Ouverture d'exercice";
     public static final String UPDATE_XERCICE = "Modification de l'exrcice";

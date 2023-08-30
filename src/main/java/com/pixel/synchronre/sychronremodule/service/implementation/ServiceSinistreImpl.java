@@ -95,8 +95,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
         BigDecimal mtTotSinPlacement = sinComptaService.calculateMtTotalCessionnairesSurSinistre(sinId);
         sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
         sinistre.setSinMontantTotPlacementLettre(ConvertMontant.numberToLetter(mtTotSinPlacement));
-        mvtService.createMvtSinistre(new MvtReq(sinistre.getSinId(), sinStatut.getStaCode(), null));
-        logService.logg(SynchronReActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.CREATE_SINISTRE, sinistre.getSinId(), sinStatut.getStaCode(), null));
+        logService.logg(SinistreActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }
 
@@ -118,48 +118,45 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinistre = sinRepo.save(sinistre);
        if(oldSin.getSinMontant100().compareTo(dto.getSinMontant100()) != 0 || oldSin.getSinMontantHonoraire().compareTo(dto.getSinMontantHonoraire()) != 0)
           cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, dto.getSinId(), ces));
-        logService.logg(SynchronReActions.UPDATE_SINISTRE, oldSin, sinistre, SynchronReTables.SINISTRE);
+        logService.logg(SinistreActions.UPDATE_SINISTRE, oldSin, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }
 
     @Override
-     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) {
+     public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException {
          boolean isCourtier = jwtService.UserIsCourtier() ;
          String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
-         mvtService.createMvtSinistre(new MvtReq(sinId, newStatut, null));
+         mvtService.createMvtSinistre(new MvtReq(SinistreActions.TRANSMETTRE_AU_SOUSCRIPTEUR, sinId, newStatut, null));
          Page<SinistreDetailsResp> sinPages = this.searchSinFacSaisiByCedante("", PageRequest.of(0, returnPageSize));
          return sinPages;
      }
     @Override
-    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) {
-        mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_VALIDATION.staCode, null));
+    public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException {
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.TRANSMETTRE_AU_VALIDATEUR, sinId, EN_ATTENTE_DE_VALIDATION.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto,  int returnPageSize)
-    {
+    public  Page<SinistreDetailsResp> retournerALaCedante(MvtReq dto,  int returnPageSize) throws UnknownHostException {
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
-        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNE.staCode, motif));
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_A_CEDANTE, dto.getObjectId(), RETOURNE.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize)
-    {
+    public  Page<SinistreDetailsResp> retournerAuSouscripteur(MvtReq dto, int returnPageSize) throws UnknownHostException {
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
-        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, motif));
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_AU_SOUSCRIPTEUR, dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
-    public  Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize)
-    {
+    public  Page<SinistreDetailsResp> retournerAuValidateur(MvtReq dto, int returnPageSize) throws UnknownHostException {
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
-        mvtService.createMvtSinistre(new MvtReq(dto.getObjectId(), RETOURNER_COMPTABLE.staCode, motif));
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_AU_VALIDATEUR, dto.getObjectId(), RETOURNER_COMPTABLE.staCode, motif));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacEnReglement("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
@@ -167,7 +164,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws Exception
     {
         //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
-        mvtService.createMvtSinistre(new MvtReq(sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
+        mvtService.createMvtSinistre(new MvtReq(SinistreActions.VALIDER_SINISTRE, sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
 
         envoyerNoteCessionSinistreEtNoteDebit(sinId);
