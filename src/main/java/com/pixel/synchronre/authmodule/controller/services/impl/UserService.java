@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.controller.services.impl;
 
+import com.pixel.synchronre.authmodule.controller.repositories.FunctionRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.*;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
@@ -73,6 +74,7 @@ public class UserService implements IUserService
     private final IFunctionService functionService;
     private final CedRepo cedRepo;
     private final IserviceCessionnaire cesService;
+    private final FunctionRepo functionRepo;
 
     @Override @Transactional
     public AuthResponseDTO login(LoginDTO dto) throws UnknownHostException {
@@ -145,6 +147,12 @@ public class UserService implements IUserService
     public ReadUserDTO updateUser(UpdateUserDTO dto) throws UnknownHostException {
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
+        Long odlVisibilityId = oldUser.getVisibilityId();
+        if(odlVisibilityId != null && !odlVisibilityId.equals(dto.getCedId()))
+        {
+            user.setVisibilityId(dto.getCedId());
+            functionRepo.findAllByUser(user.getUserId()).forEach(f->f.setVisibilityId(dto.getCedId()));
+        }
         user.setVisibilityId(dto.getCedId());
         BeanUtils.copyProperties(dto, user);
         userRepo.save(user);
