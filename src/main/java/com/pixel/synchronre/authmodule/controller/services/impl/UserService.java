@@ -47,7 +47,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -101,7 +100,7 @@ public class UserService implements IUserService
         Long actorUserId = userRepo.getUserIdByEmail(jwtService.extractUsername());
 
         AppUser user = userMapper.mapToUser(dto);
-        if(dto.getVisibilityId() == null)
+        if(dto.getCedId() == null)
         {
             Cessionnaire nre = cesService.getCourtier();
             if(nre == null) throw new AppException("Impossible de trouver le courtier");
@@ -146,6 +145,7 @@ public class UserService implements IUserService
     public ReadUserDTO updateUser(UpdateUserDTO dto) throws UnknownHostException {
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
+        user.setVisibilityId(dto.getCedId());
         BeanUtils.copyProperties(dto, user);
         userRepo.save(user);
         logger.logg(AuthActions.UPDATE_USER, oldUser, user, AuthTables.USER_TABLE);
@@ -340,7 +340,7 @@ public class UserService implements IUserService
         CreateFncDTO createFncDTO = new CreateFncDTO();
         BeanUtils.copyProperties(dto, createFncDTO);
 
-        createFncDTO.setVisibilityId(userDto.getVisibilityId());
+        createFncDTO.setVisibilityId(userDto.getCedId());
         createFncDTO.setCesId(userDto.getCesId());
         //createFncDTO.setFncStatus(1);
         createFncDTO.setUserId(user.getUserId());

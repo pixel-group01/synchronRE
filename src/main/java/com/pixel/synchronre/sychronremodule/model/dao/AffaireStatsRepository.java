@@ -13,7 +13,8 @@ public interface AffaireStatsRepository extends JpaRepository<Affaire, Long>
 {
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.statistiques.AffaireStats(
-        count(a.affId), sum(a.affCapitalInitial), sum(a.facSmpLci)) 
+        count(distinct a.affId), 
+        sum(a.affCapitalInitial), sum(a.facSmpLci)) 
         from Affaire a left join Repartition r on  a.affId  =  r.affaire.affId left join r.type t left join r.repStaCode s left join r.cessionnaire ces
          where a.statut.staCode not in ('SUP', 'SUPP') and a.exercice.exeCode in :exes and a.cedante.cedId in :cedIds and (ces is null or ces.cesId in :cesIds) 
          and  a.affStatutCreation = coalesce(:statCrea, a.affStatutCreation) and a.statut.staCode in :staCodes and a.couverture.couId in :couIds 

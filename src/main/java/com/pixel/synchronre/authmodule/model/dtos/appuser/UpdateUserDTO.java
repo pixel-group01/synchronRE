@@ -11,5 +11,5 @@ public class UpdateUserDTO
     private String tel;
     private String firstName;
     private String lastName;
-    private Long visibilityId;
+    private Long cedId;
 }
