@@ -151,7 +151,10 @@ public class UserService implements IUserService
         if(odlVisibilityId != null && !odlVisibilityId.equals(dto.getCedId()))
         {
             user.setVisibilityId(dto.getCedId());
-            functionRepo.findAllByUser(user.getUserId()).forEach(f->f.setVisibilityId(dto.getCedId()));
+            functionRepo.findAllByUser(user.getUserId()).forEach(f-> {
+                f.setVisibilityId(dto.getCedId());
+                functionRepo.save(f);
+            });
         }
         user.setVisibilityId(dto.getCedId());
         BeanUtils.copyProperties(dto, user);
