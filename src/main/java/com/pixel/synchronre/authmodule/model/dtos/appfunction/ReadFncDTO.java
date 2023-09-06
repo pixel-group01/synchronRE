@@ -21,6 +21,8 @@ public class ReadFncDTO
     private Long userId;
     private String email;
     protected int fncStatus;// 1 == actif, 2 == inactif, 3 == revoke
+    private Long typeFunctionId;
+    private String typeFunctionUniqueCode;
     protected LocalDate startsAt;
     protected LocalDate endsAt;
     private List<ReadRoleDTO> roles;

@@ -118,5 +118,16 @@ public class TypeLoader implements Loader
         Type pclPf = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_PF", "Cession légale au premier franc", PersStatus.ACTIVE, null, null));
         Type pclSimple = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_SIMPLE", "Cession légale simple", PersStatus.ACTIVE, null, null));
 
+        //Type fonction
+        Type fonctionOperateurDeSaisieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_SAI_CED", "Opérateur de saisie cédante", PersStatus.ACTIVE, null, null));
+        Type fonctionSouscripteur = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_SOUS", "Souscripteur", PersStatus.ACTIVE, null, null));
+
+        Type fonctionValidateur = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_VAL", "Validateur", PersStatus.ACTIVE, null, null));
+        Type fonctionComptable = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_COMPTA", "Comptable", PersStatus.ACTIVE, null, null));
+
+        Type fonctionAdminFonc = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_FONC", "Administrateur fonctionnel", PersStatus.ACTIVE, null, null));
+        Type fonctionAdminTech = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_TECH", "Administrateur technique", PersStatus.ACTIVE, null, null));
+
+        Type fonctionDev = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_DEV", "Développeur", PersStatus.ACTIVE, null, null));
     }
 }

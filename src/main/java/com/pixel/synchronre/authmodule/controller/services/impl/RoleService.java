@@ -2,6 +2,7 @@ package com.pixel.synchronre.authmodule.controller.services.impl;
 
 import com.pixel.synchronre.authmodule.controller.repositories.PrvToRoleAssRepo;
 import com.pixel.synchronre.authmodule.controller.repositories.RoleRepo;
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IRoleService;
 import com.pixel.synchronre.authmodule.model.constants.AuthActions;
 import com.pixel.synchronre.authmodule.model.constants.AuthTables;
@@ -45,6 +46,7 @@ public class RoleService implements IRoleService
 
     private final PrvToRoleAssRepo prvToRoleAssRepo;
     private final ObjectCopier<PrvToRoleAss> ptrCopier;
+    private final IJwtService jwtService;
 
     @Override @Transactional
     public ReadRoleDTO createRole(CreateRoleDTO dto) throws UnknownHostException
@@ -63,6 +65,12 @@ public class RoleService implements IRoleService
     {
         Page<AppRole> rolePage = roleRepo.searchRoles(StringUtils.stripAccentsToUpperCase(searchKey), pageable);
         List<ReadRoleDTO> readRoleDTOS = rolePage.stream().map(roleMapper::mapToReadRoleDTO).collect(Collectors.toList());
+
+        String tyfCode = jwtService.extractTyfCode();
+        if(tyfCode==null || (tyfCode != null && !tyfCode.equals("TYF_DEV")))
+        {
+            readRoleDTOS = readRoleDTOS.stream().filter(r-> r.getRoleCode() == null || !r.getRoleCode().equals("ROLE_DEV")).toList();
+        }
         return new PageImpl<>(readRoleDTOS, pageable, rolePage.getTotalElements());
     }
 

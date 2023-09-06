@@ -10,6 +10,8 @@ import com.pixel.synchronre.authmodule.model.dtos.appuser.AuthResponseDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.SetAuthoritiesToFunctionDTO;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
+import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -89,4 +91,11 @@ public class FunctionResource
     {
         return functionRepo.findAllByUser(userId).stream().map(fncMapper::mapToReadFncDto).collect(Collectors.toList());
     }
+
+    @GetMapping(path = "/types")
+    public List<ReadTypeDTO> getTypeFunctions()
+    {
+        return functionService.geTypeFunctions(); //typeRepo.findByGroupCode(groupCode);
+    }
+
 }

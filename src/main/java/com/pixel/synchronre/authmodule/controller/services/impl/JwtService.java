@@ -76,6 +76,10 @@ public class JwtService implements IJwtService
         extraClaims.put("connectionId", connectionId);
 
         extraClaims.put("functionName", function == null ? null : function.getName());
+        extraClaims.put("tyfId", function == null || function.getTypeFunction() == null ? null : function.getTypeFunction().getTypeId());
+        extraClaims.put("tyfCode", function == null || function.getTypeFunction() == null ? null : function.getTypeFunction().getUniqueCode());
+        extraClaims.put("tyfLibelle", function == null || function.getTypeFunction() == null ? null : function.getTypeFunction().getName());
+
         extraClaims.put("cedId", cedId);
         extraClaims.put("cedName", ced == null ? null : ced.getCedNomFiliale());
         extraClaims.put("cedSigle", ced == null ? null : ced.getCedSigleFiliale());
@@ -123,6 +127,22 @@ public class JwtService implements IJwtService
     {
         Claims claims= this.extractAllClaims(this.getCurrentJwt());
         return claims.get("connectionId", String.class);
+    }
+
+    @Override
+    public String extractTyfCode() {
+        Claims claims= this.extractAllClaims(this.getCurrentJwt());
+        return claims.get("tyfCode", String.class);
+    }
+    @Override
+    public String extractTyfLibelle() {
+        Claims claims= this.extractAllClaims(this.getCurrentJwt());
+        return claims.get("tyfLibelle", String.class);
+    }
+    @Override
+    public String extractTyfId() {
+        Claims claims= this.extractAllClaims(this.getCurrentJwt());
+        return claims.get("tyfId", String.class);
     }
 
     @Override

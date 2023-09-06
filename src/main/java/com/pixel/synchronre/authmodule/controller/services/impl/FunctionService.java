@@ -16,6 +16,10 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
+import com.pixel.synchronre.typemodule.model.entities.Type;
+import com.pixel.synchronre.typemodule.model.enums.TypeGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -49,6 +53,7 @@ public class FunctionService implements IFunctionService{
     private final ObjectCopier<RoleToFncAss> rtfCopier;
     private final ObjectCopier<PrvToFunctionAss> ptfCopier;
     private final IJwtService jwtService;
+    private final TypeRepo typeRepo;
 
     @Override
     public Long getActiveCurrentFunctionId(Long userId)
@@ -228,6 +233,17 @@ public class FunctionService implements IFunctionService{
         AppFunction function = functionRepo.findById(foncId).orElseThrow(()-> new AppException("Fonction introuvable"));
         ReadFncDTO readFncDTO = fncMapper.mapToReadFncDto(function);
         return readFncDTO;
+    }
+
+    @Override
+    public List<ReadTypeDTO> geTypeFunctions() {
+        List<ReadTypeDTO> types = typeRepo.findByTypeGroup(TypeGroup.TYPE_FUNCTION);
+        String tyfCode = jwtService.extractTyfCode();
+        if(tyfCode==null || (tyfCode != null && !tyfCode.equals("TYF_DEV")))
+        {
+            types = types.stream().filter(t->!t.equals("TYF_DEV")).toList();
+        }
+        return types;
     }
 
     private void treatRolesAssignation(RoleAssSpliterDTO roleAssSpliterDTO, Long fncId, LocalDate startsAt, LocalDate endsAt)

@@ -1,6 +1,7 @@
 package com.pixel.synchronre.authmodule.model.dtos.appfunction;
 
 import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
+import com.pixel.synchronre.typemodule.model.dtos.ExistingTypeId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,8 @@ public class CreateFncDTO
     @ExistingUserId
     private Long userId;
     protected int fncStatus;// 1 == actif, 2 == inactif, 3 == revoke
+    @ExistingTypeId
+    private Long typeFunctionId;
     protected LocalDate startsAt;
     protected LocalDate endsAt;
     private Set<Long> roleIds;

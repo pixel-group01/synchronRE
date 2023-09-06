@@ -30,9 +30,27 @@ public class AdminLoader implements Loader
     private final CessionnaireRepository cesRepo;
     private final TypeRepo typeRepo;
 //
+    /*
+        Type fonctionOperateurDeSaisieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_SAI_CED", "Opérateur de saisie cédante", PersStatus.ACTIVE, null, null));
+        Type fonctionSouscripteur = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_SOUS", "Souscripteur", PersStatus.ACTIVE, null, null));
+
+        Type fonctionValidateur = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_VAL", "Validateur", PersStatus.ACTIVE, null, null));
+        Type fonctionComptable = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_COMPTA", "Comptable", PersStatus.ACTIVE, null, null));
+
+        Type fonctionAdminFonc = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_FONC", "Administrateur fonctionnel", PersStatus.ACTIVE, null, null));
+        Type fonctionAdminTech = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_TECH", "Administrateur technique", PersStatus.ACTIVE, null, null));
+
+        Type fonctionDev = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_DEV", "Développeur", PersStatus.ACTIVE, null, "DEV"));
+
+     */
     @Override
     public void load()
     {
+        Type tyfsous = typeRepo.findByUniqueCode("TYF_SOUS").orElseThrow(()->new AppException("Type fonction introuvable : TYF_SOUS"));
+        Type tyfVal = typeRepo.findByUniqueCode("TYF_VAL").orElseThrow(()->new AppException("Type fonction introuvable : TYF_VAL"));
+        Type tyfCompta = typeRepo.findByUniqueCode("TYF_COMPTA").orElseThrow(()->new AppException("Type fonction introuvable : TYF_COMPTA"));
+        Type tyfDev = typeRepo.findByUniqueCode("TYF_DEV").orElseThrow(()->new AppException("Type fonction introuvable : TYF_DEV"));
+
         //Nelson RE
         BigDecimal FIVE = new BigDecimal(5);
         Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
@@ -41,7 +59,7 @@ public class AdminLoader implements Loader
                 pe.encode("KD@fgfysh458@"), "pixelgroup09@gmail.com", "0505050505",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                 LocalDateTime.now()));
-        AppFunction fncDev = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Développeur synchrone-Re", userDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncDev = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Développeur synchrone-Re", userDev, tyfDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userDev.setCurrentFunctionId(fncDev.getId());
         userRepo.save(userDev);
         AppRole roleDev = roleRepo.findByRoleCode("ROL-DEV");
@@ -68,7 +86,7 @@ public class AdminLoader implements Loader
 //
 //        //Operateur de saisie FAC CI
         AppRole roleSaisieFacNsiaCi = roleRepo.findByRoleCode("ROL-OPE-SAI");
-        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, nelsonRe.getCesId(), "Opérateur de saisie NSIA-CI", userci, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, nelsonRe.getCesId(), "Opérateur de saisie NSIA-CI", userci,tyfDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userci);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaCi, fncSaiFacCI));
 
@@ -104,7 +122,7 @@ public class AdminLoader implements Loader
                 LocalDateTime.now()));
 //        //Souscripteur Nelson RE
 
-        AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur,tyfsous, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userSouscripteur);
         AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-SOUS");
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
@@ -117,7 +135,7 @@ public class AdminLoader implements Loader
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now()));
         AppRole roleValidateur = roleRepo.findByRoleCode("ROL-VAL");
-        AppFunction fncValidateur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Validateur Nelson RE", userValidateur, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncValidateur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Validateur Nelson RE", userValidateur, tyfVal, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userValidateur);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleValidateur, fncValidateur));
 
@@ -128,7 +146,7 @@ public class AdminLoader implements Loader
                 true, true, null, LocalDateTime.now(),LocalDateTime.now(),
                 LocalDateTime.now()));
         AppRole roleComptable = roleRepo.findByRoleCode("ROL-COMPTA");
-        AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Comptable Nelson RE", userComptable, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Comptable Nelson RE", userComptable,tyfCompta, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
         userRepo.save(userComptable);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
 

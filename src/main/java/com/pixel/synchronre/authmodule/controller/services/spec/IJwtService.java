@@ -16,9 +16,14 @@ public interface IJwtService
     AuthResponseDTO generateJwt(UserDetails userDetails, String connectionId);
     AuthResponseDTO generateJwt(String username, Map<String, Object> extraClaims);
 
+    String extractTyfLibelle();
+
+    String extractTyfId();
+
     String extractUsername(String jwt);
     String extractUsername();
     String extractConnectionId();
+    String extractTyfCode();
     <T> T extractClaim(String jwt, Function<Claims, T> f);
 
     Log getUserInfosFromJwt(String token);

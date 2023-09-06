@@ -16,6 +16,7 @@ public enum TypeGroup
     DOCUMENT("TYP_DOC", "TYPE-DOCUMENT"),
     CESSIONNAIRE("TYP_CES", "TYPE-CESSIONNAIRE"), //Cessionnaire, courtier
     MODE_REGLEMENT("TYP_MOD_REG", "MODE_REGLEMENT"),
+    TYPE_FUNCTION("TYP_FNC", "Type de fonction"),
     TYPE_PCL("TYPE_PCL", "Type de paramètre de cession légale");
     private String groupCode;
     private String groupName;

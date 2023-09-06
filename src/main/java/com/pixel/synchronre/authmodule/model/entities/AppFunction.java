@@ -1,5 +1,6 @@
 package com.pixel.synchronre.authmodule.model.entities;
 
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.*;
 
 import jakarta.persistence.*;
@@ -18,6 +19,8 @@ public class AppFunction
     private String name;
     @ManyToOne @JoinColumn(name = "USER_ID")
     private AppUser user;
+    @ManyToOne @JoinColumn(name = "TYPE_ID")
+    private Type typeFunction;
     protected int fncStatus;// 1 == actif, 2 == inactif, 3 == revoke
     protected LocalDate startsAt;
     protected LocalDate endsAt;

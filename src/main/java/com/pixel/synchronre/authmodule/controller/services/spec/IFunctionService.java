@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.model.dtos.appfunction.CreateFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.ReadFncDTO;
 import com.pixel.synchronre.authmodule.model.dtos.asignation.SetAuthoritiesToFunctionDTO;
 import com.pixel.synchronre.authmodule.model.dtos.appfunction.UpdateFncDTO;
+import com.pixel.synchronre.typemodule.model.dtos.ReadTypeDTO;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -24,4 +25,6 @@ public interface IFunctionService
     ReadFncDTO getActiveCurrentFunction(Long userId);
 
     ReadFncDTO getFunctioninfos(Long foncId);
+
+    List<ReadTypeDTO> geTypeFunctions();
 }
