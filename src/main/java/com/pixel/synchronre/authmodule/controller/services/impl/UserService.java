@@ -148,7 +148,7 @@ public class UserService implements IUserService
         AppUser user = userRepo.findById(dto.getUserId()).orElseThrow(()->new AppException(SecurityErrorMsg.USER_ID_NOT_FOUND_ERROR_MSG));
         AppUser oldUser = userCopier.copy(user); //new AppUser();BeanUtils.copyProperties(user, oldUser);
         Long odlVisibilityId = oldUser.getVisibilityId();
-        if(odlVisibilityId != null && !odlVisibilityId.equals(dto.getCedId()))
+        if(odlVisibilityId == null || (odlVisibilityId != null && !odlVisibilityId.equals(dto.getCedId())))
         {
             user.setVisibilityId(dto.getCedId());
             functionRepo.findAllByUser(user.getUserId()).forEach(f-> {
