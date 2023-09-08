@@ -43,7 +43,7 @@ public class CedCesAffLoader implements Loader
 
         //Cedantes
         Cedante nsiaci = cedRepo.save(new Cedante(null, "NSIA CI", "NSIA-CI", "05 05 05 05 01", "nsiaci@gmail.com", "NSIA CI", "NSIA FAX", "CI","YOUIN Salif", new Banque("B00213"), new Pays("CIV"),new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
-        Cedante nsiasen = cedRepo.save(new Cedante(null, "NSIA SEN", "NSIA-SEN", "05 05 05 05 02", "nsiasen@gmail.com", "NSIA SEN", "NSIA SEN FAX", "SEN","YOUIN N'diaye", new Banque("B00213"), new Pays("SEN"),new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
+        Cedante nsiasen = cedRepo.save(new Cedante(null, "NSIA Assurances Guinée Bissau", "NSIA-SEN", "05 05 05 05 02", "nsiasen@gmail.com", "NSIA SEN", "NSIA SEN FAX", "SEN","YOUIN N'diaye", new Banque("B00213"), new Pays("SEN"),new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         //        Cedante nsiabn = cedRepo.save(new Cedante(null, "NSIA BN", "NSIA-BN", "05 05 05 05 02", "nsiabn@gmail.com", "NSIA BN", "NSIA FAX", "BN","Coulibaly Lenimama",new Banque("B00213"),new Pays("BNN"), new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
 //        Cedante nsiatg = cedRepo.save(new Cedante(null, "NSIA TG", "NSIA-TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG","Atsin Ghislain Herman",new Banque("B00213"), new Pays("TGO"), new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         //cedRepo.saveAll(Arrays.asList(nsiaci, nsiabn, nsiatg));

@@ -50,6 +50,7 @@ public class AdminLoader implements Loader
         Type tyfVal = typeRepo.findByUniqueCode("TYF_VAL").orElseThrow(()->new AppException("Type fonction introuvable : TYF_VAL"));
         Type tyfCompta = typeRepo.findByUniqueCode("TYF_COMPTA").orElseThrow(()->new AppException("Type fonction introuvable : TYF_COMPTA"));
         Type tyfDev = typeRepo.findByUniqueCode("TYF_DEV").orElseThrow(()->new AppException("Type fonction introuvable : TYF_DEV"));
+        Type tyfSaiCed = typeRepo.findByUniqueCode("TYF_DEV").orElseThrow(()->new AppException("Type fonction introuvable : TYF_SAI_CED"));
 
         //Nelson RE
         BigDecimal FIVE = new BigDecimal(5);
@@ -86,7 +87,8 @@ public class AdminLoader implements Loader
 //
 //        //Operateur de saisie FAC CI
         AppRole roleSaisieFacNsiaCi = roleRepo.findByRoleCode("ROL-OPE-SAI");
-        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, nelsonRe.getCesId(), "Opérateur de saisie NSIA-CI", userci,tyfDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        AppFunction fncSaiFacCI = fncRepo.save(new AppFunction(null, 1L, nelsonRe.getCesId(), "Opérateur de saisie NSIA-CI", userci,tyfSaiCed, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userci.setCurrentFunctionId(fncSaiFacCI.getId());
         userRepo.save(userci);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSaisieFacNsiaCi, fncSaiFacCI));
 
@@ -123,10 +125,12 @@ public class AdminLoader implements Loader
 //        //Souscripteur Nelson RE
 
         AppFunction fncSouscripteur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Souscripteur Nelson RE", userSouscripteur,tyfsous, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userSouscripteur.setCurrentFunctionId(fncSouscripteur.getId());
         userRepo.save(userSouscripteur);
         AppRole roleSouscripteur = roleRepo.findByRoleCode("ROL-SOUS");
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteur, fncSouscripteur));
-//        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
+
+        //        AppRole roleSouscripteurSaisiSin = roleRepo.findByRoleCode("ROL-OPE-SAI-SIN");
 //        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleSouscripteurSaisiSin, fncSouscripteur));
 
 //        //Validateur NelsonRE
@@ -136,6 +140,7 @@ public class AdminLoader implements Loader
                 LocalDateTime.now()));
         AppRole roleValidateur = roleRepo.findByRoleCode("ROL-VAL");
         AppFunction fncValidateur = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Validateur Nelson RE", userValidateur, tyfVal, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userValidateur.setCurrentFunctionId(fncValidateur.getId());
         userRepo.save(userValidateur);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleValidateur, fncValidateur));
 
@@ -147,6 +152,7 @@ public class AdminLoader implements Loader
                 LocalDateTime.now()));
         AppRole roleComptable = roleRepo.findByRoleCode("ROL-COMPTA");
         AppFunction fncComptable = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Comptable Nelson RE", userComptable,tyfCompta, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
+        userComptable.setCurrentFunctionId(fncComptable.getId());
         userRepo.save(userComptable);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
 
