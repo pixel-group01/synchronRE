@@ -23,6 +23,12 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     @Query("select a.affStatutCreation from Affaire a where a.affId = ?1")
     String getAffStatutCreation(Long affId);
 
+    @Query("select r.affaire.affId from Repartition r where r.repId = ?1")
+    Long getAffIdByRepId(Long repId);
+
+    @Query("select r.affaire from Repartition r where r.repId = ?1")
+    Affaire getAffaireByRepId(Long repId);
+
     //@Query("select coalesce(a.affCapitalInitial, 0)  from Affaire a where a.affId = ?1")
     //BigDecimal getCapitalInitial(Long affId);
 

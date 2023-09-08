@@ -84,4 +84,10 @@ public interface UserRepo extends JpaRepository<AppUser, Long>
 
     @Query("select u.visibilityId from AppUser u where u.userId = ?1")
     Long getVisibilityId(Long userId);
+
+    @Query("select distinct f.user from AppFunction f where f.typeFunction.uniqueCode = ?1")
+    List<AppUser> getUserByTypeFunction(String tyfCode);
+
+    @Query("select distinct f.user from AppFunction f where f.typeFunction.uniqueCode = ?1 and f.user.visibilityId = ?2")
+    List<AppUser> getUserByTypeFunctionAndCedId(String tyfCode, Long cedId);
 }

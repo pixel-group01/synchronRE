@@ -66,4 +66,7 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
 
     @Query("select c from Cessionnaire c where c.type.uniqueCode = 'COURT'")
     List<Cessionnaire> getCourtiers();
+
+    @Query("select r.cessionnaire.cesNom from Repartition r where r.repId =?1")
+    String getCesNomByPlaId(Long plaId);
 }

@@ -29,7 +29,7 @@ public @interface ExistingTypeId
         @Override
         public boolean isValid(Long value, ConstraintValidatorContext context)
         {
-            return typeRepo.existsById(value);
+            return value == null || typeRepo.existsById(value);
         }
     }
 }

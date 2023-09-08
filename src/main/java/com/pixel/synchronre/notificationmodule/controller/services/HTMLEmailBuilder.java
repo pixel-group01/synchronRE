@@ -14,4 +14,5 @@ public interface HTMLEmailBuilder
     String buildNoteDeDebitSinistreEmail(String cesInterlocuteur, String sinCode);
     String buildNoteCessionSinistreEmail(String cesInterlocuteur, String sinCode);
 
+    String buildGenericEmail(String objet, String destinataire, String corps);
 }

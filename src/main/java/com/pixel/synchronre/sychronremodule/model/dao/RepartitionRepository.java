@@ -110,9 +110,6 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
     List<Long> getPlaIdsByAffId(Long affId);
 
-    @Query("select r.affaire.affId from Repartition r where r.repId = ?1")
-    Long getAffIdByRepId(Long repId);
-
     @Query("select r.cessionnaire.cesId from Repartition r where r.repId = ?1")
     Long getCesIdByRepId(Long repId);
 

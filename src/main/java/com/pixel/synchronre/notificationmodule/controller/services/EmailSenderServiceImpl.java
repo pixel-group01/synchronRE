@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -45,6 +47,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     @Value("${front.adress}")
     private String frontAddress;
     private final IServiceInterlocuteur interService;
+    private final EmailBodyBuilder emailBodyBuilder;
 
     @Override @Async
     public void sendEmailWithAttachments(String senderMail, String receiverMail, String mailObject, String message, List<EmailAttachment> attachments) throws IllegalAccessException {
@@ -167,5 +170,73 @@ public class EmailSenderServiceImpl implements EmailSenderService
     @Override
     public void sendCheque(String senderMail, String receiverMail, String interlocName, Long regId) throws Exception {
 
+    }
+
+    @Override
+    public void envoyerEmailTransmissionAffaireAuSouscripteur(String receiverMail, String nomDestinataire, String nomCedante) {
+        Map<String, String> emailBody = emailBodyBuilder.buildTransmissionAffaireBody(nomDestinataire, nomCedante);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailRetourAffaireALaCedante(String receiverMail, String nomDestinataire, String affCode, String motif){
+        Map<String, String> emailBody = emailBodyBuilder.buildRetourAffaireBody(nomDestinataire, affCode, motif);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailTransmissionAffaireALaCompta(String receiverMail, String nomDestinataire){
+            Map<String, String> emailBody = emailBodyBuilder.buildAffaireAttenteReglementBody(nomDestinataire);
+            String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerMailPourPlacementEnAttenteDeValidation(String receiverMail, String nomDestinataire, String affCode, String cesNom, BigDecimal repCapital, String devise)
+    {
+        Map<String, String> emailBody = emailBodyBuilder.buildPlacementEnAttenteDeValidationBody(nomDestinataire, affCode, cesNom, repCapital, devise);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerMailPourPlacementRetourne(String receiverMail, String nomDestinataire, String affCode, String cesNom, BigDecimal repCapital, String devise, String motif)
+    {
+        Map<String, String> emailBody = emailBodyBuilder.buildPlacementRetourneBody(nomDestinataire, affCode, cesNom, repCapital, devise,  motif);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerMailPourEnvoieDeNoteDeCession(String receiverMail, String nomDestinataire, String affCode, String cesNom, BigDecimal repCapital, String devise) {
+        Map<String, String> emailBody = emailBodyBuilder.buildPlacementEnAttenteDEnvoieDeNoteDeCessionnBody(nomDestinataire, affCode, cesNom, repCapital, devise);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

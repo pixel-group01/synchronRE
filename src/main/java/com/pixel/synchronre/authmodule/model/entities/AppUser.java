@@ -75,14 +75,12 @@ public class AppUser
 
     @Override
     public String toString() {
-        return "AppUser{" +
-                "userId=" + userId +
-                ", password='" + password + '\'' +
+        return  "userId=" + userId +
+                ", nom ='" + firstName + " " + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", tel='" + tel + '\'' +
                 ", active=" + active +
                 ", notBlocked=" + notBlocked +
-                ", currentFunctionId=" + currentFunctionId +
-                '}';
+                ", currentFunctionId=" + currentFunctionId ;
     }
 }

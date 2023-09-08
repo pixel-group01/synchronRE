@@ -206,6 +206,7 @@ public class FunctionService implements IFunctionService{
         if(function == null) return null;
         Long visibilityId = userRepo.getVisibilityId(dto.getUserId());
         function.setVisibilityId(visibilityId);
+        function.setTypeFunction(new Type(dto.getTypeFunctionId()));
         function.setName(dto.getName());
         function.setStartsAt(dto.getStartsAt());
         function.setEndsAt(dto.getEndsAt());
@@ -388,7 +389,6 @@ public class FunctionService implements IFunctionService{
                 }
             }
         });
-
 
         //=========================
 

@@ -4,6 +4,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
@@ -30,6 +31,7 @@ public abstract class FacultativeMapper
     @Autowired protected CessionnaireRepository cesRepo;
     @Autowired protected TypeRepo typeRepo;
     @Autowired protected IServiceCalculsComptables comptaAffaireService;
+    @Autowired protected AffaireRepository affRepo;
 
     @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
@@ -123,7 +125,7 @@ public abstract class FacultativeMapper
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         Long cesId = repRepo.getCesIdByRepId(plaId);
-        Long affId = repRepo.getAffIdByRepId(plaId);
+        Long affId = affRepo.getAffIdByRepId(plaId);
 
         //Affaire aff = affRepo.
         Cessionnaire ces = cesRepo.findById(cesId).orElseThrow(()->new AppException("Cessionnaire introuvable"));

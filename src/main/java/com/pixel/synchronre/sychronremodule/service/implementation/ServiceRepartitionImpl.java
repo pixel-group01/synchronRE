@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.controller.service.PlacementDocUploader;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
+import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
@@ -11,6 +12,7 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
@@ -59,6 +61,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private String synchronreEmail;
     private final IServiceInterlocuteur intService;
     private final IserviceCalculRepartition calculRepartitionService;
+    private final UserRepo userRepo;
+    private final EmailSenderService emailSenderService;
+    private final CessionnaireRepository cesRepo;
 
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
@@ -144,15 +149,18 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override @Transactional
     public void transmettrePlacementPourValidation(Long plaId) throws UnknownHostException {
-        Long affId = repRepo.getAffIdByRepId(plaId);
-        if(affId == null) throw new AppException("Affaire introuvable");
-        String affStatutCrea = affRepo.getAffStatutCreation(affId);
+        Affaire aff = affRepo.getAffaireByRepId(plaId);
+        if(aff == null) throw new AppException("Affaire introuvable");
+        String affStatutCrea = aff.getAffStatutCreation();
         if(affStatutCrea != null && affStatutCrea.equals("NON_REALISEE"))  throw new AppException("Impossible de transmettre ce placement à la validation car l'affaire est non réalisée");
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(EN_ATTENTE_DE_VALIDATION.staCode));
         repRepo.save(placement);
         mvtService.createMvtPlacement(new MvtReq(RepartitionActions.TRANSMETTRE_PLACEMENT_POUR_VALIDATION, plaId, EN_ATTENTE_DE_VALIDATION.staCode, null));
         logService.saveLog(RepartitionActions.TRANSMETTRE_PLACEMENT_POUR_VALIDATION);
+        String cesNom = cesRepo.getCesNomByPlaId(plaId);
+        userRepo.getUserByTypeFunction("TYF_VAL").forEach(u->emailSenderService.envoyerMailPourPlacementEnAttenteDeValidation(u.getEmail(), u.getFirstName(), aff.getAffCode(), cesNom, placement.getRepCapital(), aff.getDevise() == null ? null : aff.getDevise().getDevCode()));
+
     }
 
     @Override @Transactional
@@ -176,15 +184,19 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override @Transactional
     public void retournerPlacement(Long plaId, String motif) throws UnknownHostException {
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez saisir le motif de retour");
+        Affaire aff = affRepo.getAffaireByRepId(plaId); if(aff == null) throw new AppException("Affaire introuvable");
+        String cesNom = cesRepo.getCesNomByPlaId(plaId);
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(RETOURNE.staCode));
         mvtService.createMvtPlacement(new MvtReq(RepartitionActions.RETOURNER_PLACEMENT, plaId, RETOURNE.staCode, motif));
         logService.saveLog(RepartitionActions.RETOURNER_PLACEMENT);
+
+        userRepo.getUserByTypeFunction("TYF_SOUS").forEach(u->emailSenderService.envoyerMailPourPlacementRetourne(u.getEmail(), u.getFirstName(), aff.getAffCode(), cesNom, placement.getRepCapital(), aff.getDevise() == null ? null : aff.getDevise().getDevCode(), motif));
     }
 
     @Override @Transactional
     public void validerPlacement(Long plaId) throws UnknownHostException {
-        Long affId = repRepo.getAffIdByRepId(plaId);
+        Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
         if(affStatutCrea != null && affStatutCrea.equals("NON_REALISEE"))  throw new AppException("Impossible de valider ce placement car l'affaire est non réalisée");
@@ -193,6 +205,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repRepo.save(placement);
         mvtService.createMvtPlacement(new MvtReq(RepartitionActions.VALIDER_PLACEMENT, plaId, VALIDE.staCode, null));
         logService.saveLog(RepartitionActions.VALIDER_PLACEMENT);
+        Affaire aff = affRepo.getAffaireByRepId(plaId); if(aff == null) throw new AppException("Affaire introuvable");
+        String cesNom = cesRepo.getCesNomByPlaId(plaId);
+        userRepo.getUserByTypeFunction("TYF_SOUS").forEach(u->emailSenderService.envoyerMailPourEnvoieDeNoteDeCession(u.getEmail(), u.getFirstName(), aff.getAffCode(), cesNom, placement.getRepCapital(), aff.getDevise() == null ? null : aff.getDevise().getDevCode()));
     }
 
     @Override @Transactional
@@ -235,7 +250,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override @Transactional
     public void refuserPlacement(Long plaId, String motif) throws UnknownHostException {
-        Long affId = repRepo.getAffIdByRepId(plaId);
+        Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
         if(affStatutCrea != null && affStatutCrea.equals("NON_REALISEE"))  throw new AppException("Impossible de refuser ce placement car l'affaire est non réalisée");
@@ -258,7 +273,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
     @Override @Transactional
     public void accepterPlacement(Long plaId) throws UnknownHostException {
-        Long affId = repRepo.getAffIdByRepId(plaId);
+        Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
         if(affStatutCrea != null && affStatutCrea.equals("NON_REALISEE"))  throw new AppException("Impossible d'accepter ce placement car l'affaire est non réalisée");
