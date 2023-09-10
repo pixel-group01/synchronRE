@@ -50,7 +50,7 @@ public class AdminLoader implements Loader
         Type tyfVal = typeRepo.findByUniqueCode("TYF_VAL").orElseThrow(()->new AppException("Type fonction introuvable : TYF_VAL"));
         Type tyfCompta = typeRepo.findByUniqueCode("TYF_COMPTA").orElseThrow(()->new AppException("Type fonction introuvable : TYF_COMPTA"));
         Type tyfDev = typeRepo.findByUniqueCode("TYF_DEV").orElseThrow(()->new AppException("Type fonction introuvable : TYF_DEV"));
-        Type tyfSaiCed = typeRepo.findByUniqueCode("TYF_DEV").orElseThrow(()->new AppException("Type fonction introuvable : TYF_SAI_CED"));
+        Type tyfSaiCed = typeRepo.findByUniqueCode("TYF_SAI_CED").orElseThrow(()->new AppException("Type fonction introuvable : TYF_SAI_CED"));
 
         //Nelson RE
         BigDecimal FIVE = new BigDecimal(5);
