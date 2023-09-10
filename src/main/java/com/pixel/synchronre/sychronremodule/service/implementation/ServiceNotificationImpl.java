@@ -171,12 +171,3 @@ public class ServiceNotificationImpl implements IServiceNotification
         return body;
     }
 }
-/*
-'Opérateur de saisie cédante', ==> 'TYF_SAI_CED'
-'Souscripteur'==> 'TYF_SOUS'
-'Validateur'==> 'TYF_VAL'
-'Comptable'==> 'TYF_COMPTA'
- 'Administrateur fonctionnel' ==> 'TYF_ADM_FONC'
-'Administrateur technique' ==> 'TYF_ADM_TECH'
-'Developpeur' ==> 'TYF_DEV'
- */
