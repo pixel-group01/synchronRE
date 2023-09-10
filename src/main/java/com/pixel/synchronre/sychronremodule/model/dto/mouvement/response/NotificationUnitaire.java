@@ -15,4 +15,5 @@ public class NotificationUnitaire
     private boolean forCourtier;
     private boolean forCedante;
     private List<String> prvCodes;
+    private List<String> tyfCodes;
 }

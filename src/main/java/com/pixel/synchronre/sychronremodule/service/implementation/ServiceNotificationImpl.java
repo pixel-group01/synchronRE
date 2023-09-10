@@ -155,19 +155,28 @@ public class ServiceNotificationImpl implements IServiceNotification
     {
         List<NotificationUnitaire> notificationUnitaires =new ArrayList<>();
         //notificationUnitaires.add(new NotificationUnitaire("total", this.countTotalNotifications(), true, true,Collections.emptyList()));
-        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de placement", this.countAffairesEnAttenteDePlacement(), true, false, Arrays.asList("CRT-PLA", "RET-FAC-CED")));
-        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) retournées par le souscripteur", this.countAffairesRetourneesALaCedante(), false, true, Collections.emptyList()));
-        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de règlement", this.countAffairesEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-FAC", "CRT-REV-FAC")));
-        notificationUnitaires.add(new NotificationUnitaire("Placement(s) en attente de validation", this.countPlacementsEnAttenteDeValidation(), true, false, Arrays.asList("VAL-PLA", "RET-PLA")));
-        notificationUnitaires.add(new NotificationUnitaire("Placement(s) retournés par le validateur", this.countPlacementRetourneAuSouscripteur(), true, false, Arrays.asList("ACPT-PLA", "ANL-PLA", "REFU-PLA","TRANS-PLA", "DLT-PLA")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) transmis par une cedante", this.countSinistreTransmisAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le souscripteur", this.countSinistreRetournesALaCedante(), false, true, Collections.emptyList()));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le validateur", this.countSinistreRetournesAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL", "RET-SIN-CED")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de validation", this.countSinistreEnAttenteDeValidation(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de règlement", this.countSinistreEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retourné par le comptable", this.countSinistreRetourneAuValidateur(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS")));
-        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en cours de règlement", this.countSinistreEnCoursDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN")));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de placement", this.countAffairesEnAttenteDePlacement(), true, false, Arrays.asList("TYF_DEV", "RET-FAC-CED"), Arrays.asList("TYF_DEV", "TYF_SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) retournées par le souscripteur", this.countAffairesRetourneesALaCedante(), false, true, Collections.emptyList(), Arrays.asList("TYF_DEV", "TYF_SAI_CED")));
+        notificationUnitaires.add(new NotificationUnitaire("Affaire(s) en attente de règlement", this.countAffairesEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-FAC", "CRT-REV-FAC"), Arrays.asList("TYF_DEV", "TYF_COMPTA")));
+        notificationUnitaires.add(new NotificationUnitaire("Placement(s) en attente de validation", this.countPlacementsEnAttenteDeValidation(), true, false, Arrays.asList("VAL-PLA", "RET-PLA"), Arrays.asList("TYF_DEV", "TYF_VAL")));
+        notificationUnitaires.add(new NotificationUnitaire("Placement(s) retournés par le validateur", this.countPlacementRetourneAuSouscripteur(), true, false, Arrays.asList("ACPT-PLA", "ANL-PLA", "REFU-PLA","TRANS-PLA", "DLT-PLA"), Arrays.asList("TYF_DEV", "TYF_SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) transmis par une cedante", this.countSinistreTransmisAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL"), Arrays.asList("TYF_DEV", "TYF_SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le souscripteur", this.countSinistreRetournesALaCedante(), false, true, Collections.emptyList(), Arrays.asList("TYF_DEV", "TYF_SAI_CED")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retournés par le validateur", this.countSinistreRetournesAuSouscripteur(), true, false, Arrays.asList("TRANS-SIN-VAL", "RET-SIN-CED"), Arrays.asList("TYF_DEV", "TYF_SOUS")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de validation", this.countSinistreEnAttenteDeValidation(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS"), Arrays.asList("TYF_DEV", "TYF_VAL")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en attente de règlement", this.countSinistreEnAttenteDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN"), Arrays.asList("TYF_DEV", "TYF_COMPTA")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) retourné par le comptable", this.countSinistreRetourneAuValidateur(), true, false, Arrays.asList("VAL-SIN", "RET-SIN-SOUS"), Arrays.asList("TYF_DEV", "TYF_VAL")));
+        notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en cours de règlement", this.countSinistreEnCoursDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN"), Arrays.asList("TYF_DEV", "TYF_COMPTA")));
         NotificationBody body = new NotificationBody(this.countTotalNotifications(), notificationUnitaires);
         return body;
     }
 }
+/*
+'Opérateur de saisie cédante', ==> 'TYF_SAI_CED'
+'Souscripteur'==> 'TYF_SOUS'
+'Validateur'==> 'TYF_VAL'
+'Comptable'==> 'TYF_COMPTA'
+ 'Administrateur fonctionnel' ==> 'TYF_ADM_FONC'
+'Administrateur technique' ==> 'TYF_ADM_TECH'
+'Developpeur' ==> 'TYF_DEV'
+ */
