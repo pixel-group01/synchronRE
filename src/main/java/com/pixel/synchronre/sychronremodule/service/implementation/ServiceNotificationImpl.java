@@ -169,5 +169,5 @@ public class ServiceNotificationImpl implements IServiceNotification
         notificationUnitaires.add(new NotificationUnitaire("Sinistre(s) en cours de règlement", this.countSinistreEnCoursDeReglement(), true, false, Arrays.asList("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN"), Arrays.asList("TYF_DEV", "TYF_COMPTA")));
         NotificationBody body = new NotificationBody(this.countTotalNotifications(), notificationUnitaires);
         return body;
-    }//Rien
+    }
 }

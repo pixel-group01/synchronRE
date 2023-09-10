@@ -21,4 +21,4 @@ public class NotificationsResp
     private long sinistreEnAttenteDeReglement;
     private long sinistreRetourneAuValidateur;
     private long sinistreEnCoursDeReglement;
-} //Rien
+}
