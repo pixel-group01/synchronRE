@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
@@ -57,6 +58,8 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private String synchronreEmail;
     private final IserviceExercie exeService;
     private final CedRepo cedRepo;
+    private final UserRepo userRepo;
+    private final EmailSenderService emailSenderService;
 
     private void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
     {
@@ -127,12 +130,15 @@ public class ServiceSinistreImpl implements IServiceSinistre
          boolean isCourtier = jwtService.UserIsCourtier() ;
          String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
          mvtService.createMvtSinistre(new MvtReq(SinistreActions.TRANSMETTRE_AU_SOUSCRIPTEUR, sinId, newStatut, null));
+        Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
+        userRepo.getUserByTypeFunction("TYF_SOUS").forEach(u->emailSenderService.envoyerEmailTransmissionSinistreAuSouscripteur(u.getEmail(), u.getFirstName(), affaire.getCedante().getCedNomFiliale()));
          Page<SinistreDetailsResp> sinPages = this.searchSinFacSaisiByCedante("", PageRequest.of(0, returnPageSize));
          return sinPages;
      }
     @Override
     public  Page<SinistreDetailsResp> transmettreSinistreAuValidateur(Long sinId, int returnPageSize) throws UnknownHostException {
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.TRANSMETTRE_AU_VALIDATEUR, sinId, EN_ATTENTE_DE_VALIDATION.staCode, null));
+        userRepo.getUserByTypeFunction("TYF_VAL").forEach(u->emailSenderService.envoyerEmailSinistreEnAttenteDeValidationAuValidateur(u.getEmail(), u.getFirstName()));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
@@ -141,6 +147,9 @@ public class ServiceSinistreImpl implements IServiceSinistre
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_A_CEDANTE, dto.getObjectId(), RETOURNE.staCode, motif));
+        String sinCode = sinRepo.getSinCode(dto.getObjectId());
+        Long cedId = cedRepo.getCedIdByAffId(dto.getObjectId());
+        userRepo.getUserByTypeFunctionAndCedId("TYF_SAI_CED", cedId).forEach(u->emailSenderService.envoyerEmailRetourSinistreALaCedante(u.getEmail(), u.getFirstName(), sinCode, dto.getMvtObservation()));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacTransmiByCedante("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
@@ -149,6 +158,9 @@ public class ServiceSinistreImpl implements IServiceSinistre
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_AU_SOUSCRIPTEUR, dto.getObjectId(), RETOURNER_VALIDATEUR.staCode, motif));
+        String sinCode = sinRepo.getSinCode(dto.getObjectId());
+        Long cedId = cedRepo.getCedIdByAffId(dto.getObjectId());
+        userRepo.getUserByTypeFunction("TYF_SOUS").forEach(u->emailSenderService.envoyerEmailRetourSinistreAuSouscripteur(u.getEmail(), u.getFirstName(), sinCode, dto.getMvtObservation()));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
@@ -157,17 +169,19 @@ public class ServiceSinistreImpl implements IServiceSinistre
         String motif = dto.getMvtObservation();
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez préciser le motif de retour");
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.RETOURNER_AU_VALIDATEUR, dto.getObjectId(), RETOURNER_COMPTABLE.staCode, motif));
+        String sinCode = sinRepo.getSinCode(dto.getObjectId());
+        Long cedId = cedRepo.getCedIdByAffId(dto.getObjectId());
+        userRepo.getUserByTypeFunctionAndCedId("TYF_VAL", cedId).forEach(u->emailSenderService.envoyerEmailRetourSinistreAuValidateur(u.getEmail(), u.getFirstName(), sinCode, dto.getMvtObservation()));
         Page<SinistreDetailsResp> sinPages = this.searchSinFacEnReglement("", PageRequest.of(0, returnPageSize));
         return sinPages;
     }
     @Override
     public  Page<SinistreDetailsResp> valider(Long sinId, int returnPageSize) throws Exception
     {
-        //mvtService.createMvtSinistre(new MvtReq(sinId, VALIDE.staCode, null));
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.VALIDER_SINISTRE, sinId, EN_ATTENTE_DE_PAIEMENT.staCode, null));
+        userRepo.getUserByTypeFunction("TYF_COMPTA").forEach(u->emailSenderService.envoyerEmailSinistreEnAttenteDePaiementAuComptable(u.getEmail(), u.getFirstName()));
+        //envoyerNoteCessionSinistreEtNoteDebit(sinId);
         Page<SinistreDetailsResp> sinPages = this.searchSinFacAttenteValidation("", PageRequest.of(0, returnPageSize));
-
-        envoyerNoteCessionSinistreEtNoteDebit(sinId);
         return sinPages;
     }
 

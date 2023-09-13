@@ -115,4 +115,106 @@ public class EmailBodyBuilderImpl implements EmailBodyBuilder
         emailBody.put("corps", corps);
         return emailBody;
     }
+
+    @Override
+    public Map<String, String> buildTransmissionSinistreBody(String nomDestinataire, String nomCedante) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Nouvelle declaration de sinistre de " + nomCedante;
+        String corps = String.format(
+                "Vous venez de recevoir une nouvelle declaration de sinistre de la part de %s.<br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                nomCedante,
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
+
+    @Override
+    public Map<String, String> buildRetourSinistreBody(String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Retour de votre sinistre N°" + sinCode;
+        String corps = String.format(
+                "Votre sinistre N°%s a été retourné par Nelson-RE pour le(s) motif(s) suivant(s) : <br/><br/>"
+                        +"<b>%s</b><br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                sinCode,
+                motif,
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
+
+
+
+    @Override
+    public Map<String, String> buildSinistreEnAttenteDeValidationBody(String nomDestinataire) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Nouveau sinistre en attente de validation ";
+        String corps = String.format(
+                "Vous venez de recevoir un nouveau sinistre en attente de validation.<br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
+
+    @Override
+    public Map<String, String> buildRetourSinistreAuSouscripteurBody(String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Retour du sinistre N°" + sinCode;
+        String corps = String.format(
+                "Le sinistre N°%s a été retourné par le validateur pour le(s) motif(s) suivant(s) : <br/><br/>"
+                        +"<b>%s</b><br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                sinCode,
+                motif,
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
+
+    @Override
+    public Map<String, String> buildSinistreEnAttenteDePaiementBody(String nomDestinataire) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Nouveau sinistre en attente de paiement ";
+        String corps = String.format(
+                "Vous venez de recevoir un nouveau sinistre en attente de paiement.<br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
+
+    @Override
+    public Map<String, String> buildRetourSinistreAuValidateurBody(String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = new HashMap<>();
+        String objet = "Retour du sinistre N°" + sinCode;
+        String corps = String.format(
+                "Le sinistre N°%s a été retourné par le comptable pour le(s) motif(s) suivant(s) : <br/><br/>"
+                        +"<b>%s</b><br/><br/>"
+                        + "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour traiter la requête.<br/><br/>"
+                        + "Cordialement.",
+                sinCode,
+                motif,
+                frontAddress + "/Synchronre-Web#/authentication/signin"
+        );
+        emailBody.put("objet", objet);
+        emailBody.put("corps", corps);
+        return emailBody;
+    }
 }

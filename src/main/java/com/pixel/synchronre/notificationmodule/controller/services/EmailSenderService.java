@@ -30,6 +30,13 @@ public interface EmailSenderService
     void envoyerEmailTransmissionAffaireAuSouscripteur( String receiverMail, String nomDestinataire, String nomCedante);
     void envoyerEmailRetourAffaireALaCedante( String receiverMail, String nomDestinataire, String affCode, String motif) ;
     void envoyerEmailTransmissionAffaireALaCompta( String receiverMail, String nomDestinataire);
+    //Sinistre
+    void envoyerEmailTransmissionSinistreAuSouscripteur( String receiverMail, String nomDestinataire, String nomCedante);
+    void envoyerEmailRetourSinistreALaCedante( String receiverMail, String nomDestinataire, String sinCode, String motif) ;
+    void envoyerEmailSinistreEnAttenteDeValidationAuValidateur( String receiverMail, String nomDestinataire);
+    void envoyerEmailRetourSinistreAuSouscripteur( String receiverMail, String nomDestinataire, String sinCode, String motif) ;
+    void envoyerEmailSinistreEnAttenteDePaiementAuComptable( String receiverMail, String nomDestinataire);
+    void envoyerEmailRetourSinistreAuValidateur( String receiverMail, String nomDestinataire, String sinCode, String motif) ;
 
     void envoyerMailPourPlacementEnAttenteDeValidation(String receiverMail, String nomDestinataire, String affCode, String cesNom, BigDecimal repCapital, String devise);
 

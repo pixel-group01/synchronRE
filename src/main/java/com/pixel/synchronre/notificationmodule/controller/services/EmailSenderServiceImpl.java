@@ -206,6 +206,73 @@ public class EmailSenderServiceImpl implements EmailSenderService
     }
 
     @Override
+    public void envoyerEmailTransmissionSinistreAuSouscripteur(String receiverMail, String nomDestinataire, String nomCedante) {
+        Map<String, String> emailBody = emailBodyBuilder.buildTransmissionSinistreBody(nomDestinataire, nomCedante);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailRetourSinistreALaCedante(String receiverMail, String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = emailBodyBuilder.buildRetourSinistreBody(nomDestinataire, sinCode, motif);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailSinistreEnAttenteDeValidationAuValidateur(String receiverMail, String nomDestinataire) {
+        Map<String, String> emailBody = emailBodyBuilder.buildSinistreEnAttenteDeValidationBody(nomDestinataire);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailRetourSinistreAuSouscripteur(String receiverMail, String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = emailBodyBuilder.buildRetourSinistreAuSouscripteurBody(nomDestinataire, sinCode, motif);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void envoyerEmailSinistreEnAttenteDePaiementAuComptable(String receiverMail, String nomDestinataire) {
+        Map<String, String> emailBody = emailBodyBuilder.buildSinistreEnAttenteDeValidationBody(nomDestinataire);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
+    public void envoyerEmailRetourSinistreAuValidateur(String receiverMail, String nomDestinataire, String sinCode, String motif) {
+        Map<String, String> emailBody = emailBodyBuilder.buildRetourSinistreAuSouscripteurBody(nomDestinataire, sinCode, motif);
+        String message = this.htmlEmailBuilder.buildGenericEmail(emailBody.get("objet"), nomDestinataire,emailBody.get("corps"));
+        try {
+            this.sendEmail(emailServiceConfig.getSenderEmail(), receiverMail, emailBody.get("objet"), message);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void envoyerMailPourPlacementEnAttenteDeValidation(String receiverMail, String nomDestinataire, String affCode, String cesNom, BigDecimal repCapital, String devise)
     {
         Map<String, String> emailBody = emailBodyBuilder.buildPlacementEnAttenteDeValidationBody(nomDestinataire, affCode, cesNom, repCapital, devise);
