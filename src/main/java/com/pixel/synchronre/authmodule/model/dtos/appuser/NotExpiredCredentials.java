@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {NotExpiredCredentials.UserHasAnyFunctionValidatorOnlogin.class})
+@Constraint(validatedBy = {NotExpiredCredentials.NotExpiredCredentialsValidatorOnlogin.class})
 @Documented
 public @interface NotExpiredCredentials
 {
@@ -25,7 +25,7 @@ public @interface NotExpiredCredentials
 
     @Component
     @RequiredArgsConstructor
-    class UserHasAnyFunctionValidatorOnlogin implements ConstraintValidator<NotExpiredCredentials, LoginDTO>
+    class NotExpiredCredentialsValidatorOnlogin implements ConstraintValidator<NotExpiredCredentials, LoginDTO>
     {
         private final UserRepo userRepo;
         @Override
