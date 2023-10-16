@@ -38,7 +38,7 @@ public class InterlocuteurController
     }
 
     @GetMapping(path = "/list/{cesId}")
-    public Page<InterlocuteurListResp> searchInterlocuteur(@RequestParam(defaultValue = "") String key, @PathVariable Long cesId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "100000") int size) throws UnknownHostException {
+    public Page<InterlocuteurListResp> searchInterlocuteur(@RequestParam(defaultValue = "") String key, @PathVariable Long cesId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) throws UnknownHostException {
         return interlocuteurService.searchInterlocuteur(key, cesId, PageRequest.of(page, size));
     }
 

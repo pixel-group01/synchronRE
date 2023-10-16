@@ -36,7 +36,7 @@ public class BanqueController {
 
 
     @GetMapping(path = "/list")
-    public Page<BanqueListResp> searchBanques(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<BanqueListResp> searchBanques(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) throws UnknownHostException {
         return banqueService.searchBanque(key, PageRequest.of(page, size));
     }
 
