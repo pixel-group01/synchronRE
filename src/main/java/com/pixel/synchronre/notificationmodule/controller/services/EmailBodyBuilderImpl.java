@@ -71,10 +71,10 @@ public class EmailBodyBuilderImpl implements EmailBodyBuilder
         String objet = "Nouvelle proposition de placement en attente de validation";
         String corps = String.format(
                         "Vous venez de recevoir une nouvelle proposition de placement en attente de validation.<br/>" +
-                        "Il s'agit d'un placement sur l'affaire N°%s, auprès de %s, pour un montant de %d %s<br/><br/>"+
+                        "Il s'agit d'un placement sur l'affaire N°%s, auprès de %s, pour un montant de %f %s<br/><br/>"+
                         "Veuillez acceder à la plateforme <a href=\"%s\">sychronRE</a> pour le traitement de ce placement.<br/><br/>" +
                         "Cordialement.",
-                 affCode, cesNom, repCapital, devise,
+                 affCode, cesNom, repCapital == null ? 0 : repCapital.doubleValue(), devise,
                 frontAddress + "/Synchronre-Web#/authentication/signin"
         );
         emailBody.put("objet", objet);
@@ -87,11 +87,11 @@ public class EmailBodyBuilderImpl implements EmailBodyBuilder
         Map<String, String> emailBody = new HashMap<>();
         String objet = "Proposition de placement retournée par le validateur";
         String corps = String.format(
-                       "La proposition de placement sur l'affaire N°%s a auprès de %s, d'un montant de %d %s a été retournée par le validateur pour le(s) motif(s) suivant(s):<br/>" +
+                       "La proposition de placement sur l'affaire N°%s a auprès de %s, d'un montant de %f %s a été retournée par le validateur pour le(s) motif(s) suivant(s):<br/>" +
                         "<b>%s</b><br/><br/>"+
                         "Veuillez acceder à la plateforme <a href=\"%s\">sychronRE</a> pour d'éventuel(s) traitements sur ce placement.<br/><br/>" +
                         "Cordialement.",
-                 affCode, cesNom, repCapital, devise, motif,
+                 affCode, cesNom, repCapital == null ? 0 : repCapital.doubleValue(), devise, motif,
                 frontAddress + "/Synchronre-Web#/authentication/signin"
         );
         emailBody.put("objet", objet);
@@ -105,10 +105,10 @@ public class EmailBodyBuilderImpl implements EmailBodyBuilder
         Map<String, String> emailBody = new HashMap<>();
         String objet = "Proposition de placement validée";
         String corps = String.format(
-                       "La proposition de placement sur l'affaire N°%s a auprès de %s, d'un montant de %d %s a été validée.<br/>" +
+                       "La proposition de placement sur l'affaire N°%s a auprès de %s, d'un montant de %f %s a été validée.<br/>" +
                         "Veuillez accéder à la plateforme <a href=\"%s\">sychronRE</a> pour l'envoie de la note de cession.<br/><br/>" +
                         "Cordialement.",
-                 affCode, cesNom, repCapital, devise,
+                 affCode, cesNom, repCapital == null ? 0 : repCapital.doubleValue(), devise,
                 frontAddress + "/Synchronre-Web#/authentication/signin"
         );
         emailBody.put("objet", objet);
