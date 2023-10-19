@@ -264,15 +264,14 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal smplCi = aff.getFacSmpLci();
         BigDecimal mtPartCedante = aff.getPartCedante();
-        BigDecimal repCapital = dto.getRepCapital() == null  ? ZERO : dto.getRepCapital();
+        boolean repCapitalIsNull = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0;
+        dto.setRepCapital(repCapitalIsNull ? ZERO : dto.getRepCapital());
+        BigDecimal repCapital = dto.getRepCapital();
         if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
         mtPartCedante = mtPartCedante == null || mtPartCedante.compareTo(ZERO) == 0 ? smplCi : mtPartCedante;
         BigDecimal repTaux = repCapital.multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
         BigDecimal repPrime = aff.getFacPrime() == null  ? ZERO : aff.getFacPrime().multiply(repTaux);
 
-        if(dto.getRepId() == null && (dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0))
-            return dto;
-        Long repId = dto.getRepId();
         List<Repartition> traiteReps = repRepo.findByAffaireAndTypeRep(dto.getAffId(), typeTraite);
 
         if(traiteReps.size() > 1) throw new AppException("Plusieurs traités du même type sur la même affaire");
@@ -309,9 +308,9 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
                     };
         }
         traiteRep.setRepStatut(true);
-        traiteRep.setRepCapital(dto.getRepCapital());
+        traiteRep.setRepCapital(repCapital);
         traiteRep.setRepTaux(repTaux);
-        traiteRep.setRepCapitalLettre(ConvertMontant.numberToLetter(dto.getRepCapital()));
+        traiteRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCapital));
 
         traiteRep.setRepPrime(repPrime);
         traiteRep = repRepo.save(traiteRep);

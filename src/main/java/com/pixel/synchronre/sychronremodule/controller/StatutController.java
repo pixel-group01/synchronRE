@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
 
-
 @RestController @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/statuts")
 @RequiredArgsConstructor
@@ -34,5 +33,4 @@ public class StatutController {
     public Page<StatutListResp> searchStatuts(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
         return statutService.searchStatut(key, PageRequest.of(page, size));
     }
-
 }
