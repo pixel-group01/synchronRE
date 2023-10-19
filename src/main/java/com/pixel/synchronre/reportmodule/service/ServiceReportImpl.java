@@ -127,16 +127,16 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateNoteDebitFac(Long affId) throws Exception
     {
-        Repartition repart = repRepo.repartFindByAffaire(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        Affaire aff = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
 
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", repart.getAffaire().getAffId());
-        params.put("aff_assure", repart.getAffaire().getAffAssure());
-        params.put("fac_numero_police", repart.getAffaire().getFacNumeroPolice());
+        params.put("aff_id", aff.getAffId());
+        params.put("aff_assure", aff.getAffAssure());
+        params.put("fac_numero_police", aff.getFacNumeroPolice());
         params.put("param_image", this.getImagesPath());
 
         //Affichage du cachet en fonction d'une expression dans l'etat
-        if (repart.getRepStaCode().getStaCode().equals("VAL") || repart.getRepStaCode().getStaCode().equals("MAIL")){
+        if (aff.getStatut().getStaCode().equals("VAL") ||aff.getStatut().getStaCode().equals("MAIL")){
             params.put("param_visible", "true");
         }else{
             params.put("param_visible", "false");
@@ -223,6 +223,6 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception {
         InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipal(plaId);
-        return this.generateNoteCessionFac(plaId, interlocuteur.getCesNom());
+        return this.generateNoteCessionFac(plaId, interlocuteur == null ? "Non spécifié" : interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
     }
 }

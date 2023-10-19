@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T19:00:18 -->
+<!-- 2023-10-19T16:38:59 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -148,7 +148,6 @@ WHERE affaire.couverture_id = couverture.cou_id
     repartition.rep_tauxcom_court,
     repartition.typ_id,
     repartition.cessionnaire_id,
-    repartition.rep_interlocuteur,
     repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
     repartition.rep_tauxcom_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
     repartition.rep_tauxcom_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
@@ -185,7 +184,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<field name="rep_tauxcom_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
 		<field name="cessionnaire_id" class="java.lang.Long"/>
-		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="prime_cedee" class="java.math.BigDecimal"/>
 		<field name="com_cedante" class="java.math.BigDecimal"/>
 		<field name="com_courtage" class="java.math.BigDecimal"/>
@@ -228,7 +226,6 @@ WHERE affaire.couverture_id = couverture.cou_id
     repartition.rep_taux_com_ced,
     repartition.rep_taux_com_court,
     repartition.typ_id,
-    repartition.rep_interlocuteur,
     affaire.aff_activite,
     affaire.aff_assure,
     affaire.aff_capital_initial,
@@ -257,7 +254,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
-		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="aff_activite" class="java.lang.String"/>
 		<field name="aff_assure" class="java.lang.String"/>
 		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
@@ -284,7 +280,6 @@ WHERE affaire.couverture_id = couverture.cou_id
        repartition.rep_taux_com_court,
        repartition.typ_id,
        repartition.cessionnaire_id,
-       repartition.rep_interlocuteur,
        repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
        regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
        repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
@@ -321,7 +316,7 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = 3
   AND repartition.aff_id = $P{aff_id}
-GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repartition.rep_sous_commission, repartition.rep_taux_com_ced, repartition.rep_taux_com_court, repartition.typ_id, repartition.cessionnaire_id, repartition.rep_interlocuteur, repartition.rep_taux * affaire.fac_prime / 100::numeric, regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), cessionnaire.ces_nom, affaire.aff_activite, affaire.aff_assure, affaire.aff_capital_initial, affaire.aff_code, affaire.aff_date_echeance, affaire.aff_date_effet, affaire.fac_prime, affaire.fac_smp_lci, cedante.ced_nom_filiale, couverture.cou_libelle;]]>
+GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repartition.rep_sous_commission, repartition.rep_taux_com_ced, repartition.rep_taux_com_court, repartition.typ_id, repartition.cessionnaire_id, repartition.rep_taux * affaire.fac_prime / 100::numeric, regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), cessionnaire.ces_nom, affaire.aff_activite, affaire.aff_assure, affaire.aff_capital_initial, affaire.aff_code, affaire.aff_date_echeance, affaire.aff_date_effet, affaire.fac_prime, affaire.fac_smp_lci, cedante.ced_nom_filiale, couverture.cou_libelle;]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
@@ -331,7 +326,6 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
 		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
 		<field name="cessionnaire_id" class="java.lang.Long"/>
-		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="prime_cedee" class="java.math.BigDecimal"/>
 		<field name="prime_cedee1" class="java.lang.String"/>
 		<field name="com_cedante" class="java.math.BigDecimal"/>

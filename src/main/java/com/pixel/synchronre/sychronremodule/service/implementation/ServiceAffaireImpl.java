@@ -91,7 +91,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     public boolean senNoteDebitFac(Long affId) throws Exception {
         //Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Cedante ced = cedRepo.getCedanteByAffId(affId);
-        mailSenderService.sendNoteDebitFacEmail(synchronreEmail, ced.getCedEmail(),ced.getCedSigleFiliale(),affId);
+        mailSenderService.sendNoteDebitFacEmail(synchronreEmail, ced.getCedEmail(),affId);
         return true;
     }
 

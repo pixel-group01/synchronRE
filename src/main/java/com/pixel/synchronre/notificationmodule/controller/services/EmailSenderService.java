@@ -18,8 +18,8 @@ public interface EmailSenderService
     void sendAccountActivationEmail(String receiverMail, String recipientUsername, String activationLink) throws IllegalAccessException;
 
     void sendNoteCessionFacEmail(String senderMail, String receiverMail, String interlocName, String affCode, Long plaId, String mailObject) throws Exception;
-    void sendNoteDebitFacEmail(String senderMail, String receiverMail, String interlocName,Long affId) throws Exception;
-    void sendNoteCreditFacEmail(String senderMail, String receiverMail, String interlocName,Long affId, Long cesId) throws Exception;
+    void sendNoteDebitFacEmail(String senderMail, String receiverMail, Long affId) throws Exception;
+    void sendNoteCreditFacEmail(String senderMail, String receiverMail, Long affId, Long cesId) throws Exception;
 
     void sendNoteCessionSinistreEmail(String synchronreEmail, String affCode, Long sinId, Long cesId, String note_de_cession_sinistre) throws Exception;
     void sendNoteDebitSinistreEmail(String senderMail, String receiverMail, String interlocName,Long affId) throws Exception;

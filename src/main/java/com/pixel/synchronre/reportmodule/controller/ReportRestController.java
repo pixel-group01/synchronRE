@@ -43,7 +43,6 @@ public class ReportRestController
     @GetMapping("/note-de-debit-fac/{affId}")
     public Base64FileDto generateNoteDebit(@PathVariable Long affId) throws Exception
     {
-
         byte[] reportBytes = jrService.generateNoteDebitFac(affId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
