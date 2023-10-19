@@ -116,7 +116,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
         this.sendEmailWithAttachments( senderMail,  receiverMail,  mailObject,  message, Collections.singletonList(attachment));
     }
     @Override
-    public void sendNoteDebitFacEmail(String senderMail, String receiverMail, String interlocName, Long affId) throws Exception {
+    public void sendNoteDebitFacEmail(String senderMail, String receiverMail, Long affId) throws Exception {
         String affCode = affRepo.getAffCode(affId);
         String message = this.htmlEmailBuilder.buildNoteDebitFacEmail(receiverMail, affCode);
         byte[] report = reportService.generateNoteDebitFac(affId);
@@ -125,7 +125,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
     }
 
     @Override
-    public void sendNoteCreditFacEmail(String senderMail, String receiverMail, String interlocName, Long affId, Long cesId) throws Exception {
+    public void sendNoteCreditFacEmail(String senderMail, String receiverMail, Long affId, Long cesId) throws Exception {
         String affCode = affRepo.getAffCode(affId);
         String message = this.htmlEmailBuilder.buildNoteDebitFacEmail(receiverMail, affCode);
         byte[] report = reportService.generateNoteCreditFac(affId, cesId);
