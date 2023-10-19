@@ -223,6 +223,6 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception {
         InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipal(plaId);
-        return this.generateNoteCessionFac(plaId, interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
+        return this.generateNoteCessionFac(plaId, interlocuteur == null ? "Non spécifié" : interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
     }
 }
