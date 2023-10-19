@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T19:00:18 -->
+<!-- 2023-10-19T15:54:12 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -148,7 +148,6 @@ WHERE affaire.couverture_id = couverture.cou_id
     repartition.rep_tauxcom_court,
     repartition.typ_id,
     repartition.cessionnaire_id,
-    repartition.rep_interlocuteur,
     repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
     repartition.rep_tauxcom_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
     repartition.rep_tauxcom_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
@@ -228,7 +227,6 @@ WHERE affaire.couverture_id = couverture.cou_id
     repartition.rep_taux_com_ced,
     repartition.rep_taux_com_court,
     repartition.typ_id,
-    repartition.rep_interlocuteur,
     affaire.aff_activite,
     affaire.aff_assure,
     affaire.aff_capital_initial,
@@ -284,7 +282,6 @@ WHERE affaire.couverture_id = couverture.cou_id
        repartition.rep_taux_com_court,
        repartition.typ_id,
        repartition.cessionnaire_id,
-       repartition.rep_interlocuteur,
        repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
        regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
        repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
