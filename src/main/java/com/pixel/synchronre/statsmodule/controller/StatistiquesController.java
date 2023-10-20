@@ -1,8 +1,8 @@
-package com.pixel.synchronre.sychronremodule.controller;
+package com.pixel.synchronre.statsmodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.AffaireStats;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.CritereStat;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatistiques;
+import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
+import com.pixel.synchronre.statsmodule.services.IServiceStatistiques;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

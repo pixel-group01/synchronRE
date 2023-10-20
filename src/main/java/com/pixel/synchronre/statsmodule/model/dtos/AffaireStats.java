@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.dto.statistiques;
+package com.pixel.synchronre.statsmodule.model.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +11,12 @@ import java.util.List;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class AffaireStats
 {
-    private Long nbrAffaire;
+    private Long nbrAffaires;
     private BigDecimal mtTotalCapitalInitial;
     private BigDecimal mtTotalSmpLci;
 
-    public AffaireStats(Long nbrAffaire, BigDecimal mtTotalCapitalInitial, BigDecimal mtTotalSmpLci) {
-        this.nbrAffaire = nbrAffaire;
+    public AffaireStats(Long nbrAffaires, BigDecimal mtTotalCapitalInitial, BigDecimal mtTotalSmpLci) {
+        this.nbrAffaires = nbrAffaires;
         this.mtTotalCapitalInitial = mtTotalCapitalInitial;
         this.mtTotalSmpLci = mtTotalSmpLci;
     }
@@ -38,5 +38,4 @@ public class AffaireStats
         private BigDecimal mtSmpLci;
         private BigDecimal tauxSmpLci;
     }
-
 }

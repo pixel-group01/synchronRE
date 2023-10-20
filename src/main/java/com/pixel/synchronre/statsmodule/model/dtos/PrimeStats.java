@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.dto.statistiques;
+package com.pixel.synchronre.statsmodule.model.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

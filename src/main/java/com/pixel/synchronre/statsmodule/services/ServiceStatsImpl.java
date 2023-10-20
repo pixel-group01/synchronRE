@@ -1,11 +1,8 @@
-package com.pixel.synchronre.sychronremodule.service.implementation;
+package com.pixel.synchronre.statsmodule.services;
 
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireStatsRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.AffaireStats;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.CritereStat;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCritereStats;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatsAffaire;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatistiques;
+import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

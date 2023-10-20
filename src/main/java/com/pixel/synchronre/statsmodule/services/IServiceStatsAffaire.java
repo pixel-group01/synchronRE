@@ -1,7 +1,7 @@
-package com.pixel.synchronre.sychronremodule.service.interfac;
+package com.pixel.synchronre.statsmodule.services;
 
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.AffaireStats;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 
 import java.util.List;
 

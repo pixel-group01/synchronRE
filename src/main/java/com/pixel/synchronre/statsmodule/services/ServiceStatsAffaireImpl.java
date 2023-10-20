@@ -1,14 +1,11 @@
-package com.pixel.synchronre.sychronremodule.service.implementation;
+package com.pixel.synchronre.statsmodule.services;
 
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireStatsRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.AffaireStats;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.CritereStat;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCritereStats;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceStatsAffaire;
+import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -59,12 +56,12 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
         AffaireStats.DetailsAffaireStat detailsAffaireStat = new AffaireStats.DetailsAffaireStat();
         detailsAffaireStat.setId(cedId);
         detailsAffaireStat.setLibelle( cedRepo.getCedNameById(cedId));
-        detailsAffaireStat.setNbrAffaires(affaireStatsPourLaCedante.getNbrAffaire());
+        detailsAffaireStat.setNbrAffaires(affaireStatsPourLaCedante.getNbrAffaires());
         detailsAffaireStat.setMtCapitalInitial(affaireStatsPourLaCedante.getMtTotalCapitalInitial());
         detailsAffaireStat.setMtSmpLci(affaireStatsPourLaCedante.getMtTotalSmpLci());
 
-        if(affaireStatsGlobal.getNbrAffaire().equals(0)) return detailsAffaireStat;
-        double tauxAffaire =  affaireStatsPourLaCedante.getNbrAffaire() / affaireStatsGlobal.getNbrAffaire();
+        if(affaireStatsGlobal.getNbrAffaires().equals(0)) return detailsAffaireStat;
+        double tauxAffaire =  affaireStatsPourLaCedante.getNbrAffaires() / affaireStatsGlobal.getNbrAffaires();
 
         BigDecimal tauxCapitalInitial = affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null ? BigDecimal.ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().divide(affaireStatsGlobal.getMtTotalCapitalInitial(), 4, RoundingMode.HALF_UP).multiply(CENT);
         BigDecimal tauxSmpLci = affaireStatsPourLaCedante.getMtTotalSmpLci() == null ? BigDecimal.ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().divide(affaireStatsGlobal.getMtTotalSmpLci(), 4, RoundingMode.HALF_UP).multiply(CENT);
@@ -85,12 +82,12 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
         AffaireStats.DetailsAffaireStat detailsAffaireStat = new AffaireStats.DetailsAffaireStat();
         detailsAffaireStat.setId(cesId);
         detailsAffaireStat.setLibelle(cesRepo.getCesNameById(cesId));
-        detailsAffaireStat.setNbrAffaires(affaireStatsPourLeCessionnaire.getNbrAffaire());
+        detailsAffaireStat.setNbrAffaires(affaireStatsPourLeCessionnaire.getNbrAffaires());
         detailsAffaireStat.setMtCapitalInitial(null);
         detailsAffaireStat.setMtSmpLci(null);
 
-        if(affaireStatsGlobal.getNbrAffaire().equals(0)) return detailsAffaireStat;
-        double tauxAffaire =  affaireStatsPourLeCessionnaire.getNbrAffaire() / affaireStatsGlobal.getNbrAffaire();
+        if(affaireStatsGlobal.getNbrAffaires().equals(0)) return detailsAffaireStat;
+        double tauxAffaire =  affaireStatsPourLeCessionnaire.getNbrAffaires() / affaireStatsGlobal.getNbrAffaires();
 
         detailsAffaireStat.setTauxAffaires(new BigDecimal(tauxAffaire).multiply(CENT));
         return detailsAffaireStat;

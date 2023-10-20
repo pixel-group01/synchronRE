@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.dto.statistiques;
+package com.pixel.synchronre.statsmodule.model.dtos;
 
 import lombok.*;
 
@@ -11,6 +11,7 @@ public class CritereStat
     private List<Long> exercices;
     private List<Long> cedIds;
     private List<Long> cesIds;
+    private List<Long> affIds;
     private String statutCreation;
     private List<String> staCodes;
     private List<Long> couIds;

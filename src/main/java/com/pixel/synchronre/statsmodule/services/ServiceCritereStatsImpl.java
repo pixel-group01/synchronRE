@@ -1,15 +1,13 @@
-package com.pixel.synchronre.sychronremodule.service.implementation;
+package com.pixel.synchronre.statsmodule.services;
 
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
-import com.pixel.synchronre.sychronremodule.model.dto.statistiques.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import com.pixel.synchronre.sychronremodule.model.entities.Exercice;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCritereStats;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 
