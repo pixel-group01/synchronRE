@@ -1,5 +1,6 @@
 package com.pixel.synchronre.notificationmodule.controller.services;
 
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import com.pixel.synchronre.notificationmodule.model.dto.EmailAttachment;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
@@ -48,17 +49,19 @@ public class EmailSenderServiceImpl implements EmailSenderService
     private String frontAddress;
     private final IServiceInterlocuteur interService;
     private final EmailBodyBuilder emailBodyBuilder;
+    private final IJwtService jwtService;
 
     @Override @Async
     public void sendEmailWithAttachments(String senderMail, String receiverMail, String mailObject, String message, List<EmailAttachment> attachments) throws IllegalAccessException {
+        String connectedUserEmail = jwtService.extractUsername();
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "utf-8");
             mimeMessageHelper.setText(message, true); // Second parameter true means that the message will be an HTML message
             mimeMessageHelper.setTo(receiverMail);
+            mimeMessageHelper.addCc(connectedUserEmail);
             mimeMessage.setSubject(mailObject);
             mimeMessage.setFrom(senderMail);
-
             // Add attachments to the email
             if (attachments != null && !attachments.isEmpty()) {
                 for (EmailAttachment attachment : attachments) {
@@ -66,7 +69,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
                     mimeMessageHelper.addAttachment(attachment.getFilename(), dataSource);
                 }
             }
-
+            //MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "utf-8");
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             e.printStackTrace();

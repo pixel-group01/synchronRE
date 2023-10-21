@@ -79,11 +79,16 @@ public class AffaireController
     public Page<FacultativeListResp> searchAllAffaires(@RequestParam(required = false) Long exeCode, @RequestParam(required = false) Long cedId,
                                                             @RequestParam(defaultValue = "") String key,
                                                             @RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "10") int size)
+                                                            @RequestParam(defaultValue = "10") int size,
+                                                            @RequestParam(defaultValue = "false") boolean withMaxSize)
     {
         exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
         cedId = cedId == null ? jwtService.getConnectedUserCedId() : cedId;
-        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
+
+        Page<FacultativeListResp> facPages =withMaxSize ?
+                new PageImpl<>( affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode) ) :
+                affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
+
         //List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(affService.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return facPages;
     }
