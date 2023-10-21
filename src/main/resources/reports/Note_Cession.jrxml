@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-21T01:21:27 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isTitleNewPage="true" isFloatColumnFooter="true" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
+<!-- 2023-10-22T00:12:37 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
@@ -58,7 +58,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -67,7 +67,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table_CH" mode="Opaque" backcolor="#FFFFFF">
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -77,33 +77,6 @@
 		</box>
 	</style>
 	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table 3_TD" mode="Opaque" backcolor="#FFFFFF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table 3_CH" mode="Opaque" backcolor="#BFE1FF">
-		<box>
-			<pen lineWidth="0.5" lineColor="#000000"/>
-			<topPen lineWidth="0.5" lineColor="#000000"/>
-			<leftPen lineWidth="0.5" lineColor="#000000"/>
-			<bottomPen lineWidth="0.5" lineColor="#000000"/>
-			<rightPen lineWidth="0.5" lineColor="#000000"/>
-		</box>
-	</style>
-	<style name="Table 3_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -157,7 +130,6 @@
 		<field name="rep_tauxcom_ced" class="java.math.BigDecimal"/>
 		<field name="rep_tauxcom_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
-		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="aff_activite" class="java.lang.String"/>
 		<field name="aff_assure" class="java.lang.String"/>
 		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
@@ -336,7 +308,7 @@ WHERE repartition.aff_id = affaire.aff_id
 		<field name="ced_nom_filiale" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
 	</subDataset>
-	<subDataset name="traite" uuid="1c10fbe5-45fa-402a-8078-05df9431c851">
+	<subDataset name="repart_traite" uuid="0ee68134-306c-4252-a6a0-f3abdfd14174">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
@@ -356,9 +328,8 @@ FROM affaire,
 WHERE repartition.aff_id = affaire.aff_id
   AND repartition.typ_id = type.type_id
   AND type.unique_code in ('REP_CONSERVATION','REP_FACOB','REP_XL')
-    AND affaire.aff_id = $P{aff_id}
-ORDER BY type.type_id
-    ;]]>
+  AND affaire.aff_id = $P{aff_id}
+ORDER BY type.type_id]]>
 		</queryString>
 		<field name="name" class="java.lang.String"/>
 		<field name="taux" class="java.math.BigDecimal"/>
@@ -377,17 +348,15 @@ ORDER BY type.type_id
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="logo_nre" class="java.io.InputStream">
-		<parameterDescription><![CDATA[]]></parameterDescription>
-	</parameter>
-	<parameter name="visa" class="java.io.InputStream">
-		<parameterDescription><![CDATA[]]></parameterDescription>
-	</parameter>
 	<parameter name="aff_id" class="java.lang.Long"/>
 	<parameter name="ces_id" class="java.lang.Long"/>
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<parameter name="param_visible" class="java.lang.String"/>
 	<parameter name="interlocuteur" class="java.lang.String"/>
+	<parameter name="visa" class="java.io.InputStream"/>
+	<parameter name="logo_nre" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[SELECT affaire.aff_id,
        affaire.aff_activite,
@@ -453,27 +422,23 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="84" splitType="Stretch">
-			<image>
-				<reportElement x="111" y="3" width="190" height="67" uuid="a1be9f72-70eb-412c-b67b-a258a34cba59"/>
-				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
-			</image>
+		<band height="111" splitType="Stretch">
 			<staticText>
 				<reportElement x="421" y="3" width="130" height="51" forecolor="#2D919C" uuid="5322a71a-21c6-4951-806c-c171ad9f8fad"/>
 				<box>
 					<pen lineWidth="2.0" lineColor="#41A7B0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="16"/>
+					<font fontName="Times New Roman" size="16"/>
 				</textElement>
 				<text><![CDATA[A RETOURNER SIGNE]]></text>
 			</staticText>
-		</band>
-	</title>
-	<pageHeader>
-		<band height="67" splitType="Stretch">
+			<image>
+				<reportElement x="111" y="2" width="190" height="58" uuid="ffbcf050-78c1-4015-8b50-bd151a9d6137"/>
+				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement x="70" y="7" width="371" height="31" uuid="84c4ffd7-2525-417f-8c2a-33f524d18c4f"/>
+				<reportElement x="70" y="71" width="371" height="31" uuid="65e7e7ac-479d-42d1-817a-b5d907460903"/>
 				<box>
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</box>
@@ -483,41 +448,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[NOTE DE CESSION FACULTATIVE]]></text>
 			</staticText>
 		</band>
-	</pageHeader>
+	</title>
 	<detail>
-		<band height="674" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="170" y="497" width="280" height="15" uuid="b044fa67-4de7-4964-9841-e6c6ea8900ef">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				</reportElement>
-				<textElement>
-					<font fontName="SansSerif" size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="7" y="568" width="139" height="22" uuid="ebca94a8-6980-4997-8770-5161f18d7f02"/>
-				<textElement>
-					<font size="12" isBold="false" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[LA CEDANTE]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="415" y="561" width="139" height="22" uuid="10374ccd-9492-453f-9beb-f25850d7b37e"/>
-				<textElement>
-					<font size="12" isBold="false" isUnderline="true"/>
-				</textElement>
-				<text><![CDATA[LE REASSUREUR]]></text>
-			</staticText>
+		<band height="648" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="13" y="4" width="307" height="19" uuid="e535119c-2aff-404e-b149-67ed70e8cb59">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Réassureur : "+$F{ces_nom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Réassureur : "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="13" y="25" width="307" height="19" uuid="d6be577a-e94e-466b-a4fd-b57ea86e64d9">
@@ -525,7 +467,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Interlocuteur : " +$P{interlocuteur}]]></textFieldExpression>
 			</textField>
@@ -535,7 +477,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Monnaie : " +$F{dev_libelle}]]></textFieldExpression>
 			</textField>
@@ -544,7 +486,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Affaire Nouvelle ]]></text>
 			</staticText>
@@ -594,7 +536,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ SMP/LCI]]></text>
 			</staticText>
@@ -604,7 +546,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Capitaux totaux assurés ]]></text>
 			</staticText>
@@ -614,7 +556,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="SansSerif"/>
+					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Activités :  "+$F{aff_activite}]]></textFieldExpression>
 			</textField>
@@ -624,7 +566,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Justified" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Assuré : "+$F{aff_assure}]]></textFieldExpression>
 			</textField>
@@ -634,7 +576,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif"/>
+					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Police N° : "+$F{fac_numero_police}]]></textFieldExpression>
 			</textField>
@@ -644,7 +586,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" isBold="true"/>
+					<font fontName="Times New Roman" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Prime émise nette (base à 100%)]]></text>
 			</staticText>
@@ -668,20 +610,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[ Filiale :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="433" width="109" height="17" uuid="c2894aa5-d86c-417e-aba2-4ccfbb434bff">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Effet de la cession : ]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="320" y="433" width="121" height="17" uuid="a9857d5f-b7ee-4bad-9a8b-df33d0cac7a7">
+				<reportElement x="320" y="432" width="121" height="17" uuid="a9857d5f-b7ee-4bad-9a8b-df33d0cac7a7">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Expiration de la cession : ]]></text>
 			</staticText>
@@ -691,7 +624,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif"/>
+					<font fontName="Times New Roman"/>
 				</textElement>
 				<textFieldExpression><![CDATA["N°  FAC : "+$F{aff_code}]]></textFieldExpression>
 			</textField>
@@ -709,7 +642,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fac_prime1}]]></textFieldExpression>
 			</textField>
@@ -719,7 +652,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fac_smp_lci1}]]></textFieldExpression>
 			</textField>
@@ -729,7 +662,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{aff_capital_initial1}]]></textFieldExpression>
 			</textField>
@@ -742,21 +675,21 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{bran_libelle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="98" y="432" width="182" height="17" uuid="01790e5c-3097-41bf-bf1c-ec39145f00c4">
+				<reportElement x="98" y="431" width="182" height="17" uuid="01790e5c-3097-41bf-bf1c-ec39145f00c4">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="428" y="433" width="122" height="17" uuid="1c7801de-f82c-4780-bccb-ad163f7d9b19">
+				<reportElement x="427" y="432" width="122" height="17" uuid="1c7801de-f82c-4780-bccb-ad163f7d9b19">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
 			</textField>
@@ -790,7 +723,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<pen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<text><![CDATA[ Engagement Réassureur]]></text>
 							</staticText>
@@ -803,7 +736,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<leftPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[ PRIME NETTE CEDEE]]></text>
 							</staticText>
@@ -816,7 +749,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<leftPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<text><![CDATA[ Prime Cédée]]></text>
 							</staticText>
@@ -829,7 +762,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<leftPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<text><![CDATA[ CommissionNELSON RE CI]]></text>
 							</staticText>
@@ -842,7 +775,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<leftPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+									<font fontName="Times New Roman" size="12"/>
 								</textElement>
 								<text><![CDATA[ Commission Cédante]]></text>
 							</staticText>
@@ -856,7 +789,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" uuid="69e48c4c-088d-4a4d-a76e-dcc5fbd84448"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_taux}]]></textFieldExpression>
 							</textField>
@@ -871,7 +804,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" forecolor="#FA2F28" uuid="faf39122-e240-43c9-90d1-18da56af5547"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{taux_com_court}]]></textFieldExpression>
 							</textField>
@@ -880,7 +813,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" forecolor="#FA2F28" uuid="5b3c9502-3796-46e5-a972-56cfca75cdd8"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{taux_com_ced}]]></textFieldExpression>
 							</textField>
@@ -897,7 +830,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -909,7 +842,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{prime_nette_cedee1}]]></textFieldExpression>
 							</textField>
@@ -921,7 +854,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{prime_cedee1}]]></textFieldExpression>
 							</textField>
@@ -933,7 +866,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{com_courtage1}]]></textFieldExpression>
 							</textField>
@@ -945,7 +878,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{com_cedante1}]]></textFieldExpression>
 							</textField>
@@ -984,22 +917,22 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="8" y="416" width="1" height="35" uuid="8709c785-6156-4de2-bb09-e1d3423ca2e8">
+				<reportElement x="8" y="415" width="1" height="35" uuid="8709c785-6156-4de2-bb09-e1d3423ca2e8">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="554" y="416" width="1" height="35" uuid="cef49f74-b472-46f1-ba14-b96ffcaaf207">
+				<reportElement x="554" y="415" width="1" height="35" uuid="cef49f74-b472-46f1-ba14-b96ffcaaf207">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="8" y="451" width="546" height="1" uuid="c0b2e97e-3046-47d1-9b53-c0372e927fe2">
+				<reportElement x="8" y="450" width="546" height="1" uuid="c0b2e97e-3046-47d1-9b53-c0372e927fe2">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="9" y="431" width="544" height="1" uuid="f631ff5d-8e21-4ffb-b0d4-254de3d91c28">
+				<reportElement x="9" y="430" width="544" height="1" uuid="f631ff5d-8e21-4ffb-b0d4-254de3d91c28">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
@@ -1050,7 +983,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[ I. Part souscrite par la cédante :]]></text>
 							</staticText>
@@ -1073,7 +1006,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Pourcentage (%)]]></text>
 							</staticText>
@@ -1082,7 +1015,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" uuid="db442d41-89a5-44d2-ae26-d166c64670fd"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{taux_capital}]]></textFieldExpression>
 							</textField>
@@ -1104,7 +1037,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11" isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[Montant (F CFA)]]></text>
 							</staticText>
@@ -1113,7 +1046,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="170" height="19" uuid="e6265e67-5ef2-468a-842e-1f427767990a"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -1122,7 +1055,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement x="8" y="285" width="546" height="19" uuid="f992e7a2-f591-416b-a4ce-b1b9998fe69e">
+				<reportElement x="8" y="284" width="546" height="19" uuid="f992e7a2-f591-416b-a4ce-b1b9998fe69e">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -1141,13 +1074,19 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-						<jr:detailCell style="Table_TD" height="19">
+						<jr:detailCell height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="194" height="19" uuid="208f0e50-3ae7-40ac-9895-ecdda4115a3c"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{param_ces_leg_libelle}]]></textFieldExpression>
 							</textField>
@@ -1156,12 +1095,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<jr:column width="182" uuid="fb5c3fa9-585b-4c1a-950f-4f90b605a248">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-						<jr:detailCell style="Table_TD" height="19">
+						<jr:detailCell height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" uuid="05c1ffb2-3ce3-44ac-89f6-c8c791457a40"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{taux}]]></textFieldExpression>
 							</textField>
@@ -1170,12 +1115,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<jr:column width="170" uuid="6fad5fbe-75e7-426f-92ee-df9bfc3ab92c">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-						<jr:detailCell style="Table_TD" height="19">
+						<jr:detailCell height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="170" height="19" uuid="9b85b4f3-1a54-44eb-b0df-84852ef6d959"/>
+								<box>
+									<topPen lineWidth="1.0"/>
+									<leftPen lineWidth="1.0"/>
+									<bottomPen lineWidth="1.0"/>
+									<rightPen lineWidth="1.0"/>
+								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -1193,7 +1144,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11" isBold="true"/>
+					<font fontName="Times New Roman" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Période de garantie  :  " +new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet} ) + "   au   "  +new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
 			</textField>
@@ -1202,24 +1153,47 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="11"/>
+					<font fontName="Times New Roman" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="13" y="473" width="117" height="89" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2"/>
+				<reportElement x="13" y="454" width="117" height="89" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="7" y="547" width="139" height="22" uuid="d59759b8-9db9-420d-a8b4-25a99c90538b"/>
+				<textElement>
+					<font size="12" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[LA CEDANTE]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="3" y="563" width="277" height="19" uuid="14a91642-33e0-4f6f-884c-2c58ded306ed">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NELSON RE CI  P/C  "+$F{ced_nom_filiale}]]></textFieldExpression>
+			</textField>
 			<image>
-				<reportElement x="7" y="606" width="177" height="64" uuid="9d0ad543-eca8-4084-a82b-ef51bc67bcc7">
+				<reportElement x="7" y="581" width="177" height="64" uuid="13efc285-0a90-4621-bff2-e6fbc967c613">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
+			<staticText>
+				<reportElement x="415" y="540" width="139" height="22" uuid="bf33740a-5f48-482a-8fb8-de1cbf4dff3e"/>
+				<textElement>
+					<font size="12" isBold="false" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[LE REASSUREUR]]></text>
+			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="340" y="583" width="211" height="19" uuid="932a0c98-c776-49b1-96c0-bc8e7c18f058">
+				<reportElement x="340" y="557" width="211" height="19" uuid="c299637c-ba66-4610-aa5d-94ba0ab60d10">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -1228,72 +1202,68 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="3" y="587" width="277" height="19" uuid="195dafcb-429a-4f50-8f80-2fa8dfc3e85b">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				<reportElement x="172" y="473" width="280" height="15" uuid="23b3585f-c14f-4839-938d-a662dfb65afd">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
-				<textElement verticalAlignment="Middle">
-					<font size="11"/>
+				<textElement>
+					<font fontName="SansSerif" size="12"/>
 				</textElement>
-				<textFieldExpression><![CDATA["NELSON RE CI  P/C  "+$F{ced_nom_filiale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="8" y="305" width="546" height="19" uuid="6df95897-5503-47e0-b83b-eae0319b0654">
+				<reportElement x="8" y="304" width="546" height="19" uuid="eb4a9303-f47b-40aa-bc53-5c4e93d83ccd">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
-					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 3_TH"/>
-					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 3_CH"/>
-					<property name="com.jaspersoft.studio.table.style.detail" value="Table 3_TD"/>
-					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="traite" uuid="8ac2ae0b-9dc6-458d-aa9a-8f79a6bd0b5c">
+					<datasetRun subDataset="repart_traite" uuid="ce5e20a6-8d2b-478b-b172-cb34fa57d5b0">
 						<datasetParameter name="aff_id">
 							<datasetParameterExpression><![CDATA[$F{aff_id}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="194" uuid="0ed760a8-d1fc-4028-b7a6-b58b32766a9a">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
+					<jr:column width="194" uuid="efbd34fb-d3b2-4e02-84da-f08d212f563d">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-						<jr:detailCell style="Table 3_TD" height="19">
+						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="194" height="19" uuid="5de02cb1-931a-4d53-99b7-7fc1d0049574">
+							<textField>
+								<reportElement x="0" y="0" width="194" height="19" uuid="94b835e4-ef08-4a3f-a92c-6e9e1e51ac42">
 									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
-								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font size="11" isBold="true"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="182" uuid="3510303a-d0d8-49b2-8c25-6c308bcabecd">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
+					<jr:column width="182" uuid="5faf5b84-dfd3-4b49-a457-4fb22d02d0d4">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-						<jr:detailCell style="Table 3_TD" height="19">
+						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="182" height="19" uuid="897d1de1-5b41-456a-b57d-525d059fb821"/>
+							<textField>
+								<reportElement x="0" y="0" width="182" height="19" uuid="5c9d5275-0618-4eb4-a225-87e5d5558262"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font isBold="false"/>
+									<font fontName="Times New Roman" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{taux}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="170" uuid="8f05d625-52d1-4c7b-9792-d0fe6d0fb068">
-						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
+					<jr:column width="170" uuid="891a297b-1ecb-42b7-87dd-962882d8889d">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
-						<jr:detailCell style="Table 3_TD" height="19">
+						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
-								<reportElement x="0" y="0" width="170" height="19" uuid="9c6314cc-ec2e-4d49-a8e7-232863e36a1c"/>
+								<reportElement x="0" y="0" width="170" height="19" uuid="2ea9bf46-1828-414c-9421-5a6fda6fd51f"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font isBold="true"/>
+									<font fontName="Times New Roman" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -1301,6 +1271,15 @@ WHERE affaire.couverture_id = couverture.cou_id
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<staticText>
+				<reportElement x="11" y="432" width="109" height="17" uuid="284c1373-e711-4f1d-956b-95e92ab907fd">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Effet de la cession : ]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>
