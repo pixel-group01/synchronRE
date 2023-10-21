@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-21T00:33:04 -->
+<!-- 2023-10-21T01:21:27 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isTitleNewPage="true" isFloatColumnFooter="true" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -85,7 +85,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+	<style name="Table 3_TD" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -103,7 +103,7 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<style name="Table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+	<style name="Table 3_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
 			<topPen lineWidth="0.5" lineColor="#000000"/>
@@ -346,36 +346,18 @@ WHERE repartition.aff_id = affaire.aff_id
        regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
        repartition.rep_taux,
        ROUND(repartition.rep_taux, 2) AS taux,
-       param_cession_legale.param_ces_leg_libelle,
        repartition.rep_sous_commission,
        repartition.rep_taux_com_ced,
        repartition.rep_taux_com_court,
-       repartition.typ_id,
-       affaire.aff_activite,
-       affaire.aff_assure,
-       affaire.aff_capital_initial,
-       affaire.aff_code,
-       affaire.aff_date_echeance,
-       affaire.aff_date_effet,
-       affaire.fac_prime,
-       affaire.fac_smp_lci,
-       cedante.ced_nom_filiale,
-       couverture.cou_libelle,
        type.name
 FROM affaire,
-     cedante,
-     couverture,
      repartition,
-     type,
-     param_cession_legale
+     type
 WHERE repartition.aff_id = affaire.aff_id
-  AND affaire.couverture_id = couverture.cou_id
-  AND affaire.cedente_id = cedante.ced_id
   AND repartition.typ_id = type.type_id
-  AND repartition.param_ces_legal_id = param_cession_legale.param_ces_leg_id
   AND type.unique_code in ('REP_CONSERVATION','REP_FACOB','REP_XL')
-  AND affaire.aff_id = $P{aff_id}
-  ORDER BY type.type_id
+    AND affaire.aff_id = $P{aff_id}
+ORDER BY type.type_id
     ;]]>
 		</queryString>
 		<field name="name" class="java.lang.String"/>
@@ -1255,7 +1237,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["NELSON RE CI  P/C  "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement positionType="FixRelativeToBottom" x="8" y="305" width="546" height="19" uuid="6df95897-5503-47e0-b83b-eae0319b0654">
+				<reportElement x="8" y="305" width="546" height="19" uuid="6df95897-5503-47e0-b83b-eae0319b0654">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 3_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 3_CH"/>
