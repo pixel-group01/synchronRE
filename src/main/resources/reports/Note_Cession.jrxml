@@ -459,7 +459,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Réassureur : "+$F{ced_nom_filiale}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Réassureur : "+$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="13" y="25" width="307" height="19" uuid="d6be577a-e94e-466b-a4fd-b57ea86e64d9">
