@@ -121,7 +121,9 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     @Override
     public Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, List<String> staCodes, Pageable pageable)
     {
-        return repRepo.searchRepartition(StringUtils.stripAccentsToUpperCase(key), affId, repType, staCodes,pageable);
+        Page<RepartitionListResp> reps = repRepo.searchRepartition(StringUtils.stripAccentsToUpperCase(key), affId, repType, staCodes,pageable);
+        reps.forEach(r->r.setRepTaux(r.getRepTaux().setScale(2, RoundingMode.HALF_DOWN)));
+        return reps;
     }
 
     @Override
