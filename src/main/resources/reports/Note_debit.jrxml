@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-19T16:38:59 -->
+<!-- 2023-10-24T21:01:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
@@ -452,7 +452,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="613" splitType="Stretch">
+		<band height="622" splitType="Stretch">
 			<textField>
 				<reportElement x="1" y="31" width="553" height="26" uuid="2d750b78-f098-47ba-a0a3-c0db16365f04">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -850,12 +850,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<reportElement x="11" y="496" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
-			<image>
-				<reportElement x="350" y="545" width="190" height="55" uuid="efd38a83-7177-4e4a-ab13-b4066f680633">
-					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
-				</reportElement>
-				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="0" y="379" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -885,6 +879,13 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["IBAN : "+$F{ban_iban}]]></textFieldExpression>
 			</textField>
+			<image>
+				<reportElement x="343" y="545" width="190" height="60" uuid="34f5a106-8bb3-4995-9669-07f95e8d2280">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{param_image}+"visa.PNG"]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 </jasperReport>
