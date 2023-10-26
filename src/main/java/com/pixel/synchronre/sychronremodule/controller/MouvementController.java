@@ -21,9 +21,9 @@ public class MouvementController
     private final MouvementRepository mvtRepo;
     private final IServiceMouvement mvtService;
     @GetMapping(path = "/affaire/{affId}")
-    Page<MouvementListResp> findByAffaire(@PathVariable Long affId, Pageable pageable)
+    Page<MouvementListResp> findByAffaire(@PathVariable Long affId, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "1000") int size)
     {
-        return mvtService.findMouvementById(affId,null,pageable);
+        return mvtService.findMouvementById(affId,null,PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/affaire/message-retour/{affId}")
@@ -81,7 +81,7 @@ public class MouvementController
     }
 
     @GetMapping(path = "/sinistre/get-histo/{sinId}")
-    Page<MouvementListResp> findBySinistre(@PathVariable Long sinId, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "15") int size)
+    Page<MouvementListResp> findBySinistre(@PathVariable Long sinId, @RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "1000") int size)
     {
         return mvtRepo.findMouvementById(null,sinId, PageRequest.of(page, size));
     }
