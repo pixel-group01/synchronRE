@@ -33,5 +33,6 @@ public abstract class FncMapper
     @Mapping(target = "privileges", expression = "java(ptfRepo.getFncPrivileges(fnc.getId()).stream().map(prvMapper::mapToReadPrivilegeDTO).collect(java.util.stream.Collectors.toList()))")
     @Mapping(target = "roles", expression = "java(rtfRepo.getFncRoles(fnc.getId()).stream().map(roleMapper::mapToReadRoleDTO).collect(java.util.stream.Collectors.toList()))")
     @Mapping(target = "menus", expression = "java(menuService.getMenusByFncId(fnc.getId()))")
+    @Mapping(target = "typeFunctionId", source = "typeFunction.typeId")
     public abstract ReadFncDTO mapToReadFncDto(AppFunction fnc);
 }

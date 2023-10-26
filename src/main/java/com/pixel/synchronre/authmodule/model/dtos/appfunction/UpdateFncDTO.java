@@ -20,7 +20,7 @@ public class UpdateFncDTO
     private Long fncId;
     @ExistingUserId
     private Long userId;
-    private Long visibilityId;
+    private Long visibilityId; // Id de la cédante de l'utilisateur. Null si l'utilisateur est de type courtier
     private String name;
     @ExistingTypeId
     @NotNull(message = "Veuillez selectionner le type de la fonction")
