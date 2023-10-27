@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-277T14:16:38 -->
+<!-- 2023-10-27T17:42:00 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -275,6 +275,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 			<![CDATA[SELECT repartition.aff_id,
        repartition.rep_capital,
        repartition.rep_taux,
+        ROUND(repartition.rep_taux, 2) AS taux,
        repartition.rep_sous_commission,
        repartition.rep_taux_com_ced,
        repartition.rep_taux_com_court,
@@ -321,6 +322,7 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
+		<field name="taux" class="java.math.BigDecimal"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
@@ -351,6 +353,17 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
 		<field name="fac_smp_lci" class="java.math.BigDecimal"/>
 		<field name="ced_nom_filiale" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
+		<variable name="total_prime1" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{prime_cedee}]]></variableExpression>
+			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+		</variable>
+		<variable name="total_commission1" class="java.math.BigDecimal" calculation="Sum">
+			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+		</variable>
+		<variable name="total_prime_areverser1" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{prime_nette_cedee}]]></variableExpression>
+			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
+		</variable>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -744,7 +757,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{rep_taux}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -767,7 +780,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_prime1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{total_prime1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -799,7 +812,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_commission1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{total_commission1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -831,7 +844,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_prime_areverser1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$V{total_prime_areverser1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
