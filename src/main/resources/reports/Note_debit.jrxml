@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-29T18:12:17 -->
+<!-- 2023-10-29T21:38:04 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
-	<import value="java.text.DecimalFormat"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
@@ -189,7 +188,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<field name="com_cedante" class="java.math.BigDecimal"/>
 		<field name="com_courtage" class="java.math.BigDecimal"/>
 		<field name="prime_nette_cedee" class="java.math.BigDecimal"/>
-		<field name="commission" class="java.math.BigDecimal"/>
 		<field name="ces_nom" class="java.lang.String"/>
 		<field name="aff_activite" class="java.lang.String"/>
 		<field name="aff_assure" class="java.lang.String"/>
@@ -201,18 +199,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<field name="fac_smp_lci" class="java.math.BigDecimal"/>
 		<field name="ced_nom_filiale" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
-		<variable name="total_prime" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{prime_cedee}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
-		<variable name="total_commission" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{commission}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
-		<variable name="total_prime_averser" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{prime_nette_cedee}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
 	</subDataset>
 	<subDataset name="Quote_filiale" uuid="95cf0ddb-2e2d-44d6-9afa-02f875775642">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -246,52 +232,82 @@ WHERE repartition.aff_id = affaire.aff_id
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
 		<queryString language="SQL">
-			<![CDATA[SELECT repartition.aff_id,
-       repartition.rep_capital,
-       repartition.rep_taux,
-        ROUND(repartition.rep_taux, 2) AS taux,
-       repartition.rep_sous_commission,
-       repartition.rep_taux_com_ced,
-       repartition.rep_taux_com_court,
-       repartition.typ_id,
-       repartition.cessionnaire_id,
-       repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
-       regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
-       repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
-       repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
-       (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
-       regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1,
-       (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS commission,
-       regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS commission1 ,
-       SUM(repartition.rep_taux * affaire.fac_prime / 100::numeric) AS total_prime,
-       regexp_replace(to_char(SUM(repartition.rep_taux * affaire.fac_prime / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS total_prime1 ,
-       SUM((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)) AS total_commission,
-       regexp_replace(to_char(SUM((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission1 ,
-       SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)) AS total_prime_areverser,
-       regexp_replace(to_char(SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS total_prime_areverser1 ,
-       cessionnaire.ces_nom,
-       affaire.aff_activite,
-       affaire.aff_assure,
-       affaire.aff_capital_initial,
-       affaire.aff_code,
-       affaire.aff_date_echeance,
-       affaire.aff_date_effet,
-       affaire.fac_prime,
-       affaire.fac_smp_lci,
-       cedante.ced_nom_filiale,
-       couverture.cou_libelle
-FROM affaire,
-     cedante,
-     couverture,
-     repartition,
-     cessionnaire
-WHERE repartition.cessionnaire_id = cessionnaire.ces_id
+			<![CDATA[WITH TotalSums AS (
+    SELECT
+        SUM(repartition.rep_taux * affaire.fac_prime / 100::numeric) AS total_prime,
+        SUM(repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + SUM(repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS total_commission,
+        SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)) AS total_prime_nette
+     FROM
+        affaire,
+        cedante,
+        couverture,
+        repartition,
+        type,
+        cessionnaire
+    WHERE
+      repartition.cessionnaire_id = cessionnaire.ces_id
+      AND repartition.aff_id = affaire.aff_id
+      AND affaire.couverture_id = couverture.cou_id
+      AND affaire.cedente_id = cedante.ced_id
+      AND repartition.typ_id = type.type_id
+      AND type.unique_code in ('REP_PLA')
+      AND repartition.aff_id = $P{aff_id}
+)
+SELECT
+    repartition.aff_id,
+    repartition.rep_capital,
+    repartition.rep_taux,
+    ROUND(repartition.rep_taux, 2) AS taux,
+    repartition.rep_sous_commission,
+    repartition.rep_taux_com_ced,
+    repartition.rep_taux_com_court,
+    repartition.typ_id,
+    repartition.cessionnaire_id,
+    cessionnaire.ces_nom,
+    repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
+    repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
+    repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
+    (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
+    TotalSums.total_prime AS total_prime1,
+    regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
+    regexp_replace(to_char(TotalSums.total_prime, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_globale ,
+    TotalSums.total_commission AS total_commission,
+    regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS commission1 ,
+    regexp_replace(to_char(TotalSums.total_commission, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission1 ,
+    TotalSums.total_prime_nette AS total_prime_nette,
+    regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1,
+    regexp_replace(to_char(TotalSums.total_prime_nette, 'FM999,999,999,999'), ',', ' ', 'g') AS total_prime_areverser1
+FROM
+    affaire,
+    cedante,
+    couverture,
+    repartition,
+    type,
+    cessionnaire
+        JOIN
+    TotalSums ON 1=1 
+WHERE
+ repartition.cessionnaire_id = cessionnaire.ces_id
   AND repartition.aff_id = affaire.aff_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
-  AND repartition.typ_id = 3
+  AND repartition.typ_id = type.type_id
+  AND type.unique_code in ('REP_PLA')
   AND repartition.aff_id = $P{aff_id}
-GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repartition.rep_sous_commission, repartition.rep_taux_com_ced, repartition.rep_taux_com_court, repartition.typ_id, repartition.cessionnaire_id, repartition.rep_taux * affaire.fac_prime / 100::numeric, regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric, (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric), regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'), cessionnaire.ces_nom, affaire.aff_activite, affaire.aff_assure, affaire.aff_capital_initial, affaire.aff_code, affaire.aff_date_echeance, affaire.aff_date_effet, affaire.fac_prime, affaire.fac_smp_lci, cedante.ced_nom_filiale, couverture.cou_libelle;]]>
+GROUP BY
+    repartition.aff_id,
+    repartition.rep_capital,
+    repartition.rep_taux,
+    repartition.rep_sous_commission,
+    repartition.rep_taux_com_ced,
+    repartition.rep_taux_com_court,
+    repartition.typ_id,
+    repartition.cessionnaire_id,
+    cessionnaire.ces_nom,
+    repartition.rep_taux * affaire.fac_prime / 100::numeric,
+    TotalSums.total_prime,
+    TotalSums.total_commission,
+    TotalSums.total_prime_nette]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
@@ -302,43 +318,20 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
 		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
 		<field name="cessionnaire_id" class="java.lang.Long"/>
+		<field name="ces_nom" class="java.lang.String"/>
 		<field name="prime_cedee" class="java.math.BigDecimal"/>
-		<field name="prime_cedee1" class="java.lang.String"/>
 		<field name="com_cedante" class="java.math.BigDecimal"/>
 		<field name="com_courtage" class="java.math.BigDecimal"/>
 		<field name="prime_nette_cedee" class="java.math.BigDecimal"/>
-		<field name="prime_nette_cedee1" class="java.lang.String"/>
-		<field name="commission" class="java.math.BigDecimal"/>
-		<field name="commission1" class="java.lang.String"/>
-		<field name="total_prime" class="java.math.BigDecimal"/>
-		<field name="total_prime1" class="java.lang.String"/>
+		<field name="total_prime1" class="java.math.BigDecimal"/>
+		<field name="prime_cedee1" class="java.lang.String"/>
+		<field name="prime_globale" class="java.lang.String"/>
 		<field name="total_commission" class="java.math.BigDecimal"/>
+		<field name="commission1" class="java.lang.String"/>
 		<field name="total_commission1" class="java.lang.String"/>
-		<field name="total_prime_areverser" class="java.math.BigDecimal"/>
+		<field name="total_prime_nette" class="java.math.BigDecimal"/>
+		<field name="prime_nette_cedee1" class="java.lang.String"/>
 		<field name="total_prime_areverser1" class="java.lang.String"/>
-		<field name="ces_nom" class="java.lang.String"/>
-		<field name="aff_activite" class="java.lang.String"/>
-		<field name="aff_assure" class="java.lang.String"/>
-		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
-		<field name="aff_code" class="java.lang.String"/>
-		<field name="aff_date_echeance" class="java.sql.Date"/>
-		<field name="aff_date_effet" class="java.sql.Date"/>
-		<field name="fac_prime" class="java.math.BigDecimal"/>
-		<field name="fac_smp_lci" class="java.math.BigDecimal"/>
-		<field name="ced_nom_filiale" class="java.lang.String"/>
-		<field name="cou_libelle" class="java.lang.String"/>
-		<variable name="total_prime1" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{prime_cedee}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
-		<variable name="total_commission1" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{commission}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
-		<variable name="total_prime_areverser1" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{prime_nette_cedee}]]></variableExpression>
-			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
-		</variable>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -755,7 +748,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_prime1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{prime_globale}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -787,7 +780,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_commission1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_commission1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -819,7 +812,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_prime_areverser1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_prime_areverser1}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
