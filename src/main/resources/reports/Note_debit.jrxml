@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-10-277T17:57:34 -->
+<!-- 2023-10-29T18:12:17 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
+	<import value="java.text.DecimalFormat"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
@@ -218,52 +219,25 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
-			<![CDATA[SELECT repartition.aff_id,
-    repartition.rep_capital,
-    regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
-    repartition.rep_taux,
-    repartition.rep_sous_commission,
-    repartition.rep_taux_com_ced,
-    repartition.rep_taux_com_court,
-    repartition.typ_id,
-    affaire.aff_activite,
-    affaire.aff_assure,
-    affaire.aff_capital_initial,
-    affaire.aff_code,
-    affaire.aff_date_echeance,
-    affaire.aff_date_effet,
-    affaire.fac_prime,
-    affaire.fac_smp_lci,
-    cedante.ced_nom_filiale,
-    couverture.cou_libelle
-   FROM affaire,
-    cedante,
-    couverture,
-    repartition
-  WHERE repartition.aff_id = affaire.aff_id 
-  AND affaire.couverture_id = couverture.cou_id 
+			<![CDATA[SELECT distinct affaire.aff_id,
+                affaire.part_cedante,
+                (affaire.part_cedante / affaire.fac_smp_lci)  * 100  as rep_taux,
+                ROUND((affaire.part_cedante / affaire.fac_smp_lci) * 100, 2) as taux_capital,
+                regexp_replace(to_char(affaire.part_cedante::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1
+FROM affaire,
+     cedante,
+     couverture,
+     repartition
+WHERE repartition.aff_id = affaire.aff_id
+  AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
-  AND repartition.typ_id = 2
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
-		<field name="rep_capital" class="java.math.BigDecimal"/>
-		<field name="rep_capital1" class="java.lang.String"/>
+		<field name="part_cedante" class="java.math.BigDecimal"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
-		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
-		<field name="typ_id" class="java.lang.Long"/>
-		<field name="aff_activite" class="java.lang.String"/>
-		<field name="aff_assure" class="java.lang.String"/>
-		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
-		<field name="aff_code" class="java.lang.String"/>
-		<field name="aff_date_echeance" class="java.sql.Date"/>
-		<field name="aff_date_effet" class="java.sql.Date"/>
-		<field name="fac_prime" class="java.math.BigDecimal"/>
-		<field name="fac_smp_lci" class="java.math.BigDecimal"/>
-		<field name="ced_nom_filiale" class="java.lang.String"/>
-		<field name="cou_libelle" class="java.lang.String"/>
+		<field name="taux_capital" class="java.math.BigDecimal"/>
+		<field name="rep_capital1" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="Réassureurs" uuid="3baf6a36-8ef2-4960-9d41-84a453e6d9db">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
@@ -358,6 +332,7 @@ GROUP BY repartition.aff_id, repartition.rep_capital, repartition.rep_taux, repa
 			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
 		</variable>
 		<variable name="total_commission1" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{commission}]]></variableExpression>
 			<initialValueExpression><![CDATA[java.math.BigDecimal.ZERO]]></initialValueExpression>
 		</variable>
 		<variable name="total_prime_areverser1" class="java.math.BigDecimal" calculation="Sum">
@@ -612,21 +587,21 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="396" width="550" height="41" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
+				<reportElement x="4" y="388" width="550" height="52" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
 				<textElement textAlignment="Justified">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[NELSON RE ne sera pas tenu responsable des consèquences, y compris l'annulation de la couverture qui peut resulter d'un retard ou d'une défaillance de votre part de payer la présente note à la date indiquée]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="467" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
+				<reportElement x="340" y="474" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Le Département Réassurance]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="2" y="265" width="550" height="30" uuid="15a2fd31-402a-4864-b507-41a3fc252846"/>
+				<reportElement x="2" y="263" width="550" height="30" uuid="15a2fd31-402a-4864-b507-41a3fc252846"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
@@ -671,8 +646,8 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
 								<reportElement x="0" y="0" width="277" height="19" uuid="3ad33e38-e1d2-444e-8f65-827e33d2d27f"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="11"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -780,7 +755,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[FLOOR($V{total_prime1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_prime1})]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -807,12 +782,12 @@ WHERE affaire.couverture_id = couverture.cou_id
 							</staticText>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table 3_TH" height="19" rowSpan="1">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="80" height="19" uuid="b6792e6c-d877-424e-8a72-0c05c4d5ae6c"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[FLOOR($V{total_commission1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_commission1})]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -844,7 +819,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[FLOOR($V{total_prime_areverser1})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_prime_areverser1})]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -860,11 +835,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<image>
-				<reportElement x="11" y="440" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
+				<reportElement x="11" y="447" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="0" y="325" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
+				<reportElement x="0" y="318" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -873,7 +848,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{ban_libelle} + "  "+$F{ban_num_compte}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="359" width="320" height="19" uuid="b088c375-698b-4aef-97c4-c014e7f1f4d0">
+				<reportElement x="0" y="352" width="320" height="19" uuid="b088c375-698b-4aef-97c4-c014e7f1f4d0">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -883,7 +858,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Code BIC :  "+$F{ban_code_bic}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="341" width="320" height="19" uuid="812faed3-8198-4cae-a253-f0c93a44af6a">
+				<reportElement x="0" y="334" width="320" height="19" uuid="812faed3-8198-4cae-a253-f0c93a44af6a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -893,7 +868,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["IBAN : "+$F{ban_iban}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="343" y="489" width="190" height="60" uuid="34f5a106-8bb3-4995-9669-07f95e8d2280">
+				<reportElement x="343" y="496" width="190" height="60" uuid="34f5a106-8bb3-4995-9669-07f95e8d2280">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
