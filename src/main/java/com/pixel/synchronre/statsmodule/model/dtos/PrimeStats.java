@@ -20,6 +20,7 @@ public class PrimeStats
     private BigDecimal mtTotalRestantAReverseAuxCessionnaires;
 
     private List<DetailsPrimeStats> detailsPrimeStatsParCedantes;
+    private List<DetailsPrimeParCessionnairesStats> detailsPrimeStatsParCessionnaires;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
     public static class DetailsPrimeStats
@@ -35,5 +36,21 @@ public class PrimeStats
 
         private BigDecimal mtRestantAPayerParLaCedante;
         private BigDecimal tauxRestantAPayerParLaCedante;
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    public static class DetailsPrimeParCessionnairesStats
+    {
+        private Long cesId;
+        private String cesLibelle;
+
+        private BigDecimal mtDuAuCessionnaire;
+        private BigDecimal tauxDuAuCessionnaire;
+
+        private BigDecimal mtDejaPayeAuCessionnaire;
+        private BigDecimal tauxDejaPayeAuCessionnaire;
+
+        private BigDecimal mtRestantAPayerAuCessionnaire;
+        private BigDecimal tauxRestantAPayerAuCessionnaire;
     }
 }

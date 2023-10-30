@@ -17,6 +17,10 @@ public class CommissionStats
     private BigDecimal mtTotalCommissionCourtageDejaEncaisse;
     private BigDecimal mtTotalCommissionCourtageRestantAEncaisse;
 
+    private BigDecimal mtTotalCommissionCedante;
+    private BigDecimal mtTotalCommissionCedanteDejaEncaisse;
+    private BigDecimal mtTotalCommissionCedanteRestantAEncaisse;
+
     private List<DetailCommissionStats> detailCommissionStatsParCedantes;
     private List<DetailCommissionStats> detailCommissionStatsParCessionnaires;
 

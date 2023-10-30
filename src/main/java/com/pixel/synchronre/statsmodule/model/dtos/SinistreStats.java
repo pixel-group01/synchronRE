@@ -16,6 +16,8 @@ public class SinistreStats
     private BigDecimal mtChargeTotaleSinistre; //(mtTotalSinistres + mtTotalHonoraires)
     private BigDecimal mtTotalPlacements;
     private BigDecimal mtTotalHorsPlacements;
+    private BigDecimal mtTotalDejaPaye;
+    private BigDecimal mtTotalRestantAPaye;
 
     private List<SinistreStats.DetailsSinistresStat> detailsSinistresParAffaires;
     private List<SinistreStats.DetailsSinistresStat> detailsSinistresParCedantes;
@@ -34,5 +36,7 @@ public class SinistreStats
         private BigDecimal mtChargeTotaleSinistre; //(mtTotalSinistres + mtTotalHonoraires)
         private BigDecimal mtTotalPlacements;
         private BigDecimal mtTotalHorsPlacements;
+        private BigDecimal mtTotalDejaPaye;
+        private BigDecimal mtTotalRestantAPaye;
     }
 }
