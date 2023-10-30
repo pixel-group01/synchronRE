@@ -6,7 +6,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -27,7 +26,7 @@ public class SynchronReApplication {
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);
     }
-  //@Bean(name = "commandLineRunner") @Profile("dev")
+    //@Bean(name = "commandLineRunner") @Profile("dev")
     public CommandLineRunner start(TypeLoader typeLoader, FoldersIniter foldersIniter, AdminLoader adminLoader, StatutLoader statutLoader,
                                    DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,
