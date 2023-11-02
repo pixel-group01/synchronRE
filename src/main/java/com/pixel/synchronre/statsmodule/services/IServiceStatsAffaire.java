@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface IServiceStatsAffaire
 {
-    List<AffaireStats.DetailsAffaireStat> calculerDetailsAffaireStatsParCedantes(CritereStat criteres);
+    List<AffaireStats.DetailsAffaireStatParCedante> calculerDetailsAffaireStatsParCedantes(CritereStat criteres);
 
-    List<AffaireStats.DetailsAffaireStat> calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres);
+    List<AffaireStats.DetailsAffaireStatParCessionnaire> calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres);
 
-    AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCedantes(CritereStat criteres, Long cedId);
+    AffaireStats.DetailsAffaireStatParCedante calculerDetailsAffaireStatsParCedantes(CritereStat criteres, Long cedId);
 
-    AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres, Long cesId);
+    AffaireStats.DetailsAffaireStatParCessionnaire calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres, Long cesId);
 
-    AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCedante(CritereStat criteres, Long cedId);
+    AffaireStats.DetailsAffaireStatParCedante calculerDetailsAffaireStatsParCedante(CritereStat criteres, Long cedId);
 
-    AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCessionnaire(CritereStat criteres, Long cesId);
+    AffaireStats.DetailsAffaireStatParCessionnaire calculerDetailsAffaireStatsParCessionnaire(CritereStat criteres, Long cesId);
 }

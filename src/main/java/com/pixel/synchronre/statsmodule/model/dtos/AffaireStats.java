@@ -14,6 +14,14 @@ public class AffaireStats
     private Long nbrAffaires;
     private BigDecimal mtTotalCapitalInitial;
     private BigDecimal mtTotalSmpLci;
+    private BigDecimal mtTotalSmpLciAccpte;
+
+    public AffaireStats(Long nbrAffaires, BigDecimal mtTotalCapitalInitial, BigDecimal mtTotalSmpLci, BigDecimal mtTotalSmpLciAccpte) {
+        this.nbrAffaires = nbrAffaires;
+        this.mtTotalCapitalInitial = mtTotalCapitalInitial;
+        this.mtTotalSmpLci = mtTotalSmpLci;
+        this.mtTotalSmpLciAccpte = mtTotalSmpLciAccpte;
+    }
 
     public AffaireStats(Long nbrAffaires, BigDecimal mtTotalCapitalInitial, BigDecimal mtTotalSmpLci) {
         this.nbrAffaires = nbrAffaires;
@@ -21,11 +29,11 @@ public class AffaireStats
         this.mtTotalSmpLci = mtTotalSmpLci;
     }
 
-    private List<DetailsAffaireStat> detailsAffaireParCedantes;
-    private List<DetailsAffaireStat> detailsAffaireParCessionnaires;
+    private List<DetailsAffaireStatParCedante> detailsAffaireParCedantes;
+    private List<DetailsAffaireStatParCessionnaire> detailsAffaireParCessionnaires;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-    public static class DetailsAffaireStat
+    public static class DetailsAffaireStatParCedante
     {
         private Long id;
         private String libelle;
@@ -37,5 +45,16 @@ public class AffaireStats
 
         private BigDecimal mtSmpLci;
         private BigDecimal tauxSmpLci;
+    }
+
+    @Getter @Setter @NoArgsConstructor @AllArgsConstructor
+    public static class DetailsAffaireStatParCessionnaire
+    {
+        private Long id;
+        private String libelle;
+        private Long nbrAffaires;
+
+        private BigDecimal mtSmpLciAccepte;
+        private BigDecimal tauxSmpLciAccepte;
     }
 }
