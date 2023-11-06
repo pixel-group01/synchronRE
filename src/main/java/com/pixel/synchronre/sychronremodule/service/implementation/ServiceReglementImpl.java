@@ -98,7 +98,8 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
     {//TODO A revoir le controle sur le reste à reverser
-        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(dto.getCesId());
+        Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
+        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
         if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
         if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
@@ -110,7 +111,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
 
 
-        BigDecimal primeBrute = CENT.subtract(tauxReassurance).divide(dto.getRegMontant().multiply(CENT), 1000, RoundingMode.HALF_UP);
+        BigDecimal primeBrute = dto.getRegMontant().multiply(CENT).divide(CENT.subtract(tauxReassurance), 1000, RoundingMode.HALF_UP) ;
         BigDecimal commissionCourt = primeBrute.multiply(tauxCourt).divide(CENT, 1000, RoundingMode.HALF_UP);
         BigDecimal commissionCed = primeBrute.multiply(tauxCed).divide(CENT, 1000, RoundingMode.HALF_UP);
         BigDecimal commissionReassurance = primeBrute.multiply(tauxReassurance).divide(CENT, 1000, RoundingMode.HALF_UP);

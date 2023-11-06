@@ -108,8 +108,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         tauxRep = tauxRep == null ? ZERO : tauxRep;
         tauxCms = tauxCms == null ? ZERO : tauxCms;
 
-        return primeTotale.multiply(tauxRep.divide(CENT, 2, RoundingMode.HALF_UP))
-                .multiply(CENT.subtract(tauxCms).divide(CENT, 2, RoundingMode.HALF_UP));
+        return primeTotale.multiply(tauxRep).divide(CENT, 1000, RoundingMode.HALF_UP)
+                .multiply(CENT.subtract(tauxCms).divide(CENT, 1000, RoundingMode.HALF_UP));
     }
 
     @Override
