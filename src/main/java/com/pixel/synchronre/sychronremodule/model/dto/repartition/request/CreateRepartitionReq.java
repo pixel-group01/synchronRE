@@ -4,6 +4,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.Exis
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTauBesoinFac;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -41,6 +42,8 @@ public class CreateRepartitionReq
     @NotNull(message = "Veuillez saisir le nom de l'interlocuteur")
     @Length(message = "Le nom de l'interlocuteur doit contenir au moins deux caractères", min = 2)
     private String repInterlocuteur;
+
+    protected BigDecimal affCoursDevise;
 
     private boolean repStatut;
     @ExistingAffId

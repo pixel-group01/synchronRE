@@ -1,6 +1,7 @@
 package com.pixel.synchronre.statsmodule.controller;
 
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import com.pixel.synchronre.statsmodule.services.IServiceStatistiques;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class StatistiquesController
         return statistiquesService.calculerAffaireStats(criteres);
     }
 
-    @PostMapping(path = "/affaires2")
-    List<Long> getStatistiquesAffaires2(@RequestBody(required = false) CritereStat criteres)
+    @PostMapping(path = "/commissions")
+    CommissionStats getStatistiquesCommissions(@RequestBody(required = false) CritereStat criteres)
     {
-        return statistiquesService.calculerAffaireStats2(criteres);
+        return statistiquesService.calculerCommissionStats(criteres);
     }
 }

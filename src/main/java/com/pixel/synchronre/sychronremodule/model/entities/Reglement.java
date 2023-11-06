@@ -29,6 +29,10 @@ public class Reglement {
   private String regMontantLettre;
   @Column(precision = 50, scale = 20)
   private BigDecimal regCommission;
+  @Column(precision = 50, scale = 20)
+  private BigDecimal regCommissionCourt;
+  @Column(precision = 50, scale = 20)
+  private BigDecimal regCommissionCed;
   private boolean regStatut;
   private String regMode;
   @ManyToOne @JoinColumn(name = "type_id")

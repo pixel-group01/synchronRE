@@ -13,6 +13,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -22,6 +23,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.Regleme
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
@@ -56,6 +59,8 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final IServiceCalculsComptablesSinistre comptaSinistreService;
     private final String PAIEMENT = "paiements";
     private final String REVERSEMENT = "reversements";
+    private final BigDecimal CENT = new BigDecimal(100);
+    private final RepartitionRepository repRepo;
 
 
     @Override @Transactional
@@ -92,10 +97,27 @@ public class ServiceReglementImpl implements IserviceReglement {
 
     @Override @Transactional
     public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
-    {
-        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverser(dto.getAffId());
+    {//TODO A revoir le controle sur le reste à reverser
+        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(dto.getCesId());
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
         if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
+        Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
+
+        BigDecimal tauxReassurance = placement.getRepSousCommission();
+        BigDecimal tauxCourt = placement.getRepTauxComCourt();
+        BigDecimal tauxCed = placement.getRepTauxComCed();
+
+
+
+        BigDecimal primeBrute = CENT.subtract(tauxReassurance).divide(dto.getRegMontant().multiply(CENT), 1000, RoundingMode.HALF_UP);
+        BigDecimal commissionCourt = primeBrute.multiply(tauxCourt).divide(CENT, 1000, RoundingMode.HALF_UP);
+        BigDecimal commissionCed = primeBrute.multiply(tauxCed).divide(CENT, 1000, RoundingMode.HALF_UP);
+        BigDecimal commissionReassurance = primeBrute.multiply(tauxReassurance).divide(CENT, 1000, RoundingMode.HALF_UP);
+        reversement.setRegCommissionCourt(commissionCourt);
+        reversement.setRegCommissionCed(commissionCed);
+        reversement.setRegCommission(commissionReassurance);
+
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         reversement.setRegMontantLettre(ConvertMontant.numberToLetter(reversement.getRegMontant().longValue()));

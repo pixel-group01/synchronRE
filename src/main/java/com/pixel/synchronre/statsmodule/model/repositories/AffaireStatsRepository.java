@@ -1,7 +1,10 @@
 package com.pixel.synchronre.statsmodule.model.repositories;
 
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
+import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,17 +43,33 @@ public interface AffaireStatsRepository extends JpaRepository<Affaire, Long>
                                  @Param("devCodes")List<String> devCodes, @Param("dateEffet")LocalDate dateEffet, @Param("dateEcheance")LocalDate dateEcheance);
 
 
-
-    @Query(""" 
-        select a0.affId from Affaire a0 where a0.affId not in
-        (select distinct a.affId
-        from Affaire a left join Repartition r on  a.affId  =  r.affaire.affId left join r.type t left join r.repStaCode s left join r.cessionnaire ces
-         where s.staCode not in ('SUP', 'SUPP') and a.exercice.exeCode in :exes and a.cedante.cedId in :cedIds and (ces is null or ces.cesId in :cesIds) 
-         and  a.affStatutCreation = coalesce(:statCrea, a.affStatutCreation) and s.staCode in :staCodes and a.couverture.couId in :couIds 
-         and (r is null or r.repStatut = true) and (t is null or t.uniqueCode = 'REP_PLA') and (s is null or s.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE'))
-         and a.devise.devCode in :devCodes and a.affDateEffet between :dateEffet and :dateEcheance)
+    @Query("""
+    select r0 from Repartition r0 where r0.repId in
+    (select distinct r.repId    
+    from Repartition r left join r.type t left join r.cessionnaire ces  left  join r.affaire a left join a.cedante ced    
+    left join r.repStaCode repStatut left join a.statut affStatut    where t.uniqueCode = 'REP_PLA' and ces.cesId in :cesIds and ced.cedId in :cedIds and a.exercice.exeCode in :exes     
+    and repStatut.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE') and affStatut.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE')    
+    and a.couverture.couId in :couIds and a.devise.devCode in :devCodes     and (a.affDateEffet <= :dateEcheance and a.affDateEcheance >= :dateEffet) and (:dateEffet <= :dateEcheance)) 
 """)
-    List<Long> getAffaireStats2(@Param("exes") List<Long> exercices, @Param("cedIds")List<Long> cedIds, @Param("cesIds")List<Long> cesIds,
-                                @Param("statCrea")String statutCreation, @Param("staCodes")List<String> staCodes, @Param("couIds")List<Long> couIds,
-                                @Param("devCodes")List<String> devCodes, @Param("dateEffet")LocalDate dateEffet, @Param("dateEcheance")LocalDate dateEcheance);
+    List<Repartition>  getRepartitionStats(@Param("exes") List<Long> exercices, @Param("cedIds")List<Long> cedIds, @Param("cesIds")List<Long> cesIds,
+                                   @Param("couIds")List<Long> couIds, @Param("devCodes")List<String> devCodes,
+                                   @Param("dateEffet")LocalDate dateEffet, @Param("dateEcheance")LocalDate dateEcheance);
+
+    @Query("""
+        select r from Reglement r where r.affaire.affId =?1 and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true
+""")
+    List<Reglement> getPaiementsByAffaire(Long affId);
+
+    @Query("""
+        select new com.pixel.synchronre.statsmodule.model.dtos.CommissionStats(sum(cast(r.repSousCommission * r.repPrime * coalesce(a.affCoursDevise, 1) as java.math.BigDecimal)), sum(cast(r.repTauxComCourt *r.repPrime * coalesce(a.affCoursDevise, 1) as java.math.BigDecimal)), sum(cast(r.repTauxComCed * r.repPrime * coalesce(a.affCoursDevise, 1) as java.math.BigDecimal))) 
+        from Repartition r left join r.type t left join r.cessionnaire ces  left  join r.affaire a left join a.cedante ced    
+        left join r.repStaCode repStatut left join a.statut affStatut    where t.uniqueCode = 'REP_PLA' and ces.cesId in :cesIds and ced.cedId in :cedIds and a.exercice.exeCode in :exes     
+        and repStatut.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE') and affStatut.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE')    
+        and a.couverture.couId in :couIds and a.devise.devCode in :devCodes     and (a.affDateEffet <= :dateEcheance and a.affDateEcheance >= :dateEffet) and (:dateEffet <= :dateEcheance)
+""")
+    CommissionStats getCommissionStats(@Param("exes") List<Long> exercices, @Param("cedIds")List<Long> cedIds, @Param("cesIds")List<Long> cesIds,
+                        @Param("couIds")List<Long> couIds, @Param("devCodes")List<String> devCodes,
+                        @Param("dateEffet")LocalDate dateEffet, @Param("dateEcheance")LocalDate dateEcheance);
 }
+
+

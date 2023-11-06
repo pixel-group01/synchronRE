@@ -224,7 +224,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 
     @Override
     public BigDecimal calculateRestAReverserbyCes(Long plaId) {
-        return this.calculateMtPrimeNetteByCes(plaId).subtract(this.calculateDejaReverse(plaId));
+        return this.calculateMtPrimeNetteByCes(plaId).subtract(this.calculateDejaReverseByCes(plaId));
     }
 
     @Override
