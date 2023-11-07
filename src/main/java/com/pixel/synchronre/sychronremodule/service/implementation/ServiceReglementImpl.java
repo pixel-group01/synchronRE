@@ -49,11 +49,9 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final ReglementMapper reglementMapper;
     private final ObjectCopier<Reglement> paiCopier;
     private final ILogService logService;
-    private final IJwtService jwtService;
     private final AffaireRepository affRepo;
     private final TypeRepo typeRepo;
     private final IServiceMouvement mvtService;
-    private final ReglementDocUploader regDocUploader;
     private final SinRepo sinRepo;
     private final IServiceCalculsComptables comptaAffaireService;
     private final IServiceCalculsComptablesSinistre comptaSinistreService;
@@ -76,16 +74,18 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
+        BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
+        if(resteAPayer.compareTo(dto.getRegMontant())<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.toString() + " " + affRepo.getDevCodeByAffId(dto.getAffId()));
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
-        //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
-        //NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
-        //String formattedNumber = numberFormat.format(paiement.getRegMontant());
-        //paiement.setRegMontantTemp(formattedNumber);
-        paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
+
+        BigDecimal commissionCed = comptaAffaireService.calculateMtTotaleCmsCed(dto.getAffId());
+        paiement.setRegCommissionCed(commissionCed);
+
+        paiement = regRepo.save(paiement);
         logService.logg(ReglementActions.CREATE_PAIEMENT_AFFAIRE, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
 

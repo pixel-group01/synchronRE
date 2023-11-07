@@ -78,7 +78,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal dejaRegle = this.calculateDejaRegle(affId);
         BigDecimal facprime = !affIdExists ? ZERO : affRepo.getFacPrime(affId);
         facprime = facprime == null ? ZERO : facprime;
-        return  facprime.subtract(dejaRegle);
+        BigDecimal cmsCedante = this.calculateMtTotaleCmsCed(affId); cmsCedante = cmsCedante == null ? ZERO : cmsCedante;
+        return  facprime.subtract(dejaRegle.add(cmsCedante));
     }
 
     @Override
