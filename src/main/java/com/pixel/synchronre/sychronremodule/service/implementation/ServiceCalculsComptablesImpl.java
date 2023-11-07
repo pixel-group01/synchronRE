@@ -188,6 +188,15 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
+    public BigDecimal calculatePrimeNetteCommissionCed(Long affId) {
+        BigDecimal prime = affRepo.getFacPrime(affId);
+        prime = prime == null ? ZERO : prime;
+        BigDecimal comCed = this.calculateMtTotaleCmsCed(affId);
+        BigDecimal primeNetComCed = prime.subtract(comCed);
+        return primeNetComCed;
+    }
+
+    @Override
     public BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude)
     {
         BigDecimal resteARepartir = this.calculateRestARepartir(affId);

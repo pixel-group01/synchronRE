@@ -88,7 +88,9 @@ public abstract class FacultativeMapper
 
     @Mapping(target = "mtTotalCmsCedante", expression = "java(comptaService.calculateMtTotaleCmsCed(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "mtTotalCmsCourtage", expression = "java(comptaService.calculateMtTotalCmsCourtage(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
+
     @Mapping(target = "mtTotalPrimeNetteCes", expression = "java(comptaService.calculateMtTotalAReverseAuxCes(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
+    @Mapping(target = "primeNetteCmsCedante", expression = "java(comptaService.calculatePrimeNetteCommissionCed(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "dejaRegle", expression = "java(comptaService.calculateDejaRegle(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "resteARegler", expression = "java(comptaService.calculateRestARegler(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "tauxDeReglement", expression = "java(comptaService.calculateTauxDeReglement(aff.getAffId()).setScale(2, java.math.RoundingMode.HALF_UP))")

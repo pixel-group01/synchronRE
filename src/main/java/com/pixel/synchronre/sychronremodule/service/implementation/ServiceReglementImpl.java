@@ -75,7 +75,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
-        if(resteAPayer.compareTo(dto.getRegMontant())<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.toString() + " " + affRepo.getDevCodeByAffId(dto.getAffId()));
+        if(resteAPayer.compareTo(dto.getRegMontant())<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -101,7 +101,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
         BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
         if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
-        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
+        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
 
