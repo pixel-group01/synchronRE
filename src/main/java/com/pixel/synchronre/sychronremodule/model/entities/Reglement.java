@@ -24,14 +24,14 @@ public class Reglement {
   private Long regId;
   private String regReference;
   private LocalDate regDate;
-  @Column(precision = 50, scale = 20)
+  @Column(precision = 1000, scale = 980)
   private BigDecimal regMontant;
   private String regMontantLettre;
-  @Column(precision = 50, scale = 20)
+  @Column(precision = 1000, scale = 980)
   private BigDecimal regCommission;
-  @Column(precision = 50, scale = 20)
+  @Column(precision = 1000, scale = 980)
   private BigDecimal regCommissionCourt;
-  @Column(precision = 50, scale = 20)
+  @Column(precision = 1000, scale = 980)
   private BigDecimal regCommissionCed;
   private boolean regStatut;
   private String regMode;

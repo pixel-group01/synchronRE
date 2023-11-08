@@ -45,4 +45,10 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("select sum(r.regMontant) from Reglement r join r.affaire a join Repartition rep on rep.affaire.affId = a.affId where rep.repId = ?1 and r.typeReglement.uniqueCode = 'reversements' and r.regStatut = true")
     BigDecimal calculateMtDejaReverseByCes(Long plaId);
+
+    @Query("select sum(r.regCommissionCed) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'")
+    BigDecimal calculateMtComCedDejaEncaisse(Long affId);
+
+    @Query("select sum(r.regCommissionCourt) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'")
+    BigDecimal calculateMtComCourtierDejaEncaisse(Long affId);
 }

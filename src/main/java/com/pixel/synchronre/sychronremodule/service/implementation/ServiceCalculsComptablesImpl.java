@@ -224,7 +224,6 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         return CENT.multiply(this.calculateDejaReverse(affId).divide(mtTotalAReverseAuxCes, 2, RoundingMode.HALF_UP));
     }
 
-
     @Override
     public BigDecimal calculateDejaReverseByCes(Long plaId)
     {
