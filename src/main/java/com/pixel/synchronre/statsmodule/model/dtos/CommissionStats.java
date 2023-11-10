@@ -21,6 +21,22 @@ public class CommissionStats
     private BigDecimal mtTotalCommissionCedanteDejaEncaisse;
     private BigDecimal mtTotalCommissionCedanteRestantAEncaisse;
 
+    public CommissionStats(BigDecimal mtTotalCommissionRea, BigDecimal mtTotalCommissionCourtage, BigDecimal mtTotalCommissionCedante) {
+        this.mtTotalCommissionRea = mtTotalCommissionRea;
+        this.mtTotalCommissionCourtage = mtTotalCommissionCourtage;
+        this.mtTotalCommissionCedante = mtTotalCommissionCedante;
+    }
+
+    public CommissionStats(BigDecimal mtTotalCommissionRea, BigDecimal mtTotalCommissionCourtage, BigDecimal mtTotalCommissionCourtageDejaEncaisse, BigDecimal mtTotalCommissionCourtageRestantAEncaisse, BigDecimal mtTotalCommissionCedante, BigDecimal mtTotalCommissionCedanteDejaEncaisse, BigDecimal mtTotalCommissionCedanteRestantAEncaisse) {
+        this.mtTotalCommissionRea = mtTotalCommissionRea;
+        this.mtTotalCommissionCourtage = mtTotalCommissionCourtage;
+        this.mtTotalCommissionCourtageDejaEncaisse = mtTotalCommissionCourtageDejaEncaisse;
+        this.mtTotalCommissionCourtageRestantAEncaisse = mtTotalCommissionCourtageRestantAEncaisse;
+        this.mtTotalCommissionCedante = mtTotalCommissionCedante;
+        this.mtTotalCommissionCedanteDejaEncaisse = mtTotalCommissionCedanteDejaEncaisse;
+        this.mtTotalCommissionCedanteRestantAEncaisse = mtTotalCommissionCedanteRestantAEncaisse;
+    }
+
     private List<DetailCommissionStats> detailCommissionStatsParCedantes;
     private List<DetailCommissionStats> detailCommissionStatsParCessionnaires;
 

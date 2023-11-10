@@ -13,6 +13,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -22,6 +23,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.Regleme
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
+import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
@@ -46,16 +49,16 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final ReglementMapper reglementMapper;
     private final ObjectCopier<Reglement> paiCopier;
     private final ILogService logService;
-    private final IJwtService jwtService;
     private final AffaireRepository affRepo;
     private final TypeRepo typeRepo;
     private final IServiceMouvement mvtService;
-    private final ReglementDocUploader regDocUploader;
     private final SinRepo sinRepo;
     private final IServiceCalculsComptables comptaAffaireService;
     private final IServiceCalculsComptablesSinistre comptaSinistreService;
     private final String PAIEMENT = "paiements";
     private final String REVERSEMENT = "reversements";
+    private final BigDecimal CENT = new BigDecimal(100);
+    private final RepartitionRepository repRepo;
 
 
     @Override @Transactional
@@ -71,16 +74,46 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
+        BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
+        BigDecimal primeNette = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
+
+        if(resteAPayer.compareTo(primeNette)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
-        //paiement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
-        //NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.FRANCE);
-        //String formattedNumber = numberFormat.format(paiement.getRegMontant());
-        //paiement.setRegMontantTemp(formattedNumber);
-        paiement = regRepo.save(paiement); Long regId = paiement.getRegId();
+
+        BigDecimal commissionCedGlobale = comptaAffaireService.calculateMtTotaleCmsCed(dto.getAffId());
+        BigDecimal commissionCourtGlobale = comptaAffaireService.calculateMtTotalCmsCourtage(dto.getAffId());
+
+        BigDecimal primeTotale = affRepo.getFacPrime(dto.getAffId());
+        primeTotale = primeTotale == null ? ZERO : primeTotale;
+        boolean isDernierPaiement = primeNette.compareTo(resteAPayer) == 0;
+        BigDecimal commissionCed = ZERO;
+        BigDecimal commissionCourt = ZERO;
+        if(!isDernierPaiement)
+        {
+            // commissionCedante = (primeNette * commissionCedGlobale)/(primeTotale - commissionCedGlobale)
+            commissionCed = primeNette.multiply(commissionCedGlobale).divide(primeTotale.subtract(commissionCedGlobale), 1000, RoundingMode.HALF_UP);
+            commissionCourt = primeNette.multiply(commissionCourtGlobale).divide(primeTotale.subtract(commissionCourtGlobale), 1000, RoundingMode.HALF_UP);
+        }
+        else
+        {
+            BigDecimal commissionCedanteDejaEncaisse = regRepo.calculateMtComCedDejaEncaisse(dto.getAffId()); commissionCedanteDejaEncaisse = commissionCedanteDejaEncaisse == null ? ZERO : commissionCedanteDejaEncaisse;
+            BigDecimal commissionCourtierDejaEncaisse = regRepo.calculateMtComCourtierDejaEncaisse(dto.getAffId()); commissionCourtierDejaEncaisse = commissionCourtierDejaEncaisse == null ? ZERO : commissionCourtierDejaEncaisse;
+            commissionCed = commissionCedGlobale.subtract(commissionCedanteDejaEncaisse);
+            commissionCourt = commissionCourtGlobale.subtract(commissionCourtierDejaEncaisse);
+        }
+
+        BigDecimal commissionRea = commissionCed.add(commissionCourt);
+
+
+        paiement.setRegCommissionCed(commissionCed);
+        paiement.setRegCommissionCourt(commissionCourt);
+        paiement.setRegCommission(commissionRea);
+
+        paiement = regRepo.save(paiement);
         logService.logg(ReglementActions.CREATE_PAIEMENT_AFFAIRE, null, paiement, SynchronReTables.REGLEMENT);
         paiement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
 
@@ -92,10 +125,28 @@ public class ServiceReglementImpl implements IserviceReglement {
 
     @Override @Transactional
     public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
-    {
-        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverser(dto.getAffId());
-        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser + ")");
+    {//TODO A revoir le controle sur le reste à reverser
+        Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
+        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
+        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
+        Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
+
+        BigDecimal tauxReassurance = placement.getRepSousCommission();
+        BigDecimal tauxCourt = placement.getRepTauxComCourt();
+        BigDecimal tauxCed = placement.getRepTauxComCed();
+
+
+
+        BigDecimal primeBrute = dto.getRegMontant().multiply(CENT).divide(CENT.subtract(tauxReassurance), 1000, RoundingMode.HALF_UP) ;
+        BigDecimal commissionCourt = primeBrute.multiply(tauxCourt).divide(CENT, 1000, RoundingMode.HALF_UP);
+        BigDecimal commissionCed = primeBrute.multiply(tauxCed).divide(CENT, 1000, RoundingMode.HALF_UP);
+        BigDecimal commissionReassurance = primeBrute.multiply(tauxReassurance).divide(CENT, 1000, RoundingMode.HALF_UP);
+        reversement.setRegCommissionCourt(commissionCourt);
+        reversement.setRegCommissionCed(commissionCed);
+        reversement.setRegCommission(commissionReassurance);
+
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         reversement.setRegMontantLettre(ConvertMontant.numberToLetter(reversement.getRegMontant().longValue()));

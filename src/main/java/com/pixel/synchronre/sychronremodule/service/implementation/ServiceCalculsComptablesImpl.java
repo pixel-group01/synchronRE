@@ -78,7 +78,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal dejaRegle = this.calculateDejaRegle(affId);
         BigDecimal facprime = !affIdExists ? ZERO : affRepo.getFacPrime(affId);
         facprime = facprime == null ? ZERO : facprime;
-        return  facprime.subtract(dejaRegle);
+        BigDecimal cmsCedante = this.calculateMtTotaleCmsCed(affId); cmsCedante = cmsCedante == null ? ZERO : cmsCedante;
+        return  facprime.subtract(dejaRegle.add(cmsCedante));
     }
 
     @Override
@@ -108,8 +109,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         tauxRep = tauxRep == null ? ZERO : tauxRep;
         tauxCms = tauxCms == null ? ZERO : tauxCms;
 
-        return primeTotale.multiply(tauxRep.divide(CENT, 2, RoundingMode.HALF_UP))
-                .multiply(CENT.subtract(tauxCms).divide(CENT, 2, RoundingMode.HALF_UP));
+        return primeTotale.multiply(tauxRep).divide(CENT, 1000, RoundingMode.HALF_UP)
+                .multiply(CENT.subtract(tauxCms).divide(CENT, 1000, RoundingMode.HALF_UP));
     }
 
     @Override
@@ -187,6 +188,15 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
+    public BigDecimal calculatePrimeNetteCommissionCed(Long affId) {
+        BigDecimal prime = affRepo.getFacPrime(affId);
+        prime = prime == null ? ZERO : prime;
+        BigDecimal comCed = this.calculateMtTotaleCmsCed(affId);
+        BigDecimal primeNetComCed = prime.subtract(comCed);
+        return primeNetComCed;
+    }
+
+    @Override
     public BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude)
     {
         BigDecimal resteARepartir = this.calculateRestARepartir(affId);
@@ -214,7 +224,6 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         return CENT.multiply(this.calculateDejaReverse(affId).divide(mtTotalAReverseAuxCes, 2, RoundingMode.HALF_UP));
     }
 
-
     @Override
     public BigDecimal calculateDejaReverseByCes(Long plaId)
     {
@@ -224,7 +233,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 
     @Override
     public BigDecimal calculateRestAReverserbyCes(Long plaId) {
-        return this.calculateMtPrimeNetteByCes(plaId).subtract(this.calculateDejaReverse(plaId));
+        return this.calculateMtPrimeNetteByCes(plaId).subtract(this.calculateDejaReverseByCes(plaId));
     }
 
     @Override

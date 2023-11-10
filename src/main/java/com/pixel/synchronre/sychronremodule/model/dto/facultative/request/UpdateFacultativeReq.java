@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.Exis
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.NotNullSmpForAffaireRealise;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidEcheanceDate;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidStatutCreation;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -60,6 +61,8 @@ public class UpdateFacultativeReq
     @NotBlank(message = "Veuillez définir le statut de l'affaire")
     @ValidStatutCreation
     protected String affStatutCreation;
+
+    protected BigDecimal affCoursDevise;
 
     @NotNull(message = "Veuillez saisir le montant de la prime")
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")

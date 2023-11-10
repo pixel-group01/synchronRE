@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ActiveE
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.NotNullSmpForAffaireRealise;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidEcheanceDate;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ValidStatutCreation;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -63,6 +64,8 @@ public class CreateFacultativeReq
     @NotBlank(message = "Veuillez définir le statut de l'affaire")
     @ValidStatutCreation
     protected String affStatutCreation;
+
+    protected BigDecimal affCoursDevise;
 
     @ExistingCedId
     private Long cedId;

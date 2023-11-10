@@ -45,4 +45,6 @@ public class CreatePlaRepartitionReq
 
     @ExistingAffId
     private Long affId;
+
+    protected BigDecimal affCoursDevise;
 }

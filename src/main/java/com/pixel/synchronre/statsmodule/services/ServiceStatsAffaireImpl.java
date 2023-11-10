@@ -1,6 +1,6 @@
 package com.pixel.synchronre.statsmodule.services;
 
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireStatsRepository;
+import com.pixel.synchronre.statsmodule.model.repositories.AffaireStatsRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
@@ -15,6 +15,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.math.BigDecimal.ZERO;
+
 @Service @RequiredArgsConstructor
 public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
 {
@@ -25,82 +27,81 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
     private final BigDecimal CENT = new BigDecimal(100);
 
     @Override
-    public List<AffaireStats.DetailsAffaireStat> calculerDetailsAffaireStatsParCedantes(CritereStat criteres)
+    public List<AffaireStats.DetailsAffaireStatParCedante> calculerDetailsAffaireStatsParCedantes(CritereStat criteres)
     {
         CritereStat criteresInit = critereStatsService.initCriteres(criteres);
-        List<AffaireStats.DetailsAffaireStat> detailsParCedante = criteres.getCedIds().stream()
+        List<AffaireStats.DetailsAffaireStatParCedante> detailsParCedante = criteres.getCedIds().stream()
                 .map(cedId->calculerDetailsAffaireStatsParCedante(criteresInit, cedId))
-                .sorted(Comparator.comparing(AffaireStats.DetailsAffaireStat::getNbrAffaires).reversed())
+                .sorted(Comparator.comparing(AffaireStats.DetailsAffaireStatParCedante::getNbrAffaires).reversed())
                 .collect(Collectors.toList());
         return detailsParCedante;
     }
 
     @Override
-    public List<AffaireStats.DetailsAffaireStat> calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres)
+    public List<AffaireStats.DetailsAffaireStatParCessionnaire> calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres)
     {
         CritereStat criteresInit  = critereStatsService.initCriteres(criteres);
-        List<AffaireStats.DetailsAffaireStat> detailsParCessionnaire = criteres.getCesIds().stream()
+        List<AffaireStats.DetailsAffaireStatParCessionnaire> detailsParCessionnaire = criteres.getCesIds().stream()
                 .map(cesId->calculerDetailsAffaireStatsParCessionnaire(criteresInit, cesId))
-                .sorted(Comparator.comparing(AffaireStats.DetailsAffaireStat::getNbrAffaires).reversed())
+                .sorted(Comparator.comparing(AffaireStats.DetailsAffaireStatParCessionnaire::getNbrAffaires).reversed())
                 .collect(Collectors.toList());
         return detailsParCessionnaire;
     }
 
     @Override
-    public AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCedantes(CritereStat criteres, Long cedId)
+    public AffaireStats.DetailsAffaireStatParCedante calculerDetailsAffaireStatsParCedantes(CritereStat criteres, Long cedId)
     {
         criteres = critereStatsService.initCriteres(criteres);
-        AffaireStats affaireStatsGlobal = statRepo.getAffaireStats(criteres.getExercices(), criteres.getCedIds() , criteres.getCesIds(), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
-        AffaireStats affaireStatsPourLaCedante = statRepo.getAffaireStats(criteres.getExercices(), cedId == null ? criteres.getCedIds() : Collections.singletonList(cedId), criteres.getCesIds(), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
+        AffaireStats affaireStatsGlobal = statRepo.getAffaireStats(criteres.getExercices(), criteres.getCedIds(), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
+        AffaireStats affaireStatsPourLaCedante = statRepo.getAffaireStats(criteres.getExercices(), cedId == null ? criteres.getCedIds() : Collections.singletonList(cedId), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
 
-        AffaireStats.DetailsAffaireStat detailsAffaireStat = new AffaireStats.DetailsAffaireStat();
+        AffaireStats.DetailsAffaireStatParCedante detailsAffaireStat = new AffaireStats.DetailsAffaireStatParCedante();
         detailsAffaireStat.setId(cedId);
         detailsAffaireStat.setLibelle( cedRepo.getCedNameById(cedId));
         detailsAffaireStat.setNbrAffaires(affaireStatsPourLaCedante.getNbrAffaires());
-        detailsAffaireStat.setMtCapitalInitial(affaireStatsPourLaCedante.getMtTotalCapitalInitial());
-        detailsAffaireStat.setMtSmpLci(affaireStatsPourLaCedante.getMtTotalSmpLci());
+        detailsAffaireStat.setMtCapitalInitial(affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null  || affaireStatsPourLaCedante.getMtTotalCapitalInitial().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().setScale(0));
+        detailsAffaireStat.setMtSmpLci(affaireStatsPourLaCedante.getMtTotalSmpLci() == null  || affaireStatsPourLaCedante.getMtTotalSmpLci().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().setScale(0));
 
-        if(affaireStatsGlobal.getNbrAffaires().equals(0)) return detailsAffaireStat;
-        double tauxAffaire =  affaireStatsPourLaCedante.getNbrAffaires() / affaireStatsGlobal.getNbrAffaires();
+        if(affaireStatsGlobal.getNbrAffaires() == 0) return detailsAffaireStat;
+        BigDecimal tauxAffaire =  BigDecimal.valueOf(affaireStatsPourLaCedante.getNbrAffaires()).multiply(CENT).divide(BigDecimal.valueOf(affaireStatsGlobal.getNbrAffaires()),4, RoundingMode.HALF_UP) ;
 
-        BigDecimal tauxCapitalInitial = affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null ? BigDecimal.ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().divide(affaireStatsGlobal.getMtTotalCapitalInitial(), 4, RoundingMode.HALF_UP).multiply(CENT);
-        BigDecimal tauxSmpLci = affaireStatsPourLaCedante.getMtTotalSmpLci() == null ? BigDecimal.ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().divide(affaireStatsGlobal.getMtTotalSmpLci(), 4, RoundingMode.HALF_UP).multiply(CENT);
+        BigDecimal tauxCapitalInitial = affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().divide(affaireStatsGlobal.getMtTotalCapitalInitial(), 4, RoundingMode.HALF_UP).multiply(CENT);
+        BigDecimal tauxSmpLci = affaireStatsPourLaCedante.getMtTotalSmpLci() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().divide(affaireStatsGlobal.getMtTotalSmpLci(), 4, RoundingMode.HALF_UP).multiply(CENT);
 
-        detailsAffaireStat.setTauxAffaires(new BigDecimal(tauxAffaire).multiply(CENT));
+        detailsAffaireStat.setTauxAffaires(tauxAffaire);
         detailsAffaireStat.setTauxCapitalInitial(tauxCapitalInitial);
         detailsAffaireStat.setTauxSmpLci(tauxSmpLci);
         return detailsAffaireStat;
     }
 
     @Override
-    public AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres, Long cesId)
+    public AffaireStats.DetailsAffaireStatParCessionnaire calculerDetailsAffaireStatsParCessionnaires(CritereStat criteres, Long cesId)
     {
         criteres = critereStatsService.initCriteres(criteres);
-        AffaireStats affaireStatsGlobal = statRepo.getAffaireStats(criteres.getExercices(), criteres.getCedIds() , criteres.getCesIds(), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
-        AffaireStats affaireStatsPourLeCessionnaire = statRepo.getAffaireStatsParCessionnaires(criteres.getExercices(), criteres.getCedIds(), cesId == null ? criteres.getCesIds() : Collections.singletonList(cesId), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
+        AffaireStats affaireStatsGlobal = statRepo.getAffaireStats(criteres.getExercices(), criteres.getCedIds(), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
+        AffaireStats affaireStatsPourLeCessionnaire = statRepo.getAffaireStatsParCessionnaires(criteres.getExercices(), cesId == null ? criteres.getCesIds() : Collections.singletonList(cesId), criteres.getStatutCreation(), criteres.getStaCodes(), criteres.getCouIds(), criteres.getDevCodes(), criteres.getDateEffet(), criteres.getDateEcheance());
 
-        AffaireStats.DetailsAffaireStat detailsAffaireStat = new AffaireStats.DetailsAffaireStat();
+        AffaireStats.DetailsAffaireStatParCessionnaire detailsAffaireStat = new AffaireStats.DetailsAffaireStatParCessionnaire();
         detailsAffaireStat.setId(cesId);
         detailsAffaireStat.setLibelle(cesRepo.getCesNameById(cesId));
         detailsAffaireStat.setNbrAffaires(affaireStatsPourLeCessionnaire.getNbrAffaires());
-        detailsAffaireStat.setMtCapitalInitial(null);
-        detailsAffaireStat.setMtSmpLci(null);
+        detailsAffaireStat.setMtSmpLciAccepte(affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte() == null || affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().setScale(0));
+        BigDecimal mtTotalSmpLci = affaireStatsGlobal.getMtTotalSmpLci();
+        if(mtTotalSmpLci == null || mtTotalSmpLci.compareTo(ZERO) == 0) return detailsAffaireStat;
+        BigDecimal tauxSmpLciAccepte = detailsAffaireStat.getMtSmpLciAccepte() == null ? ZERO : detailsAffaireStat.getMtSmpLciAccepte().multiply(CENT).divide(mtTotalSmpLci, 4, RoundingMode.HALF_UP);
+        detailsAffaireStat.setTauxSmpLciAccepte(tauxSmpLciAccepte);
 
-        if(affaireStatsGlobal.getNbrAffaires().equals(0)) return detailsAffaireStat;
-        double tauxAffaire =  affaireStatsPourLeCessionnaire.getNbrAffaires() / affaireStatsGlobal.getNbrAffaires();
-
-        detailsAffaireStat.setTauxAffaires(new BigDecimal(tauxAffaire).multiply(CENT));
         return detailsAffaireStat;
     }
 
     @Override
-    public AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCedante(CritereStat criteres, Long cedId)
+    public AffaireStats.DetailsAffaireStatParCedante calculerDetailsAffaireStatsParCedante(CritereStat criteres, Long cedId)
     {
         return this.calculerDetailsAffaireStatsParCedantes(criteres, cedId);
     }
 
     @Override
-    public AffaireStats.DetailsAffaireStat calculerDetailsAffaireStatsParCessionnaire(CritereStat criteres, Long cesId)
+    public AffaireStats.DetailsAffaireStatParCessionnaire calculerDetailsAffaireStatsParCessionnaire(CritereStat criteres, Long cesId)
     {
         return this.calculerDetailsAffaireStatsParCessionnaires(criteres, cesId);
     }

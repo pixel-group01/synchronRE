@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import com.pixel.synchronre.typemodule.model.entities.Type;
+import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
@@ -36,4 +37,6 @@ public class CreateCesLegReq
     @ExistingParamCesLegId @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
     private Long paramCesLegalId;
     private boolean accepte;
+
+    protected BigDecimal affCoursDevise;
 }

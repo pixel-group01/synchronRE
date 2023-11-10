@@ -18,7 +18,7 @@ public interface IServiceCalculsComptables
     BigDecimal calculateMtTotalAReverseAuxCes(Long affId);
     BigDecimal calculateDejaReverse(Long affId);
     BigDecimal calculateRestAReverser(Long affId);
-    public BigDecimal calculateMtEnAttenteDeAReversement(Long affId);
+    BigDecimal calculateMtEnAttenteDeAReversement(Long affId);
     BigDecimal calculateTauxDeReversement(Long affId);
 
     BigDecimal calculateDejaReverseByCes(Long plaId);
@@ -35,6 +35,8 @@ public interface IServiceCalculsComptables
     BigDecimal calculateMtCmsCourtageByCes(Long plaId);
     BigDecimal calculateMtTotalCmsCourtage(Long affId);
     BigDecimal calculateTauxDeReglement(Long affId);
+
+    BigDecimal calculatePrimeNetteCommissionCed(Long affId);
 
 
     BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude);

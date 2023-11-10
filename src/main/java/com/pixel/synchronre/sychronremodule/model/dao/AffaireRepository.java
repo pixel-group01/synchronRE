@@ -165,4 +165,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
     @Query("select a.cedante.pays.paysCode from Affaire a where a.affId = ?1")
     String getPaysCodebyAffId(Long affId);
+
+    @Query("select a.devise.devCode from Affaire a where a.affId = ?1")
+    String getDevCodeByAffId(Long affId);
 }

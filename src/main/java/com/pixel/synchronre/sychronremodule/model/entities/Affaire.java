@@ -64,6 +64,8 @@ public class Affaire {
     private AppFunction affFonCreator;
     @ManyToOne @JoinColumn(name = "devise_code")
     protected Devise devise;
+    @Column(precision = 50, scale = 20)
+    protected BigDecimal affCoursDevise;
 
 
     public Affaire(Long affId) {

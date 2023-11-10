@@ -29,6 +29,7 @@ public class EtatComptableAffaire
 
     private BigDecimal mtTotalCmsCedante;
     private BigDecimal mtTotalCmsCourtage; //Commission du réassureur propriétaire (NelsonRE)
+    private BigDecimal primeNetteCmsCedante; //Prime net de la commission cedante (prime totale sur l'affaire - commission cedante)
 
     private BigDecimal mtTotalPrimeBruteCes;
     private BigDecimal mtTotalPrimeNetteCes; //Montant du aux cessionnaires

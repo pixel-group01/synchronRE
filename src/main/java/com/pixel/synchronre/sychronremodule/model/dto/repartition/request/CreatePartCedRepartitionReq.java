@@ -34,4 +34,5 @@ public class CreatePartCedRepartitionReq
     private BigDecimal repSousCommission; //TODO A Valider
     @ExistingAffId
     private Long affId;
+    protected BigDecimal affCoursDevise;
 }
