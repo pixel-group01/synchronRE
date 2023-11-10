@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-08-12T13:21:57 -->
+<!-- 2023-11-10T11:14:08 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Credit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b258cd63-2ea2-4241-8959-d0231463b3ee">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -45,12 +45,15 @@
        repartition.rep_capital,
        regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
        repartition.rep_taux,
+       ROUND(repartition.rep_taux, 2) AS taux,
        repartition.rep_sous_commission,
+       ROUND(repartition.rep_sous_commission, 2) AS taux_sous_commission,
        repartition.rep_taux_com_ced,
+       ROUND(repartition.rep_taux_com_ced, 2) AS taux_com_cedante,
        repartition.rep_taux_com_court,
+       ROUND(repartition.rep_taux_com_court, 2) AS taux_com_courtage,
        repartition.typ_id,
        repartition.cessionnaire_id,
-       repartition.rep_interlocuteur,
        repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
        regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
        repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
@@ -74,12 +77,14 @@ FROM affaire,
      cedante,
      couverture,
      repartition,
-     cessionnaire
+     cessionnaire,
+     type
 WHERE repartition.cessionnaire_id = cessionnaire.ces_id
   AND repartition.aff_id = affaire.aff_id
+  AND repartition.typ_id = type.type_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
-  AND repartition.typ_id = 3
+  AND type.unique_code in ('REP_PLA')
   AND repartition.aff_id = $P{aff_id}
   AND  repartition.cessionnaire_id =$P{ces_id}]]>
 		</queryString>
@@ -87,12 +92,15 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 		<field name="rep_capital" class="java.math.BigDecimal"/>
 		<field name="rep_capital1" class="java.lang.String"/>
 		<field name="rep_taux" class="java.math.BigDecimal"/>
+		<field name="taux" class="java.math.BigDecimal"/>
 		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
+		<field name="taux_sous_commission" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
+		<field name="taux_com_cedante" class="java.math.BigDecimal"/>
 		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
+		<field name="taux_com_courtage" class="java.math.BigDecimal"/>
 		<field name="typ_id" class="java.lang.Long"/>
 		<field name="cessionnaire_id" class="java.lang.Long"/>
-		<field name="rep_interlocuteur" class="java.lang.String"/>
 		<field name="prime_cedee" class="java.math.BigDecimal"/>
 		<field name="prime_cedee1" class="java.lang.String"/>
 		<field name="com_cedante" class="java.math.BigDecimal"/>
@@ -145,7 +153,6 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
                 cedante.ced_nom_filiale,
                 couverture.cou_libelle,
                 branche.bran_libelle,
-                repartition.rep_interlocuteur,
                 repartition.cessionnaire_id,
                 bordereau.bord_num,
                 cessionnaire.ces_nom
@@ -182,7 +189,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="cou_libelle" class="java.lang.String"/>
 	<field name="bran_libelle" class="java.lang.String"/>
-	<field name="rep_interlocuteur" class="java.lang.String"/>
 	<field name="cessionnaire_id" class="java.lang.Long"/>
 	<field name="bord_num" class="java.lang.String"/>
 	<field name="ces_nom" class="java.lang.String"/>
@@ -192,7 +198,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<title>
 		<band height="69" splitType="Stretch">
 			<image>
-				<reportElement x="178" y="3" width="159" height="64" uuid="f014caeb-d106-4590-aa46-b4249df00b39">
+				<reportElement x="178" y="3" width="172" height="64" uuid="f014caeb-d106-4590-aa46-b4249df00b39">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
@@ -200,7 +206,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</title>
 	<detail>
-		<band height="665" splitType="Stretch">
+		<band height="660" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="32" width="554" height="33" backcolor="#DEDCDC" uuid="7e43f0d5-6454-4c47-8866-0fb63a0d98d0">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -214,7 +220,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[NOTE DE CREDIT - CESSIONS FACULTATIVES]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="10" width="218" height="21" uuid="26e7106e-6b35-430d-9b86-bc9eaf83dee7">
+				<reportElement x="2" y="10" width="318" height="21" uuid="26e7106e-6b35-430d-9b86-bc9eaf83dee7">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -231,13 +237,6 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<textFieldExpression><![CDATA["Date   :    "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="0" y="76" width="80" height="20" uuid="924a8c7f-a681-4dd4-b0a7-1def3beaea42"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="14"/>
-				</textElement>
-				<text><![CDATA[Réassureur :]]></text>
-			</staticText>
 			<line>
 				<reportElement x="1" y="119" width="1" height="245" uuid="3b8cc868-d776-485c-aafc-36fd32631336">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -469,13 +468,13 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{aff_activite}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="76" width="403" height="19" uuid="97ffe6f1-9c2b-4416-bd96-45846066c0ec">
+				<reportElement x="2" y="77" width="403" height="19" uuid="97ffe6f1-9c2b-4416-bd96-45846066c0ec">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="12"/>
+					<font fontName="SansSerif" size="14"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Réassureur  :  " +$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="7" y="414" width="541" height="95" uuid="ac6c8901-fbb6-42a2-98ce-55d7a1170b08">
@@ -598,7 +597,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="12"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{rep_taux} +" % "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux} +" % "]]></textFieldExpression>
 							</textField>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TH" height="19" rowSpan="1">
@@ -621,7 +620,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="12"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{rep_taux_com_court} + " % "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux_com_courtage} + " % "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="19">
@@ -634,7 +633,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="12"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{rep_taux_com_ced} + " % "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux_com_cedante} + " % "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
