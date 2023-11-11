@@ -77,7 +77,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
         BigDecimal primeNette = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
 
-        if(resteAPayer.compareTo(primeNette)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(resteAPayer.compareTo(primeNette)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
