@@ -36,6 +36,10 @@ public interface IServiceCalculsComptables
     BigDecimal calculateMtTotalCmsCourtage(Long affId);
     BigDecimal calculateTauxDeReglement(Long affId);
 
+
+    BigDecimal calculateMtTotalCmsCourtageDejaEncaisse(Long affId);
+    BigDecimal calculateMtTotalCmsCourtageRestantAEncaisse(Long affId);
+
     BigDecimal calculatePrimeNetteCommissionCed(Long affId);
 
 

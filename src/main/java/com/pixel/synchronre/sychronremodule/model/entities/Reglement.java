@@ -28,6 +28,8 @@ public class Reglement {
   private BigDecimal regMontant;
   private String regMontantLettre;
   @Column(precision = 1000, scale = 980)
+  private BigDecimal regMontantNetteCommissionRea;
+  @Column(precision = 1000, scale = 980)
   private BigDecimal regCommission;
   @Column(precision = 1000, scale = 980)
   private BigDecimal regCommissionCourt;

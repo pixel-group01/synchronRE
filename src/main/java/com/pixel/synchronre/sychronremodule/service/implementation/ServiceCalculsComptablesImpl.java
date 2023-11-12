@@ -188,6 +188,22 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
+    public BigDecimal calculateMtTotalCmsCourtageDejaEncaisse(Long affId)
+    {
+        BigDecimal mtTotalCmsCourtageDejaEncaisse = regRepo.calculateMtComCourtierDejaEncaisse(affId);
+        return mtTotalCmsCourtageDejaEncaisse == null ? ZERO : mtTotalCmsCourtageDejaEncaisse;
+    }
+
+    @Override
+    public BigDecimal calculateMtTotalCmsCourtageRestantAEncaisse(Long affId)
+    {
+        BigDecimal mtTotalCmsCourtageGlobale = this.calculateMtTotalCmsCourtage(affId);
+        mtTotalCmsCourtageGlobale = mtTotalCmsCourtageGlobale == null ? ZERO : mtTotalCmsCourtageGlobale;
+        BigDecimal mtTotalCommissionCourtageDejaEncaisse = this.calculateMtTotalCmsCourtageDejaEncaisse(affId);
+        return mtTotalCmsCourtageGlobale.subtract(mtTotalCommissionCourtageDejaEncaisse);
+    }
+
+    @Override
     public BigDecimal calculatePrimeNetteCommissionCed(Long affId) {
         BigDecimal prime = affRepo.getFacPrime(affId);
         prime = prime == null ? ZERO : prime;

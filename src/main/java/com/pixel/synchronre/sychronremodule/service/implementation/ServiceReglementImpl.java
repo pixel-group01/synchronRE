@@ -75,9 +75,9 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
-        BigDecimal primeNette = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
+        BigDecimal primeNetteComCed = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
 
-        if(resteAPayer.compareTo(primeNette)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(resteAPayer.compareTo(primeNetteComCed)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -85,33 +85,28 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
 
         BigDecimal commissionCedGlobale = comptaAffaireService.calculateMtTotaleCmsCed(dto.getAffId());
-        BigDecimal commissionCourtGlobale = comptaAffaireService.calculateMtTotalCmsCourtage(dto.getAffId());
+        BigDecimal commissionCourtageRestantAEncaisse = comptaAffaireService.calculateMtTotalCmsCourtageRestantAEncaisse(dto.getAffId());
 
-        BigDecimal primeTotale = affRepo.getFacPrime(dto.getAffId());
-        primeTotale = primeTotale == null ? ZERO : primeTotale;
-        boolean isDernierPaiement = primeNette.compareTo(resteAPayer) == 0;
-        BigDecimal commissionCed = ZERO;
-        BigDecimal commissionCourt = ZERO;
-        if(!isDernierPaiement)
+        BigDecimal commissionCourtageEncaisse;
+        BigDecimal primeNetteComRea;
+        if(primeNetteComCed.compareTo(commissionCourtageRestantAEncaisse)>0)
         {
-            // commissionCedante = (primeNette * commissionCedGlobale)/(primeTotale - commissionCedGlobale)
-            commissionCed = primeNette.multiply(commissionCedGlobale).divide(primeTotale.subtract(commissionCedGlobale), 1000, RoundingMode.HALF_UP);
-            commissionCourt = primeNette.multiply(commissionCourtGlobale).divide(primeTotale.subtract(commissionCourtGlobale), 1000, RoundingMode.HALF_UP);
+            primeNetteComRea = primeNetteComCed.subtract(commissionCourtageRestantAEncaisse);
+            commissionCourtageEncaisse = commissionCourtageRestantAEncaisse;
         }
         else
         {
-            BigDecimal commissionCedanteDejaEncaisse = regRepo.calculateMtComCedDejaEncaisse(dto.getAffId()); commissionCedanteDejaEncaisse = commissionCedanteDejaEncaisse == null ? ZERO : commissionCedanteDejaEncaisse;
-            BigDecimal commissionCourtierDejaEncaisse = regRepo.calculateMtComCourtierDejaEncaisse(dto.getAffId()); commissionCourtierDejaEncaisse = commissionCourtierDejaEncaisse == null ? ZERO : commissionCourtierDejaEncaisse;
-            commissionCed = commissionCedGlobale.subtract(commissionCedanteDejaEncaisse);
-            commissionCourt = commissionCourtGlobale.subtract(commissionCourtierDejaEncaisse);
+            primeNetteComRea = ZERO;
+            commissionCourtageEncaisse = commissionCourtageRestantAEncaisse.subtract(primeNetteComCed);
         }
 
-        BigDecimal commissionRea = commissionCed.add(commissionCourt);
+        BigDecimal commissionRea = commissionCedGlobale.add(commissionCourtageEncaisse);
 
 
-        paiement.setRegCommissionCed(commissionCed);
-        paiement.setRegCommissionCourt(commissionCourt);
+        paiement.setRegCommissionCed(commissionCedGlobale);
+        paiement.setRegCommissionCourt(commissionCourtageEncaisse);
         paiement.setRegCommission(commissionRea);
+        paiement.setRegMontantNetteCommissionRea(primeNetteComRea);
 
         paiement = regRepo.save(paiement);
         logService.logg(ReglementActions.CREATE_PAIEMENT_AFFAIRE, null, paiement, SynchronReTables.REGLEMENT);
