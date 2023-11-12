@@ -124,29 +124,22 @@ public class ServiceReglementImpl implements IserviceReglement {
     {//TODO A revoir le controle sur le reste à reverser
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
         BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
+        BigDecimal mtEnAttenteDeReversement = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
+
         if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
         if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(dto.getRegMontant().compareTo(mtEnAttenteDeReversement)>0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
 
-        BigDecimal tauxReassurance = placement.getRepSousCommission();
-        BigDecimal tauxCourt = placement.getRepTauxComCourt();
-        BigDecimal tauxCed = placement.getRepTauxComCed();
-
-
-
-        BigDecimal primeBrute = dto.getRegMontant().multiply(CENT).divide(CENT.subtract(tauxReassurance), 1000, RoundingMode.HALF_UP) ;
-        BigDecimal commissionCourt = primeBrute.multiply(tauxCourt).divide(CENT, 1000, RoundingMode.HALF_UP);
-        BigDecimal commissionCed = primeBrute.multiply(tauxCed).divide(CENT, 1000, RoundingMode.HALF_UP);
-        BigDecimal commissionReassurance = primeBrute.multiply(tauxReassurance).divide(CENT, 1000, RoundingMode.HALF_UP);
-        reversement.setRegCommissionCourt(commissionCourt);
-        reversement.setRegCommissionCed(commissionCed);
-        reversement.setRegCommission(commissionReassurance);
+        reversement.setRegCommissionCourt(ZERO);
+        reversement.setRegCommissionCed(ZERO);
+        reversement.setRegCommission(ZERO);
 
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         reversement.setRegMontantLettre(ConvertMontant.numberToLetter(reversement.getRegMontant().longValue()));
-        reversement = regRepo.save(reversement); Long regId = reversement.getRegId();
+        reversement = regRepo.save(reversement);
         logService.logg(ReglementActions.CREATE_REVERSEMENT_AFFAIRE, null, reversement, SynchronReTables.REGLEMENT);
         reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         BigDecimal restARegler = comptaAffaireService.calculateRestARegler(dto.getAffId());
