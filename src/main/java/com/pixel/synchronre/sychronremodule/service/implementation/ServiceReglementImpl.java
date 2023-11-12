@@ -84,7 +84,8 @@ public class ServiceReglementImpl implements IserviceReglement {
         paiement.setTypeReglement(typeRepo.findByUniqueCode(PAIEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
         paiement.setRegMontantLettre(ConvertMontant.numberToLetter(paiement.getRegMontant().longValue()));
 
-        BigDecimal commissionCedGlobale = comptaAffaireService.calculateMtTotaleCmsCed(dto.getAffId());
+        //BigDecimal commissionCedGlobale = comptaAffaireService.calculateMtTotaleCmsCed(dto.getAffId());
+        BigDecimal commissionCedanteRestantAEncaisse = comptaAffaireService.calculateMtTotalCmsCedanteRestantAEncaisse(dto.getAffId());
         BigDecimal commissionCourtageRestantAEncaisse = comptaAffaireService.calculateMtTotalCmsCourtageRestantAEncaisse(dto.getAffId());
 
         BigDecimal commissionCourtageEncaisse;
@@ -100,10 +101,10 @@ public class ServiceReglementImpl implements IserviceReglement {
             commissionCourtageEncaisse = commissionCourtageRestantAEncaisse.subtract(primeNetteComCed);
         }
 
-        BigDecimal commissionRea = commissionCedGlobale.add(commissionCourtageEncaisse);
+        BigDecimal commissionRea = commissionCedanteRestantAEncaisse.add(commissionCourtageEncaisse);
 
 
-        paiement.setRegCommissionCed(commissionCedGlobale);
+        paiement.setRegCommissionCed(commissionCedanteRestantAEncaisse);
         paiement.setRegCommissionCourt(commissionCourtageEncaisse);
         paiement.setRegCommission(commissionRea);
         paiement.setRegMontantNetteCommissionRea(primeNetteComRea);

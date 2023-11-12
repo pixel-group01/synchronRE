@@ -204,6 +204,20 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     }
 
     @Override
+    public BigDecimal calculateMtTotalCmsCedanteDejaEncaisse(Long affId) {
+        BigDecimal mtTotalCmsCmsCedanteDejaEncaisse = regRepo.calculateMtComCedDejaEncaisse(affId);
+        return mtTotalCmsCmsCedanteDejaEncaisse == null ? ZERO : mtTotalCmsCmsCedanteDejaEncaisse;
+    }
+
+    @Override
+    public BigDecimal calculateMtTotalCmsCedanteRestantAEncaisse(Long affId) {
+        BigDecimal mtTotalCmsCedanteGlobale = this.calculateMtTotaleCmsCed(affId);
+        mtTotalCmsCedanteGlobale = mtTotalCmsCedanteGlobale == null ? ZERO : mtTotalCmsCedanteGlobale;
+        BigDecimal mtTotalCommissionCedanteDejaEncaisse = this.calculateMtTotalCmsCedanteDejaEncaisse(affId);
+        return mtTotalCmsCedanteGlobale.subtract(mtTotalCommissionCedanteDejaEncaisse);
+    }
+
+    @Override
     public BigDecimal calculatePrimeNetteCommissionCed(Long affId) {
         BigDecimal prime = affRepo.getFacPrime(affId);
         prime = prime == null ? ZERO : prime;
@@ -231,6 +245,8 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         repCapitalToExclude = repCapitalToExclude == null ? ZERO : repCapitalToExclude;
         return dejaReparti.subtract(repCapitalToExclude);
     }
+
+
 
     @Override
     public BigDecimal calculateTauxDeReversement(Long affId)
