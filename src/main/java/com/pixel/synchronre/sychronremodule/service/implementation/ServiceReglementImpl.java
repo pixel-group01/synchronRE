@@ -60,7 +60,6 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final BigDecimal CENT = new BigDecimal(100);
     private final RepartitionRepository repRepo;
 
-
     @Override @Transactional
     public ReglementDetailsResp createReglementAffaire(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
@@ -102,7 +101,6 @@ public class ServiceReglementImpl implements IserviceReglement {
         }
 
         BigDecimal commissionRea = commissionCedanteRestantAEncaisse.add(commissionCourtageEncaisse);
-
 
         paiement.setRegCommissionCed(commissionCedanteRestantAEncaisse);
         paiement.setRegCommissionCourt(commissionCourtageEncaisse);
@@ -222,18 +220,27 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException
     {
-        Reglement ref = regRepo.findById(dto.getRegId()).orElseThrow(()->new AppException("Reglement introuvable"));
-        Reglement oldPai = paiCopier.copy(ref);
-        ref.setRegReference(dto.getRegReference());
-        ref.setRegMontant(dto.getRegMontant());
-        ref.setRegDate(dto.getRegDate());
-        ref=regRepo.save(ref);
-        logService.logg(ReglementActions.UPDATE_REGLEMENT, oldPai, ref, SynchronReTables.REGLEMENT);
-        return reglementMapper.mapToReglementDetailsResp(ref);
+        Reglement reg = regRepo.findById(dto.getRegId()).orElseThrow(()->new AppException("Reglement introuvable"));
+        Reglement oldPai = paiCopier.copy(reg);
+        reg.setRegReference(dto.getRegReference());
+        reg.setRegMontant(dto.getRegMontant());
+        reg.setRegDate(dto.getRegDate());
+        reg=regRepo.save(reg);
+        logService.logg(ReglementActions.UPDATE_REGLEMENT, oldPai, reg, SynchronReTables.REGLEMENT);
+        return reglementMapper.mapToReglementDetailsResp(reg);
     }
 
     @Override
     public Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typRegUniqueCode, Pageable pageable) {
         return regRepo.searchReglement(StringUtils.stripAccentsToUpperCase(key), affId, sinId,typRegUniqueCode, pageable);
+    }
+
+    @Override
+    public int deleteReglement(Long regId) throws UnknownHostException {
+        Reglement reglement = regRepo.findById(regId).orElseThrow(()->new AppException("Règlemement introuvable"));
+        Reglement oldReg = paiCopier.copy(reglement);
+        reglement.setRegStatut(false);
+        logService.logg(ReglementActions.DELETE_REGLEMENT, oldReg, reglement, SynchronReTables.REGLEMENT);
+        return 1;
     }
 }

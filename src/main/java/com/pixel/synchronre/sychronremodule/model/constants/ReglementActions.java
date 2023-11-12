@@ -13,4 +13,5 @@ public class ReglementActions
     public static final String UPDATE_REVERSEMENT_AFFAIRE = "Modification d'un reversement sur une affaire";
     public static final String UPDATE_REVERSEMENT_SINISTRE = "Modification d'un reversement sur un sinistre";
     public static final String UPDATE_REGLEMENT = "Modification d'un règlement";
+    public static final String DELETE_REGLEMENT = "Supression d'un règlement";
 }

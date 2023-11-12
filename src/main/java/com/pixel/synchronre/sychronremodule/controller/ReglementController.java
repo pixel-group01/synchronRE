@@ -88,4 +88,9 @@ public class ReglementController
     {
         return sinMapper. getDetailsEtatComptableSinistre(sinId, cesId);
     }
+
+    @GetMapping(path ="/delete/{regId}")
+    public int getDetailEtatComptableSinistre(@PathVariable Long regId) throws UnknownHostException {
+        return regService.deleteReglement(regId);
+    }
 }
