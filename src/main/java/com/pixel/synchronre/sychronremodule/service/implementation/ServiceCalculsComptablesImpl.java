@@ -76,10 +76,9 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     {
         boolean affIdExists = affId != null && affRepo.existsById(affId);
         BigDecimal dejaRegle = this.calculateDejaRegle(affId);
-        BigDecimal facprime = !affIdExists ? ZERO : affRepo.getFacPrime(affId);
-        facprime = facprime == null ? ZERO : facprime;
-        BigDecimal cmsCedante = this.calculateMtTotaleCmsCed(affId); cmsCedante = cmsCedante == null ? ZERO : cmsCedante;
-        return  facprime.subtract(dejaRegle.add(cmsCedante));
+        BigDecimal mtTotalPrimeCessionnaireNetteComCed = !affIdExists ? ZERO : this.calculateMtTotalPrimeCessionnaireNetteComCed(affId);
+        mtTotalPrimeCessionnaireNetteComCed = mtTotalPrimeCessionnaireNetteComCed == null ? ZERO : mtTotalPrimeCessionnaireNetteComCed;
+        return  mtTotalPrimeCessionnaireNetteComCed.subtract(dejaRegle);
     }
 
     @Override
@@ -96,6 +95,14 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         List<Long> plaIds = repRepo.getPlaIdsByAffId(affId);
         BigDecimal primeNetteTotale = plaIds.stream().map(plaId->this.calculateMtPrimeNetteByCes(plaId)).reduce(BigDecimal::add).orElse(ZERO);
         return primeNetteTotale;
+    }
+
+    @Override
+    public BigDecimal calculateMtTotalPrimeCessionnaireNetteComCed(Long affId)
+    {
+        BigDecimal primeNetteCessionnaire = repRepo.calculateMtPrimeBruteByAffaire(affId);
+        BigDecimal primeCessionnaireNetteComCed = primeNetteCessionnaire.subtract(this.calculateMtTotaleCmsCed(affId));
+        return primeCessionnaireNetteComCed;
     }
 
     @Override

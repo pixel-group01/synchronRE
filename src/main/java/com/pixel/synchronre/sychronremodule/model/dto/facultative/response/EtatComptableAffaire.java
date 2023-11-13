@@ -31,7 +31,8 @@ public class EtatComptableAffaire
     private BigDecimal mtTotalCmsCourtage; //Commission du réassureur propriétaire (NelsonRE)
     private BigDecimal primeNetteCmsCedante; //Prime net de la commission cedante (prime totale sur l'affaire - commission cedante)
 
-    private BigDecimal mtTotalPrimeBruteCes;
+    private BigDecimal mtTotalPrimeBruteCes; //
+    private BigDecimal mtTotalPrimeCessionnaireNetteComCed;
     private BigDecimal mtTotalPrimeNetteCes; //Montant du aux cessionnaires
     private BigDecimal dejaRegle;
     private BigDecimal resteARegler;
@@ -40,6 +41,7 @@ public class EtatComptableAffaire
     private BigDecimal mtAttenteReversement;
     private BigDecimal resteAReverser;
     private BigDecimal tauxDeReversement;
+
     private List<DetailsEtatComptable> detailsEtatComptables;
 
     @Getter @Setter @NoArgsConstructor @AllArgsConstructor

@@ -74,6 +74,8 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
+        if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un paiement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+
         BigDecimal primeNetteComCed = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
 
         if(resteAPayer.compareTo(primeNetteComCed)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
@@ -97,7 +99,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         else
         {
             primeNetteComRea = ZERO;
-            commissionCourtageEncaisse = commissionCourtageRestantAEncaisse.subtract(primeNetteComCed);
+            commissionCourtageEncaisse = primeNetteComCed;
         }
 
         BigDecimal commissionRea = commissionCedanteRestantAEncaisse.add(commissionCourtageEncaisse);
@@ -121,6 +123,8 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
     {//TODO A revoir le controle sur le reste à reverser
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
+        //if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un reversement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+
         BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
         BigDecimal mtEnAttenteDeReversement = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
 

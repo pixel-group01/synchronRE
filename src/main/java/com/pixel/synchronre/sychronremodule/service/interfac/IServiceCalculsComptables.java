@@ -16,6 +16,7 @@ public interface IServiceCalculsComptables
     BigDecimal calculateRestARegler(Long affId);
 
     BigDecimal calculateMtTotalAReverseAuxCes(Long affId);
+    BigDecimal calculateMtTotalPrimeCessionnaireNetteComCed(Long affId);
     BigDecimal calculateDejaReverse(Long affId);
     BigDecimal calculateRestAReverser(Long affId);
     BigDecimal calculateMtEnAttenteDeAReversement(Long affId);

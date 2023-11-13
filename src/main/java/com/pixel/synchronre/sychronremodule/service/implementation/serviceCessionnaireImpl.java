@@ -7,12 +7,15 @@ import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CessionnaireMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
@@ -22,8 +25,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
 public class serviceCessionnaireImpl implements IserviceCessionnaire
@@ -33,6 +39,8 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     private final ObjectCopier<Cessionnaire> cesCopier;
     private final ILogService logService;
     private final TypeRepo typeRepo;
+    private final IServiceCalculsComptables comptaService;
+    private final RepartitionRepository repRepo;
     @Override @Transactional
     public CessionnaireDetailsResp createCessionnaire(CreateCessionnaireReq dto) throws UnknownHostException {
         Cessionnaire ces = cesMapper.mapToCessionnaire(dto);
@@ -69,5 +77,17 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
         List<Cessionnaire> cessionnaires = cesRepo.getCourtiers();
         if(cessionnaires == null || cessionnaires.isEmpty()) throw new AppException("Aucun coutier détecté dans le système");
         return cessionnaires.get(0);
+    }
+
+    @Override
+    public List<CessionnaireListResp> getCessionnairesByAffaire(Long affId) {
+        return cesRepo.findByAffId(affId).stream()
+                .map(ces->repRepo.getPlacementIdByAffIdAndCesId(affId, ces.getCesId()).orElse(null))
+                .filter(Objects::nonNull)
+                .filter(plaId->comptaService.calculateRestAReverserbyCes(plaId).setScale(4).compareTo(BigDecimal.ZERO) != 0)
+                .map(plaId->repRepo.getCessionnaireByRepId(plaId).orElse(null))
+                .filter(Objects::nonNull)
+                .map(ces->cesMapper.mapToCessionnaireListResp(ces))
+                .collect(Collectors.toList());
     }
 }

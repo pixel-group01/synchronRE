@@ -18,4 +18,6 @@ public interface IserviceCessionnaire
     Page<CessionnaireListResp> searchCessionnaire(String key, Pageable pageable);
 
     Cessionnaire getCourtier();
+
+    List<CessionnaireListResp> getCessionnairesByAffaire(Long affId);
 }

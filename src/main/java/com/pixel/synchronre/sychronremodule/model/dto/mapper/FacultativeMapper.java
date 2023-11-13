@@ -107,6 +107,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "mtTotalPrimeBruteCes", expression = "java(repRepo.calculateMtPrimeBruteByAffaire(aff.getAffId()))")
+    @Mapping(target = "mtTotalPrimeCessionnaireNetteComCed", expression = "java(comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(aff.getAffId()))")
     public abstract EtatComptableAffaire mapToEtatComptableAffaire(Affaire aff);
 
     protected boolean placementIsFinished(Long affId)
