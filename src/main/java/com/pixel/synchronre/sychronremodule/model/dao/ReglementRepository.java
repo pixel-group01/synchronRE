@@ -19,11 +19,12 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
                                          or cast(r.regMontant as string) like concat(coalesce(concat(?1), ''), '%'))
                                          and (a.affId = ?2 or ?2 is null)
                                          and (s.sinId = ?3 or ?3 is null)
-                                         and upper(r.typeReglement.uniqueCode) = upper(?4)     
+                                         and upper(r.typeReglement.uniqueCode) = upper(?4) 
+                                         and r.regStatut=true   
         """)
     Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typeReg, Pageable pageable);
 
-    @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 ")
+    @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2")
     boolean affaireHasReglement(Long affId, String typeReg);
 
     @Query("select coalesce(sum(r.regMontant), 0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 and r.regStatut = true")
