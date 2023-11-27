@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-11-27T17:36:26 -->
+<!-- 2023-11-27T17:46:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -1086,7 +1086,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{param_ces_leg_libelle}]]></textFieldExpression>
 							</textField>
@@ -1126,7 +1126,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<rightPen lineWidth="1.0"/>
 								</box>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -1204,7 +1204,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="172" y="486" width="280" height="15" uuid="23b3585f-c14f-4839-938d-a662dfb65afd">
+				<reportElement x="183" y="488" width="280" height="15" uuid="23b3585f-c14f-4839-938d-a662dfb65afd">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
 				<textElement>
