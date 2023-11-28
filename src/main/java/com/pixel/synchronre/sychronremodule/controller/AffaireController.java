@@ -7,7 +7,6 @@ import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderSe
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
-import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -303,7 +302,6 @@ public class AffaireController
     {
         affService.setAsNonRealisee(affId);
     }
-
 
     @PostMapping(path = "/affaires/upload-doc/{docType}/{affId}")
     public void uploadDoc(@RequestParam(name = "file") MultipartFile file, @PathVariable String docType, @PathVariable Long affId) throws IOException

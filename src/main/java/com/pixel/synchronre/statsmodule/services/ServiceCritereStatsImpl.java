@@ -43,7 +43,7 @@ public class ServiceCritereStatsImpl implements IServiceCritereStats
 
         if(criteres == null) return criteresParDefaut;
         criteres.setExercices(criteres.getExercices()==null || criteres.getExercices().isEmpty() ? criteresParDefaut.getExercices() : criteres.getExercices());
-        criteres.setCedIds(criteres.getCedIds()==null || criteres.getCesIds().isEmpty() ? criteresParDefaut.getCedIds() : criteres.getCedIds());
+        criteres.setCedIds(criteres.getCedIds()==null || criteres.getCedIds().isEmpty() ? criteresParDefaut.getCedIds() : criteres.getCedIds());
         criteres.setCesIds(criteres.getCesIds()==null || criteres.getCesIds().isEmpty() ? criteresParDefaut.getCesIds() : criteres.getCesIds());
         criteres.setStaCodes(criteres.getStaCodes()==null || criteres.getStaCodes().isEmpty() ? criteresParDefaut.getStaCodes() : criteres.getStaCodes());
         criteres.setCouIds(criteres.getCouIds()==null || criteres.getCouIds().isEmpty() ? criteresParDefaut.getCouIds() : criteres.getCouIds());
