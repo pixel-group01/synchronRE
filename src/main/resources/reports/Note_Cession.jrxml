@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-11-27T17:46:43 -->
+<!-- 2023-11-28T17:17:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -256,35 +256,38 @@ WHERE repartition.aff_id = affaire.aff_id
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT repartition.aff_id,
-    repartition.rep_capital,
-    regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
-    repartition.rep_taux,
-    ROUND(repartition.rep_taux, 2) AS taux,
-	param_cession_legale.param_ces_leg_libelle,
-    repartition.rep_sous_commission,
-    repartition.rep_taux_com_ced,
-    repartition.rep_taux_com_court,
-    repartition.typ_id,
-    affaire.aff_activite,
-    affaire.aff_assure,
-    affaire.aff_capital_initial,
-    affaire.aff_code,
-    affaire.aff_date_echeance,
-    affaire.aff_date_effet,
-    affaire.fac_prime,
-    affaire.fac_smp_lci,
-    cedante.ced_nom_filiale,
-    couverture.cou_libelle
-   FROM affaire,
-    cedante,
-    couverture,
-    repartition,
-	param_cession_legale
-  WHERE repartition.aff_id = affaire.aff_id 
-  AND affaire.couverture_id = couverture.cou_id 
+       repartition.rep_capital,
+       regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
+       repartition.rep_taux,
+       ROUND(repartition.rep_taux, 2) AS taux,
+       param_cession_legale.param_ces_leg_libelle,
+       repartition.rep_sous_commission,
+       repartition.rep_taux_com_ced,
+       repartition.rep_taux_com_court,
+       repartition.typ_id,
+       affaire.aff_activite,
+       affaire.aff_assure,
+       affaire.aff_capital_initial,
+       affaire.aff_code,
+       affaire.part_cedante,
+       affaire.aff_date_echeance,
+       affaire.aff_date_effet,
+       affaire.fac_prime,
+       affaire.fac_smp_lci,
+       cedante.ced_nom_filiale,
+       couverture.cou_libelle
+FROM affaire,
+     cedante,
+     couverture,
+     repartition,
+     param_cession_legale,
+     type
+WHERE repartition.aff_id = affaire.aff_id
+  AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
+  AND repartition.typ_id = type.type_id
   AND repartition.param_ces_legal_id = param_cession_legale.param_ces_leg_id
-  AND repartition.typ_id = 1
+  AND type.unique_code in ('REP_CES_LEG')
   AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -301,6 +304,7 @@ WHERE repartition.aff_id = affaire.aff_id
 		<field name="aff_assure" class="java.lang.String"/>
 		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
 		<field name="aff_code" class="java.lang.String"/>
+		<field name="part_cedante" class="java.math.BigDecimal"/>
 		<field name="aff_date_echeance" class="java.sql.Date"/>
 		<field name="aff_date_effet" class="java.sql.Date"/>
 		<field name="fac_prime" class="java.math.BigDecimal"/>
@@ -313,7 +317,21 @@ WHERE repartition.aff_id = affaire.aff_id
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
-			<![CDATA[SELECT repartition.aff_id,
+			<![CDATA[WITH TotalSumsAffaire AS (
+    SELECT
+        SUM(repartition.rep_capital) AS somme_capital,
+        affaire.part_cedante - SUM(repartition.rep_capital) as diffrence_montant,
+        (affaire.part_cedante / affaire.fac_smp_lci)  * 100 - SUM(repartition.rep_taux) as differnce_taux
+    FROM affaire,
+         repartition,
+         type
+    WHERE repartition.aff_id = affaire.aff_id
+      AND repartition.typ_id = type.type_id
+      AND type.unique_code in ('REP_CONSERVATION','REP_FACOB','REP_XL')
+      AND affaire.aff_id =  $P{aff_id}
+    group by affaire.part_cedante,affaire.fac_smp_lci
+)
+SELECT repartition.aff_id,
        repartition.rep_capital,
        regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
        repartition.rep_taux,
@@ -321,19 +339,47 @@ WHERE repartition.aff_id = affaire.aff_id
        repartition.rep_sous_commission,
        repartition.rep_taux_com_ced,
        repartition.rep_taux_com_court,
-       type.name
-FROM affaire,
-     repartition,
-     type
+       type.name,
+       TotalSumsAffaire.somme_capital,
+       TotalSumsAffaire.differnce_taux,
+       ROUND(TotalSumsAffaire.differnce_taux, 2) AS reste_taux,
+       TotalSumsAffaire.diffrence_montant,
+       regexp_replace(to_char(TotalSumsAffaire.diffrence_montant, 'FM999,999,999,999'), ',', ' ', 'g') AS reste_montant
+FROM repartition,
+     type,
+     affaire
+         JOIN
+     TotalSumsAffaire ON 1=1
 WHERE repartition.aff_id = affaire.aff_id
   AND repartition.typ_id = type.type_id
   AND type.unique_code in ('REP_CONSERVATION','REP_FACOB','REP_XL')
   AND affaire.aff_id = $P{aff_id}
-ORDER BY type.type_id]]>
+ORDER BY repartition.aff_id,
+       repartition.rep_capital,
+       repartition.rep_taux,
+         affaire.part_cedante,
+         affaire.fac_smp_lci,
+       repartition.rep_sous_commission,
+       repartition.rep_taux_com_ced,
+       repartition.rep_taux_com_court,
+       TotalSumsAffaire.somme_capital,
+       TotalSumsAffaire.differnce_taux,
+       TotalSumsAffaire.diffrence_montant]]>
 		</queryString>
-		<field name="name" class="java.lang.String"/>
-		<field name="taux" class="java.math.BigDecimal"/>
+		<field name="aff_id" class="java.lang.Long"/>
+		<field name="rep_capital" class="java.math.BigDecimal"/>
 		<field name="rep_capital1" class="java.lang.String"/>
+		<field name="rep_taux" class="java.math.BigDecimal"/>
+		<field name="taux" class="java.math.BigDecimal"/>
+		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
+		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
+		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
+		<field name="name" class="java.lang.String"/>
+		<field name="somme_capital" class="java.math.BigDecimal"/>
+		<field name="differnce_taux" class="java.math.BigDecimal"/>
+		<field name="reste_taux" class="java.math.BigDecimal"/>
+		<field name="diffrence_montant" class="java.math.BigDecimal"/>
+		<field name="reste_montant" class="java.lang.String"/>
 		<group name="name">
 			<groupExpression><![CDATA[$F{name}]]></groupExpression>
 		</group>
@@ -1046,7 +1092,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="170" height="19" uuid="e6265e67-5ef2-468a-842e-1f427767990a"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -1231,10 +1277,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<jr:column width="194" uuid="efbd34fb-d3b2-4e02-84da-f08d212f563d">
 						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
 						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="194" height="19" uuid="94b835e4-ef08-4a3f-a92c-6e9e1e51ac42">
 									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 								</reportElement>
@@ -1247,6 +1294,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					</jr:column>
 					<jr:column width="182" uuid="5faf5b84-dfd3-4b49-a457-4fb22d02d0d4">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
 						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
@@ -1260,6 +1308,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					</jr:column>
 					<jr:column width="170" uuid="891a297b-1ecb-42b7-87dd-962882d8889d">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
 						<jr:detailCell style="Table_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
