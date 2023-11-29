@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Bordereau {
@@ -23,6 +24,11 @@ public class Bordereau {
     private Repartition repartition;
     @ManyToOne @JoinColumn(name = "affId")
     private Affaire affaire;
+    private BigDecimal bordMontantTotalPrime;
+    private BigDecimal bordMontantTotalCommission;
+    private BigDecimal bordMontantTotalPrimeAreverser;
+    private String bordMontantTotalPrimeAreverserLette;
+    private LocalDate brodDateLimite;
     @ManyToOne @JoinColumn(name = "type_code")
     private Type type;
     @CreationTimestamp
