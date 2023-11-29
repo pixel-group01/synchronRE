@@ -63,10 +63,10 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
         detailsAffaireStat.setMtSmpLci(affaireStatsPourLaCedante.getMtTotalSmpLci() == null  || affaireStatsPourLaCedante.getMtTotalSmpLci().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().setScale(0));
 
         if(affaireStatsGlobal.getNbrAffaires() == 0) return detailsAffaireStat;
-        BigDecimal tauxAffaire =  BigDecimal.valueOf(affaireStatsPourLaCedante.getNbrAffaires()).multiply(CENT).divide(BigDecimal.valueOf(affaireStatsGlobal.getNbrAffaires()),4, RoundingMode.HALF_UP) ;
+        BigDecimal tauxAffaire =  BigDecimal.valueOf(affaireStatsPourLaCedante.getNbrAffaires()).multiply(CENT).divide(BigDecimal.valueOf(affaireStatsGlobal.getNbrAffaires()),1, RoundingMode.HALF_UP) ;
 
-        BigDecimal tauxCapitalInitial = affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().divide(affaireStatsGlobal.getMtTotalCapitalInitial(), 4, RoundingMode.HALF_UP).multiply(CENT);
-        BigDecimal tauxSmpLci = affaireStatsPourLaCedante.getMtTotalSmpLci() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().divide(affaireStatsGlobal.getMtTotalSmpLci(), 4, RoundingMode.HALF_UP).multiply(CENT);
+        BigDecimal tauxCapitalInitial = affaireStatsPourLaCedante.getMtTotalCapitalInitial() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalCapitalInitial().divide(affaireStatsGlobal.getMtTotalCapitalInitial(), 1, RoundingMode.HALF_UP).multiply(CENT);
+        BigDecimal tauxSmpLci = affaireStatsPourLaCedante.getMtTotalSmpLci() == null ? ZERO : affaireStatsPourLaCedante.getMtTotalSmpLci().divide(affaireStatsGlobal.getMtTotalSmpLci(), 1, RoundingMode.HALF_UP).multiply(CENT);
 
         detailsAffaireStat.setTauxAffaires(tauxAffaire);
         detailsAffaireStat.setTauxCapitalInitial(tauxCapitalInitial);
@@ -88,7 +88,7 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
         detailsAffaireStat.setMtSmpLciAccepte(affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte() == null || affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().setScale(0));
         BigDecimal mtTotalSmpLci = affaireStatsGlobal.getMtTotalSmpLci();
         if(mtTotalSmpLci == null || mtTotalSmpLci.compareTo(ZERO) == 0) return detailsAffaireStat;
-        BigDecimal tauxSmpLciAccepte = detailsAffaireStat.getMtSmpLciAccepte() == null ? ZERO : detailsAffaireStat.getMtSmpLciAccepte().multiply(CENT).divide(mtTotalSmpLci, 4, RoundingMode.HALF_UP);
+        BigDecimal tauxSmpLciAccepte = detailsAffaireStat.getMtSmpLciAccepte() == null ? ZERO : detailsAffaireStat.getMtSmpLciAccepte().multiply(CENT).divide(mtTotalSmpLci, 1, RoundingMode.HALF_UP);
         detailsAffaireStat.setTauxSmpLciAccepte(tauxSmpLciAccepte);
 
         return detailsAffaireStat;
