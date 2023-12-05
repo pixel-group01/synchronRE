@@ -28,6 +28,7 @@ public interface IServiceCalculsComptables
 
 
     BigDecimal calculateMtPrimeNetteByCes(Long plaId); //Prime nette du aux cessionnaires
+    BigDecimal calculateMtPrimeNetteComCedByCes(Long plaId); //Prime nette de la commission cedante (NelsonRe doit recupérer sa commission de ce montant)
     BigDecimal calculateMtTotaleCms(Long affId);
     BigDecimal calculateMtCmsByCes(Long plaId);
     BigDecimal calculateMtCmsCedByCes(Long plaId);

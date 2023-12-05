@@ -1,16 +1,17 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.controller.service.PlacementDocUploader;
-import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.*;
+import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
+import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
@@ -19,14 +20,12 @@ import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.Int
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
+import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreatePlaRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +55,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final ParamCessionLegaleRepository pclRepo;
     private final PlacementDocUploader placementDocUploader;
     private final EmailSenderService mailSenderService;
-    private final IserviceBordereau bordService;
     @Value("${spring.mail.username}")
     private String synchronreEmail;
     private final IServiceInterlocuteur intService;
@@ -64,6 +62,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final UserRepo userRepo;
     private final EmailSenderService emailSenderService;
     private final CessionnaireRepository cesRepo;
+    private final IserviceBordereau bordService;
+
 
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
@@ -106,7 +106,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep.setRepStaCode(new Statut(StatutEnum.SAISIE_CRT.staCode));
             rep = repRepo.save(rep);
             mvtService.createMvtPlacement(new MvtReq(RepartitionActions.CREATE_PLA_REPARTITION, rep.getRepId(), StatutEnum.SAISIE_CRT.staCode, null));
-            bordService.createBordereau(rep.getRepId());
+            bordService.createNoteDebit(aff.getAffId());
         }
         rep.setRepTaux(repTaux);
         rep.setRepPrime(repPrime);

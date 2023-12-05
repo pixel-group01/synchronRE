@@ -15,8 +15,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.math.BigDecimal.ZERO;
-
 @RequiredArgsConstructor @Service
 public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 {
@@ -92,7 +90,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtTotalAReverseAuxCes(Long affId) //Prime nette du aux cessionnaires
     {
-        List<Long> plaIds = repRepo.getPlaIdsByAffId(affId);
+        List<Long> plaIds = repRepo.getActivePlaIdsByAffId(affId);
         BigDecimal primeNetteTotale = plaIds.stream().map(plaId->this.calculateMtPrimeNetteByCes(plaId)).reduce(BigDecimal::add).orElse(ZERO);
         return primeNetteTotale;
     }
@@ -100,8 +98,9 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtTotalPrimeCessionnaireNetteComCed(Long affId)
     {
-        BigDecimal primeNetteCessionnaire = repRepo.calculateMtPrimeBruteByAffaire(affId);
-        BigDecimal primeCessionnaireNetteComCed = primeNetteCessionnaire.subtract(this.calculateMtTotaleCmsCed(affId));
+        BigDecimal primeBrute = repRepo.calculateMtPrimeBruteByAffaire(affId);
+        if(primeBrute == null || primeBrute.compareTo(ZERO) == 0)  return ZERO;
+        BigDecimal primeCessionnaireNetteComCed = primeBrute.subtract(this.calculateMtTotaleCmsCed(affId));
         return primeCessionnaireNetteComCed;
     }
 
@@ -118,6 +117,20 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 
         return primeTotale.multiply(tauxRep).divide(CENT, 1000, RoundingMode.HALF_UP)
                 .multiply(CENT.subtract(tauxCms).divide(CENT, 1000, RoundingMode.HALF_UP));
+    }
+
+    @Override
+    public BigDecimal calculateMtPrimeNetteComCedByCes(Long plaId) {
+        BigDecimal primeTotale = repRepo.getFacPrimeTotalByPlaId(plaId);
+        BigDecimal tauxRep = repRepo.getTauRep(plaId);
+        BigDecimal tauxCmsCed = repRepo.getTauxCmsCedante(plaId);
+
+        primeTotale = primeTotale == null ? ZERO : primeTotale;
+        tauxRep = tauxRep == null ? ZERO : tauxRep;
+        tauxCmsCed = tauxCmsCed == null ? ZERO : tauxCmsCed;
+        BigDecimal comCed = this.calculateMtCmsCedByCes(plaId);
+
+        return primeTotale.subtract(comCed);
     }
 
     @Override
@@ -164,7 +177,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtTotaleCmsCed(Long affId) //Montant totale de la commission cedante
     {
-        List<Long> plaIds = repRepo.getPlaIdsByAffId(affId);
+        List<Long> plaIds = repRepo.getActivePlaIdsByAffId(affId);
         plaIds = plaIds == null ? new ArrayList<>() : plaIds;
         return plaIds.stream()
                 .map(plaId->this.calculateMtCmsCedByCes(plaId))
@@ -181,7 +194,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtTotalCmsCourtage(Long affId) //Montant total de la commission du réassureur proproétaire de l'affaire (NelsonRE)
     {
-        List<Long> plaIds = repRepo.getPlaIdsByAffId(affId);
+        List<Long> plaIds = repRepo.getActivePlaIdsByAffId(affId);
         plaIds = plaIds == null ? new ArrayList<>() : plaIds;
         return plaIds.stream()
                 .map(plaId->this.calculateMtCmsCourtageByCes(plaId))

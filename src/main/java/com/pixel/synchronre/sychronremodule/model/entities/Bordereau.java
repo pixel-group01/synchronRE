@@ -14,14 +14,10 @@ public class Bordereau {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BORD_ID_GEN")
     @SequenceGenerator(name = "BORD_ID_GEN", sequenceName = "BORD_ID_GEN")
-    private Long BordId;
+    private Long bordId;
     @Column(unique = true)
     private String bordNum;
     private String bordStatut;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal bordMtTotNoteDebit;
-    @ManyToOne @JoinColumn(name = "repId")
-    private Repartition repartition;
     @ManyToOne @JoinColumn(name = "affId")
     private Affaire affaire;
     private BigDecimal bordMontantTotalPrime;
