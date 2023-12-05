@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-11-30T17:46:22 -->
+<!-- 2023-11-30T13:49:23 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -244,8 +244,8 @@ WHERE repartition.aff_id = affaire.aff_id
         SUM(repartition.rep_taux * affaire.fac_prime / 100::numeric) AS total_prime,
         SUM(repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + SUM(repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS total_commission,
         SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)) AS total_prime_nette,
-        SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))) ) AS total_commission_individuelle
-     FROM
+        SUM((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))) AS total_commission_individuelle
+    FROM
         affaire,
         cedante,
         couverture,
@@ -253,7 +253,7 @@ WHERE repartition.aff_id = affaire.aff_id
         type,
         cessionnaire
     WHERE
-      repartition.cessionnaire_id = cessionnaire.ces_id
+            repartition.cessionnaire_id = cessionnaire.ces_id
       AND repartition.aff_id = affaire.aff_id
       AND affaire.couverture_id = couverture.cou_id
       AND affaire.cedente_id = cedante.ced_id
@@ -285,9 +285,10 @@ SELECT
     TotalSums.total_prime_nette AS total_prime_nette,
     regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1,
     regexp_replace(to_char(TotalSums.total_prime_nette, 'FM999,999,999,999'), ',', ' ', 'g') AS total_prime_areverser1,
-     (repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))) AS commission_individuelle,
-    regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))), 'FM999,999,999,999'), ',', ' ', 'g') AS commission_individuelle1,
+    (repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric))) AS commission_individuelle,
     TotalSums.total_commission_individuelle AS somme_commission,
+    (repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)) AS commission_individuelle,
+    regexp_replace(to_char( (repartition.rep_taux * affaire.fac_prime / 100::numeric) - ((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)), 'FM999,999,999,999'), ',', ' ', 'g') AS commission_individuelle1,
     regexp_replace(to_char(TotalSums.total_commission_individuelle, 'FM999,999,999,999'), ',', ' ', 'g') AS total_somme_commission
 FROM
     affaire,
@@ -297,9 +298,9 @@ FROM
     type,
     cessionnaire
         JOIN
-    TotalSums ON 1=1 
+    TotalSums ON 1=1
 WHERE
- repartition.cessionnaire_id = cessionnaire.ces_id
+        repartition.cessionnaire_id = cessionnaire.ces_id
   AND repartition.aff_id = affaire.aff_id
   AND affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
@@ -320,7 +321,7 @@ GROUP BY
     TotalSums.total_prime,
     TotalSums.total_commission,
     TotalSums.total_prime_nette,
-     TotalSums.total_commission_individuelle]]>
+    TotalSums.total_commission_individuelle]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="rep_capital" class="java.math.BigDecimal"/>
@@ -346,8 +347,9 @@ GROUP BY
 		<field name="prime_nette_cedee1" class="java.lang.String"/>
 		<field name="total_prime_areverser1" class="java.lang.String"/>
 		<field name="commission_individuelle" class="java.math.BigDecimal"/>
-		<field name="commission_individuelle1" class="java.lang.String"/>
 		<field name="somme_commission" class="java.math.BigDecimal"/>
+		<field name="COLUMN_26" class="java.math.BigDecimal"/>
+		<field name="commission_individuelle1" class="java.lang.String"/>
 		<field name="total_somme_commission" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
