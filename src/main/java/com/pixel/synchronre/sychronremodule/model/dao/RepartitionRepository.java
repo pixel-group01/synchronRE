@@ -209,4 +209,10 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
         and r.repStatut = true
     """)
     BigDecimal calculateSommeCapitauxTraites(Long affId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
+    List<Repartition> getActivePlacementsByAffId(Long affId);
+
+    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
+    List<Long> getActivePlaIdsByAffId(Long affId);
 }
