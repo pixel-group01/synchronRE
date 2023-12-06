@@ -4,6 +4,6 @@ import com.pixel.synchronre.sychronremodule.model.entities.Bordereau;
 
 public interface IserviceBordereau
 {
-    //Bordereau createBordereau(String typeUnicode,Long plaId,String staCode);
+    Bordereau createNoteCession(Long plaId);
     Bordereau createNoteDebit(Long affId);
 }

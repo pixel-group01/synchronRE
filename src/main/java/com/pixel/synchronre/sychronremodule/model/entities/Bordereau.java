@@ -17,8 +17,9 @@ public class Bordereau {
     private Long bordId;
     @Column(unique = true)
     private String bordNum;
-    private String bordStatut;
-    @ManyToOne @JoinColumn(name = "affId")
+    @ManyToOne @JoinColumn(name = "rep_id")
+    private Repartition repartition;
+    @ManyToOne @JoinColumn(name = "aff_id")
     private Affaire affaire;
     private BigDecimal bordMontantTotalPrime;
     private BigDecimal bordMontantTotalCommission;
@@ -27,6 +28,8 @@ public class Bordereau {
     private LocalDate brodDateLimite;
     @ManyToOne @JoinColumn(name = "type_code")
     private Type type;
+    @ManyToOne @JoinColumn(name = "bord_statut")
+    private Statut statut;
     @CreationTimestamp
     protected LocalDateTime createdAt;
     @UpdateTimestamp

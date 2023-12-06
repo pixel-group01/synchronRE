@@ -106,7 +106,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep.setRepStaCode(new Statut(StatutEnum.SAISIE_CRT.staCode));
             rep = repRepo.save(rep);
             mvtService.createMvtPlacement(new MvtReq(RepartitionActions.CREATE_PLA_REPARTITION, rep.getRepId(), StatutEnum.SAISIE_CRT.staCode, null));
-            bordService.createNoteDebit(aff.getAffId());
+            //bordService.createNoteDebit(aff.getAffId());
+            bordService.createNoteCession(rep.getRepId());
         }
         rep.setRepTaux(repTaux);
         rep.setRepPrime(repPrime);

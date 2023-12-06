@@ -6,10 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.DetailsBordereauRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Bordereau;
-import com.pixel.synchronre.sychronremodule.model.entities.DetailBordereau;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
@@ -30,19 +27,21 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptables comptaService;
     private final DetailsBordereauRepository detailBordRepo;
-//    @Override
-//    public Bordereau createBordereau(Long plaId)
-//    {
-//        Long affId =  repRepo.repartFindByRep(plaId);
-//        Bordereau bordereau = new Bordereau();
-//        bordereau.setRepartition(new Repartition(plaId));
-//        bordereau.setAffaire(new Affaire(affId));
-//        bordereau.setBordStatut();
-//        bordereau = bordRepo.save(bordereau);
-//        bordereau.setBordNum(this.generateBordNum(bordereau.getBordId(), plaId));
-//       bordRepo.save(bordereau);
-//       return bordereau;
-//    }
+    @Override
+    public Bordereau createNoteCession(Long plaId)
+    {
+        Long affId =  repRepo.repartFindByRep(plaId);
+        Type bordType = typeRepo.findByUniqueCode("NOT_CES_FAC").orElseThrow(()->new AppException("Type introuvable"));
+        Bordereau bordereau = new Bordereau();
+        bordereau.setRepartition(new Repartition(plaId));
+        bordereau.setAffaire(new Affaire(affId));
+        bordereau.setType(bordType);
+        bordereau.setStatut(new Statut("ACT"));
+        bordereau = bordRepo.save(bordereau);
+        bordereau.setBordNum(this.generateBordNum(bordereau.getBordId(), plaId));
+       bordRepo.save(bordereau);
+       return bordereau;
+    }
 
     private String generateBordNum(Long borId, Long plaId)
     {
@@ -70,6 +69,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setBordMontantTotalCommission(bordMontantTotalCommission);
         bordereau.setBordMontantTotalPrimeAreverser(bordMontantTotalPrimeAreverser);
         bordereau.setBordMontantTotalPrimeAreverserLette(bordMontantTotalPrimeAreverserLette);
+        bordereau.setStatut(new Statut("ACT"));
         bordereau  = bordRepo.save(bordereau);
         bordereau.setBordNum("ND." + affaire.getAffCode() + "." + String.format("%05d", bordereau.getBordId()));
         bordereau.setType(bordType);
