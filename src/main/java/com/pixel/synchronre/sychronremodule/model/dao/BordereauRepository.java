@@ -15,4 +15,7 @@ public interface BordereauRepository extends JpaRepository<Bordereau, String>
 
     @Query("select (count(db.debId)>0) from DetailBordereau db where db.repartition.repId = ?1")
     boolean detailsBordereauExistsByPlaId(Long plaId);
+
+    @Query("select (count(b.bordId) > 0) from Bordereau b where b.affaire.affId = ?1 and b.type.uniqueCode = 'NOT_DEB_FAC'")
+    boolean noteDebExistsByAffId(Long affId);
 }

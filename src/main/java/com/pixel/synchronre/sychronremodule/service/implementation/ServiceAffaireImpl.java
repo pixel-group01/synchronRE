@@ -14,6 +14,7 @@ import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
@@ -21,10 +22,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
+import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -61,6 +59,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final IServiceCalculsComptables comptaAffaireService;
     private final UserRepo userRepo;
     private final EmailSenderService emailSenderService;
+    private final IserviceBordereau bordService;
+    private final BordereauRepository bordRep;
 
     @Override
     public EtatComptableAffaire getEtatComptable(Long affId)
@@ -92,6 +92,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
         //Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Cedante ced = cedRepo.getCedanteByAffId(affId);
         mailSenderService.sendNoteDebitFacEmail(synchronreEmail, ced.getCedEmail(),affId);
+        if(bordRep.noteDebExistsByAffId(affId)) return true;
+        bordService.createNoteDebit(affId);
         return true;
     }
 

@@ -58,6 +58,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     @Override @Transactional
     public Bordereau createNoteDebit(Long affId)
     {
+        if(bordRepo.noteDebExistsByAffId(affId)) return null;
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Type bordType = typeRepo.findByUniqueCode("NOT_DEB_FAC").orElseThrow(()->new AppException("Type introuvable"));
         BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalAReverseAuxCes(affId);
