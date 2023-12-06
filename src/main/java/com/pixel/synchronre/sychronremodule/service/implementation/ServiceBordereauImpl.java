@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 //Bordereaux de cession = BC+CODE CESSIONNAIRE+CODE FAC+"-"+Numéro d'ordre
 
@@ -64,6 +65,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         String bordMontantTotalPrimeAreverserLette = ConvertMontant.numberToLetter(bordMontantTotalPrimeAreverser);
 
         Bordereau bordereau = new Bordereau();
+
         bordereau.setAffaire(affaire);
         bordereau.setBordMontantTotalPrime(bordMontantTotalPrime);
         bordereau.setBordMontantTotalCommission(bordMontantTotalCommission);
@@ -71,10 +73,23 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setBordMontantTotalPrimeAreverserLette(bordMontantTotalPrimeAreverserLette);
         bordereau.setStatut(new Statut("ACT"));
         bordereau  = bordRepo.save(bordereau);
+        bordereau.setBrodDateLimite(this.calculateDateLimite(affaire, bordereau));
         bordereau.setBordNum("ND." + affaire.getAffCode() + "." + String.format("%05d", bordereau.getBordId()));
         bordereau.setType(bordType);
         this.saveDetailNoteDebit(affaire, bordereau);
         return bordereau;
+    }
+
+    private LocalDate calculateDateLimite(Affaire affaire, Bordereau bordereau)
+    {
+        if(affaire == null || bordereau == null) return  null;
+        LocalDate dateEffet = affaire.getAffDateEffet();
+        LocalDate dateCreationBordereau = bordereau.getCreatedAt().toLocalDate();
+        if(dateEffet == null) throw new AppException("La date d'effet de l'affaire n'est pas connue");
+        if(dateCreationBordereau == null) throw new AppException("La date de création du bordereau n'est pas connue");
+        if(dateEffet.isBefore(dateCreationBordereau) && dateEffet.plusDays(30).isBefore(dateCreationBordereau))
+            return LocalDate.now();
+        return dateCreationBordereau.plusDays(8);
     }
 
     private void saveDetailNoteDebit(Affaire aff, Bordereau bordereau)
