@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 //Bordereaux de cession = BC+CODE CESSIONNAIRE+CODE FAC+"-"+Numéro d'ordre
 
@@ -72,6 +73,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setBordMontantTotalPrimeAreverser(bordMontantTotalPrimeAreverser);
         bordereau.setBordMontantTotalPrimeAreverserLette(bordMontantTotalPrimeAreverserLette);
         bordereau.setStatut(new Statut("ACT"));
+        bordereau.setCreatedAt(LocalDateTime.now());
         bordereau  = bordRepo.save(bordereau);
         bordereau.setBrodDateLimite(this.calculateDateLimite(affaire, bordereau));
         bordereau.setBordNum("ND." + affaire.getAffCode() + "." + String.format("%05d", bordereau.getBordId()));
