@@ -88,12 +88,11 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public boolean senNoteDebitFac(Long affId) throws Exception {
-        //Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+    public boolean senNoteDebitFac(Long affId) throws Exception
+    {
         Cedante ced = cedRepo.getCedanteByAffId(affId);
+        if(!bordRep.noteDebExistsByAffId(affId)) bordService.createNoteDebit(affId);
         mailSenderService.sendNoteDebitFacEmail(synchronreEmail, ced.getCedEmail(),affId);
-        if(bordRep.noteDebExistsByAffId(affId)) return true;
-        bordService.createNoteDebit(affId);
         return true;
     }
 
