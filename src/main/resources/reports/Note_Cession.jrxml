@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-12-05T17:14:19 -->
+<!-- 2023-12-08T02:06:19 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -487,7 +487,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</title>
 	<detail>
-		<band height="696" splitType="Stretch">
+		<band height="629" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="13" y="4" width="307" height="19" uuid="e535119c-2aff-404e-b149-67ed70e8cb59">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -593,7 +593,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="SansSerif"/>
+					<font fontName="SansSerif" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Activités :  "+$F{aff_activite}]]></textFieldExpression>
 			</textField>
@@ -647,7 +647,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[ Filiale :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="316" y="504" width="154" height="17" uuid="a9857d5f-b7ee-4bad-9a8b-df33d0cac7a7">
+				<reportElement positionType="Float" x="316" y="440" width="154" height="17" uuid="a9857d5f-b7ee-4bad-9a8b-df33d0cac7a7">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -712,7 +712,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{cou_libelle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="98" y="503" width="182" height="17" uuid="01790e5c-3097-41bf-bf1c-ec39145f00c4">
+				<reportElement positionType="Float" x="98" y="439" width="182" height="17" uuid="01790e5c-3097-41bf-bf1c-ec39145f00c4">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -721,17 +721,20 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_effet})]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="429" y="504" width="122" height="17" uuid="1c7801de-f82c-4780-bccb-ad163f7d9b19">
+				<reportElement positionType="Float" x="432" y="439" width="122" height="17" uuid="1c7801de-f82c-4780-bccb-ad163f7d9b19">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yy").format($F{aff_date_echeance})]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="8" y="390" width="546" height="95" uuid="d5dc5ab2-f98c-4a8f-b81b-1ea5b45a3eea">
+				<reportElement positionType="Float" x="8" y="329" width="546" height="95" uuid="d5dc5ab2-f98c-4a8f-b81b-1ea5b45a3eea">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
@@ -754,16 +757,13 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<jr:tableHeader style="Table 1_TH" height="19" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
-							<staticText>
-								<reportElement x="0" y="0" width="194" height="19" uuid="14382701-040d-4336-b50f-5cb1e423c41f"/>
-								<box>
-									<pen lineWidth="1.0"/>
-								</box>
+							<textField>
+								<reportElement x="0" y="0" width="194" height="19" uuid="507e723d-a139-40a3-8490-3a7bc06250cd"/>
 								<textElement verticalAlignment="Middle">
-									<font fontName="SansSerif" size="12"/>
+									<font size="12"/>
 								</textElement>
-								<text><![CDATA[ Engagement Réassureur]]></text>
-							</staticText>
+								<textFieldExpression><![CDATA[" Engagement "+$F{ces_nom}]]></textFieldExpression>
+							</textField>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table 1_TH" height="19" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -801,7 +801,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement verticalAlignment="Middle">
 									<font fontName="SansSerif" size="12"/>
 								</textElement>
-								<text><![CDATA[ CommissionNELSON RE CI]]></text>
+								<text><![CDATA[ Commission NELSON RE CI]]></text>
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table 1_TD" height="19">
@@ -836,7 +836,15 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<reportElement x="0" y="0" width="182" height="19" backcolor="#BAB6B6" uuid="9e9dcc90-029c-44ac-bccb-2a1067d052a1"/>
 							</rectangle>
 						</jr:tableFooter>
-						<jr:columnHeader style="Table 1_CH" height="19" rowSpan="1"/>
+						<jr:columnHeader style="Table 1_CH" height="19" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="182" height="19" uuid="7466d7ce-5cd3-47ac-83e4-ad8f1ccf6bfe"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{taux}+ " % "]]></textFieldExpression>
+							</textField>
+						</jr:columnHeader>
 						<jr:columnFooter style="Table 1_CH" height="19" rowSpan="1">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="182" height="19" forecolor="#FA2F28" uuid="faf39122-e240-43c9-90d1-18da56af5547"/>
@@ -866,8 +874,8 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<box>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
 							</textField>
@@ -878,8 +886,8 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<box>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{prime_nette_cedee1}]]></textFieldExpression>
 							</textField>
@@ -890,8 +898,8 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<box>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font fontName="SansSerif" size="11"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{prime_cedee1}]]></textFieldExpression>
 							</textField>
@@ -902,7 +910,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<box>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{com_courtage1}]]></textFieldExpression>
@@ -914,7 +922,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<box>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{com_cedante1}]]></textFieldExpression>
@@ -954,22 +962,17 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="8" y="486" width="1" height="35" uuid="8709c785-6156-4de2-bb09-e1d3423ca2e8">
+				<reportElement positionType="Float" x="8" y="422" width="1" height="35" uuid="8709c785-6156-4de2-bb09-e1d3423ca2e8">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="554" y="486" width="1" height="35" uuid="cef49f74-b472-46f1-ba14-b96ffcaaf207">
-					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-				</reportElement>
-			</line>
-			<line>
-				<reportElement x="8" y="521" width="546" height="1" uuid="c0b2e97e-3046-47d1-9b53-c0372e927fe2">
+				<reportElement positionType="Float" x="8" y="457" width="546" height="1" uuid="c0b2e97e-3046-47d1-9b53-c0372e927fe2">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="9" y="501" width="544" height="1" uuid="f631ff5d-8e21-4ffb-b0d4-254de3d91c28">
+				<reportElement positionType="Float" x="9" y="438" width="544" height="1" uuid="f631ff5d-8e21-4ffb-b0d4-254de3d91c28">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 			</line>
@@ -987,6 +990,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table 2_TD"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="cessions_filiale" uuid="b17e614d-12d2-4b6f-afcb-1121b4a7cdf5">
@@ -1054,7 +1058,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{taux_capital}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux_capital}+ " % "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -1082,7 +1086,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<jr:detailCell style="Table 2_TD" height="19">
 							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="170" height="19" uuid="e6265e67-5ef2-468a-842e-1f427767990a"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
@@ -1115,20 +1119,20 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["N° Bordereau  :  "  +$F{bord_num}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="13" y="527" width="117" height="69" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2">
+				<reportElement positionType="Float" x="13" y="461" width="107" height="77" uuid="5e64b21e-6ecf-40ef-afa7-cbef69b55ad2">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="7" y="598" width="139" height="22" uuid="d59759b8-9db9-420d-a8b4-25a99c90538b"/>
+				<reportElement positionType="Float" x="7" y="538" width="139" height="22" uuid="d59759b8-9db9-420d-a8b4-25a99c90538b"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[LA CEDANTE]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="3" y="611" width="277" height="19" uuid="14a91642-33e0-4f6f-884c-2c58ded306ed">
+				<reportElement positionType="Float" x="3" y="551" width="277" height="19" uuid="14a91642-33e0-4f6f-884c-2c58ded306ed">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -1137,7 +1141,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["NELSON RE CI  P/C  "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="7" y="628" width="177" height="64" uuid="13efc285-0a90-4621-bff2-e6fbc967c613">
+				<reportElement positionType="Float" x="7" y="570" width="177" height="56" uuid="13efc285-0a90-4621-bff2-e6fbc967c613">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
@@ -1145,14 +1149,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="415" y="590" width="139" height="22" uuid="bf33740a-5f48-482a-8fb8-de1cbf4dff3e"/>
+				<reportElement positionType="Float" x="415" y="534" width="139" height="22" uuid="bf33740a-5f48-482a-8fb8-de1cbf4dff3e"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[LE REASSUREUR]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="340" y="604" width="211" height="19" uuid="c299637c-ba66-4610-aa5d-94ba0ab60d10">
+				<reportElement positionType="Float" x="340" y="548" width="211" height="19" uuid="c299637c-ba66-4610-aa5d-94ba0ab60d10">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -1161,11 +1165,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{ces_nom}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="183" y="533" width="280" height="15" uuid="23b3585f-c14f-4839-938d-a662dfb65afd">
+				<reportElement positionType="Float" x="195" y="475" width="280" height="15" uuid="23b3585f-c14f-4839-938d-a662dfb65afd">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
 				<textElement>
-					<font fontName="SansSerif" size="12"/>
+					<font fontName="SansSerif" size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
@@ -1178,6 +1182,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="repart_traite" uuid="ce5e20a6-8d2b-478b-b172-cb34fa57d5b0">
@@ -1243,7 +1248,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<jr:tableFooter style="Table_TH" height="19" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="170" height="19" uuid="f76975f9-8397-4981-ac05-afad39b15c95"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{diffrence_montant}]]></textFieldExpression>
@@ -1253,7 +1258,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<textField>
 								<reportElement x="0" y="0" width="170" height="19" uuid="2ea9bf46-1828-414c-9421-5a6fda6fd51f"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
@@ -1263,7 +1268,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<staticText>
-				<reportElement x="11" y="504" width="109" height="17" uuid="284c1373-e711-4f1d-956b-95e92ab907fd">
+				<reportElement positionType="Float" x="11" y="440" width="109" height="17" uuid="284c1373-e711-4f1d-956b-95e92ab907fd">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -1272,13 +1277,15 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[Effet de la cession : ]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="8" y="370" width="546" height="19" uuid="31742c4b-36d8-4256-9bfb-801329c7d845">
+				<reportElement positionType="Float" x="8" y="309" width="546" height="19" uuid="31742c4b-36d8-4256-9bfb-801329c7d845">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="cessions_legales" uuid="9cb4d49b-50b5-405f-93eb-91bcaef43b8b">
@@ -1354,7 +1361,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<jr:columnFooter style="Table_CH" height="19" rowSpan="1">
 							<textField>
 								<reportElement x="0" y="0" width="170" height="19" uuid="fb2d92c9-9389-406e-af88-e52996d84093"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{diffrence_montant1}]]></textFieldExpression>
@@ -1370,7 +1377,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 									<bottomPen lineWidth="1.0"/>
 									<rightPen lineWidth="1.0"/>
 								</box>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11" isBold="true"/>
 								</textElement>
 								<textFieldExpression><![CDATA[$F{rep_capital1}]]></textFieldExpression>
@@ -1379,6 +1386,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 					</jr:column>
 				</jr:table>
 			</componentElement>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="432" y="425" width="122" height="13" uuid="4bb91fd3-c38a-4f3e-925c-ce5cbaa0ed4c">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="11"/>
+				</textElement>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>
