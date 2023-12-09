@@ -12,6 +12,7 @@ import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import jakarta.servlet.http.HttpServletResponse;
 import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,8 @@ public class ServiceReportImpl implements IServiceReport
     private final ReglementRepository regRepo;
     private final ResourceLoader resourceLoader;
     private final InterlocuteurRepository interRepo;
+    private final BordereauRepository bordRep;
+    private final IserviceBordereau bordService;
 
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
@@ -128,6 +131,7 @@ public class ServiceReportImpl implements IServiceReport
     public byte[] generateNoteDebitFac(Long affId) throws Exception
     {
         Affaire aff = affRepo.findById(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
+        if(!bordRep.noteDebExistsByAffId(affId)) bordService.createNoteDebit(affId);
 
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", aff.getAffId());

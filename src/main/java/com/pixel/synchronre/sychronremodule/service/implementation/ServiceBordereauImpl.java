@@ -110,6 +110,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
             details.setBordereau(bordereau);
             details.setDebCommission(debCommission);
             details.setDebPrimeAreverser(debPrimeAreverser);
+            details.setDebTaux(p.getRepTaux());
             details.setDebPrime(p.getRepPrime());
             details.setDebStatut(true);
             details.setRepartition(p);
