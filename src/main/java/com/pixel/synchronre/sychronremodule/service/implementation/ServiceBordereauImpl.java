@@ -16,9 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.math.BigDecimal.ZERO;
 //Bordereaux de cession = BC+CODE CESSIONNAIRE+CODE FAC+"-"+Numéro d'ordre
 
 @Service @RequiredArgsConstructor
@@ -64,6 +67,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalPrimeBruteByAffId(affId);
         BigDecimal bordMontantTotalCommission = comptaService.calculateMtTotaleCmsCed(affId);
         BigDecimal bordMontantTotalPrimeAreverser = comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(affId);
+        bordMontantTotalPrimeAreverser = bordMontantTotalPrimeAreverser == null ? ZERO : bordMontantTotalPrimeAreverser.setScale(0, RoundingMode.HALF_UP);
         String bordMontantTotalPrimeAreverserLette = ConvertMontant.numberToLetter(bordMontantTotalPrimeAreverser);
 
         Bordereau bordereau = new Bordereau();
@@ -106,6 +110,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         {
             BigDecimal debCommission = comptaService.calculateMtCmsCedByCes(p.getRepId());
             BigDecimal debPrimeAreverser = comptaService.calculateMtPrimeNetteComCedByCes(p.getRepId());
+            debPrimeAreverser = debPrimeAreverser == null ? ZERO : debPrimeAreverser.setScale(0, RoundingMode.HALF_UP);
             DetailBordereau details = new DetailBordereau();
             details.setBordereau(bordereau);
             details.setDebCommission(debCommission);
