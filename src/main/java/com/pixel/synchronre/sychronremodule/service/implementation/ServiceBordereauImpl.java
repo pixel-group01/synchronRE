@@ -61,7 +61,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         if(bordRepo.noteDebExistsByAffId(affId)) return null;
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Type bordType = typeRepo.findByUniqueCode("NOT_DEB_FAC").orElseThrow(()->new AppException("Type introuvable"));
-        BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalAReverseAuxCes(affId);
+        BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalPrimeBruteByAffId(affId);
         BigDecimal bordMontantTotalCommission = comptaService.calculateMtTotaleCmsCed(affId);
         BigDecimal bordMontantTotalPrimeAreverser = comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(affId);
         String bordMontantTotalPrimeAreverserLette = ConvertMontant.numberToLetter(bordMontantTotalPrimeAreverser);
@@ -114,6 +114,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
             details.setDebPrime(p.getRepPrime());
             details.setDebStatut(true);
             details.setRepartition(p);
+            details.setDebCesId(p.getCessionnaire().getCesId());
             detailBordRepo.save(details);
         });
     }

@@ -73,7 +73,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
         if(!STATUT_CREATION.REALISEE.name().equals(aff.getAffStatutCreation())) throw new AppException("Impossible de faire un placement sur une affaire en intance ou non réalisée");
         BigDecimal repTaux = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0 ? ZERO : dto.getRepCapital().multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
-        BigDecimal repPrime = aff.getFacPrime() == null ? ZERO : aff.getFacPrime().multiply(repTaux);
+        BigDecimal repPrime = aff.getFacPrime() == null ? ZERO : aff.getFacPrime().multiply(repTaux).divide(CENT, 100, RoundingMode.HALF_UP);
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
         boolean existsByAffaireAndTypeRepAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;

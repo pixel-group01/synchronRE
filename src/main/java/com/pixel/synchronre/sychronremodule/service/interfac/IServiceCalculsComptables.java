@@ -50,4 +50,6 @@ public interface IServiceCalculsComptables
 
     BigDecimal calculateRestARepartir(Long affId, Long repIdToExclude);
     BigDecimal calculateDejaRepartir(Long affId, Long repIdToExclude);
+
+    BigDecimal calculateMtTotalPrimeBruteByAffId(Long affId);
 }

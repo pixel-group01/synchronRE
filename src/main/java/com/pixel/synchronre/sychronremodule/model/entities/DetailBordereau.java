@@ -24,6 +24,7 @@ public class DetailBordereau {
     private Bordereau bordereau;
     @ManyToOne @JoinColumn(name = "debRep")
     private Repartition repartition;
+    private Long debCesId;
     private BigDecimal debPrime;
     @Column(precision = 50, scale = 20)
     private BigDecimal debTaux;
@@ -34,6 +35,7 @@ public class DetailBordereau {
     private boolean debStatut;
     @ManyToOne @JoinColumn(name = "type_code")
     private Type type;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp

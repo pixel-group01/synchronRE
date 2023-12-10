@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-12-09T11:35:08 -->
+<!-- 2023-12-09T18:52:42 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="891"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="99"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -385,13 +387,16 @@ FROM affaire,
      couverture,
      branche,
      banque,
-     bordereau
+     bordereau,
+     type
 WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
   AND couverture.bran_id = branche.bran_id
   AND affaire.aff_id = bordereau.aff_id
   AND cedante.ban_num_compte = banque.ban_num_compte
-  AND affaire.aff_id= $P{aff_id}]]>
+  and bordereau.type_code=type.type_id
+  and type.unique_code='NOT_DEB_FAC'
+  AND affaire.aff_id=$P{aff_id}]]>
 	</queryString>
 	<field name="aff_id" class="java.lang.Long"/>
 	<field name="aff_activite" class="java.lang.String"/>

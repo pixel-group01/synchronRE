@@ -121,13 +121,9 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
 
     @Override
     public BigDecimal calculateMtPrimeNetteComCedByCes(Long plaId) {
-        BigDecimal primeTotale = repRepo.getFacPrimeTotalByPlaId(plaId);
-        BigDecimal tauxRep = repRepo.getTauRep(plaId);
-        BigDecimal tauxCmsCed = repRepo.getTauxCmsCedante(plaId);
+        BigDecimal primeTotale = repRepo.getPrimeBruteByPlaId(plaId);
 
         primeTotale = primeTotale == null ? ZERO : primeTotale;
-        tauxRep = tauxRep == null ? ZERO : tauxRep;
-        tauxCmsCed = tauxCmsCed == null ? ZERO : tauxCmsCed;
         BigDecimal comCed = this.calculateMtCmsCedByCes(plaId);
 
         return primeTotale.subtract(comCed);
@@ -266,6 +262,11 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         return dejaReparti.subtract(repCapitalToExclude);
     }
 
+    @Override
+    public BigDecimal calculateMtTotalPrimeBruteByAffId(Long affId)
+    {
+        return repRepo.calculateMtTotalPrimeBruteByAffId(affId);
+    }
 
 
     @Override

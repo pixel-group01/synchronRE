@@ -134,6 +134,9 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.affaire.facPrime from Repartition r where r.repId = ?1")
     BigDecimal getFacPrimeTotalByPlaId(Long plaId);
 
+    @Query("select r.repPrime from Repartition r where r.repId = ?1")
+    BigDecimal getPrimeBruteByPlaId(Long plaId);
+
     @Query("select (a.facPrime * r.repTaux * r.repTauxComCed /10000) from Repartition r join r.affaire a where r.repId = ?1")
     BigDecimal calculateMtCmsCedByCes(Long plaId);
 
@@ -215,4 +218,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
     List<Long> getActivePlaIdsByAffId(Long affId);
+
+    @Query("select sum(r.affaire.facPrime * r.repTaux / 100) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULE'))")
+    BigDecimal calculateMtTotalPrimeBruteByAffId(Long affId);
 }
