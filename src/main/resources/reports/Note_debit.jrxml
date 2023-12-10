@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-12-09T18:52:42 -->
+<!-- 2023-12-10T15:56:51 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -209,29 +209,19 @@ WHERE affaire.couverture_id = couverture.cou_id
 		<queryString language="SQL">
 			<![CDATA[SELECT distinct affaire.aff_id,
                 affaire.part_cedante,
-                repartition.rep_taux,
-                ROUND (repartition.rep_taux, 2) AS taux,
-(affaire.part_cedante / affaire.fac_smp_lci)  * 100  as rep_taux,
-                ROUND((affaire.part_cedante / affaire.fac_smp_lci) * 100, 2) as taux_capital,
+                ROUND((affaire.part_cedante / affaire.fac_smp_lci) * 100, 2) as taux,
                 regexp_replace(to_char(affaire.part_cedante::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1
 FROM affaire,
      cedante,
-     couverture,
-     repartition,
-     type
-WHERE repartition.aff_id = affaire.aff_id
-  AND affaire.couverture_id = couverture.cou_id
+     couverture
+
+WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
-  AND repartition.typ_id = type.type_id
-  AND type.unique_code in ('REP_CED')
-  AND affaire.aff_id = $P{aff_id}]]>
+  AND affaire.aff_id = $P{aff_id} ]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="part_cedante" class="java.math.BigDecimal"/>
-		<field name="rep_taux" class="java.math.BigDecimal"/>
 		<field name="taux" class="java.math.BigDecimal"/>
-		<field name="COLUMN_5" class="java.math.BigDecimal"/>
-		<field name="taux_capital" class="java.math.BigDecimal"/>
 		<field name="rep_capital1" class="java.lang.String"/>
 	</subDataset>
 	<subDataset name="Réassureurs" uuid="3baf6a36-8ef2-4960-9d41-84a453e6d9db">
@@ -241,109 +231,35 @@ WHERE repartition.aff_id = affaire.aff_id
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
 		<queryString language="SQL">
-			<![CDATA[SELECT
-    repartition.aff_id,
-    repartition.rep_capital,
-    repartition.rep_taux,
-    repartition.rep_sous_commission,
-    repartition.rep_taux_com_ced,
-    repartition.rep_taux_com_court,
-    repartition.typ_id,
-    repartition.cessionnaire_id,
-    cessionnaire.ces_nom,
-    repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
-    repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
-    repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
-    (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
-    regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1,
-    regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS commission1 ,
-    regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1,
-    bordereau.bord_montant_total_prime,
-    regexp_replace(to_char(bordereau.bord_montant_total_prime, 'FM999,999,999,999'), ',', ' ', 'g') AS bord_montant_total_prime1,
-    bordereau.bord_montant_total_prime_areverser,
-    regexp_replace(to_char(bordereau.bord_montant_total_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') AS bord_montant_total_prime_areverser1,
-    bordereau.bord_montant_total_prime_areverser_lette,
-    bordereau.bord_montant_total_commission,
-    regexp_replace(to_char(bordereau.bord_montant_total_commission, 'FM999,999,999,999'), ',', ' ', 'g') AS bord_montant_total_commission1,
-    ROUND(detail_bordereau.deb_taux, 2) AS taux,
-    regexp_replace(to_char(detail_bordereau.deb_prime, 'FM999,999,999,999'), ',', ' ', 'g') AS deb_prime1,
-    regexp_replace(to_char(detail_bordereau.deb_commission, 'FM999,999,999,999'), ',', ' ', 'g') AS deb_commission1,
-    regexp_replace(to_char(detail_bordereau.deb_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') AS deb_prime_areverser1
-FROM
-    affaire,
-    cedante,
-    couverture,
-    repartition,
-    type,
-    cessionnaire,
-    bordereau,
-    detail_bordereau
-WHERE
-        repartition.cessionnaire_id = cessionnaire.ces_id
-  AND repartition.aff_id = affaire.aff_id
-  AND affaire.couverture_id = couverture.cou_id
-  AND affaire.cedente_id = cedante.ced_id
-  AND bordereau.aff_id = affaire.aff_id
-  AND bordereau.bord_id = detail_bordereau.deb_bord_id
-  AND repartition.typ_id = type.type_id
-  AND type.unique_code in ('REP_PLA')
-  AND repartition.aff_id = $P{aff_id}
-GROUP BY
-    repartition.aff_id,
-    repartition.rep_capital,
-    repartition.rep_taux,
-    repartition.rep_sous_commission,
-    repartition.rep_taux_com_ced,
-    repartition.rep_taux_com_court,
-    repartition.typ_id,
-    repartition.cessionnaire_id,
-    cessionnaire.ces_nom,
-    repartition.rep_taux * affaire.fac_prime / 100::numeric,
-    repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric,
-    repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric,
-    (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric),
-    regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g'),
-    regexp_replace(to_char((repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) + (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'),
-    regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g'),
-    bordereau.bord_montant_total_prime,
-    regexp_replace(to_char(bordereau.bord_montant_total_prime, 'FM999,999,999,999'), ',', ' ', 'g') ,
-    bordereau.bord_montant_total_prime_areverser,
-    regexp_replace(to_char(bordereau.bord_montant_total_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g'),
-    bordereau.bord_montant_total_prime_areverser_lette,
-    bordereau.bord_montant_total_commission,
-    regexp_replace(to_char(bordereau.bord_montant_total_commission, 'FM999,999,999,999'), ',', ' ', 'g'),
-    ROUND(detail_bordereau.deb_taux, 2),
-    regexp_replace(to_char(detail_bordereau.deb_prime, 'FM999,999,999,999'), ',', ' ', 'g'),
-    regexp_replace(to_char(detail_bordereau.deb_commission, 'FM999,999,999,999'), ',', ' ', 'g'),
-    regexp_replace(to_char(detail_bordereau.deb_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g')]]>
+			<![CDATA[select b.aff_id,
+       c.ces_id,
+       c.ces_nom,
+       ROUND(db.deb_taux, 2) deb_taux,
+       regexp_replace(to_char(db.deb_prime, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime,
+       regexp_replace(to_char(db.deb_commission, 'FM999,999,999,999'), ',', ' ', 'g') deb_commission,
+       regexp_replace(to_char(db.deb_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime_areverser,
+       regexp_replace(to_char(b.bord_montant_total_prime, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_prime,
+       regexp_replace(to_char(b.bord_montant_total_commission, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_commission,
+       regexp_replace(to_char(b.bord_montant_total_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_prime_areverser,
+       b.bord_montant_total_prime_areverser_lette
+
+from detail_bordereau db,bordereau b,cessionnaire c
+where b.bord_id = db.deb_bord_id
+  and db.deb_ces_id=c.ces_id
+  and b.aff_id = $P{aff_id}
+  and db.deb_statut=true]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
-		<field name="rep_capital" class="java.math.BigDecimal"/>
-		<field name="rep_taux" class="java.math.BigDecimal"/>
-		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
-		<field name="typ_id" class="java.lang.Long"/>
-		<field name="cessionnaire_id" class="java.lang.Long"/>
+		<field name="ces_id" class="java.lang.Long"/>
 		<field name="ces_nom" class="java.lang.String"/>
-		<field name="prime_cedee" class="java.math.BigDecimal"/>
-		<field name="com_cedante" class="java.math.BigDecimal"/>
-		<field name="com_courtage" class="java.math.BigDecimal"/>
-		<field name="prime_nette_cedee" class="java.math.BigDecimal"/>
-		<field name="prime_cedee1" class="java.lang.String"/>
-		<field name="commission1" class="java.lang.String"/>
-		<field name="prime_nette_cedee1" class="java.lang.String"/>
-		<field name="bord_montant_total_prime" class="java.math.BigDecimal"/>
-		<field name="bord_montant_total_prime1" class="java.lang.String"/>
-		<field name="bord_montant_total_prime_areverser" class="java.math.BigDecimal"/>
-		<field name="bord_montant_total_prime_areverser1" class="java.lang.String"/>
+		<field name="deb_taux" class="java.math.BigDecimal"/>
+		<field name="deb_prime" class="java.lang.String"/>
+		<field name="deb_commission" class="java.lang.String"/>
+		<field name="deb_prime_areverser" class="java.lang.String"/>
+		<field name="bord_montant_total_prime" class="java.lang.String"/>
+		<field name="bord_montant_total_commission" class="java.lang.String"/>
+		<field name="bord_montant_total_prime_areverser" class="java.lang.String"/>
 		<field name="bord_montant_total_prime_areverser_lette" class="java.lang.String"/>
-		<field name="bord_montant_total_commission" class="java.math.BigDecimal"/>
-		<field name="bord_montant_total_commission1" class="java.lang.String"/>
-		<field name="taux" class="java.math.BigDecimal"/>
-		<field name="deb_prime1" class="java.lang.String"/>
-		<field name="deb_commission1" class="java.lang.String"/>
-		<field name="deb_prime_areverser1" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -607,22 +523,22 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</reportElement>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="408" width="550" height="52" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
+				<reportElement positionType="Float" x="4" y="408" width="550" height="52" uuid="afabf775-08b6-4777-bb18-7d6046b2dbe8"/>
 				<textElement textAlignment="Justified">
 					<font fontName="SansSerif" size="12" isBold="true" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[NELSON RE ne sera pas tenu responsable des consèquences, y compris l'annulation de la couverture qui peut resulter d'un retard ou d'une défaillance de votre part de payer la présente note à la date indiquée]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="340" y="496" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
+				<reportElement positionType="Float" x="340" y="496" width="214" height="22" uuid="a3ef04d6-513b-4fac-93cb-b087b3651d23"/>
 				<textElement>
 					<font size="12" isBold="false" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[Le Département Réassurance]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="2" y="305" width="550" height="30" uuid="15a2fd31-402a-4864-b507-41a3fc252846"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement positionType="Float" x="2" y="305" width="550" height="30" uuid="15a2fd31-402a-4864-b507-41a3fc252846"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Date de Paiement : " +  new SimpleDateFormat("dd/MM/yy").format($F{brod_date_limite})]]></textFieldExpression>
@@ -752,7 +668,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{taux}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{deb_taux}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -775,7 +691,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_prime1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{bord_montant_total_prime}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -784,7 +700,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{deb_prime1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{deb_prime}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -807,7 +723,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_commission1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{bord_montant_total_commission}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -816,7 +732,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{deb_commission1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{deb_commission}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -839,7 +755,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_prime_areverser1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{bord_montant_total_prime_areverser}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
@@ -848,18 +764,18 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{deb_prime_areverser1}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{deb_prime_areverser}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>
 			<image>
-				<reportElement x="11" y="469" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
+				<reportElement positionType="Float" x="11" y="469" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="0" y="345" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
+				<reportElement positionType="Float" x="0" y="345" width="320" height="19" uuid="3dad61cf-612c-4a98-90cd-90e58d512b78">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left">
@@ -868,7 +784,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA[$F{ban_libelle} + "  "+$F{ban_num_compte}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="379" width="320" height="19" uuid="b088c375-698b-4aef-97c4-c014e7f1f4d0">
+				<reportElement positionType="Float" x="0" y="379" width="320" height="19" uuid="b088c375-698b-4aef-97c4-c014e7f1f4d0">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -878,7 +794,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Code BIC :  "+$F{ban_code_bic}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="361" width="320" height="19" uuid="812faed3-8198-4cae-a253-f0c93a44af6a">
+				<reportElement positionType="Float" x="0" y="361" width="320" height="19" uuid="812faed3-8198-4cae-a253-f0c93a44af6a">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -888,15 +804,20 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["IBAN : "+$F{ban_iban}]]></textFieldExpression>
 			</textField>
 			<image>
-				<reportElement x="343" y="513" width="190" height="60" uuid="34f5a106-8bb3-4995-9669-07f95e8d2280">
+				<reportElement positionType="Float" x="343" y="513" width="190" height="60" uuid="34f5a106-8bb3-4995-9669-07f95e8d2280">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="Table_TD" x="0" y="253" width="554" height="37" uuid="05698436-0816-4300-a985-506eef9c3800"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<reportElement style="Table_TD" positionType="Float" x="0" y="253" width="554" height="47" uuid="05698436-0816-4300-a985-506eef9c3800"/>
+				<box>
+					<pen lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12" isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Arrêté la présente note à la somme de FCFA " +$F{bord_montant_total_prime_areverser_lette}]]></textFieldExpression>
 			</textField>
 		</band>
