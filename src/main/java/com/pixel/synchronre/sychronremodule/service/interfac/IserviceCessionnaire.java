@@ -20,4 +20,5 @@ public interface IserviceCessionnaire
     Cessionnaire getCourtier();
 
     List<CessionnaireListResp> getCessionnairesByAffaire(Long affId);
+    List<CessionnaireListResp> getCessionnairesBySinistre(Long sinId);
 }

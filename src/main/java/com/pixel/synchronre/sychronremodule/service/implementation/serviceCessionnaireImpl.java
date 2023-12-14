@@ -16,6 +16,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.CessionnaireMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -41,6 +43,7 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptables comptaService;
     private final RepartitionRepository repRepo;
+    private final IServiceCalculsComptablesSinistre sinComptaService;
     @Override @Transactional
     public CessionnaireDetailsResp createCessionnaire(CreateCessionnaireReq dto) throws UnknownHostException {
         Cessionnaire ces = cesMapper.mapToCessionnaire(dto);
@@ -88,6 +91,17 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
                 .map(plaId->repRepo.getCessionnaireByRepId(plaId).orElse(null))
                 .filter(Objects::nonNull)
                 .map(ces->cesMapper.mapToCessionnaireListResp(ces))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CessionnaireListResp> getCessionnairesBySinistre(Long sinId)
+    {
+        List<CessionnaireListResp> cessionnaires = cesRepo.findBySinId(sinId);
+        if(cessionnaires == null) return new ArrayList<>();
+
+        return cessionnaires.stream()
+                .filter(ces->sinComptaService.calculateResteAPayerBySinAndCes(sinId, ces.getCesId()).setScale(4).compareTo(BigDecimal.ZERO) != 0)
                 .collect(Collectors.toList());
     }
 }

@@ -165,6 +165,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createPaiementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
         boolean hasPaiement = regRepo.sinistreHasReglement(dto.getSinId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -187,6 +188,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createReversementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
         boolean hasReversement = regRepo.sinistreHasReglement(dto.getSinId(), REVERSEMENT);
         Reglement reversement = reglementMapper.mapToReglement(dto);
 
