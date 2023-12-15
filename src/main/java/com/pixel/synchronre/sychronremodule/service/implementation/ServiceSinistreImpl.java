@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinRep.setSinistre(new Sinistre(sinId));
         sinRep.setRepStatut(true);
         sinRep.setRepCapital(repCaptital);
-        sinRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCaptital));
+        sinRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCaptital == null ? BigDecimal.ZERO : repCaptital.setScale(0, RoundingMode.HALF_UP)));
         sinRep.setType(typeRepo.findByUniqueCode("REP_SIN").orElseThrow(()->new AppException("Type de document inconnu")));
         //sinRep.setInterlocuteurPrincipal(ces.getCesInterlocuteur());
 
@@ -97,7 +98,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         BigDecimal mtTotSinPlacement = sinComptaService.calculateMtTotalCessionnairesSurSinistre(sinId);
         sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
-        sinistre.setSinMontantTotPlacementLettre(ConvertMontant.numberToLetter(mtTotSinPlacement));
+        sinistre.setSinMontantTotPlacementLettre(ConvertMontant.numberToLetter(mtTotSinPlacement == null ? BigDecimal.ZERO : mtTotSinPlacement.setScale(0, RoundingMode.HALF_UP)));
         mvtService.createMvtSinistre(new MvtReq(SinistreActions.CREATE_SINISTRE, sinistre.getSinId(), sinStatut.getStaCode(), null));
         logService.logg(SinistreActions.CREATE_SINISTRE, null, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
