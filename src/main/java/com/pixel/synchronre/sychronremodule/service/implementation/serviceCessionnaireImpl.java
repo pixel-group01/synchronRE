@@ -27,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,7 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
         if(cessionnaires == null) return new ArrayList<>();
 
         return cessionnaires.stream()
-                .filter(ces->sinComptaService.calculateResteAPayerBySinAndCes(sinId, ces.getCesId()).setScale(4).compareTo(BigDecimal.ZERO) != 0)
+                .filter(ces->sinComptaService.calculateResteAPayerBySinAndCes(sinId, ces.getCesId()).setScale(4, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0)
                 .collect(Collectors.toList());
     }
 }
