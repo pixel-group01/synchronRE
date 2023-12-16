@@ -87,10 +87,23 @@ public class AffaireController
         Page<FacultativeListResp> facPages =withMaxSize ?
                 new PageImpl<>( affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode) ) :
                 affRepo.searchAffaires(key, null, null,  cedId,  AffStatutGroup.tabAllAffaires, exeCode, PageRequest.of(page, size));
-
         //List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(affService.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return facPages;
     }
+
+    //Tab saisie par la cedante : affiche les affaires saisies par la cedante
+    @GetMapping(path = "/facultative/by-sinistre")
+    public Page<FacultativeListResp> searchAffaireBySinistre(@RequestParam(required = false) Long exeCode,
+                                                            @RequestParam(defaultValue = "") String key,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10000") int size)
+    {
+        exeCode = exeCode ==null ? exoService.getExerciceCourant().getExeCode() : exeCode;
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires(key, null, null,  jwtService.getConnectedUserCedId(), AffStatutGroup.tabAffaireSinistre, exeCode, PageRequest.of(page, size));
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(affService.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
+    }
+
 
     @GetMapping(path = "/facultative/by-user")
     public Page<FacultativeListResp> searchAffaireByUser(@RequestParam(required = false) Long exeCode,
@@ -128,7 +141,6 @@ public class AffaireController
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(affService.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, PageRequest.of(page, size), facPages.getTotalElements());
     }
-
 
     //Tab transmis et en cours de placement visible par la cedante :affiche les affaires transmises au souscripte
     @GetMapping(path = "/facultative/by-cedante-transmis") //Transmis par la cedante mais en cours de traitement
