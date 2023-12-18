@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-12-19T18:47:35 -->
+<!-- 2023-12-18T19:52:14 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Cheque_sinistre" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1fa4fb2c-0829-45de-b665-259e0dfcfd71">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -10,14 +10,16 @@
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<queryString language="SQL">
-		<![CDATA[SELECT cedante.ced_nom_filiale,
-       reglement.reg_id,
-       regexp_replace(to_char(reglement.reg_montant, 'FM999,999,999,999'), ',', ' ', 'g') AS reg_montant_temp ,
-       reglement.reg_montant_lettre
-FROM reglement,affaire,cedante
-WHERE reglement.aff_id = affaire.aff_id
-  AND affaire.cedente_id = cedante.ced_id
-  AND reglement.reg_id = $P{reg_id}]]>
+		<![CDATA[SELECT c.ced_nom_filiale,
+       r.reg_id,
+       regexp_replace(to_char(r.reg_montant, 'FM999,999,999,999'), ',', ' ', 'g') AS reg_montant_temp ,
+       r.reg_montant_lettre
+FROM reglement r,sinistre s,affaire a,cedante c
+WHERE  r.sin_id = s.sin_id
+AND s.aff_id=a.aff_id
+AND a.cedente_id=c.ced_id
+  AND r.reg_id =  $P{reg_id}
+  ]]>
 	</queryString>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="reg_id" class="java.lang.Long"/>
@@ -39,7 +41,7 @@ WHERE reglement.aff_id = affaire.aff_id
 		<band height="302" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="280" y="98" width="410" height="30" uuid="c03af9dd-04df-435b-a669-30df971de2a2"/>
+				<reportElement x="280" y="98" width="542" height="30" uuid="c03af9dd-04df-435b-a669-30df971de2a2"/>
 				<textElement>
 					<font fontName="SansSerif" size="14" isBold="true"/>
 					<paragraph lineSpacing="Double"/>
