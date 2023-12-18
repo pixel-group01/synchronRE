@@ -139,4 +139,15 @@ public class ReportController
         byte[] reportBytes = jrService.generateReport(jrConfig.cheque, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Cheque");
     }
+
+
+    @GetMapping("/cheque-sinistre/{regId}")
+    public void generateChequeSinistre(HttpServletResponse response, @PathVariable Long regId) throws Exception
+    {
+        Reglement reglement =  regRepo.findById(regId).orElseThrow(()-> new AppException(("Règlement introuvable")));
+        Map<String, Object> params = new HashMap<>();
+        params.put("reg_id", reglement.getRegId());
+        byte[] reportBytes = jrService.generateReport(jrConfig.chequeSinistre, params, new ArrayList<>(), null);
+        docService.displayPdf(response, reportBytes, "Cheque-Sinistre");
+    }
 }

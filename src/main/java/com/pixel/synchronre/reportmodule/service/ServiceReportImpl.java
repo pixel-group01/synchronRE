@@ -225,6 +225,15 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
+    public byte[] generateChequeSinistre(Long regId) throws Exception {
+        Reglement reglement =  regRepo.findById(regId).orElseThrow(()-> new AppException(("Règlement introuvable")));
+        Map<String, Object> params = new HashMap<>();
+        params.put("reg_id", reglement.getRegId());
+        byte[] reportBytes = this.generateReport(jrConfig.chequeSinistre, params, new ArrayList<>(), null);
+        return reportBytes;
+    }
+
+    @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception {
         InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipal(plaId);
         return this.generateNoteCessionFac(plaId, interlocuteur == null ? "Non spécifié" : interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
