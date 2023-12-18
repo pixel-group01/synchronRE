@@ -117,10 +117,11 @@ public class ReportRestController
     }
 
     @GetMapping("/cheque-sinistre/{regId}")
-    public void generateChequeSinistre(HttpServletResponse response, @PathVariable Long regId) throws Exception
+    public Base64FileDto generateChequeSinistre(@PathVariable Long regId) throws Exception
     {
         byte[] reportBytes = jrService.generateChequeSinistre(regId);
-        docService.displayPdf(response, reportBytes, "Cheque-Sinistre");
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
     }
 
 }
