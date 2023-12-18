@@ -9,6 +9,7 @@ import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import jakarta.servlet.http.HttpServletResponse;
@@ -114,4 +115,12 @@ public class ReportRestController
         byte[] reportBytes = jrService.generateNoteCessionSinistre(sinId, cesId);
         docService.displayPdf(response, reportBytes, "Note-de-cession");
     }
+
+    @GetMapping("/cheque-sinistre/{regId}")
+    public void generateChequeSinistre(HttpServletResponse response, @PathVariable Long regId) throws Exception
+    {
+        byte[] reportBytes = jrService.generateChequeSinistre(regId);
+        docService.displayPdf(response, reportBytes, "Cheque-Sinistre");
+    }
+
 }
