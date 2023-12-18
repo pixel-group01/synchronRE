@@ -148,6 +148,6 @@ public class ReportController
         Map<String, Object> params = new HashMap<>();
         params.put("reg_id", reglement.getRegId());
         byte[] reportBytes = jrService.generateReport(jrConfig.chequeSinistre, params, new ArrayList<>(), null);
-        docService.displayPdf(response, reportBytes, "Cheque-Sinistre");
+        docService.displayPdf(response, reportBytes, "Cheque-sinistre");
     }
 }
