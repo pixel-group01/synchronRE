@@ -30,4 +30,6 @@ public class SynchronReActions
     public static final String UPDATE_DEVISE = "Modification d'une devise";
     public static final String CREATE_INTERLOCUTEUR = "Création d'un interlocuteur";
     public static final String UPDATE_INTERLOCUTEUR = "Modification d'd'un interlocuteur";
+    public static final String DELETE_REGLEMENT_AFFAIRE = "Suppression d'un règlement sur une affaire";
+    public static final String DELETE_REGLEMENT_SINISTRE = "Suppression d'un règlement sur un sinistre";
 }

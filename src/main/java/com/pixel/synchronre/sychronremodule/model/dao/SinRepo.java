@@ -84,7 +84,7 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
    @Query("""
     select sum((s.sinMontant100 + s.sinMontantHonoraire) * r.repTaux/100) from Sinistre s join s.affaire a join Repartition r 
     on r.affaire.affId = a.affId where r.type.uniqueCode = 'REP_PLA' and r.repStatut = true 
-    and r.repStaCode.staCode not in ('REFUSE') and a.affStatutCreation = 'REALISEE' and s.sinId = ?1
+    and r.repStaCode.staCode not in ('REFUSE', 'SUPP', 'SUP', 'ANNULE', 'ANNULEE') and a.affStatutCreation = 'REALISEE' and s.sinId = ?1
 """)
    BigDecimal calculateMtTotalCessionnairesSurSinistre(Long sinId);
                                                             //sinMontant100 + sinMontantHonoraire

@@ -27,6 +27,7 @@ public class UserResource
         return userService.getUserInfos(userId);
     }
 
+
     @PostMapping(path = "/open/login")
     public AuthResponseDTO login(@RequestBody @Valid LoginDTO dto) throws UnknownHostException {
         return userService.login(dto);

@@ -13,3 +13,4 @@ public class MvtReq
     private String staCode;
     private String mvtObservation;
 }
+//log_details_id_gen

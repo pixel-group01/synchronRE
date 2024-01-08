@@ -36,7 +36,7 @@ public class LogService implements ILogService
     private final LogDetailsRepo histoRepo;
     private final FunctionRepo functionRepo;
 
-    @Override @Transactional
+    @Override //@Transactional
     public Log logg(String action, Object oldObject, Object newObject, String tableName) throws UnknownHostException
     {
         Log log = this.saveLog(action);
@@ -159,7 +159,11 @@ public class LogService implements ILogService
             }
             return null;
         }).collect(Collectors.toList());
-        return histoRepo.saveAll(histos);
+        for (LogDetails details: histos)
+        {
+            details = histoRepo.save(details);
+        }
+        return histos;
     }
 
     @Override

@@ -82,6 +82,28 @@ public class ServiceMouvementImpl implements IServiceMouvement
         return mvtRepo.findMouvementById(affId,sinId,pageable);
     }
 
+    @Override
+    public Mouvement getAvantDernierByAffId(Long affId)
+    {
+        List<Mouvement> mvts = mvtRepo.findMouvementById(affId, null, (Long)null);
+        if(mvts == null || mvts.size() < 2) return  null;
+        return mvts.get(2);
+    }
+
+    @Override
+    public Mouvement getAvantDernierByPlaId(Long plaId) {
+        List<Mouvement> mvts = mvtRepo.findMouvementById(null, null, plaId);
+        if(mvts == null || mvts.size() < 2) return  null;
+        return mvts.get(2);
+    }
+
+    @Override
+    public Mouvement getAvantDernierBySinId(Long sinId) {
+        List<Mouvement> mvts = mvtRepo.findMouvementById(null, sinId, (Long)null);
+        if(mvts == null || mvts.size() < 2) return  null;
+        return mvts.get(2);
+    }
+
 //    public Page<CouvertureListResp> searchCouverture(String key, Pageable pageable) {
 //        return  couvRepo.searchCouvertures(StringUtils.stripAccentsToUpperCase(key), pageable);
 }

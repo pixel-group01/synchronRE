@@ -23,8 +23,15 @@ public interface MouvementRepository extends JpaRepository<Mouvement, Long>
             c.cedNomFiliale, c.cedSigleFiliale, 
             s.sinId,s.sinCode,s.sinMontant100,s.sinMontantHonoraire,s.sinDateSurvenance,s.sinDateDeclaration,
             m.mvtObservation,m.mvtUser.email,concat(m.mvtUser.firstName, ' ', m.mvtUser.lastName),m.mvtFunction.name, m.mvtDate)
-            From Mouvement m left join m.affaire a left join a.cedante c left join m.sinistre s where (a.affId = ?1 or ?1 is null) and (s.sinId = ?2 or ?2 is null)order by m.mvtDate desc""")
+            From Mouvement m left join m.affaire a left join a.cedante c left join m.sinistre s where (a.affId = ?1 or ?1 is null) and (s.sinId = ?2 or ?2 is null)order by m.mvtDate desc
+            """)
     Page<MouvementListResp> findMouvementById(Long affId, Long sinId, Pageable pageable);
+
+    @Query("""
+            select m
+            From Mouvement m left join m.affaire a left join a.cedante c left join m.sinistre s left join m.placement p where (a.affId = ?1 or ?1 is null) and (s.sinId = ?2 or ?2 is null) and (p.repId = ?3 or ?3 is null) order by m.mvtDate desc
+            """)
+    List<Mouvement> findMouvementById(Long affId, Long sinId, Long plaId);
 
     @Query("select m.mvtObservation from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET' and m.mvtDate = (select max(m.mvtDate) from Mouvement m where m.affaire.affId = ?1 and m.statut.staCode = 'RET')")
     String getMessageRetourForAffaire(Long affId);

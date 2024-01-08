@@ -7,24 +7,19 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
-import com.pixel.synchronre.sychronremodule.model.constants.ReglementActions;
-import com.pixel.synchronre.sychronremodule.model.constants.SinistreActions;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
+import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Reglement;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
-import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
@@ -241,11 +236,22 @@ public class ServiceReglementImpl implements IserviceReglement {
         return regRepo.searchReglement(StringUtils.stripAccentsToUpperCase(key), affId, sinId,typRegUniqueCode, pageable);
     }
 
-    @Override
+    @Override @Transactional
     public int deleteReglement(Long regId) throws UnknownHostException {
         Reglement reglement = regRepo.findById(regId).orElseThrow(()->new AppException("Règlemement introuvable"));
         Reglement oldReg = paiCopier.copy(reglement);
         reglement.setRegStatut(false);
+        if(reglement.getAffId() != null)
+        {
+            Mouvement avantDernier = mvtService.getAvantDernierByAffId(reglement.getAffId());
+            mvtService.createMvtAffaire(new MvtReq(SynchronReActions.DELETE_REGLEMENT_AFFAIRE, reglement.getAffId(), avantDernier == null ? null : avantDernier.getStatut().getStaCode(), null));
+        }
+        else if(reglement.getSinId() != null)
+        {
+            Mouvement avantDernier = mvtService.getAvantDernierBySinId(reglement.getSinId());
+            mvtService.createMvtSinistre(new MvtReq(SynchronReActions.DELETE_REGLEMENT_SINISTRE, reglement.getSinId(), avantDernier == null ? null : avantDernier.getStatut().getStaCode(), null));
+        }
+
         logService.logg(ReglementActions.DELETE_REGLEMENT, oldReg, reglement, SynchronReTables.REGLEMENT);
         return 1;
     }
