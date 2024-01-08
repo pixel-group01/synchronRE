@@ -22,5 +22,7 @@ public interface IServiceReport
 
     byte[] generateCheque(Long regId) throws Exception;
 
+    byte[] generateChequeSinistre(Long regId) throws Exception;
+
     byte[] generateNoteCessionFac(Long plaId) throws Exception;
 }

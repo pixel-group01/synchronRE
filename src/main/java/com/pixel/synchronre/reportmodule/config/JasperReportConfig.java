@@ -37,4 +37,6 @@ public class JasperReportConfig {
     @Value("${report.location.cheque}")
     public String cheque;
 
+    @Value("${report.location.cheque.sinistre}")
+    public String chequeSinistre;
 }
