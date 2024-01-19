@@ -18,4 +18,20 @@ public class CritereStat
     private List<String> devCodes;
     private LocalDate dateEffet;
     private LocalDate dateEcheance;
+
+    @Override
+    public String toString() {
+        return "CritereStat{" +
+                "exercices=" + exercices +
+                ", cedIds=" + cedIds +
+                ", cesIds=" + cesIds +
+                ", affIds=" + affIds +
+                ", statutCreation='" + statutCreation + '\'' +
+                ", staCodes=" + staCodes +
+                ", couIds=" + couIds +
+                ", devCodes=" + devCodes +
+                ", dateEffet=" + dateEffet +
+                ", dateEcheance=" + dateEcheance +
+                '}';
+    }
 }

@@ -18,7 +18,8 @@ public interface AffaireStatsRepository extends JpaRepository<Affaire, Long>
     @Query("""
         select new com.pixel.synchronre.statsmodule.model.dtos.AffaireStats(
         count(distinct a.affId), 
-        sum(a.affCapitalInitial), sum(a.facSmpLci)) 
+        sum(cast(a.affCapitalInitial * coalesce(a.affCoursDevise, 1) as java.math.BigDecimal)),
+        sum(cast(a.facSmpLci * coalesce(a.affCoursDevise, 1) as java.math.BigDecimal)))
         from Affaire a  left join a.statut s
          where s.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE') and a.exercice.exeCode in :exes and a.cedante.cedId in :cedIds  
          and  a.affStatutCreation = coalesce(:statCrea, a.affStatutCreation) and s.staCode in :staCodes and a.couverture.couId in :couIds 

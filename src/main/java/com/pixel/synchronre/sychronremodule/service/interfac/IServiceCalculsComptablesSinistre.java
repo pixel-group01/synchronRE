@@ -24,6 +24,7 @@ public interface IServiceCalculsComptablesSinistre
     BigDecimal calculateResteAPayerBySinAndCes(Long sinId, Long cesId);
     BigDecimal calculateTauxDePaiementSinistreBySinAndCes(Long sinId, Long cesId);
 
+    BigDecimal calculateResteAReverserBySin(Long sinId);
     BigDecimal calculateMtSinistreTotalAReverserByCed(Long cedId);
     BigDecimal calculateMtSinistreTotalDejaReverseByCed(Long cedId);
     BigDecimal calculateResteSinistreTotalAReverserByCed(Long cedId);
@@ -39,7 +40,6 @@ public interface IServiceCalculsComptablesSinistre
     BigDecimal calculateMtSinistreTotalDejaPayeByCes(Long cesId, Long exeCode);
     BigDecimal calculateResteSinistreTotalAPayerByCes(Long cesId, Long exeCode);
     BigDecimal calculateTauxDePaiementSinistreByCes(Long cesId, Long exeCode);
-
 
     BigDecimal calculateMtSinistreTotalAReverserByCed(Long cedId, Long exeCode);
     BigDecimal calculateMtSinistreTotalDejaReverseByCed(Long cedId, Long exeCode);

@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
@@ -13,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,8 +95,8 @@ public interface SinRepo extends JpaRepository<Sinistre, Long>
 
 
     @Query("""
-       select sum(r.regMontant) from Reglement r where r.sinistre.affaire.exercice.exeCode = ?1 and r.sinistre.sinId is not null and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true  and r.sinistre.affaire.affStatutCreation = 'REALISEE'
-          """)
+       select sum(r.regMontant) from Reglement r where r.sinistre.affaire.exercice.exeCode = ?1 and r.sinistre.sinId is not null and r.typeReglement.uniqueCode = 'paiements' and r.regStatut = true and r.sinistre.affaire.affStatutCreation = 'REALISEE'
+    """)
     BigDecimal calculateMtTotalSinistreDejaReglerByExercice(Long exeCode);
 
     @Query("""

@@ -1,14 +1,10 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCessionnaire;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.xpath.XPath;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -43,7 +38,7 @@ public class CessionnaireController
         return cessionnaireService.searchCessionnaire(key, PageRequest.of(page, size));
     }
     //getCessionnairesBySinistre
-    @GetMapping(path = "/by-affaire/{affId}")
+    @GetMapping(path = "/by-affaire/{affId}") // 652
     public List<CessionnaireListResp> findCessionnairesByAffaire(@PathVariable Long affId)
     {
         return cessionnaireService.getCessionnairesByAffaire(affId);

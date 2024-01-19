@@ -103,6 +103,14 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     }
 
     @Override
+    public BigDecimal calculateResteAReverserBySin(Long sinId)
+    {
+        BigDecimal mtTotalAReverser = this.calculateMtTotalCessionnairesSurSinistre(sinId);
+        BigDecimal mtTotalDejaReverse = this.calculateMtSinistreTotalDejaReverseBySin(sinId);
+        return mtTotalAReverser.subtract(mtTotalDejaReverse);
+    }
+
+    @Override
     public BigDecimal calculateMtSinistreTotalAReverserByCed(Long cedId)
     {
         BigDecimal mtSinistreTotalAReverserByCed = sinRepo.calculateMtSinistreTotalAReverserByCed(cedId);
@@ -161,9 +169,9 @@ public class ServiceCalculsComptablesSinistreImpl implements IServiceCalculsComp
     @Override
     public BigDecimal calculateMtSinistreEnAttenteDeAReversement(Long sinId)
     {
-        BigDecimal mtDejaPaye = sinRepo.calculateMtDejaPayeBySin(sinId);
-        BigDecimal mtDejaReverse = sinRepo.calculateMtDejaReverseBySin(sinId);
-        return mtDejaPaye == null ? ZERO : mtDejaPaye.subtract(mtDejaReverse == null ? ZERO : mtDejaReverse);
+        BigDecimal mtDejaPaye = sinRepo.calculateMtDejaPayeBySin(sinId); mtDejaPaye = mtDejaPaye == null ? ZERO : mtDejaPaye;
+        BigDecimal mtDejaReverse = sinRepo.calculateMtDejaReverseBySin(sinId); mtDejaReverse = mtDejaReverse == null ? ZERO : mtDejaReverse;
+        return mtDejaPaye.compareTo(mtDejaReverse) < 0 ? ZERO : mtDejaPaye.subtract(mtDejaReverse);
     }
 
     @Override

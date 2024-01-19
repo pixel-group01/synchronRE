@@ -18,7 +18,8 @@ import java.util.Optional;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "affType")
-public class Affaire {
+public class Affaire
+{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "AFF_ID_GEN", sequenceName = "AFF_ID_GEN", allocationSize = 1)

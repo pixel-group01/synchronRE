@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
-import com.pixel.synchronre.archivemodule.controller.service.ReglementDocUploader;
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
@@ -14,7 +12,6 @@ import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReglementMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
-import com.pixel.synchronre.sychronremodule.model.dto.mouvement.response.MouvementListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.CreateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.request.UpdateReglementReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reglement.response.ReglementDetailsResp;
@@ -58,6 +55,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createReglementAffaire(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
         switch (typeReg)
         {
             case PAIEMENT: return this.createPaiementAffaire(dto);
@@ -69,8 +67,6 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp createPaiementAffaire(CreateReglementReq dto) throws UnknownHostException
     {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
-        if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un paiement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-
         BigDecimal primeNetteComCed = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
 
         if(resteAPayer.compareTo(primeNetteComCed)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
@@ -116,7 +112,7 @@ public class ServiceReglementImpl implements IserviceReglement {
 
     @Override @Transactional
     public ReglementDetailsResp createReversementAffaire(CreateReglementReq dto) throws UnknownHostException
-    {//TODO A revoir le controle sur le reste à reverser
+    {
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
         //if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un reversement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
 
@@ -124,8 +120,8 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal mtEnAttenteDeReversement = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
 
         if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
-        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(dto.getRegMontant().compareTo(mtEnAttenteDeReversement)>0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(0) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(dto.getRegMontant().compareTo(mtEnAttenteDeReversement)>0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         Reglement reversement = reglementMapper.mapToReglement(dto);
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
 
@@ -149,6 +145,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createReglementSinistre(String typeReg, CreateReglementReq dto) throws UnknownHostException
     {
+        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
         switch (typeReg)
         {
             case PAIEMENT: return this.createPaiementSinistre(dto);
@@ -160,7 +157,8 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createPaiementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
-        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
+        BigDecimal resteAPayer = comptaSinistreService.calculateResteAPayerBySinAndCes(dto.getSinId(), dto.getCesId());
+        if(dto.getRegMontant().compareTo(resteAPayer) > 0) throw new AppException("Le montant du paiement ne peut excéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + ")");
         boolean hasPaiement = regRepo.sinistreHasReglement(dto.getSinId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -183,9 +181,13 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public ReglementDetailsResp createReversementSinistre(CreateReglementReq dto) throws UnknownHostException
     {
-        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du règlement ne peut être nul");
+        BigDecimal mtEnAttenteDeReversement = comptaSinistreService.calculateMtSinistreEnAttenteDeAReversement(dto.getSinId());
+        BigDecimal mtRestantAReverser = comptaSinistreService.calculateResteAReverserBySin(dto.getSinId());
+        if(dto.getRegMontant().compareTo(mtEnAttenteDeReversement) > 0) throw new AppException("Le montant du reversement ne peut excéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(0, RoundingMode.HALF_UP) + ")");
+        if(dto.getRegMontant().compareTo(mtRestantAReverser) > 0) throw new AppException("Le montant du reversement ne peut excéder le reste à reverser (" + mtRestantAReverser.setScale(0, RoundingMode.HALF_UP) + ")");
         boolean hasReversement = regRepo.sinistreHasReglement(dto.getSinId(), REVERSEMENT);
         Reglement reversement = reglementMapper.mapToReglement(dto);
+
 
         //reversement.setAppUser(new AppUser(jwtService.getUserInfosFromJwt().getUserId()));
         reversement.setTypeReglement(typeRepo.findByUniqueCode(REVERSEMENT).orElseThrow(()->new AppException("Type de document inconnu")));
