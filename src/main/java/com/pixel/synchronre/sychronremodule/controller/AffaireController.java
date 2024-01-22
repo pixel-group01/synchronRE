@@ -3,12 +3,12 @@ package com.pixel.synchronre.sychronremodule.controller;
 import com.pixel.synchronre.archivemodule.controller.service.AffaireDocUploader;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
@@ -19,7 +19,6 @@ import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceAffaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceFacultative;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -44,7 +43,6 @@ import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 public class AffaireController
 {
-    private final IserviceFacultative facService;
     private final AffaireRepository affRepo;
     private final FacultativeMapper facMapper;
     private final IJwtService jwtService;
@@ -52,7 +50,6 @@ public class AffaireController
     private final IserviceAffaire affService;
     private final IserviceExercie exoService;
     private final AffaireDocUploader docService;
-    private final EmailSenderService mailSenderService;
 
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
@@ -64,15 +61,19 @@ public class AffaireController
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto) throws UnknownHostException {
-        return facService.createFacultative(dto);
+        return affService.createFacultative(dto);
     }
 
     @PutMapping("/facultative/update")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp updateAffaire(@RequestBody @Valid UpdateFacultativeReq dto) throws UnknownHostException {
-        return facService.updateFacultative(dto);
+        return affService.updateFacultative(dto);
     }
-
+    @PostMapping("/facultative/renew")
+    @ResponseStatus(HttpStatus.CREATED)
+    public FacultativeDetailsResp renewAffaire(@RequestBody @Valid RenewFacultativeReq dto) throws UnknownHostException {
+        return affService.renewAffaire(dto);
+    }
     //Tab all affaires : affiche toutes les affaires qui sont pas supprimées quelques soit l'acteur
     @GetMapping(path = "/facultative/all")
     public Page<FacultativeListResp> searchAllAffaires(@RequestParam(required = false) Long exeCode, @RequestParam(required = false) Long cedId,

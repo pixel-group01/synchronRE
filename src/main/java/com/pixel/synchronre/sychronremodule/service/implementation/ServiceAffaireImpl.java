@@ -13,17 +13,21 @@ import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.CedRepo;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
-import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
-import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -61,6 +65,79 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final EmailSenderService emailSenderService;
     private final IserviceBordereau bordService;
     private final BordereauRepository bordRep;
+
+    private final FacultativeMapper facultativeMapper;
+    private final CouvertureRepository couvRepo;
+    @PersistenceContext
+    private EntityManager entityManager;
+
+
+    @Override @jakarta.transaction.Transactional
+    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException
+    {
+        boolean isCourtier = jwtService.UserIsCourtier();
+        Affaire aff=facultativeMapper.mapToAffaire(dto);
+        aff.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
+        aff=affRepo.save(aff);
+        aff.setAffCode(this.generateAffCode(aff.getAffId()));
+        logService.logg(AffaireActions.CREATE_FAC, null, aff, SynchronReTables.AFFAIRE);
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.CREATE_FAC, aff.getAffId(), aff.getStatut().getStaCode(), null));
+        aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
+        aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
+        return facultativeMapper.mapToFacultativeDetailsResp(aff);
+    }
+    private final BrancheRepository branRepo;
+    @Override //F+Code filiale+codeBranche+Exercice+numeroOrdre
+    public String generateAffCode(Long affId)
+    {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        return "F." + cedRepo.getCedSigleById(affaire.getCedante().getCedId()) + "." +
+                branRepo.getBranCheByCouId(affaire.getCouverture().getCouId()) + "." +
+                exoService.getExerciceCourant().getExeCode() + "." +
+                String.format("%05d", affId);
+    }
+
+    @Override @Transactional
+    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
+        affaire.setFacPrime(dto.getFacPrime());
+        affaire.setFacSmpLci(dto.getFacSmpLci());
+        affaire.setAffActivite(dto.getAffActivite());
+        affaire.setAffAssure(dto.getAffAssure());
+        affaire.setAffDateEcheance(dto.getAffDateEcheance());
+        affaire.setAffDateEffet(dto.getAffDateEffet());
+        affaire.setAffStatutCreation(dto.getAffStatutCreation());
+        if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
+        if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
+        affaire=affRepo.save(affaire);
+        logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        return facultativeMapper.mapToFacultativeDetailsResp(affaire);
+    }
+
+    @Override
+    public Page<FacultativeListResp> searchFacultative(String key, Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) throws UnknownHostException {
+        Affaire oldAffaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        boolean isCourtier = jwtService.UserIsCourtier();
+        entityManager.detach(oldAffaire);
+        Affaire newAffaire = affCopier.copy(oldAffaire);
+        BeanUtils.copyProperties(dto, newAffaire);
+        newAffaire.setAffSource(oldAffaire);
+        newAffaire.setExercice(new Exercice(oldAffaire.getExercice().getExeCode() + 1));
+        newAffaire.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
+        newAffaire = affRepo.save(newAffaire);
+        String newAffCode = this.generateAffCode(newAffaire.getAffId());
+        newAffaire.setAffCode(newAffCode);
+
+        logService.logg(AffaireActions.RENOUVELER_FAC, null, newAffaire, SynchronReTables.AFFAIRE);
+        return facultativeMapper.mapToFacultativeDetailsResp(newAffaire);
+    }
 
     @Override
     public EtatComptableAffaire getEtatComptable(Long affId)

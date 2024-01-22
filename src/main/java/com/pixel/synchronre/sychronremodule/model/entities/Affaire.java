@@ -67,6 +67,8 @@ public class Affaire
     protected Devise devise;
     @Column(precision = 50, scale = 20)
     protected BigDecimal affCoursDevise;
+    @ManyToOne @JoinColumn(name = "aff_source_id")
+    private Affaire affSource;
 
 
     public Affaire(Long affId) {
