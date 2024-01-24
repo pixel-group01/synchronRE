@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.facultative.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -13,7 +14,7 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {ValidEcheanceDate.ValidEcheanceDateValidator.class, ValidEcheanceDate.ValidEcheanceDateValidatorOnUpdate.class})
+@Constraint(validatedBy = {ValidEcheanceDate.ValidEcheanceDateValidator.class, ValidEcheanceDate.ValidEcheanceDateValidatorOnUpdate.class, ValidEcheanceDate.ValidEcheanceDateValidatorOnRenew.class})
 @Documented
 public @interface ValidEcheanceDate
 {
@@ -39,6 +40,18 @@ public @interface ValidEcheanceDate
     {
         @Override
         public boolean isValid(UpdateFacultativeReq dto, ConstraintValidatorContext context)
+        {
+            if (dto.getAffDateEffet() == null || dto.getAffDateEcheance() == null) return true;
+            return dto.getAffDateEffet().isEqual(dto.getAffDateEcheance()) || dto.getAffDateEffet().isBefore(dto.getAffDateEcheance());
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class ValidEcheanceDateValidatorOnRenew implements ConstraintValidator<ValidEcheanceDate, RenewFacultativeReq>
+    {
+        @Override
+        public boolean isValid(RenewFacultativeReq dto, ConstraintValidatorContext context)
         {
             if (dto.getAffDateEffet() == null || dto.getAffDateEcheance() == null) return true;
             return dto.getAffDateEffet().isEqual(dto.getAffDateEcheance()) || dto.getAffDateEffet().isBefore(dto.getAffDateEcheance());

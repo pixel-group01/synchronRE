@@ -93,7 +93,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         return "F." + cedRepo.getCedSigleById(affaire.getCedante().getCedId()) + "." +
                 branRepo.getBranCheByCouId(affaire.getCouverture().getCouId()) + "." +
-                exoService.getExerciceCourant().getExeCode() + "." +
+                affaire.getExercice().getExeCode() + "." +
                 String.format("%05d", affId);
     }
 
@@ -126,9 +126,11 @@ public class ServiceAffaireImpl implements IserviceAffaire
         Affaire oldAffaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         boolean isCourtier = jwtService.UserIsCourtier();
         entityManager.detach(oldAffaire);
-        Affaire newAffaire = affCopier.copy(oldAffaire);
-        BeanUtils.copyProperties(dto, newAffaire);
+        Affaire newAffaire = new Affaire();
+        BeanUtils.copyProperties(oldAffaire, newAffaire, "affId");
+        BeanUtils.copyProperties(dto, newAffaire, "affId");
         newAffaire.setAffSource(oldAffaire);
+        newAffaire.setAffCode(null);
         newAffaire.setExercice(new Exercice(oldAffaire.getExercice().getExeCode() + 1));
         newAffaire.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
         newAffaire = affRepo.save(newAffaire);
