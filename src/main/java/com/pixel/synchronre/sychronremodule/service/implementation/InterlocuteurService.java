@@ -66,7 +66,7 @@ public class InterlocuteurService implements IServiceInterlocuteur
 
     @Override
     public List<InterlocuteurListResp> getInterlocuteurByCessionnaire(Long cesId) {
-        return null;
+        return interRepo.getInterlocuteursByCessionnaire(cesId);
     }
 
     @Override

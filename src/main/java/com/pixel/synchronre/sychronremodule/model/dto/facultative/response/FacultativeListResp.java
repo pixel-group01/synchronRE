@@ -31,6 +31,7 @@ public class FacultativeListResp
     private String cedSigleFiliale;
     private String exeCode;
     private boolean placementTermine;
+    private BigDecimal affCoursDevise;
 
     public FacultativeListResp(Long affId, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance, String facNumeroPolice, BigDecimal facCapitaux, BigDecimal facSmpLci, BigDecimal facPrime, String affStatutCreation, String devCode, Long cedanteId, String statutCode, String staLibelle, Long couId,
             String couLibelle, Long branId, String branLibelle, String cedNomFiliale, String cedSigleFiliale, String exeCode) {

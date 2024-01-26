@@ -262,7 +262,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
     public void envoyerNoteDebitSinistre(Long sinId) throws Exception {
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));
         Cedante cedante = cedRepo.getCedanteByAffId(affaire.getAffId());
-        mailSenderService.sendNoteDebitSinistreEmail(synchronreEmail, cedante.getCedEmail(), cedante.getCedSigleFiliale(), affaire.getAffId());
+        mailSenderService.sendNoteDebitSinistreEmail(synchronreEmail, cedante.getCedEmail(), cedante.getCedSigleFiliale(), sinId);
     }
 
     @Override

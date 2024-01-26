@@ -75,7 +75,7 @@ public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Lo
         r.interlocuteurPrincipal.cessionnaire.cesNom,r.interlocuteurPrincipal.cessionnaire.cesSigle,
         r.interlocuteurPrincipal.statut.staCode) 
         from Repartition r join r.affaire a join Sinistre s on s.affaire.affId = a.affId where s.sinId = ?1 
-        and r.cessionnaire.cesId = ?2 and r.repStatut = true and r.repStatut not in ('REFUSE') and r.type.uniqueCode = 'REP_PLA'                                                                
+        and r.cessionnaire.cesId = ?2 and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'REFUSE', 'ANNULE', 'ANNULEE', 'SUPP', 'SUP') and r.type.uniqueCode = 'REP_PLA'                                                                
         """)
     InterlocuteurListResp getInterlocuteursPrincipalBySinAndCes(Long sinId, Long cesId);
 }

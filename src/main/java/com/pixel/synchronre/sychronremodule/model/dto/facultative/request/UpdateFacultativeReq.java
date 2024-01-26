@@ -62,7 +62,7 @@ public class UpdateFacultativeReq
     @ValidStatutCreation
     protected String affStatutCreation;
 
-    protected BigDecimal affCoursDevise;
+    private BigDecimal affCoursDevise;
 
     @NotNull(message = "Veuillez saisir le montant de la prime")
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
@@ -70,5 +70,5 @@ public class UpdateFacultativeReq
     @ExistingCedId
     private Long cedId;
     @ExistingCouId
-    protected Long couvertureId;
+    private Long couvertureId;
 }
