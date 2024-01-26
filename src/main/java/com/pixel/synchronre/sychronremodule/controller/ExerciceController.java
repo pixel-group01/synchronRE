@@ -4,15 +4,9 @@ import com.pixel.synchronre.sychronremodule.model.dto.exercice.request.CreateExe
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.request.UpdateExerciceReq;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.response.ExerciceDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.response.ExerciceListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.request.CreateStatutReq;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.request.UpdateStatutReq;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +32,16 @@ public class ExerciceController {
     @PutMapping(path = "/update")
     public ExerciceDetailsResp updateExercice(@RequestBody @Valid UpdateExerciceReq dto) throws UnknownHostException {
         return exoService.updateExercice(dto);
+    }
+
+    @PutMapping(path = "/activate/{exeCode}")
+    public ExerciceDetailsResp updateExercice(@PathVariable Long exeCode) throws UnknownHostException {
+        return exoService.activateExercice(exeCode);
+    }
+
+    @GetMapping(path = "/getCourantAndPlus1")
+    public List<ExerciceDetailsResp> getCourantAndPlus1(){
+        return exoService.getExerciceCourantAndPlus1();
     }
 
 }

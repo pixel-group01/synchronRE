@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ExerciceMapper {
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
-    Exercice mapToExerciceReq(CreateExerciceReq dto);
+    Exercice mapToExercice(CreateExerciceReq dto);
 
-    ExerciceDetailsResp ExerciceDetailsRespToExercice(Exercice exo);
+    ExerciceDetailsResp mapToExerciceDetailsResp(Exercice exo);
 }

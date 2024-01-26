@@ -9,6 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.statut.request.UpdateStatu
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Exercice;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,8 +18,14 @@ import java.util.List;
 
 public interface IserviceExercie {
     ExerciceDetailsResp createExercice(CreateExerciceReq dto) throws UnknownHostException;
+
+    @Transactional
+    ExerciceDetailsResp activateExercice(Long exeCode) throws UnknownHostException;
+
     ExerciceDetailsResp updateExercice(UpdateExerciceReq dto) throws UnknownHostException;
     List<ExerciceListResp> searchExercice(String key);
 
     Exercice getExerciceCourant();
+
+    List<ExerciceDetailsResp> getExerciceCourantAndPlus1();
 }
