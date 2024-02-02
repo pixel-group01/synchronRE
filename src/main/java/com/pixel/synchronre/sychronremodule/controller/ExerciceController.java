@@ -43,5 +43,4 @@ public class ExerciceController {
     public List<ExerciceDetailsResp> getCourantAndPlus1(){
         return exoService.getExerciceCourantAndPlus1();
     }
-
 }
