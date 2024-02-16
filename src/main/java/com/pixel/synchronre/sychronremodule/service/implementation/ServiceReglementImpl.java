@@ -39,7 +39,7 @@ import static java.math.BigDecimal.ZERO;
 public class ServiceReglementImpl implements IserviceReglement {
     private final ReglementRepository regRepo;
     private final ReglementMapper reglementMapper;
-    private final ObjectCopier<Reglement> paiCopier;
+    private final ObjectCopier<Reglement> regCopier;
     private final ILogService logService;
     private final AffaireRepository affRepo;
     private final TypeRepo typeRepo;
@@ -224,7 +224,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     public ReglementDetailsResp updateReglement(UpdateReglementReq dto) throws UnknownHostException
     {
         Reglement reg = regRepo.findById(dto.getRegId()).orElseThrow(()->new AppException("Reglement introuvable"));
-        Reglement oldPai = paiCopier.copy(reg);
+        Reglement oldPai = regCopier.copy(reg);
         reg.setRegReference(dto.getRegReference());
         reg.setRegMontant(dto.getRegMontant());
         reg.setRegDate(dto.getRegDate());
@@ -241,7 +241,7 @@ public class ServiceReglementImpl implements IserviceReglement {
     @Override @Transactional
     public int deleteReglement(Long regId) throws UnknownHostException {
         Reglement reglement = regRepo.findById(regId).orElseThrow(()->new AppException("Règlemement introuvable"));
-        Reglement oldReg = paiCopier.copy(reglement);
+        Reglement oldReg = regCopier.copy(reglement);
         reglement.setRegStatut(false);
         if(reglement.getAffId() != null)
         {
@@ -256,5 +256,18 @@ public class ServiceReglementImpl implements IserviceReglement {
 
         logService.logg(ReglementActions.DELETE_REGLEMENT, oldReg, reglement, SynchronReTables.REGLEMENT);
         return 1;
+    }
+
+    @Override
+    public void annulerReglement(Long regId)
+    {
+        Reglement reglement = regRepo.findById(regId).orElseThrow(()->new AppException("Reglement introuvable"));
+        Reglement oldReglement = regCopier.copy(reglement);
+        reglement.setRegStatut(false);
+        try
+        {
+            logService.logg(RepartitionActions.ANNULER_REPARTITION, oldReglement, reglement, SynchronReTables.REGLEMENT);
+        }
+        catch (UnknownHostException e) {e.printStackTrace();}
     }
 }

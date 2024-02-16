@@ -7,7 +7,7 @@ public class SynchronReTables {
     public static final String COUVERTURE = "Couverture";
     public static final String STATUT = "Statut";
     public static final String CEDENTE = "Cedente";
-    public static final  String PARAM_CESSION_LEGALE = "ParamCessionLegale";
+    public static final  String PARAM_CESSION_LEGALE = "Param_Cession_Legale";
     public static final String AFFAIRE = "Affaire";
     public static final String PAYS = "Pays";
     public static final String REGLEMENT = "Reglement";
@@ -16,4 +16,6 @@ public class SynchronReTables {
     public static final String DEVISE = "Devise";
     public static final String INTERLOCUTEUR = "Interlocuteur";
     public static final String EXERCICE = "Exercice";
+    public static final String BORDEREAU = "Bordereau";
+    public static final String DETAIL_BORDEREAU = "Detail_bordereau";
 }

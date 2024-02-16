@@ -33,4 +33,6 @@ public interface IserviceReglement
     Page<ReglementListResp> searchReglement(String key, Long affId, Long sinId, String typRegUniqueCode, Pageable pageable);
 
     int deleteReglement(Long regId) throws UnknownHostException;
+
+    void annulerReglement(Long regId);
 }

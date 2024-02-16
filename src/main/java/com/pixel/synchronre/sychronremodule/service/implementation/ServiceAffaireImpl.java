@@ -65,14 +65,17 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final EmailSenderService emailSenderService;
     private final IserviceBordereau bordService;
     private final BordereauRepository bordRep;
-
+    private final IserviceRepartition repService;
+    private final RepartitionRepository repRepo;
     private final FacultativeMapper facultativeMapper;
     private final CouvertureRepository couvRepo;
+    private final ReglementRepository regRepo;
+    private final IserviceReglement regService;
     @PersistenceContext
     private EntityManager entityManager;
 
 
-    @Override @jakarta.transaction.Transactional
+    @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException
     {
         boolean isCourtier = jwtService.UserIsCourtier();
@@ -98,8 +101,11 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override @Transactional
-    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException {
+    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException
+    {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        boolean smpHasChanged = dto.getFacSmpLci() == null ? false : dto.getFacSmpLci().compareTo(affaire.getFacSmpLci()) != 0;
+        boolean facPrimeHasChanged = dto.getFacPrime() == null ? false :  dto.getFacPrime().compareTo(affaire.getFacPrime()) != 0;
         Affaire oldAffaire = affCopier.copy(affaire);
         affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
         affaire.setFacPrime(dto.getFacPrime());
@@ -109,10 +115,17 @@ public class ServiceAffaireImpl implements IserviceAffaire
         affaire.setAffDateEcheance(dto.getAffDateEcheance());
         affaire.setAffDateEffet(dto.getAffDateEffet());
         affaire.setAffStatutCreation(dto.getAffStatutCreation());
+        affaire.setAffCoursDevise(dto.getAffCoursDevise());
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
         logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et les règlements de l'affaire
+        {
+            repRepo.findRepIdByAffId(dto.getAffId()).forEach(repId->repService.annulerRepartition(repId));
+            regRepo.findRegIdByAffId(dto.getAffId()).forEach(regId->regService.annulerReglement(regId));
+            bordRep.findBordIdByAffId(dto.getAffId()).forEach(bordId-> bordService.deleteBordereau(bordId));
+        }
         return facultativeMapper.mapToFacultativeDetailsResp(affaire);
     }
 

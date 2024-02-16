@@ -287,7 +287,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         logService.saveLog(RepartitionActions.ACCEPTER_PLACEMENT);
     }
 
-    @Override
+    @Override @Transactional
     public void validerPlacement(List<Long> plaIds)
     {
         if(plaIds == null) return;
@@ -299,5 +299,19 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 e.printStackTrace();
             }
         });
+    }
+
+    @Override @Transactional
+    public void annulerRepartition(Long repId)
+    {
+        Repartition repartition = repRepo.findById(repId).orElseThrow(()->new AppException("Repartition introuvable"));
+        Repartition oldRepartition = repCopier.copy(repartition);
+        repartition.setRepStaCode(new Statut(ANNULE.staCode));
+        repartition.setRepStatut(false);
+        try
+        {
+            logService.logg(RepartitionActions.ANNULER_REPARTITION, oldRepartition, repartition, SynchronReTables.REPARTITION);
+        }
+        catch (UnknownHostException e) {e.printStackTrace();}
     }
 }

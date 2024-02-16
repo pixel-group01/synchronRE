@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BordereauRepository extends JpaRepository<Bordereau, String>
+public interface BordereauRepository extends JpaRepository<Bordereau, Long>
 {
     @Query("select b from Bordereau b where b.affaire.statut.staCode in ?1")
     Page<Bordereau> getBordereauByStatut(List<String> staCodes, Pageable pageable);
@@ -18,4 +18,7 @@ public interface BordereauRepository extends JpaRepository<Bordereau, String>
 
     @Query("select (count(b.bordId) > 0) from Bordereau b where b.affaire.affId = ?1 and b.type.uniqueCode = 'NOT_DEB_FAC'")
     boolean noteDebExistsByAffId(Long affId);
+
+    @Query("select b from Bordereau b where b.affaire.affId = ?1")
+    List<Long> findBordIdByAffId(Long affId);
 }

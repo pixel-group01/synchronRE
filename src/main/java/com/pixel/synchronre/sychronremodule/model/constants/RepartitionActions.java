@@ -25,5 +25,6 @@ public class RepartitionActions {
     public static final String TRANSMETTRE_NOTE_CESSION = "Transmission d'une note de cession";
     public static final String ACCEPTER_PLACEMENT = "Acceptation d'un placement";
     public static final String ANNULER_PLACEMENT="Annulation d'un placement";
+    public static final String ANNULER_REPARTITION = "Annuler une répartition";
     public static String UPDATE_PLA_REPARTITION = "Modification d'une répartition de type part placement";
 }

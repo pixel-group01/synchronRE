@@ -221,4 +221,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select sum(r.affaire.facPrime * r.repTaux / 100) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULE'))")
     BigDecimal calculateMtTotalPrimeBruteByAffId(Long affId);
+
+    @Query("select r from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
+    List<Long> findRepIdByAffId(java.lang.Long affId);
 }

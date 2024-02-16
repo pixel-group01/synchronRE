@@ -53,4 +53,7 @@ public interface IserviceRepartition
     void accepterPlacement(Long plaId) throws UnknownHostException;
 
     void validerPlacement(List<Long> plaIds);
+
+    @Transactional
+    public void annulerRepartition(Long repId);
 }

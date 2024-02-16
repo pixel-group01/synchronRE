@@ -33,4 +33,6 @@ public class SynchronReActions
     public static final String DELETE_REGLEMENT_AFFAIRE = "Suppression d'un règlement sur une affaire";
     public static final String DELETE_REGLEMENT_SINISTRE = "Suppression d'un règlement sur un sinistre";
     public static final String ACTIVATE_EXERCICE = "Activation d'une gestion";
+    public static final String DELETE_BORDEREAU = "Suppression d'un bordereau";
+    public static final String DELETE_DETAIL_BORDEREAU = "Suppression d'un détail bordereau";
 }

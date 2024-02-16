@@ -6,4 +6,7 @@ public interface IserviceBordereau
 {
     Bordereau createNoteCession(Long plaId);
     Bordereau createNoteDebit(Long affId);
+    void deleteBordereau(Long bordId);
+
+    void deleteDetailBordereau(Long debId);
 }

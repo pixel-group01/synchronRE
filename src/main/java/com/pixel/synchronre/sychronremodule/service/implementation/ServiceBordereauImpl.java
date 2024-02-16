@@ -1,7 +1,11 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
+import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.BordereauRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.DetailsBordereauRepository;
@@ -17,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,7 +37,11 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptables comptaService;
     private final DetailsBordereauRepository detailBordRepo;
-    @Override
+    private final ObjectCopier<Bordereau> bordCopier;
+    private final ObjectCopier<DetailBordereau> detailBordCopier;
+    private final ILogService logService;
+
+    @Override @Transactional
     public Bordereau createNoteCession(Long plaId)
     {
         Long affId =  repRepo.repartFindByRep(plaId);
@@ -85,6 +94,29 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setType(bordType);
         this.saveDetailNoteDebit(affaire, bordereau);
         return bordereau;
+    }
+
+    @Override @Transactional
+    public void deleteBordereau(Long bordId)
+    {
+        Bordereau bordereau = bordRepo.findById(bordId).orElseThrow(()->new AppException("Bordereau introuvable"));
+        detailBordRepo.findByBordId(bordId).forEach(debId->this.deleteDetailBordereau(debId));
+        Bordereau oldBordereau = bordCopier.copy(bordereau);
+        try {
+            logService.logg(SynchronReActions.DELETE_BORDEREAU, oldBordereau, bordereau, SynchronReTables.BORDEREAU);
+        } catch (UnknownHostException e) {e.printStackTrace();}
+        bordRepo.deleteById(bordereau.getBordId());
+    }
+
+    @Override @Transactional
+    public void deleteDetailBordereau(Long debId)
+    {
+        DetailBordereau detailBordereau = detailBordRepo.findById(debId).orElseThrow(()->new AppException("Detail bordereau introuvable"));
+        DetailBordereau oldDetailBordereau = detailBordCopier.copy(detailBordereau);
+        try {
+            logService.logg(SynchronReActions.DELETE_DETAIL_BORDEREAU, oldDetailBordereau, null, SynchronReTables.DETAIL_BORDEREAU);
+        } catch (UnknownHostException e) {e.printStackTrace();}
+        detailBordRepo.deleteById(debId);
     }
 
     private LocalDate calculateDateLimite(Affaire affaire, Bordereau bordereau)

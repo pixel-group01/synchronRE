@@ -13,4 +13,7 @@ public interface DetailsBordereauRepository extends JpaRepository<DetailBorderea
 {
     @Query("select (count(db.debId)>0) from DetailBordereau db where db.repartition.repId = ?1")
     boolean detailsBordereauExistsByPlaId(Long plaId);
+
+    @Query("select db.debId from DetailBordereau db where db.bordereau.bordId = ?1")
+    List<Long> findByBordId(Long bordId);
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     @Query("select (count(r) > 0) from Reglement r where r.regReference = ?1")
@@ -52,4 +53,7 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("select sum(r.regCommissionCourt) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'")
     BigDecimal calculateMtComCourtierDejaEncaisse(Long affId);
+
+    @Query("select r from Reglement r where r.affaire.affId = ?1 and r.regStatut = true")
+    List<Long> findRegIdByAffId(Long affId);
 }
