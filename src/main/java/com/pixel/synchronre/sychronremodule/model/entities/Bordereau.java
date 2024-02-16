@@ -17,18 +17,18 @@ public class Bordereau {
     private Long bordId;
     @Column(unique = true)
     private String bordNum;
-    @ManyToOne @JoinColumn(name = "rep_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "rep_id")
     private Repartition repartition;
-    @ManyToOne @JoinColumn(name = "aff_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "aff_id")
     private Affaire affaire;
     private BigDecimal bordMontantTotalPrime;
     private BigDecimal bordMontantTotalCommission;
     private BigDecimal bordMontantTotalPrimeAreverser;
     private String bordMontantTotalPrimeAreverserLette;
     private LocalDate brodDateLimite;
-    @ManyToOne @JoinColumn(name = "type_code")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "type_code")
     private Type type;
-    @ManyToOne @JoinColumn(name = "bord_statut")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "bord_statut")
     private Statut statut;
     @CreationTimestamp
     protected LocalDateTime createdAt;

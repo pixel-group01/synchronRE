@@ -6,6 +6,7 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
+import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
@@ -123,6 +124,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et les règlements de l'affaire
         {
             repRepo.findRepIdByAffId(dto.getAffId()).forEach(repId->repService.annulerRepartition(repId));
+            affaire.setAffCode(EN_COURS_DE_REPARTITION.staCode);
             regRepo.findRegIdByAffId(dto.getAffId()).forEach(regId->regService.annulerReglement(regId));
             bordRep.findBordIdByAffId(dto.getAffId()).forEach(bordId-> bordService.deleteBordereau(bordId));
         }
