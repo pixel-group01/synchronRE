@@ -106,6 +106,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         boolean smpHasChanged = dto.getFacSmpLci() == null ? false : dto.getFacSmpLci().compareTo(affaire.getFacSmpLci()) != 0;
         boolean facPrimeHasChanged = dto.getFacPrime() == null ? false :  dto.getFacPrime().compareTo(affaire.getFacPrime()) != 0;
+        boolean facHasReglement = regRepo.affaireHasValidReglement(dto.getAffId());
+        if((smpHasChanged || facPrimeHasChanged) && facHasReglement) throw new AppException("Impossible de modifier la SMP ou la prime d'une affaire ayant déjà fait objet d'un règlement");
         Affaire oldAffaire = affCopier.copy(affaire);
         affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
         affaire.setFacPrime(dto.getFacPrime());
@@ -123,7 +125,6 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et les règlements de l'affaire
         {
             repRepo.findRepIdByAffId(dto.getAffId()).forEach(repId->repService.annulerRepartition(repId));
-            regRepo.findRegIdByAffId(dto.getAffId()).forEach(regId->regService.annulerReglement(regId));
             bordRep.findBordIdByAffId(dto.getAffId()).forEach(bordId-> bordService.deleteBordereau(bordId));
         }
         return facultativeMapper.mapToFacultativeDetailsResp(affaire);

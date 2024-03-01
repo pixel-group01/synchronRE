@@ -28,6 +28,9 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2")
     boolean affaireHasReglement(Long affId, String typeReg);
 
+    @Query("select (count(r.regId)>0) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true")
+    boolean affaireHasValidReglement(Long affId);
+
     @Query("select coalesce(sum(r.regMontant), 0) from Reglement r where r.affaire.affId = ?1 and r.typeReglement.uniqueCode = ?2 and r.regStatut = true")
     BigDecimal calculateMontantRegleByAffId(Long affId, String typeRegUniqueCode);
 
