@@ -19,6 +19,6 @@ public interface BordereauRepository extends JpaRepository<Bordereau, Long>
     @Query("select (count(b.bordId) > 0) from Bordereau b where b.affaire.affId = ?1 and b.type.uniqueCode = 'NOT_DEB_FAC'")
     boolean noteDebExistsByAffId(Long affId);
 
-    @Query("select b from Bordereau b where b.affaire.affId = ?1")
+    @Query("select b.bordId from Bordereau b where b.affaire.affId = ?1")
     List<Long> findBordIdByAffId(Long affId);
 }

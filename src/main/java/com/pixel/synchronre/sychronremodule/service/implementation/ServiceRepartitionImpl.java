@@ -306,7 +306,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     {
         Repartition repartition = repRepo.findById(repId).orElseThrow(()->new AppException("Repartition introuvable"));
         Repartition oldRepartition = repCopier.copy(repartition);
-        repartition.setRepStaCode(new Statut(ANNULE.staCode));
         repartition.setRepStatut(false);
         try
         {

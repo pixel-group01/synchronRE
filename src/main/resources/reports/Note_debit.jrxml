@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-12-10T15:56:51 -->
+<!-- 2024-02-16T15:11:25 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -217,7 +217,7 @@ FROM affaire,
 
 WHERE affaire.couverture_id = couverture.cou_id
   AND affaire.cedente_id = cedante.ced_id
-  AND affaire.aff_id = $P{aff_id} ]]>
+  AND affaire.aff_id = $P{aff_id}]]>
 		</queryString>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="part_cedante" class="java.math.BigDecimal"/>
@@ -285,6 +285,7 @@ where b.bord_id = db.deb_bord_id
                 affaire.aff_code,
                 affaire.aff_date_echeance,
                 affaire.aff_date_effet,
+                affaire.devise_code,
                 affaire.fac_prime,
                 affaire.fac_smp_lci,
                 affaire.cedente_id,
@@ -322,6 +323,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="aff_code" class="java.lang.String"/>
 	<field name="aff_date_echeance" class="java.sql.Date"/>
 	<field name="aff_date_effet" class="java.sql.Date"/>
+	<field name="devise_code" class="java.lang.String"/>
 	<field name="fac_prime" class="java.math.BigDecimal"/>
 	<field name="fac_smp_lci" class="java.math.BigDecimal"/>
 	<field name="cedente_id" class="java.lang.Long"/>
@@ -818,7 +820,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Arrêté la présente note à la somme de FCFA " +$F{bord_montant_total_prime_areverser_lette}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Arrêté la présente note à la somme de "+$F{devise_code}+" "+$F{bord_montant_total_prime_areverser_lette}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

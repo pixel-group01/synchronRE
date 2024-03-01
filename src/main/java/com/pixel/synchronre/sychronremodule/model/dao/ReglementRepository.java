@@ -57,6 +57,6 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     @Query("select sum(r.regCommissionCourt) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'")
     BigDecimal calculateMtComCourtierDejaEncaisse(Long affId);
 
-    @Query("select r from Reglement r where r.affaire.affId = ?1 and r.regStatut = true")
+    @Query("select r.regId from Reglement r where r.affaire.affId = ?1 and r.regStatut = true")
     List<Long> findRegIdByAffId(Long affId);
 }
