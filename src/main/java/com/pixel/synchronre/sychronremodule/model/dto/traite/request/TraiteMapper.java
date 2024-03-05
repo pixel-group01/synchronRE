@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface TraiteMapper
 {
-    @Mapping(target = "typeTraite", expression = "java(dto.getTypeId() == null ? null : new com.pixel.synchronre.typemodule.model.entities.Type(dto.getTypeId()))")
+    //@Mapping(target = "typeTraite", expression = "java(dto.getTypeId() == null ? null : new com.pixel.synchronre.typemodule.model.entities.Type(dto.getTypeId()))")
     @Mapping(target = "conditions", source = "conditions")
     Traite mapToTraite(TraiteReq dto);
 

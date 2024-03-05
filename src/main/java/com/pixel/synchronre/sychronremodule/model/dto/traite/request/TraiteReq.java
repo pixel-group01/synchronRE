@@ -22,6 +22,6 @@ public class TraiteReq
     private BigDecimal capitalMin;
     private LocalDate dateEffet;
     private LocalDate dateEcheance;
-    private Long typeId;
+    //private Long typeId;
     private List<ConditionTraiteReq> conditions;
 }

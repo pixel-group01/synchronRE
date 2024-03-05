@@ -1,39 +1,72 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
-import com.pixel.synchronre.typemodule.model.entities.Type;
+import com.pixel.synchronre.authmodule.model.entities.AppFunction;
+import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Traite
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRAITE_ID_GEN")
     @SequenceGenerator(name = "TRAITE_ID_GEN", sequenceName = "TRAITE_ID_GEN")
-    private Long tariteId;
-    private String traiteCode;
-    private String traiteLibelle;
-    private BigDecimal traiteTaux;
-    private BigDecimal smpMax;
-    private BigDecimal smpMin;
-    private BigDecimal capitalMax;
-    private BigDecimal capitalMin;
-    private LocalDate dateEffet;
-    private LocalDate dateEcheance;
+    protected Long traiId;
+    protected String traiCode;
+    protected String traiLibelle;
+    protected Long traiPreavis;
+    protected Long traiDure;
+    protected Long traiDelaiCompte;
+    protected Long traiDelaiPaiement;
+    protected String traiPeriodicite;
+    protected LocalDate traiDateEffet;
+    protected LocalDate traiDateRenouvellement;
+    protected BigDecimal traiTaux;
+    protected BigDecimal traiAlimentEst;
+    protected BigDecimal traiTauxResultatEstime;
+    protected BigDecimal traiTauxSurcommission;
+    protected BigDecimal traiTauxCourtier;
+    protected BigDecimal traiTauxImpot;
+    protected BigDecimal traiTauxAutreCharge;
+    protected BigDecimal traiTauxParticipation;
+    protected BigDecimal traiTauxFraisGeneraux;
+    protected BigDecimal traiTauxDepotSinistre;
+    protected BigDecimal traiTauxInteretSinistre;
+    protected LocalDate dateDateResiliation;
+    @ManyToOne @JoinColumn(name = "exe_code")
+    protected Exercice exercice;
+    @ManyToOne @JoinColumn(name = "nat_id")
+    protected Nature nature;
     @ManyToOne @JoinColumn(name = "STA_CODE")
-    private Statut statut;
-    @ManyToOne @JoinColumn(name = "TYPE_ID")
-    private Type typeTraite;
+    protected Statut statut;
+    @ManyToOne @JoinColumn(name = "trai_user_creator")
+    protected AppUser traiUserCreator;
+    @ManyToOne @JoinColumn(name = "trai_fon_creator")
+    protected AppFunction traiFonCreator;
+    @ManyToOne @JoinColumn(name = "devise_code")
+    protected Devise devise;
+    @Column(precision = 50, scale = 20)
+    protected BigDecimal traiCoursDevise;
+    @ManyToOne @JoinColumn(name = "trai_source_id")
+    protected Traite traiSource;
+    @CreationTimestamp
+    protected LocalDateTime createdAt;
+    @UpdateTimestamp
+    protected LocalDateTime updatedAt;
     @Transient
-    private List<ConditionTraite> conditions;
+    protected List<ConditionTraite> conditions;
 
-    public Traite(Long tariteId) {
-        this.tariteId = tariteId;
+    public Traite(Long traiId) {
+        this.traiId = traiId;
     }
 }
 /*
