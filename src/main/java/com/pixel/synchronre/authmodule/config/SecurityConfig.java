@@ -8,6 +8,7 @@ import io.jsonwebtoken.impl.crypto.JwtSignatureValidator;
 import io.jsonwebtoken.security.Keys;
 import com.pixel.synchronre.authmodule.model.constants.SecurityConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration @EnableWebSecurity
 @RequiredArgsConstructor
@@ -35,18 +37,20 @@ public class SecurityConfig
 {
     private final JwtAuthenticationFilter authenticationFilter;
     private final UserDetailsService userDetailsService;
+    @Value("${corse.allowed-origns}")
+    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        List<String> allowedOriginsList = allowedOrigins == null ? Collections.emptyList() :
+                Arrays.asList(allowedOrigins.split(","));
         return httpSecurity
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors(cors -> {
                     CorsConfigurationSource source = request -> {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(Arrays.asList("http://localhost:4200/","http://localhost:8000/","http://localhost/",
-                                "http://164.160.41.153/","http://137.74.199.79:8000/","https://groupensia.synchronre.com:8000/","https://137.74.199.79:8000/","http://10.100.100.106/", "http://141.94.206.196:8000"
-                        ));
+                        config.setAllowedOrigins(allowedOriginsList);
                         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                         config.setAllowedHeaders(Collections.singletonList("*"));
                         return config;
