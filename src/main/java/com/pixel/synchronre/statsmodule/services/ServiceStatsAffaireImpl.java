@@ -85,9 +85,9 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
         detailsAffaireStat.setId(cesId);
         detailsAffaireStat.setLibelle(cesRepo.getCesNameById(cesId));
         detailsAffaireStat.setNbrAffaires(affaireStatsPourLeCessionnaire.getNbrAffaires());
-        detailsAffaireStat.setMtSmpLciAccepte(affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte() == null || affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().setScale(0));
+        detailsAffaireStat.setMtSmpLciAccepte(affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte() == null || affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().setScale(2, RoundingMode.HALF_UP).compareTo(ZERO) == 0 ? ZERO : affaireStatsPourLeCessionnaire.getMtTotalSmpLciAccpte().setScale(0, RoundingMode.HALF_UP));
         BigDecimal mtTotalSmpLci = affaireStatsGlobal.getMtTotalSmpLci();
-        if(mtTotalSmpLci == null || mtTotalSmpLci.compareTo(ZERO) == 0) return detailsAffaireStat;
+        if(mtTotalSmpLci == null || mtTotalSmpLci.setScale(2, RoundingMode.HALF_UP).compareTo(ZERO) == 0) return detailsAffaireStat;
         BigDecimal tauxSmpLciAccepte = detailsAffaireStat.getMtSmpLciAccepte() == null ? ZERO : detailsAffaireStat.getMtSmpLciAccepte().multiply(CENT).divide(mtTotalSmpLci, 1, RoundingMode.HALF_UP);
         detailsAffaireStat.setTauxSmpLciAccepte(tauxSmpLciAccepte);
 
