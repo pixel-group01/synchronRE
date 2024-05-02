@@ -23,5 +23,5 @@ public class TraiteReq
     private LocalDate dateEffet;
     private LocalDate dateEcheance;
     //private Long typeId;
-    private List<ConditionTraiteReq> conditions;
+
 }

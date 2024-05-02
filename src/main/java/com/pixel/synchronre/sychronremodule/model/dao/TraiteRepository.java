@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
-import com.pixel.synchronre.sychronremodule.model.entities.Traite;
+import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TraiteRepository extends JpaRepository<Traite, Long> {
+public interface TraiteRepository extends JpaRepository<TraiteNonProportionnel, Long> {
 }
