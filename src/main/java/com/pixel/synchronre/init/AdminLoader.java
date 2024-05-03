@@ -79,7 +79,7 @@ public class AdminLoader implements Loader
 //        rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(1), roleAdmin, functionAdmin1));
 
 
-//        //user NSIA COTE D'IVOIRE
+//      //user NSIA COTE D'IVOIRE
         AppUser userci = userRepo.save(new AppUser(null, "userci", "userci", 1L, nelsonRe.getCesId(),
                 pe.encode("1234"), "userci@gmail.com", "userci-tel",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
@@ -155,9 +155,5 @@ public class AdminLoader implements Loader
         userComptable.setCurrentFunctionId(fncComptable.getId());
         userRepo.save(userComptable);
         rtfRepo.save(new RoleToFncAss(null, 1, LocalDate.now(), LocalDate.now().plusYears(20), roleComptable, fncComptable));
-
-
     }
-
-
 }

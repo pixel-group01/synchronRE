@@ -2,19 +2,13 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.sharedmodule.enums.TypeStatut;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@Builder
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
 @Entity
 public class Statut {
   @Id

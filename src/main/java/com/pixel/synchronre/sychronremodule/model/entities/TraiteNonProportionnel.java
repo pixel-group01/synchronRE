@@ -20,12 +20,14 @@ public class TraiteNonProportionnel
     protected String traiNumeroPolice;
     protected String traiLibelle;
     protected String traiAuteur;
-    protected String traiEcerciceRattachement;
+    @Enumerated(EnumType.STRING)
+    protected EXERCICE_RATTACHEMENT traiEcerciceRattachement;
     protected LocalDate traiDateEffet;
     protected LocalDate traiDateEcheance;
     @Column(precision = 50, scale = 20)
     protected BigDecimal traiCoursDevise;
-    protected String traiPeriodicite;
+    @Enumerated(EnumType.STRING)
+    protected PERIODICITE traiPeriodicite;
     protected Long traiDelaiEnvoi;
     protected Long traiDelaiConfirmation;
     protected BigDecimal traiTauxCourtier;
