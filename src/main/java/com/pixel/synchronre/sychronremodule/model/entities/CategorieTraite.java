@@ -21,7 +21,7 @@ public class CategorieTraite
     @JoinColumn(name = "categorie_id")
     private Categorie categorie;
     @ManyToOne
-    @JoinColumn(name = "traite_np_reference")
+    @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne
     @JoinColumn(name = "territorialite_ID")

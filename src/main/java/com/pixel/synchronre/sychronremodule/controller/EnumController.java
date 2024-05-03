@@ -32,9 +32,9 @@ public class EnumController {
     @GetMapping("/exercice-rattachement")
     List<EnumDTO> getExerciceRattachement()
     {
-        List<EnumDTO> periodicites = EnumUtils.getEnumList(EXERCICE_RATTACHEMENT.class)
+        List<EnumDTO> exoRattachements = EnumUtils.getEnumList(EXERCICE_RATTACHEMENT.class)
                 .stream().map(p->new EnumDTO(p.getCode(),p.getLibelle()))
                 .collect(Collectors.toList());
-        return periodicites;
+        return exoRattachements;
     }
 }

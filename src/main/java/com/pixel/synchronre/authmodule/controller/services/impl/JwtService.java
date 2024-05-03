@@ -208,6 +208,7 @@ public class JwtService implements IJwtService
         jwtInfos.setCedSigle(ced == null ? "" : ced.getCedSigleFiliale());
         jwtInfos.setUserEmail(this.extractUsername(jwt));
         jwtInfos.setUserId(claims.get("userId", Long.class));
+        jwtInfos.setNomPrenom(claims.get("nom", String.class) + " " + claims.get("prenom", String.class));
         jwtInfos.setAuthorities(claims.get("authorities", List.class));
         jwtInfos.setConnectionId(claims.get("connectionId", String.class));
         jwtInfos.setTokenStartingDate(this.extractClaim(jwt,Claims::getIssuedAt));

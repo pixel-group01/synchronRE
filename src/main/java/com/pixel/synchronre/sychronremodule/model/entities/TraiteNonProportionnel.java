@@ -16,46 +16,50 @@ import java.time.LocalDateTime;
 public class TraiteNonProportionnel
 {
     @Id
-    protected String traiReference;
-    protected String traiNumeroPolice;
-    protected String traiLibelle;
-    protected String traiAuteur;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRAI_ID_GEN")
+    @SequenceGenerator(name = "TRAI_ID_GEN", sequenceName = "TRAI_ID_GEN")
+    private Long traiId;
+    @Column(unique = true)
+    private String traiReference;
+    private String traiNumeroPolice;
+    private String traiLibelle;
+    private String traiAuteur;
     @Enumerated(EnumType.STRING)
-    protected EXERCICE_RATTACHEMENT traiEcerciceRattachement;
-    protected LocalDate traiDateEffet;
-    protected LocalDate traiDateEcheance;
+    private EXERCICE_RATTACHEMENT traiEcerciceRattachement;
+    private LocalDate traiDateEffet;
+    private LocalDate traiDateEcheance;
     @Column(precision = 50, scale = 20)
-    protected BigDecimal traiCoursDevise;
+    private BigDecimal traiCoursDevise;
     @Enumerated(EnumType.STRING)
-    protected PERIODICITE traiPeriodicite;
-    protected Long traiDelaiEnvoi;
-    protected Long traiDelaiConfirmation;
-    protected BigDecimal traiTauxCourtier;
-    protected BigDecimal traiTauxSurcommission;
+    private PERIODICITE traiPeriodicite;
+    private Long traiDelaiEnvoi;
+    private Long traiDelaiConfirmation;
+    private BigDecimal traiTauxCourtier;
+    private BigDecimal traiTauxSurcommission;
     @ManyToOne @JoinColumn(name = "exe_code")
-    protected Exercice exercice;
+    private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")
-    protected TraiteNonProportionnel traiSource;
-    @ManyToOne @JoinColumn(name = "nat_id")
-    protected Nature nature;
+    private TraiteNonProportionnel traiSource;
+    @ManyToOne @JoinColumn(name = "nat_code")
+    private Nature nature;
     @ManyToOne @JoinColumn(name = "devise_code")
-    protected Devise traiDevise;
+    private Devise traiDevise;
     @ManyToOne @JoinColumn(name = "comote_devise_code")
-    protected Devise traiCompteDevise;
+    private Devise traiCompteDevise;
     @ManyToOne @JoinColumn(name = "STA_CODE")
-    protected Statut statut;
+    private Statut statut;
     @ManyToOne @JoinColumn(name = "trai_user_creator")
-    protected AppUser traiUserCreator;
+    private AppUser traiUserCreator;
     @ManyToOne @JoinColumn(name = "trai_fon_creator")
-    protected AppFunction traiFonCreator;
+    private AppFunction traiFonCreator;
     @CreationTimestamp
-    protected LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     @UpdateTimestamp
-    protected LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
 
-    public TraiteNonProportionnel(String traiReference) {
-        this.traiReference = traiReference;
+    public TraiteNonProportionnel(Long traiId) {
+        this.traiId = traiId;
     }
 }
 /*

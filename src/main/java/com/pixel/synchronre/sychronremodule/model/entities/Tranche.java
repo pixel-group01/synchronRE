@@ -27,7 +27,7 @@ public class Tranche
     @ManyToOne @JoinColumn(name = "risque_couvert_ID")
     private RisqueCouvert risqueCouvert;
 
-    @ManyToOne @JoinColumn(name = "traite_np_reference")
+    @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
 
     @ManyToOne @JoinColumn(name = "STA_CODE")

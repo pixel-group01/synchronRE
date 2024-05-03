@@ -26,7 +26,7 @@ public class CedanteTraite
     private BigDecimal pmd;
     @ManyToOne @JoinColumn(name = "ced_id")
     private Cedante cedante;
-    @ManyToOne @JoinColumn(name = "traite_np_reference")
+    @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;

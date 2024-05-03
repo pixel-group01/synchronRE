@@ -14,4 +14,8 @@ public class Nature {
     private FORME forme;
     @ManyToOne @JoinColumn(name = "nat_sta_code")
     private Statut statut;
+
+    public Nature(String natCode) {
+        this.natCode = natCode;
+    }
 }

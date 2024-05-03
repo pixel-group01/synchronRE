@@ -25,7 +25,7 @@ public class Reconstitution
     private BigDecimal tauxReconstitution;
     private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
-    @ManyToOne @JoinColumn(name = "traite_np_reference")
+    @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;

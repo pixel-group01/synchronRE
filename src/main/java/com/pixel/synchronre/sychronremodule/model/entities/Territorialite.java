@@ -24,7 +24,7 @@ public class Territorialite
     @ManyToOne @JoinColumn(name = "org_pays_id")
     private OrganisationPays orgPays;
     @ManyToOne
-    @JoinColumn(name = "traite_np_reference")
+    @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne
     @JoinColumn(name = "STA_CODE")
