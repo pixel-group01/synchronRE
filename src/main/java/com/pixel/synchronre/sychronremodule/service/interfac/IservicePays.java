@@ -9,10 +9,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IservicePays {
 
     PaysDetailsResp createPays(CreatePaysReq dto) throws UnknownHostException;
     PaysDetailsResp updatePays(UpdatePaysReq dto) throws UnknownHostException;
     Page<PaysListResp> searchPays(String key, Pageable pageable);
+
+    List<PaysListResp> getPaysByOrgCode(String orgCode);
 }

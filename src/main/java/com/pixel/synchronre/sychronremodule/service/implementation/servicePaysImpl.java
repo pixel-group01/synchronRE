@@ -6,6 +6,7 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.dao.OrganisationPaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.PaysMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.request.CreatePaysReq;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 
 @Service
@@ -32,6 +34,7 @@ public class servicePaysImpl implements IservicePays {
     private final PaysMapper paysMapper;
     private final ObjectCopier<Pays> payCopier;
     private final ILogService logService;
+    private final OrganisationPaysRepository orgPaysRepo;
 
     @Override
     public PaysDetailsResp createPays(CreatePaysReq dto) throws UnknownHostException {
@@ -54,5 +57,10 @@ public class servicePaysImpl implements IservicePays {
     @Override
     public Page<PaysListResp> searchPays(String key, Pageable pageable) {
         return paysRepo.searchPays(StringUtils.stripAccentsToUpperCase(key), pageable);
+    }
+
+    @Override
+    public List<PaysListResp> getPaysByOrgCode(String orgCode) {
+        return orgPaysRepo.getPaysByOrgCode(orgCode);
     }
 }

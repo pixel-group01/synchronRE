@@ -21,7 +21,6 @@ import java.util.Optional;
 public class Affaire
 {
     @Id
-
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "AFF_ID_GEN", sequenceName = "AFF_ID_GEN", allocationSize = 1)
     protected Long affId;
