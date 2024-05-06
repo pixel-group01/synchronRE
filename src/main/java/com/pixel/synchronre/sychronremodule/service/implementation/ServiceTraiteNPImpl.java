@@ -1,8 +1,5 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.authmodule.model.entities.AppFunction;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
@@ -13,6 +10,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTrait
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;

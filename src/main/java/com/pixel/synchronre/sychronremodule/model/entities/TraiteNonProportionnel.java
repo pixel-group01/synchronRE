@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

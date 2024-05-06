@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.enums.EnumDTO;
-import com.pixel.synchronre.sychronremodule.model.entities.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;

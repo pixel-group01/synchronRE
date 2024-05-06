@@ -1,6 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.response;
 
-import com.pixel.synchronre.sychronremodule.model.entities.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
