@@ -17,7 +17,7 @@ public interface TerritorialiteRepository extends JpaRepository<Territorialite, 
     where (locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ter.terrLibelle) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(ter.terrTaux as string))) =1 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ter.terrDescription) as string))) >0)
-    and tnp.traiId = :traiId
+    and tnp.traiId = :traiId and ter.statut.staCode = 'ACT'
 """)
     Page<TerritorialiteResp> search(@Param("traiId")Long traiId, @Param("key") String key, Pageable pageable);
 }
