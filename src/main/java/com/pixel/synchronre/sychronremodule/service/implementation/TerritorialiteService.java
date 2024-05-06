@@ -77,8 +77,8 @@ public class TerritorialiteService implements IServiceTerritorialite
             this.addPaysToTerritorialite(dto.getTerrId(), paysCode);
         });
 
-        List<String> orgsToRemove = terrDetRepo.getOrgCodesToRemove(dto.getTerrId(), dto.getPaysCodes());
-        List<String> orgsToAdd = terrDetRepo.getOrgCodesToAdd(dto.getTerrId(), dto.getPaysCodes());
+        List<String> orgsToRemove = terrDetRepo.getOrgCodesToRemove(dto.getTerrId(), dto.getOrgCodes());
+        List<String> orgsToAdd = terrDetRepo.getOrgCodesToAdd(dto.getTerrId(), dto.getOrgCodes());
         orgsToRemove.forEach(orgCode-> {
             this.removeOrgFromTerritorialite(dto.getTerrId(), orgCode);
         });
