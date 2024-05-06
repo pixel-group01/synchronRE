@@ -57,7 +57,7 @@ public class AdminLoader implements Loader
         Cessionnaire nelsonRe=cesRepo.save(new Cessionnaire(null, "NELSON-RE", "NRE", "nre@gmail.com", "nre-tel", "nre-cel", "nre", "ABJ", FIVE, typeRepo.findByUniqueCode("COURT").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
        //Developpeur
         AppUser userDev = userRepo.save(new AppUser(null, "Développeur", "Synchrone-Re", null, nelsonRe.getCesId(),
-                pe.encode("KD@fgfysh458@"), "pixelgroup09@gmail.com", "0505050505",
+                pe.encode("1234"), "pixelgroup09@gmail.com", "0505050505",
                 true, true, null, LocalDateTime.now(), LocalDateTime.now(),
                 LocalDateTime.now()));
         AppFunction fncDev = fncRepo.save(new AppFunction(null, null, nelsonRe.getCesId(), "Développeur synchrone-Re", userDev, tyfDev, 1, LocalDate.now(), LocalDate.now().plusYears(1)));
