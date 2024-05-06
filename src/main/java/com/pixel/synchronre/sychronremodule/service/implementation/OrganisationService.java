@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,7 @@ public class OrganisationService implements IServiceOrganisation
     public List<OrganisationDTO> getListOrganisations()
     {
         List<OrganisationDTO> organisations = orgRepo.getListOrganisations();
-        organisations = organisations.stream().peek(o->o.setPaysList(orgPaysRepo.getPaysByOrgCode(o.getOrganisationCode()))).collect(Collectors.toList());
+        organisations = organisations.stream().peek(o->o.setPaysList(orgPaysRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
         return organisations;
     }
 

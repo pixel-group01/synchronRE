@@ -28,4 +28,8 @@ public class Organisation {
     protected LocalDateTime createdAt;
     @UpdateTimestamp
     protected LocalDateTime updatedAt;
+
+    public Organisation(String organisationCode) {
+        this.organisationCode = organisationCode;
+    }
 }

@@ -39,9 +39,9 @@ public class PaysController {
         return paysService.searchPays(key, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/organisations/{orgCode}")
-    public List<PaysListResp> getPaysByOrgCode(@PathVariable(required = true) String orgCode) throws UnknownHostException {
-        return paysService.getPaysByOrgCode(orgCode);
+    @GetMapping(path = "/organisations")
+    public List<PaysListResp> getPaysByOrgCode(@RequestParam(required =  false) List<String> orgCodes) throws UnknownHostException {
+        return paysService.getPaysByOrgCodes(orgCodes);
     }
 
 

@@ -18,6 +18,6 @@ public abstract class OrganisationMapper
     public abstract Organisation mapToOrgnaisation(OrganisationDTO dto);
     @Mapping(target = "staCode", source = "statut.staCode")
     @Mapping(target = "staLibelle", source = "statut.staLibelle")
-    @Mapping(target = "paysList", expression = "java(orgPaysRepo.getPaysByOrgCode(dto.getOrganisationCode()))")
+    @Mapping(target = "paysList", expression = "java(orgPaysRepo.getPaysByOrgCodes(java.util.Collections.singletonList(dto.getOrganisationCode())) )")
     public abstract OrganisationDTO mapToOrgnaisationDTO(Organisation dto);
 }

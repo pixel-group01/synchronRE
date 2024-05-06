@@ -17,5 +17,5 @@ public interface IservicePays {
     PaysDetailsResp updatePays(UpdatePaysReq dto) throws UnknownHostException;
     Page<PaysListResp> searchPays(String key, Pageable pageable);
 
-    List<PaysListResp> getPaysByOrgCode(String orgCode);
+    List<PaysListResp> getPaysByOrgCodes(List<String> orgCodes);
 }

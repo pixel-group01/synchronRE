@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -60,7 +61,8 @@ public class servicePaysImpl implements IservicePays {
     }
 
     @Override
-    public List<PaysListResp> getPaysByOrgCode(String orgCode) {
-        return orgPaysRepo.getPaysByOrgCode(orgCode);
+    public List<PaysListResp> getPaysByOrgCodes(List<String> orgCodes) {
+        if(orgCodes == null || orgCodes.isEmpty()) return Collections.emptyList();
+        return orgPaysRepo.getPaysByOrgCodes(orgCodes);
     }
 }

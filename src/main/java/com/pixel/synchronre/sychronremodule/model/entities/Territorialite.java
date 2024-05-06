@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,10 +22,9 @@ public class Territorialite
     @SequenceGenerator(name = "TERR_ID_GEN", sequenceName = "TERR_ID_GEN")
     private Long terrId;
     private String terrLibelle;
-    @ManyToOne @JoinColumn(name = "org_pays_id")
-    private OrganisationPays orgPays;
-    @ManyToOne
-    @JoinColumn(name = "traite_np_id")
+    private BigDecimal terrTaux;
+    private String terrDescription;
+    @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne
     @JoinColumn(name = "STA_CODE")
@@ -37,4 +37,23 @@ public class Territorialite
     protected LocalDateTime createdAt;
     @UpdateTimestamp
     protected LocalDateTime updatedAt;
+
+    public Territorialite(String terrLibelle, BigDecimal terrTaux,
+                          String terrDescription,
+                          TraiteNonProportionnel traiteNonProportionnel,
+                           Statut statut,
+                          AppUser userCreator, AppFunction fonCreator)
+    {
+        this.terrLibelle = terrLibelle;
+        this.terrTaux = terrTaux;
+        this.terrDescription = terrDescription;
+        this.traiteNonProportionnel = traiteNonProportionnel;
+        this.statut = statut;
+        this.userCreator = userCreator;
+        this.fonCreator = fonCreator;
+    }
+
+    public Territorialite(Long terrId) {
+        this.terrId = terrId;
+    }
 }
