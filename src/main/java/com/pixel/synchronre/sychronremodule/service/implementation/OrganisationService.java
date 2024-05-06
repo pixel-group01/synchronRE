@@ -18,6 +18,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceOrganisation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,11 @@ public class OrganisationService implements IServiceOrganisation
     }
 
     @Override
-    public Page<OrganisationDTO> search(String key, Pageable pageable) {
-        return orgRepo.search(key, pageable);
+    public Page<OrganisationDTO> search(String key, Pageable pageable)
+    {
+        Page<OrganisationDTO> organisationPage = orgRepo.search(key, pageable);
+        List<OrganisationDTO> organisationList = organisationPage.stream().peek(o->o.setPaysList(orgPaysRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
+        return new PageImpl<>(organisationList, pageable, organisationPage.getTotalElements());
     }
 
     @Override @Transactional
@@ -82,35 +86,35 @@ public class OrganisationService implements IServiceOrganisation
         List<String> paysToRemove = orgPaysRepo.getPaysCodesToRemove(dto.getOrgCode(), dto.getPaysCodes());
         List<String> paysToAdd = orgPaysRepo.getPaysCodesToAdd(dto.getOrgCode(), dto.getPaysCodes());
         paysToRemove.forEach(paysCode-> {
-            try {
                 this.removePaysFromOrganisation(dto.getOrgCode(), paysCode);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
         });
         paysToAdd.forEach(paysCode-> {
-            try {
                 this.addPaysToOrganisation(dto.getOrgCode(), paysCode);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
         });
 
         return orgMapper.mapToOrgnaisationDTO(organisation);
     }
 
-    private void addPaysToOrganisation(String orgCode, String paysCode) throws UnknownHostException {
+    private void addPaysToOrganisation(String orgCode, String paysCode){
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
         if(orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
         OrganisationPays orgPays = orgPaysRepo.save(new OrganisationPays(new Pays(paysCode), organisation, new Statut("ACT"), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId())));
-        logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
+        try {
+            logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void removePaysFromOrganisation(String orgCode, String paysCode) throws UnknownHostException {
+    private void removePaysFromOrganisation(String orgCode, String paysCode) {
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
         if(!orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
         OrganisationPays orgPays = orgPaysRepo.findByOrgCodeAndPaysCode(orgCode, paysCode);
                 orgPaysRepo.deleteByOrgCodeAndPaysCode(orgCode, paysCode);
-        logService.logg("Suppression d'un pays à une organisation", orgPays, new OrganisationPays(), "OrganisationPays");
+        try {
+            logService.logg("Suppression d'un pays à une organisation", orgPays, new OrganisationPays(), "OrganisationPays");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 }
