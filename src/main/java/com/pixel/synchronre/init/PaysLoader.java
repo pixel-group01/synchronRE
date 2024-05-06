@@ -32,6 +32,20 @@ public class PaysLoader implements Loader
         Pays BFO = paysRepo.save(new Pays("BFO","+226", "Burkina Faso",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
         Pays MAL = paysRepo.save(new Pays("MAL","+223", "Mali",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
         Pays CMR = paysRepo.save(new Pays("CMR","+237", "Cameroun",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
-        //paysRepo.saveAll(Arrays.asList(ci, bn, tg, sen,GAB, gui, BFO, MAL,CMR));
+
+        //Nouveau
+        Pays CAF = paysRepo.save(new Pays("CAF","+236", "Centrafrique",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+       // Pays COM = paysRepo.save(new Pays("COM","+269", "Comores",new Devise("KMF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays COG = paysRepo.save(new Pays("COG","+242", "Congo",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays GNB = paysRepo.save(new Pays("GNB","+245", "Guinée-Bissau",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays GNQ = paysRepo.save(new Pays("GNQ","+240", "Guinée équatoriale",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays NER = paysRepo.save(new Pays("NER","+227", "Niger",new Devise("XOF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays TCD = paysRepo.save(new Pays("TCD","+235", "Tchad",new Devise("XAF"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays CPV = paysRepo.save(new Pays("CPV","+238", "Cap-Vert",new Devise("CVE"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays GMB = paysRepo.save(new Pays("GMB","+220", "Gambie",new Devise("GMD"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays GHA = paysRepo.save(new Pays("GHA","+233", "Ghana",new Devise("GHS"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays LBR = paysRepo.save(new Pays("LBR","+231", "Libéria",new Devise("LRD"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+        Pays NGA = paysRepo.save(new Pays("NGA","+234", "Nigeria",new Devise("NGN"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+       // Pays SLE = paysRepo.save(new Pays("SLE","+232", "Sierra Leone",new Devise("SLL"),new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
     }
 }
