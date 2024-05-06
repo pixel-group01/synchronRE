@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
@@ -29,12 +30,12 @@ public class TerritorialiteController
     }
 
     @GetMapping(path = "/search")
-    Page<TerritorialiteResp> create(@RequestParam(defaultValue = "") String key,
-                              @RequestParam(required = false) Long traiId,
-                              @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size)
+    Page<TerritorialiteResp> create(@RequestParam(required = false) Long traiId,
+                                    @RequestParam(defaultValue = "") String key,
+                                    @RequestParam(defaultValue = "0") int page,
+                                    @RequestParam(defaultValue = "10") int size)
     {
-        return null;
+        return territorialiteService.search(traiId, key, PageRequest.of(page, size));
     }
 
 }

@@ -1,8 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.territorialite;
 
-import com.pixel.synchronre.sychronremodule.model.dto.organisation.OrganisationDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +23,13 @@ public class TerritorialiteResp
     private String traiNumeroPolice;
     private String traiLibelle;
     private String traiAuteur;
+
+    public TerritorialiteResp(Long terrId, String terrLibelle, BigDecimal terrTaux, String terrDescription, Long traiteNPId, String traiReference) {
+        this.terrId = terrId;
+        this.terrLibelle = terrLibelle;
+        this.terrTaux = terrTaux;
+        this.terrDescription = terrDescription;
+        this.traiteNPId = traiteNPId;
+        this.traiReference = traiReference;
+    }
 }

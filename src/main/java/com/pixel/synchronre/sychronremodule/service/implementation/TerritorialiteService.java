@@ -12,13 +12,18 @@ import com.pixel.synchronre.sychronremodule.model.dto.territorialite.Territorial
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTerritorialite;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
 public class TerritorialiteService implements IServiceTerritorialite
@@ -114,8 +119,18 @@ public class TerritorialiteService implements IServiceTerritorialite
     }
 
     @Override  @Transactional
-    public Page<TerritorialiteResp> search(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, PageRequest of) {
-        return null;
+    public Page<TerritorialiteResp> search(Long traiId, String key, Pageable pageable)
+    {
+        if(traiId == null || !traiRepo.existsById(traiId)) throw new AppException("Traité introuvable");
+        Page<TerritorialiteResp> territorialitePage = terrRepo.search(traiId, key, pageable);
+        List<TerritorialiteResp> territorialiteList = territorialitePage.stream().peek(t->
+        {
+            t.setPaysList(terrDetRepo.getPaysByTerrId(t.getTerrId()));
+            t.setOrganisationList(terrDetRepo.getOrgCodesByTerrId(t.getTerrId()).stream()
+                    .filter(Objects::nonNull).collect(java.util.stream.Collectors.joining(", ")));
+        }).collect(Collectors.toList());
+
+        return new PageImpl<>(territorialiteList, pageable, territorialitePage.getTotalElements());
     }
 
     private void addPaysToTerritorialite(Long terrId, String paysCode)

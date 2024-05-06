@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface TerritorialiteDetailsRepository extends JpaRepository<TerritorialiteDetails, Long> {
@@ -31,9 +32,9 @@ public interface TerritorialiteDetailsRepository extends JpaRepository<Territori
     void deleteByTerrIdAndPaysCode(Long terrId, String paysCode);
 
     @Query("""
-select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(
+    select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(
     p.paysCode, p.paysIndicatif, p.paysNom, p.statut.staLibelle, p.devise.devCode, p.devise.devLibelle) 
-    from OrganisationPays op join op.pays p where op.organisation.organisationCode in ?1
+    from TerritorialiteDetails td join td.pays p where td.territorialite.terrId = ?1
 """)
     List<PaysListResp> getPaysByTerrId(Long terrId);
 
@@ -64,4 +65,9 @@ select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysList
     not exists(select td from TerritorialiteDetails td where td.territorialite.terrId = ?1 and td.organisation.organisationCode = o.organisationCode)
     """)
     List<String> getOrgCodesToAdd(Long terrId, List<String> orgCodes);
+
+    @Query("""
+    select td.organisation.organisationCode from TerritorialiteDetails td join td.territorialite t where t.terrId = ?1
+    """)
+    List<String> getOrgCodesByTerrId(Long terrId);
 }
