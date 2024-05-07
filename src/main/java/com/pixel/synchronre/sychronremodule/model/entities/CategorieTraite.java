@@ -23,9 +23,8 @@ public class CategorieTraite
     @ManyToOne
     @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @ManyToOne
-    @JoinColumn(name = "territorialite_ID")
-    private Territorialite territorialite;
+    @ManyToOne @JoinColumn(name = "pays_code")
+    private Pays pays;
     @ManyToOne
     @JoinColumn(name = "STA_CODE")
     private Statut statut;

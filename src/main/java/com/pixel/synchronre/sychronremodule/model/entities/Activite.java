@@ -9,13 +9,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    @Builder
+    @AllArgsConstructor @NoArgsConstructor @Getter @Setter
     @Entity
-    public class Activite {
+    public class Activite
+    {
         @Id
         @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ACT_ID_GEN")
         @SequenceGenerator(name = "ACT_ID_GEN", sequenceName = "ACT_ID_GEN")
