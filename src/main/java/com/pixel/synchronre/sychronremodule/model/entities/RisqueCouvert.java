@@ -38,4 +38,16 @@ public class RisqueCouvert
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public RisqueCouvert(Long risqueId) {
+        this.risqueId = risqueId;
+    }
+
+    @Override
+    public String toString() {
+        return "RisqueCouvert{" +
+                "risqueId=" + risqueId +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
