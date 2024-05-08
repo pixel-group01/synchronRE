@@ -29,6 +29,10 @@ import java.time.LocalDateTime;
         protected LocalDateTime createdAt;
         @UpdateTimestamp
         protected LocalDateTime updatedAt;
+
+        public Activite(Long activiteId) {
+            this.activiteId = activiteId;
+        }
     }
 
 
