@@ -28,8 +28,6 @@ public class CedanteTraite
     private Cedante cedante;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @ManyToOne @JoinColumn(name = "tranche_ID")
-    private Tranche tranche;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")

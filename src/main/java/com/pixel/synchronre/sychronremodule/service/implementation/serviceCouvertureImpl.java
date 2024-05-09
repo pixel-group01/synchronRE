@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +46,17 @@ public class serviceCouvertureImpl implements IserviceCouverture {
         Couverture oldCouverture = couvCopier.copy(couv);
         couv.setCouLibelle(dto.getCouLibelle());
         couv.setCouLibelleAbrege(dto.getCouLibelleAbrege());
+        couv.setCouParent(dto.getCouParentId() == null ? null : new Couverture(dto.getCouParentId()));
         couv.setBranche(new Branche(dto.getBranId()));
         couv = couvRepo.save(couv);
         logService.logg(SynchronReActions.UPDATE_COUVERTURE, oldCouverture, couv, SynchronReTables.COUVERTURE);
         return couvMapper.mapToCouvertureDetailsResp(couv);
+    }
+
+    @Override
+    public List<CouvertureListResp> getCouerturesParents()
+    {
+        return couvRepo.getCouerturesParents();
     }
 
     @Override

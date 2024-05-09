@@ -9,7 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisque
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Activite;
+
 import com.pixel.synchronre.sychronremodule.model.entities.Couverture;
 import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
@@ -44,7 +44,6 @@ public class RisqueService implements IServiceRisque
         RisqueCouvert risqueCouvert = risqueRepo.findById(dto.getRisqueId()).orElseThrow(()->new AppException("Risque introuvable"));
         RisqueCouvert oldRisqueCouvert = risqueCopier.copy(risqueCouvert);
         risqueCouvert.setCouverture(new Couverture(dto.getCouId()));
-        risqueCouvert.setActivite(new Activite(dto.getActiviteId()));
         risqueCouvert.setDescription(dto.getDescription());
         logService.logg("Modification d'un risque", oldRisqueCouvert, risqueCouvert, "RisqueCouvert");
         return risqueMapper.mapToRisqueCouvertResp(risqueCouvert);

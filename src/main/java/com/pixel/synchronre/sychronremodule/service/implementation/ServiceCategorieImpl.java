@@ -7,7 +7,6 @@ import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieReq;
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CategorieMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;

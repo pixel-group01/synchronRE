@@ -14,8 +14,6 @@ public class RisqueCouvertResp
     private String description;
     private Long traiId;
     private  String traiReference;
-    private Long activiteId;
-    private String activiteLibelle;
     private String staCode;
     private String staLibelle;
 }

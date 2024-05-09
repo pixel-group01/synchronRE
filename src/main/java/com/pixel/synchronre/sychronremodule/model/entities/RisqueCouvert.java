@@ -26,8 +26,6 @@ public class RisqueCouvert
     private String description;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @ManyToOne @JoinColumn(name = "activite_id")
-    private Activite activite;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
