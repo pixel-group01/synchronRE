@@ -6,10 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class CreateRisqueCouvertReq
+public class UpdateRisqueCouvertReq
 {
+    private Long risqueId;
     private Long couId;
     private String description;
-    private Long traiteNPId;
     private Long activiteId;
 }
