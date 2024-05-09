@@ -24,11 +24,20 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege, 
-       cv.branche.branId,cv.branche.branLibelle, cv.statut.staLibelle) 
+       cv.couParent.couId, cv.couParent.couLibelle, cv.branche.branId,cv.branche.branLibelle, cv.statut.staLibelle) 
         from Couverture cv where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.couLibelle, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.couLibelleAbrege, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.branche.branLibelle, '') ) as string)) ) >0 ) 
                                          and cv.statut.staCode = 'ACT'     
 """)
     Page<CouvertureListResp> searchCouvertures(String key, Pageable pageable);
+
+    @Query("select (count(c.couId)>0) from Couverture c where c.couId = ?1 and c.couParent is null")
+    boolean existsParentId(Long couId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
+        from Couverture cv where cv.couParent is null and cv.statut.staCode = 'ACT'  
+""")
+    List<CouvertureListResp> getCouerturesParents();
 }

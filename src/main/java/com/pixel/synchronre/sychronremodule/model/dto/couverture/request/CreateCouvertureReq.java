@@ -2,6 +2,8 @@ package com.pixel.synchronre.sychronremodule.model.dto.couverture.request;
 
 
 
+import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.ExistingCouId;
+import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.ExistingCouParentId;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.UniqueCouLibelleAbrege;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,5 +21,7 @@ public class CreateCouvertureReq
     @NotNull(message = "Veuillez saisir l'abréviation de la couverture")
     @UniqueCouLibelleAbrege
     private String couLibelleAbrege;
+    @ExistingCouParentId
+    private Long couParentId;
     private Long branId;
 }

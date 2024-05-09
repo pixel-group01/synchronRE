@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController @ResponseStatus(HttpStatus.OK)
 @RequiredArgsConstructor
@@ -37,7 +38,12 @@ public class CouvertureController {
     }
 
     @GetMapping(path = "/list")
-    public Page<CouvertureListResp> searchCouvertures(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) throws UnknownHostException {
+    public Page<CouvertureListResp> searchCouvertures(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) {
         return couvertureService.searchCouverture(key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/parents")
+    public List<CouvertureListResp> getCouerturesParents() {
+        return couvertureService.getCouerturesParents();
     }
 }

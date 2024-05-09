@@ -19,9 +19,11 @@ public class Couverture {
   private Long couId;
   private String couLibelle;
   private String couLibelleAbrege;
+  @ManyToOne @JoinColumn(name = "cou_parent_id")
+  private Couverture couParent;
   @ManyToOne @JoinColumn(name = "branId")
   private Branche branche;
-  @ManyToOne @JoinColumn(name = "branStatut")
+  @ManyToOne @JoinColumn(name = "sta_code")
   private Statut statut;
   @CreationTimestamp
   private LocalDateTime createdAt;
