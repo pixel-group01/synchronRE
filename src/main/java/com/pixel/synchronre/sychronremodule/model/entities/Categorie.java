@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Categorie {
@@ -15,15 +16,14 @@ public class Categorie {
     @SequenceGenerator(name = "CAT_ID_GEN", sequenceName = "CAT_ID_GEN")
     private Long categorieId;
     private String categorieLibelle;
-    @ManyToOne
-    @JoinColumn(name = "STA_CODE")
-    private Statut statut;
-    @ManyToOne @JoinColumn(name = "user_creator")
-    private AppUser userCreator;
-    @ManyToOne @JoinColumn(name = "fon_creator")
-    private AppFunction fonCreator;
+    private BigDecimal categorieCapacite;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Categorie(String categorieLibelle, BigDecimal categorieCapacite) {
+        this.categorieLibelle = categorieLibelle;
+        this.categorieCapacite = categorieCapacite;
+    }
 }
