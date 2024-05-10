@@ -17,10 +17,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.UpdateSin
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComptableSinistreResp;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSinistre;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
+import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -51,36 +48,16 @@ public class ServiceSinistreImpl implements IServiceSinistre
     private final EmailSenderService mailSenderService;
     private  final CessionnaireRepository cesRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
-    private final TypeRepo typeRepo;
-    private final RepartitionRepository repRepo;
     private final String FAC_UNIQUE_CODE = "FAC";
     private final String TRAITE_UNIQUE_CODE = "TRAITE";
     @Value("${spring.mail.username}")
     private String synchronreEmail;
-    private final IserviceExercie exeService;
     private final CedRepo cedRepo;
     private final UserRepo userRepo;
     private final EmailSenderService emailSenderService;
+    private final IserviceRepartition repService;
 
-    private void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
-    {
-        Long cesId = ces.getCesId();
-        BigDecimal repCaptital = sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId);
-        Repartition sinRep = new Repartition();
 
-        sinRep.setSinistre(new Sinistre(sinId));
-        sinRep.setRepStatut(true);
-        sinRep.setRepCapital(repCaptital);
-        sinRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCaptital == null ? BigDecimal.ZERO : repCaptital.setScale(0, RoundingMode.HALF_UP)));
-        sinRep.setType(typeRepo.findByUniqueCode("REP_SIN").orElseThrow(()->new AppException("Type de document inconnu")));
-        //sinRep.setInterlocuteurPrincipal(ces.getCesInterlocuteur());
-
-        Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(aff.getAffId(), "REP_PLA", cesId);
-        if(placement == null) throw new AppException("Placement introuvable");
-        sinRep.setRepTaux(repRepo.getTauRep(placement.getRepId()));
-        sinRep.setCessionnaire(new Cessionnaire(cesId));
-        repRepo.save(sinRep);
-    }
 
     @Override @Transactional
     public SinistreDetailsResp createSinistre(CreateSinistreReq dto) throws UnknownHostException
@@ -94,7 +71,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         sinistre.setStatut(sinStatut);
         sinistre = sinRepo.save(sinistre);
         Long sinId = sinistre.getSinId();
-        cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, sinId, ces));
+        cesRepo.findByAffId(dto.getAffId()).forEach(ces->repService.doRepartitionSinistre(affaire, sinId, ces));
         sinistre.setSinCode(this.generateSinCode(sinistre.getSinId()));
         BigDecimal mtTotSinPlacement = sinComptaService.calculateMtTotalCessionnairesSurSinistre(sinId);
         sinistre.setSinMontantTotPlacement(mtTotSinPlacement);
@@ -121,7 +98,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         BeanUtils.copyProperties(dto, sinistre);
         sinistre = sinRepo.save(sinistre);
        if(oldSin.getSinMontant100().compareTo(dto.getSinMontant100()) != 0 || oldSin.getSinMontantHonoraire().compareTo(dto.getSinMontantHonoraire()) != 0)
-          cesRepo.findByAffId(dto.getAffId()).forEach(ces->this.doRepartitionSinistre(affaire, dto.getSinId(), ces));
+          cesRepo.findByAffId(dto.getAffId()).forEach(ces->repService.doRepartitionSinistre(affaire, dto.getSinId(), ces));
         logService.logg(SinistreActions.UPDATE_SINISTRE, oldSin, sinistre, SynchronReTables.SINISTRE);
         return sinMapper.mapToSinistreDetailsResp(sinistre);
     }

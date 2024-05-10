@@ -45,4 +45,12 @@ public class Cedante {
   public Cedante(Long cedId) {
     this.cedId = cedId;
   }
+
+  @Override
+  public String toString() {
+    return "Cedante{" +
+            "cedId=" + cedId +
+            ", cedSigleFiliale='" + cedSigleFiliale + '\'' +
+            '}';
+  }
 }

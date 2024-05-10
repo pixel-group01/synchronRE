@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
@@ -13,7 +14,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,4 +84,12 @@ public abstract class RepartitionMapper {
         String stringIntIds = intIds == null ? "" : intIds.stream().map(String::valueOf).collect(Collectors.joining(","));
         return stringIntIds;
     }
+
+    @Mapping(target = "repCapital", source = "pmd")
+    @Mapping(target = "repTaux", source = "tauxCesLeg")
+    @Mapping(target = "repStaCode", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    @Mapping(target = "paramCessionLegale", expression = "java((new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(cesLeg.getParamCesLegalId())))")
+    @Mapping(target = "repStatut", expression = "java(true)")
+    @Mapping(target = "type", expression = "java(typeRepo.findByUniqueCode(\"REP_TNP\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type (REP_TNP) introuvable\")))")
+    public abstract Repartition mapToRepartition(CedanteTraiteReq.CesLeg cesLeg);
 }

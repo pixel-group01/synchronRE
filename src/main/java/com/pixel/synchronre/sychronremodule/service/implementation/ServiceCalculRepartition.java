@@ -312,11 +312,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         traiteRep.setRepPrime(repPrime);
         traiteRep = repRepo.save(traiteRep);
         dto.setRepId(dto.getRepId());
-        try {
-            logService.logg(action, oldRep, traiteRep, SynchronReTables.REPARTITION);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg(action, oldRep, traiteRep, SynchronReTables.REPARTITION);
         return dto;
     }
 
@@ -374,11 +370,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         pclRep.setRepPrime(pclPrime);
         pclRep = repRepo.save(pclRep);
         pclDto.setRepId(pclRep.getRepId());
-        try {
-            logService.logg(action, oldRep, pclRep, SynchronReTables.REPARTITION);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg(action, oldRep, pclRep, SynchronReTables.REPARTITION);
         return pclDto;
     }
 

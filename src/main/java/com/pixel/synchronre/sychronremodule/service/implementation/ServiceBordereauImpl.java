@@ -102,9 +102,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         Bordereau bordereau = bordRepo.findById(bordId).orElseThrow(()->new AppException("Bordereau introuvable"));
         detailBordRepo.findByBordId(bordId).forEach(debId->this.deleteDetailBordereau(debId));
         Bordereau oldBordereau = bordCopier.copy(bordereau);
-        try {
-            logService.logg(SynchronReActions.DELETE_BORDEREAU, oldBordereau, bordereau, SynchronReTables.BORDEREAU);
-        } catch (UnknownHostException e) {e.printStackTrace();}
+        logService.logg(SynchronReActions.DELETE_BORDEREAU, oldBordereau, bordereau, SynchronReTables.BORDEREAU);
         bordRepo.deleteById(bordereau.getBordId());
     }
 
@@ -113,9 +111,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     {
         DetailBordereau detailBordereau = detailBordRepo.findById(debId).orElseThrow(()->new AppException("Detail bordereau introuvable"));
         DetailBordereau oldDetailBordereau = detailBordCopier.copy(detailBordereau);
-        try {
-            logService.logg(SynchronReActions.DELETE_DETAIL_BORDEREAU, oldDetailBordereau, null, SynchronReTables.DETAIL_BORDEREAU);
-        } catch (UnknownHostException e) {e.printStackTrace();}
+        logService.logg(SynchronReActions.DELETE_DETAIL_BORDEREAU, oldDetailBordereau, null, SynchronReTables.DETAIL_BORDEREAU);
         detailBordRepo.deleteById(debId);
     }
 

@@ -1,17 +1,16 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -56,4 +55,10 @@ public interface IserviceRepartition
 
     @Transactional
     public void annulerRepartition(Long repId);
+
+    void createRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg);
+
+    void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
+
+    void updateRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg);
 }

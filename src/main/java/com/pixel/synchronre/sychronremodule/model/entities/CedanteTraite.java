@@ -38,4 +38,13 @@ public class CedanteTraite
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return "CedanteTraite{" +
+                "cedanteTraiteId=" + cedanteTraiteId +
+                ", cedante=" + cedante +
+                ", traiteNonProportionnel=" + traiteNonProportionnel +
+                '}';
+    }
 }

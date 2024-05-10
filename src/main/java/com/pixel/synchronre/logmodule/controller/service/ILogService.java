@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface ILogService
 {
-    Log logg(String action, Object oldObject, Object newObject, String tableName) throws UnknownHostException;
+    Log logg(String action, Object oldObject, Object newObject, String tableName);
 
     @Transactional
     Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName) throws UnknownHostException;

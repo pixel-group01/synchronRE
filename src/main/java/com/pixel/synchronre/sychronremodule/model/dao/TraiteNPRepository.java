@@ -14,7 +14,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 {
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiId,
-        tnp.traiReference, tnp.traiNumeroPolice, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
         tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxSurcommission, e.exeCode, src.traiReference, 
         src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, 
@@ -23,7 +23,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         left join tnp.statut s left join tnp.traiUserCreator u left join tnp.traiFonCreator f left join tnp.traiCompteDevise dc 
         left join CedanteTraite ct on ct.traiteNonProportionnel.traiId = tnp.traiId left join ct.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(tnp.traiReference, '') ) as string))) >0 
-        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumeroPolice, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumero, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiLibelle, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiAuteur, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiEcerciceRattachement, '') ) as string))) >0

@@ -37,9 +37,14 @@ public class LogService implements ILogService
     private final FunctionRepo functionRepo;
 
     @Override //@Transactional
-    public Log logg(String action, Object oldObject, Object newObject, String tableName) throws UnknownHostException
+    public Log logg(String action, Object oldObject, Object newObject, String tableName)
     {
-        Log log = this.saveLog(action);
+        Log log = null;
+        try {
+            log = this.saveLog(action);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         List<LogDetails> logDetails = this.saveLogDetails(oldObject, newObject, log, tableName, false);
         log.setLogDetails(logDetails);
         return log;

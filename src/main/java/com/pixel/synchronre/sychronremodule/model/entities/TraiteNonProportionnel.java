@@ -22,7 +22,7 @@ public class TraiteNonProportionnel
     private Long traiId;
     @Column(unique = true)
     private String traiReference;
-    private String traiNumeroPolice;
+    private String traiNumero;
     private String traiLibelle;
     private String traiAuteur;
     @Enumerated(EnumType.STRING)
@@ -58,6 +58,13 @@ public class TraiteNonProportionnel
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Override
+    public String toString() {
+        return "TraiteNonProportionnel{" +
+                "traiId=" + traiId +
+                ", traiReference='" + traiReference + '\'' +
+                '}';
+    }
 
     public TraiteNonProportionnel(Long traiId) {
         this.traiId = traiId;

@@ -100,11 +100,7 @@ public class RoleService implements IRoleService
             PrvToRoleAss oldPrvToRoleAss = ptrCopier.copy(prvToRoleAss);
             prvToRoleAss.setAssStatus(2);
             prvToRoleAss = prvToRoleAssRepo.save(prvToRoleAss);
-            try {
-                logger.logg(AuthActions.REMOVE_PRV_TO_ROL, oldPrvToRoleAss, prvToRoleAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logger.logg(AuthActions.REMOVE_PRV_TO_ROL, oldPrvToRoleAss, prvToRoleAss, AuthTables.ASS);
         });
 
         prvIdsToBeAdded.forEach(id->
@@ -114,22 +110,13 @@ public class RoleService implements IRoleService
             {
                 prvToRoleAss = new PrvToRoleAss(null, 1, startsAt, endsAt, new AppPrivilege(id), new AppRole(roleId));
                 prvToRoleAss = prvToRoleAssRepo.save(prvToRoleAss);
-                try {
-                    logger.logg(AuthActions.ADD_PRV_TO_ROL,null, prvToRoleAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.ADD_PRV_TO_ROL,null, prvToRoleAss, AuthTables.ASS);
             }
             else if(prvToRoleAss.getAssStatus() != 1)
             {
                 PrvToRoleAss oldPrvToRoleAss = ptrCopier.copy(prvToRoleAss);
-
                 prvToRoleAss.setAssStatus(1);
-                try {
-                    logger.logg(AuthActions.RESTORE_PRV_TO_ROL, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.RESTORE_PRV_TO_ROL, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
             }
 
         });
@@ -141,11 +128,7 @@ public class RoleService implements IRoleService
             prvToRoleAss.setStartsAt( startsAt);
             prvToRoleAss.setEndsAt(endsAt);
             prvToRoleAss = prvToRoleAssRepo.save(prvToRoleAss);
-            try {
-                logger.logg(AuthActions.CHANGE_PRV_TO_ROL_VALIDITY_PERIOD, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logger.logg(AuthActions.CHANGE_PRV_TO_ROL_VALIDITY_PERIOD, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
         });
 
         prvIdsToActivateAndChangeTheDates.forEach(id->
@@ -156,11 +139,7 @@ public class RoleService implements IRoleService
             prvToRoleAss.setStartsAt(startsAt);
             prvToRoleAss.setEndsAt(endsAt);
             prvToRoleAss = prvToRoleAssRepo.save(prvToRoleAss);
-            try {
-                logger.logg(AuthActions.PRV_TO_ROL_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logger.logg(AuthActions.PRV_TO_ROL_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED, oldPrvToRoleAss,prvToRoleAss, AuthTables.ASS);
         });
         ReadRoleDTO readRoleDTO = roleMapper.mapToReadRoleDTO(role);
         readRoleDTO.setPrivileges(prvToRoleAssRepo.findActivePrivilegesForRoles(Collections.singleton(role.getRoleId())));

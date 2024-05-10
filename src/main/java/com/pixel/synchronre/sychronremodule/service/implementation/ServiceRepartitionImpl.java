@@ -6,6 +6,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
@@ -16,6 +17,8 @@ import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -25,6 +28,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -63,6 +67,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final EmailSenderService emailSenderService;
     private final CessionnaireRepository cesRepo;
     private final IserviceBordereau bordService;
+    private final TypeRepo typeRepo;
+    private final IServiceCalculsComptablesSinistre sinComptaService;
 
 
     @Override @Transactional //Placemement
@@ -307,10 +313,44 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Repartition repartition = repRepo.findById(repId).orElseThrow(()->new AppException("Repartition introuvable"));
         Repartition oldRepartition = repCopier.copy(repartition);
         repartition.setRepStatut(false);
-        try
-        {
-            logService.logg(RepartitionActions.ANNULER_REPARTITION, oldRepartition, repartition, SynchronReTables.REPARTITION);
-        }
-        catch (UnknownHostException e) {e.printStackTrace();}
+        logService.logg(RepartitionActions.ANNULER_REPARTITION, oldRepartition, repartition, SynchronReTables.REPARTITION);
+    }
+    @Override
+    public void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
+    {
+        Long cesId = ces.getCesId();
+        BigDecimal repCaptital = sinComptaService.calculateMtAPayerBySinAndCes(sinId, cesId);
+        Repartition sinRep = new Repartition();
+
+        sinRep.setSinistre(new Sinistre(sinId));
+        sinRep.setRepStatut(true);
+        sinRep.setRepCapital(repCaptital);
+        sinRep.setRepCapitalLettre(ConvertMontant.numberToLetter(repCaptital == null ? BigDecimal.ZERO : repCaptital.setScale(0, RoundingMode.HALF_UP)));
+        sinRep.setType(typeRepo.findByUniqueCode("REP_SIN").orElseThrow(()->new AppException("Type de document inconnu")));
+        //sinRep.setInterlocuteurPrincipal(ces.getCesInterlocuteur());
+
+        Repartition placement = repRepo.findByAffaireAndTypeRepAndCesId(aff.getAffId(), "REP_PLA", cesId);
+        if(placement == null) throw new AppException("Placement introuvable");
+        sinRep.setRepTaux(repRepo.getTauRep(placement.getRepId()));
+        sinRep.setCessionnaire(new Cessionnaire(cesId));
+        repRepo.save(sinRep);
+    }
+    @Override
+    public void createRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg)
+    {
+        Repartition repartition = repMapper.mapToRepartition(cesLeg);
+        repRepo.save(repartition);
+        logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
+    }
+
+    @Override
+    public void updateRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg)
+    {
+        if(cesLeg.getRepId() == null) throw new AppException("Repartition nulle");
+        Repartition repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+        Repartition oldRepartition = repCopier.copy(repartition);
+        repartition.setRepTaux(cesLeg.getTauxCesLeg());
+        repartition.setRepCapital(cesLeg.getPmd());
+        logService.logg("Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition");
     }
 }

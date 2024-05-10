@@ -264,10 +264,6 @@ public class ServiceReglementImpl implements IserviceReglement {
         Reglement reglement = regRepo.findById(regId).orElseThrow(()->new AppException("Reglement introuvable"));
         Reglement oldReglement = regCopier.copy(reglement);
         reglement.setRegStatut(false);
-        try
-        {
-            logService.logg(RepartitionActions.ANNULER_REPARTITION, oldReglement, reglement, SynchronReTables.REGLEMENT);
-        }
-        catch (UnknownHostException e) {e.printStackTrace();}
+        logService.logg(RepartitionActions.ANNULER_REPARTITION, oldReglement, reglement, SynchronReTables.REGLEMENT);
     }
 }

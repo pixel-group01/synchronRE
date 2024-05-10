@@ -48,11 +48,7 @@ public class OrganisationService implements IServiceOrganisation
         dto.getPaysCodes().forEach(code->
         {
             OrganisationPays orgPays = orgPaysRepo.save(new OrganisationPays(new Pays(code), organisationConstant, new Statut("ACT"), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId())));
-            try {
-                logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
         });
         logService.logg("Création d'une organisation", null, organisation, "Organisation");
         return orgMapper.mapToOrgnaisationDTO(organisation);
@@ -99,22 +95,14 @@ public class OrganisationService implements IServiceOrganisation
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
         if(orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
         OrganisationPays orgPays = orgPaysRepo.save(new OrganisationPays(new Pays(paysCode), organisation, new Statut("ACT"), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId())));
-        try {
-            logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
     }
 
     private void removePaysFromOrganisation(String orgCode, String paysCode) {
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
         if(!orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
         OrganisationPays orgPays = orgPaysRepo.findByOrgCodeAndPaysCode(orgCode, paysCode);
-                orgPaysRepo.deleteByOrgCodeAndPaysCode(orgCode, paysCode);
-        try {
-            logService.logg("Suppression d'un pays à une organisation", orgPays, new OrganisationPays(), "OrganisationPays");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        orgPaysRepo.deleteByOrgCodeAndPaysCode(orgCode, paysCode);
+        logService.logg("Suppression d'un pays à une organisation", orgPays, new OrganisationPays(), "OrganisationPays");
     }
 }

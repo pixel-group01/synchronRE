@@ -41,21 +41,13 @@ public class TerritorialiteService implements IServiceTerritorialite
         dto.getPaysCodes().forEach(p->
         {
             TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(null, new Pays(p), territorialite));
-            try {
-                logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Territorialite");
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Territorialite");
         });
 
         dto.getOrgCodes().forEach(o->
         {
             TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(new Organisation(o), null, territorialite));
-            try {
-                logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "TerritorialiteDetails");
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "TerritorialiteDetails");
         });
         TerritorialiteResp territorialiteResp = terrMapper.mapToTerritorialiteResp(dto, traite);
         territorialiteResp.setTerrId(territorialite.getTerrId());
@@ -97,11 +89,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(terrDetRepo.terrHasOrg(terrId, orgCode)) return ;
         Territorialite territorialite = terrRepo.findById(terrId).orElseThrow(()->new AppException("Territorialité introuvable"));
         TerritorialiteDetails terreDet = terrDetRepo.save(new TerritorialiteDetails(new Organisation(orgCode), null, territorialite));
-        try {
-            logService.logg("Ajout d'une organisation à une territorialité", null, terreDet, "TerritorialiteDetails");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg("Ajout d'une organisation à une territorialité", null, terreDet, "TerritorialiteDetails");
     }
 
     private void removeOrgFromTerritorialite(Long terrId, String orgCode)
@@ -109,11 +97,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(!terrDetRepo.terrHasOrg(terrId, orgCode)) return ;
         TerritorialiteDetails terreDet = terrDetRepo.findByTerrIdAndOrgCode(terrId, orgCode);
         terrDetRepo.deleteByTerrIdAndPOrgCode(terrId, orgCode);
-        try {
-            logService.logg("Suppression d'une organisation sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg("Suppression d'une organisation sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
     }
 
     @Override  @Transactional
@@ -136,11 +120,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(terrDetRepo.terrHasPays(terrId, paysCode)) return ;
         Territorialite territorialite = terrRepo.findById(terrId).orElseThrow(()->new AppException("Territorialité introuvable"));
         TerritorialiteDetails terreDet = terrDetRepo.save(new TerritorialiteDetails(null, new Pays(paysCode), territorialite));
-        try {
-            logService.logg("Ajout d'un pays à une territorialité", null, terreDet, "TerritorialiteDetails");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg("Ajout d'un pays à une territorialité", null, terreDet, "TerritorialiteDetails");
     }
 
     private void removePaysFromTerritorialite(Long terrId, String paysCode)
@@ -148,10 +128,6 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(!terrDetRepo.terrHasPays(terrId, paysCode)) return ;
         TerritorialiteDetails terreDet = terrDetRepo.findByTerrIdAndPaysCode(terrId, paysCode);
         terrDetRepo.deleteByTerrIdAndPaysCode(terrId, paysCode);
-        try {
-            logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
     }
 }

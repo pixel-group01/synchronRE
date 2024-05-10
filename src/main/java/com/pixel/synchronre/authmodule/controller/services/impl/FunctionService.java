@@ -99,11 +99,7 @@ public class FunctionService implements IFunctionService{
             roleToFunctionAss.setRole(new AppRole(id));
             roleToFunctionAss.setFunction(new AppFunction(fncId));
             roleToFunctionAss = rtfRepo.save(roleToFunctionAss);
-            try {
-                logger.logg(AuthActions.ADD_ROLE_TO_FNC, null, roleToFunctionAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logger.logg(AuthActions.ADD_ROLE_TO_FNC, null, roleToFunctionAss, AuthTables.ASS);
         });
 
         PrvAssSpliterDTO prvAssSpliterDTO = assMapper.mapToPrvAssSpliterDTO(prvIds, roleIds, fncId, dto.getStartsAt(), dto.getEndsAt(), false);
@@ -116,11 +112,9 @@ public class FunctionService implements IFunctionService{
             prvToFunctionAss.setPrivilege(new AppPrivilege(id));
             prvToFunctionAss.setFunction(new AppFunction(fncId));
             ptfRepo.save(prvToFunctionAss);
-            try {
+            
                 logger.logg(AuthActions.ADD_PRV_TO_FNC, null, prvToFunctionAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
         return fncMapper.mapToReadFncDto(function);
     }
@@ -137,11 +131,7 @@ public class FunctionService implements IFunctionService{
                 AppFunction oldFnc = functionCopier.copy(fnc);
                 fnc.setFncStatus(2);
                 fnc = functionRepo.save(fnc);
-                try {
-                    logger.logg(AuthActions.SET_FNC_AS_NONE_DEFAULT, oldFnc, fnc, AuthTables.FUNCTION);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.SET_FNC_AS_NONE_DEFAULT, oldFnc, fnc, AuthTables.FUNCTION);
             }
         });
         if(function.getFncStatus() == 1) return null;
@@ -255,11 +245,9 @@ public class FunctionService implements IFunctionService{
             RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
             rtfAss.setAssStatus(2);
             rtfAss = rtfRepo.save(rtfAss);
-            try {
+            
                 logger.logg(AuthActions.REMOVE_ROLE_TO_FNC, oldRtfAss, rtfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
 
         roleAssSpliterDTO.getRoleIdsToBeAddedAsNew().forEach(id->
@@ -272,22 +260,18 @@ public class FunctionService implements IFunctionService{
                 rtfAss.setRole(new AppRole(id));
                 rtfAss.setFunction(new AppFunction(fncId));
                 rtfRepo.save(rtfAss);
-                try {
+                
                     logger.logg(AuthActions.ADD_ROLE_TO_FNC, null, rtfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                
             }
             else
             {
                 RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
                 rtfAss.setAssStatus(1);
                 rtfRepo.save(rtfAss);
-                try {
+                
                     logger.logg(AuthActions.RESTORE_ROLE_TO_FNC, oldRtfAss, rtfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                
             }
         });
 
@@ -297,11 +281,9 @@ public class FunctionService implements IFunctionService{
             RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
             rtfAss.setStartsAt(startsAt); rtfAss.setEndsAt(endsAt);
             rtfAss = rtfRepo.save(rtfAss);
-            try {
+            
                 logger.logg(AuthActions.CHANGE_ROLE_TO_FNC_VALIDITY_PERIOD, oldRtfAss, rtfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
 
         roleAssSpliterDTO.getRoleIdsToActivate().forEach(id->
@@ -310,11 +292,9 @@ public class FunctionService implements IFunctionService{
             RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
             rtfAss.setAssStatus(1);
             rtfAss = rtfRepo.save(rtfAss);
-            try {
+            
                 logger.logg(AuthActions.RESTORE_ROLE_TO_FNC, oldRtfAss, rtfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
 
         roleAssSpliterDTO.getRoleIdsToActivateAndChangeTheDates().forEach(id->
@@ -323,11 +303,9 @@ public class FunctionService implements IFunctionService{
             RoleToFncAss oldRtfAss = rtfCopier.copy(rtfAss);
             rtfAss.setAssStatus(1);rtfAss.setStartsAt(startsAt); rtfAss.setEndsAt(endsAt);
             rtfAss = rtfRepo.save(rtfAss);
-            try {
+            
                 logger.logg(AuthActions.ASSIGNATION_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED, oldRtfAss, rtfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
     }
 
@@ -343,21 +321,13 @@ public class FunctionService implements IFunctionService{
                 ptfAss.setAssStatus(3); ptfAss.setStartsAt(startsAt); ptfAss.setEndsAt(endsAt);
                 ptfAss.setFunction(new AppFunction(fncId));
                 ptfAss.setPrivilege(new AppPrivilege(id));
-                try {
-                    logger.logg(AuthActions.REMOVE_PRV_TO_FNC, null, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.REMOVE_PRV_TO_FNC, null, ptfAss, AuthTables.ASS);
             }
             else
             {
                 PrvToFunctionAss oldPtfAss = ptfCopier.copy(ptfAss);
                 ptfAss.setAssStatus(3); ptfAss = ptfRepo.save(ptfAss);
-                try {
-                    logger.logg(AuthActions.REMOVE_PRV_TO_FNC, oldPtfAss, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.REMOVE_PRV_TO_FNC, oldPtfAss, ptfAss, AuthTables.ASS);
             }
         });
 
@@ -371,22 +341,14 @@ public class FunctionService implements IFunctionService{
                 ptfAss.setFunction(new AppFunction(fncId));
                 ptfAss.setPrivilege(new AppPrivilege(id));
                 ptfAss = ptfRepo.save(ptfAss);
-                try {
-                    logger.logg(AuthActions.ADD_PRV_TO_FNC, null, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.ADD_PRV_TO_FNC, null, ptfAss, AuthTables.ASS);
             }
             else
             {
                 PrvToFunctionAss oldPtfAss = ptfCopier.copy(ptfAss);
                 ptfAss.setAssStatus(1);
                 ptfAss = ptfRepo.save(ptfAss);
-                try {
-                    logger.logg(AuthActions.ADD_PRV_TO_FNC, oldPtfAss, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                logger.logg(AuthActions.ADD_PRV_TO_FNC, oldPtfAss, ptfAss, AuthTables.ASS);
             }
         });
 
@@ -398,11 +360,7 @@ public class FunctionService implements IFunctionService{
             PrvToFunctionAss oldPtfAss = ptfCopier.copy(ptfAss);
             ptfAss.setStartsAt(startsAt);ptfAss.setEndsAt(endsAt);
             ptfAss = ptfRepo.save(ptfAss);
-            try {
-                logger.logg(AuthActions.CHANGE_PRV_TO_FNC_VALIDITY_PERIOD, oldPtfAss, ptfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            logger.logg(AuthActions.CHANGE_PRV_TO_FNC_VALIDITY_PERIOD, oldPtfAss, ptfAss, AuthTables.ASS);
         });
 
         prvAssSpliterDTO.getPrvIdsToActivate().forEach(id->
@@ -411,11 +369,9 @@ public class FunctionService implements IFunctionService{
             PrvToFunctionAss oldPtfAss = ptfCopier.copy(ptfAss);
             ptfAss.setAssStatus(1);
             ptfAss = ptfRepo.save(ptfAss);
-            try {
+            
             logger.logg(AuthActions.RESTORE_PRV_TO_FNC, oldPtfAss, ptfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
 
         prvAssSpliterDTO.getPrvIdsToActivateAndChangeTheDates().forEach(id->
@@ -424,11 +380,9 @@ public class FunctionService implements IFunctionService{
             PrvToFunctionAss oldPtfAss = ptfCopier.copy(ptfAss);
             ptfAss.setAssStatus(1);ptfAss.setStartsAt(startsAt);ptfAss.setEndsAt(endsAt);
             ptfAss = ptfRepo.save(ptfAss);
-            try {
+            
                 logger.logg(AuthActions.ASSIGNATION_ACTIVATED_AND_VALIDITY_PERIOD_CHANGED, oldPtfAss, ptfAss, AuthTables.ASS);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+            
         });
     }
 
@@ -445,11 +399,9 @@ public class FunctionService implements IFunctionService{
                 PrvToFunctionAss oldptfAss = ptfCopier.copy(ptfAss);
                 ptfAss.setAssStatus(status);
                 ptfRepo.save(ptfAss);
-                try {
+                
                     logger.logg(AuthActions.RESTORE_PRV_TO_FNC, oldptfAss, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                
             }
             else
             {
@@ -457,11 +409,9 @@ public class FunctionService implements IFunctionService{
                 ptfAss.setPrivilege(new AppPrivilege(id));ptfAss.setFunction(new AppFunction(dto.getFncId()));
                 ptfAss.setAssStatus(status); ptfAss.setStartsAt(dto.getStartsAt()); ptfAss.setEndsAt(dto.getEndsAt());
                 ptfRepo.save(ptfAss);
-                try {
+                
                     logger.logg(action, null, ptfAss, AuthTables.ASS);
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                }
+                
             }
         });
     }
