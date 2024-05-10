@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class CedanteTraiteResp
@@ -22,4 +23,7 @@ public class CedanteTraiteResp
     private String traiNumero;
     private String staCode;
     private String staLibelle;
+
+    private List<CesLeg> cessionsLegales;
+
 }

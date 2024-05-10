@@ -39,6 +39,10 @@ public class CedanteTraite
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    public CedanteTraite(Long cedanteTraiteId) {
+        this.cedanteTraiteId = cedanteTraiteId;
+    }
+
     @Override
     public String toString() {
         return "CedanteTraite{" +

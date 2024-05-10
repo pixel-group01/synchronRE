@@ -13,11 +13,8 @@ import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
 import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
@@ -69,6 +66,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
+    private final TraiteNPRepository tnpRepo;
 
 
     @Override @Transactional //Placemement
@@ -336,15 +334,16 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repRepo.save(sinRep);
     }
     @Override
-    public void createRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg)
+    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long tnpId)
     {
-        Repartition repartition = repMapper.mapToRepartition(cesLeg);
+        if(tnpId == null || !tnpRepo.existsById(tnpId)) throw new AppException("Traité non proportionnel introuvable");
+        Repartition repartition = repMapper.mapToRepartition(cesLeg, tnpId);
         repRepo.save(repartition);
         logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
     }
 
     @Override
-    public void updateRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg)
+    public void updateRepartitionCesLegTraite(CesLeg cesLeg)
     {
         if(cesLeg.getRepId() == null) throw new AppException("Repartition nulle");
         Repartition repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));

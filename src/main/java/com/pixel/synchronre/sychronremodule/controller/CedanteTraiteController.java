@@ -1,11 +1,12 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/traite/cedantes")
@@ -13,9 +14,19 @@ public class CedanteTraiteController
 {
     private final IServiceCedanteTraite cedanteTraiteService;
 
-    @GetMapping(path = "/save")
-    void save(CedanteTraiteReq dto)
+    @PostMapping(path = "/save")
+    public CedanteTraiteResp save(CedanteTraiteReq dto)
     {
-        cedanteTraiteService.save(dto);
+        return cedanteTraiteService.save(dto);
     }
+
+    @GetMapping(path = "/search")
+    public Page<CedanteTraiteResp> search(@RequestParam Long traiId,
+                                          @RequestParam(defaultValue = "") String key,
+                                          @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "10") int size)
+    {
+        return cedanteTraiteService.search(traiId, key, PageRequest.of(page, size));
+    }
+
 }

@@ -102,7 +102,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         Bordereau bordereau = bordRepo.findById(bordId).orElseThrow(()->new AppException("Bordereau introuvable"));
         detailBordRepo.findByBordId(bordId).forEach(debId->this.deleteDetailBordereau(debId));
         Bordereau oldBordereau = bordCopier.copy(bordereau);
-        logService.logg(SynchronReActions.DELETE_BORDEREAU, oldBordereau, bordereau, SynchronReTables.BORDEREAU);
+        logService.logg(SynchronReActions.DELETE_BORDEREAU, oldBordereau, new Bordereau(), SynchronReTables.BORDEREAU);
         bordRepo.deleteById(bordereau.getBordId());
     }
 

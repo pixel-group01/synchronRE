@@ -21,6 +21,7 @@ public class ParamCessionLegale {
     private Type paramType;
     @ManyToOne @JoinColumn(name = "pays_code")
     private Pays pays;
+
     @ManyToOne @JoinColumn(name = "paramStatut")
     private Statut statut;
     private Long numOrdre;

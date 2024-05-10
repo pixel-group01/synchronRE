@@ -24,8 +24,8 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege, 
-       cv.couParent.couId, cv.couParent.couLibelle, cv.branche.branId,cv.branche.branLibelle, cv.statut.staLibelle) 
-        from Couverture cv where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.couLibelle, '') ) as string)) ) >0 
+       parent.couId, parent.couLibelle, cv.branche.branId,cv.branche.branLibelle, cv.statut.staLibelle) 
+        from Couverture cv left join cv.couParent parent where (locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.couLibelle, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.couLibelleAbrege, '') ) as string)) ) >0 
                                          or locate(upper(coalesce(?1, '') ), upper(cast(function('strip_accents',  coalesce(cv.branche.branLibelle, '') ) as string)) ) >0 ) 
                                          and cv.statut.staCode = 'ACT'     

@@ -38,6 +38,8 @@ public class Repartition {
     private Statut repStaCode;
     @ManyToOne @JoinColumn(name = "aff_id")
     private Affaire affaire;
+    @ManyToOne @JoinColumn(name = "ced_trai_id")
+    private CedanteTraite cedanteTraite;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
     @ManyToOne @JoinColumn(name = "cessionnaire_id")

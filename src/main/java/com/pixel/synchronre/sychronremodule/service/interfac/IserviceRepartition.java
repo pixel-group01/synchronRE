@@ -1,6 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
@@ -54,11 +54,11 @@ public interface IserviceRepartition
     void validerPlacement(List<Long> plaIds);
 
     @Transactional
-    public void annulerRepartition(Long repId);
+    void annulerRepartition(Long repId);
 
-    void createRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg);
+    void createRepartitionCesLegTraite(CesLeg cesLeg, Long tnpId);
 
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
 
-    void updateRepartitionCesLegTraite(CedanteTraiteReq.CesLeg cesLeg);
+    void updateRepartitionCesLegTraite(CesLeg cesLeg);
 }

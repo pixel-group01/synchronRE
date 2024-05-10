@@ -1,12 +1,12 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.CreateCedLegRepartitionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -224,4 +224,11 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     List<Long> findRepIdByAffId(java.lang.Long affId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
+        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut
+        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1
+    """)
+    List<CesLeg> findByCedTraiId(Long cedanteTraiteId);
 }
