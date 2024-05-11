@@ -32,6 +32,7 @@ public abstract class SousLimiteMapper {
 
     @Mapping(target = "traiteNonProportionnel", expression ="java(dto.getTraiteNonProportionnelId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNonProportionnelId()))")
     @Mapping(target = "risqueCouvert", expression ="java(dto.getRisqueCouvertId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert(dto.getRisqueCouvertId()))")
+    @Mapping(target = "tranche", expression = "java(dto.getTrancheId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Tranche(dto.getTrancheId()))")
     @Mapping(target = "statut", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     @Mapping(target = "userCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "fonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
