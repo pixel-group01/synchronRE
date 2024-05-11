@@ -17,5 +17,4 @@ public class UpdateSousLimite
     private Long traiteNonProportionnelId;
     private Long trancheId;
     private String statutCode;
-
 }
