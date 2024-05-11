@@ -21,12 +21,12 @@ public class CategorieController
     private final IServiceCategorie categorieService;
 
     @PostMapping(path = "/save")
-    CategorieResp create(@Valid @RequestBody CategorieReq dto) throws UnknownHostException {
+    CategorieResp create(@Valid @RequestBody CategorieReq dto) {
         return categorieService.save(dto);
     }
 
     @DeleteMapping(path = "/delete/{categorieId}")
-    boolean update(@PathVariable Long categorieId) throws UnknownHostException {
+    boolean delete(@PathVariable Long categorieId) {
         return categorieService.delete(categorieId);
     }
 
@@ -38,5 +38,4 @@ public class CategorieController
     {
         return categorieService.search(traiId, key, PageRequest.of(page, size));
     }
-
 }
