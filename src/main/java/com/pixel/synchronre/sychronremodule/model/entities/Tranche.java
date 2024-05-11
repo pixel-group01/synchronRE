@@ -40,4 +40,9 @@ public class Tranche
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Tranche(Long trancheId) {
+        this.trancheId = trancheId;
+    }
+
 }

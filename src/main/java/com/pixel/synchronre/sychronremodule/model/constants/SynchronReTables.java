@@ -18,4 +18,5 @@ public class SynchronReTables {
     public static final String EXERCICE = "Exercice";
     public static final String BORDEREAU = "Bordereau";
     public static final String DETAIL_BORDEREAU = "Detail_bordereau";
+    public static final String SOUS_LIMITE = "Sous_limite";
 }
