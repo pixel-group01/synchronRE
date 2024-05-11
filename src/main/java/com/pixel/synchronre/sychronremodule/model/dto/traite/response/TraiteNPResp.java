@@ -16,7 +16,7 @@ public class TraiteNPResp
 {
     private Long traiId;
     private String traiReference;
-    private String traiNumeroPolice;
+    private String traiNumero;
     private String traiLibelle;
     private String traiAuteur;
     private String traiEcerciceRattachement;
@@ -44,6 +44,12 @@ public class TraiteNPResp
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 
+    public TraiteNPResp(Long traiId, String traiReference, String traiNumeroPolice) {
+        this.traiId = traiId;
+        this.traiReference = traiReference;
+        this.traiNumero = traiNumeroPolice;
+    }
+
     public TraiteNPResp(Long traiId, String traiReference, String traiNumeroPolice, String traiLibelle,
                         String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
@@ -58,7 +64,7 @@ public class TraiteNPResp
                         LocalDateTime updatedAt) {
         this.traiId = traiId;
         this.traiReference = traiReference;
-        this.traiNumeroPolice = traiNumeroPolice;
+        this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
         this.traiAuteur = traiAuteur;
         this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();

@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
@@ -75,6 +76,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     @Override
     public Page<CedanteTraiteResp> search(Long traiId, String key, Pageable pageable)
     {
+        key = StringUtils.stripAccentsToUpperCase(key);
         Page<CedanteTraiteResp> cedanteTraitePage = cedTraiRepo.search(traiId, key, pageable);
         List<CedanteTraiteResp> cedanteTraiteList = cedanteTraitePage.stream()
                 .peek(cedTrai-> {

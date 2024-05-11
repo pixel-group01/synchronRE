@@ -59,4 +59,11 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("select t from TraiteNonProportionnel t where t.traiReference = ?1")
     TraiteNonProportionnel findByRef(String traiSourceRef);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiId,
+        tnp.traiReference, tnp.traiNumero)
+        from TraiteNonProportionnel tnp where tnp.traiId = ?1
+    """)
+    TraiteNPResp getShortTraiteById(Long traiteNPId);
 }

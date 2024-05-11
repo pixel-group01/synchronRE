@@ -20,14 +20,14 @@ public class CategorieController
 {
     private final IServiceCategorie categorieService;
 
-    @PostMapping(path = "/create")
+    @PostMapping(path = "/save")
     CategorieResp create(@Valid @RequestBody CategorieReq dto) throws UnknownHostException {
-        return categorieService.create(dto);
+        return categorieService.save(dto);
     }
 
-    @PutMapping(path = "/update")
-    CategorieResp update(@Valid @RequestBody CategorieReq dto) throws UnknownHostException {
-        return categorieService.update(dto);
+    @DeleteMapping(path = "/delete/{categorieId}")
+    boolean update(@PathVariable Long categorieId) throws UnknownHostException {
+        return categorieService.delete(categorieId);
     }
 
     @GetMapping(path = "/search")

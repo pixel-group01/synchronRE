@@ -26,7 +26,7 @@ public class TranchePays
     @ManyToOne @JoinColumn(name = "organisation_pays_id")
     private OrganisationPays organisationPays;
     @ManyToOne @JoinColumn(name = "categorie_traite_id")
-    private CategorieTraite categorieTraite;
+    private CategorieCedante categorieTraite;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")

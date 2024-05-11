@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
-import com.pixel.synchronre.authmodule.model.entities.AppFunction;
-import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
 public class Categorie {
     @Id
@@ -17,6 +16,8 @@ public class Categorie {
     private Long categorieId;
     private String categorieLibelle;
     private BigDecimal categorieCapacite;
+    @ManyToOne @JoinColumn(name = "STA_CODE")
+    private Statut statut;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -25,5 +26,9 @@ public class Categorie {
     public Categorie(String categorieLibelle, BigDecimal categorieCapacite) {
         this.categorieLibelle = categorieLibelle;
         this.categorieCapacite = categorieCapacite;
+    }
+
+    public Categorie(Long categorieId) {
+        this.categorieId = categorieId;
     }
 }

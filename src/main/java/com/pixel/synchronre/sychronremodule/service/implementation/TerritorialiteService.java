@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.TerritorialiteDetailsRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TerritorialiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TraiteRepository;
@@ -103,6 +104,7 @@ public class TerritorialiteService implements IServiceTerritorialite
     @Override  @Transactional
     public Page<TerritorialiteResp> search(Long traiId, String key, Pageable pageable)
     {
+        key = StringUtils.stripAccentsToUpperCase(key);
         if(traiId == null || !traiRepo.existsById(traiId)) throw new AppException("Traité introuvable");
         Page<TerritorialiteResp> territorialitePage = terrRepo.search(traiId, key, pageable);
         List<TerritorialiteResp> territorialiteList = territorialitePage.stream().peek(t->

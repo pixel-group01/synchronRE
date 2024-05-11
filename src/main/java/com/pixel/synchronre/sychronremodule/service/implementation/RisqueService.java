@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.RisqueCouvertRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RisqueMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
@@ -52,6 +53,7 @@ public class RisqueService implements IServiceRisque
     @Override
     public Page<RisqueCouvertResp> search(Long traiId, String key, Pageable pageable)
     {
+        key = StringUtils.stripAccentsToUpperCase(key);
         Page<RisqueCouvertResp> risquePage = risqueRepo.search(traiId, key, pageable);
         return risquePage;
     }

@@ -41,6 +41,12 @@ public interface CedRepo extends JpaRepository<Cedante, Long>
 """)
     Page<ReadCedanteDTO> searchCedentes(String key, Pageable pageable);
 
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO(c.cedId, c.cedNomFiliale, c.cedSigleFiliale)
+        from Cedante c where c.cedId = in ?1
+""")
+    List<ReadCedanteDTO> getShortCedantesByIds(List<Long> cedId);
+
     @Query("select c.cedSigleFiliale from Cedante c where c.cedId = ?1")
     String getCedSigleById(Long cedId);
 

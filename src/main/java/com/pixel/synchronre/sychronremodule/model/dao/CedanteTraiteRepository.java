@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Long>
 {
@@ -24,6 +27,5 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     and tnp.traiId = :traiId and s.staCode = 'ACT'
 """)
     Page<CedanteTraiteResp> search(@Param("traiId") Long traiId, @Param("key")String key, Pageable pageable);
-
 
 }

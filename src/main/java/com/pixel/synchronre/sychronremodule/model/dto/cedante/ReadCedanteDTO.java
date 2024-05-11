@@ -21,4 +21,10 @@ public class ReadCedanteDTO
     private String banCodeBic;
     private String banLibelle;
     private String banLibelleAbrege;
+
+    public ReadCedanteDTO(Long cedId, String cedNomFiliale, String cedSigleFiliale) {
+        this.cedId = cedId;
+        this.cedNomFiliale = cedNomFiliale;
+        this.cedSigleFiliale = cedSigleFiliale;
+    }
 }
