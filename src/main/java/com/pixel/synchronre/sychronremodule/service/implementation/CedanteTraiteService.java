@@ -36,6 +36,13 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     @Override @Transactional
     public CedanteTraiteResp create(CedanteTraiteReq dto)
     {
+        //Si le traite a déjà cette cédante, on fait un update
+        if(cedTraiRepo.traiteHasCedante(dto.getTraiteNPId(), dto.getCedId()))
+        {
+            Long cedanteTraiteId = cedTraiRepo.getCedanteTraiteIdByTraiIdAndCedId(dto.getTraiteNPId(), dto.getCedId());
+            dto.setCedanteTraiteId(cedanteTraiteId);
+            return this.update(dto);
+        }
         CedanteTraite cedanteTraite = cedTraiMapper.mapToCedanteTraite(dto);
         final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
@@ -61,7 +68,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         logService.logg("Modification d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
         dto.getCessionsLegales().forEach(cesLeg->
         {
-            repService.updateRepartitionCesLegTraite(cesLeg);
+            repService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId());
         });
         return cedTraiMapper.mapToCedanteTraiteResp(cedanteTraite);
     }

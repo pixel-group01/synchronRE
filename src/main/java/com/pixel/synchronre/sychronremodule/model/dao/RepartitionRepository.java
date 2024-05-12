@@ -17,6 +17,8 @@ import java.util.*;
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
+    @Query("select r from Repartition r where r.cedanteTraite.cedanteTraiteId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true and r.repStaCode.staCode = 'ACT'")
+    Repartition findByCedTraiIdAndPclId(Long cedanteTraiteId, Long paramCesLegId);
     @Query("select r.repSousCommission from Repartition r where r.repId = ?1")
     BigDecimal getTauxSousCommission(Long repId);
 

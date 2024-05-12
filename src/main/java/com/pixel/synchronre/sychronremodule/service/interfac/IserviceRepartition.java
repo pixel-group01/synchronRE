@@ -60,5 +60,5 @@ public interface IserviceRepartition
 
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
 
-    void updateRepartitionCesLegTraite(CesLeg cesLeg);
+    void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
 }

@@ -26,6 +26,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.controller.resources.TypeResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -66,7 +67,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
-    private final TraiteNPRepository tnpRepo;
+    private final CedanteTraiteRepository cedTraiRepo;
 
 
     @Override @Transactional //Placemement
@@ -334,22 +335,24 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repRepo.save(sinRep);
     }
     @Override
-    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long tnpId)
+    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
     {
-        if(tnpId == null || !tnpRepo.existsById(tnpId)) throw new AppException("Traité non proportionnel introuvable");
-        Repartition repartition = repMapper.mapToRepartition(cesLeg, tnpId);
+        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
+        Repartition repartition = repMapper.mapToRepartition(cesLeg, cedTraiId);
         repRepo.save(repartition);
         logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
     }
 
     @Override
-    public void updateRepartitionCesLegTraite(CesLeg cesLeg)
+    public void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
     {
-        if(cesLeg.getRepId() == null) throw new AppException("Repartition nulle");
-        Repartition repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+        Repartition repartition;
+        if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
+        if(cesLeg.getRepId() == null) repartition = repRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
+        repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
         Repartition oldRepartition = repCopier.copy(repartition);
         repartition.setRepTaux(cesLeg.getTauxCesLeg());
-        repartition.setRepCapital(cesLeg.getPmd());
+        repartition.setRepPrime(cesLeg.getPmd());
         logService.logg("Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition");
     }
 }
