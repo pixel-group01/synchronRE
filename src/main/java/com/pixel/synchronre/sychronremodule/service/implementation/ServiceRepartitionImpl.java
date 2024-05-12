@@ -26,6 +26,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.controller.resources.TypeResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -66,11 +67,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
-    private final TraiteNPRepository tnpRepo;
+    private final CedanteTraiteRepository cedTraiRepo;
 
 
     @Override @Transactional //Placemement
-    public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException
+    public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto)
     {
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal smplCi = aff.getFacSmpLci();
@@ -132,7 +133,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override
-    public void deletePlacement(Long repId) throws UnknownHostException
+    public void deletePlacement(Long repId)
     {
         boolean plaExists = repRepo.placementExists(repId);
         if(plaExists)
@@ -155,7 +156,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void transmettrePlacementPourValidation(Long plaId) throws UnknownHostException {
+    public void transmettrePlacementPourValidation(Long plaId)
+    {
         Affaire aff = affRepo.getAffaireByRepId(plaId);
         if(aff == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = aff.getAffStatutCreation();
@@ -171,25 +173,17 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void transmettrePlacementPourValidation(List<Long> plaIds) throws UnknownHostException {
+    public void transmettrePlacementPourValidation(List<Long> plaIds)
+    {
         if(plaIds != null && plaIds.size() > 0)
         {
-            plaIds.forEach(id-> {
-                try {
-                    this.transmettreNoteDeCession(id);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (UnknownHostException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+            plaIds.forEach(id->this.transmettreNoteDeCession(id));
         }
     }
 
     @Override @Transactional
-    public void retournerPlacement(Long plaId, String motif) throws UnknownHostException {
+    public void retournerPlacement(Long plaId, String motif)
+    {
         if(motif == null || motif.trim().equals("")) throw new AppException("Veuillez saisir le motif de retour");
         Affaire aff = affRepo.getAffaireByRepId(plaId); if(aff == null) throw new AppException("Affaire introuvable");
         String cesNom = cesRepo.getCesNomByPlaId(plaId);
@@ -202,7 +196,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void validerPlacement(Long plaId) throws UnknownHostException {
+    public void validerPlacement(Long plaId)
+    {
         Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
@@ -218,20 +213,14 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void transmettreNoteDeCession(List<Long> plaIds) {
-        plaIds.forEach(plaId-> {
-            try {
-                this.transmettreNoteDeCession(plaId);
-            } catch (IllegalAccessException | UnknownHostException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public void transmettreNoteDeCession(List<Long> plaIds)
+    {
+        plaIds.forEach(plaId-> {this.transmettreNoteDeCession(plaId);});
     }
 
     @Override @Transactional
-    public void transmettreNoteDeCession(Long plaId) throws Exception {
+    public void transmettreNoteDeCession(Long plaId)
+    {
         Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de transmettre la note de cession de ce placement car l'affaire est non réalisée ou en instance");
@@ -256,7 +245,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void refuserPlacement(Long plaId, String motif) throws UnknownHostException {
+    public void refuserPlacement(Long plaId, String motif)
+    {
         Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
@@ -271,7 +261,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void annulerPlacement(Long plaId) throws UnknownHostException {
+    public void annulerPlacement(Long plaId)
+    {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(ANNULE.staCode));
         mvtService.createMvtPlacement(new MvtReq(RepartitionActions.ANNULER_PLACEMENT, plaId, ANNULE.staCode, null));
@@ -279,7 +270,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     }
 
     @Override @Transactional
-    public void accepterPlacement(Long plaId) throws UnknownHostException {
+    public void accepterPlacement(Long plaId)
+    {
         Long affId = affRepo.getAffIdByRepId(plaId);
         if(affId == null) throw new AppException("Affaire introuvable");
         String affStatutCrea = affRepo.getAffStatutCreation(affId);
@@ -295,14 +287,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     public void validerPlacement(List<Long> plaIds)
     {
         if(plaIds == null) return;
-        plaIds.forEach(plaId->
-        {
-            try {
-                this.validerPlacement(plaId);
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-        });
+        plaIds.forEach(plaId-> this.validerPlacement(plaId));
     }
 
     @Override @Transactional
@@ -313,7 +298,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repartition.setRepStatut(false);
         logService.logg(RepartitionActions.ANNULER_REPARTITION, oldRepartition, repartition, SynchronReTables.REPARTITION);
     }
-    @Override
+    @Override @Transactional
     public void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces)
     {
         Long cesId = ces.getCesId();
@@ -333,23 +318,25 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         sinRep.setCessionnaire(new Cessionnaire(cesId));
         repRepo.save(sinRep);
     }
-    @Override
-    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long tnpId)
+    @Override @Transactional
+    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
     {
-        if(tnpId == null || !tnpRepo.existsById(tnpId)) throw new AppException("Traité non proportionnel introuvable");
-        Repartition repartition = repMapper.mapToRepartition(cesLeg, tnpId);
+        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
+        Repartition repartition = repMapper.mapToRepartition(cesLeg, cedTraiId);
         repRepo.save(repartition);
         logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
     }
 
-    @Override
-    public void updateRepartitionCesLegTraite(CesLeg cesLeg)
+    @Override @Transactional
+    public void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
     {
-        if(cesLeg.getRepId() == null) throw new AppException("Repartition nulle");
-        Repartition repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+        Repartition repartition;
+        if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
+        if(cesLeg.getRepId() == null) repartition = repRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
+        else repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
         Repartition oldRepartition = repCopier.copy(repartition);
         repartition.setRepTaux(cesLeg.getTauxCesLeg());
-        repartition.setRepCapital(cesLeg.getPmd());
+        repartition.setRepPrime(cesLeg.getPmd());
         logService.logg("Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition");
     }
 }

@@ -17,12 +17,12 @@ public interface ILogService
     Log logg(String action, Object oldObject, Object newObject, String tableName);
 
     @Transactional
-    Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName) throws UnknownHostException;
+    Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName);
 
-    Log saveLog(String action) throws UnknownHostException;
+    Log saveLog(String action);
 
     @Transactional
-    Log saveLogError(String errorMsg, String stackTrace) throws UnknownHostException;
+    Log saveLogError(String errorMsg, String stackTrace) ;
 
     Log saveLog(String action, String token) throws UnknownHostException;
 

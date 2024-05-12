@@ -43,9 +43,6 @@ public class RisqueCouvert
 
     @Override
     public String toString() {
-        return "RisqueCouvert{" +
-                "risqueId=" + risqueId +
-                ", description='" + description + '\'' +
-                '}';
+        return risqueId + "-" + description;
     }
 }

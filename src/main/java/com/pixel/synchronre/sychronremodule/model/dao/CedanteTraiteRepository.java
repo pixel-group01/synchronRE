@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import org.springframework.data.domain.Page;
@@ -9,10 +8,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Long>
 {
+    @Query("select c.cedanteTraiteId from CedanteTraite c where c.traiteNonProportionnel.traiId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode = 'ACT'")
+    Long getCedanteTraiteIdByTraiIdAndCedId(Long traiId, Long cedId);
+    @Query("select (count(c) > 0) from CedanteTraite c where c.traiteNonProportionnel.traiId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode='ACT'")
+    boolean traiteHasCedante(Long traiId, Long cedId);
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(
     c.cedanteTraiteId, c.assiettePrime, c.tauxPrime, c.pmd, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale,

@@ -42,7 +42,8 @@ public class ServiceMouvementImpl implements IServiceMouvement
 
 
     @Override @Transactional
-    public void createMvtAffaire(MvtReq dto) throws UnknownHostException {
+    public void createMvtAffaire(MvtReq dto)
+    {
         Affaire aff = affRepo.findById(dto.getObjectId()).orElseThrow(()->new AppException("Affaire introuvable"));
         Affaire oldAff = affCopier.copy(aff);
         aff.setStatut(new Statut(dto.getStaCode()));
@@ -53,7 +54,8 @@ public class ServiceMouvementImpl implements IServiceMouvement
     }
 
     @Override @Transactional
-    public void createMvtPlacement(MvtReq dto) throws UnknownHostException {
+    public void createMvtPlacement(MvtReq dto)
+    {
         Repartition placement = repRepo.findPlacementById(dto.getObjectId()).orElseThrow(()->new AppException("Placement introuvable"));
         Repartition olPla = repCopier.copy(placement);
         placement.setRepStaCode(new Statut(dto.getStaCode()));
@@ -64,7 +66,8 @@ public class ServiceMouvementImpl implements IServiceMouvement
     }
 
     @Override @Transactional
-    public void createMvtSinistre(MvtReq dto) throws UnknownHostException {
+    public void createMvtSinistre(MvtReq dto)
+    {
         Sinistre sinistre = sinRepo.findById(dto.getObjectId()).orElseThrow(()->new AppException("Sinistre introuvable"));
         sinistre.setStatut(new Statut(dto.getStaCode()));
         Sinistre oldSin = sinCopier.copy(sinistre);

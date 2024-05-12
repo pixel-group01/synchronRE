@@ -17,6 +17,8 @@ import java.util.*;
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
+    @Query("select r from Repartition r where r.cedanteTraite.cedanteTraiteId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true and r.repStaCode.staCode = 'ACT'")
+    Repartition findByCedTraiIdAndPclId(Long cedanteTraiteId, Long paramCesLegId);
     @Query("select r.repSousCommission from Repartition r where r.repId = ?1")
     BigDecimal getTauxSousCommission(Long repId);
 
@@ -228,7 +230,12 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
         r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut
-        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1
+        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
     """)
-    List<CesLeg> findByCedTraiId(Long cedanteTraiteId);
+    List<CesLeg> findCesLegsByCedTraiId(Long cedanteTraiteId);
+
+    @Query("""
+        select r.repId from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
+    """)
+    List<Long> findCesLegIdsByCedTraiId(Long cedanteTraiteId);
 }

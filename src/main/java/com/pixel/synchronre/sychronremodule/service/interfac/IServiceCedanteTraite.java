@@ -18,4 +18,7 @@ public interface IServiceCedanteTraite
     CedanteTraiteResp save(CedanteTraiteReq dto);
 
     Page<CedanteTraiteResp> search(Long traiId, String key, Pageable pageable);
+
+    @Transactional
+    void removeCedanteOnTraite(Long cedanteTraiteId);
 }
