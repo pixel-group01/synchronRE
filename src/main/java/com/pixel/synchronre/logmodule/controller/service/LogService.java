@@ -40,32 +40,35 @@ public class LogService implements ILogService
     public Log logg(String action, Object oldObject, Object newObject, String tableName)
     {
         Log log = null;
-        try {
-            log = this.saveLog(action);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        log = this.saveLog(action);
         List<LogDetails> logDetails = this.saveLogDetails(oldObject, newObject, log, tableName, false);
         log.setLogDetails(logDetails);
         return log;
     }
 
     @Override @Transactional
-    public Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName) throws UnknownHostException
+    public Log loggOffConnection(String action, String actorEmail, Object oldObject, Object newObject, String tableName)
     {
-        Log log = this.saveLogOffConnection(action, actorEmail);
+        Log log = null;
+        try {
+            log = this.saveLogOffConnection(action, actorEmail);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         List<LogDetails> logDetails = this.saveLogDetails(oldObject, newObject, log, tableName, true);
         log.setLogDetails(logDetails);
         return log;
     }
 
     @Override @Transactional
-    public Log saveLog(String action) throws UnknownHostException {
+    public Log saveLog(String action)
+    {
         return this.saveLog(action, jwtService.getCurrentJwt());
     }
 
     @Override @Transactional
-    public Log saveLogError(String errorMsg, String stackTrace) throws UnknownHostException {
+    public Log saveLogError(String errorMsg, String stackTrace)
+    {
         Log logErreur = this.saveLog("SYSTEM_ERROR", jwtService.getCurrentJwt());
         logErreur.setErrorMessage(errorMsg);
         logErreur.setStackTrace(stackTrace);
@@ -74,8 +77,13 @@ public class LogService implements ILogService
 
 
     @Override @Transactional
-    public Log saveLog(String action, String token) throws UnknownHostException {
-        InetAddress Ip=InetAddress.getLocalHost();
+    public Log saveLog(String action, String token) {
+        InetAddress Ip= null;
+        try {
+            Ip = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         Log log = jwtService.getUserInfosFromJwt(token);
         log.setAction(action);
         log.setIpAddress(HttpServletManager.getClientIpAddressIfServletRequestExist());

@@ -12,10 +12,10 @@ import java.net.UnknownHostException;
 public interface IServiceMouvement
 {
     @Transactional
-    void createMvtAffaire(MvtReq dto) throws UnknownHostException;
+    void createMvtAffaire(MvtReq dto);
 
     @Transactional
-    void createMvtPlacement(MvtReq dto) throws UnknownHostException;
+    void createMvtPlacement(MvtReq dto);
 
     @Transactional
     void createMvtSinistre(MvtReq dto) throws UnknownHostException;
