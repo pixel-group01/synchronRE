@@ -16,10 +16,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class LimiteSouscription
 {
     @Id
@@ -27,12 +24,10 @@ public class LimiteSouscription
     @SequenceGenerator(name = "LIM_ID_GEN", sequenceName = "LIM_ID_GEN")
     private Long limiteSouscriptionId;
     private BigDecimal limSousMontant;
-    @ManyToOne @JoinColumn(name = "ced_trai_id")
-    private CedanteTraite cedanteTraite;
     @ManyToOne @JoinColumn(name = "risque_id")
     private RisqueCouvert risqueCouvert;
-    @ManyToOne @JoinColumn(name = "traite_np_id")
-    private TraiteNonProportionnel traiteNonProportionnel;
+    @ManyToOne @JoinColumn(name = "ced_trai_id")
+    private CedanteTraite cedanteTraite;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;
     @ManyToOne @JoinColumn(name = "STA_CODE")
