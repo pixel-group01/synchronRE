@@ -22,7 +22,13 @@ public class Statut {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-    public Statut(String staCode) {
+  @Override
+  public String toString()
+  {
+    return staCode + '-' + staLibelle;
+  }
+
+  public Statut(String staCode) {
       this.staCode = staCode;
     }
 }

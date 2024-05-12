@@ -20,6 +20,12 @@ public class CedanteTraiteController
         return cedanteTraiteService.save(dto);
     }
 
+    @DeleteMapping(path = "/delete/{cedanteTraiteId}")
+    public void delete(Long cedanteTraiteId)
+    {
+        cedanteTraiteService.removeCedanteOnTraite(cedanteTraiteId);
+    }
+
     @GetMapping(path = "/search")
     public Page<CedanteTraiteResp> search(@RequestParam Long traiId,
                                           @RequestParam(defaultValue = "") String key,

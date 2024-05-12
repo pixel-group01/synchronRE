@@ -12,6 +12,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedanteTraiteMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,6 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         if(dto.getCedanteTraiteId() == null) throw new AppException("CedanteTraite null");
         CedanteTraite cedanteTraite = cedTraiRepo.findById(dto.getCedanteTraiteId()).orElseThrow(()->new AppException("CedanteTraite introuvable"));
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
-        cedanteTraite = cedTraiRepo.save(cedanteTraite);
         cedanteTraite.setCedante(new Cedante(dto.getCedId()));
         cedanteTraite.setAssiettePrime(dto.getAssiettePrime());
         cedanteTraite.setPmd(dto.getPmd());
@@ -87,11 +87,20 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         Page<CedanteTraiteResp> cedanteTraitePage = cedTraiRepo.search(traiId, key, pageable);
         List<CedanteTraiteResp> cedanteTraiteList = cedanteTraitePage.stream()
                 .peek(cedTrai-> {
-                    List<CesLeg> repartitions = repRepo.findByCedTraiId(cedTrai.getCedanteTraiteId());
+                    List<CesLeg> repartitions = repRepo.findCesLegsByCedTraiId(cedTrai.getCedanteTraiteId());
 
                     cedTrai.setCessionsLegales(repartitions);
                 }).toList();
 
         return new PageImpl<>(cedanteTraiteList, pageable, cedanteTraitePage.getTotalElements());
+    }
+    @Override @Transactional
+    public void removeCedanteOnTraite(Long cedanteTraiteId)
+    {
+        CedanteTraite cedanteTraite = cedTraiRepo.findById(cedanteTraiteId).orElseThrow(()->new AppException("CedanteTraite introuvable"));
+        CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
+        cedanteTraite.setStatut(new Statut("ACT"));
+        logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
+        repRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repService.annulerRepartition(repId));
     }
 }
