@@ -77,7 +77,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
 
 
     @Override @Transactional
-    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException
+    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto)
     {
         boolean isCourtier = jwtService.UserIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
@@ -90,6 +90,21 @@ public class ServiceAffaireImpl implements IserviceAffaire
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
         return facultativeMapper.mapToFacultativeDetailsResp(aff);
     }
+
+    @Override
+    public boolean deleteAffaire(Long affId)
+    {
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        Affaire oldAffaire = affCopier.copy(affaire);
+        String affStaCode = affaire.getStatut().getStaCode();
+        if(!AffStatutGroup.statutsDeSuppression.contains(affStaCode)) throw new AppException("Impossible de supprimer une affaire au statut \"" + affaire.getStatut().getStaLibelle() + "\"");
+        if(affaire.getAffUserCreator().getUserId() != jwtService.getConnectedUserId()) throw new AppException("Impossible de supprimer une affaire que vous n'avez pas saisie ");
+        affaire.setStatut(new Statut("SUP"));
+        repRepo.findRepIdByAffId(affId).forEach(repId->repService.annulerRepartition(repId));
+        logService.logg(AffaireActions.DELETE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
+        return true;
+    }
+
     private final BrancheRepository branRepo;
     @Override //F+Code filiale+codeBranche+Exercice+numeroOrdre
     public String generateAffCode(Long affId)
@@ -102,7 +117,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override @Transactional
-    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException
+    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto)
     {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         boolean smpHasChanged = dto.getFacSmpLci() == null ? false : dto.getFacSmpLci().compareTo(affaire.getFacSmpLci()) != 0;
@@ -138,7 +153,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) throws UnknownHostException {
+    public FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) {
         Affaire oldAffaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         boolean isCourtier = jwtService.UserIsCourtier();
         entityManager.detach(oldAffaire);
@@ -165,7 +180,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override @Transactional
-    public void setAsNonRealisee(Long affId) throws UnknownHostException {
+    public void setAsNonRealisee(Long affId) {
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Affaire oldAffaire = affCopier.copy(affaire);
         affaire.setAffStatutCreation("NON_REALISEE");
@@ -174,7 +189,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public void setAsRealisee(Long affId) throws UnknownHostException {
+    public void setAsRealisee(Long affId){
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         Affaire oldAffaire = affCopier.copy(affaire);
         affaire.setAffStatutCreation("REALISEE");
@@ -202,7 +217,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public Page<FacultativeListResp> transmettreAffaireAuSouscripteur(Long affId, Pageable pageable) throws UnknownHostException {
+    public Page<FacultativeListResp> transmettreAffaireAuSouscripteur(Long affId, Pageable pageable)
+    {
             String statutCreation = affRepo.getAffStatutCreation(affId);
             String cedName = cedRepo.getCedNameByAffId(affId);
             if(!STATUT_CREATION.REALISEE.name().equals(statutCreation)) throw new AppException("Impossible de transmettre une affaire en intance ou non réalisée");
@@ -216,7 +232,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public Page<FacultativeListResp> retournerAffaireALaCedante(MvtReq dto, Pageable pageable) throws UnknownHostException
+    public Page<FacultativeListResp> retournerAffaireALaCedante(MvtReq dto, Pageable pageable)
     {
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.RETOURNER_A_CEDANTE, dto.getObjectId(), RETOURNE.staCode, dto.getMvtObservation()));
         Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null,
@@ -232,7 +248,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public Page<FacultativeListResp> validerAffaire(Long affId, Pageable pageable) throws UnknownHostException {
+    public Page<FacultativeListResp> validerAffaire(Long affId, Pageable pageable)
+    {
         String statutCreation = affRepo.getAffStatutCreation(affId);
         if(!STATUT_CREATION.REALISEE.name().equals(statutCreation)) throw new AppException("Impossible de valider une affaire en intance ou non réalisée");
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.VALIDER_FAC, affId, EN_COURS_DE_PAIEMENT.staCode,null));

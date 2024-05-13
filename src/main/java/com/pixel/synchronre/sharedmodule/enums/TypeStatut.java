@@ -7,5 +7,7 @@ public enum TypeStatut
     REGLEMENT,
     PLACEMENT,
     USER,
+    SINISTRE,
+    TRAITE,
     PARTAGE;
 }

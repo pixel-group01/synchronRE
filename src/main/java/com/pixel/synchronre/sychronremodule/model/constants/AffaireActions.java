@@ -18,5 +18,6 @@ public class AffaireActions {
     public static final String REVERSER_FAC = "Enregistrement d'un reversement sur une affaire";
     public static final String VALIDER_FAC = "Validation d'une affaire";
     public static final String ENREGISTRER_REPARTITION = "Enregistrement d'une repartition sur une affaire";
-    public static final String RENOUVELER_FAC = "Renouveler une affaire facultative";
+    public static final String RENOUVELER_FAC = "Renouvelement d'une affaire facultative";
+    public static final String DELETE_FAC = "Suppression d'une affaire facultative";
 }

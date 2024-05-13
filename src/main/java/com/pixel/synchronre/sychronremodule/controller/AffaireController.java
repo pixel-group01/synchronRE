@@ -53,15 +53,22 @@ public class AffaireController
 
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
-    public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId) throws MethodArgumentNotValidException, UnknownHostException {
+    public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId){
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
         return facMapper.mapToFacultativeDetailsResp(affaire);
     }
 
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto) throws UnknownHostException {
+    public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto){
         return affService.createFacultative(dto);
+    }
+
+    @PostMapping("/facultative/delete/{affId}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteAffaire(@PathVariable Long affId)
+    {
+        return affService.deleteAffaire(affId);
     }
 
     @PutMapping("/facultative/update")

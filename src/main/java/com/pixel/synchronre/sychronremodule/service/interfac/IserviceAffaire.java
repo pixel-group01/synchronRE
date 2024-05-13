@@ -15,28 +15,29 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 public interface IserviceAffaire {
-    FacultativeDetailsResp createFacultative(CreateFacultativeReq dto) throws UnknownHostException;
+    FacultativeDetailsResp createFacultative(CreateFacultativeReq dto);
+    boolean deleteAffaire(Long affId);
 
     String generateAffCode(Long affId);
 
-    FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto) throws UnknownHostException;
+    FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto);
     Page<FacultativeListResp> searchFacultative(String key, Pageable pageable);
 
-    FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) throws UnknownHostException;
+    FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto);
 
     EtatComptableAffaire getEtatComptable(Long affId);
 
-    void setAsNonRealisee(Long affId) throws UnknownHostException;
+    void setAsNonRealisee(Long affId);
 
-    void setAsRealisee(Long affId) throws UnknownHostException;
+    void setAsRealisee(Long affId);
 
     boolean senNoteDebitFac(Long affId) throws Exception;
     Base64FileDto printNoteCreditFac(Long affId, Long cesId) throws Exception;
 
-    Page<FacultativeListResp> transmettreAffaireAuSouscripteur(Long affId, Pageable pageable) throws UnknownHostException;
+    Page<FacultativeListResp> transmettreAffaireAuSouscripteur(Long affId, Pageable pageable);
 
-    Page<FacultativeListResp> retournerAffaireALaCedante(MvtReq dto, Pageable pageable) throws UnknownHostException;
-    Page<FacultativeListResp> validerAffaire(Long affId, Pageable pageable) throws UnknownHostException;
+    Page<FacultativeListResp> retournerAffaireALaCedante(MvtReq dto, Pageable pageable);
+    Page<FacultativeListResp> validerAffaire(Long affId, Pageable pageable);
 
     Page<FacultativeListResp> searchAffaires(Long exeCode, String key, List<String> staCodes, Pageable pageable);
 

@@ -265,6 +265,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
         placement.setRepStaCode(new Statut(ANNULE.staCode));
+        placement.setRepStatut(false);
         mvtService.createMvtPlacement(new MvtReq(RepartitionActions.ANNULER_PLACEMENT, plaId, ANNULE.staCode, null));
         logService.saveLog(RepartitionActions.ANNULER_PLACEMENT);
     }
