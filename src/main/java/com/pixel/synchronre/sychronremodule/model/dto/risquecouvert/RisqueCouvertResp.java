@@ -12,7 +12,7 @@ public class RisqueCouvertResp
     private Long couId;
     private String couLibelle;
     private String description;
-    private Long traiId;
+    private Long traiteNPId;
     private  String traiReference;
     private String staCode;
     private String staLibelle;

@@ -22,7 +22,7 @@ public abstract class CedanteTraiteMapper
     @Mapping(target = "cedNomFiliale", source = "cedante.cedNomFiliale")
     @Mapping(target = "cedSigleFiliale", source = "cedante.cedSigleFiliale")
 
-    @Mapping(target = "traiId", source = "traiteNonProportionnel.traiId")
+    @Mapping(target = "traiteNPId", source = "traiteNonProportionnel.traiteNPId")
     @Mapping(target = "traiReference", source = "traiteNonProportionnel.traiReference")
     @Mapping(target = "traiNumero", source = "traiteNonProportionnel.traiNumero")
     @Mapping(target = "staCode", source = "statut.staCode")

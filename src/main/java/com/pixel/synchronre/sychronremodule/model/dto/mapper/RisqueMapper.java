@@ -23,7 +23,7 @@ public abstract class RisqueMapper
 
     @Mapping(target = "couId", source = "couverture.couId")
     @Mapping(target = "couLibelle", source = "couverture.couLibelle")
-    @Mapping(target = "traiId", source = "traiteNonProportionnel.traiId")
+    @Mapping(target = "traiteNPId", source = "traiteNonProportionnel.traiteNPId")
     @Mapping(target = "traiReference", source = "traiteNonProportionnel.traiReference")
     @Mapping(target = "staCode", source = "statut.staCode")
     @Mapping(target = "staLibelle", source = "statut.staLibelle")

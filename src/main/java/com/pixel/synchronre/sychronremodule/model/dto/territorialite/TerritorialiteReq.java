@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.territorialite;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTNPId;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +21,6 @@ public class TerritorialiteReq
     private List<String> paysCodes;
     private List<String> orgCodes;
     @NotNull(message = "L'ID du traité ne peut être null")
+    @ExistingTNPId
     private Long traiteNPId;
 }

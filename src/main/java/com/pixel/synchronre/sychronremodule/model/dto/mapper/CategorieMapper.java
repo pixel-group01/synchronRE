@@ -22,7 +22,6 @@ public abstract class CategorieMapper
     @Autowired protected IJwtService jwtService;
     @Autowired protected PaysRepository paysRepo;//categorie, dto.getTraiteNPId(), dto.getCedIds()
 
-    @Mapping(target = "traiteNPId", source = "traite.traiId")
     public abstract CategorieResp mapToCategorieResp(Categorie categorie, TraiteNPResp traite, List<ReadCedanteDTO> cedantes);
 
     @Mapping(target = "categorie", expression = "java(categorieId == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Categorie(categorieId))")

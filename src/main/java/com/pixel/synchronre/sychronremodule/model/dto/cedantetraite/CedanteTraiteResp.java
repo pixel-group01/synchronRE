@@ -18,7 +18,7 @@ public class CedanteTraiteResp
     private Long cedId;
     private String cedNomFiliale;
     private String cedSigleFiliale;
-    private Long traiId;
+    private Long traiteNPId;
     private String traiReference;
     private String traiNumero;
     private String staCode;

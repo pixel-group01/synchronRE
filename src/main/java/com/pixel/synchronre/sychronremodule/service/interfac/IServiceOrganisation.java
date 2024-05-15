@@ -8,10 +8,11 @@ import org.springframework.data.domain.Pageable;
 import java.net.UnknownHostException;
 import java.util.List;
 
-public interface IServiceOrganisation {
-    OrganisationDTO create(OrganisationDTO dto) throws UnknownHostException;
+public interface IServiceOrganisation
+{
+    OrganisationDTO create(OrganisationDTO dto);
 
-    OrganisationDTO update(UpdatePaysOrgDTO dto) throws UnknownHostException;
+    OrganisationDTO update(UpdatePaysOrgDTO dto);
 
     List<OrganisationDTO> getListOrganisations();
 

@@ -48,6 +48,7 @@ public class Repartition {
     private Type type;
     @ManyToOne @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
+    private boolean isAperiteur;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -60,5 +61,8 @@ public class Repartition {
         this.repId = repId;
     }
 
-
+    @Override
+    public String toString() {
+        return String.valueOf(repId) ;
+    }
 }

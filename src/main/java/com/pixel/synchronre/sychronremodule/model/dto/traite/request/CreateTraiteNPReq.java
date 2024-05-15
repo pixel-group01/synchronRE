@@ -15,8 +15,10 @@ public class CreateTraiteNPReq
 {
     @NotNull(message = "La référence unique est obligatoire")
     @NotBlank(message = "La référence unique est obligatoire")
+    //@UniqueTraiteNPRef
     private String traiReference;
-    private String traiNumeroPolice;
+    //@UniqueTraiteNumero
+    private String traiNumero;
     private String traiLibelle;
     private String traiAuteur;
     private String traiEcerciceRattachement;
@@ -27,7 +29,7 @@ public class CreateTraiteNPReq
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
     private BigDecimal traiTauxCourtier;
-    private BigDecimal traiTauxSurcommission;
+    private BigDecimal traiTauxCourtierPlaceur;
     private Long exeCode;
     private String traiSourceRef;
     private String natCode;

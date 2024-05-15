@@ -27,7 +27,7 @@ import java.util.List;
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/repartitions")
 @Validated @ResponseStatus(HttpStatus.OK)
-public class RepartitionController
+public class RepartitionFacController
 {
     private final IserviceRepartition repService;
     private final ParamCessionLegaleRepository pclRepo;

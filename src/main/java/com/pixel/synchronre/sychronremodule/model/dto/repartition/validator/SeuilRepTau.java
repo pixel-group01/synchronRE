@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -17,11 +18,12 @@ import java.lang.annotation.*;
         SeuilRepTau.SeuilRepTauValidatorOnUpdate.class, SeuilRepTau.SeuilRepTauValidatorOnCreatePartCed.class,
         SeuilRepTau.SeuilRepTauValidatorOnCreateCesLeg.class,
         SeuilRepTau.SeuilRepTauValidatorOnCreatePlaRep.class,
-        SeuilRepTau.SeuilRepTauValidatorOnCreateCedLegRep.class})
+        SeuilRepTau.SeuilRepTauValidatorOnCreateCedLegRep.class,
+        SeuilRepTau.SeuilRepTauValidatorOnTraiteNP.class})
 @Documented
 public @interface SeuilRepTau
 {
-    String message() default "repTaux::Le taux de répartition ne peut exéder le taux restant";
+    String message() default "Le taux de répartition ne peut exéder le taux restant";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
@@ -38,6 +40,7 @@ public @interface SeuilRepTau
             return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
         }
     }
+
 
     @Component
     @RequiredArgsConstructor
@@ -106,6 +109,20 @@ public @interface SeuilRepTau
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
             return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+        }
+    }
+
+    @Component
+    @RequiredArgsConstructor
+    class SeuilRepTauValidatorOnTraiteNP implements ConstraintValidator<SeuilRepTau, PlacementTraiteNPReq>
+    {
+        private final IServiceCalculsComptablesTraite comptaService;
+        @Override
+        public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
+        {
+            if(dto == null) return true;
+            if(dto.getTraiNPId() == null) return true;
+            return comptaService.calculateTauxRestantARepartir(dto.getTraiNPId()).compareTo(dto.getRepTaux()) >= 0;
         }
     }
 }

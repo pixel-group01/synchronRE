@@ -21,6 +21,7 @@ public abstract class TerritorialiteMapper
 
     @Mapping(target = "paysList", expression = "java(paysRepo.getPaysByPaysCodes(dto.getPaysCodes()))")
     @Mapping(target = "organisationList", expression = "java(dto.getOrgCodes() == null ? \"\" : dto.getOrgCodes().stream().collect(java.util.stream.Collectors.joining(\", \")))")
+    @Mapping(target = "traiteNPId", source = "dto.traiteNPId")
     public abstract TerritorialiteResp mapToTerritorialiteResp(TerritorialiteReq dto, TraiteNonProportionnel traite);
 
     @Mapping(target = "traiteNonProportionnel", expression = "java(dto.getTraiteNPId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNPId()))")

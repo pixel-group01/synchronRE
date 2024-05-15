@@ -13,8 +13,7 @@ import java.time.LocalDate;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class UpdateTraiteNPReq
 {
-
-    private Long traiId;
+    private Long traiteNPId;
     @NotNull(message = "La référence unique est obligatoire")
     @NotBlank(message = "La référence unique est obligatoire")
     private String traiReference;
@@ -29,7 +28,7 @@ public class UpdateTraiteNPReq
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
     private BigDecimal traiTauxCourtier;
-    private BigDecimal traiTauxSurcommission;
+    private BigDecimal traiTauxCourtierPlaceur;
     private String traiSourceRef;
     private String natCode;
     private String devCode;

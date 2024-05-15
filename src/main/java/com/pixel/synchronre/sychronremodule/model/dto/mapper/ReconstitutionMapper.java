@@ -23,7 +23,7 @@ public abstract class ReconstitutionMapper
     @Mapping(target = "statut", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     public abstract Reconstitution mapToReconstitution(ReconstitutionReq dto);
 
-    @Mapping(target = "traiteNPId", source = "traiteNonProportionnel.traiId")
+    @Mapping(target = "traiteNPId", source = "traiteNonProportionnel.traiteNPId")
     @Mapping(target = "traiReference", source = "traiteNonProportionnel.traiReference")
     @Mapping(target = "traiNumero", source = "traiteNonProportionnel.traiNumero")
     @Mapping(target = "staCode", source = "statut.staCode")
