@@ -29,5 +29,5 @@ public class TrancheReq
     @ExistingRisqueId
     private Long risqueId;
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
 }

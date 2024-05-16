@@ -30,16 +30,6 @@ public abstract class TraiteNPMapper
     @Mapping(target = "traiFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     public abstract TraiteNonProportionnel mapToTraiteNP(CreateTraiteNPReq dto);
 
-
-
-
-    //@Mapping(target = "exeCode", source = "exercice.exeCode")
-    @Mapping(target = "natCode", source = "nature.natCode")
-    @Mapping(target = "devCode", source = "traiDevise.devCode")
-    @Mapping(target = "traiCompteDevCode", source = "traiCompteDevise.devCode")
-    public abstract UpdateTraiteNPReq mapToTraiteNP(TraiteNonProportionnel traiteNP);
-
-
     @Mapping(target = "traiEcerciceRattachement", source = "traiEcerciceRattachement.libelle")
     @Mapping(target = "traiPeriodicite", source = "traiPeriodicite.libelle")
     @Mapping(target = "exeCode", source = "exercice.exeCode")

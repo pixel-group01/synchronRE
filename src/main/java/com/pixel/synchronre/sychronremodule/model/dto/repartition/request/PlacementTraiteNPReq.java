@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.repartition.request;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.validator.ExistingCesId;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.validator.ExistingIntId;
+import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.ExistingCedanteTraiteId;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.CoherentTauxCrtAndScms;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepCap;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.validator.SeuilRepTau;
@@ -41,7 +42,7 @@ public class PlacementTraiteNPReq
     @ExistingCesId
     private Long cesId;
 
-    @ExistingTNPId
-    private Long traiNPId;
+    @ExistingCedanteTraiteId
+    private Long cedanteTraiteId;
     private boolean isAperiteur;
 }

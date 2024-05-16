@@ -30,6 +30,7 @@ public class Repartition {
     private BigDecimal repTauxComCed;
     @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCourt;
+    private BigDecimal repTauxCourtierPlaceur; //TODO A Valider
     private String autreInterlocuteurs;
     @ManyToOne @JoinColumn(name = "rep_interlocuteur_principal_id")
     private Interlocuteur interlocuteurPrincipal;

@@ -21,7 +21,7 @@ public class TrancheResp
     private Long couId;
     private String couLibelle;
     private String couLibelleAbrege;
-    private Long traiId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
 }

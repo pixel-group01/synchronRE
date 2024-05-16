@@ -5,3 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TranchePaysRepository extends JpaRepository<TranchePays, Long> {
 }
+
+//07 09 07 96 68 //M. Emil Zola
