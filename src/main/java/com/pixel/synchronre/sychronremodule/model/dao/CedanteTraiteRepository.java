@@ -29,4 +29,6 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
 """)
     Page<CedanteTraiteResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
+    @Query("select ct from CedanteTraite ct where ct.traiteNonProportionnel.traiteNpId = ?1")
+    Long getTraiteIdByCedTraiId(Long cedTraiId);
 }

@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -42,4 +43,8 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
     Page<RepartitionTraiteNPResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
+
+    @Modifying
+    @Query("update Repartition r set r.isAperiteur = false where r.repId <> ?1 and r.cedanteTraite.cedanteTraiteId = (select ct.cedanteTraiteId from Repartition r join r.cedanteTraite ct where r.repId = ?1)")
+    void setAsTheOnlyAperiteur(Long repId);
 }
