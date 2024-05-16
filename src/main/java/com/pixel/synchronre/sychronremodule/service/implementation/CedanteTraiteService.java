@@ -45,9 +45,10 @@ public class CedanteTraiteService implements IServiceCedanteTraite
             return this.update(dto);
         }
         CedanteTraite cedanteTraite = cedTraiMapper.mapToCedanteTraite(dto);
-        final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
+        final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
         logService.logg("Ajout d'une cédante sur un traité", new CedanteTraite(), cedanteTraite, "CedanteTraite");
+        if(dto.getCessionsLegales() == null || dto.getCessionsLegales().isEmpty()) return cedTraiMapper.mapToCedanteTraiteResp(cedanteTraite);
         dto.getCessionsLegales().forEach(cesLeg->
         {
             repService.createRepartitionCesLegTraite(cesLeg, cedTraiId);

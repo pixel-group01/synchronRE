@@ -15,13 +15,13 @@ public class CedanteTraiteController
     private final IServiceCedanteTraite cedanteTraiteService;
 
     @PostMapping(path = "/save")
-    public CedanteTraiteResp save(CedanteTraiteReq dto)
+    public CedanteTraiteResp save(@RequestBody CedanteTraiteReq dto)
     {
         return cedanteTraiteService.save(dto);
     }
 
     @DeleteMapping(path = "/delete/{cedanteTraiteId}")
-    public void delete(Long cedanteTraiteId)
+    public void delete(@PathVariable Long cedanteTraiteId)
     {
         cedanteTraiteService.removeCedanteOnTraite(cedanteTraiteId);
     }
