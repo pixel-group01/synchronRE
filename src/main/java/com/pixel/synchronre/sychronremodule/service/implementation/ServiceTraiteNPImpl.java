@@ -69,6 +69,6 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     @Override
     public TraiteNPResp detail(Long traiId) {
         TraiteNonProportionnel traiteNP = traiteNPRepo.findById(traiId).orElseThrow(()->new AppException("Traité introuvable"));
-        return traiteNPMapper.mapToTraiteNPResp(traiteNP);
+        return traiteNPMapper.mapToTraiteNPResp(traiteNP);//
     }
 }

@@ -47,4 +47,5 @@ public class TraiteNPController
         return traiteNPService.detail(traiId);
     }
 
+
 }
