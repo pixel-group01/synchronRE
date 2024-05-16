@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
@@ -39,6 +40,11 @@ public class TraiteNPController
                               @RequestParam(defaultValue = "10") int size)
     {
         return traiteNPService.search(key, fncId, userId, cedId, staCodes, exeCode, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/detail/{traiId}")
+    TraiteNPResp detail(@PathVariable Long traiId){
+        return traiteNPService.detail(traiId);
     }
 
 }

@@ -141,7 +141,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et les règlements de l'affaire
         {
             repRepo.findRepIdByAffId(dto.getAffId()).forEach(repId->repService.annulerRepartition(repId));
-            affaire.setAffCode(EN_COURS_DE_REPARTITION.staCode);
+            affaire.setStatut(new Statut(EN_COURS_DE_REPARTITION.staCode));
             bordRep.findBordIdByAffId(dto.getAffId()).forEach(bordId-> bordService.deleteBordereau(bordId));
         }
         return facultativeMapper.mapToFacultativeDetailsResp(affaire);

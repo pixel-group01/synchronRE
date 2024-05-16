@@ -85,7 +85,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         List<UpdateCesLegReq> pclPfs = dto.getParamCesLegsPremierFranc();
         SimpleRepDto conservationDto = new SimpleRepDto(dto.getConservationCapital(), dto.getConservationTaux(), dto.getConservationRepId(), dto.getConservationPrime(), dto.getAffId());
         SimpleRepDto facobDto = new SimpleRepDto(dto.getFacobCapital(), dto.getFacobTaux(), dto.getFacobRepId(), dto.getFacobPrime(), dto.getAffId());
-        SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getConservationRepId(), dto.getXlPrime(), dto.getAffId());
+        SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getXlRepId(), dto.getXlPrime(), dto.getAffId());
         List<UpdateCesLegReq> pclSimples = dto.getParamCesLegs();
 
         pclPfs = this.savePclReps(pclPfs);
@@ -260,13 +260,13 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
     {
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal smplCi = aff.getFacSmpLci();
-        BigDecimal mtPartCedante = aff.getPartCedante();
+        //BigDecimal mtPartCedante = aff.getPartCedante();
         boolean repCapitalIsNull = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0;
         dto.setRepCapital(repCapitalIsNull ? ZERO : dto.getRepCapital());
         BigDecimal repCapital = dto.getRepCapital();
         if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
-        mtPartCedante = mtPartCedante == null || mtPartCedante.compareTo(ZERO) == 0 ? smplCi : mtPartCedante;
-        BigDecimal repTaux = repCapital.multiply(CENT).divide(mtPartCedante, 100, RoundingMode.HALF_UP);
+        //mtPartCedante = mtPartCedante == null || mtPartCedante.compareTo(ZERO) == 0 ? smplCi : mtPartCedante;
+        BigDecimal repTaux = repCapital.multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
         BigDecimal repPrime = aff.getFacPrime() == null  ? ZERO : aff.getFacPrime().multiply(repTaux);
 
         List<Repartition> traiteReps = repRepo.findByAffaireAndTypeRep(dto.getAffId(), typeTraite);

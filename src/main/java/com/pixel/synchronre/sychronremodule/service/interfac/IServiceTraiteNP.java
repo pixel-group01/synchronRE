@@ -16,4 +16,7 @@ public interface IServiceTraiteNP
     Page<TraiteNPResp> search(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable);
 
     TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException;
+
+    TraiteNPResp detail(Long traiId);
 }
+
