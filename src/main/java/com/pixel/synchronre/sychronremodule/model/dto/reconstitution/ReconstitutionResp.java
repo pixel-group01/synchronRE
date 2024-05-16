@@ -19,7 +19,7 @@ public class ReconstitutionResp
     private BigDecimal tauxReconstitution;
     private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
-    private Long traiteNPId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
     private String staCode;
@@ -33,7 +33,7 @@ public class ReconstitutionResp
         this.tauxReconstitution = tauxReconstitution;
         this.tauxPrimeReconstitution = tauxPrimeReconstitution;
         this.modeCalculReconstitution = modeCalculReconstitution;
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.trancheId = trancheId;

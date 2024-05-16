@@ -22,5 +22,5 @@ public class TerritorialiteReq
     private List<String> orgCodes;
     @NotNull(message = "L'ID du traité ne peut être null")
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
 }

@@ -110,6 +110,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "mtTotalPrimeCessionnaireNetteComCed", expression = "java(comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(aff.getAffId()))")
     public abstract EtatComptableAffaire mapToEtatComptableAffaire(Affaire aff);
 
+
     protected boolean placementIsFinished(Long affId)
     {
         BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);

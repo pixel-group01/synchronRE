@@ -36,7 +36,7 @@ public class TerritorialiteService implements IServiceTerritorialite
     @Override @Transactional
     public TerritorialiteResp create(TerritorialiteReq dto) throws UnknownHostException
     {
-        TraiteNonProportionnel traite = traiRepo.findById(dto.getTraiteNPId()).orElseThrow(()->new AppException("Traité introuvable"));
+        TraiteNonProportionnel traite = traiRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         Territorialite territorialite = terrRepo.save(terrMapper.mapToTerritorialite(dto));
         logService.logg("Création d'une territorialité", null, territorialite, "Territorialite");
         dto.getPaysCodes().forEach(p->
@@ -131,5 +131,10 @@ public class TerritorialiteService implements IServiceTerritorialite
         TerritorialiteDetails terreDet = terrDetRepo.findByTerrIdAndPaysCode(terrId, paysCode);
         terrDetRepo.deleteByTerrIdAndPaysCode(terrId, paysCode);
         logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
+    }
+    @Override
+    public TerritorialiteReq edit(Long terrId){
+        return terrRepo.getEditDtoById(terrId);
+
     }
 }

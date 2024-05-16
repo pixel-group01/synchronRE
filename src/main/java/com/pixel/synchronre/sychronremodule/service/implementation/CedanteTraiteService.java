@@ -38,9 +38,9 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     public CedanteTraiteResp create(CedanteTraiteReq dto)
     {
         //Si le traite a déjà cette cédante, on fait un update
-        if(cedTraiRepo.traiteHasCedante(dto.getTraiteNPId(), dto.getCedId()))
+        if(cedTraiRepo.traiteHasCedante(dto.getTraiteNpId(), dto.getCedId()))
         {
-            Long cedanteTraiteId = cedTraiRepo.getCedanteTraiteIdByTraiIdAndCedId(dto.getTraiteNPId(), dto.getCedId());
+            Long cedanteTraiteId = cedTraiRepo.getCedanteTraiteIdByTraiIdAndCedId(dto.getTraiteNpId(), dto.getCedId());
             dto.setCedanteTraiteId(cedanteTraiteId);
             return this.update(dto);
         }

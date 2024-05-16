@@ -13,7 +13,7 @@ public class SousLimiteDetailsResp
     private BigDecimal sousLimMontant;
     private Long sslimiteRisqueCouvertId;
     private String sslimiteRisqueCouvertLibelle;
-    private Long sslimiteTraiteNPId;
+    private Long sslimiteTraiteNpId;
     private String sslimiteTraiLibelle;
     private Long sslimiteTrancheId;
     private String sslimiteTrancheLibelle;

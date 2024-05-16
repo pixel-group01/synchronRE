@@ -17,6 +17,6 @@ public interface IServiceTraiteNP
 
     TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException;
 
-    TraiteNPResp detail(Long traiId);
+    UpdateTraiteNPReq edit(Long traiId);
 }
 

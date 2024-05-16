@@ -13,7 +13,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
     t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNPId, tnp.traiReference, tnp.traiNumero)
+    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
     left join r.couverture c 
@@ -25,7 +25,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
     t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNPId, tnp.traiReference, tnp.traiNumero)
+    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
     left join r.couverture c 
@@ -38,7 +38,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelle) as string))) >0 or 
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelleAbrege) as string))) >0 
     )
-    and tnp.traiteNPId = :traiteNPId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
-    Page<TrancheResp> search(@Param("traiteNPId") Long traiteNPId, @Param("key")String key, Pageable pageable);
+    Page<TrancheResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 }

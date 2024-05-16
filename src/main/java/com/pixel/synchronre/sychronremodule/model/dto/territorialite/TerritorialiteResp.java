@@ -18,7 +18,7 @@ public class TerritorialiteResp
     private String terrDescription;
     private List<PaysListResp> paysList;
     private String organisationList;
-    private Long traiteNPId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumeroPolice;
     private String traiLibelle;
@@ -29,7 +29,7 @@ public class TerritorialiteResp
         this.terrLibelle = terrLibelle;
         this.terrTaux = terrTaux;
         this.terrDescription = terrDescription;
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
     }
 }

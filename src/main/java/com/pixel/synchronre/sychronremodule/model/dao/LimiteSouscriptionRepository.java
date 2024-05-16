@@ -14,7 +14,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp(
     l.limiteSouscriptionId, l.limSousMontant, r.risqueId, r.description, cou.couId, cou.couLibelle, 
     cou.couLibelleAbrege, ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, 
-    tnp.traiteNPId, tnp.traiReference, tnp.traiNumero, tr.trancheId, tr.trancheLibelle
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, tr.trancheId, tr.trancheLibelle
     )
     from LimiteSouscription l 
     left join l.risqueCouvert r 
@@ -30,7 +30,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp(
     l.limiteSouscriptionId, l.limSousMontant, r.risqueId, r.description, cou.couId, cou.couLibelle, cou.couLibelleAbrege,
-    ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, tnp.traiteNPId,
+    ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, tnp.traiteNpId,
     tnp.traiReference, tnp.traiNumero, tr.trancheId, tr.trancheLibelle
     )
     from LimiteSouscription l 
@@ -49,7 +49,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedSigleFiliale) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  tr.trancheLibelle) as string))) >0 
     )
-    and tnp.traiteNPId = :traiteNPId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
-    Page<LimiteSouscriptionResp> search(@Param("traiteNPId") Long traiteNPId, @Param("key")String key, Pageable pageable);
+    Page<LimiteSouscriptionResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 }

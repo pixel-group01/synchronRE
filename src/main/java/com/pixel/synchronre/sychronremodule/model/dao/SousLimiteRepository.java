@@ -17,7 +17,7 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
 
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp(slm.sousLimiteSouscriptionId, trnp.traiteNPId,
+        select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp(slm.sousLimiteSouscriptionId, trnp.traiteNpId,
         slm.sousLimMontant, trnp.traiReference, trnp.traiNumero, trnp.traiLibelle, rs.description, tr.trancheLibelle, tr.tranchePriorite, s.staCode, s.staLibelle, u.email, 
         concat(u.firstName, ' ', u.lastName), f.name, slm.createdAt, slm.updatedAt) 
         from SousLimite slm left join slm.risqueCouvert rs 

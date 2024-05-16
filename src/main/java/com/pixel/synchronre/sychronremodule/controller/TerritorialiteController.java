@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTerritorialite;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,11 @@ public class TerritorialiteController
                                     @RequestParam(defaultValue = "10") int size)
     {
         return territorialiteService.search(traiId, key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/edit/{terrId}")
+    TerritorialiteReq edit(@PathVariable Long terrId){
+        return territorialiteService.edit(terrId);
     }
 
 }

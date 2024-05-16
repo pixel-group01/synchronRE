@@ -26,7 +26,7 @@ public class ExerciceLoader implements Loader
 //        Exercice exe0 = new Exercice(2020L,"2020",false,new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now());
 //        Exercice exe1 = new Exercice(2021L,"2021",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
 //        Exercice exe2 = new Exercice(2022L,"2022",false,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
-        Exercice exe3 = new Exercice(2023L,"2023",true,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
+        Exercice exe3 = new Exercice(2024L,"2024",true,new Statut("ACT"),LocalDateTime.now(), LocalDateTime.now());
         //exeRepo.saveAll(Arrays.asList(exe0,exe1,exe2,exe3));
         exeRepo.saveAll(Arrays.asList(exe3));
 

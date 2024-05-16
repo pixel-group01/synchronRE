@@ -33,7 +33,7 @@ public abstract class SousLimiteMapper {
 
     @Mapping(target = "sslimiteRisqueCouvertId", source = "risqueCouvert.risqueId")
     @Mapping(target = "sslimiteRisqueCouvertLibelle", source = "risqueCouvert.description")
-    @Mapping(target = "sslimiteTraiteNPId", source = "traiteNonProportionnel.traiteNPId")
+    @Mapping(target = "sslimiteTraiteNpId", source = "traiteNonProportionnel.traiteNpId")
     @Mapping(target = "sslimiteTraiLibelle", source = "traiteNonProportionnel.traiLibelle")
     @Mapping(target = "sslimiteTrancheId", source = "tranche.trancheId")
     @Mapping(target = "sslimiteTrancheLibelle", source = "tranche.trancheLibelle")

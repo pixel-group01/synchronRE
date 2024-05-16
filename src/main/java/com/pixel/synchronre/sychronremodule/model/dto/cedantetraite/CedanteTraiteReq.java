@@ -26,7 +26,7 @@ public class CedanteTraiteReq
     private Long cedId;
     @NotNull(message = "Veuillez selectionner le traité concerné")
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
     private List<CesLeg> cessionsLegales;
 
 }

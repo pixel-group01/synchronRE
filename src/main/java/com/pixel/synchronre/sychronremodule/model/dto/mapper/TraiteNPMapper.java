@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,6 +30,16 @@ public abstract class TraiteNPMapper
     @Mapping(target = "traiFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     public abstract TraiteNonProportionnel mapToTraiteNP(CreateTraiteNPReq dto);
 
+
+
+
+    //@Mapping(target = "exeCode", source = "exercice.exeCode")
+    @Mapping(target = "natCode", source = "nature.natCode")
+    @Mapping(target = "devCode", source = "traiDevise.devCode")
+    @Mapping(target = "traiCompteDevCode", source = "traiCompteDevise.devCode")
+    public abstract UpdateTraiteNPReq mapToTraiteNP(TraiteNonProportionnel traiteNP);
+
+
     @Mapping(target = "traiEcerciceRattachement", source = "traiEcerciceRattachement.libelle")
     @Mapping(target = "traiPeriodicite", source = "traiPeriodicite.libelle")
     @Mapping(target = "exeCode", source = "exercice.exeCode")
@@ -44,5 +55,6 @@ public abstract class TraiteNPMapper
     @Mapping(target = "traiUserCreatorNomPrenom", expression = "java(jwtService.getJwtInfos().getNomPrenom())")
     @Mapping(target = "traiFonCreatorName", expression = "java(jwtService.getJwtInfos().getFncName())")
     public abstract TraiteNPResp mapToTraiteNPResp(TraiteNonProportionnel traiteNP);
+
 }
 

@@ -10,14 +10,14 @@ import org.springframework.data.repository.query.Param;
 
 public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Long>
 {
-    @Query("select c.cedanteTraiteId from CedanteTraite c where c.traiteNonProportionnel.traiteNPId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode = 'ACT'")
-    Long getCedanteTraiteIdByTraiIdAndCedId(Long traiteNPId, Long cedId);
-    @Query("select (count(c) > 0) from CedanteTraite c where c.traiteNonProportionnel.traiteNPId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode='ACT'")
-    boolean traiteHasCedante(Long traiteNPId, Long cedId);
+    @Query("select c.cedanteTraiteId from CedanteTraite c where c.traiteNonProportionnel.traiteNpId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode = 'ACT'")
+    Long getCedanteTraiteIdByTraiIdAndCedId(Long traiteNpId, Long cedId);
+    @Query("select (count(c) > 0) from CedanteTraite c where c.traiteNonProportionnel.traiteNpId = ?1 and c.cedante.cedId = ?2 and c.statut.staCode='ACT'")
+    boolean traiteHasCedante(Long traiteNpId, Long cedId);
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(
     c.cedanteTraiteId, c.assiettePrime, c.tauxPrime, c.pmd, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale,
-    tnp.traiteNPId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle) 
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle) 
     from CedanteTraite c left join c.cedante ced left join c.traiteNonProportionnel tnp left join c.statut s
     where (locate(upper(coalesce(:key, '') ), upper(cast(c.assiettePrime as string))) =1 or
     locate(upper(coalesce(:key, '') ), upper(cast(c.tauxPrime as string))) =1 or
@@ -25,8 +25,8 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedNomFiliale) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedSigleFiliale) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedNomFiliale) as string))) >0 )
-    and tnp.traiteNPId = :traiteNPId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
 """)
-    Page<CedanteTraiteResp> search(@Param("traiteNPId") Long traiteNPId, @Param("key")String key, Pageable pageable);
+    Page<CedanteTraiteResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
 }

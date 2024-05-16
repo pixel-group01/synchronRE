@@ -20,6 +20,6 @@ public class ReconstitutionReq {
     @ExistingTrancheId
     private Long trancheId;
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
 
 }

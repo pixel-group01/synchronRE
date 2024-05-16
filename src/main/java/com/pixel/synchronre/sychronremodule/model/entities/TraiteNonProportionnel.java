@@ -19,7 +19,7 @@ public class TraiteNonProportionnel
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRAI_ID_GEN")
     @SequenceGenerator(name = "TRAI_ID_GEN", sequenceName = "TRAI_ID_GEN")
-    private Long traiteNPId;
+    private Long traiteNpId;
     @Column(unique = true)
     private String traiReference;
     private String traiNumero;
@@ -61,13 +61,13 @@ public class TraiteNonProportionnel
     @Override
     public String toString() {
         return "TraiteNonProportionnel{" +
-                "traiId=" + traiteNPId +
+                "traiId=" + traiteNpId +
                 ", traiReference='" + traiReference + '\'' +
                 '}';
     }
 
     public TraiteNonProportionnel(Long traiId) {
-        this.traiteNPId = traiId;
+        this.traiteNpId = traiId;
     }
 }
 /*
