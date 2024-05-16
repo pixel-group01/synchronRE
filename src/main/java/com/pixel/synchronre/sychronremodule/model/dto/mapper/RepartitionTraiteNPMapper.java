@@ -7,11 +7,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "")
+@Mapper(componentModel = "spring")
 public abstract class RepartitionTraiteNPMapper
 {
-    @Autowired
-    protected IJwtService jwtService;//cedanteTraiteId
+    @Autowired protected IJwtService jwtService;//cedanteTraiteId
 
 
     @Mapping(target = "cedanteTraite", expression = "java(dto.getCedanteTraiteId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(dto.getCedanteTraiteId()))")
