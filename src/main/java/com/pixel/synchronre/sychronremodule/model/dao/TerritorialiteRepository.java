@@ -12,12 +12,12 @@ public interface TerritorialiteRepository extends JpaRepository<Territorialite, 
 {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp(
-    ter.terrId, ter.terrLibelle, ter.terrTaux, ter.terrDescription, tnp.traiteNPId,tnp.traiReference
+    ter.terrId, ter.terrLibelle, ter.terrTaux, ter.terrDescription, tnp.traiteNpId,tnp.traiReference
     ) from Territorialite ter left join ter.traiteNonProportionnel tnp
     where (locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ter.terrLibelle) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(ter.terrTaux as string))) =1 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ter.terrDescription) as string))) >0)
-    and tnp.traiteNPId = :traiteNPId and ter.statut.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and ter.statut.staCode = 'ACT'
 """)
-    Page<TerritorialiteResp> search(@Param("traiteNPId")Long traiteNPId, @Param("key") String key, Pageable pageable);
+    Page<TerritorialiteResp> search(@Param("traiteNpId")Long traiteNpId, @Param("key") String key, Pageable pageable);
 }

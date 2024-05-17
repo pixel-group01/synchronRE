@@ -13,7 +13,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp(
         r.repId, r.repPrime, r.repTaux, tnp.traiTauxCourtierPlaceur, tnp.traiTauxCourtier, c.cesId,
-        c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNPId, tnp.traiReference, tnp.traiNumero,
+        c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
         from Repartition r left join r.cessionnaire c left join r.cedanteTraite cedTrai 
             left join cedTrai.traiteNonProportionnel tnp
@@ -25,7 +25,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp(
         r.repId, r.repPrime, r.repTaux, tnp.traiTauxCourtierPlaceur, tnp.traiTauxCourtier, c.cesId,
-        c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNPId, tnp.traiReference, tnp.traiNumero,
+        c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
         from Repartition r left join r.cessionnaire c 
             left join r.cedanteTraite cedTrai 
@@ -39,7 +39,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.cesEmail) as string))) >0 or 
         locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.cesTelephone) as string))) >0
         )
-        and tnp.traiteNPId = :traiteNPId and s.staCode = 'ACT'
+        and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
-    Page<RepartitionTraiteNPResp> search(@Param("traiteNPId") Long traiteNPId, @Param("key")String key, Pageable pageable);
+    Page<RepartitionTraiteNPResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 }

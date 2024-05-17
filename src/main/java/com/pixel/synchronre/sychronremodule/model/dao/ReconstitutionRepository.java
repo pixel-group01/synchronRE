@@ -15,7 +15,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp(
      r.reconstitutionId,r.nbrReconstitution, r.tauxReconstitution,r.tauxPrimeReconstitution,
-        r.modeCalculReconstitution,tnp.traiteNPId,tnp.traiReference,tnp.traiNumero,t.trancheId,t.trancheLibelle)
+        r.modeCalculReconstitution,tnp.traiteNpId,tnp.traiReference,tnp.traiNumero,t.trancheId,t.trancheLibelle)
     from Reconstitution r
     left join r.tranche t
     left join r.traiteNonProportionnel tnp
@@ -26,7 +26,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
     @Query("""
      select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp(
                 r.reconstitutionId,r.nbrReconstitution, r.tauxReconstitution,r.tauxPrimeReconstitution,
-        r.modeCalculReconstitution,tnp.traiteNPId,tnp.traiReference,tnp.traiNumero,s.staCode,s.staLibelle,t.trancheId,t.trancheLibelle)
+        r.modeCalculReconstitution,tnp.traiteNpId,tnp.traiReference,tnp.traiNumero,s.staCode,s.staLibelle,t.trancheId,t.trancheLibelle)
                 from Reconstitution r
                 left join r.tranche t
                 left join r.traiteNonProportionnel tnp
@@ -40,7 +40,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
                 locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  tnp.traiNumero) as string))) >0 or
                 locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  t.trancheLibelle) as string))) >0
                 )
-                and tnp.traiteNPId = :traiteNPId and s.staCode = 'ACT'
+                and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
      """)
-    Page<ReconstitutionResp> search(@Param("traiteNPId") Long traiteNPId, @Param("key") String key, Pageable pageable);
+    Page<ReconstitutionResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key") String key, Pageable pageable);
 }

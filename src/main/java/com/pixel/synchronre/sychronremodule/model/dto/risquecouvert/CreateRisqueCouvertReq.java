@@ -16,5 +16,5 @@ public class CreateRisqueCouvertReq
     private Long couId;
     private String description;
     @ExistingTNPId @NotNull(message = "L'ID du traité ne peut être nul")
-    private Long traiteNPId;
+    private Long traiteNpId;
 }
