@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import org.springframework.data.domain.Page;
@@ -41,4 +42,28 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
     Page<TrancheResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
+
+
+//    @Query("""
+//        select new com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq(tnp.traiteNpId,
+//        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiAuteur,tnp.traiEcerciceRattachement,
+//        tnp.traiDateEffet, tnp.traiDateEcheance,tnp.traiCoursDevise,tnp.traiPeriodicite,tnp.traiDelaiEnvoi,
+//        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode)
+//        from TraiteNonProportionnel tnp
+//        left join tnp.traiSource scr
+//        left join tnp.nature nat
+//        left join tnp.traiDevise dev
+//        left join tnp.traiCompteDevise comp
+//        where tnp.traiteNpId = ?1
+//    """)
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq(
+        t.trancheId,t.trancheLibelle,t.tranchePriorite,t.tranchePorte,r.risqueId,tnp.traiteNpId)
+        from Tranche t
+        left join t.risqueCouvert r
+        left join t.traiteNonProportionnel tnp 
+        where tnp.traiteNpId = ?1
+    """)
+    TrancheReq getEditDtoById(Long trancheId);
 }

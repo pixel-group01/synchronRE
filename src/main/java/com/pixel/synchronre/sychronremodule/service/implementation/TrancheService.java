@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service @RequiredArgsConstructor
-public class TrancheService implements IServiceTranche
-{
+public class TrancheService implements com.pixel.synchronre.sychronremodule.service.interfac.TrancheService {
     private final TrancheRepository trancheRepo;
     private final ILogService logService;
     private final TrancheMapper trancheMapper;
@@ -70,5 +69,9 @@ public class TrancheService implements IServiceTranche
         tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
         return trancheRepo.getTrancheResp(dto.getTrancheId());
+    }
+    @Override
+    public TrancheReq edit(Long trancheId){
+        return trancheRepo.getEditDtoById(trancheId);
     }
 }

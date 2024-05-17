@@ -16,4 +16,7 @@ public interface IServiceTranche
     TrancheResp create(TrancheReq dto);
 
     TrancheResp update(TrancheReq dto);
+
+
+    TrancheReq edit(Long trancheId);
 }

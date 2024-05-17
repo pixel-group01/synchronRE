@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
@@ -34,4 +35,10 @@ public class TrancheController
     {
         return trancheService.search(traiId, key, PageRequest.of(page, size));
     }
+
+    @GetMapping(path = "/edit/{trancheId}")
+    TrancheReq edit(@PathVariable Long trancheId){
+        return trancheService.edit(trancheId);
+    }
+
 }
