@@ -75,6 +75,9 @@ public class ReconstitutionServiceImpl implements IserviceReconstitution
         key = StringUtils.stripAccentsToUpperCase(key);
         Page<ReconstitutionResp> reconstitutionRespPage = reconstRepo.search(traiteNPId, key, pageable);
         return reconstitutionRespPage;
-
+    }
+    @Override
+    public ReconstitutionReq edit(Long reconstitutionId){
+        return reconstRepo.getEditDtoById(reconstitutionId);
     }
 }

@@ -48,7 +48,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
         from Tranche t
         left join t.risqueCouvert r
         left join t.traiteNonProportionnel tnp 
-        where tnp.traiteNpId = ?1
+        where t.trancheId = ?1
     """)
     TrancheReq getEditDtoById(Long trancheId);
 }

@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp;
 import com.pixel.synchronre.sychronremodule.model.entities.LimiteSouscription;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     LimiteSouscriptionResp findLimiteSouscriptionRespById(Long limiteSouscriptionId );
 
     @Query("""
+    
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp(
     l.limiteSouscriptionId, l.limSousMontant, r.risqueId, r.description, cou.couId, cou.couLibelle, cou.couLibelleAbrege,
     ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, tnp.traiteNpId,
@@ -52,4 +54,16 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
     Page<LimiteSouscriptionResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq(
+    l.limiteSouscriptionId,l.limSousMontant,r.risqueId,ct.cedanteTraiteId,tr.trancheId
+    )
+    from LimiteSouscription l 
+    left join l.risqueCouvert r 
+    left join l.cedanteTraite ct 
+    left join l.tranche tr
+    where l.limiteSouscriptionId = ?1
+    """)
+    LimiteSouscriptionReq getEditDtoById(Long limiteSouscriptionId);
 }
