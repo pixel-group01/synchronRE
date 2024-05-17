@@ -65,4 +65,8 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
         SousLimiteDetailsResp sslResp = sslMapper.mapToSousLimiteResp(ssl);
         return sslResp;
     }
+
+    public UpdateSousLimite edit(Long sousLimiteSouscriptionId){
+        return sslRepo.getEditDtoById(sousLimiteSouscriptionId);
+    }
 }

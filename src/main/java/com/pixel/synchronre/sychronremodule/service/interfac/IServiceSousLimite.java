@@ -15,4 +15,6 @@ public interface IServiceSousLimite {
     Page<SousLimiteDetailsResp> search(String key, Long traiteNpId, Pageable pageable);
 
     SousLimiteDetailsResp update(UpdateSousLimite dto) throws  UnknownHostException;
+
+    UpdateSousLimite edit(Long sousLimiteSouscriptionId);
 }

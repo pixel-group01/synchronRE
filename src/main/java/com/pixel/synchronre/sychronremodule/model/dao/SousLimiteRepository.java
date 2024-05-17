@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.SousLimite;
@@ -38,4 +39,15 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
                                        @Param("traiteNpId") Long traiteNpId,
                                        Pageable pageable);
 
+    @Query("""
+          select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite(
+          slm.sousLimiteSouscriptionId,slm.sousLimMontant,rs.risqueId,trnp.traiteNpId,tr.trancheId,s.staCode
+          )
+          from SousLimite slm left join slm.risqueCouvert rs
+          left join slm.traiteNonProportionnel trnp
+          left join slm.tranche tr
+          left join slm.statut s
+           where slm.sousLimiteSouscriptionId = ?1
+     """)
+    UpdateSousLimite getEditDtoById(Long sousLimiteSouscriptionId);
 }

@@ -4,6 +4,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSousLimite;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class SousLimiteController {
                               @RequestParam(defaultValue = "10") int size)
     {
         return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/edit/{sousLimiteSouscriptionId}")
+    UpdateSousLimite edit(@PathVariable Long sousLimiteSouscriptionId){
+        return iServiceSousLimite.edit(sousLimiteSouscriptionId);
     }
 
 }
