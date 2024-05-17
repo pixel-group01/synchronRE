@@ -73,4 +73,9 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
         logService.logg("Modification d'une limite de souscription", oldLimiteSouscription, limiteSouscription, "LimiteSouscription");
         return lsRepo.findLimiteSouscriptionRespById(dto.getLimiteSouscriptionId());
     }
+
+    @Override
+    public LimiteSouscriptionReq edit(Long limiteSouscriptionId){
+        return lsRepo.getEditDtoById(limiteSouscriptionId);
+    }
 }

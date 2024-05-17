@@ -10,4 +10,6 @@ public interface IserviceReconstitution {
     ReconstitutionResp save(ReconstitutionReq dto);
     boolean delete(Long reconstitutionId);
     Page<ReconstitutionResp> search(Long traiteNPId, String key, Pageable pageable);
+
+    ReconstitutionReq edit(Long reconstitutionId);
 }

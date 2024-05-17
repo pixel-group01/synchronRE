@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Reconstitution;
@@ -43,4 +44,14 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
                 and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
      """)
     Page<ReconstitutionResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key") String key, Pageable pageable);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionReq(
+        r.reconstitutionId,r.nbrReconstitution,r.tauxReconstitution,r.tauxPrimeReconstitution,r.modeCalculReconstitution,t.trancheId,tnp.traiteNpId)
+        from Reconstitution r
+        left join r.tranche t
+        left join r.traiteNonProportionnel tnp
+        where r.reconstitutionId = ?1
+    """)
+    ReconstitutionReq getEditDtoById(Long reconstitutionId);
 }
