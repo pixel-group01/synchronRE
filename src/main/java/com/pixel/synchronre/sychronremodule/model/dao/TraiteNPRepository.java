@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.springframework.data.domain.Page;
@@ -67,7 +68,6 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
     """)
     TraiteNPResp getShortTraiteById(Long traiteNpId);
 
-
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiAuteur,tnp.traiEcerciceRattachement,
@@ -80,5 +80,5 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         left join tnp.traiCompteDevise comp
         where tnp.traiteNpId = ?1
     """)
-    TraiteNPResp getShortTraiteById(Long traiteNPId);
+    UpdateTraiteNPReq getEditDtoById(Long traiteNpId);
 }

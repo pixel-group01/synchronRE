@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service @RequiredArgsConstructor
-public class TrancheService implements com.pixel.synchronre.sychronremodule.service.interfac.TrancheService {
+public class TrancheService implements IServiceTranche {
     private final TrancheRepository trancheRepo;
     private final ILogService logService;
     private final TrancheMapper trancheMapper;

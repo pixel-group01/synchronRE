@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import org.springframework.data.domain.Page;
