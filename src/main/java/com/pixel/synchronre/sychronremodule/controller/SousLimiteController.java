@@ -33,12 +33,11 @@ public class SousLimiteController {
 
     @GetMapping(path = "/search")
     Page<SousLimiteDetailsResp> create(@RequestParam(defaultValue = "") String key,
-                              @RequestParam(required = false) Long fncId,
-                              @RequestParam(required = false) Long userId,
+                              @RequestParam(required = true) Long traiteNpId,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size)
     {
-        return iServiceSousLimite.search(key, fncId, userId, PageRequest.of(page, size));
+        return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
     }
 
 }

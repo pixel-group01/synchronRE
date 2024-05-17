@@ -13,15 +13,12 @@ public class SousLimiteDetailsResp
     private BigDecimal sousLimMontant;
     private Long sslimiteRisqueCouvertId;
     private String sslimiteRisqueCouvertLibelle;
-    private Long sslimiteTraiteNpId;
+    private Long traiteNpId;
+    private String sslimiteTraiteReference;
+    private String sslimiteTraiteNumero;
     private String sslimiteTraiLibelle;
     private Long sslimiteTrancheId;
     private String sslimiteTrancheLibelle;
     private String sslimiteStaCode;
     private String sslimiteStaLibelle;
-    protected String sslimiteUserCreatorEmail;
-    protected String sslimiteUserCreatorNomPrenom;
-    protected String sslimiteFonCreatorName;
-    protected LocalDateTime createdAt;
-    protected LocalDateTime updatedAt;
 }

@@ -44,10 +44,10 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
     }
 
     @Override
-    public Page<SousLimiteDetailsResp> search(String key, Long fncId, Long userId, Pageable pageable) {
+    public Page<SousLimiteDetailsResp> search(String key, Long traiteNpId, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
 
-        Page<SousLimiteDetailsResp> sslResps = sslRepo.search(key, fncId, userId, pageable);
+        Page<SousLimiteDetailsResp> sslResps = sslRepo.search(key, traiteNpId, pageable);
         return sslResps;
     }
 

@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.reconstitution;
 
-import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTNPId;
-import com.pixel.synchronre.sychronremodule.model.dto.tranche.ExistingTrancheId;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +25,7 @@ public class ReconstitutionResp
     private Long trancheId;
     private String trancheLibelle;
 
-    public ReconstitutionResp(Long reconstitutionId, Long nbrReconstitution, BigDecimal tauxReconstitution, BigDecimal tauxPrimeReconstitution, String modeCalculReconstitution, Long traiteNPId, String traiReference, String traiNumero, Long trancheId, String trancheLibelle) {
+    public ReconstitutionResp(Long reconstitutionId, Long nbrReconstitution, BigDecimal tauxReconstitution, BigDecimal tauxPrimeReconstitution, String modeCalculReconstitution, Long traiteNpId, String traiReference, String traiNumero, Long trancheId, String trancheLibelle) {
         this.reconstitutionId = reconstitutionId;
         this.nbrReconstitution = nbrReconstitution;
         this.tauxReconstitution = tauxReconstitution;
