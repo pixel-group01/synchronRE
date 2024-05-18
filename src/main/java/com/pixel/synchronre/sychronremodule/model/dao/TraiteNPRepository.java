@@ -81,4 +81,16 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         where tnp.traiteNpId = ?1
     """)
     UpdateTraiteNPReq getEditDtoById(Long traiteNpId);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiReference) = upper(?1) ")
+    boolean existsByRef(String ref);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiReference) = upper(?1) and tnp.traiteNpId <> ?2")
+    boolean existsByRef(String ref, Long traiteNpId);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1)")
+    boolean existsByNumero(String numero);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1) tnp.traiteNpId <> ?2")
+    boolean existsByNumero(String numero, Long traiteNpId);
 }

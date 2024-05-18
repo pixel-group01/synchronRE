@@ -1,10 +1,11 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.request;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
 import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor
+@UniqueTraiteNpRef @UniqueTraiteNumero
 public class UpdateTraiteNPReq
 {
-    private Long traiteNPId;
+    private Long traiteNpId;
     @NotNull(message = "La référence unique est obligatoire")
     @NotBlank(message = "La référence unique est obligatoire")
     private String traiReference;
@@ -36,7 +38,7 @@ public class UpdateTraiteNPReq
     private String devCode;
     private String traiCompteDevCode;
 
-    public UpdateTraiteNPReq(Long traiteNPId, String traiReference,
+    public UpdateTraiteNPReq(Long traiteNpId, String traiReference,
                              String traiNumero, String traiLibelle,
                              String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                              LocalDate traiDateEffet, LocalDate traiDateEcheance,
@@ -45,7 +47,7 @@ public class UpdateTraiteNPReq
                              BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                              String traiSourceRef, String natCode, String devCode,
                              String traiCompteDevCode) {
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.traiLibelle = traiLibelle;

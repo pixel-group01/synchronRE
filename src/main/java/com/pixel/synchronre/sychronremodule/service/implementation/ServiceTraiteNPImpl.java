@@ -52,7 +52,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
 
     @Override @Transactional
     public TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException {
-        TraiteNonProportionnel traiteNP = traiteNPRepo.findById(dto.getTraiteNPId()).orElseThrow(()->new AppException("Traité introuvable"));
+        TraiteNonProportionnel traiteNP = traiteNPRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         TraiteNonProportionnel oldTraiteNP = traiteNPCopier.copy(traiteNP);
         BeanUtils.copyProperties(dto, traiteNP);
         traiteNP.setTraiEcerciceRattachement(EnumUtils.getEnum(EXERCICE_RATTACHEMENT.class, dto.getTraiEcerciceRattachement()));

@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.request;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,9 +17,9 @@ public class CreateTraiteNPReq
 {
     @NotNull(message = "La référence unique est obligatoire")
     @NotBlank(message = "La référence unique est obligatoire")
-    //@UniqueTraiteNPRef
+    @UniqueTraiteNpRef
     private String traiReference;
-    //@UniqueTraiteNumero
+    @UniqueTraiteNumero
     private String traiNumero;
     private String traiLibelle;
     private String traiAuteur;
