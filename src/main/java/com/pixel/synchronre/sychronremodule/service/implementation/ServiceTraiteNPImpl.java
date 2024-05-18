@@ -11,6 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTrait
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;

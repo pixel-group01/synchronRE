@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.entities;
+package com.pixel.synchronre.sychronremodule.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

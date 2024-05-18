@@ -1,9 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.response;
 
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
-import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +10,6 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TraiteNPResp
