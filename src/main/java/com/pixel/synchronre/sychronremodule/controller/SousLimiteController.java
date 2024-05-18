@@ -46,4 +46,10 @@ public class SousLimiteController {
         return iServiceSousLimite.edit(sousLimiteSouscriptionId);
     }
 
+    @DeleteMapping(path = "/delete/{sousLimiteSouscriptionId}")
+    public void delete(@PathVariable Long sousLimiteSouscriptionId)
+    {
+        iServiceSousLimite.delete(sousLimiteSouscriptionId);
+    }
+
 }

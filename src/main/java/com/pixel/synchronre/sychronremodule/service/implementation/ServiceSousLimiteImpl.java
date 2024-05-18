@@ -5,6 +5,8 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.SousLimiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SousLimiteMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
@@ -69,4 +71,11 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
     public UpdateSousLimite edit(Long sousLimiteSouscriptionId){
         return sslRepo.getEditDtoById(sousLimiteSouscriptionId);
     }
+
+   public void delete(Long sousLimiteSouscriptionId){
+       SousLimite sousLimite = sslRepo.findById(sousLimiteSouscriptionId).orElseThrow(()->new AppException("Sous-Limite introuvable"));
+       SousLimite oldSousLimite = sousLimiteCopier.copy(sousLimite);
+       sslRepo.delete(sousLimite);
+       logService.logg(SynchronReActions.DELETE_SOUS_LIMITE, oldSousLimite, new SousLimite(), SynchronReTables.SOUS_LIMITE);
+   }
 }

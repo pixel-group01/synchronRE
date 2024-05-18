@@ -37,4 +37,5 @@ public class SynchronReActions
     public static final String DELETE_DETAIL_BORDEREAU = "Suppression d'un détail bordereau";
     public static final String CREATE_SOUS_LIMITE = "Création d'une sous-limite";
     public static final String UPDATE_SOUS_LIMITE = "Modification d'une sous-limite";
+    public static final String DELETE_SOUS_LIMITE = "Suppression d'une sous-limite";
 }

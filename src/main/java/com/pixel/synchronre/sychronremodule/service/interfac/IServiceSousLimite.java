@@ -17,4 +17,6 @@ public interface IServiceSousLimite {
     SousLimiteDetailsResp update(UpdateSousLimite dto) throws  UnknownHostException;
 
     UpdateSousLimite edit(Long sousLimiteSouscriptionId);
+
+    void delete(Long sousLimiteSouscriptionId);
 }
