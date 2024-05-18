@@ -19,6 +19,6 @@ public class CategorieReq
     private String categorieLibelle;
     private BigDecimal categorieCapacite;
     @NotNull(message = "L'ID du traité ne peut être null") @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
     private List<Long> cedIds;
 }

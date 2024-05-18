@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.request.CreateC
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.request.UpdateCouvertureReq;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,4 +21,5 @@ public interface IserviceCouverture {
     List<CouvertureListResp> getCouerturesParents();
 
     Page<CouvertureListResp> searchCouverture(String key, Pageable pageable);
+    List<CouvertureListResp> getCouerturesFilles(Long couParentId);
 }
