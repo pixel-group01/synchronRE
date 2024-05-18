@@ -44,7 +44,7 @@ public class CouvertureController {
     }
 
     @GetMapping(path = "/parents")
-    public List<CouvertureListResp> getCouerturesParents() {
+    public List<CouvertureListResp> getCouverturesParents() {
         return couvertureService.getCouerturesParents();
     }
 

@@ -30,7 +30,12 @@ public class Couverture {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-    public Couverture(Long couvertureId) {
+  @Override
+  public String toString() {
+    return couId + "_" + couLibelle;
+  }
+
+  public Couverture(Long couvertureId) {
       this.couId = couvertureId;
     }
 }
