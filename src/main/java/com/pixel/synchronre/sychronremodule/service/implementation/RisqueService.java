@@ -86,6 +86,14 @@ public class RisqueService implements IServiceRisque
         return true;
     }
 
+    @Override
+    public UpdateRisqueCouvertReq getEditDto(Long risqueId)
+    {
+        UpdateRisqueCouvertReq dto = risqueRepo.getEditDto(risqueId);
+        dto.setSousCouIds(risqueDetailsRepo.getSousCouIds(risqueId));
+        return dto;
+    }
+
     private void addSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;

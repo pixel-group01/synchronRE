@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
+import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,4 +31,10 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
 """)
     RisqueCouvertResp getFullRisqueCouvertById(Long risqueId);
 
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq(
+        r.risqueId, r.couverture.couId, r.description
+        )from RisqueCouvert r where r.risqueId = ?1
+""")
+    UpdateRisqueCouvertReq getEditDto(Long risqueId);
 }

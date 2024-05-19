@@ -15,4 +15,6 @@ public interface IServiceRisque
     Page<RisqueCouvertResp> search(Long traiId, String key, Pageable pageable);
 
     boolean delete(Long risqueId) throws UnknownHostException;
+
+    UpdateRisqueCouvertReq getEditDto(Long risqueId);
 }

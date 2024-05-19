@@ -44,4 +44,9 @@ public class RisqueController
         return risqueService.search(traiId, key, PageRequest.of(page, size));
     }
 
+    @GetMapping(path = "/edit/{risqueId}")
+    UpdateRisqueCouvertReq getEditDto(@PathVariable(required = true) Long risqueId)
+    {
+        return risqueService.getEditDto(risqueId);
+    }
 }

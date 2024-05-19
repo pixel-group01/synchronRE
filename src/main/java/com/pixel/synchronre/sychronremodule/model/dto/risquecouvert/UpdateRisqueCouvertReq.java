@@ -15,9 +15,16 @@ public class UpdateRisqueCouvertReq
 {
     @ExistingRisqueId
     private Long risqueId;
-    private List<Long> sousCouIds;
+
     @ExistingCouId
     @NotNull(message = "Veuillez selectionner la couverture")
     private Long couId;
     private String description;
+    private List<Long> sousCouIds;
+
+    public UpdateRisqueCouvertReq(Long risqueId, Long couId, String description) {
+        this.risqueId = risqueId;
+        this.couId = couId;
+        this.description = description;
+    }
 }

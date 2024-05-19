@@ -25,4 +25,7 @@ public interface RisqueDetailsRepo extends JpaRepository<RisqueCouvertDetails, L
     not exists(select rd from RisqueCouvertDetails rd where rd.risqueCouvert.risqueId = ?1 and rd.couverture.couId = c.couId)
     """)
     List<Long> getCouIdsToAdd(Long risqueId, List<Long> couIds);
+
+    @Query("select rd.couverture.couId from RisqueCouvertDetails rd where rd.risqueCouvert.risqueId = ?1")
+    List<Long> getSousCouIds(Long risqueId);
 }
