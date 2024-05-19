@@ -17,4 +17,17 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
     and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
 """)
     Page<RisqueCouvertResp> search(Long traiteNpId, String key, Pageable pageable);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
+    rc.risqueId, cv.couId, cv.couLibelle, rc.description, 
+    tnp.traiteNpId, tnp.traiReference, sta.staCode, sta.staLibelle)
+    from RisqueCouvert rc 
+    join rc.couverture cv 
+    join rc.traiteNonProportionnel tnp
+    join rc.statut sta
+     where rc.risqueId = ?1
+""")
+    RisqueCouvertResp getFullRisqueCouvertById(Long risqueId);
+
 }

@@ -4,6 +4,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.dao.CouvertureRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RisqueCouvertRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RisqueMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
@@ -27,6 +28,7 @@ public class RisqueService implements IServiceRisque
     private final ILogService logService;
     private final ObjectCopier<RisqueCouvert> risqueCopier;
     private final RisqueDetailsRepo risqueDetailsRepo;
+    private final CouvertureRepository couRepo;
 
     @Override @Transactional
     public RisqueCouvertResp create(CreateRisqueCouvertReq dto)
@@ -39,8 +41,9 @@ public class RisqueService implements IServiceRisque
             dto.getSousCouIds().forEach(scId->this.addSousCouverture(finalRisqueCouvert, scId));
         }
         logService.logg("Création d'un risque", new RisqueCouvert(), risqueCouvert, "RisqueCouvert");
-
-        return risqueMapper.mapToRisqueCouvertResp(risqueCouvert);
+        RisqueCouvertResp risqueCouvertResps = risqueRepo.getFullRisqueCouvertById(risqueCouvert.getRisqueId());
+        risqueCouvertResps.setSousCouvertures(couRepo.getShortCouverturesByIds(dto.getSousCouIds()));
+        return risqueCouvertResps;
     }
 
     @Override @Transactional
@@ -59,8 +62,9 @@ public class RisqueService implements IServiceRisque
             couIdsToAdd.forEach(scId->this.addSousCouverture(finalRisqueCouvert, scId));
             couIdsToRemove.forEach(scId->this.removeSousCouverture(finalRisqueCouvert, scId));
         }
-        return risqueMapper.mapToRisqueCouvertResp(risqueCouvert);
-
+        RisqueCouvertResp risqueCouvertResps = risqueRepo.getFullRisqueCouvertById(risqueCouvert.getRisqueId());
+        risqueCouvertResps.setSousCouvertures(couRepo.getShortCouverturesByIds(dto.getSousCouIds()));
+        return risqueCouvertResps;
     }
 
     @Override
