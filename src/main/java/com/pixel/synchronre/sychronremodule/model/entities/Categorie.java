@@ -31,4 +31,9 @@ public class Categorie {
     public Categorie(Long categorieId) {
         this.categorieId = categorieId;
     }
+
+    @Override
+    public String toString() {
+        return  categorieId +"_" + categorieLibelle;
+    }
 }

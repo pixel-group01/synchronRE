@@ -4,13 +4,12 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.dao.TrancheCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
-import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -19,12 +18,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service @RequiredArgsConstructor
 public class TrancheService implements IServiceTranche {
     private final TrancheRepository trancheRepo;
     private final ILogService logService;
     private final TrancheMapper trancheMapper;
     private final ObjectCopier<Tranche> trancheCopier;
+    private final TrancheCedanteRepository trancheCedRepo;
     @Override
     public TrancheResp save(TrancheReq dto)
     {
@@ -56,6 +58,11 @@ public class TrancheService implements IServiceTranche {
         Tranche tranche = trancheMapper.mapToTranche(dto);
         tranche = trancheRepo.save(tranche);
         logService.logg("Création d'une tranche", new Tranche(), tranche, "Tranche");
+        final Tranche finalTranche = tranche;
+        if(dto.getCategorieCedanteIds() != null && !dto.getCategorieCedanteIds().isEmpty())
+        {
+            dto.getCategorieCedanteIds().forEach(catCedId->this.addCategorieCedante(finalTranche, catCedId));
+        }
         return trancheRepo.getTrancheResp(dto.getTrancheId());
     }
 
@@ -68,8 +75,32 @@ public class TrancheService implements IServiceTranche {
         BeanUtils.copyProperties(dto, tranche);
         tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
+        final Tranche finalTranche = tranche;
+        if(dto.getCategorieCedanteIds() != null && !dto.getCategorieCedanteIds().isEmpty())
+        {
+            List<Long> catCedIdsToAdd = trancheCedRepo.getCatCedIdsToAdd(dto.getTrancheId(), dto.getCategorieCedanteIds());
+            List<Long> catCedIdsToRemove = trancheCedRepo.getCatCedIdsToRemove(dto.getTrancheId(), dto.getCategorieCedanteIds());
+            catCedIdsToAdd.forEach(catCedId->this.addCategorieCedante(finalTranche, catCedId));
+            catCedIdsToRemove.forEach(catCedId->this.removeCategorieCedante(finalTranche, catCedId));
+        }
         return trancheRepo.getTrancheResp(dto.getTrancheId());
     }
+
+    private void removeCategorieCedante(Tranche tranche, Long catCedId)
+    {
+        if(!trancheCedRepo.trancheHasCatCed(tranche.getTrancheId(),catCedId )) return ;
+        TrancheCedante trancheCedante = trancheCedRepo.findByTrancheIdAndCatCedId(tranche.getTrancheId(), catCedId);
+        logService.logg("Retrait d'une catégorie à une tranche", new TrancheCedante(), trancheCedante, "TrancheCedante");
+        trancheCedRepo.deleteById(tranche.getTrancheId());
+    }
+
+    private void addCategorieCedante(Tranche tranche, Long catCedId)
+    {
+        if(trancheCedRepo.trancheHasCatCed(tranche.getTrancheId(),catCedId )) return ;
+        TrancheCedante trancheCedante = trancheCedRepo.save(new TrancheCedante(null, tranche, new CategorieCedante(catCedId)));
+        logService.logg("Ajout d'une catégorie à une tranche", new TrancheCedante(), trancheCedante, "TrancheCedante");
+    }
+
     @Override
     public TrancheReq edit(Long trancheId){
         return trancheRepo.getEditDtoById(trancheId);

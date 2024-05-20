@@ -48,9 +48,6 @@ public class Cedante {
 
   @Override
   public String toString() {
-    return "Cedante{" +
-            "cedId=" + cedId +
-            ", cedSigleFiliale='" + cedSigleFiliale + '\'' +
-            '}';
+    return cedId + "_" + cedSigleFiliale;
   }
 }

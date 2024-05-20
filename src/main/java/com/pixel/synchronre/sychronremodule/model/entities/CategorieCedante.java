@@ -33,11 +33,21 @@ public class CategorieCedante
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public CategorieCedante(Long catCedId) {
+        this.catCedId = catCedId;
+    }
+
     public CategorieCedante(Categorie categorie, TraiteNonProportionnel traiteNonProportionnel, Cedante cedante, AppUser userCreator, AppFunction fonCreator) {
         this.categorie = categorie;
         this.traiteNonProportionnel = traiteNonProportionnel;
         this.cedante = cedante;
         this.userCreator = userCreator;
         this.fonCreator = fonCreator;
+    }
+
+    @Override
+    public String toString() {
+        return catCedId + "/"+ categorie +"/"+ cedante +"/"+ traiteNonProportionnel;
     }
 }

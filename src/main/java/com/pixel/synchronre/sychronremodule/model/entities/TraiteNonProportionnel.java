@@ -61,10 +61,7 @@ public class TraiteNonProportionnel
 
     @Override
     public String toString() {
-        return "TraiteNonProportionnel{" +
-                "traiId=" + traiteNpId +
-                ", traiReference='" + traiReference + '\'' +
-                '}';
+        return traiteNpId +"_" + traiReference;
     }
 
     public TraiteNonProportionnel(Long traiId) {
