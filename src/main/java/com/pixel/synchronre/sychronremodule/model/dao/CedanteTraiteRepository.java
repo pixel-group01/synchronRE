@@ -54,4 +54,13 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     and s.staCode = 'ACT'
 """)
     List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(
+    ct.cedanteTraiteId, ct.assiettePrime, ct.tauxPrime, ct.pmd, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale,
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle) 
+    from CedanteTraite ct join ct.cedante ced join ct.traiteNonProportionnel tnp join ct.statut s
+    where ct.cedanteTraiteId = ?1
+""")
+    CedanteTraiteResp getCedanteTraiteRespById(Long cedanteTraiteId);
 }

@@ -54,7 +54,9 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         {
             repService.createRepartitionCesLegTraite(cesLeg, cedTraiId);
         });
-        return cedTraiMapper.mapToCedanteTraiteResp(cedanteTraite);
+        CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(cedanteTraite.getCedanteTraiteId());
+        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(cedanteTraite.getCedanteTraiteId()));
+        return cedanteTraiteResp;
     }
 
     @Override @Transactional
@@ -72,7 +74,9 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         {
             repService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId());
         });
-        return cedTraiMapper.mapToCedanteTraiteResp(cedanteTraite);
+        CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(dto.getCedanteTraiteId());
+        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(dto.getCedanteTraiteId()));
+        return cedanteTraiteResp;
     }
 
     @Override @Transactional
