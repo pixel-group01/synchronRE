@@ -4,8 +4,7 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
@@ -32,7 +31,9 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     private final CedanteTraiteMapper cedTraiMapper;
     private final ILogService logService;
     private final ObjectCopier<CedanteTraite> cedTraiCopier;
-    private final RepartitionRepository repRepo;
+    private final RepartitionTraiteRepo repTraiRepo;
+    private final TraiteNPRepository traiteRepo;
+    private final CedRepo cedRepo;
 
     @Override @Transactional
     public CedanteTraiteResp create(CedanteTraiteReq dto)
@@ -88,7 +89,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         Page<CedanteTraiteResp> cedanteTraitePage = cedTraiRepo.search(traiId, key, pageable);
         List<CedanteTraiteResp> cedanteTraiteList = cedanteTraitePage.stream()
                 .peek(cedTrai-> {
-                    List<CesLeg> repartitions = repRepo.findCesLegsByCedTraiId(cedTrai.getCedanteTraiteId());
+                    List<CesLeg> repartitions = repTraiRepo.findCesLegsByCedTraiId(cedTrai.getCedanteTraiteId());
 
                     cedTrai.setCessionsLegales(repartitions);
                 }).toList();
@@ -102,7 +103,32 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
         cedanteTraite.setStatut(new Statut("ACT"));
         logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
-        repRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repService.annulerRepartition(repId));
+        repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repService.annulerRepartition(repId));
+    }
+
+    @Override
+    public CedanteTraiteReq getEditDto(Long cedanteTraiteId)
+    {
+        CedanteTraiteReq dto = cedTraiRepo.getEditDto(cedanteTraiteId);
+        dto.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(cedanteTraiteId));
+        return dto;
+    }
+
+    @Override
+    public CedanteTraiteReq getEditDto(Long traiteNpId, Long cedId)
+    {
+        if(traiteNpId == null || !traiteRepo.existsById(traiteNpId)) throw new AppException("Traité non proportionnel introuvable");
+        if(cedId == null || !cedRepo.existsById(cedId)) throw new AppException("Cédante introuvable");
+        CedanteTraiteReq dto = new CedanteTraiteReq(traiteNpId, cedId);
+        dto.setCessionsLegales(repTraiRepo.findCesLegsByTraiIdAndCedId(traiteNpId, cedId));
+        return dto;
+    }
+
+    @Override
+    public CedanteTraiteReq getEditDto(Long cedanteTraiteId, Long traiteNpId, Long cedId)
+    {
+        if(cedanteTraiteId != null && cedTraiRepo.existsById(cedanteTraiteId)) return this.getEditDto(cedanteTraiteId);
+        return this.getEditDto(traiteNpId, cedId);
     }
 
     @Override

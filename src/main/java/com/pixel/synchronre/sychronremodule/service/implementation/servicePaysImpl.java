@@ -62,7 +62,8 @@ public class servicePaysImpl implements IservicePays {
 
     @Override
     public List<PaysListResp> getPaysByOrgCodes(List<String> orgCodes) {
-        if(orgCodes == null || orgCodes.isEmpty()) return Collections.emptyList();
+        List<PaysListResp> allPays = paysRepo.getAllPays();
+        if(orgCodes == null || orgCodes.isEmpty()) return allPays;
         return orgPaysRepo.getPaysByOrgCodes(orgCodes);
     }
 }

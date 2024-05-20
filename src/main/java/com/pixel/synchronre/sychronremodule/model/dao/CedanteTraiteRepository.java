@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import org.springframework.data.domain.Page;
@@ -32,8 +33,17 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
 """)
     Page<CedanteTraiteResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
-    @Query("select ct from CedanteTraite ct where ct.traiteNonProportionnel.traiteNpId = ?1")
+    @Query("select ct.traiteNonProportionnel.traiteNpId from CedanteTraite ct where ct.traiteNonProportionnel.traiteNpId = ?1")
     Long getTraiteIdByCedTraiId(Long cedTraiId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq(
+        ct.cedanteTraiteId, ct.assiettePrime, ct.tauxPrime,
+        ct.pmd, ct.cedante.cedId, ct.traiteNonProportionnel.traiteNpId)
+        from CedanteTraite ct 
+        where ct.cedanteTraiteId = ?1 
+""")
+    CedanteTraiteReq getEditDto(Long cedanteTraiteId);
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(

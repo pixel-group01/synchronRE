@@ -226,16 +226,4 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     List<Long> findRepIdByAffId(java.lang.Long affId);
-
-    @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
-        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut
-        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
-    """)
-    List<CesLeg> findCesLegsByCedTraiId(Long cedanteTraiteId);
-
-    @Query("""
-        select r.repId from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
-    """)
-    List<Long> findCesLegIdsByCedTraiId(Long cedanteTraiteId);
 }

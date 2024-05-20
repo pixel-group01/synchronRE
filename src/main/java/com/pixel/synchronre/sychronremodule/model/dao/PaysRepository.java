@@ -44,4 +44,11 @@ select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysList
     from Pays p where p.paysCode in ?1
 """)
     List<PaysListResp> getPaysByPaysCodes(List<String> paysCodes);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(
+    p.paysCode, p.paysIndicatif, p.paysNom, p.statut.staLibelle, p.devise.devCode, p.devise.devLibelle) 
+    from Pays p where p.statut.staCode = 'ACT'
+""")
+    List<PaysListResp> getAllPays();
 }

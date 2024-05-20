@@ -12,21 +12,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Table(name = "tranche_pays")@Entity
+@Table(name = "tranche_cedante")@Entity
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class TranchePays
+public class TrancheCedante
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRANCHE_PAYS_ID_GEN")
-    @SequenceGenerator(name = "TRANCHE_PAYS_ID_GEN", sequenceName = "TRANCHE_PAYS_ID_GEN")
-    private Long tranchePaysId;
-    private String tranchePaysLibelle;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRANCHE_CEDANTE_ID_GEN")
+    @SequenceGenerator(name = "TRANCHE_CEDANTE_ID_GEN", sequenceName = "TRANCHE_CEDANTE_ID_GEN")
+    private Long trancheCedanteId;
+    private String trancheCedanteLibelle;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;
-    @ManyToOne @JoinColumn(name = "organisation_pays_id")
-    private OrganisationPays organisationPays;
-    @ManyToOne @JoinColumn(name = "categorie_traite_id")
-    private CategorieCedante categorieTraite;
+    @ManyToOne @JoinColumn(name = "categorie_cedante_id")
+    private CategorieCedante categorieCedante;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")

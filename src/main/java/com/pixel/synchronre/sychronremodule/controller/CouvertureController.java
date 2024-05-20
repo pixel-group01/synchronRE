@@ -49,8 +49,8 @@ public class CouvertureController {
     }
 
     @GetMapping(path = "/filles/{couParentId}")
-    List<CouvertureListResp>  filles(@PathVariable Long couParentId){
+    List<CouvertureListResp>  filles(@PathVariable Long couParentId)
+    {
         return couvertureService.getCouerturesFilles(couParentId);
-
     }
 }

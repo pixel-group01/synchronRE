@@ -25,5 +25,11 @@ public interface IServiceCedanteTraite
     @Transactional
     void removeCedanteOnTraite(Long cedanteTraiteId);
 
+    CedanteTraiteReq getEditDto(Long cedanteTraiteId);
+
+    CedanteTraiteReq getEditDto(Long traiteNpId,Long cedId);
+    CedanteTraiteReq getEditDto(Long cedanteTraiteId, Long traiteNpId,Long cedId);
+
+
     List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId);
 }

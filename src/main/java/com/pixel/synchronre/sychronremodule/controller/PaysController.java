@@ -40,9 +40,7 @@ public class PaysController {
     }
 
     @GetMapping(path = "/organisations")
-    public List<PaysListResp> getPaysByOrgCode(@RequestParam(required =  false) List<String> orgCodes) throws UnknownHostException {
+    public List<PaysListResp> getPaysByOrgCode(@RequestParam(required =  false) List<String> orgCodes) {
         return paysService.getPaysByOrgCodes(orgCodes);
     }
-
-
 }
