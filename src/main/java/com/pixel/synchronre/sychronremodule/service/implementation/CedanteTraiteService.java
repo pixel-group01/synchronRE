@@ -104,4 +104,9 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
         repRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repService.annulerRepartition(repId));
     }
+
+    @Override
+    public List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId) {
+        return cedTraiRepo.getCedanteTraitelist(traiteNpId);
+    }
 }
