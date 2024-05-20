@@ -24,6 +24,4 @@ public class LimiteSouscriptionResp
     private Long traiId;
     private String traiReference;
     private String traiNumero;
-    private Long trancheId;
-    private String trancheLibelle;
 }

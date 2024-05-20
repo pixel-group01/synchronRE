@@ -69,7 +69,6 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
         limiteSouscription.setLimSousMontant(dto.getLimSousMontant());
         limiteSouscription.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         limiteSouscription.setCedanteTraite(new CedanteTraite(dto.getCedanteTraiteId()));
-        limiteSouscription.setTranche(new Tranche(dto.getTrancheId()));
         logService.logg("Modification d'une limite de souscription", oldLimiteSouscription, limiteSouscription, "LimiteSouscription");
         return lsRepo.findLimiteSouscriptionRespById(dto.getLimiteSouscriptionId());
     }

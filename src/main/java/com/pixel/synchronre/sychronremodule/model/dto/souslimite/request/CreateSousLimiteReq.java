@@ -22,6 +22,4 @@ public class CreateSousLimiteReq
     private Long traiteNpId;
     @ExistingTrancheId @NotNull(message = "Veuillez sélectionner la tranche")
     private Long trancheId;
-    private String statutCode;
-
 }

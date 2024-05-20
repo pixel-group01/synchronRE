@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Long> {
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
@@ -37,4 +39,16 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
         )from RisqueCouvert r where r.risqueId = ?1
 """)
     UpdateRisqueCouvertReq getEditDto(Long risqueId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
+    rc.risqueId, cv.couId, cv.couLibelle, rc.description, 
+    tnp.traiteNpId, tnp.traiReference, sta.staCode, sta.staLibelle)
+    from RisqueCouvert rc 
+    join rc.couverture cv 
+    join rc.traiteNonProportionnel tnp
+    join rc.statut sta
+     where tnp.traiteNpId = ?1 AND sta.staCode='ACT'
+""")
+    List<RisqueCouvertResp> getRisqueList(Long traiteNpId);
 }

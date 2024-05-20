@@ -28,8 +28,6 @@ public class LimiteSouscription
     private RisqueCouvert risqueCouvert;
     @ManyToOne @JoinColumn(name = "ced_trai_id")
     private CedanteTraite cedanteTraite;
-    @ManyToOne @JoinColumn(name = "tranche_ID")
-    private Tranche tranche;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
