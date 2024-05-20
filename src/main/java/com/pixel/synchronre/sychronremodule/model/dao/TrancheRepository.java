@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import org.springframework.data.domain.Page;
@@ -13,7 +14,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
     t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiId, tnp.traiReference, tnp.traiNumero)
+    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
     left join r.couverture c 
@@ -25,7 +26,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
     t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiId, tnp.traiReference, tnp.traiNumero)
+    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
     left join r.couverture c 
@@ -38,7 +39,17 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelle) as string))) >0 or 
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelleAbrege) as string))) >0 
     )
-    and tnp.traiId = :traiId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
-    Page<TrancheResp> search(@Param("traiId") Long traiId, @Param("key")String key, Pageable pageable);
+    Page<TrancheResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq(
+        t.trancheId,t.trancheLibelle,t.tranchePriorite,t.tranchePorte,r.risqueId,tnp.traiteNpId)
+        from Tranche t
+        left join t.risqueCouvert r
+        left join t.traiteNonProportionnel tnp 
+        where t.trancheId = ?1
+    """)
+    TrancheReq getEditDtoById(Long trancheId);
 }

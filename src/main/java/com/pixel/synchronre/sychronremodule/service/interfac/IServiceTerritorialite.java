@@ -13,4 +13,6 @@ public interface IServiceTerritorialite {
     TerritorialiteResp update(TerritorialiteReq dto) throws UnknownHostException;
 
     Page<TerritorialiteResp> search(Long traiId, String key, Pageable pageable);
+
+    TerritorialiteReq edit(Long terrId);
 }

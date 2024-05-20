@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +18,7 @@ public abstract class TraiteNPMapper
     @Autowired protected IJwtService jwtService;
     @Autowired protected TraiteNPRepository traiteNPRepo;
     @Mapping(target = "traiEcerciceRattachement", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT.class, dto.getTraiEcerciceRattachement()))")
-    @Mapping(target = "traiPeriodicite", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE.class, dto.getTraiPeriodicite()))")
+    @Mapping(target = "traiPeriodicite", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE.class, dto.getTraiPeriodicite()))")
     @Mapping(target = "exercice", expression = "java(dto.getExeCode() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Exercice(dto.getExeCode()))")
     //@Mapping(target = "traiSource", expression = "java(dto.getTraiSourceRef() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiSourceRef()))")
     @Mapping(target = "nature", expression = "java(dto.getNatCode() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Nature(dto.getNatCode()))")
@@ -44,5 +45,6 @@ public abstract class TraiteNPMapper
     @Mapping(target = "traiUserCreatorNomPrenom", expression = "java(jwtService.getJwtInfos().getNomPrenom())")
     @Mapping(target = "traiFonCreatorName", expression = "java(jwtService.getJwtInfos().getFncName())")
     public abstract TraiteNPResp mapToTraiteNPResp(TraiteNonProportionnel traiteNP);
+
 }
 

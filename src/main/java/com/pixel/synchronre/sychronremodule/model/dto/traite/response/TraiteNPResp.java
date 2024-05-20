@@ -1,9 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.response;
 
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
-import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,12 +10,11 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TraiteNPResp
 {
-    private Long traiId;
+    private Long traiteNPId;
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
@@ -30,7 +27,7 @@ public class TraiteNPResp
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
     private BigDecimal traiTauxCourtier;
-    private BigDecimal traiTauxSurcommission;
+    private BigDecimal traiTauxCourtierPlaceur;
     private Long exeCode;
     private String traiSourceRef;
     private String traiSourceLibelle;
@@ -47,25 +44,25 @@ public class TraiteNPResp
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
 
-    public TraiteNPResp(Long traiId, String traiReference, String traiNumeroPolice) {
-        this.traiId = traiId;
+    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice) {
+        this.traiteNPId = traiteNPId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
     }
 
-    public TraiteNPResp(Long traiId, String traiReference, String traiNumeroPolice, String traiLibelle,
+    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice, String traiLibelle,
                         String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                         Long traiDelaiEnvoi, Long traiDelaiConfirmation,
-                        BigDecimal traiTauxCourtier, BigDecimal traiTauxSurcommission,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
                         String natCode, String natLibelle, String devCode,
                         String traiCompteDevCode, String traiStaCode, String traiStaLibelle,
                         String traiUserCreatorEmail, String traiUserCreatorNomPrenom,
                         String traiFonCreatorName, LocalDateTime createdAt,
                         LocalDateTime updatedAt) {
-        this.traiId = traiId;
+        this.traiteNPId = traiteNPId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
@@ -78,7 +75,7 @@ public class TraiteNPResp
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
         this.traiTauxCourtier = traiTauxCourtier;
-        this.traiTauxSurcommission = traiTauxSurcommission;
+        this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
         this.exeCode = exeCode;
         this.traiSourceRef = traiSourceRef;
         this.traiSourceLibelle = traiSourceLibelle;

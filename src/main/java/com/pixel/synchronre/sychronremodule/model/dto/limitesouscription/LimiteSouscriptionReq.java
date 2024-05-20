@@ -20,6 +20,4 @@ public class LimiteSouscriptionReq
     private Long risqueId;
     @ExistingCedanteTraiteId
     private Long cedanteTraiteId;
-    @ExistingTrancheId
-    private Long trancheId;
 }

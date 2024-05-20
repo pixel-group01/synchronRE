@@ -30,6 +30,7 @@ public class Repartition {
     private BigDecimal repTauxComCed;
     @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCourt;
+    private BigDecimal repTauxCourtierPlaceur; //TODO A Valider
     private String autreInterlocuteurs;
     @ManyToOne @JoinColumn(name = "rep_interlocuteur_principal_id")
     private Interlocuteur interlocuteurPrincipal;
@@ -48,6 +49,8 @@ public class Repartition {
     private Type type;
     @ManyToOne @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
+    @Column(columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isAperiteur;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -60,5 +63,8 @@ public class Repartition {
         this.repId = repId;
     }
 
-
+    @Override
+    public String toString() {
+        return String.valueOf(repId) ;
+    }
 }

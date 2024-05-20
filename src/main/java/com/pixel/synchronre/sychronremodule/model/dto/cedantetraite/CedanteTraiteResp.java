@@ -18,7 +18,7 @@ public class CedanteTraiteResp
     private Long cedId;
     private String cedNomFiliale;
     private String cedSigleFiliale;
-    private Long traiId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
     private String staCode;
@@ -26,4 +26,18 @@ public class CedanteTraiteResp
 
     private List<CesLeg> cessionsLegales;
 
+    public CedanteTraiteResp(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd, Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId, String traiReference, String traiNumero, String staCode, String staLibelle) {
+        this.cedanteTraiteId = cedanteTraiteId;
+        this.assiettePrime = assiettePrime;
+        this.tauxPrime = tauxPrime;
+        this.pmd = pmd;
+        this.cedId = cedId;
+        this.cedNomFiliale = cedNomFiliale;
+        this.cedSigleFiliale = cedSigleFiliale;
+        this.traiteNpId = traiteNpId;
+        this.traiReference = traiReference;
+        this.traiNumero = traiNumero;
+        this.staCode = staCode;
+        this.staLibelle = staLibelle;
+    }
 }

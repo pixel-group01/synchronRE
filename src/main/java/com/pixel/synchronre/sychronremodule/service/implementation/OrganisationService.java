@@ -40,7 +40,8 @@ public class OrganisationService implements IServiceOrganisation
     private final ObjectCopier<Organisation> orgCopier;
 
     @Override @Transactional
-    public OrganisationDTO create(OrganisationDTO dto) throws UnknownHostException {
+    public OrganisationDTO create(OrganisationDTO dto)
+    {
         Organisation organisation = orgMapper.mapToOrgnaisation(dto);
         organisation = orgRepo.save(organisation);
         final Organisation organisationConstant = organisation;
@@ -71,7 +72,7 @@ public class OrganisationService implements IServiceOrganisation
     }
 
     @Override @Transactional
-    public OrganisationDTO update(UpdatePaysOrgDTO dto) throws UnknownHostException
+    public OrganisationDTO update(UpdatePaysOrgDTO dto)
     {
         Organisation organisation = orgRepo.findById(dto.getOrgCode()).orElseThrow(()->new AppException("Organisation introuvable"));
         Organisation oldOrganisation = orgCopier.copy(organisation);

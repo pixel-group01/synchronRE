@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.springframework.data.domain.Page;
@@ -13,15 +14,15 @@ import java.util.List;
 public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel, Long>
 {
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiId,
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
-        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxSurcommission, e.exeCode, src.traiReference, 
+        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
         src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, 
         concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, tnp.updatedAt) 
         from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
         left join tnp.statut s left join tnp.traiUserCreator u left join tnp.traiFonCreator f left join tnp.traiCompteDevise dc 
-        left join CedanteTraite ct on ct.traiteNonProportionnel.traiId = tnp.traiId left join ct.cedante ced
+        left join CedanteTraite ct on ct.traiteNonProportionnel.traiteNpId = tnp.traiteNpId left join ct.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(tnp.traiReference, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumero, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiLibelle, '') ) as string))) >0
@@ -61,9 +62,35 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
     TraiteNonProportionnel findByRef(String traiSourceRef);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiId,
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero)
-        from TraiteNonProportionnel tnp where tnp.traiId = ?1
+        from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1
     """)
-    TraiteNPResp getShortTraiteById(Long traiteNPId);
+    TraiteNPResp getShortTraiteById(Long traiteNpId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq(tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiAuteur,tnp.traiEcerciceRattachement,
+        tnp.traiDateEffet, tnp.traiDateEcheance,tnp.traiCoursDevise,tnp.traiPeriodicite,tnp.traiDelaiEnvoi,
+        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode)
+        from TraiteNonProportionnel tnp 
+        left join tnp.traiSource scr
+        left join tnp.nature nat
+        left join tnp.traiDevise dev
+        left join tnp.traiCompteDevise comp
+        where tnp.traiteNpId = ?1
+    """)
+    UpdateTraiteNPReq getEditDtoById(Long traiteNpId);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiReference) = upper(?1) ")
+    boolean existsByRef(String ref);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiReference) = upper(?1) and tnp.traiteNpId <> ?2")
+    boolean existsByRef(String ref, Long traiteNpId);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1)")
+    boolean existsByNumero(String numero);
+
+    @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1) and tnp.traiteNpId <> ?2")
+    boolean existsByNumero(String numero, Long traiteNpId);
 }

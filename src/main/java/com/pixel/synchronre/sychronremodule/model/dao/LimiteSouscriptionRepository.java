@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp;
 import com.pixel.synchronre.sychronremodule.model.entities.LimiteSouscription;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp(
     l.limiteSouscriptionId, l.limSousMontant, r.risqueId, r.description, cou.couId, cou.couLibelle, 
     cou.couLibelleAbrege, ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, 
-    tnp.traiId, tnp.traiReference, tnp.traiNumero, tr.trancheId, tr.trancheLibelle
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero
     )
     from LimiteSouscription l 
     left join l.risqueCouvert r 
@@ -22,16 +23,16 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     left join l.cedanteTraite ct 
     left join ct.cedante ced 
     left join ct.traiteNonProportionnel tnp
-    left join l.tranche tr
     where l.limiteSouscriptionId = ?1
     """)
     LimiteSouscriptionResp findLimiteSouscriptionRespById(Long limiteSouscriptionId );
 
     @Query("""
+    
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp(
     l.limiteSouscriptionId, l.limSousMontant, r.risqueId, r.description, cou.couId, cou.couLibelle, cou.couLibelleAbrege,
-    ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, tnp.traiId,
-    tnp.traiReference, tnp.traiNumero, tr.trancheId, tr.trancheLibelle
+    ct.cedanteTraiteId, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale, tnp.traiteNpId,
+    tnp.traiReference, tnp.traiNumero
     )
     from LimiteSouscription l 
     left join l.risqueCouvert r 
@@ -39,17 +40,26 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     left join l.cedanteTraite ct 
     left join ct.cedante ced 
     left join ct.traiteNonProportionnel tnp
-    left join l.tranche tr
     left join l.statut s
     where (
     locate(upper(coalesce(:key, '') ), upper(cast(l.limSousMontant as string))) =1 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  cou.couLibelle) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  cou.couLibelleAbrege) as string))) >0 or 
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedNomFiliale) as string))) >0 or
-    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedSigleFiliale) as string))) >0 or
-    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  tr.trancheLibelle) as string))) >0 
+    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  ced.cedSigleFiliale) as string))) >0 
     )
-    and tnp.traiId = :traiId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
     """)
-    Page<LimiteSouscriptionResp> search(@Param("traiId") Long traiId, @Param("key")String key, Pageable pageable);
+    Page<LimiteSouscriptionResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq(
+    l.limiteSouscriptionId,l.limSousMontant,r.risqueId,ct.cedanteTraiteId
+    )
+    from LimiteSouscription l 
+    left join l.risqueCouvert r 
+    left join l.cedanteTraite ct 
+    where l.limiteSouscriptionId = ?1
+    """)
+    LimiteSouscriptionReq getEditDtoById(Long limiteSouscriptionId);
 }

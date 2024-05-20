@@ -16,10 +16,9 @@ public class ReconstitutionReq {
     private BigDecimal tauxReconstitution;
     private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
-    private String staCode;
     @ExistingTrancheId
     private Long trancheId;
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
 
 }

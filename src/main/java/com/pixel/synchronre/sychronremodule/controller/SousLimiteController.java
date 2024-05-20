@@ -4,6 +4,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSousLimite;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,22 @@ public class SousLimiteController {
 
     @GetMapping(path = "/search")
     Page<SousLimiteDetailsResp> create(@RequestParam(defaultValue = "") String key,
-                              @RequestParam(required = false) Long fncId,
-                              @RequestParam(required = false) Long userId,
+                              @RequestParam(required = true) Long traiteNpId,
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size)
     {
-        return iServiceSousLimite.search(key, fncId, userId, PageRequest.of(page, size));
+        return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/edit/{sousLimiteSouscriptionId}")
+    UpdateSousLimite edit(@PathVariable Long sousLimiteSouscriptionId){
+        return iServiceSousLimite.edit(sousLimiteSouscriptionId);
+    }
+
+    @DeleteMapping(path = "/delete/{sousLimiteSouscriptionId}")
+    public void delete(@PathVariable Long sousLimiteSouscriptionId)
+    {
+        iServiceSousLimite.delete(sousLimiteSouscriptionId);
     }
 
 }

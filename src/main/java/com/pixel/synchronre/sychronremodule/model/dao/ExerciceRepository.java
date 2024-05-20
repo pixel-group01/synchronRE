@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ExerciceRepository extends JpaRepository<Exercice, Long> {
-    @Query("select (count(e) > 0) from Exercice e where e.exeCode = ?1")
+    @Query("select (count(e.exeCode) > 0) from Exercice e where e.exeCode = ?1")
     boolean alreadyExistsByCode(Long exeCode);
 
     @Query("""

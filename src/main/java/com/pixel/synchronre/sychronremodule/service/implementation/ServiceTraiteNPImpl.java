@@ -11,6 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTrait
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
@@ -52,7 +53,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
 
     @Override @Transactional
     public TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException {
-        TraiteNonProportionnel traiteNP = traiteNPRepo.findById(dto.getTraiId()).orElseThrow(()->new AppException("Traité introuvable"));
+        TraiteNonProportionnel traiteNP = traiteNPRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         TraiteNonProportionnel oldTraiteNP = traiteNPCopier.copy(traiteNP);
         BeanUtils.copyProperties(dto, traiteNP);
         traiteNP.setTraiEcerciceRattachement(EnumUtils.getEnum(EXERCICE_RATTACHEMENT.class, dto.getTraiEcerciceRattachement()));
@@ -67,8 +68,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     }
 
     @Override
-    public TraiteNPResp detail(Long traiId) {
-        TraiteNonProportionnel traiteNP = traiteNPRepo.findById(traiId).orElseThrow(()->new AppException("Traité introuvable"));
-        return traiteNPMapper.mapToTraiteNPResp(traiteNP);
+    public UpdateTraiteNPReq edit(Long traiId) {
+        return traiteNPRepo.getEditDtoById(traiId);
     }
 }

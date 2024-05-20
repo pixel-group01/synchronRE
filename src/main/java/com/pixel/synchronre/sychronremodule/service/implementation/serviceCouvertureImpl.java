@@ -14,6 +14,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.Couver
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CouvertureMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Branche;
 import com.pixel.synchronre.sychronremodule.model.entities.Couverture;
+import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCouverture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,5 +63,10 @@ public class serviceCouvertureImpl implements IserviceCouverture {
     @Override
     public Page<CouvertureListResp> searchCouverture(String key, Pageable pageable) {
         return  couvRepo.searchCouvertures(StringUtils.stripAccentsToUpperCase(key), pageable);
+    }
+
+    @Override
+    public List<CouvertureListResp> getCouerturesFilles(Long couParentId) {
+        return couvRepo.getCouerturesFilles(couParentId);
     }
 }

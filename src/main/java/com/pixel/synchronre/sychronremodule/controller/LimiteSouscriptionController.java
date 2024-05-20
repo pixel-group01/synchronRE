@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp;
+import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceLimiteSouscription;
@@ -37,4 +38,10 @@ public class LimiteSouscriptionController
     {
         return limiteSouscriptionService.search(traiId, key, PageRequest.of(page, size));
     }
+
+    @GetMapping(path = "/edit/{limiteSouscriptionId}")
+    LimiteSouscriptionReq edit(@PathVariable Long limiteSouscriptionId){
+        return limiteSouscriptionService.edit(limiteSouscriptionId);
+    }
+
 }

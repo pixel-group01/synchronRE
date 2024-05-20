@@ -40,4 +40,16 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
         from Couverture cv where cv.couParent is null and cv.statut.staCode = 'ACT'  
 """)
     List<CouvertureListResp> getCouerturesParents();
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
+         from Couverture cv where cv.statut.staCode = 'ACT' AND cv.couParent.couId = ?1 
+    """)
+    List<CouvertureListResp> getCouerturesFilles(Long couParentId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
+         from Couverture cv where cv.statut.staCode = 'ACT' AND cv.couId in ?1 
+    """)
+    List<CouvertureListResp> getShortCouverturesByIds(List<Long> couIds);
 }

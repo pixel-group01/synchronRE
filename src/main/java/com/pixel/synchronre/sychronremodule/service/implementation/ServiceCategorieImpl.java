@@ -47,9 +47,9 @@ public class ServiceCategorieImpl implements IServiceCategorie
         logService.logg("Création d'une catégorie", new Categorie(), categorie, "Categorie");
         dto.getCedIds().forEach(cedId->
         {
-            this.addCedanteToCategorie(cedId, catId, dto.getTraiteNPId());
+            this.addCedanteToCategorie(cedId, catId, dto.getTraiteNpId());
         });
-        TraiteNPResp traiteNPResp = traiRepo.getShortTraiteById(dto.getTraiteNPId());
+        TraiteNPResp traiteNPResp = traiRepo.getShortTraiteById(dto.getTraiteNpId());
         List<ReadCedanteDTO> cedantes = cedRepo.getShortCedantesByIds(dto.getCedIds());
         return catMapper.mapToCategorieResp(categorie, traiteNPResp, cedantes);
     }
@@ -63,13 +63,13 @@ public class ServiceCategorieImpl implements IServiceCategorie
         categorie.setCategorieLibelle(dto.getCategorieLibelle());
         categorie.setCategorieCapacite(dto.getCategorieCapacite());
         logService.logg("Modification d'une catégorie", oldCategorie, categorie, "Categorie");
-        TraiteNPResp traiteNPResp = traiRepo.getShortTraiteById(dto.getTraiteNPId());
+        TraiteNPResp traiteNPResp = traiRepo.getShortTraiteById(dto.getTraiteNpId());
         List<ReadCedanteDTO> cedantes = cedRepo.getShortCedantesByIds(dto.getCedIds());
         CategorieResp categorieResp = catMapper.mapToCategorieResp(categorie, traiteNPResp, cedantes);
         if(dto.getCedIds() == null) return categorieResp;
         List<Long> cedIdsToAdd = catCedRepo.getCedIdsToAdd(dto.getCategorieId(), dto.getCedIds());
         List<Long> cedIdsToRemove = catCedRepo.getCedIdsToRemove(dto.getCategorieId(), dto.getCedIds());
-        cedIdsToAdd.forEach(cedId->this.addCedanteToCategorie(cedId, dto.getCategorieId(), dto.getTraiteNPId()));
+        cedIdsToAdd.forEach(cedId->this.addCedanteToCategorie(cedId, dto.getCategorieId(), dto.getTraiteNpId()));
         cedIdsToRemove.forEach(cedId->this.removeCedanteToCategorie(cedId, dto.getCategorieId()));
         return categorieResp;
     }
@@ -112,10 +112,10 @@ public class ServiceCategorieImpl implements IServiceCategorie
         logService.logg("Retrait d'une cédante sur une catégorie", categorieCedante, new CategorieCedante(), "CategorieCedante");
     }
 
-    private void addCedanteToCategorie(Long cedId, Long catId, Long traiteNPId)
+    private void addCedanteToCategorie(Long cedId, Long catId, Long traiteNpId)
     {
         if(catCedRepo.exitsByCedIdAndCatId(cedId, catId)) return;
-        CategorieCedante categorieCedante = new CategorieCedante(new Categorie(catId), new TraiteNonProportionnel(traiteNPId), new Cedante(cedId), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId()));
+        CategorieCedante categorieCedante = new CategorieCedante(new Categorie(catId), new TraiteNonProportionnel(traiteNpId), new Cedante(cedId), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId()));
         categorieCedante.setStatut(new Statut("ACT"));
         categorieCedante = catCedRepo.save(categorieCedante);
         logService.logg("Ajout d'une cédante à une catégorie", new CategorieCedante(), categorieCedante, "CategorieCedante");

@@ -16,25 +16,25 @@ import java.util.List;
 
 public interface IserviceRepartition
 {
-    RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto) throws UnknownHostException;
+    RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto);
 
     Page<RepartitionListResp> searchRepartition(String key, Long affId, String repType, List<String> staCodes, Pageable pageable);
 
-    void deletePlacement(Long repId) throws UnknownHostException;
+    void deletePlacement(Long repId);
 
     List<ParamCessionLegaleListResp> getCesLegParam(Long affId);
 
     @Transactional
-    void transmettrePlacementPourValidation(Long plaId) throws UnknownHostException;
+    void transmettrePlacementPourValidation(Long plaId);
 
     @Transactional
-    void transmettrePlacementPourValidation(List<Long> plaIds) throws UnknownHostException;
+    void transmettrePlacementPourValidation(List<Long> plaIds);
 
     @Transactional
-    void retournerPlacement(Long plaId, String motif) throws UnknownHostException;
+    void retournerPlacement(Long plaId, String motif);
 
     @Transactional
-    void validerPlacement(Long plaId) throws UnknownHostException;
+    void validerPlacement(Long plaId);
 
     @Transactional
     void transmettreNoteDeCession(List<Long> plaId);
@@ -43,13 +43,13 @@ public interface IserviceRepartition
     void transmettreNoteDeCession(Long plaId) throws Exception;
 
     @Transactional
-    void refuserPlacement(Long plaId, String motif) throws UnknownHostException;
+    void refuserPlacement(Long plaId, String motif);
 
     @Transactional
-    void annulerPlacement(Long plaId) throws UnknownHostException;
+    void annulerPlacement(Long plaId);
 
     @Transactional
-    void accepterPlacement(Long plaId) throws UnknownHostException;
+    void accepterPlacement(Long plaId);
 
     void validerPlacement(List<Long> plaIds);
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/risques")
@@ -44,4 +45,15 @@ public class RisqueController
         return risqueService.search(traiId, key, PageRequest.of(page, size));
     }
 
+    @GetMapping(path = "/edit/{risqueId}")
+    UpdateRisqueCouvertReq getEditDto(@PathVariable(required = true) Long risqueId)
+    {
+        return risqueService.getEditDto(risqueId);
+    }
+
+    @GetMapping(path = "/list/{traiteNpId}")
+    List<RisqueCouvertResp> getRisqueList(@PathVariable Long traiteNpId)
+    {
+        return risqueService.getRisqueList(traiteNpId);
+    }
 }

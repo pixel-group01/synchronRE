@@ -2,7 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.enums.EnumDTO;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
-import com.pixel.synchronre.sychronremodule.model.entities.PERIODICITE;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.http.HttpStatus;

@@ -9,6 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.request.CreateC
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.request.UpdateCouvertureReq;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCouverture;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +44,13 @@ public class CouvertureController {
     }
 
     @GetMapping(path = "/parents")
-    public List<CouvertureListResp> getCouerturesParents() {
+    public List<CouvertureListResp> getCouverturesParents() {
         return couvertureService.getCouerturesParents();
+    }
+
+    @GetMapping(path = "/filles/{couParentId}")
+    List<CouvertureListResp>  filles(@PathVariable Long couParentId)
+    {
+        return couvertureService.getCouerturesFilles(couParentId);
     }
 }

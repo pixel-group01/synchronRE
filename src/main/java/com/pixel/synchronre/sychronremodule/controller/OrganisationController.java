@@ -29,22 +29,26 @@ public class OrganisationController {
     private final IServiceOrganisation organisationService;
 
     @PostMapping(path = "/create")
-    public OrganisationDTO createPays(@RequestBody @Valid OrganisationDTO dto) throws UnknownHostException {
+    public OrganisationDTO createPays(@RequestBody @Valid OrganisationDTO dto)
+    {
         return organisationService.create(dto);
     }
 
     @PutMapping(path = "/update")
-    public OrganisationDTO updatePays(@RequestBody @Valid UpdatePaysOrgDTO dto) throws UnknownHostException {
+    public OrganisationDTO updatePays(@RequestBody @Valid UpdatePaysOrgDTO dto)
+    {
         return organisationService.update(dto);
     }
 
     @GetMapping(path = "/list")
-    public List<OrganisationDTO> getListOrganisations() throws UnknownHostException {
+    public List<OrganisationDTO> getListOrganisations()
+    {
         return organisationService.getListOrganisations();
     }
 
     @GetMapping(path = "/search")
-    public Page<OrganisationDTO> searchPays(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<OrganisationDTO> searchPays(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size)
+    {
         return organisationService.search(key, PageRequest.of(page, size));
     }
 }

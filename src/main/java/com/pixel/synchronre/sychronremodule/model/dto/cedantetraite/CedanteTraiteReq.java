@@ -26,7 +26,20 @@ public class CedanteTraiteReq
     private Long cedId;
     @NotNull(message = "Veuillez selectionner le traité concerné")
     @ExistingTNPId
-    private Long traiteNPId;
+    private Long traiteNpId;
     private List<CesLeg> cessionsLegales;
 
+    public CedanteTraiteReq(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd, Long cedId, Long traiteNpId) {
+        this.cedanteTraiteId = cedanteTraiteId;
+        this.assiettePrime = assiettePrime;
+        this.tauxPrime = tauxPrime;
+        this.pmd = pmd;
+        this.cedId = cedId;
+        this.traiteNpId = traiteNpId;
+    }
+
+    public CedanteTraiteReq(Long cedId, Long traiteNpId) {
+        this.cedId = cedId;
+        this.traiteNpId = traiteNpId;
+    }
 }

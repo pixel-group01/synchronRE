@@ -17,7 +17,6 @@ public abstract class LimiteSouscriptionMapper
 
     @Mapping(target = "risqueCouvert", expression = "java(dto.getRisqueId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert(dto.getRisqueId()))")
     @Mapping(target = "cedanteTraite", expression = "java(dto.getCedanteTraiteId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(dto.getCedanteTraiteId() ))")
-    @Mapping(target = "tranche", expression = "java(dto.getTrancheId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Tranche(dto.getTrancheId() ))")
     @Mapping(target = "statut", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     @Mapping(target = "userCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "fonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")

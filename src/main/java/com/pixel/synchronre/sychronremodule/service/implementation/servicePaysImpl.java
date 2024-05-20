@@ -38,7 +38,7 @@ public class servicePaysImpl implements IservicePays {
     private final OrganisationPaysRepository orgPaysRepo;
 
     @Override
-    public PaysDetailsResp createPays(CreatePaysReq dto) throws UnknownHostException {
+    public PaysDetailsResp createPays(CreatePaysReq dto) {
         Pays pay = paysMapper.mapToPaysReq(dto);
         pay = paysRepo.save(pay);
         logService.logg(SynchronReActions.CREATE_PAYS, null, pay, SynchronReTables.PAYS);
@@ -46,7 +46,8 @@ public class servicePaysImpl implements IservicePays {
     }
 
     @Override
-    public PaysDetailsResp updatePays(UpdatePaysReq dto) throws UnknownHostException {
+    public PaysDetailsResp updatePays(UpdatePaysReq dto)
+    {
         Pays pays = paysRepo.findById(dto.getPaysCode()).orElseThrow(()->new AppException("Code pays introuvable"));
         Pays oldPays = payCopier.copy(pays);
         BeanUtils.copyProperties(dto, pays);
@@ -62,7 +63,8 @@ public class servicePaysImpl implements IservicePays {
 
     @Override
     public List<PaysListResp> getPaysByOrgCodes(List<String> orgCodes) {
-        if(orgCodes == null || orgCodes.isEmpty()) return Collections.emptyList();
+        List<PaysListResp> allPays = paysRepo.getAllPays();
+        if(orgCodes == null || orgCodes.isEmpty()) return allPays;
         return orgPaysRepo.getPaysByOrgCodes(orgCodes);
     }
 }

@@ -42,9 +42,9 @@ public class TraiteNPController
         return traiteNPService.search(key, fncId, userId, cedId, staCodes, exeCode, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/detail/{traiId}")
-    TraiteNPResp detail(@PathVariable Long traiId){
-        return traiteNPService.detail(traiId);
+    @GetMapping(path = "/edit/{traiId}")
+    UpdateTraiteNPReq edit(@PathVariable Long traiId){
+        return traiteNPService.edit(traiId);
     }
 
 }

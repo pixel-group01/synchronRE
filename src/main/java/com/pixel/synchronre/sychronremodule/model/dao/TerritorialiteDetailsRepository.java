@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp;
+import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.entities.OrganisationPays;
 import com.pixel.synchronre.sychronremodule.model.entities.Territorialite;
 import com.pixel.synchronre.sychronremodule.model.entities.TerritorialiteDetails;
@@ -70,4 +71,6 @@ public interface TerritorialiteDetailsRepository extends JpaRepository<Territori
     select td.organisation.organisationCode from TerritorialiteDetails td join td.territorialite t where t.terrId = ?1
     """)
     List<String> getOrgCodesByTerrId(Long terrId);
+
+
 }

@@ -19,7 +19,7 @@ public class Couverture {
   private Long couId;
   private String couLibelle;
   private String couLibelleAbrege;
-  @ManyToOne @JoinColumn(name = "cou_parent_id")
+  @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cou_parent_id")
   private Couverture couParent;
   @ManyToOne @JoinColumn(name = "branId")
   private Branche branche;
@@ -30,7 +30,12 @@ public class Couverture {
   @UpdateTimestamp
   private LocalDateTime updatedAt;
 
-    public Couverture(Long couvertureId) {
+  @Override
+  public String toString() {
+    return couId + "_" + couLibelle;
+  }
+
+  public Couverture(Long couvertureId) {
       this.couId = couvertureId;
     }
 }

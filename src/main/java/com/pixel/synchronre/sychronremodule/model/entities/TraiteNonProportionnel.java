@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,7 +20,7 @@ public class TraiteNonProportionnel
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRAI_ID_GEN")
     @SequenceGenerator(name = "TRAI_ID_GEN", sequenceName = "TRAI_ID_GEN")
-    private Long traiId;
+    private Long traiteNpId;
     @Column(unique = true)
     private String traiReference;
     private String traiNumero;
@@ -36,7 +37,7 @@ public class TraiteNonProportionnel
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
     private BigDecimal traiTauxCourtier;
-    private BigDecimal traiTauxSurcommission;
+    private BigDecimal traiTauxCourtierPlaceur;
     @ManyToOne @JoinColumn(name = "exe_code")
     private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")
@@ -60,14 +61,11 @@ public class TraiteNonProportionnel
 
     @Override
     public String toString() {
-        return "TraiteNonProportionnel{" +
-                "traiId=" + traiId +
-                ", traiReference='" + traiReference + '\'' +
-                '}';
+        return traiteNpId +"_" + traiReference;
     }
 
     public TraiteNonProportionnel(Long traiId) {
-        this.traiId = traiId;
+        this.traiteNpId = traiId;
     }
 }
 /*

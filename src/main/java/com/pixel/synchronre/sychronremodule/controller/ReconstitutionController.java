@@ -37,4 +37,8 @@ public class ReconstitutionController
     {
         return reconstitutionService.search(traiteNPId, key, PageRequest.of(page, size));
     }
+    @GetMapping(path = "/edit/{reconstitutionId}")
+    ReconstitutionReq edit(@PathVariable Long reconstitutionId){
+        return reconstitutionService.edit(reconstitutionId);
+    }
 }

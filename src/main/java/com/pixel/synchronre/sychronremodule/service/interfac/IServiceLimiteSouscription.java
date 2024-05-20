@@ -17,4 +17,6 @@ public interface IServiceLimiteSouscription
     LimiteSouscriptionResp create(LimiteSouscriptionReq dto);
 
     LimiteSouscriptionResp update(LimiteSouscriptionReq dto);
+
+    LimiteSouscriptionReq edit(Long limiteSouscriptionId);
 }

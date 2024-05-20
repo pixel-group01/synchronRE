@@ -12,7 +12,11 @@ public interface IServiceSousLimite {
 
     SousLimiteDetailsResp create(CreateSousLimiteReq dto) throws UnknownHostException;
 
-    Page<SousLimiteDetailsResp> search(String key, Long fncId, Long userId, Pageable pageable);
+    Page<SousLimiteDetailsResp> search(String key, Long traiteNpId, Pageable pageable);
 
     SousLimiteDetailsResp update(UpdateSousLimite dto) throws  UnknownHostException;
+
+    UpdateSousLimite edit(Long sousLimiteSouscriptionId);
+
+    void delete(Long sousLimiteSouscriptionId);
 }
