@@ -34,6 +34,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     private final RepartitionTraiteRepo repTraiRepo;
     private final TraiteNPRepository traiteRepo;
     private final CedRepo cedRepo;
+    private final ParamCessionLegaleRepository paramCesLegRepo;
 
     @Override @Transactional
     public CedanteTraiteResp create(CedanteTraiteReq dto)
@@ -114,7 +115,12 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     public CedanteTraiteReq getEditDto(Long cedanteTraiteId)
     {
         CedanteTraiteReq dto = cedTraiRepo.getEditDto(cedanteTraiteId);
-        dto.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(cedanteTraiteId));
+        List<CesLeg> cesLegs =repTraiRepo.findCesLegsByCedTraiId(cedanteTraiteId);
+        if(cesLegs == null || cesLegs.isEmpty())
+        {
+            cesLegs = paramCesLegRepo.findCesLegsByCedId(dto.getCedId());
+        }
+        dto.setCessionsLegales(cesLegs);
         return dto;
     }
 
@@ -124,7 +130,12 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         if(traiteNpId == null || !traiteRepo.existsById(traiteNpId)) throw new AppException("Traité non proportionnel introuvable");
         if(cedId == null || !cedRepo.existsById(cedId)) throw new AppException("Cédante introuvable");
         CedanteTraiteReq dto = new CedanteTraiteReq(traiteNpId, cedId);
-        dto.setCessionsLegales(repTraiRepo.findCesLegsByTraiIdAndCedId(traiteNpId, cedId));
+        List<CesLeg> cesLegs = repTraiRepo.findCesLegsByTraiIdAndCedId(traiteNpId, cedId);
+        if(cesLegs == null || cesLegs.isEmpty())
+        {
+            cesLegs = paramCesLegRepo.findCesLegsByCedId(cedId);
+        }
+        dto.setCessionsLegales(cesLegs);
         return dto;
     }
 
