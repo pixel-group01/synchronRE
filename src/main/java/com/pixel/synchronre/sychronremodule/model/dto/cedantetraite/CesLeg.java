@@ -24,4 +24,11 @@ public class CesLeg {
     @NotNull(message = "Veuillez choisir le paramétrage de la cession légale")
     private Long paramCesLegalId;
     private boolean accepte;
+
+    public CesLeg(BigDecimal tauxCesLeg, String paramCesLegalLibelle, Long paramCesLegalId, boolean accepte) {
+        this.tauxCesLeg = tauxCesLeg;
+        this.paramCesLegalLibelle = paramCesLegalLibelle;
+        this.paramCesLegalId = paramCesLegalId;
+        this.accepte = accepte;
+    }
 }

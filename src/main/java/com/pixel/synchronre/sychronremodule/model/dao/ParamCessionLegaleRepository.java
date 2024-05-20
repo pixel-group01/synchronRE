@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale;
 import org.springframework.data.domain.Page;
@@ -60,4 +61,12 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
 
     @Query("select (count(pcl)>0) from ParamCessionLegale pcl where pcl.paramCesLegId = ?1 and pcl.paramType.uniqueCode = 'PCL_SIMPLE'")
     boolean pclIsSimple(Long pclId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
+        pcl.paramCesLegTaux, pcl.paramCesLegLibelle, pcl.paramCesLegId, true)
+        from ParamCessionLegale pcl join Cedante ced on ced.pays.paysCode = pcl.pays.paysCode
+        where ced.cedId = ?1
+""")
+    List<CesLeg> findCesLegsByCedId(Long cedId);
 }
