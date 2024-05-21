@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-05-21T18:31:14 -->
+<!-- 2024-05-21T19:03:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -520,7 +520,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<rectangle>
-				<reportElement x="1" y="121" width="553" height="15" backcolor="#BAB6B6" uuid="f2d7065d-c4f5-4beb-8fc6-ac6ff148f10c">
+				<reportElement x="1" y="120" width="553" height="15" backcolor="#BAB6B6" uuid="f2d7065d-c4f5-4beb-8fc6-ac6ff148f10c">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -551,7 +551,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Date de Paiement : " +  new SimpleDateFormat("dd/MM/yy").format($F{brod_date_limite})]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="1" y="105" width="553" height="15" uuid="447314b9-0787-4174-8f97-207d1a2f5eee">
+				<reportElement x="1" y="104" width="553" height="15" uuid="447314b9-0787-4174-8f97-207d1a2f5eee">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 2_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 2_CH"/>
@@ -601,7 +601,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<componentElement>
-				<reportElement x="1" y="137" width="553" height="45" uuid="884fe2c3-e3f5-4c21-ba1c-0c3171524a68">
+				<reportElement x="1" y="136" width="553" height="45" uuid="884fe2c3-e3f5-4c21-ba1c-0c3171524a68">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 3_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 3_CH"/>
