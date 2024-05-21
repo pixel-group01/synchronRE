@@ -20,6 +20,4 @@ public class CreateSousLimiteReq
     private Long risqueCouvertId;
     @ExistingTNPId @NotNull(message = "L'ID du traité ne peut être null")
     private Long traiteNpId;
-    @ExistingTrancheId @NotNull(message = "Veuillez sélectionner la tranche")
-    private Long trancheId;
 }

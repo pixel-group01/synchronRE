@@ -34,7 +34,7 @@ public class TrancheService implements IServiceTranche {
         return this.update(dto);
     }
 
-    @Override
+    @Override @Transactional
     public boolean delete(Long trancheId) {
         if(trancheId == null) throw new AppException("Veuillez sélectionner la catégorie à supprimer");
         Tranche tranche = trancheRepo.findById(trancheId).orElseThrow(()->new AppException("Tranche introuvable"));

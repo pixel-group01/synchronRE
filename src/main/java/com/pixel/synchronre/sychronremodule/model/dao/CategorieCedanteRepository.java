@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.CategorieCedante;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,4 +38,7 @@ public interface CategorieCedanteRepository extends JpaRepository<CategorieCedan
         from CategorieCedante cc left join cc.cedante c where cc.categorie.categorieId = ?1
 """)
     List<ReadCedanteDTO> getShortCedantesByCatId(Long categorieId);
+
+
+
 }

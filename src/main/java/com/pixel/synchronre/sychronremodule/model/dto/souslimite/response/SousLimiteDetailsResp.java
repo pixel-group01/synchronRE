@@ -17,8 +17,6 @@ public class SousLimiteDetailsResp
     private String sslimiteTraiteReference;
     private String sslimiteTraiteNumero;
     private String sslimiteTraiLibelle;
-    private Long sslimiteTrancheId;
-    private String sslimiteTrancheLibelle;
     private String sslimiteStaCode;
     private String sslimiteStaLibelle;
 }

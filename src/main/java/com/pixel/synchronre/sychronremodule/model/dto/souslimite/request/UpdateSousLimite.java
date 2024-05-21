@@ -21,8 +21,6 @@ public class UpdateSousLimite
     @ExistingRisqueId @NotNull(message = "Veuillez sélectionner le risque couvert")
     private Long risqueCouvertId;
     private Long traiteNonProportionnelId;
-    @ExistingTrancheId @NotNull(message = "Veuillez sélectionner la tranche")
-    private Long trancheId;
     private String statutCode;
 }
 /*

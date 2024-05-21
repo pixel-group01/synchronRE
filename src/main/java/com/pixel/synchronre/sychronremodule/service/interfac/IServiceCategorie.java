@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IServiceCategorie{
     CategorieResp create(CategorieReq dto);
@@ -14,4 +15,6 @@ public interface IServiceCategorie{
     CategorieResp save(CategorieReq dto);
     boolean delete(Long catId);
     Page<CategorieResp> search(Long traiId, String key, Pageable pageable);
+
+    List<CategorieResp> getCategorieList(Long traiteNpId);
 }

@@ -32,7 +32,6 @@ public abstract class SousLimiteMapper {
 
     @Mapping(target = "traiteNonProportionnel", expression ="java(dto.getTraiteNpId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNpId()))")
     @Mapping(target = "risqueCouvert", expression ="java(dto.getRisqueCouvertId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert(dto.getRisqueCouvertId()))")
-    @Mapping(target = "tranche", expression = "java(dto.getTrancheId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Tranche(dto.getTrancheId()))")
     @Mapping(target = "statut", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     @Mapping(target = "userCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "fonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
@@ -55,8 +54,6 @@ public abstract class SousLimiteMapper {
     @Mapping(target = "sslimiteTraiteReference", source = "traiteNonProportionnel.traiReference")
     @Mapping(target = "sslimiteTraiteNumero", source = "traiteNonProportionnel.traiNumero")
     @Mapping(target = "sslimiteTraiLibelle", source = "traiteNonProportionnel.traiLibelle")
-    @Mapping(target = "sslimiteTrancheId", source = "tranche.trancheId")
-    @Mapping(target = "sslimiteTrancheLibelle", source = "tranche.trancheLibelle")
     @Mapping(target = "sslimiteStaCode", source = "statut.staCode")
     @Mapping(target = "sslimiteStaLibelle", source = "statut.staLibelle")
 

@@ -2,17 +2,14 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieReq;
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCategorie;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTerritorialite;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.UnknownHostException;
+import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/categories")
@@ -37,5 +34,11 @@ public class CategorieController
                                     @RequestParam(defaultValue = "10") int size)
     {
         return categorieService.search(traiId, key, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/list/{traiteNpId}")
+    List<CategorieResp> getCategorieList(@PathVariable Long traiteNpId)
+    {
+        return categorieService.getCategorieList(traiteNpId);
     }
 }
