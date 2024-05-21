@@ -32,5 +32,5 @@ public class TrancheReq
     private Long risqueId;
     @ExistingTNPId
     private Long traiteNpId;
-    private List<Long> categorieCedanteIds;
+    private List<Long> categorieIds;
 }
