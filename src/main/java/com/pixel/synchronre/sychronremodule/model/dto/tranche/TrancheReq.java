@@ -32,5 +32,14 @@ public class TrancheReq
     private Long risqueId;
     @ExistingTNPId
     private Long traiteNpId;
-    private List<Long> categorieCedanteIds;
+    private List<Long> categorieIds;
+
+    public TrancheReq(Long trancheId, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, Long risqueId, Long traiteNpId) {
+        this.trancheId = trancheId;
+        this.trancheLibelle = trancheLibelle;
+        this.tranchePriorite = tranchePriorite;
+        this.tranchePorte = tranchePorte;
+        this.risqueId = risqueId;
+        this.traiteNpId = traiteNpId;
+    }
 }

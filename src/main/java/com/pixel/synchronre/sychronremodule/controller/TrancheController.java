@@ -40,5 +40,4 @@ public class TrancheController
     TrancheReq edit(@PathVariable Long trancheId){
         return trancheService.edit(trancheId);
     }
-
 }
