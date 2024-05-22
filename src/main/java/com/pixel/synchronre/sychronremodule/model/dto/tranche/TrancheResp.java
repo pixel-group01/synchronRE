@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 public class TrancheResp
 {
     private Long trancheId;
+    private String trancheType;
     private String trancheLibelle;
     private BigDecimal tranchePriorite;
     private BigDecimal tranchePorte;

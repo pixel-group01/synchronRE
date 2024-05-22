@@ -5,6 +5,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface IServiceTranche
 {
     TrancheResp save(TrancheReq dto);
@@ -19,4 +21,6 @@ public interface IServiceTranche
 
 
     TrancheReq edit(Long trancheId);
+
+    List<TrancheResp> getTrancheList(Long traiteNpId);
 }

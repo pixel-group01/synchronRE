@@ -113,4 +113,9 @@ public class TrancheService implements IServiceTranche
         if(dto != null) dto.setCategorieIds(trancheCatRepo.getCatIdsByTrancheId(trancheId));
         return trancheRepo.getEditDtoById(trancheId);
     }
+
+    @Override
+    public List<TrancheResp> getTrancheList(Long traiteNpId) {
+        return trancheRepo.getTrancheList(traiteNpId);
+    }
 }

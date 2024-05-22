@@ -9,11 +9,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TrancheRepository extends JpaRepository<Tranche, Long>
 {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -25,7 +27,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -45,11 +47,23 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq(
-        t.trancheId,t.trancheLibelle,t.tranchePriorite,t.tranchePorte,r.risqueId,tnp.traiteNpId)
+        t.trancheId,t.trancheType,t.trancheLibelle,t.tranchePriorite,t.tranchePorte,r.risqueId,tnp.traiteNpId)
         from Tranche t
         left join t.risqueCouvert r
         left join t.traiteNonProportionnel tnp 
         where t.trancheId = ?1
     """)
     TrancheReq getEditDtoById(Long trancheId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
+    from Tranche t 
+    left join t.risqueCouvert r 
+    left join r.couverture c 
+    left join t.traiteNonProportionnel tnp left join t.statut s
+    where tnp.traiteNpId = ?1 and s.staCode = 'ACT'
+    """)
+    List<TrancheResp> getTrancheList(Long traiteNpId);
 }

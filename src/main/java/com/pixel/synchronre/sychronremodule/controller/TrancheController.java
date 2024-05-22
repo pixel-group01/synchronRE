@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +42,11 @@ public class TrancheController
     @GetMapping(path = "/edit/{trancheId}")
     TrancheReq edit(@PathVariable Long trancheId){
         return trancheService.edit(trancheId);
+    }
+
+    @GetMapping(path = "/list/{traiteNpId}")
+    List<TrancheResp> getTrancheList(@PathVariable Long traiteNpId)
+    {
+        return trancheService.getTrancheList(traiteNpId);
     }
 }

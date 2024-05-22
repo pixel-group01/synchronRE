@@ -21,6 +21,7 @@ public class Tranche
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRANCHE_ID_GEN")
     @SequenceGenerator(name = "TRANCHE_ID_GEN", sequenceName = "TRANCHE_ID_GEN")
     private Long trancheId;
+    private String trancheType;
     private String trancheLibelle;
     private BigDecimal tranchePriorite;
     private BigDecimal tranchePorte;
