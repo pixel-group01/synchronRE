@@ -13,7 +13,7 @@ public class TrancheCategorie
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "TRANCHE_CATEGORIE_ID_GEN")
     @SequenceGenerator(name = "TRANCHE_CATEGORIE_ID_GEN", sequenceName = "TRANCHE_CATEGORIE_ID_GEN")
-    private Long trancheCedanteId;
+    private Long trancheCategorieId;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;
     @ManyToOne @JoinColumn(name = "categorie_id")

@@ -22,8 +22,11 @@ public interface TrancheCategorieRepository extends JpaRepository<TrancheCategor
     """)
     List<Long> getCatIdsToAdd(Long trancheId, List<Long> catCedIds);
 
-    @Query(" select (count(tc.trancheCedanteId)>0) from TrancheCategorie tc where tc.tranche.trancheId = ?1 and tc.categorie.categorieId = ?2")
+    @Query(" select (count(tc.trancheCategorieId)>0) from TrancheCategorie tc where tc.tranche.trancheId = ?1 and tc.categorie.categorieId = ?2")
     boolean trancheHasCat(Long trancheId, Long catId);
+
+    @Query("select tc.categorie.categorieId from TrancheCategorie tc where tc.tranche.trancheId = ?1")
+    List<Long> getCatIdsByTrancheId(Long trancheId);
 }
 
 //07 09 07 96 68 //M. Emil Zola

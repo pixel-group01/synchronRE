@@ -60,7 +60,7 @@ public class TrancheService implements IServiceTranche
         tranche = trancheRepo.save(tranche);
         logService.logg("Création d'une tranche", new Tranche(), tranche, "Tranche");
         final Tranche finalTranche = tranche;
-        if(dto.getCategorieIds() != null && !dto.getCategorieIds().isEmpty())
+        if(dto.getCategorieIds() != null)
         {
             dto.getCategorieIds().forEach(catCedId->this.addCategorie(finalTranche, catCedId));
         }
@@ -77,10 +77,13 @@ public class TrancheService implements IServiceTranche
         tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
         final Tranche finalTranche = tranche;
-        if(dto.getCategorieIds() != null && !dto.getCategorieIds().isEmpty())
+        if(dto.getCategorieIds() != null )
         {
             List<Long> catIdsToAdd = trancheCatRepo.getCatIdsToAdd(dto.getTrancheId(), dto.getCategorieIds());
-            List<Long> catIdsToRemove = trancheCatRepo.getCatIdsToRemove(dto.getTrancheId(), dto.getCategorieIds());
+            List<Long> catIdsToRemove = dto.getCategorieIds().isEmpty() ?
+                    trancheCatRepo.getCatIdsByTrancheId(tranche.getTrancheId()) :
+                    trancheCatRepo.getCatIdsToRemove(dto.getTrancheId(), dto.getCategorieIds());
+
             catIdsToAdd.forEach(catCedId->this.addCategorie(finalTranche, catCedId));
             catIdsToRemove.forEach(catCedId->this.removeCategorie(finalTranche, catCedId));
         }
@@ -92,18 +95,22 @@ public class TrancheService implements IServiceTranche
         if(!trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
         TrancheCategorie trancheCategorie = trancheCatRepo.findByTrancheIdAndCatId(tranche.getTrancheId(), catId);
         logService.logg("Retrait d'une catégorie à une tranche", new TrancheCategorie(), trancheCategorie, "TrancheCategorie");
-        trancheCatRepo.deleteById(tranche.getTrancheId());
+        trancheCatRepo.deleteById(trancheCategorie.getTrancheCategorieId());
     }
 
     private void addCategorie(Tranche tranche, Long catId)
     {
         if(trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
+        //TODO Vérifier que la catégorie appartient au traité
         TrancheCategorie trancheCategorie = trancheCatRepo.save(new TrancheCategorie(null, tranche, new Categorie(catId)));
         logService.logg("Ajout d'une catégorie à une tranche", new TrancheCategorie(), trancheCategorie, "TrancheCategorie");
     }
 
     @Override
-    public TrancheReq edit(Long trancheId){
+    public TrancheReq edit(Long trancheId)
+    {
+        TrancheReq dto = trancheRepo.getEditDtoById(trancheId);
+        if(dto != null) dto.setCategorieIds(trancheCatRepo.getCatIdsByTrancheId(trancheId));
         return trancheRepo.getEditDtoById(trancheId);
     }
 }
