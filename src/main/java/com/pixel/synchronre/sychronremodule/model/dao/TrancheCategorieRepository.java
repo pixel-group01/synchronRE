@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import com.pixel.synchronre.sychronremodule.model.entities.TrancheCategorie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,6 +28,15 @@ public interface TrancheCategorieRepository extends JpaRepository<TrancheCategor
 
     @Query("select tc.categorie.categorieId from TrancheCategorie tc where tc.tranche.trancheId = ?1")
     List<Long> getCatIdsByTrancheId(Long trancheId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp(
+        c.categorieId, c.categorieLibelle, c.categorieCapacite, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
+         from TrancheCategorie tc join tc.tranche t 
+         join tc.categorie c join t.traiteNonProportionnel tnp 
+         where tc.tranche.trancheId = ?1
+        """)
+    List<CategorieResp> getCategoriesByTrancheId(Long trancheId);
 }
 
 //07 09 07 96 68 //M. Emil Zola
