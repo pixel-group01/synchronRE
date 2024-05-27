@@ -4,7 +4,6 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.CompteTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionTraiteNPMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
@@ -16,12 +15,13 @@ import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+;
 
 @Service @RequiredArgsConstructor
 public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
@@ -56,16 +56,18 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         //TODO Calculer la pmd du cessionnaire
         Repartition repartition = repTnpMapper.mapToPlacementTnp(dto);
         repartition.setType(typeRepo.findByUniqueCode("REP_PLA_TNP").orElseThrow(()->new AppException("Type(REP_PLA_TNP) introuvable")));
+        //if(rtRepo.)
         repartition = rtRepo.save(repartition);
         if(dto.isAperiteur()) setAsAperiteur(repartition);
         logService.logg("Enregistrement d'un placement sur traité non proportionnel", new Repartition(), repartition, "Repartition");
         Long traiteNpId = ctRepo.getTraiteIdByCedTraiId(dto.getCedanteTraiteId());
-        RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(dto.getRepId());
+        RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(repartition.getRepId());
         repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaReparti(traiteNpId));
         repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantARepartir(traiteNpId));
         return repartitionTraiteNPResp;
     }
 
+    //@Transactional
     private void setAsAperiteur(Repartition repartition)
     {
         if(repartition == null) return;
