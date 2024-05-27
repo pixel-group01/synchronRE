@@ -14,11 +14,13 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service @RequiredArgsConstructor
 public class TrancheService implements IServiceTranche
@@ -50,7 +52,13 @@ public class TrancheService implements IServiceTranche
     {
         key = StringUtils.stripAccentsToUpperCase(key);
         Page<TrancheResp> trancheRespPage = trancheRepo.search(traiId, key, pageable);
-        return trancheRespPage;
+        List<TrancheResp> trancheRespList = trancheRespPage
+                .stream()
+                .filter(Objects::nonNull)
+                .peek(t->t.setCategories(trancheCatRepo.getCategoriesByTrancheId(t.getTrancheId())))
+                .toList();
+
+        return new PageImpl<>(trancheRespList, pageable, trancheRespPage.getTotalElements());
     }
 
     @Override @Transactional

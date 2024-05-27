@@ -21,15 +21,25 @@ public class SousLimite
     @SequenceGenerator(name = "SOUS_LIM_ID_GEN", sequenceName = "SOUS_LIM_ID_GEN")
     private Long sousLimiteSouscriptionId;
     private BigDecimal sousLimMontant;
-    @ManyToOne @JoinColumn(name = "risque_id")
+    @MapsId("risqueId")
+    @ManyToOne
+    @JoinColumn(name = "risque_id")
     private RisqueCouvert risqueCouvert;
-    @ManyToOne @JoinColumn(name = "traite_np_id")
+    @MapsId("traiteNpId")
+    @ManyToOne
+    @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @MapsId("staCode")
+    @ManyToOne
+    @JoinColumn(name = "STA_CODE")
     private Statut statut;
-    @ManyToOne @JoinColumn(name = "user_creator")
+    @MapsId("userId")
+    @ManyToOne
+    @JoinColumn(name = "user_creator")
     private AppUser userCreator;
-    @ManyToOne @JoinColumn(name = "fon_creator")
+    @MapsId("id")
+    @ManyToOne
+    @JoinColumn(name = "fon_creator")
     private AppFunction fonCreator;
     @CreationTimestamp
     private LocalDateTime createdAt;
