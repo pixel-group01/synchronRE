@@ -44,6 +44,8 @@ public class Repartition {
     private Affaire affaire;
     @ManyToOne @JoinColumn(name = "ced_trai_id")
     private CedanteTraite cedanteTraite;
+    @ManyToOne @JoinColumn(name = "traite_np_id")
+    private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
     @ManyToOne @JoinColumn(name = "cessionnaire_id")
