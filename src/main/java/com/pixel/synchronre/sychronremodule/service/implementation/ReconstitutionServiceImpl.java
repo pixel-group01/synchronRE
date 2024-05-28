@@ -1,5 +1,8 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.authmodule.model.constants.AuthActions;
+import com.pixel.synchronre.authmodule.model.constants.AuthTables;
+import com.pixel.synchronre.authmodule.model.entities.AppRole;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
@@ -10,12 +13,10 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.ReconstitutionMappe
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp;
+import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Reconstitution;
-import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceReconstitution;
 import lombok.RequiredArgsConstructor;
@@ -47,9 +48,9 @@ public class ReconstitutionServiceImpl implements IserviceReconstitution
         Reconstitution oldReconstitution = reconstitutionCopier.copy(reconstitution);
         BeanUtils.copyProperties(dto, reconstitution);
         reconstitution.setTranche(new Tranche(dto.getTrancheId()));
+        reconstRepo.save(reconstitution);
         logService.logg("Modification d'une reconstitution", oldReconstitution, reconstitution, "Reconstitution");
         return reconstRepo.getReconstitutionResp(dto.getReconstitutionId());
-
     }
 
     public ReconstitutionResp create(ReconstitutionReq dto) {
@@ -57,7 +58,6 @@ public class ReconstitutionServiceImpl implements IserviceReconstitution
         reconstitution = reconstRepo.save(reconstitution);
         logService.logg("Création d'une reconstitution", new Reconstitution(), reconstitution, "Reconstitution");
         return reconstRepo.getReconstitutionResp(dto.getReconstitutionId());
-
     }
 
     @Override

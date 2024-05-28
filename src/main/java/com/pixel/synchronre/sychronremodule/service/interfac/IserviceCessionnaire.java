@@ -21,4 +21,6 @@ public interface IserviceCessionnaire
 
     List<CessionnaireListResp> getCessionnairesByAffaire(Long affId);
     List<CessionnaireListResp> getCessionnairesBySinistre(Long sinId);
+
+    List<CessionnaireListResp> getCessionnairesByTraiteNp(Long traiteNPId);
 }

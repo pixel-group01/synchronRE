@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
 {
@@ -76,4 +77,8 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
     """)
     List<CesLeg> findCesLegsByTraiIdAndCedId(Long traiteNpId, Long cedId);
+
+    @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
+    Optional<Long> getPlacementIdByTraiteNPIdAndCesId(Long traiteNpId, Long cesId);
+
 }

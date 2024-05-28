@@ -49,4 +49,11 @@ public class CessionnaireController
     {
         return cessionnaireService.getCessionnairesBySinistre(sinId);
     }
+
+    @GetMapping(path = "/by-traite-non-proportionnel/{traiteNPId}")
+    public List<CessionnaireListResp> findCessionnairesByTraiteNp(@PathVariable Long traiteNPId)
+    {
+        return cessionnaireService.getCessionnairesByTraiteNp(traiteNPId);
+    }
+
 }

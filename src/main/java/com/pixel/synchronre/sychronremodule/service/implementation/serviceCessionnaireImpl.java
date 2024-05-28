@@ -8,12 +8,12 @@ import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.CreateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.request.UpdateCessionnaireReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CessionnaireMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesSinistre;
@@ -44,6 +44,7 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptables comptaService;
     private final RepartitionRepository repRepo;
+    private final RepartitionTraiteRepo repTraiRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
     @Override @Transactional
     public CessionnaireDetailsResp createCessionnaire(CreateCessionnaireReq dto) throws UnknownHostException {
@@ -104,5 +105,17 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
         return cessionnaires.stream()
                 .filter(ces->sinComptaService.calculateResteAPayerBySinAndCes(sinId, ces.getCesId()).setScale(4, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CessionnaireListResp> getCessionnairesByTraiteNp(Long traiteNPId) {
+        return cesRepo.findByTraiteNPId(traiteNPId);
+//                cesRepo.findByTraiteNPId(traiteNPId).stream()
+//                .map(ces->repTraiRepo.getPlacementIdByTraiteNPIdAndCesId(traiteNPId, ces.getCesId()).orElse(null))
+//                .filter(Objects::nonNull)
+//                .map(plaId->repRepo.getCessionnaireByRepId(plaId).orElse(null))
+//                .filter(Objects::nonNull)
+//                .map(ces->cesMapper.mapToCessionnaireListResp(ces))
+//                .collect(Collectors.toList());
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long> {
@@ -69,4 +70,14 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
 
     @Query("select r.cessionnaire.cesNom from Repartition r where r.repId =?1")
     String getCesNomByPlaId(Long plaId);
+
+    @Query("""
+      select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
+            r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
+            r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
+            s.staLibelle)
+       from Repartition r left join r.repStaCode s where r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULEE', 'ANNULE')) and r.type.uniqueCode = 'REP_PLA_TNP'
+""")
+    List<CessionnaireListResp> findByTraiteNPId(Long traiteNPId);
+
 }
