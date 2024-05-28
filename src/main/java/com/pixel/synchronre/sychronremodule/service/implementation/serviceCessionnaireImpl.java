@@ -108,14 +108,9 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
     }
 
     @Override
-    public List<CessionnaireListResp> getCessionnairesByTraiteNp(Long traiteNPId) {
-        return cesRepo.findByTraiteNPId(traiteNPId);
-//                cesRepo.findByTraiteNPId(traiteNPId).stream()
-//                .map(ces->repTraiRepo.getPlacementIdByTraiteNPIdAndCesId(traiteNPId, ces.getCesId()).orElse(null))
-//                .filter(Objects::nonNull)
-//                .map(plaId->repRepo.getCessionnaireByRepId(plaId).orElse(null))
-//                .filter(Objects::nonNull)
-//                .map(ces->cesMapper.mapToCessionnaireListResp(ces))
-//                .collect(Collectors.toList());
+    public List<CessionnaireListResp> getCessionnairesByTraiteNp(Long traiteNpId)
+    {
+        List<CessionnaireListResp> cessionaires = cesRepo.findCessionnairesNotOnTraite(traiteNpId);
+        return cessionaires;
     }
 }

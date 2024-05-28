@@ -76,8 +76,18 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
             r.cessionnaire.cesId, r.cessionnaire.cesNom, r.cessionnaire.cesSigle, r.cessionnaire.cesEmail,
             r.cessionnaire.cesTelephone, r.cessionnaire.cesAdressePostale, r.cessionnaire.cesSituationGeo, 
             s.staLibelle)
-       from Repartition r left join r.repStaCode s where r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULEE', 'ANNULE')) and r.type.uniqueCode = 'REP_PLA_TNP'
+       from Repartition r left join r.repStaCode s where r.traiteNonProportionnel.traiteNpId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULEE', 'ANNULE')) and r.type.uniqueCode = 'REP_PLA_TNP'
 """)
-    List<CessionnaireListResp> findByTraiteNPId(Long traiteNPId);
+    List<CessionnaireListResp> findByTraiteNpId(Long traiteNpId);
+
+    @Query("""
+      select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(
+            ces.cesId, ces.cesNom, ces.cesSigle, ces.cesEmail,
+            ces.cesTelephone, ces.cesAdressePostale, ces.cesSituationGeo, 
+            ces.statut.staLibelle)
+       from Cessionnaire ces where ces.cesId not in 
+       (select ces2.cesId from  Repartition r left join r.cessionnaire ces2 left join r.repStaCode s where r.traiteNonProportionnel.traiteNpId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULEE', 'ANNULE')) and r.type.uniqueCode = 'REP_PLA_TNP')
+    """)
+    List<CessionnaireListResp> findCessionnairesNotOnTraite(Long traiteNpId);
 
 }

@@ -21,7 +21,6 @@ import java.util.List;
 public class CessionnaireController
 {
     private final IserviceCessionnaire cessionnaireService;
-    private final CessionnaireRepository cessRepo;
 
     @PostMapping(path = "/create")
     public CessionnaireDetailsResp createCessionnaire(@RequestBody @Valid CreateCessionnaireReq dto) throws UnknownHostException {
@@ -50,10 +49,10 @@ public class CessionnaireController
         return cessionnaireService.getCessionnairesBySinistre(sinId);
     }
 
-    @GetMapping(path = "/by-traite-non-proportionnel/{traiteNPId}")
-    public List<CessionnaireListResp> findCessionnairesByTraiteNp(@PathVariable Long traiteNPId)
+    @GetMapping(path = "/by-traite-non-proportionnel/{traiteNpId}")
+    public List<CessionnaireListResp> findCessionnairesByTraiteNp(@PathVariable Long traiteNpId)
     {
-        return cessionnaireService.getCessionnairesByTraiteNp(traiteNPId);
+        return cessionnaireService.getCessionnairesByTraiteNp(traiteNpId);
     }
 
 }
