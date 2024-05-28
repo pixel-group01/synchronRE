@@ -24,7 +24,7 @@ public abstract class RepartitionTraiteNPMapper
     @Mapping(target = "cedanteTraite", expression = "java(cedTraiId == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(cedTraiId))")
     public abstract Repartition mapToCesLegRepartition(CesLeg cesLeg, Long cedTraiId);
 
-    @Mapping(target = "cedanteTraite", expression = "java(dto.getCedanteTraiteId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(dto.getCedanteTraiteId()))")
+    @Mapping(target = "traiteNonProportionnel", expression = "java(dto.getTraiteNpId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNpId()))")
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     @Mapping(target = "repTauxComCourt", source = "repTauxCourtier")
     @Mapping(target = "repStaCode", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")

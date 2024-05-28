@@ -42,7 +42,7 @@ public class PlacementTraiteNPReq
     @ExistingCesId
     private Long cesId;
 
-    @ExistingCedanteTraiteId
-    private Long cedanteTraiteId;
+    @ExistingTNPId
+    private Long traiteNpId;
     private boolean isAperiteur;
 }
