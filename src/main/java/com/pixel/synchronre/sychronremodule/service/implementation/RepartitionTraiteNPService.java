@@ -9,6 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionTraiteNPMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service @RequiredArgsConstructor
 public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
@@ -82,6 +84,10 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         Repartition placement = rtRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
         Repartition oldPlacement = repCopier.copy(placement);
         placement.setRepTaux(dto.getRepTaux());
+        if(placement.getCessionnaire() == null || !Objects.equals(dto.getCesId(), placement.getCessionnaire().getCesId()))  //Si le cessionnaire à changé
+        {
+            placement.setCessionnaire(new Cessionnaire(dto.getCesId()));
+        }
         if(dto.isAperiteur()) setAsAperiteur(placement);
         logService.logg("Modification d'un placement sur traité non proportionnel", oldPlacement, placement, "Repartition");
         RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(dto.getRepId());
