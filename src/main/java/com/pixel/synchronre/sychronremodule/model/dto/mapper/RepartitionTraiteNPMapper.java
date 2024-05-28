@@ -28,5 +28,6 @@ public abstract class RepartitionTraiteNPMapper
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")
     @Mapping(target = "repTauxComCourt", source = "repTauxCourtier")
     @Mapping(target = "repStaCode", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
+    @Mapping(target = "repStatut", expression = "java(true)")
     public abstract Repartition mapToPlacementTnp(PlacementTraiteNPReq dto);
 }

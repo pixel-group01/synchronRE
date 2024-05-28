@@ -50,7 +50,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     Page<RepartitionTraiteNPResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
     @Modifying @Transactional
-    @Query("update Repartition r set r.isAperiteur = false where r.repId <> ?1 and r.cedanteTraite.cedanteTraiteId = (select ct.cedanteTraiteId from Repartition r join r.cedanteTraite ct where r.repId = ?1)")
+    @Query("update Repartition r set r.isAperiteur = false where r.repId <> ?1 and r.traiteNonProportionnel.traiteNpId = (select tnp.traiteNpId from Repartition r join r.traiteNonProportionnel tnp where r.repId = ?1)")
     void setAsTheOnlyAperiteur(Long repId);
 
     @Query("""
@@ -79,7 +79,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     List<CesLeg> findCesLegsByTraiIdAndCedId(Long traiteNpId, Long cedId);
 
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
-    Optional<Long> getPlacementIdByTraiteNPIdAndCesId(Long traiteNpId, Long cesId);
+    Optional<Long> getPlacementIdByTraiteNpIdAndCesId(Long traiteNpId, Long cesId);
 
     @Query("select r from Repartition r where r.cedanteTraite.cedanteTraiteId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true and r.repStaCode.staCode = 'ACT'")
     Repartition findByCedTraiIdAndPclId(Long cedanteTraiteId, Long paramCesLegId);

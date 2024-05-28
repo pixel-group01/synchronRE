@@ -43,6 +43,7 @@ public class PlacementTraiteNPReq
     private Long cesId;
 
     @ExistingTNPId
+    @NotNull(message = "Veuillez sélectionner le traité")
     private Long traiteNpId;
     private boolean isAperiteur;
 }
