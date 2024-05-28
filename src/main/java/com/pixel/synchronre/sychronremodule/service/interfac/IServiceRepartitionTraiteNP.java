@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface IServiceRepartitionTraiteNP
     RepartitionTraiteNPResp create(PlacementTraiteNPReq dto);
 
     RepartitionTraiteNPResp update(PlacementTraiteNPReq dto);
+    void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
+    void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
 }

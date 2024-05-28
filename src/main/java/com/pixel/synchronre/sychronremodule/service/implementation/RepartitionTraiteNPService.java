@@ -5,6 +5,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionTraiteNPMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp;
@@ -33,6 +34,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     private final ObjectCopier<Repartition> repCopier;
     private final TypeRepo typeRepo;
     private final CedanteTraiteRepository ctRepo;
+    private final CedanteTraiteRepository cedTraiRepo;
     @Override
     public RepartitionTraiteNPResp save(PlacementTraiteNPReq dto)
     {
@@ -89,5 +91,27 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaReparti(traiteNpId));
         repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantARepartir(traiteNpId));
         return repartitionTraiteNPResp;
+    }
+
+    @Override @Transactional
+    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
+    {
+        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
+        Repartition repartition = repTnpMapper.mapToCesLegRepartition(cesLeg, cedTraiId);
+        rtRepo.save(repartition);
+        logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
+    }
+
+    @Override @Transactional
+    public void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
+    {
+        Repartition repartition;
+        if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
+        if(cesLeg.getRepId() == null) repartition = rtRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
+        else repartition  = rtRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+        Repartition oldRepartition = repCopier.copy(repartition);
+        repartition.setRepTaux(cesLeg.getTauxCesLeg());
+        repartition.setRepPrime(cesLeg.getPmd());
+        logService.logg("Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition");
     }
 }

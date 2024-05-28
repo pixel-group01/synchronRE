@@ -13,6 +13,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,8 @@ import java.util.List;
 public class CedanteTraiteService implements IServiceCedanteTraite
 {
     private final CedanteTraiteRepository cedTraiRepo;
-    private final IserviceRepartition repService;
+    private final IServiceRepartitionTraiteNP repTnpService;
+    private final IserviceRepartition repFacService;
     private final CedanteTraiteMapper cedTraiMapper;
     private final ILogService logService;
     private final ObjectCopier<CedanteTraite> cedTraiCopier;
@@ -52,7 +54,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         logService.logg("Ajout d'une cédante sur un traité", new CedanteTraite(), cedanteTraite, "CedanteTraite");
         if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
         {
-            dto.getCessionsLegales().forEach(cesLeg->repService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
+            dto.getCessionsLegales().forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
         }
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(cedanteTraite.getCedanteTraiteId());
@@ -73,7 +75,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         logService.logg("Modification d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
         if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
         {
-            dto.getCessionsLegales().forEach(cesLeg->repService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
+            dto.getCessionsLegales().forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
         }
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(dto.getCedanteTraiteId());
@@ -109,7 +111,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
         cedanteTraite.setStatut(new Statut("ACT"));
         logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
-        repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repService.annulerRepartition(repId));
+        repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repFacService.annulerRepartition(repId));
     }
 
     @Override
