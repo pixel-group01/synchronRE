@@ -27,11 +27,11 @@ public class RepartitionTraiteNPController
     }
 
     @GetMapping(path = "/search")
-    public Page<RepartitionTraiteNPResp> search(@RequestParam(name = "traiteNPId") Long traiteNPId,
+    public Page<RepartitionTraiteNPResp> search(@RequestParam(name = "traiteNpId") Long traiteNpId,
                                               @RequestParam(name = "key", defaultValue = "")String key,
                                               @RequestParam(name = "page", defaultValue = "0") int page,
                                               @RequestParam(name = "size", defaultValue = "10") int size)
     {
-        return repartitionTraiteNPService.search(traiteNPId, key, PageRequest.of(page, size));
+        return repartitionTraiteNPService.search(traiteNpId, key, PageRequest.of(page, size));
     }
 }
