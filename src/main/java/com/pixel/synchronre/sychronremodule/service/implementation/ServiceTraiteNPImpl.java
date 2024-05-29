@@ -12,6 +12,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPRe
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
+import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
@@ -32,9 +33,11 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     private final TraiteNPMapper traiteNPMapper;
     private final ILogService logService;
     private final ObjectCopier<TraiteNonProportionnel> traiteNPCopier;
+    private final IServiceCalculsComptablesTraite traiteComptaService;
 
     @Override @Transactional
-    public TraiteNPResp create(CreateTraiteNPReq dto) throws UnknownHostException {
+    public TraiteNPResp create(CreateTraiteNPReq dto)
+    {
         TraiteNonProportionnel traiteNP = traiteNPMapper.mapToTraiteNP(dto);
         traiteNP = traiteNPRepo.save(traiteNP);
         logService.logg("Création d'un traité non proportionnel", null, traiteNP, "TraiteNonProportionnel");
@@ -52,7 +55,8 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     }
 
     @Override @Transactional
-    public TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException {
+    public TraiteNPResp update(UpdateTraiteNPReq dto)
+    {
         TraiteNonProportionnel traiteNP = traiteNPRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         TraiteNonProportionnel oldTraiteNP = traiteNPCopier.copy(traiteNP);
         BeanUtils.copyProperties(dto, traiteNP);
@@ -70,5 +74,14 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     @Override
     public UpdateTraiteNPReq edit(Long traiId) {
         return traiteNPRepo.getEditDtoById(traiId);
+    }
+
+    @Override
+    public TraiteNPResp getTraiteDetails(Long traiId)
+    {
+        TraiteNPResp details = traiteNPRepo.findTraiteById(traiId);
+        details.setTraiTauxDejaPlace(traiteComptaService.calculateTauxDejaPlace(traiId));
+        details.setTraiTauxRestantAPlacer(traiteComptaService.calculateTauxRestantAPlacer(traiId));
+        return details;
     }
 }

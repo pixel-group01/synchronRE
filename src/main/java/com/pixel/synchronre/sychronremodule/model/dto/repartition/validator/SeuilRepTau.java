@@ -125,7 +125,7 @@ public @interface SeuilRepTau
             if(dto == null) return true;
             if(dto.getTraiteNpId() == null) return true;
             Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getTraiteNpId());
-            return comptaService.calculateTauxRestantARepartir(traiteNPId).compareTo(dto.getRepTaux()) >= 0;
+            return comptaService.calculateTauxRestantAPlacer(traiteNPId).compareTo(dto.getRepTaux()) >= 0;
         }
     }
 }

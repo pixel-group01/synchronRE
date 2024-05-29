@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(
     c.cedanteTraiteId, c.assiettePrime, c.tauxPrime, c.pmd, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale,
-    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle) 
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle, c.pmdCourtier, c.pmdCourtier, c.pmdNette) 
     from CedanteTraite c left join c.cedante ced left join c.traiteNonProportionnel tnp left join c.statut s
     where (locate(upper(coalesce(:key, '') ), upper(cast(c.assiettePrime as string))) =1 or
     locate(upper(coalesce(:key, '') ), upper(cast(c.tauxPrime as string))) =1 or
@@ -58,9 +59,16 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp(
     ct.cedanteTraiteId, ct.assiettePrime, ct.tauxPrime, ct.pmd, ced.cedId, ced.cedNomFiliale, ced.cedSigleFiliale,
-    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle) 
+    tnp.traiteNpId, tnp.traiReference, tnp.traiNumero, s.staCode, s.staLibelle, ct.pmdCourtier, ct.pmdCourtier, ct.pmdNette) 
     from CedanteTraite ct join ct.cedante ced join ct.traiteNonProportionnel tnp join ct.statut s
     where ct.cedanteTraiteId = ?1
 """)
     CedanteTraiteResp getCedanteTraiteRespById(Long cedanteTraiteId);
+
+    @Query("""
+        select  new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp(
+        sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette))
+        from CedanteTraite ct where ct.traiteNonProportionnel.traiteNpId = ?1 and ct.statut.staCode = 'ACT'
+        """)
+    PmdGlobalResp getPmdGlobal(Long traiteNpId);
 }

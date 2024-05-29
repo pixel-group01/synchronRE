@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 
 public interface IServiceCalculsComptablesTraite
 {
-    BigDecimal calculateTauxRestantARepartir(Long traiNPId);
-    BigDecimal calculateTauxDejaReparti(Long traiNPId);
+    BigDecimal calculateTauxRestantAPlacer(Long traiNPId);
+    BigDecimal calculateTauxDejaPlace(Long traiNPId);
 }

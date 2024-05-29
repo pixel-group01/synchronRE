@@ -47,7 +47,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     {
         Page<RepartitionTraiteNPResp> repartitionPage = rtRepo.search(traiteNPId, key, pageable);
         List<RepartitionTraiteNPResp> repartitionList = repartitionPage.stream()
-                .peek(r->r.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaReparti(traiteNPId)))
+                .peek(r->r.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaPlace(traiteNPId)))
                 .toList();
         return new PageImpl<>(repartitionList, pageable, repartitionPage.getTotalElements());
     }
@@ -64,8 +64,8 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         logService.logg("Enregistrement d'un placement sur traité non proportionnel", new Repartition(), repartition, "Repartition");
 
         RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(repartition.getRepId());
-        repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaReparti(dto.getTraiteNpId()));
-        repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantARepartir(dto.getTraiteNpId()));
+        repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaPlace(dto.getTraiteNpId()));
+        repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantAPlacer(dto.getTraiteNpId()));
         return repartitionTraiteNPResp;
     }
 
@@ -91,8 +91,8 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         if(dto.isAperiteur()) setAsAperiteur(placement);
         logService.logg("Modification d'un placement sur traité non proportionnel", oldPlacement, placement, "Repartition");
         RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(dto.getRepId());
-        repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaReparti(dto.getTraiteNpId()));
-        repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantARepartir(dto.getTraiteNpId()));
+        repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaPlace(dto.getTraiteNpId()));
+        repartitionTraiteNPResp.setTauxRestant(comptaTraiteService.calculateTauxRestantAPlacer(dto.getTraiteNpId()));
         return repartitionTraiteNPResp;
     }
 

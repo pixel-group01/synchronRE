@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
             return this.update(dto);
         }
         CedanteTraite cedanteTraite = cedTraiMapper.mapToCedanteTraite(dto);
+        setPmdCourtiers(dto, cedanteTraite);
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
         final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
         logService.logg("Ajout d'une cédante sur un traité", new CedanteTraite(), cedanteTraite, "CedanteTraite");
@@ -72,6 +75,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         cedanteTraite.setAssiettePrime(dto.getAssiettePrime());
         cedanteTraite.setPmd(dto.getPmd());
         cedanteTraite.setTauxPrime(dto.getTauxPrime());
+        setPmdCourtiers(dto, cedanteTraite);
         logService.logg("Modification d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
         if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
         {
@@ -109,7 +113,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     {
         CedanteTraite cedanteTraite = cedTraiRepo.findById(cedanteTraiteId).orElseThrow(()->new AppException("CedanteTraite introuvable"));
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
-        cedanteTraite.setStatut(new Statut("ACT"));
+        cedanteTraite.setStatut(new Statut("SUP"));
         logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
         repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repFacService.annulerRepartition(repId));
     }
@@ -152,5 +156,17 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     @Override
     public List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId) {
         return cedTraiRepo.getCedanteTraitelist(traiteNpId);
+    }
+
+
+    private void setPmdCourtiers(CedanteTraiteReq dto, CedanteTraite cedanteTraite) {
+        BigDecimal tauxCourtier = traiteRepo.getTauxCourtier(dto.getTraiteNpId());
+        BigDecimal tauxCourtierPlaceur = traiteRepo.getTauxCourtierPlaceur(dto.getTraiteNpId());
+        BigDecimal pmdCourtier = cedanteTraite.getPmd() == null || tauxCourtier == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtier).setScale(20, RoundingMode.HALF_UP);
+        BigDecimal pmdCourtierPlaceur = cedanteTraite.getPmd() == null || tauxCourtierPlaceur == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtierPlaceur).setScale(20, RoundingMode.HALF_UP);
+        BigDecimal pmdNette = cedanteTraite.getPmd() == null ? BigDecimal.ZERO : cedanteTraite.getPmd().subtract(pmdCourtier.add(pmdCourtierPlaceur));
+        cedanteTraite.setPmdCourtier(pmdCourtier);
+        cedanteTraite.setPmdCourtierPlaceur(pmdCourtierPlaceur);
+        cedanteTraite.setPmdNette(pmdNette);
     }
 }

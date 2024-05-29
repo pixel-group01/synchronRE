@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel, Long>
@@ -58,6 +59,19 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
                               @Param("staCodes") List<String> staCodes,
                               @Param("exeCode")Long exeCode, Pageable pageable);
 
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
+        tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
+        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
+        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode, sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), 
+        sum(ct.pmdNette)) 
+        from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
+        left join tnp.traiCompteDevise dc left join CedanteTraite ct on ct.traiteNonProportionnel.traiteNpId = tnp.traiteNpId 
+        where tnp.traiteNpId = ?1
+""")
+    TraiteNPResp findTraiteById(Long traiteNpId);
+
     @Query("select t from TraiteNonProportionnel t where t.traiReference = ?1")
     TraiteNonProportionnel findByRef(String traiSourceRef);
 
@@ -93,4 +107,10 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1) and tnp.traiteNpId <> ?2")
     boolean existsByNumero(String numero, Long traiteNpId);
+
+    @Query("select tnp.traiTauxCourtier from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
+    BigDecimal getTauxCourtier(Long traiteNpId);
+
+    @Query("select tnp.traiTauxCourtierPlaceur from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
+    BigDecimal getTauxCourtierPlaceur(Long traiteNpId);
 }
