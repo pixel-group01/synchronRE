@@ -64,10 +64,9 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
         tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
-        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode, sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), 
-        sum(ct.pmdNette)) 
+        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode) 
         from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
-        left join tnp.traiCompteDevise dc left join CedanteTraite ct on ct.traiteNonProportionnel.traiteNpId = tnp.traiteNpId 
+        left join tnp.traiCompteDevise dc
         where tnp.traiteNpId = ?1
 """)
     TraiteNPResp findTraiteById(Long traiteNpId);

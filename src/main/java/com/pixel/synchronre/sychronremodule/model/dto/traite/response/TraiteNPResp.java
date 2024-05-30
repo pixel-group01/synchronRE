@@ -102,8 +102,7 @@ public class TraiteNPResp
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, Long exeCode, String traiSourceRef,
-                        String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode,
-                        BigDecimal traiPmd, BigDecimal traiPmdCourtier, BigDecimal traiPmdCourtierPlaceur, BigDecimal traiPmdNette)
+                        String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode)
     {
         this.traiteNPId = traiteNPId;
         this.traiReference = traiReference;
@@ -126,9 +125,5 @@ public class TraiteNPResp
         this.natLibelle = natLibelle;
         this.devCode = devCode;
         this.traiCompteDevCode = traiCompteDevCode;
-        this.traiPmd = traiPmd;
-        this.traiPmdCourtier = traiPmdCourtier;
-        this.traiPmdCourtierPlaceur = traiPmdCourtierPlaceur;
-        this.traiPmdNette = traiPmdNette;
     }
 }

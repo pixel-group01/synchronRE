@@ -68,7 +68,7 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
     @Query("""
         select  new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp(
         sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette))
-        from CedanteTraite ct where ct.traiteNonProportionnel.traiteNpId = ?1 and ct.statut.staCode = 'ACT'
+        from CedanteTraite ct  where ct.traiteNonProportionnel.traiteNpId = ?1 and ct.statut.staCode = 'ACT' group by ct.traiteNonProportionnel.traiteNpId 
         """)
     PmdGlobalResp getPmdGlobal(Long traiteNpId);
 }

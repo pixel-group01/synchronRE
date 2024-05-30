@@ -4,7 +4,9 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TraiteNPMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
@@ -34,6 +36,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     private final ILogService logService;
     private final ObjectCopier<TraiteNonProportionnel> traiteNPCopier;
     private final IServiceCalculsComptablesTraite traiteComptaService;
+    private final CedanteTraiteRepository ctRepo;
 
     @Override @Transactional
     public TraiteNPResp create(CreateTraiteNPReq dto)
@@ -80,6 +83,11 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public TraiteNPResp getTraiteDetails(Long traiId)
     {
         TraiteNPResp details = traiteNPRepo.findTraiteById(traiId);
+        PmdGlobalResp pmdGlobalResp = ctRepo.getPmdGlobal(traiId);
+        details.setTraiPmd(pmdGlobalResp.getTraiPmd());
+        details.setTraiPmdCourtier(pmdGlobalResp.getTraiPmdCourtier());
+        details.setTraiPmdCourtierPlaceur(pmdGlobalResp.getTraiPmdCourtierPlaceur());
+        details.setTraiPmdNette(pmdGlobalResp.getTraiPmdNette());
         details.setTraiTauxDejaPlace(traiteComptaService.calculateTauxDejaPlace(traiId));
         details.setTraiTauxRestantAPlacer(traiteComptaService.calculateTauxRestantAPlacer(traiId));
         return details;
