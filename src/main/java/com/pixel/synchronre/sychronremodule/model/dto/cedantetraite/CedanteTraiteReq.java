@@ -38,7 +38,7 @@ public class CedanteTraiteReq
         this.traiteNpId = traiteNpId;
     }
 
-    public CedanteTraiteReq(Long cedId, Long traiteNpId) {
+    public CedanteTraiteReq(Long traiteNpId, Long cedId) {
         this.cedId = cedId;
         this.traiteNpId = traiteNpId;
     }
