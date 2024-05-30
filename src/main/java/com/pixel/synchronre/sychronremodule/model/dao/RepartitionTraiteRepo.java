@@ -21,9 +21,9 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         r.repId, r.repPrime, r.repTaux, tnp.traiTauxCourtierPlaceur, tnp.traiTauxCourtier, c.cesId,
         c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
-        from Repartition r left join r.cessionnaire c left join r.cedanteTraite cedTrai 
-            left join cedTrai.traiteNonProportionnel tnp
-            left join r.repStaCode s
+        from Repartition r join r.cessionnaire c 
+            join r.traiteNonProportionnel tnp
+            join r.repStaCode s
         where r.repId = ?1
     """)
     RepartitionTraiteNPResp getRepartitionTraiteNPResp(Long repId);
@@ -34,8 +34,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
         from Repartition r left join r.cessionnaire c 
-            left join r.cedanteTraite cedTrai 
-            left join cedTrai.traiteNonProportionnel tnp
+            left join r.traiteNonProportionnel tnp
             left join r.repStaCode s
         where (
         locate(upper(coalesce(:key, '') ), upper(cast(r.repPrime as string))) =1 or
