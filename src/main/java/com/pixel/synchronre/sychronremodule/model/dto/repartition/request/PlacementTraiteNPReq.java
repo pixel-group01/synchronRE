@@ -22,9 +22,6 @@ import java.util.List;
 public class PlacementTraiteNPReq
 {
     private Long repId;
-    @NotNull(message = "Veuillez saisir le capital")
-    @PositiveOrZero(message = "La prime doit être un nombre positif")
-    private BigDecimal repPrime;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
