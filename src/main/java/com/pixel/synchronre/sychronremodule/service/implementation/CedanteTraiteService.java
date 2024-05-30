@@ -39,6 +39,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     private final TraiteNPRepository traiteRepo;
     private final CedRepo cedRepo;
     private final ParamCessionLegaleRepository paramCesLegRepo;
+    private final BigDecimal CENT = new BigDecimal(100);
 
     @Override @Transactional
     public CedanteTraiteResp create(CedanteTraiteReq dto)
@@ -162,8 +163,8 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     private void setPmdCourtiers(CedanteTraiteReq dto, CedanteTraite cedanteTraite) {
         BigDecimal tauxCourtier = traiteRepo.getTauxCourtier(dto.getTraiteNpId());
         BigDecimal tauxCourtierPlaceur = traiteRepo.getTauxCourtierPlaceur(dto.getTraiteNpId());
-        BigDecimal pmdCourtier = cedanteTraite.getPmd() == null || tauxCourtier == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtier).setScale(20, RoundingMode.HALF_UP);
-        BigDecimal pmdCourtierPlaceur = cedanteTraite.getPmd() == null || tauxCourtierPlaceur == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtierPlaceur).setScale(20, RoundingMode.HALF_UP);
+        BigDecimal pmdCourtier = cedanteTraite.getPmd() == null || tauxCourtier == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtier).divide(CENT).setScale(20, RoundingMode.HALF_UP);
+        BigDecimal pmdCourtierPlaceur = cedanteTraite.getPmd() == null || tauxCourtierPlaceur == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtierPlaceur).divide(CENT).setScale(20, RoundingMode.HALF_UP);
         BigDecimal pmdNette = cedanteTraite.getPmd() == null ? BigDecimal.ZERO : cedanteTraite.getPmd().subtract(pmdCourtier.add(pmdCourtierPlaceur));
         cedanteTraite.setPmdCourtier(pmdCourtier);
         cedanteTraite.setPmdCourtierPlaceur(pmdCourtierPlaceur);
