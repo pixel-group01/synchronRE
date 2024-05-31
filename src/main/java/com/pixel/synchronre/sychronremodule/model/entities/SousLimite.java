@@ -29,15 +29,12 @@ public class SousLimite
     @ManyToOne
     @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @MapsId("staCode")
     @ManyToOne
     @JoinColumn(name = "STA_CODE")
     private Statut statut;
-    @MapsId("userId")
     @ManyToOne
     @JoinColumn(name = "user_creator")
     private AppUser userCreator;
-    @MapsId("id")
     @ManyToOne
     @JoinColumn(name = "fon_creator")
     private AppFunction fonCreator;
