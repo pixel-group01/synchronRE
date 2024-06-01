@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface IServiceTraiteNP
 {
-    TraiteNPResp create(CreateTraiteNPReq dto) throws UnknownHostException;
+    TraiteNPResp create(CreateTraiteNPReq dto);
 
     Page<TraiteNPResp> search(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable);
 
-    TraiteNPResp update(UpdateTraiteNPReq dto) throws UnknownHostException;
+    TraiteNPResp update(UpdateTraiteNPReq dto);
 
     UpdateTraiteNPReq edit(Long traiId);
 

@@ -44,7 +44,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
         TraiteNonProportionnel traiteNP = traiteNPMapper.mapToTraiteNP(dto);
         traiteNP = traiteNPRepo.save(traiteNP);
         logService.logg("Création d'un traité non proportionnel", null, traiteNP, "TraiteNonProportionnel");
-        TraiteNPResp traiteNPResp = traiteNPMapper.mapToTraiteNPResp(traiteNP);
+        TraiteNPResp traiteNPResp = traiteNPRepo.findTraiteById(traiteNP.getTraiteNpId());
         return traiteNPResp;
     }
 
@@ -83,13 +83,15 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public TraiteNPResp getTraiteDetails(Long traiId)
     {
         TraiteNPResp details = traiteNPRepo.findTraiteById(traiId);
+        if(details == null) return null;
+        details.setTraiTauxDejaPlace(traiteComptaService.calculateTauxDejaPlace(traiId));
+        details.setTraiTauxRestantAPlacer(traiteComptaService.calculateTauxRestantAPlacer(traiId));
         PmdGlobalResp pmdGlobalResp = ctRepo.getPmdGlobal(traiId);
+        if(pmdGlobalResp == null) return details;
         details.setTraiPmd(pmdGlobalResp.getTraiPmd());
         details.setTraiPmdCourtier(pmdGlobalResp.getTraiPmdCourtier());
         details.setTraiPmdCourtierPlaceur(pmdGlobalResp.getTraiPmdCourtierPlaceur());
         details.setTraiPmdNette(pmdGlobalResp.getTraiPmdNette());
-        details.setTraiTauxDejaPlace(traiteComptaService.calculateTauxDejaPlace(traiId));
-        details.setTraiTauxRestantAPlacer(traiteComptaService.calculateTauxRestantAPlacer(traiId));
         return details;
     }
 }

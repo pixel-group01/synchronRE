@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TraiteNPResp
 {
-    private Long traiteNPId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
@@ -50,13 +50,13 @@ public class TraiteNPResp
     private BigDecimal traiPmdCourtierPlaceur;
     private BigDecimal traiPmdNette;
 
-    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice) {
-        this.traiteNPId = traiteNPId;
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumeroPolice) {
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
     }
 
-    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice, String traiLibelle,
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumeroPolice, String traiLibelle,
                         String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
@@ -68,7 +68,7 @@ public class TraiteNPResp
                         String traiUserCreatorEmail, String traiUserCreatorNomPrenom,
                         String traiFonCreatorName, LocalDateTime createdAt,
                         LocalDateTime updatedAt) {
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
@@ -98,13 +98,13 @@ public class TraiteNPResp
         this.updatedAt = updatedAt;
     }
 
-    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumero, String traiLibelle, String traiAuteur,
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle, String traiAuteur,
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, Long exeCode, String traiSourceRef,
                         String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode)
     {
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.traiLibelle = traiLibelle;

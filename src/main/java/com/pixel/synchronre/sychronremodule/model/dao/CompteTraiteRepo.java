@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 
 public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
 {
-    @Query("select sum(r.repTaux) from Repartition r where r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'ANNULE')")
+    @Query("select sum(r.repTaux) from Repartition r where r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'ANNULE') and r.traiteNonProportionnel.traiteNpId = ?1")
     BigDecimal calculateTauxDejaPlace(Long traiteNpId);
 }

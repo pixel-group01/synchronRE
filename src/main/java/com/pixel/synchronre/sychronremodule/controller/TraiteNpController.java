@@ -20,12 +20,13 @@ public class TraiteNpController
     private final IServiceTraiteNP traiteNpService;
 
     @PostMapping(path = "/create")
-    TraiteNPResp create(@Valid @RequestBody CreateTraiteNPReq dto) throws UnknownHostException {
+    TraiteNPResp create(@Valid @RequestBody CreateTraiteNPReq dto)
+    {
         return traiteNpService.create(dto);
     }
 
     @PutMapping(path = "/update")
-    TraiteNPResp update(@Valid @RequestBody UpdateTraiteNPReq dto) throws UnknownHostException {
+    TraiteNPResp update(@Valid @RequestBody UpdateTraiteNPReq dto){
         return traiteNpService.update(dto);
     }
 

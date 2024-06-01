@@ -17,8 +17,8 @@ public abstract class TraiteNPMapper
 {
     @Autowired protected IJwtService jwtService;
     @Autowired protected TraiteNPRepository traiteNPRepo;
-    @Mapping(target = "traiEcerciceRattachement", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT.class, dto.getTraiEcerciceRattachement()))")
-    @Mapping(target = "traiPeriodicite", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE.class, dto.getTraiPeriodicite()))")
+    @Mapping(target = "traiEcerciceRattachement", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT.class, dto.getTraiEcerciceRattachement().toUpperCase()))")
+    @Mapping(target = "traiPeriodicite", expression = "java(org.apache.commons.lang3.EnumUtils.getEnum(com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE.class, dto.getTraiPeriodicite().toUpperCase()))")
     @Mapping(target = "exercice", expression = "java(dto.getExeCode() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Exercice(dto.getExeCode()))")
     //@Mapping(target = "traiSource", expression = "java(dto.getTraiSourceRef() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiSourceRef()))")
     @Mapping(target = "nature", expression = "java(dto.getNatCode() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Nature(dto.getNatCode()))")
