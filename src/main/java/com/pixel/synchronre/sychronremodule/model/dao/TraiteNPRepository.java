@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.springframework.data.domain.Page;
@@ -107,9 +108,6 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
     @Query("select (count(tnp.traiteNpId)>0) from TraiteNonProportionnel tnp where upper(tnp.traiNumero) = upper(?1) and tnp.traiteNpId <> ?2")
     boolean existsByNumero(String numero, Long traiteNpId);
 
-    @Query("select tnp.traiTauxCourtier from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
-    BigDecimal getTauxCourtier(Long traiteNpId);
-
-    @Query("select tnp.traiTauxCourtierPlaceur from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
-    BigDecimal getTauxCourtierPlaceur(Long traiteNpId);
+    @Query("select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp(tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur) tnp from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
+    TauxCourtiersResp getTauxCourtiers(Long traiteNpId);
 }

@@ -4,18 +4,26 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
+import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.UsualNumbers.CENT;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedanteTraiteMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
+import com.pixel.synchronre.sychronremodule.model.events.GenereicEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +47,8 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     private final TraiteNPRepository traiteRepo;
     private final CedRepo cedRepo;
     private final ParamCessionLegaleRepository paramCesLegRepo;
-    private final BigDecimal CENT = new BigDecimal(100);
+    private final ApplicationEventPublisher eventPublisher;
+
 
     @Override @Transactional
     public CedanteTraiteResp create(CedanteTraiteReq dto)
@@ -52,10 +61,10 @@ public class CedanteTraiteService implements IServiceCedanteTraite
             return this.update(dto);
         }
         CedanteTraite cedanteTraite = cedTraiMapper.mapToCedanteTraite(dto);
-        setPmdCourtiers(dto, cedanteTraite);
+        setMontantsPrimes(dto, cedanteTraite);
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
         final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
-        logService.logg("Ajout d'une cédante sur un traité", new CedanteTraite(), cedanteTraite, "CedanteTraite");
+        logService.logg(ADD_CEDANTE_TO_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
         if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
         {
             dto.getCessionsLegales().forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
@@ -63,6 +72,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(cedanteTraite.getCedanteTraiteId());
         cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(cedanteTraite.getCedanteTraiteId()));
+        eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, ADD_CEDANTE_TO_TRAITE_NP));
         return cedanteTraiteResp;
     }
 
@@ -76,8 +86,8 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         cedanteTraite.setAssiettePrime(dto.getAssiettePrime());
         cedanteTraite.setPmd(dto.getPmd());
         cedanteTraite.setTauxPrime(dto.getTauxPrime());
-        setPmdCourtiers(dto, cedanteTraite);
-        logService.logg("Modification d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
+        setMontantsPrimes(dto, cedanteTraite);
+        logService.logg(SynchronReActions.UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
         if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
         {
             dto.getCessionsLegales().forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
@@ -85,6 +95,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(dto.getCedanteTraiteId());
         cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(dto.getCedanteTraiteId()));
+        eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, UPDATE_CEDANTE_ON_TRAITE_NP));
         return cedanteTraiteResp;
     }
 
@@ -115,8 +126,10 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         CedanteTraite cedanteTraite = cedTraiRepo.findById(cedanteTraiteId).orElseThrow(()->new AppException("CedanteTraite introuvable"));
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
         cedanteTraite.setStatut(new Statut("SUP"));
-        logService.logg("Retrait d'une cédante sur un traité", oldCedanteTraite, cedanteTraite, "CedanteTraite");
+        logService.logg(SynchronReActions.REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
         repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repFacService.annulerRepartition(repId));
+
+        eventPublisher.publishEvent(new GenereicEvent(this, cedanteTraite, REMOVE_CEDANTE_ON_TRAITE_NP));
     }
 
     @Override
@@ -160,9 +173,11 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     }
 
 
-    private void setPmdCourtiers(CedanteTraiteReq dto, CedanteTraite cedanteTraite) {
-        BigDecimal tauxCourtier = traiteRepo.getTauxCourtier(dto.getTraiteNpId());
-        BigDecimal tauxCourtierPlaceur = traiteRepo.getTauxCourtierPlaceur(dto.getTraiteNpId());
+    private void setMontantsPrimes(CedanteTraiteReq dto, CedanteTraite cedanteTraite)
+    {
+        TauxCourtiersResp tauxCourtiers = traiteRepo.getTauxCourtiers(dto.getTraiteNpId());
+        BigDecimal tauxCourtier = tauxCourtiers == null ? null : tauxCourtiers.getTraiTauxCourtier();
+        BigDecimal tauxCourtierPlaceur = tauxCourtiers == null ? null : tauxCourtiers.getTraiTauxCourtierPlaceur();
         BigDecimal pmdCourtier = cedanteTraite.getPmd() == null || tauxCourtier == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtier).divide(CENT).setScale(20, RoundingMode.HALF_UP);
         BigDecimal pmdCourtierPlaceur = cedanteTraite.getPmd() == null || tauxCourtierPlaceur == null ? BigDecimal.ZERO : cedanteTraite.getPmd().multiply(tauxCourtierPlaceur).divide(CENT).setScale(20, RoundingMode.HALF_UP);
         BigDecimal pmdNette = cedanteTraite.getPmd() == null ? BigDecimal.ZERO : cedanteTraite.getPmd().subtract(pmdCourtier.add(pmdCourtierPlaceur));

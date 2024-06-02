@@ -3,6 +3,8 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.events.GenereicEvent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,4 +19,5 @@ public interface IServiceRepartitionTraiteNP
     RepartitionTraiteNPResp update(PlacementTraiteNPReq dto);
     void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
     void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
+    void onCedanteTraiteEvent(GenereicEvent<CedanteTraite> event);
 }
