@@ -27,7 +27,9 @@ public interface IServiceCedanteTraite
 
     CedanteTraiteReq getEditDto(Long cedanteTraiteId);
 
-    CedanteTraiteReq getEditDto(Long traiteNpId,Long cedId);
+    CedanteTraiteReq getEditDto(CedanteTraiteReq dto);
+
+    CedanteTraiteReq getEditDto(Long traiteNpId, Long cedId);
     CedanteTraiteReq getEditDto(Long cedanteTraiteId, Long traiteNpId,Long cedId);
 
 

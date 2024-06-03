@@ -33,6 +33,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
 public class CedanteTraiteService implements IServiceCedanteTraite
@@ -71,7 +74,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         }
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(cedanteTraite.getCedanteTraiteId());
-        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(cedanteTraite.getCedanteTraiteId()));
+        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findPersistedCesLegsByCedTraiId(cedanteTraite.getCedanteTraiteId()));
         eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, ADD_CEDANTE_TO_TRAITE_NP));
         return cedanteTraiteResp;
     }
@@ -94,7 +97,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         }
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(dto.getCedanteTraiteId());
-        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findCesLegsByCedTraiId(dto.getCedanteTraiteId()));
+        cedanteTraiteResp.setCessionsLegales(repTraiRepo.findPersistedCesLegsByCedTraiId(dto.getCedanteTraiteId()));
         eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, UPDATE_CEDANTE_ON_TRAITE_NP));
         return cedanteTraiteResp;
     }
@@ -113,7 +116,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         Page<CedanteTraiteResp> cedanteTraitePage = cedTraiRepo.search(traiId, key, pageable);
         List<CedanteTraiteResp> cedanteTraiteList = cedanteTraitePage.stream()
                 .peek(cedTrai-> {
-                    List<CesLeg> repartitions = repTraiRepo.findCesLegsByCedTraiId(cedTrai.getCedanteTraiteId());
+                    List<CesLeg> repartitions = repTraiRepo.findPersistedCesLegsByCedTraiId(cedTrai.getCedanteTraiteId());
 
                     cedTrai.setCessionsLegales(repartitions);
                 }).toList();
@@ -136,7 +139,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     public CedanteTraiteReq getEditDto(Long cedanteTraiteId)
     {
         CedanteTraiteReq dto = cedTraiRepo.getEditDto(cedanteTraiteId);
-        List<CesLeg> cesLegs =repTraiRepo.findCesLegsByCedTraiId(cedanteTraiteId);
+        List<CesLeg> cesLegs =repTraiRepo.findPersistedCesLegsByCedTraiId(cedanteTraiteId);
         if(cesLegs == null || cesLegs.isEmpty())
         {
             cesLegs = paramCesLegRepo.findCesLegsByCedId(dto.getCedId());
@@ -146,12 +149,80 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     }
 
     @Override
+    public CedanteTraiteReq getEditDto(CedanteTraiteReq dto)
+    {
+        if(dto == null) return null;
+        Long cedanteTraiteId = dto.getCedanteTraiteId() != null ? dto.getCedanteTraiteId() : cedTraiRepo.getCedanteTraiteIdByTraiIdAndCedId(dto.getTraiteNpId(), dto.getCedId());
+        dto.setCedanteTraiteId(cedanteTraiteId);
+        BigDecimal pmd = dto.getAssiettePrime() != null && dto.getTauxPrime() != null ?
+                dto.getAssiettePrime().multiply(dto.getTauxPrime()).divide(CENT, 20, RoundingMode.HALF_UP) :
+                dto.getPmd();
+        dto.setPmd(pmd);
+
+        //Cessionns légales envoyées par le front dans le dto
+        List<CesLeg> dtoCesLegs = dto.getCessionsLegales();
+
+
+        //Cessionns légales lié au pays de la cedante concerné
+        List<CesLeg> baseCesLegs = paramCesLegRepo.findCesLegsByCedId(dto.getCedId());
+
+        //Cessionns légales Déjà persisté en base pour ce traité et cette cédante
+        List<CesLeg> persistedCesLegs = cedanteTraiteId != null ?
+                        repTraiRepo.findPersistedCesLegsByCedTraiId(cedanteTraiteId) :
+                repTraiRepo.findPersistedCesLegsByTraiIdAndCedId(dto.getTraiteNpId(), dto.getCedId());
+
+        List<CesLeg> cesLegs = null;
+
+        //Le front n'envoie aucune donnée de cessions légales et il n'existe aucune cessionn légale déjà persistée
+        if((dtoCesLegs == null || dtoCesLegs.isEmpty()) && (persistedCesLegs == null || persistedCesLegs.isEmpty()))
+        {
+            cesLegs = baseCesLegs;
+        }
+
+        //Le front n'envoie aucune donnée de cessions légales mais il existe des cessionns légales déjà persistées
+        if((dtoCesLegs == null || dtoCesLegs.isEmpty()) && persistedCesLegs != null && !persistedCesLegs.isEmpty())
+        {
+            cesLegs = persistedCesLegs;
+        }
+
+        //Le front envoie des données de cessions légales mais il n'existe aucune cessionn légales déjà persistée
+        if((dtoCesLegs != null && !dtoCesLegs.isEmpty()) && (persistedCesLegs == null || persistedCesLegs.isEmpty()))
+        {
+            cesLegs = dtoCesLegs;
+        }
+
+        //Le front envoie des données de cessions légales et il existe des cessionns légales déjà persistées
+        if((dtoCesLegs != null && !dtoCesLegs.isEmpty()) && (persistedCesLegs != null && !persistedCesLegs.isEmpty()))
+        {
+            cesLegs = persistedCesLegs.stream()
+                    .peek(persCL->setCesLegAccepte(persCL, dtoCesLegs)).collect(Collectors.toList());
+        }
+
+        if(cesLegs != null && pmd != null)
+        {
+            cesLegs.forEach(cesLeg -> {
+                BigDecimal cesLegPmd = pmd.multiply(cesLeg.getTauxCesLeg()).divide(CENT, 20, RoundingMode.HALF_UP);
+                cesLeg.setPmd(cesLegPmd);
+            });
+        }
+        dto.setCessionsLegales(cesLegs);
+        return dto;
+    }
+
+    private void setCesLegAccepte(CesLeg cesLeg, List<CesLeg> dtoCesLegs)
+    {
+        Optional<CesLeg> correspondingDtoCesLeg$ = dtoCesLegs.stream().filter(dtoCl-> Objects.equals(cesLeg.getParamCesLegalId(), dtoCl.getParamCesLegalId())).findFirst();
+
+        cesLeg.setAccepte(correspondingDtoCesLeg$.isPresent() ? correspondingDtoCesLeg$.get().isAccepte() : false);
+    }
+
+    @Override
     public CedanteTraiteReq getEditDto(Long traiteNpId, Long cedId)
     {
         if(traiteNpId == null || !traiteRepo.existsById(traiteNpId)) throw new AppException("Traité non proportionnel introuvable");
         if(cedId == null || !cedRepo.existsById(cedId)) throw new AppException("Cédante introuvable");
         CedanteTraiteReq dto = new CedanteTraiteReq(traiteNpId, cedId);
-        List<CesLeg> cesLegs = repTraiRepo.findCesLegsByTraiIdAndCedId(traiteNpId, cedId);
+        List<CesLeg> cesLegs = repTraiRepo.findPersistedCesLegsByTraiIdAndCedId(traiteNpId, cedId);
         if(cesLegs == null || cesLegs.isEmpty())
         {
             cesLegs = paramCesLegRepo.findCesLegsByCedId(cedId);
