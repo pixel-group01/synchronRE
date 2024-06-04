@@ -18,7 +18,9 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourti
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Statut;
-import com.pixel.synchronre.sychronremodule.model.events.GenereicEvent;
+import com.pixel.synchronre.sychronremodule.model.events.CedanteTraiteEvent;
+import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
+import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
@@ -41,10 +43,10 @@ import java.util.stream.Collectors;
 public class CedanteTraiteService implements IServiceCedanteTraite
 {
     private final CedanteTraiteRepository cedTraiRepo;
-    private final IServiceRepartitionTraiteNP repTnpService;
-    private final IserviceRepartition repFacService;
+    //private final IServiceRepartitionTraiteNP repTnpService;
+    //private final IserviceRepartition repFacService;
     private final CedanteTraiteMapper cedTraiMapper;
-    private final ILogService logService;
+    //private final ILogService logService;
     private final ObjectCopier<CedanteTraite> cedTraiCopier;
     private final RepartitionTraiteRepo repTraiRepo;
     private final TraiteNPRepository traiteRepo;
@@ -67,15 +69,18 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         setMontantsPrimes(dto, cedanteTraite);
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
         final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
-        logService.logg(ADD_CEDANTE_TO_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
-        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
-        {
-            dto.getCessionsLegales().forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
-        }
+        //logService.logg(ADD_CEDANTE_TO_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
+//        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
+//        {
+//            dto.getCessionsLegales().forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
+//        }
+
+        eventPublisher.publishEvent(new LoggingEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
+        eventPublisher.publishEvent(new CedanteTraiteEvent(this, ADD_CEDANTE_TO_TRAITE_NP, cedanteTraite, dto.getCessionsLegales()));
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(cedanteTraite.getCedanteTraiteId());
         cedanteTraiteResp.setCessionsLegales(repTraiRepo.findPersistedCesLegsByCedTraiId(cedanteTraite.getCedanteTraiteId()));
-        eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, ADD_CEDANTE_TO_TRAITE_NP));
+
         return cedanteTraiteResp;
     }
 
@@ -90,15 +95,17 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         cedanteTraite.setPmd(dto.getPmd());
         cedanteTraite.setTauxPrime(dto.getTauxPrime());
         setMontantsPrimes(dto, cedanteTraite);
-        logService.logg(SynchronReActions.UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
-        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
-        {
-            dto.getCessionsLegales().forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
-        }
+        //logService.logg(SynchronReActions.UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
+
+//        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
+//        {
+//            dto.getCessionsLegales().forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
+//        }
+        eventPublisher.publishEvent(new LoggingEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
+        eventPublisher.publishEvent(new CedanteTraiteEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, cedanteTraite, dto.getCessionsLegales()));
 
         CedanteTraiteResp cedanteTraiteResp = cedTraiRepo.getCedanteTraiteRespById(dto.getCedanteTraiteId());
         cedanteTraiteResp.setCessionsLegales(repTraiRepo.findPersistedCesLegsByCedTraiId(dto.getCedanteTraiteId()));
-        eventPublisher.publishEvent(new GenereicEvent<CedanteTraite>(this, cedanteTraite, UPDATE_CEDANTE_ON_TRAITE_NP));
         return cedanteTraiteResp;
     }
 
@@ -129,10 +136,10 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         CedanteTraite cedanteTraite = cedTraiRepo.findById(cedanteTraiteId).orElseThrow(()->new AppException("CedanteTraite introuvable"));
         CedanteTraite oldCedanteTraite = cedTraiCopier.copy(cedanteTraite);
         cedanteTraite.setStatut(new Statut("SUP"));
-        logService.logg(SynchronReActions.REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
-        repTraiRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repFacService.annulerRepartition(repId));
+        //logService.logg(SynchronReActions.REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
 
-        eventPublisher.publishEvent(new GenereicEvent(this, cedanteTraite, REMOVE_CEDANTE_ON_TRAITE_NP));
+        eventPublisher.publishEvent(new LoggingEvent(this, REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
+        eventPublisher.publishEvent(new SimpleEvent(this, REMOVE_CEDANTE_ON_TRAITE_NP, cedanteTraite));
     }
 
     @Override

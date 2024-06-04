@@ -4,14 +4,15 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class GenereicEvent <T> extends ApplicationEvent
+public class SimpleEvent<T> extends ApplicationEvent
 {
-    private T data;
     private String action;
-    public GenereicEvent(Object source, T data, String action) {
+    private T data;
+
+    public SimpleEvent(Object source, String action, T data) {
         super(source);
-        this.data = data;
         this.action = action;
+        this.data = data;
     }
 
 }
