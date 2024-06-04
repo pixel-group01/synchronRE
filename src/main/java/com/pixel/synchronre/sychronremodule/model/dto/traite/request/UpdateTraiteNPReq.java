@@ -56,21 +56,22 @@ public class UpdateTraiteNPReq
     @ExistingDevCode(message = "La dévise des comptes sur le traité est introuvable")
     @NotBlank(message = "Veuillez saisir la divise des comptes")
     private String traiCompteDevCode;
+    @NotNull(message = "Veuillez sélectionner le courtier placeur")
+    private Long courtierPlaceurId;
 
     public UpdateTraiteNPReq(Long traiteNpId, String traiReference,
                              String traiNumero, String traiLibelle,
-                             String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
+                             EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                              LocalDate traiDateEffet, LocalDate traiDateEcheance,
                              BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                              Long traiDelaiEnvoi, Long traiDelaiConfirmation,
                              BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                              String traiSourceRef, String natCode, String devCode,
-                             String traiCompteDevCode) {
+                             String traiCompteDevCode,Long courtierPlaceurId) {
         this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.traiLibelle = traiLibelle;
-        this.traiAuteur = traiAuteur;
         this.traiEcerciceRattachement = traiEcerciceRattachement == null ? null : traiEcerciceRattachement.name();
         this.traiDateEffet = traiDateEffet;
         this.traiDateEcheance = traiDateEcheance;
@@ -84,5 +85,6 @@ public class UpdateTraiteNPReq
         this.natCode = natCode;
         this.devCode = devCode;
         this.traiCompteDevCode = traiCompteDevCode;
+        this.courtierPlaceurId=courtierPlaceurId;
     }
 }

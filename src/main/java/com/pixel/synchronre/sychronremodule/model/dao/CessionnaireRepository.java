@@ -90,4 +90,9 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
     """)
     List<CessionnaireListResp> findCessionnairesNotOnTraite(Long traiteNpId);
 
+    @Query("""
+         select new  com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp(c.cesId, c.cesNom, c.cesSigle)
+         from Cessionnaire c where c.type.uniqueCode = 'COURT_PLA' and c.statut.staCode='ACT'
+         """)
+    List<CessionnaireListResp> getCourtierPlaceurs();
 }

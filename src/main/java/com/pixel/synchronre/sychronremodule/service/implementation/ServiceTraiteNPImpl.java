@@ -68,6 +68,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
         traiteNP.setNature(new Nature(dto.getNatCode()));
         traiteNP.setTraiDevise(new Devise(dto.getDevCode()));
         traiteNP.setTraiCompteDevise(new Devise(dto.getTraiCompteDevCode()));
+        traiteNP.setCourtierPlaceur(new Cessionnaire(dto.getCourtierPlaceurId()));
         traiteNP = traiteNPRepo.save(traiteNP);
         logService.logg("Modification d'un traité non proportionnel", oldTraiteNP, traiteNP, "TraiteNonProportionnel");
         TraiteNPResp traiteNPResp = traiteNPMapper.mapToTraiteNPResp(traiteNP);

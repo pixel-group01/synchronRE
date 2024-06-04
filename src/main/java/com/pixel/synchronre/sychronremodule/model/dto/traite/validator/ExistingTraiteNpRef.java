@@ -29,7 +29,7 @@ public @interface ExistingTraiteNpRef
         @Override
         public boolean isValid(String ref, ConstraintValidatorContext context)
         {
-            if(ref == null) return true;
+            if(ref == null || ref.equals("")) return true;
             return tnpRepo.existsByRef(ref.toUpperCase());
         }
     }
