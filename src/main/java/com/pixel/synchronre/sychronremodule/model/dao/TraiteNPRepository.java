@@ -17,18 +17,25 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 {
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
-        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
         tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
-        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, 
+        src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, 
         concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, tnp.updatedAt) 
-        from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
-        left join tnp.statut s left join tnp.traiUserCreator u left join tnp.traiFonCreator f left join tnp.traiCompteDevise dc 
+        from TraiteNonProportionnel tnp 
+        left join tnp.exercice e 
+        left join tnp.traiSource src 
+        left join tnp.nature n 
+        left join tnp.traiDevise d 
+        left join tnp.statut s 
+        left join tnp.traiUserCreator u 
+        left join tnp.traiFonCreator f 
+        left join tnp.traiCompteDevise dc 
         left join CedanteTraite ct on ct.traiteNonProportionnel.traiteNpId = tnp.traiteNpId left join ct.cedante ced
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(tnp.traiReference, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumero, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiLibelle, '') ) as string))) >0
-        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiAuteur, '') ) as string))) >0
+        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.courtierPlaceur.cesNom, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiEcerciceRattachement, '') ) as string))) >0
         or 
         (
@@ -62,10 +69,10 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
-        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle, tnp.traiAuteur, tnp.traiEcerciceRattachement, 
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
         tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
-        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode) 
+        src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom) 
         from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
         left join tnp.traiCompteDevise dc
         where tnp.traiteNpId = ?1
@@ -84,14 +91,15 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq(tnp.traiteNpId,
-        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiAuteur,tnp.traiEcerciceRattachement,
+        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiEcerciceRattachement,
         tnp.traiDateEffet, tnp.traiDateEcheance,tnp.traiCoursDevise,tnp.traiPeriodicite,tnp.traiDelaiEnvoi,
-        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode)
+        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode,court.cesId)
         from TraiteNonProportionnel tnp 
         left join tnp.traiSource scr
         left join tnp.nature nat
         left join tnp.traiDevise dev
         left join tnp.traiCompteDevise comp
+        left join tnp.courtierPlaceur court
         where tnp.traiteNpId = ?1
     """)
     UpdateTraiteNPReq getEditDtoById(Long traiteNpId);

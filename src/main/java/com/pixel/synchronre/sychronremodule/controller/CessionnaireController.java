@@ -36,6 +36,10 @@ public class CessionnaireController
     public Page<CessionnaireListResp> searchCessionnaires(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10000") int size) throws UnknownHostException {
         return cessionnaireService.searchCessionnaire(key, PageRequest.of(page, size));
     }
+    @GetMapping(path = "/courtiers-placeurs")
+    public List<CessionnaireListResp> getCourtierPlaceurs(){
+        return cessionnaireService.getCourtierPlaceurs();
+    }
     //getCessionnairesBySinistre
     @GetMapping(path = "/by-affaire/{affId}") // 652
     public List<CessionnaireListResp> findCessionnairesByAffaire(@PathVariable Long affId)

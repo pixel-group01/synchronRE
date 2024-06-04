@@ -113,4 +113,9 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
         List<CessionnaireListResp> cessionaires = cesRepo.findCessionnairesNotOnTraite(traiteNpId);
         return cessionaires;
     }
+
+    @Override
+    public List<CessionnaireListResp> getCourtierPlaceurs() {
+        return cesRepo.getCourtierPlaceurs();
+    }
 }

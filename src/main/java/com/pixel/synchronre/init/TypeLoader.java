@@ -44,6 +44,7 @@ public class TypeLoader implements Loader
 
         Type typeCessionnaire= typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "CES", "Cessionnaire", PersStatus.ACTIVE, null, null));
         Type typeCourtier = typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "COURT", "Courtier", PersStatus.ACTIVE, null, null));
+        Type typeCourtierPlaceur = typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "COURT_PLA", "Courtier placeur", PersStatus.ACTIVE, null, null));
 
         Type fil= typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null));
         Type rea = typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null));

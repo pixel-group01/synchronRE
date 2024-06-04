@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.nature.validator.ExistingN
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidPeriodicite;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidRattachement;
 import jakarta.validation.constraints.NotBlank;
@@ -65,4 +66,6 @@ public class CreateTraiteNPReq
     @NotNull(message = "Veuillez saisir la divise des comptes")
     @NotBlank(message = "Veuillez saisir la divise des comptes")
     private String traiCompteDevCode;
+    @NotNull(message = "Veuillez sélectionner le courtier placeur")
+    private Long courtierPlaceurId;
 }

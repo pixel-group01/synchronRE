@@ -18,7 +18,6 @@ public class TraiteNPResp
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
-    private String traiAuteur;
     private String traiEcerciceRattachement;
     private LocalDate traiDateEffet;
     private LocalDate traiDateEcheance;
@@ -33,6 +32,8 @@ public class TraiteNPResp
     private String traiSourceLibelle;
     private String natCode;
     private String natLibelle;
+    private Long courtierPlaceurId;
+    private String cesNom;
     private String devCode;
     private String traiCompteDevCode;
     private String traiStaCode;
@@ -57,13 +58,14 @@ public class TraiteNPResp
     }
 
     public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumeroPolice, String traiLibelle,
-                        String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
+                        EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                         Long traiDelaiEnvoi, Long traiDelaiConfirmation,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
-                        String natCode, String natLibelle, String devCode,
+                        String natCode, String natLibelle,Long courtierPlaceurId,String cesNom,
+                        String devCode,
                         String traiCompteDevCode, String traiStaCode, String traiStaLibelle,
                         String traiUserCreatorEmail, String traiUserCreatorNomPrenom,
                         String traiFonCreatorName, LocalDateTime createdAt,
@@ -72,7 +74,6 @@ public class TraiteNPResp
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
-        this.traiAuteur = traiAuteur;
         this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();
         this.traiDateEffet = traiDateEffet;
         this.traiDateEcheance = traiDateEcheance;
@@ -87,6 +88,8 @@ public class TraiteNPResp
         this.traiSourceLibelle = traiSourceLibelle;
         this.natCode = natCode;
         this.natLibelle = natLibelle;
+        this.courtierPlaceurId=courtierPlaceurId;
+        this.cesNom=cesNom;
         this.devCode = devCode;
         this.traiCompteDevCode = traiCompteDevCode;
         this.traiStaCode = traiStaCode;
@@ -98,17 +101,16 @@ public class TraiteNPResp
         this.updatedAt = updatedAt;
     }
 
-    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle, String traiAuteur,
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle,
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, Long exeCode, String traiSourceRef,
-                        String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode)
+                        String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode,Long courtierPlaceurId,String cesNom)
     {
         this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.traiLibelle = traiLibelle;
-        this.traiAuteur = traiAuteur;
         this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();
         this.traiDateEffet = traiDateEffet;
         this.traiDateEcheance = traiDateEcheance;
@@ -125,5 +127,7 @@ public class TraiteNPResp
         this.natLibelle = natLibelle;
         this.devCode = devCode;
         this.traiCompteDevCode = traiCompteDevCode;
+        this.courtierPlaceurId=courtierPlaceurId;
+        this.cesNom=cesNom;
     }
 }
