@@ -95,7 +95,10 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     List<Repartition> findCesLegsByTraiteNpId(Long traiteNpId);
 
     @Query("""
-        select r.repId from Repartition r where r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE') and r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 and r.paramCessionLegale.paramCesLegId = ? and r.type.uniqueCode = 'REP_CES_LEG_TNP'
+        select r.repId from Repartition r where r.repStatut = true 
+        and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE') 
+        and r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 
+        and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
     """)
     List<Repartition> findCesLegByTraiteNpIdAndPclId(Long traiteNpId, Long paramCesLegalId);
 }
