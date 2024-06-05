@@ -90,7 +90,7 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
         //On recalcule les montants de prime sur les cessions légales du traité
         rtRepo.findCesLegsByTraiteNpId(traiteNpId).forEach(pclRep->
         {
-            CesLeg cesLeg = new CesLeg(pclRep.getRepId(), pclRep.getRepTaux(), pclRep.getRepTauxComCourt(), pclRep.getRepTauxComCourtPlaceur());
+            CesLeg cesLeg = new CesLeg(pclRep.getRepId(), pclRep.getRepTaux(), tnp.getTraiTauxCourtier(), tnp.getTraiTauxCourtierPlaceur());
             repTnpService.setMontantPrimesForCesLegRep(cesLeg, pclRep);
         });
 
