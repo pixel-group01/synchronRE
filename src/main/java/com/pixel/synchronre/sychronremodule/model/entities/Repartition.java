@@ -32,6 +32,8 @@ public class Repartition {
     @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCourt;
     @Column(precision = 50, scale = 20)
+    private BigDecimal repTauxComCourtPlaceur;
+    @Column(precision = 50, scale = 20)
     private BigDecimal repMontantComCourt; //Prime à reverser à nre
     @Column(precision = 50, scale = 20)
     private BigDecimal repMontantCourtierPlaceur; //Prime à reverser au courtier placeur

@@ -17,6 +17,8 @@ public abstract class RepartitionTraiteNPMapper
 
     @Mapping(target = "repPrime", source = "cesLeg.pmd")
     @Mapping(target = "repTaux", source = "cesLeg.tauxCesLeg")
+    @Mapping(target = "repTauxComCourt", source = "cesLeg.tauxCourtier")
+    @Mapping(target = "repTauxComCourtPlaceur", source = "cesLeg.tauxCourtierPlaceur")
     @Mapping(target = "repStaCode", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     @Mapping(target = "paramCessionLegale", expression = "java(cesLeg.getParamCesLegalId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(cesLeg.getParamCesLegalId()))")
     @Mapping(target = "repStatut", expression = "java(true)")

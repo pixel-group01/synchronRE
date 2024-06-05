@@ -87,7 +87,12 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         Repartition repartition = repTnpMapper.mapToPlacementTnp(dto);
         repartition.setType(typeRepo.findByUniqueCode("REP_PLA_TNP").orElseThrow(()->new AppException("Type(REP_PLA_TNP) introuvable")));
         //if(rtRepo.)
-        setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), repartition);
+        TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(dto.getTraiteNpId());
+        BigDecimal tauxCoutier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
+        BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
+        repartition.setRepTauxComCourt(tauxCoutier);
+        repartition.setRepTauxComCourtPlaceur(tauxCourtierPlaceur);
+        setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), tauxCoutier, tauxCourtierPlaceur, repartition);
 
         repartition = rtRepo.save(repartition);
         if(dto.isAperiteur()) setAsAperiteur(repartition);
@@ -110,7 +115,13 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
             placement.setCessionnaire(new Cessionnaire(dto.getCesId()));
         }
         if(dto.isAperiteur()) setAsAperiteur(placement);
-        setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), placement);
+        TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(dto.getTraiteNpId());
+        BigDecimal tauxCoutier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
+        BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
+        placement.setRepTauxComCourt(tauxCoutier);
+        placement.setRepTauxComCourtPlaceur(tauxCourtierPlaceur);
+        setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), tauxCoutier, tauxCourtierPlaceur, placement);
+        placement = rtRepo.save(placement);
         eventPublisher.publishEvent(new LoggingEvent(this,"Modification d'un placement sur traité non proportionnel", oldPlacement, placement, "Repartition"));
         RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(dto.getRepId());
         repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaPlace(dto.getTraiteNpId()));
@@ -124,15 +135,15 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
         Repartition repartition = repTnpMapper.mapToCesLegRepartition(cesLeg, cedTraiId);
         rtRepo.save(repartition);
-        eventPublisher.publishEvent(new LoggingEvent(this,"Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition"));
         setMontantPrimesForCesLegRep(cesLeg, repartition);
+        eventPublisher.publishEvent(new LoggingEvent(this,"Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition"));
     }
 
     private void setMontantPrimesForCesLegRep(CesLeg cesLeg, Repartition repartition) {
         if(repartition.getCedanteTraite() == null || repartition.getCedanteTraite().getCedanteTraiteId() == null)
             throw new AppException("Impossible de récupérer l'ID du traité de la CedanteTraite lié à répartition " + repartition.getRepId());
         Long traiteNpId = cedTraiRepo.getTraiteIdByCedTraiId(repartition.getCedanteTraite().getCedanteTraiteId());
-        this.setMontantsPrimes(traiteNpId,cesLeg.getTauxCesLeg(),repartition);
+        this.setMontantsPrimes(traiteNpId,cesLeg.getTauxCesLeg(), cesLeg.getTauxCourtier(), cesLeg.getTauxCourtierPlaceur(), repartition);
     }
 
     @Override @Transactional
@@ -145,9 +156,12 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         Repartition oldRepartition = repCopier.copy(repartition);
 
         repartition.setRepTaux(cesLeg.getTauxCesLeg());
+        repartition.setRepTauxComCourt(cesLeg.getTauxCourtier());
+        repartition.setRepTauxComCourtPlaceur(cesLeg.getTauxCourtierPlaceur());
         repartition = rtRepo.save(repartition);
-        eventPublisher.publishEvent(new LoggingEvent(this,"Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition"));
         setMontantPrimesForCesLegRep(cesLeg, repartition);
+        eventPublisher.publishEvent(new LoggingEvent(this,"Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition"));
+
     }
 
     @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
@@ -167,7 +181,10 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         List<Repartition> placements = rtRepo.getValidPlacementsOnTraiteNp(traiteNpId);
         if(placements != null)
         {
-            placements.forEach(placement->this.setMontantsPrimes(traiteNpId, placement.getRepTaux(), placement));
+            TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(traiteNpId);
+            BigDecimal tauxCoutier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
+            BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
+            placements.forEach(placement->this.setMontantsPrimes(traiteNpId, placement.getRepTaux(), tauxCoutier, tauxCourtierPlaceur, placement));
         }
     }
 
@@ -185,7 +202,10 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         List<Repartition> placements = rtRepo.getValidPlacementsOnTraiteNp(traiteNpId);
         if(placements != null)
         {
-            placements.forEach(placement->this.setMontantsPrimes(traiteNpId, placement.getRepTaux(), placement));
+            TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(traiteNpId);
+            BigDecimal tauxCoutier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
+            BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
+            placements.forEach(placement->this.setMontantsPrimes(traiteNpId, placement.getRepTaux(), tauxCoutier, tauxCourtierPlaceur, placement));
         }
         switch (event.getAction())
         {
@@ -193,31 +213,31 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
             {
                 if(cesLegs != null && !cesLegs.isEmpty())
                 {
-                    cesLegs.forEach(cesLeg->this.createRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
+                    cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->this.createRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
                 }
             }
             case UPDATE_CEDANTE_ON_TRAITE_NP ->
             {
                 if(cesLegs != null && !cesLegs.isEmpty())
                 {
-                    cesLegs.forEach(cesLeg->this.updateRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
+                    cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->this.updateRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
                 }
             }
         }
     }
 
-    private void setMontantsPrimes(Long traiteNpId, BigDecimal repTaux, Repartition repartition)
+    private void setMontantsPrimes(Long traiteNpId, BigDecimal repTaux, BigDecimal tauxCoutier, BigDecimal tauxCourtierPlaceur, Repartition repartition)
     {
         PmdGlobalResp pmdGlobal = cedTraiRepo.getPmdGlobal(traiteNpId);
         if(pmdGlobal == null || repartition == null) return;
-        TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(traiteNpId);
-        BigDecimal tauxCoutier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
-        BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
 
-        BigDecimal repMontantComCourt = pmdGlobal.getTraiPmdCourtier() == null ? BigDecimal.ZERO : pmdGlobal.getTraiPmdCourtier().multiply(tauxCoutier).divide(CENT, 20, RoundingMode.HALF_UP);
-        BigDecimal repMontantCourtPlaceur = pmdGlobal.getTraiPmdCourtierPlaceur() == null ? BigDecimal.ZERO : pmdGlobal.getTraiPmdCourtierPlaceur().multiply(tauxCourtierPlaceur).divide(CENT, 20, RoundingMode.HALF_UP);
         BigDecimal repPrime = pmdGlobal.getTraiPmd() == null ? BigDecimal.ZERO : pmdGlobal.getTraiPmd().multiply(repTaux).divide(CENT, 20, RoundingMode.HALF_UP);
-        BigDecimal repPrimeNette = pmdGlobal.getTraiPmdNette() == null ? BigDecimal.ZERO : pmdGlobal.getTraiPmdNette().multiply(repTaux).divide(CENT, 20, RoundingMode.HALF_UP);
+        BigDecimal repMontantComCourt = repPrime == null || tauxCoutier == null ? BigDecimal.ZERO :
+                repPrime.multiply(tauxCoutier).divide(CENT, 20, RoundingMode.HALF_UP);
+        BigDecimal repMontantCourtPlaceur = repPrime == null || tauxCourtierPlaceur == null ? BigDecimal.ZERO :
+                repPrime.multiply(tauxCourtierPlaceur).divide(CENT, 20, RoundingMode.HALF_UP);
+
+        BigDecimal repPrimeNette = repPrime == null ? BigDecimal.ZERO : repPrime.subtract(repMontantComCourt.add(repMontantCourtPlaceur));
 
         repartition.setRepMontantComCourt(repMontantComCourt);
         repartition.setRepMontantCourtierPlaceur(repMontantCourtPlaceur);

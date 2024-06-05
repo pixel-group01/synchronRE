@@ -68,12 +68,8 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         CedanteTraite cedanteTraite = cedTraiMapper.mapToCedanteTraite(dto);
         setMontantsPrimes(dto, cedanteTraite);
         cedanteTraite = cedTraiRepo.save(cedanteTraite);
-        final Long cedTraiId = cedanteTraite.getCedanteTraiteId();
-        //logService.logg(ADD_CEDANTE_TO_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
-//        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
-//        {
-//            dto.getCessionsLegales().forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedTraiId));
-//        }
+
+        this.setMontantsPrimes(dto, cedanteTraite);
 
         eventPublisher.publishEvent(new LoggingEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, new CedanteTraite(), cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
         eventPublisher.publishEvent(new CedanteTraiteEvent(this, ADD_CEDANTE_TO_TRAITE_NP, cedanteTraite, dto.getCessionsLegales()));
@@ -94,13 +90,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         cedanteTraite.setAssiettePrime(dto.getAssiettePrime());
         cedanteTraite.setPmd(dto.getPmd());
         cedanteTraite.setTauxPrime(dto.getTauxPrime());
-        setMontantsPrimes(dto, cedanteTraite);
-        //logService.logg(SynchronReActions.UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
-
-//        if(dto.getCessionsLegales() != null && !dto.getCessionsLegales().isEmpty())
-//        {
-//            dto.getCessionsLegales().forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, dto.getCedanteTraiteId()));
-//        }
+        this.setMontantsPrimes(dto, cedanteTraite);
         eventPublisher.publishEvent(new LoggingEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
         eventPublisher.publishEvent(new CedanteTraiteEvent(this, UPDATE_CEDANTE_ON_TRAITE_NP, cedanteTraite, dto.getCessionsLegales()));
 
