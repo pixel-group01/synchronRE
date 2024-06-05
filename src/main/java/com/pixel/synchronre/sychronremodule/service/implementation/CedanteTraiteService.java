@@ -129,7 +129,7 @@ public class CedanteTraiteService implements IServiceCedanteTraite
         //logService.logg(SynchronReActions.REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE);
 
         eventPublisher.publishEvent(new LoggingEvent(this, REMOVE_CEDANTE_ON_TRAITE_NP, oldCedanteTraite, cedanteTraite, SynchronReTables.CEDANTE_TRAITE));
-        eventPublisher.publishEvent(new SimpleEvent(this, REMOVE_CEDANTE_ON_TRAITE_NP, cedanteTraite));
+        eventPublisher.publishEvent(new SimpleEvent<CedanteTraite>(this, REMOVE_CEDANTE_ON_TRAITE_NP, cedanteTraite));
     }
 
     @Override

@@ -14,11 +14,13 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPRe
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
 import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
+import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     private final ObjectCopier<TraiteNonProportionnel> traiteNPCopier;
     private final IServiceCalculsComptablesTraite traiteComptaService;
     private final CedanteTraiteRepository ctRepo;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override @Transactional
     public TraiteNPResp create(CreateTraiteNPReq dto)
@@ -69,7 +72,17 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
         traiteNP.setTraiDevise(new Devise(dto.getDevCode()));
         traiteNP.setTraiCompteDevise(new Devise(dto.getTraiCompteDevCode()));
         traiteNP.setCourtierPlaceur(new Cessionnaire(dto.getCourtierPlaceurId()));
+        traiteNP.setTraiTauxCourtier(dto.getTraiTauxCourtier());
+        traiteNP.setTraiTauxCourtierPlaceur(dto.getTraiTauxCourtierPlaceur());
         traiteNP = traiteNPRepo.save(traiteNP);
+        if((dto.getTraiTauxCourtier() == null && traiteNP.getTraiTauxCourtier() != null) || dto.getTraiTauxCourtier().compareTo(traiteNP.getTraiTauxCourtier()) != 0)
+        {
+            eventPublisher.publishEvent(new SimpleEvent<TraiteNonProportionnel>(this, "Modifier du taux courtier sur un traité", traiteNP));
+        }
+        if((dto.getTraiTauxCourtierPlaceur() == null && traiteNP.getTraiTauxCourtierPlaceur() != null) || dto.getTraiTauxCourtierPlaceur().compareTo(traiteNP.getTraiTauxCourtierPlaceur()) != 0)
+        {
+            eventPublisher.publishEvent(new SimpleEvent<TraiteNonProportionnel>(this, "Modifier du taux courtier placeur sur un traité", traiteNP));
+        }
         logService.logg("Modification d'un traité non proportionnel", oldTraiteNP, traiteNP, "TraiteNonProportionnel");
         TraiteNPResp traiteNPResp = traiteNPMapper.mapToTraiteNPResp(traiteNP);
         return traiteNPResp;

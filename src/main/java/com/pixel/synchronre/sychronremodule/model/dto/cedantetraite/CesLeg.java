@@ -33,4 +33,11 @@ public class CesLeg {
         this.paramCesLegalId = paramCesLegalId;
         this.accepte = accepte;
     }
+
+    public CesLeg(Long repId, BigDecimal tauxCesLeg, BigDecimal tauxCourtier, BigDecimal tauxCourtierPlaceur) {
+        this.repId = repId;
+        this.tauxCesLeg = tauxCesLeg;
+        this.tauxCourtier = tauxCourtier;
+        this.tauxCourtierPlaceur = tauxCourtierPlaceur;
+    }
 }
