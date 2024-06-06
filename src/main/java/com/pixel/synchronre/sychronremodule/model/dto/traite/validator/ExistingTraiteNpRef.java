@@ -42,8 +42,8 @@ public @interface ExistingTraiteNpRef
         @Override
         public boolean isValid(UpdateTraiteNPReq dto, ConstraintValidatorContext context)
         {
-            if(dto == null || dto.getTraiReference() == null || dto.getTraiteNpId() == null || dto.getTraiReference() == null || dto.getTraiReference().equals("")) return true;
-            return tnpRepo.existsByRef(dto.getTraiReference().toUpperCase(), dto.getTraiteNpId());
+            if(dto == null || dto.getTraiSourceRef() == null || dto.getTraiteNpId() == null || dto.getTraiSourceRef() == null || dto.getTraiSourceRef().equals("")) return true;
+            return tnpRepo.existsByRef(dto.getTraiSourceRef().toUpperCase(), dto.getTraiteNpId());
         }
     }
 }

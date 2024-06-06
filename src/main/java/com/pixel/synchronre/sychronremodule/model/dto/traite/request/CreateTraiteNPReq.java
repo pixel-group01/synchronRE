@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pixel.synchronre.sychronremodule.model.dto.devise.validator.ExistingDevCode;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ActiveExercice;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ExistingExeCode;
@@ -35,7 +36,7 @@ public class CreateTraiteNPReq
     private String traiLibelle;
     private String traiAuteur;
     @NotNull(message = "Veuillez saisir l'exercice de rattachement")
-    @NotNull(message = "Veuillez saisir l'exercice de rattachement")
+    @NotBlank(message = "Veuillez saisir l'exercice de rattachement")
     @ValidRattachement
     private String traiEcerciceRattachement;
     @NotNull(message = "Veuillez saisir la date d'effet")
