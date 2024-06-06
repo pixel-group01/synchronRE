@@ -74,11 +74,11 @@ public class TraiteNPResp
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
-        this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();
+        this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getCode();
         this.traiDateEffet = traiDateEffet;
         this.traiDateEcheance = traiDateEcheance;
         this.traiCoursDevise = traiCoursDevise;
-        this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getLibelle();
+        this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getCode();
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
         this.traiTauxCourtier = traiTauxCourtier;
