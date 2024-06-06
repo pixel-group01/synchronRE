@@ -16,6 +16,9 @@ import java.util.Optional;
 
 public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
 {
+    @Query("select r from Repartition r where r.repId = ?1")
+    Optional<Repartition> findById(Long repId);
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp(
         r.repId, r.repPrime, r.repTaux, tnp.traiTauxCourtierPlaceur, tnp.traiTauxCourtier, c.cesId,

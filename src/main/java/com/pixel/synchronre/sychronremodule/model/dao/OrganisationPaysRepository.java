@@ -35,7 +35,8 @@ public interface OrganisationPaysRepository extends JpaRepository<OrganisationPa
     @Query("""
 select new com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp(
     p.paysCode, p.paysIndicatif, p.paysNom, p.statut.staLibelle, p.devise.devCode, p.devise.devLibelle) 
-    from OrganisationPays op join op.pays p where op.organisation.organisationCode in ?1
+    from Pays p where p.paysCode in 
+    (select p1.paysCode from OrganisationPays op join op.pays p1 where op.organisation.organisationCode in ?1)
 """)
     List<PaysListResp> getPaysByOrgCodes(List<String> orgCode);
 }

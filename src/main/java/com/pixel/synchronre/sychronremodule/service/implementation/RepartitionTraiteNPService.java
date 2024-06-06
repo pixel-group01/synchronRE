@@ -121,8 +121,9 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     {
         Repartition repartition;
         if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
-        if(cesLeg.getRepId() == null) repartition = rtRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
+        else if(cesLeg.getRepId() == null) repartition = rtRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
         else repartition  = rtRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
+
         Repartition oldRepartition = repCopier.copy(repartition);
 
         repartition.setRepStatut(cesLeg.isAccepte());
