@@ -16,10 +16,10 @@ import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,6 +45,8 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     private final TypeRepo typeRepo;
     private final CedanteTraiteRepository cedTraiRepo;
     private final TraiteNPRepository tnpRepo;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -78,6 +80,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         repartition.setType(typeRepo.findByUniqueCode("REP_PLA_TNP").orElseThrow(()->new AppException("Type(REP_PLA_TNP) introuvable")));
         //if(rtRepo.)
         repartition = recalculateMontantPrimeOnPlacement(dto, repartition);
+        entityManager.persist(repartition);
         if(dto.isAperiteur()) setAsAperiteur(repartition);
         eventPublisher.publishEvent(new LoggingEvent(this, "Enregistrement d'un placement sur traité non proportionnel", new Repartition(), repartition, "Repartition"));
 
@@ -190,8 +193,6 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         placement.setRepTauxComCourt(tauxCourtier);
         placement.setRepTauxComCourtPlaceur(tauxCourtierPlaceur);
         setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), tauxCourtier, tauxCourtierPlaceur, placement);
-        rtRepo.save(placement);
-        placement = rtRepo.findById(placement.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
         return placement;
     }
 }
