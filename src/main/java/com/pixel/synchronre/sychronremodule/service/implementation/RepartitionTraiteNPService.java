@@ -183,7 +183,6 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         this.setMontantsPrimes(traiteNpId,cesLeg.getTauxCesLeg(), cesLeg.getTauxCourtier(), cesLeg.getTauxCourtierPlaceur(), repartition);
     }
 
-    @NotNull
     private Repartition recalculateMontantPrimeOnPlacement(PlacementTraiteNPReq dto, Repartition placement) {
         TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(dto.getTraiteNpId());
         BigDecimal tauxCourtier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
@@ -191,7 +190,8 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         placement.setRepTauxComCourt(tauxCourtier);
         placement.setRepTauxComCourtPlaceur(tauxCourtierPlaceur);
         setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), tauxCourtier, tauxCourtierPlaceur, placement);
-        placement = rtRepo.save(placement);
+        rtRepo.save(placement);
+        placement = rtRepo.findById(placement.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
         return placement;
     }
 }
