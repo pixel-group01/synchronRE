@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,11 @@ public class RepartitionTraiteNPController
     }
 
     @GetMapping(path = "/search")
-    public Page<RepartitionTraiteNPResp> save(@RequestParam(name = "traiteNPId") Long traiteNPId,
+    public Page<RepartitionTraiteNPResp> search(@RequestParam(name = "traiteNpId") Long traiteNpId,
                                               @RequestParam(name = "key", defaultValue = "")String key,
                                               @RequestParam(name = "page", defaultValue = "0") int page,
                                               @RequestParam(name = "size", defaultValue = "10") int size)
     {
-        return repartitionTraiteNPService.search(traiteNPId, key, PageRequest.of(page, size));
+        return repartitionTraiteNPService.search(traiteNpId, key, PageRequest.of(page, size));
     }
 }

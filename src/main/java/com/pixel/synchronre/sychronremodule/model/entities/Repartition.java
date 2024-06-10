@@ -21,7 +21,8 @@ public class Repartition {
     private BigDecimal repCapital;
     private String repCapitalLettre;
     @Column(precision = 50, scale = 20)
-    private BigDecimal repPrime;
+    private BigDecimal repPrime;//Prime à reverser au cessionnaire
+    private BigDecimal repPrimeNette;//Prime nette à reverser au cessionnaire
     @Column(precision = 50, scale = 20)
     private BigDecimal repTaux;
     @Column(precision = 50, scale = 20)
@@ -30,7 +31,12 @@ public class Repartition {
     private BigDecimal repTauxComCed;
     @Column(precision = 50, scale = 20)
     private BigDecimal repTauxComCourt;
-    private BigDecimal repTauxCourtierPlaceur; //TODO A Valider
+    @Column(precision = 50, scale = 20)
+    private BigDecimal repTauxComCourtPlaceur;
+    @Column(precision = 50, scale = 20)
+    private BigDecimal repMontantComCourt; //Prime à reverser à nre
+    @Column(precision = 50, scale = 20)
+    private BigDecimal repMontantCourtierPlaceur; //Prime à reverser au courtier placeur
     private String autreInterlocuteurs;
     @ManyToOne @JoinColumn(name = "rep_interlocuteur_principal_id")
     private Interlocuteur interlocuteurPrincipal;
@@ -41,6 +47,8 @@ public class Repartition {
     private Affaire affaire;
     @ManyToOne @JoinColumn(name = "ced_trai_id")
     private CedanteTraite cedanteTraite;
+    @ManyToOne @JoinColumn(name = "traite_np_id")
+    private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
     @ManyToOne @JoinColumn(name = "cessionnaire_id")

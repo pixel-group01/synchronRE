@@ -26,10 +26,10 @@ public @interface ExistingTNPId
     {
         private final TraiteNPRepository tnpRepo;
         @Override
-        public boolean isValid(Long tnpId, ConstraintValidatorContext context)
+        public boolean isValid(Long traiteNpId, ConstraintValidatorContext context)
         {
-            if(tnpId == null) return true;
-            return tnpRepo.existsById(tnpId);
+            if(traiteNpId == null) return true;
+            return tnpRepo.existsById(traiteNpId);
         }
     }
 }

@@ -22,7 +22,7 @@ public class TerritorialiteResp
     private String traiReference;
     private String traiNumeroPolice;
     private String traiLibelle;
-    private String traiAuteur;
+    private Long cesNom;
 
     public TerritorialiteResp(Long terrId, String terrLibelle, BigDecimal terrTaux, String terrDescription, Long traiteNPId, String traiReference) {
         this.terrId = terrId;

@@ -12,17 +12,21 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
 {
+    @Query("select r from Repartition r where r.repId = ?1")
+    Optional<Repartition> findById(Long repId);
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionTraiteNPResp(
         r.repId, r.repPrime, r.repTaux, tnp.traiTauxCourtierPlaceur, tnp.traiTauxCourtier, c.cesId,
         c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
-        from Repartition r left join r.cessionnaire c left join r.cedanteTraite cedTrai 
-            left join cedTrai.traiteNonProportionnel tnp
-            left join r.repStaCode s
+        from Repartition r join r.cessionnaire c 
+            join r.traiteNonProportionnel tnp
+            join r.repStaCode s
         where r.repId = ?1
     """)
     RepartitionTraiteNPResp getRepartitionTraiteNPResp(Long repId);
@@ -33,8 +37,7 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         c.cesNom, c.cesSigle, c.cesEmail, c.cesTelephone, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero,
         tnp.traiLibelle, r.isAperiteur, r.repStatut, s.staCode)
         from Repartition r left join r.cessionnaire c 
-            left join r.cedanteTraite cedTrai 
-            left join cedTrai.traiteNonProportionnel tnp
+            left join r.traiteNonProportionnel tnp
             left join r.repStaCode s
         where (
         locate(upper(coalesce(:key, '') ), upper(cast(r.repPrime as string))) =1 or
@@ -49,31 +52,56 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
     Page<RepartitionTraiteNPResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
     @Modifying @Transactional
-    @Query("update Repartition r set r.isAperiteur = false where r.repId <> ?1 and r.cedanteTraite.cedanteTraiteId = (select ct.cedanteTraiteId from Repartition r join r.cedanteTraite ct where r.repId = ?1)")
+    @Query("update Repartition r set r.isAperiteur = false where r.repId <> ?1 and r.traiteNonProportionnel.traiteNpId = (select tnp.traiteNpId from Repartition r join r.traiteNonProportionnel tnp where r.repId = ?1)")
     void setAsTheOnlyAperiteur(Long repId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
-        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut
-        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
+        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut, r.cedanteTraite.traiteNonProportionnel.traiTauxCourtier, r.cedanteTraite.traiteNonProportionnel.traiTauxCourtierPlaceur
+        ) from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
     """)
-    List<CesLeg> findCesLegsByCedTraiId(Long cedanteTraiteId);
+    List<CesLeg> findPersistedCesLegsByCedTraiId(Long cedanteTraiteId);
 
     @Query("""
-        select r.repId from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
+        select r.repId from Repartition r where r.repStatut = true and r.repStaCode.staCode = 'ACT' and r.cedanteTraite.cedanteTraiteId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
     """)
     List<Long> findCesLegIdsByCedTraiId(Long cedanteTraiteId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
-        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, r.repStatut
+        r.repId, r.repTaux, r.repPrime, r.paramCessionLegale.paramCesLegLibelle, r.paramCessionLegale.paramCesLegId, 
+        r.repStatut, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur
         ) from Repartition r 
         join r.cedanteTraite ct
         join ct.traiteNonProportionnel tnp
         join ct.cedante ced
         where  tnp.traiteNpId = ?1 and ced.cedId = ?2 
         and r.repStatut = true and r.repStaCode.staCode = 'ACT' 
-        and r.type.uniqueCode = 'REP_CES_LEG_TRAI'
+        and r.type.uniqueCode = 'REP_CES_LEG_TNP'
     """)
-    List<CesLeg> findCesLegsByTraiIdAndCedId(Long traiteNpId, Long cedId);
+    List<CesLeg> findPersistedCesLegsByTraiIdAndCedId(Long traiteNpId, Long cedId);
+
+    @Query("select r.repId from Repartition r where r.traiteNonProportionnel.traiteNpId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
+    Optional<Long> getPlacementIdByTraiteNpIdAndCesId(Long traiteNpId, Long cesId);
+
+    @Query("select r from Repartition r where r.cedanteTraite.cedanteTraiteId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true and r.repStaCode.staCode = 'ACT'")
+    Repartition findByCedTraiIdAndPclId(Long cedanteTraiteId, Long paramCesLegId);
+
+    @Query("""
+        select r from Repartition r where r.traiteNonProportionnel.traiteNpId = ?1 and r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')
+    """)
+    List<Repartition> getValidPlacementsOnTraiteNp(Long traiteNpId);
+
+    @Query("""
+        select r from Repartition r where r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE') and r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
+    """)
+    List<Repartition> findCesLegsByTraiteNpId(Long traiteNpId);
+
+    @Query("""
+        select r.repId from Repartition r where r.repStatut = true 
+        and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE') 
+        and r.cedanteTraite.traiteNonProportionnel.traiteNpId = ?1 
+        and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
+    """)
+    List<Repartition> findCesLegByTraiteNpIdAndPclId(Long traiteNpId, Long paramCesLegalId);
 }

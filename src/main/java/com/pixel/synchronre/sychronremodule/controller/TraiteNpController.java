@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
@@ -16,18 +15,19 @@ import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @RequestMapping(path = "/traite-non-proportionnel")
-public class TraiteNPController
+public class TraiteNpController
 {
-    private final IServiceTraiteNP traiteNPService;
+    private final IServiceTraiteNP traiteNpService;
 
     @PostMapping(path = "/create")
-    TraiteNPResp create(@Valid @RequestBody CreateTraiteNPReq dto) throws UnknownHostException {
-        return traiteNPService.create(dto);
+    TraiteNPResp create(@Valid @RequestBody CreateTraiteNPReq dto)
+    {
+        return traiteNpService.create(dto);
     }
 
     @PutMapping(path = "/update")
-    TraiteNPResp update(@Valid @RequestBody UpdateTraiteNPReq dto) throws UnknownHostException {
-        return traiteNPService.update(dto);
+    TraiteNPResp update(@Valid @RequestBody UpdateTraiteNPReq dto){
+        return traiteNpService.update(dto);
     }
 
     @GetMapping(path = "/search")
@@ -39,12 +39,17 @@ public class TraiteNPController
                               @RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size)
     {
-        return traiteNPService.search(key, fncId, userId, cedId, staCodes, exeCode, PageRequest.of(page, size));
+        return traiteNpService.search(key, fncId, userId, cedId, staCodes, exeCode, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/edit/{traiId}")
     UpdateTraiteNPReq edit(@PathVariable Long traiId){
-        return traiteNPService.edit(traiId);
+        return traiteNpService.edit(traiId);
     }
 
+    @GetMapping(path = "/details/{traiteNpId}")
+    public TraiteNPResp getDetails(@PathVariable Long traiteNpId)
+    {
+        return traiteNpService.getTraiteDetails(traiteNpId);
+    }
 }

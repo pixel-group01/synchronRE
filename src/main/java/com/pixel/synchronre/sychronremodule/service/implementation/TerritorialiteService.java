@@ -34,18 +34,18 @@ public class TerritorialiteService implements IServiceTerritorialite
     private final TerritorialiteDetailsRepository terrDetRepo;
     private final ObjectCopier<Territorialite> terrCopier;
     @Override @Transactional
-    public TerritorialiteResp create(TerritorialiteReq dto) throws UnknownHostException
+    public TerritorialiteResp create(TerritorialiteReq dto)
     {
         TraiteNonProportionnel traite = traiRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         Territorialite territorialite = terrRepo.save(terrMapper.mapToTerritorialite(dto));
         logService.logg("Création d'une territorialité", null, territorialite, "Territorialite");
-        dto.getPaysCodes().forEach(p->
+        dto.getPaysCodes().stream().distinct().forEach(p->
         {
             TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(null, new Pays(p), territorialite));
             logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Territorialite");
         });
 
-        dto.getOrgCodes().forEach(o->
+        dto.getOrgCodes().stream().distinct().forEach(o->
         {
             TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(new Organisation(o), null, territorialite));
             logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "TerritorialiteDetails");
@@ -56,7 +56,7 @@ public class TerritorialiteService implements IServiceTerritorialite
     }
 
     @Override  @Transactional
-    public TerritorialiteResp update(TerritorialiteReq dto) throws UnknownHostException {
+    public TerritorialiteResp update(TerritorialiteReq dto){
         Territorialite territorialite = terrRepo.findById(dto.getTerrId()).orElseThrow(()->new AppException("Territorialité introuvable"));
         Territorialite oldTerritorialite = terrCopier.copy(territorialite);
         territorialite.setTerrLibelle(dto.getTerrLibelle());

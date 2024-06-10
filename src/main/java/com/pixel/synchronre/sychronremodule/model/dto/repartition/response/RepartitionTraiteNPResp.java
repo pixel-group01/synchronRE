@@ -20,7 +20,7 @@ public class RepartitionTraiteNPResp
     private String cesSigle;
     private String cesEmail;
     private String cesTelephone;
-    private Long traiNPId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
@@ -32,7 +32,7 @@ public class RepartitionTraiteNPResp
 
     public RepartitionTraiteNPResp(Long repId, BigDecimal repPrime, BigDecimal repTaux, BigDecimal repTauxCourtierPlaceur,
                                    BigDecimal repTauxCourtier, Long cesId, String cesNom, String cesSigle, String cesEmail,
-                                   String cesTelephone, Long traiNPId, String traiReference, String traiNumero,
+                                   String cesTelephone, Long traiteNpId, String traiReference, String traiNumero,
                                    String traiLibelle, boolean isAperiteur, boolean repStatut, String repStaCode)
     {
         this.repId = repId;
@@ -45,7 +45,7 @@ public class RepartitionTraiteNPResp
         this.cesSigle = cesSigle;
         this.cesEmail = cesEmail;
         this.cesTelephone = cesTelephone;
-        this.traiNPId = traiNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
         this.traiLibelle = traiLibelle;

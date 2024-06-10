@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.traite.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pixel.synchronre.sychronremodule.model.dto.devise.validator.ExistingDevCode;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ActiveExercice;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.validator.ExistingExeCode;
@@ -7,6 +8,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.nature.validator.ExistingN
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
+import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidPeriodicite;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidRattachement;
 import jakarta.validation.constraints.NotBlank;
@@ -34,7 +36,7 @@ public class CreateTraiteNPReq
     private String traiLibelle;
     private String traiAuteur;
     @NotNull(message = "Veuillez saisir l'exercice de rattachement")
-    @NotNull(message = "Veuillez saisir l'exercice de rattachement")
+    @NotBlank(message = "Veuillez saisir l'exercice de rattachement")
     @ValidRattachement
     private String traiEcerciceRattachement;
     @NotNull(message = "Veuillez saisir la date d'effet")
@@ -65,4 +67,6 @@ public class CreateTraiteNPReq
     @NotNull(message = "Veuillez saisir la divise des comptes")
     @NotBlank(message = "Veuillez saisir la divise des comptes")
     private String traiCompteDevCode;
+    @NotNull(message = "Veuillez sélectionner le courtier placeur")
+    private Long courtierPlaceurId;
 }

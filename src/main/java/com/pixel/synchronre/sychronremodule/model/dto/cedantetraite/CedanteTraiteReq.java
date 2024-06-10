@@ -19,7 +19,7 @@ public class CedanteTraiteReq
     private BigDecimal assiettePrime;
     @NotNull(message = "Veuillez saisir le taux de prime")
     private BigDecimal tauxPrime;
-    @NotNull(message = "Veuillez saisir la PMD")
+    //@NotNull(message = "Veuillez saisir la PMD")
     private BigDecimal pmd;
     @NotNull(message = "Veuillez choisir la cédante")
     @ExistingCedId
@@ -38,7 +38,7 @@ public class CedanteTraiteReq
         this.traiteNpId = traiteNpId;
     }
 
-    public CedanteTraiteReq(Long cedId, Long traiteNpId) {
+    public CedanteTraiteReq(Long traiteNpId, Long cedId) {
         this.cedId = cedId;
         this.traiteNpId = traiteNpId;
     }

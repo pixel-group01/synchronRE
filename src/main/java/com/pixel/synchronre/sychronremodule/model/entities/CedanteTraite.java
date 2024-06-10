@@ -24,6 +24,9 @@ public class CedanteTraite
     private BigDecimal assiettePrime;
     private BigDecimal tauxPrime;
     private BigDecimal pmd;
+    private BigDecimal pmdCourtier;
+    private BigDecimal pmdCourtierPlaceur;
+    private BigDecimal pmdNette;
     @ManyToOne @JoinColumn(name = "ced_id")
     private Cedante cedante;
     @ManyToOne @JoinColumn(name = "traite_np_id")

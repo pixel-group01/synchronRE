@@ -84,13 +84,4 @@ public abstract class RepartitionMapper {
         String stringIntIds = intIds == null ? "" : intIds.stream().map(String::valueOf).collect(Collectors.joining(","));
         return stringIntIds;
     }
-
-    @Mapping(target = "repPrime", source = "cesLeg.pmd")
-    @Mapping(target = "repTaux", source = "cesLeg.tauxCesLeg")
-    @Mapping(target = "repStaCode", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
-    @Mapping(target = "paramCessionLegale", expression = "java(cesLeg.getParamCesLegalId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(cesLeg.getParamCesLegalId()))")
-    @Mapping(target = "repStatut", expression = "java(true)")
-    @Mapping(target = "type", expression = "java(typeRepo.findByUniqueCode(\"REP_CES_LEG_TNP\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type (REP_CES_LEG_TNP) introuvable\")))")
-    @Mapping(target = "cedanteTraite", expression = "java(cedTraiId == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(cedTraiId))")
-    public abstract Repartition mapToRepartition(CesLeg cesLeg, Long cedTraiId);
-}//cedanteTraite
+}
