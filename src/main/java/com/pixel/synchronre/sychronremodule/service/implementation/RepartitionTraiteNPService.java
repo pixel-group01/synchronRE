@@ -45,8 +45,6 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     private final TypeRepo typeRepo;
     private final CedanteTraiteRepository cedTraiRepo;
     private final TraiteNPRepository tnpRepo;
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -74,13 +72,13 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         if(plaId$.isPresent())
         {
             dto.setRepId(plaId$.get());
-            this.update(dto);
+            return this.update(dto);
         }
         Repartition repartition = repTnpMapper.mapToPlacementTnp(dto);
         repartition.setType(typeRepo.findByUniqueCode("REP_PLA_TNP").orElseThrow(()->new AppException("Type(REP_PLA_TNP) introuvable")));
         //if(rtRepo.)
         repartition = recalculateMontantPrimeOnPlacement(dto, repartition);
-        entityManager.persist(repartition);
+        repartition = rtRepo.save(repartition);
         if(dto.isAperiteur()) setAsAperiteur(repartition);
         eventPublisher.publishEvent(new LoggingEvent(this, "Enregistrement d'un placement sur traité non proportionnel", new Repartition(), repartition, "Repartition"));
 

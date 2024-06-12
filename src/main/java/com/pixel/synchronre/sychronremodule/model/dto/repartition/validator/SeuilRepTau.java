@@ -123,7 +123,7 @@ public @interface SeuilRepTau
         public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            if(dto.getTraiteNpId() == null) return true;
+            if(dto.getTraiteNpId() == null || dto.getRepTaux() == null) return true;
             return comptaService.calculateTauxRestantAPlacer(dto.getTraiteNpId()).compareTo(dto.getRepTaux()) >= 0;
         }
     }
