@@ -17,8 +17,6 @@ import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
