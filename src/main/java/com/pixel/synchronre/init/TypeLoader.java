@@ -135,6 +135,7 @@ public class TypeLoader implements Loader
         //Type Association
         Type organisationPays = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "ORG-PAYS", "Association", PersStatus.ACTIVE, null, null));
         Type CategorieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "CAT-CED", "Association", PersStatus.ACTIVE, null, null));
+        Type TrancheCategorie = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "TRAN-CAT", "Association", PersStatus.ACTIVE, null, null));
 
     }
 }

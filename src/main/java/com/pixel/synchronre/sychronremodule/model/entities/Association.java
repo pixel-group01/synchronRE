@@ -53,4 +53,11 @@ public class Association
         this.cedante = cedante;
         this.type=type;
     }
+
+    public Association(Pays pays, Tranche tranche,Categorie categorie,  Type type) {
+        this.pays = pays;
+        this.tranche = tranche;
+        this.categorie = categorie;
+        this.type = type;
+    }
 }
