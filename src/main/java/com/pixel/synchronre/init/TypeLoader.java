@@ -137,6 +137,7 @@ public class TypeLoader implements Loader
         Type CategorieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "CAT-CED", "Association", PersStatus.ACTIVE, null, null));
         Type TrancheCategorie = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "TRAN-CAT", "Association", PersStatus.ACTIVE, null, null));
         Type TerritorialiteDetails = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "TER-DET", "Association", PersStatus.ACTIVE, null, null));
+        Type RisqueCouvertDetails = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "RISQ-DET", "Association", PersStatus.ACTIVE, null, null));
 
     }
 }

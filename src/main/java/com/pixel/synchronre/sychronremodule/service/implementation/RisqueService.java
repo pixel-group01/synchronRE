@@ -12,6 +12,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouver
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRisque;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class RisqueService implements IServiceRisque
     private final ObjectCopier<RisqueCouvert> risqueCopier;
     private final RisqueDetailsRepo risqueDetailsRepo;
     private final CouvertureRepository couRepo;
+    private final TypeRepo typeRepo;
 
     @Override @Transactional
     public RisqueCouvertResp create(CreateRisqueCouvertReq dto)
@@ -102,16 +105,18 @@ public class RisqueService implements IServiceRisque
     private void addSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;
-        RisqueCouvertDetails risqueCouvertDetails = new RisqueCouvertDetails(risque, new Couverture(scId));
+        Type type = typeRepo.findByUniqueCode("RISQ-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
+        Association risqueCouvertDetails = new Association(risque, new Couverture(scId),type);
         risqueCouvertDetails = risqueDetailsRepo.save(risqueCouvertDetails);
-        logService.logg("Ajout d'une sous couverture à un risque", new RisqueCouvertDetails(), risqueCouvertDetails, "RisqueCouvertDetails");
+        logService.logg("Ajout d'une sous couverture à un risque", new Association(), risqueCouvertDetails, "Association");
     }
 
     private void removeSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(!risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;
-        RisqueCouvertDetails risqueCouvertDetails = risqueDetailsRepo.findByRisqueIdAndSousCouId(risque.getRisqueId(), scId);
-        logService.logg("Retrait d'une sous couverture sur un risque", risqueCouvertDetails, new RisqueCouvertDetails(), "RisqueCouvertDetails");
-        risqueDetailsRepo.deleteById(risqueCouvertDetails.getRisqueDetailsId());
+        Type type = typeRepo.findByUniqueCode("RISQ-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
+        Association risqueCouvertDetails = risqueDetailsRepo.findByRisqueIdAndSousCouId(risque.getRisqueId(), scId);
+        logService.logg("Retrait d'une sous couverture sur un risque", risqueCouvertDetails, new Association(), "Association");
+        //risqueDetailsRepo.deleteById(risqueCouvertDetails.getRisqueDetailsId());
     }
 }
