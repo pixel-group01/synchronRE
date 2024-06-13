@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity
-public class TableAssociation
+public class Association
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ASSO_ID_GEN")
