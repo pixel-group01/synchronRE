@@ -132,5 +132,8 @@ public class TypeLoader implements Loader
         Type fonctionAdminTech = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_TECH", "Administrateur technique", PersStatus.ACTIVE, null, null));
 
         Type fonctionDev = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_DEV", "Développeur", PersStatus.ACTIVE, null, null));
+        //Type Association
+        Type organisationPays = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "ORG-PAYS", "Association", PersStatus.ACTIVE, null, null));
+
     }
 }

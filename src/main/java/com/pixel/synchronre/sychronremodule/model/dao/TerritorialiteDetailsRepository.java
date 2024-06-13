@@ -1,15 +1,11 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
-import com.pixel.synchronre.sychronremodule.model.entities.OrganisationPays;
-import com.pixel.synchronre.sychronremodule.model.entities.Territorialite;
 import com.pixel.synchronre.sychronremodule.model.entities.TerritorialiteDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface TerritorialiteDetailsRepository extends JpaRepository<TerritorialiteDetails, Long> {

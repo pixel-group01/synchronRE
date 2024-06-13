@@ -38,4 +38,12 @@ public class Association
     @ManyToOne @JoinColumn(name = "TYP_ID")
     private Type type;
 
+    @ManyToOne @JoinColumn(name = "STA_CODE")
+    private Statut statut;
+
+    public Association(Pays pays, Organisation organisation, Statut statut) {
+        this.pays = pays;
+        this.organisation = organisation;
+        this.statut = statut;
+    }
 }

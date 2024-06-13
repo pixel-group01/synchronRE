@@ -1,20 +1,17 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
-import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.dao.OrganisationPaysRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.AssociationRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.OrganisationRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.organisation.OrganisationDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.organisation.OrganisationMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.organisation.UpdatePaysOrgDTO;
-import com.pixel.synchronre.sychronremodule.model.entities.Organisation;
-import com.pixel.synchronre.sychronremodule.model.entities.OrganisationPays;
-import com.pixel.synchronre.sychronremodule.model.entities.Pays;
-import com.pixel.synchronre.sychronremodule.model.entities.Statut;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceOrganisation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,8 +31,7 @@ public class OrganisationService implements IServiceOrganisation
 {
     private final OrganisationMapper orgMapper;
     private final OrganisationRepository orgRepo;
-    private final OrganisationPaysRepository orgPaysRepo;
-    private final IJwtService jwtService;
+    private final AssociationRepository assoRepo;
     private final ILogService logService;
     private final ObjectCopier<Organisation> orgCopier;
 
@@ -48,7 +44,7 @@ public class OrganisationService implements IServiceOrganisation
         if(dto.getPaysCodes() == null || dto.getPaysCodes().isEmpty()) return orgMapper.mapToOrgnaisationDTO(organisation);
         dto.getPaysCodes().forEach(code->
         {
-            OrganisationPays orgPays = orgPaysRepo.save(new OrganisationPays(new Pays(code), organisationConstant, new Statut("ACT"), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId())));
+            Association orgPays = assoRepo.save(new Association(new Pays(code), organisationConstant, new Statut("ACT")));
             logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
         });
         logService.logg("Création d'une organisation", null, organisation, "Organisation");
@@ -59,7 +55,7 @@ public class OrganisationService implements IServiceOrganisation
     public List<OrganisationDTO> getListOrganisations()
     {
         List<OrganisationDTO> organisations = orgRepo.getListOrganisations();
-        organisations = organisations.stream().peek(o->o.setPaysList(orgPaysRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
+        organisations = organisations.stream().peek(o->o.setPaysList(assoRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
         return organisations;
     }
 
@@ -67,7 +63,7 @@ public class OrganisationService implements IServiceOrganisation
     public Page<OrganisationDTO> search(String key, Pageable pageable)
     {
         Page<OrganisationDTO> organisationPage = orgRepo.search(key, pageable);
-        List<OrganisationDTO> organisationList = organisationPage.stream().peek(o->o.setPaysList(orgPaysRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
+        List<OrganisationDTO> organisationList = organisationPage.stream().peek(o->o.setPaysList(assoRepo.getPaysByOrgCodes(Collections.singletonList(o.getOrganisationCode())))).collect(Collectors.toList());
         return new PageImpl<>(organisationList, pageable, organisationPage.getTotalElements());
     }
 
@@ -80,8 +76,8 @@ public class OrganisationService implements IServiceOrganisation
 
         logService.logg("Modification d'une organisation", oldOrganisation, organisation, "Organisation");
 
-        List<String> paysToRemove = orgPaysRepo.getPaysCodesToRemove(dto.getOrgCode(), dto.getPaysCodes());
-        List<String> paysToAdd = orgPaysRepo.getPaysCodesToAdd(dto.getOrgCode(), dto.getPaysCodes());
+        List<String> paysToRemove = assoRepo.getPaysCodesToRemove(dto.getOrgCode(), dto.getPaysCodes());
+        List<String> paysToAdd = assoRepo.getPaysCodesToAdd(dto.getOrgCode(), dto.getPaysCodes());
         paysToRemove.forEach(paysCode-> {
                 this.removePaysFromOrganisation(dto.getOrgCode(), paysCode);
         });
@@ -94,16 +90,16 @@ public class OrganisationService implements IServiceOrganisation
 
     private void addPaysToOrganisation(String orgCode, String paysCode){
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
-        if(orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
-        OrganisationPays orgPays = orgPaysRepo.save(new OrganisationPays(new Pays(paysCode), organisation, new Statut("ACT"), new AppUser(jwtService.getConnectedUserId()), new AppFunction(jwtService.getConnectedUserFunctionId())));
+        if(assoRepo.orgHasPays(orgCode, paysCode)) return ;
+        Association orgPays = assoRepo.save(new Association(new Pays(paysCode), organisation, new Statut("ACT")));
         logService.logg("Ajout d'un pays à une organisation", null, orgPays, "OrganisationPays");
     }
 
     private void removePaysFromOrganisation(String orgCode, String paysCode) {
         Organisation organisation = orgRepo.findById(orgCode).orElseThrow(()->new AppException("Organisation introuvable"));
-        if(!orgPaysRepo.orgHasPays(orgCode, paysCode)) return ;
-        OrganisationPays orgPays = orgPaysRepo.findByOrgCodeAndPaysCode(orgCode, paysCode);
-        orgPaysRepo.deleteByOrgCodeAndPaysCode(orgCode, paysCode);
-        logService.logg("Suppression d'un pays à une organisation", orgPays, new OrganisationPays(), "OrganisationPays");
+        if(!assoRepo.orgHasPays(orgCode, paysCode)) return ;
+        Association orgPays = assoRepo.findByOrgCodeAndPaysCode(orgCode, paysCode);
+        assoRepo.deleteByOrgCodeAndPaysCode(orgCode, paysCode);
+        logService.logg("Suppression d'un pays à une organisation", orgPays, new Association(), "Association");
     }
 }
