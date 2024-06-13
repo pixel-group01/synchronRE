@@ -22,8 +22,7 @@ public class TerritorialiteDetails
     private Organisation organisation;
     @ManyToOne @JoinColumn(name = "pays_code")
     private Pays pays;
-    @ManyToOne
-    @JoinColumn(name = "terr_id")
+    @ManyToOne @JoinColumn(name = "terr_id")
     private Territorialite territorialite;
     @CreationTimestamp
     protected LocalDateTime createdAt;

@@ -12,6 +12,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.territorialite.Territorial
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTerritorialite;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,22 +35,25 @@ public class TerritorialiteService implements IServiceTerritorialite
     private final TraiteRepository traiRepo;
     private final TerritorialiteDetailsRepository terrDetRepo;
     private final ObjectCopier<Territorialite> terrCopier;
+    private final TypeRepo typeRepo;
     @Override @Transactional
     public TerritorialiteResp create(TerritorialiteReq dto)
     {
+        Type type = typeRepo.findByUniqueCode("TER-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
         TraiteNonProportionnel traite = traiRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         Territorialite territorialite = terrRepo.save(terrMapper.mapToTerritorialite(dto));
-        logService.logg("Création d'une territorialité", null, territorialite, "Territorialite");
+        logService.logg("Création d'une territorialité", null, territorialite, "Association");
         dto.getPaysCodes().stream().distinct().forEach(p->
         {
-            TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(null, new Pays(p), territorialite));
-            logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Territorialite");
+            Association terrDetails = terrDetRepo.save(new Association(null, new Pays(p), territorialite,type));
+            logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Association");
         });
 
         dto.getOrgCodes().stream().distinct().forEach(o->
         {
-            TerritorialiteDetails terrDetails = terrDetRepo.save(new TerritorialiteDetails(new Organisation(o), null, territorialite));
-            logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "TerritorialiteDetails");
+
+            Association terrDetails = terrDetRepo.save(new Association(new Organisation(o), null, territorialite,type));
+            logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "Association");
         });
         TerritorialiteResp territorialiteResp = terrMapper.mapToTerritorialiteResp(dto, traite);
         territorialiteResp.setTerrId(territorialite.getTerrId());
@@ -88,15 +93,16 @@ public class TerritorialiteService implements IServiceTerritorialite
     private void addOrgToTerritorialite(Long terrId, String orgCode)
     {
         if(terrDetRepo.terrHasOrg(terrId, orgCode)) return ;
+        Type type = typeRepo.findByUniqueCode("TER-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
         Territorialite territorialite = terrRepo.findById(terrId).orElseThrow(()->new AppException("Territorialité introuvable"));
-        TerritorialiteDetails terreDet = terrDetRepo.save(new TerritorialiteDetails(new Organisation(orgCode), null, territorialite));
-        logService.logg("Ajout d'une organisation à une territorialité", null, terreDet, "TerritorialiteDetails");
+        Association terreDet = terrDetRepo.save(new Association(new Organisation(orgCode), null, territorialite,type));
+        logService.logg("Ajout d'une organisation à une territorialité", null, terreDet, "Association");
     }
 
     private void removeOrgFromTerritorialite(Long terrId, String orgCode)
     {
         if(!terrDetRepo.terrHasOrg(terrId, orgCode)) return ;
-        TerritorialiteDetails terreDet = terrDetRepo.findByTerrIdAndOrgCode(terrId, orgCode);
+        Association terreDet = terrDetRepo.findByTerrIdAndOrgCode(terrId, orgCode);
         terrDetRepo.deleteByTerrIdAndPOrgCode(terrId, orgCode);
         logService.logg("Suppression d'une organisation sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
     }
@@ -120,17 +126,18 @@ public class TerritorialiteService implements IServiceTerritorialite
     private void addPaysToTerritorialite(Long terrId, String paysCode)
     {
         if(terrDetRepo.terrHasPays(terrId, paysCode)) return ;
+        Type type = typeRepo.findByUniqueCode("TER-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
         Territorialite territorialite = terrRepo.findById(terrId).orElseThrow(()->new AppException("Territorialité introuvable"));
-        TerritorialiteDetails terreDet = terrDetRepo.save(new TerritorialiteDetails(null, new Pays(paysCode), territorialite));
-        logService.logg("Ajout d'un pays à une territorialité", null, terreDet, "TerritorialiteDetails");
+        Association terreDet = terrDetRepo.save(new Association(null, new Pays(paysCode), territorialite,type));
+        logService.logg("Ajout d'un pays à une territorialité", null, terreDet, "Association");
     }
 
     private void removePaysFromTerritorialite(Long terrId, String paysCode)
     {
         if(!terrDetRepo.terrHasPays(terrId, paysCode)) return ;
-        TerritorialiteDetails terreDet = terrDetRepo.findByTerrIdAndPaysCode(terrId, paysCode);
+        Association terreDet = terrDetRepo.findByTerrIdAndPaysCode(terrId, paysCode);
         terrDetRepo.deleteByTerrIdAndPaysCode(terrId, paysCode);
-        logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
+        logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "Association");
     }
     @Override
     public TerritorialiteReq edit(Long terrId){

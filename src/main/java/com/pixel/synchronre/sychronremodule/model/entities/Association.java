@@ -35,6 +35,9 @@ public class Association
     @ManyToOne @JoinColumn(name = "ORGAN_CODE")
     private Organisation organisation;
 
+    @ManyToOne @JoinColumn(name = "terr_id")
+    private Territorialite territorialite;
+
     @ManyToOne @JoinColumn(name = "TYP_ID")
     private Type type;
 
@@ -58,6 +61,13 @@ public class Association
         this.pays = pays;
         this.tranche = tranche;
         this.categorie = categorie;
+        this.type = type;
+    }
+
+    public Association(Organisation organisation, Pays pays, Territorialite territorialite, Type type) {
+        this.organisation = organisation;
+        this.pays = pays;
+        this.territorialite = territorialite;
         this.type = type;
     }
 }
