@@ -47,4 +47,10 @@ public class Association
         this.statut = statut;
         this.type=type;
     }
+
+    public Association(Categorie categorie, Cedante cedante,Type type) {
+        this.categorie = categorie;
+        this.cedante = cedante;
+        this.type=type;
+    }
 }

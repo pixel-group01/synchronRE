@@ -134,6 +134,7 @@ public class TypeLoader implements Loader
         Type fonctionDev = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_DEV", "Développeur", PersStatus.ACTIVE, null, null));
         //Type Association
         Type organisationPays = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "ORG-PAYS", "Association", PersStatus.ACTIVE, null, null));
+        Type CategorieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "CAT-CED", "Association", PersStatus.ACTIVE, null, null));
 
     }
 }
