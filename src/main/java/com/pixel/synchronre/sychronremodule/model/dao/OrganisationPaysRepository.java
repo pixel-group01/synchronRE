@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface AssociationRepository extends JpaRepository<Association, Long> {
+public interface OrganisationPaysRepository extends JpaRepository<Association, Long> {
     @Query("""
     select p.paysCode from Pays p where p.paysCode not in ?2 and 
     exists(select op from Association op where op.organisation.organisationCode = ?1 and op.pays.paysCode = p.paysCode and op.type.uniqueCode = 'ORG-PAYS')

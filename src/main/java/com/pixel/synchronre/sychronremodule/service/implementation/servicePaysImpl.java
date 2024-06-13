@@ -6,7 +6,7 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.AssociationRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.OrganisationPaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.PaysMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.request.CreatePaysReq;
@@ -32,7 +32,7 @@ public class servicePaysImpl implements IservicePays {
     private final PaysMapper paysMapper;
     private final ObjectCopier<Pays> payCopier;
     private final ILogService logService;
-    private final AssociationRepository assoRepo;
+    private final OrganisationPaysRepository orgPaysRepo;
 
     @Override
     public PaysDetailsResp createPays(CreatePaysReq dto) {
@@ -62,6 +62,6 @@ public class servicePaysImpl implements IservicePays {
     public List<PaysListResp> getPaysByOrgCodes(List<String> orgCodes) {
         List<PaysListResp> allPays = paysRepo.getAllPays();
         if(orgCodes == null || orgCodes.isEmpty()) return allPays;
-        return assoRepo.getPaysByOrgCodes(orgCodes);
+        return orgPaysRepo.getPaysByOrgCodes(orgCodes);
     }
 }

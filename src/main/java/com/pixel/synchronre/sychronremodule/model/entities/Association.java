@@ -41,9 +41,10 @@ public class Association
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
 
-    public Association(Pays pays, Organisation organisation, Statut statut) {
+    public Association(Pays pays, Organisation organisation, Statut statut,Type type) {
         this.pays = pays;
         this.organisation = organisation;
         this.statut = statut;
+        this.type=type;
     }
 }

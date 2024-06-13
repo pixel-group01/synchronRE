@@ -1,7 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.sychronremodule.model.dao.AssociationRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
