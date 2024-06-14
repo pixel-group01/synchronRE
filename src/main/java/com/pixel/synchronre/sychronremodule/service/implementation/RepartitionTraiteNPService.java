@@ -134,7 +134,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         eventPublisher.publishEvent(new LoggingEvent(this,"Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition"));
     }
 
-    @Override
+    @Override @Transactional
     public void setMontantsPrimes(Long traiteNpId, BigDecimal repTaux, BigDecimal tauxCoutier, BigDecimal tauxCourtierPlaceur, Repartition repartition)
     {
         PmdGlobalResp pmdGlobal = cedTraiRepo.getPmdGlobal(traiteNpId);
@@ -155,7 +155,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         rtRepo.save(repartition);
     }
 
-    @Override
+    @Override @Transactional
     public void desactivateCesLegByTraiteNpIdAndPclId(Long traiteNpId, Long paramCesLegalId)
     {
         List<Repartition> pclReps = rtRepo.findCesLegByTraiteNpIdAndPclId(traiteNpId, paramCesLegalId);
@@ -174,7 +174,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         rtRepo.setAsTheOnlyAperiteur(repartition.getRepId());
     }
 
-    @Override
+    @Override @Transactional
     public void setMontantPrimesForCesLegRep(CesLeg cesLeg, Repartition repartition) {
         if(repartition.getCedanteTraite() == null || repartition.getCedanteTraite().getCedanteTraiteId() == null)
             throw new AppException("Impossible de récupérer l'ID du traité de la CedanteTraite lié à répartition " + repartition.getRepId());

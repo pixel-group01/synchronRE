@@ -105,8 +105,8 @@ public class InterlocuteurService implements IServiceInterlocuteur
     public Page<InterlocuteurListResp> searchInterlocuteurForPlacement(String key, Long plaId, Pageable pageable)
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
-        Interlocuteur interlocuteurPrincipal = placement.getInterlocuteurPrincipal();
-        if(interlocuteurPrincipal == null) throw new AppException("Aucun interlocuteur principal sur ce placement");
+
+        Interlocuteur interlocuteurPrincipal = repRepo.getInterlocuteurPrincipal(plaId).orElseThrow(()->new AppException("Aucun interlocuteur principal sur ce placement"));
         Long idInterlocuteurPrincipal =  interlocuteurPrincipal.getIntId();
         String idAutreInterlocuteursString = placement.getAutreInterlocuteurs();
         String[] idAutreInterlocuteursTab = idAutreInterlocuteursString == null ? null : idAutreInterlocuteursString.split(",");

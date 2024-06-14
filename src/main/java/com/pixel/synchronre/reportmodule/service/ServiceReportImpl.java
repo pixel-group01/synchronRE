@@ -109,11 +109,13 @@ public class ServiceReportImpl implements IServiceReport
     public byte[] generateNoteCessionFac(Long plaId, String interlocuteur) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
+        Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Impossible de trouver une affaire sur la repartition " + plaId));
+        placement.setAffaire(affaire);
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", placement.getAffaire().getAffId());
-        params.put("aff_assure", placement.getAffaire().getAffAssure());
-        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("aff_id", affaire.getAffId());
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("interlocuteur", interlocuteur);
         params.put("param_image", this.getImagesPath());
@@ -154,11 +156,13 @@ public class ServiceReportImpl implements IServiceReport
     public byte[] generateNoteCreditFac(Long affId, Long cesId) throws Exception
     {
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable "));
+        placement.setAffaire(affaire);
         if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", placement.getAffaire().getAffId());
-        params.put("aff_assure", placement.getAffaire().getAffAssure());
-        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("aff_id", affaire.getAffId());
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("ces_id", placement.getCessionnaire().getCesId());
         params.put("param_image", this.getImagesPath());
         byte[] reportBytes = this.generateReport(jrConfig.noteCredit, params, new ArrayList<>(), null);

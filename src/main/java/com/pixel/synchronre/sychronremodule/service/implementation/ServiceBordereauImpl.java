@@ -61,8 +61,8 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Répartition introuvable"));
         Long cesId = placement.getCessionnaire().getCesId();
-
-        String bordNum = "BC." + String.format("%04d", cesId)+ "."+ affRepo.getAffCode(placement.getAffaire().getAffId()) + "." + String.format("%05d", borId);
+        Long affId = repRepo.getAffIdByRepId(plaId).orElseThrow(()->new AppException("Affaire introuvable"));
+        String bordNum = "BC." + String.format("%04d", cesId)+ "."+ affRepo.getAffCode(affId) + "." + String.format("%05d", borId);
         return bordNum;
     }
 
