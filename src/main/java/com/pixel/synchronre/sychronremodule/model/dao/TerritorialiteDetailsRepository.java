@@ -2,7 +2,6 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Association;
-import com.pixel.synchronre.sychronremodule.model.entities.TerritorialiteDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

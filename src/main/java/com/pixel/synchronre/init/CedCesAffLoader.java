@@ -36,6 +36,7 @@ public class CedCesAffLoader implements Loader
         Cessionnaire ces6 = cesRepo.save(new Cessionnaire(null, "CONTINENTAL-RE", "CRE", "cnre@gmail.com", "cnrare-tel", "cnare-cel", "ncnre", "ABJ", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         Cessionnaire ces7 = cesRepo.save(new Cessionnaire(null, "SCG-RE", "SCG-RE", "sgre@gmail.com", "sgre-tel", "sgre-cel", "sgre", "ABJ", FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         Cessionnaire ces8 = cesRepo.save(new Cessionnaire(null, "WAICA-RE", "WRE", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ",FIVE, typeRepo.findByUniqueCode("CES").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
+        Cessionnaire courtierPlaceur = cesRepo.save(new Cessionnaire(null, "GUY CAPENTER", "GUY CAPENTER", "wre@gmail.com", "wre-tel", "wre-cel", "wre", "ABJ",FIVE, typeRepo.findByUniqueCode("COURT_PLA").orElseThrow(()->new AppException("Type de document inconnu")), LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         //cesRepo.saveAll(Arrays.asList(ces1, ces2, ces3,ces5, ces6, ces7, ces8));
         //cesRepo.save(nre);
 

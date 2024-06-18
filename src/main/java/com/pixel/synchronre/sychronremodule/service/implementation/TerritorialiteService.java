@@ -104,7 +104,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(!terrDetRepo.terrHasOrg(terrId, orgCode)) return ;
         Association terreDet = terrDetRepo.findByTerrIdAndOrgCode(terrId, orgCode);
         terrDetRepo.deleteByTerrIdAndPOrgCode(terrId, orgCode);
-        logService.logg("Suppression d'une organisation sur une territorialité", terreDet, new TerritorialiteDetails(), "TerritorialiteDetails");
+        logService.logg("Suppression d'une organisation sur une territorialité", terreDet, new Association(), "Association");
     }
 
     @Override  @Transactional
@@ -137,7 +137,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         if(!terrDetRepo.terrHasPays(terrId, paysCode)) return ;
         Association terreDet = terrDetRepo.findByTerrIdAndPaysCode(terrId, paysCode);
         terrDetRepo.deleteByTerrIdAndPaysCode(terrId, paysCode);
-        logService.logg("Suppression d'un pays sur une territorialité", terreDet, new TerritorialiteDetails(), "Association");
+        logService.logg("Suppression d'un pays sur une territorialité", terreDet, new Association(), "Association");
     }
     @Override
     public TerritorialiteReq edit(Long terrId){
