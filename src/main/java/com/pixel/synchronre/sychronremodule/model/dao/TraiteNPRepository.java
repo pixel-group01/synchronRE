@@ -19,7 +19,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
-        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
+        tnp.traiDelaiConfirmation,tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
         src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, 
         concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, tnp.updatedAt) 
         from TraiteNonProportionnel tnp 
@@ -71,7 +71,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, 
         tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi,
-        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
+        tnp.traiDelaiConfirmation,tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur, e.exeCode, src.traiReference, 
         src.traiLibelle, n.natCode, n.natLibelle, d.devCode, dc.devCode,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom) 
         from TraiteNonProportionnel tnp left join tnp.exercice e left join tnp.traiSource src left join tnp.nature n left join tnp.traiDevise d 
         left join tnp.traiCompteDevise dc
@@ -93,7 +93,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiEcerciceRattachement,
         tnp.traiDateEffet, tnp.traiDateEcheance,tnp.traiCoursDevise,tnp.traiPeriodicite,tnp.traiDelaiEnvoi,
-        tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode,court.cesId)
+        tnp.traiDelaiConfirmation,tnp.traiDelaiPaiement, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode,court.cesId)
         from TraiteNonProportionnel tnp 
         left join tnp.traiSource scr
         left join tnp.nature nat

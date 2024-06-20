@@ -45,6 +45,7 @@ public class UpdateTraiteNPReq
     private String traiPeriodicite;
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
+    private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private String traiSourceRef;
@@ -64,7 +65,7 @@ public class UpdateTraiteNPReq
                              EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                              LocalDate traiDateEffet, LocalDate traiDateEcheance,
                              BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
-                             Long traiDelaiEnvoi, Long traiDelaiConfirmation,
+                             Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
                              BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                              String traiSourceRef, String natCode, String devCode,
                              String traiCompteDevCode,Long courtierPlaceurId) {
@@ -79,6 +80,7 @@ public class UpdateTraiteNPReq
         this.traiPeriodicite = traiPeriodicite == null ? null : traiPeriodicite.name();
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
+        this.traiDelaiPaiement=traiDelaiPaiement;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
         this.traiSourceRef = traiSourceRef;

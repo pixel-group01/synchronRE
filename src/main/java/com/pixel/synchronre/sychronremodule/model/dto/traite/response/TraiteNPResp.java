@@ -25,6 +25,7 @@ public class TraiteNPResp
     private String traiPeriodicite;
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
+    private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private Long exeCode;
@@ -61,7 +62,7 @@ public class TraiteNPResp
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
-                        Long traiDelaiEnvoi, Long traiDelaiConfirmation,
+                        Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
                         String natCode, String natLibelle,Long courtierPlaceurId,String cesNom,
@@ -103,7 +104,7 @@ public class TraiteNPResp
 
     public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle,
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
-                        BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,
+                        BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, Long exeCode, String traiSourceRef,
                         String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode,Long courtierPlaceurId,String cesNom)
     {
@@ -118,6 +119,7 @@ public class TraiteNPResp
         this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getLibelle();
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
+        this.traiDelaiPaiement=traiDelaiPaiement;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
         this.exeCode = exeCode;
