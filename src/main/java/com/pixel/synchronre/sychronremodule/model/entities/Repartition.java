@@ -12,7 +12,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
+@AllArgsConstructor @NoArgsConstructor
+@Getter @Setter
+@Entity
 public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,16 +40,16 @@ public class Repartition {
     @Column(precision = 50, scale = 20)
     private BigDecimal repMontantCourtierPlaceur; //Prime à reverser au courtier placeur
     private String autreInterlocuteurs;
-    @ManyToOne @JoinColumn(name = "rep_interlocuteur_principal_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "rep_interlocuteur_principal_id")
     private Interlocuteur interlocuteurPrincipal;
     private boolean repStatut;
     @ManyToOne @JoinColumn(name = "sta_code")
     private Statut repStaCode;
-    @ManyToOne @JoinColumn(name = "aff_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "aff_id")
     private Affaire affaire;
     @ManyToOne @JoinColumn(name = "ced_trai_id")
     private CedanteTraite cedanteTraite;
-    @ManyToOne @JoinColumn(name = "traite_np_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
@@ -55,7 +57,7 @@ public class Repartition {
     private Cessionnaire cessionnaire;
     @ManyToOne @JoinColumn(name = "typ_id")
     private Type type;
-    @ManyToOne @JoinColumn(name = "param_ces_legal_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isAperiteur;
@@ -64,7 +66,7 @@ public class Repartition {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne @JoinColumn(name = "sin_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "sin_id")
     private Sinistre sinistre;
 
     public Repartition(Long repId) {

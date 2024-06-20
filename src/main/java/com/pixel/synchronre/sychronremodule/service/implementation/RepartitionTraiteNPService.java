@@ -17,8 +17,6 @@ import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -136,7 +134,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         eventPublisher.publishEvent(new LoggingEvent(this,"Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition"));
     }
 
-    @Override
+    @Override @Transactional
     public void setMontantsPrimes(Long traiteNpId, BigDecimal repTaux, BigDecimal tauxCoutier, BigDecimal tauxCourtierPlaceur, Repartition repartition)
     {
         PmdGlobalResp pmdGlobal = cedTraiRepo.getPmdGlobal(traiteNpId);
@@ -157,7 +155,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         rtRepo.save(repartition);
     }
 
-    @Override
+    @Override @Transactional
     public void desactivateCesLegByTraiteNpIdAndPclId(Long traiteNpId, Long paramCesLegalId)
     {
         List<Repartition> pclReps = rtRepo.findCesLegByTraiteNpIdAndPclId(traiteNpId, paramCesLegalId);
@@ -176,7 +174,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         rtRepo.setAsTheOnlyAperiteur(repartition.getRepId());
     }
 
-    @Override
+    @Override @Transactional
     public void setMontantPrimesForCesLegRep(CesLeg cesLeg, Repartition repartition) {
         if(repartition.getCedanteTraite() == null || repartition.getCedanteTraite().getCedanteTraiteId() == null)
             throw new AppException("Impossible de récupérer l'ID du traité de la CedanteTraite lié à répartition " + repartition.getRepId());

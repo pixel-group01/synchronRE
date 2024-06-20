@@ -119,6 +119,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             mvtService.createMvtAffaire(new MvtReq(modeUpdate ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, dto.getAffId(), EN_COURS_DE_PLACEMENT.staCode, null));
         }
+        rep.setAffaire(aff);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
