@@ -28,6 +28,7 @@ public class TraiteNPResp
     private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
+    private BigDecimal traiTauxAbattement;
     private Long exeCode;
     private String traiSourceRef;
     private String traiSourceLibelle;
@@ -63,7 +64,7 @@ public class TraiteNPResp
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                         Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
-                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
                         String natCode, String natLibelle,Long courtierPlaceurId,String cesNom,
                         String devCode,
@@ -84,6 +85,7 @@ public class TraiteNPResp
         this.traiDelaiConfirmation = traiDelaiConfirmation;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
+        this.traiTauxAbattement=traiTauxAbattement;
         this.exeCode = exeCode;
         this.traiSourceRef = traiSourceRef;
         this.traiSourceLibelle = traiSourceLibelle;
@@ -105,7 +107,7 @@ public class TraiteNPResp
     public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle,
                         EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
-                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, Long exeCode, String traiSourceRef,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement, Long exeCode, String traiSourceRef,
                         String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode,Long courtierPlaceurId,String cesNom)
     {
         this.traiteNpId = traiteNpId;
@@ -122,6 +124,7 @@ public class TraiteNPResp
         this.traiDelaiPaiement=traiDelaiPaiement;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
+        this.traiTauxAbattement=traiTauxAbattement;
         this.exeCode = exeCode;
         this.traiSourceRef = traiSourceRef;
         this.traiSourceLibelle = traiSourceLibelle;
