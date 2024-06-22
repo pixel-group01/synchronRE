@@ -10,17 +10,20 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.RisqueMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRisque;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service @RequiredArgsConstructor
 public class RisqueService implements IServiceRisque
@@ -75,8 +78,14 @@ public class RisqueService implements IServiceRisque
     {
         key = StringUtils.stripAccentsToUpperCase(key);
         Page<RisqueCouvertResp> risquePage = risqueRepo.search(traiteNpId, key, pageable);
-        return risquePage;
+        List<RisqueCouvertResp> risqueList = risquePage
+                .stream()
+                .filter(Objects::nonNull)
+                .peek(t->t.setSousCouvertures(risqueRepo.getActivitesByrisqueId(t.getRisqueId())))
+                .toList();
+        return new PageImpl<>(risqueList, pageable, risquePage.getTotalElements());
     }
+
 
     @Override @Transactional
     public boolean delete(Long risqueId)

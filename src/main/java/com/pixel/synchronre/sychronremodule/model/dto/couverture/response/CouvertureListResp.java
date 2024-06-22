@@ -22,4 +22,8 @@ public class CouvertureListResp
         this.couLibelle = couLibelle;
         this.couLibelleAbrege = couLibelleAbrege;
     }
+
+    public CouvertureListResp(String couLibelle) {
+        this.couLibelle = couLibelle;
+    }
 }
