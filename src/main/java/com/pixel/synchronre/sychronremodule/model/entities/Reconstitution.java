@@ -22,8 +22,6 @@ public class Reconstitution
     @SequenceGenerator(name = "REC_ID_GEN", sequenceName = "REC_ID_GEN")
     private Long reconstitutionId;
     private Long nbrReconstitution;
-    private BigDecimal tauxReconstitution;
-    private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;

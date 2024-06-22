@@ -35,8 +35,10 @@ public class TraiteNonProportionnel
     private PERIODICITE traiPeriodicite;
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
+    private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
+    private BigDecimal traiTauxAbattement;
     @ManyToOne @JoinColumn(name = "exe_code")
     private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")

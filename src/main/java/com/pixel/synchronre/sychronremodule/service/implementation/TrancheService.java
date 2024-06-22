@@ -11,6 +11,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,7 @@ public class TrancheService implements IServiceTranche
     private final TrancheMapper trancheMapper;
     private final ObjectCopier<Tranche> trancheCopier;
     private final TrancheCategorieRepository trancheCatRepo;
+    private final TypeRepo typeRepo;
     @Override
     public TrancheResp save(TrancheReq dto)
     {
@@ -101,17 +104,18 @@ public class TrancheService implements IServiceTranche
     private void removeCategorie(Tranche tranche, Long catId)
     {
         if(!trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
-        TrancheCategorie trancheCategorie = trancheCatRepo.findByTrancheIdAndCatId(tranche.getTrancheId(), catId);
-        logService.logg("Retrait d'une catégorie à une tranche", new TrancheCategorie(), trancheCategorie, "TrancheCategorie");
-        trancheCatRepo.deleteById(trancheCategorie.getTrancheCategorieId());
+        Association trancheCategorie = trancheCatRepo.findByTrancheIdAndCatId(tranche.getTrancheId(), catId);
+        logService.logg("Retrait d'une catégorie à une tranche", new Association(), trancheCategorie, "Association");
+        trancheCatRepo.deleteById(trancheCategorie.getAssoId());
     }
 
     private void addCategorie(Tranche tranche, Long catId)
     {
         if(trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
         //TODO Vérifier que la catégorie appartient au traité
-        TrancheCategorie trancheCategorie = trancheCatRepo.save(new TrancheCategorie(null, tranche, new Categorie(catId)));
-        logService.logg("Ajout d'une catégorie à une tranche", new TrancheCategorie(), trancheCategorie, "TrancheCategorie");
+       Type type = typeRepo.findByUniqueCode("TRAN-CAT").orElseThrow(()->new AppException("Type de document inconnu"));
+        Association trancheCategorie = trancheCatRepo.save(new Association(null,tranche, new Categorie(catId),type));
+        logService.logg("Ajout d'une catégorie à une tranche", new Association(), trancheCategorie, "Association");
     }
 
     @Override

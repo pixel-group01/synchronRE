@@ -17,7 +17,8 @@ public enum TypeGroup
     CESSIONNAIRE("TYP_CES", "TYPE-CESSIONNAIRE"), //Cessionnaire, courtier
     MODE_REGLEMENT("TYP_MOD_REG", "MODE_REGLEMENT"),
     TYPE_FUNCTION("TYP_FNC", "Type de fonction"),
-    TYPE_PCL("TYPE_PCL", "Type de paramètre de cession légale");
+    TYPE_PCL("TYPE_PCL", "Type de paramètre de cession légale"),
+    TYPE_ASSOCIATION("TYPE_ASSO", "Type de table d'association");
     private String groupCode;
     private String groupName;
 }

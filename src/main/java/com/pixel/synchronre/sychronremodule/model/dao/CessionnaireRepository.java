@@ -85,7 +85,8 @@ public interface CessionnaireRepository extends JpaRepository<Cessionnaire, Long
             ces.cesId, ces.cesNom, ces.cesSigle, ces.cesEmail,
             ces.cesTelephone, ces.cesAdressePostale, ces.cesSituationGeo, 
             ces.statut.staLibelle)
-       from Cessionnaire ces where ces.cesId not in 
+       from Cessionnaire ces where ces.type.uniqueCode not in ('COURT','COURT_PLA') 
+       and ces.cesId not in 
        (select ces2.cesId from  Repartition r left join r.cessionnaire ces2 left join r.repStaCode s where r.traiteNonProportionnel.traiteNpId = ?1 and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULEE', 'ANNULE')) and r.type.uniqueCode = 'REP_PLA_TNP')
     """)
     List<CessionnaireListResp> findCessionnairesNotOnTraite(Long traiteNpId);
