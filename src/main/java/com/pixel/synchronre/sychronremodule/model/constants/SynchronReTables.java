@@ -20,4 +20,5 @@ public class SynchronReTables {
     public static final String DETAIL_BORDEREAU = "Detail_bordereau";
     public static final String SOUS_LIMITE = "Sous_limite";
     public static final String CEDANTE_TRAITE = "CedanteTraite";
+    public static final String TRAITE_NON_PROPORTIONNEL = "traite_non_proportionnel";
 }

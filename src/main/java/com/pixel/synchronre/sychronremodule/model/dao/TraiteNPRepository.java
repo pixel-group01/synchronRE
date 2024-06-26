@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel, Long>
 {
@@ -118,4 +120,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp(tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur) tnp from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1")
     TauxCourtiersResp getTauxCourtiers(Long traiteNpId);
+
+    @Query("select t from TraiteNonProportionnel t where t.traiteNpId = ?1")
+    Optional<TraiteNonProportionnel> findById(Long traiteNpId);
 }

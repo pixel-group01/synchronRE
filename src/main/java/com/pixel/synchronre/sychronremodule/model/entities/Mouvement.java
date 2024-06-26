@@ -30,6 +30,8 @@ public class Mouvement {
   private Sinistre sinistre;
   @ManyToOne @JoinColumn(name = "PLA_ID")
   private Repartition placement;
+  @ManyToOne @JoinColumn(name = "traite_np_id")
+  private TraiteNonProportionnel traiteNonProportionnel;
   @CreationTimestamp
   private LocalDateTime mvtDate;
 }
