@@ -38,6 +38,9 @@ public class ReportController
     public void generateNoteCession(HttpServletResponse response, @PathVariable Long plaId) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
+        Affaire affaire = affRepo.getAffaireByRepId(plaId);
+        if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
+        placement.setAffaire(affaire);
         String repTypeCode = repRepo.getTypeRepCode(plaId).orElse("");
         if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Long cesId = repRepo.getCesIdByRepId(plaId);
@@ -89,7 +92,8 @@ public class ReportController
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
         String repTypeCode = repRepo.getTypeRepCode(placement.getRepId()).orElse("");
         if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
-
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable " + affId));
+        placement.setAffaire(affaire);
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
         params.put("aff_assure", placement.getAffaire().getAffAssure());
@@ -108,6 +112,9 @@ public class ReportController
         if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Long cesId = repRepo.getCesIdByRepId(plaId);
         if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
+        Affaire affaire = affRepo.getAffaireByRepId(plaId);
+        if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
+        placement.setAffaire(affaire);
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
         params.put("aff_assure", placement.getAffaire().getAffAssure());

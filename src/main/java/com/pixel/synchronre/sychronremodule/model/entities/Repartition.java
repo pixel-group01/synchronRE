@@ -32,7 +32,7 @@ public class Repartition {
     private BigDecimal repTauxComCourt;
     private BigDecimal repTauxCourtierPlaceur; //TODO A Valider
     private String autreInterlocuteurs;
-    @ManyToOne @JoinColumn(name = "rep_interlocuteur_principal_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "rep_interlocuteur_principal_id")
     private Interlocuteur interlocuteurPrincipal;
     private boolean repStatut;
     @ManyToOne @JoinColumn(name = "sta_code")
@@ -45,7 +45,7 @@ public class Repartition {
     protected BigDecimal repCoursDevise;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cessionnaire_id")
     private Cessionnaire cessionnaire;
-    @ManyToOne @JoinColumn(name = "typ_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "typ_id")
     private Type type;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
@@ -55,7 +55,6 @@ public class Repartition {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "sin_id")
     private Sinistre sinistre;
 

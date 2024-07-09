@@ -5,15 +5,12 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
-import jakarta.servlet.http.HttpServletResponse;
 import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
@@ -21,8 +18,6 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.sql.DataSource;
 import java.io.*;
@@ -114,6 +109,9 @@ public class ServiceReportImpl implements IServiceReport
         Long cesId = repRepo.getCesIdByRepId(plaId);
         if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
         Map<String, Object> params = new HashMap<>();
+        Affaire affaire = affRepo.getAffaireByRepId(plaId);
+        if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
+        placement.setAffaire(affaire);
         params.put("aff_id", placement.getAffaire().getAffId());
         params.put("aff_assure", placement.getAffaire().getAffAssure());
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
@@ -159,6 +157,8 @@ public class ServiceReportImpl implements IServiceReport
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
         String repTypeCode = repRepo.getTypeRepCode(placement.getRepId()).orElse("");
         if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable " + affId));
+        placement.setAffaire(affaire);
         Map<String, Object> params = new HashMap<>();
         params.put("aff_id", placement.getAffaire().getAffId());
         params.put("aff_assure", placement.getAffaire().getAffAssure());
@@ -239,7 +239,7 @@ public class ServiceReportImpl implements IServiceReport
 
     @Override
     public byte[] generateNoteCessionFac(Long plaId) throws Exception {
-        InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipal(plaId);
+        InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipalResp(plaId);
         return this.generateNoteCessionFac(plaId, interlocuteur == null ? "Non spécifié" : interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
     }
 }
