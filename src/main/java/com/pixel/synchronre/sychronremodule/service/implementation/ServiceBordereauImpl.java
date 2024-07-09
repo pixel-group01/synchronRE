@@ -60,7 +60,8 @@ public class ServiceBordereauImpl implements IserviceBordereau {
     private String generateBordNum(Long borId, Long plaId)
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Répartition introuvable"));
-        Long cesId = placement.getCessionnaire().getCesId();
+        Long cesId = repRepo.getCesIdByRepId(plaId);
+        if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
 
         String bordNum = "BC." + String.format("%04d", cesId)+ "."+ affRepo.getAffCode(placement.getAffaire().getAffId()) + "." + String.format("%05d", borId);
         return bordNum;
@@ -147,7 +148,9 @@ public class ServiceBordereauImpl implements IserviceBordereau {
             details.setDebPrime(p.getRepPrime());
             details.setDebStatut(true);
             details.setRepartition(p);
-            details.setDebCesId(p.getCessionnaire().getCesId());
+            Long cesId = repRepo.getCesIdByRepId(p.getRepId());
+            if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + p.getRepId());
+            details.setDebCesId(cesId);
             detailBordRepo.save(details);
         });
     }
