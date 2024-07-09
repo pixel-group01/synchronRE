@@ -21,7 +21,7 @@ public class LimiteSouscriptionResp
     private Long cedId;
     private String cedNomFiliale;
     private String cedSigleFiliale;
-    private Long traiId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
 }

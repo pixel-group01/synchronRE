@@ -33,7 +33,6 @@ public class UpdateTraiteNPReq
     private String traiLibelle;
     private String traiAuteur;
     @NotNull(message = "Veuillez saisir l'exercice de rattachement")
-    @NotNull(message = "Veuillez saisir l'exercice de rattachement")
     @ValidRattachement
     private String traiEcerciceRattachement;
     @NotNull(message = "Veuillez saisir la date d'effet")
@@ -41,7 +40,6 @@ public class UpdateTraiteNPReq
     @NotNull(message = "Veuillez saisir la date d'échéance")
     private LocalDate traiDateEcheance;
     private BigDecimal traiCoursDevise;
-    @NotNull(message = "Veuillez saisir la périodicité")
     @NotNull(message = "Veuillez saisir la périodicité")
     @ValidPeriodicite
     private String traiPeriodicite;
@@ -54,10 +52,8 @@ public class UpdateTraiteNPReq
     private String natCode;
     @ExistingDevCode(message = "La dévise du traité est introuvable")
     @NotNull(message = "Veuillez saisir la divise du traité")
-    @NotNull(message = "Veuillez saisir la divise du traité")
     private String devCode;
     @ExistingDevCode(message = "La dévise des comptes sur le traité est introuvable")
-    @NotNull(message = "Veuillez saisir la divise des comptes")
     @NotBlank(message = "Veuillez saisir la divise des comptes")
     private String traiCompteDevCode;
 

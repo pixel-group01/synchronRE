@@ -19,35 +19,20 @@ public class CategorieCedante
     private Long catCedId;
     @ManyToOne @JoinColumn(name = "categorie_id")
     private Categorie categorie;
-    @ManyToOne @JoinColumn(name = "traite_np_id")
-    private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne @JoinColumn(name = "ced_id")
     private Cedante cedante;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
-    private Statut statut;
-    @ManyToOne @JoinColumn(name = "user_creator")
-    private AppUser userCreator;
-    @ManyToOne @JoinColumn(name = "fon_creator")
-    private AppFunction fonCreator;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     public CategorieCedante(Long catCedId) {
         this.catCedId = catCedId;
     }
 
-    public CategorieCedante(Categorie categorie, TraiteNonProportionnel traiteNonProportionnel, Cedante cedante, AppUser userCreator, AppFunction fonCreator) {
+    public CategorieCedante(Categorie categorie, Cedante cedante) {
         this.categorie = categorie;
-        this.traiteNonProportionnel = traiteNonProportionnel;
         this.cedante = cedante;
-        this.userCreator = userCreator;
-        this.fonCreator = fonCreator;
     }
 
     @Override
     public String toString() {
-        return catCedId + "/"+ categorie +"/"+ cedante +"/"+ traiteNonProportionnel;
+        return catCedId + "/"+ categorie +"/"+ cedante;
     }
 }

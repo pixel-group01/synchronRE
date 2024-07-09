@@ -20,15 +20,12 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp(
         slm.sousLimiteSouscriptionId, slm.sousLimMontant, rs.risqueId,
-         rs.description, trnp.traiteNpId, trnp.traiReference, trnp.traiNumero, trnp.traiLibelle, 
-        tr.trancheId, tr.trancheLibelle, s.staCode, s.staLibelle)
+         rs.description, trnp.traiteNpId, trnp.traiReference, trnp.traiNumero, trnp.traiLibelle, s.staCode, s.staLibelle)
         from SousLimite slm left join slm.risqueCouvert rs 
         left join slm.traiteNonProportionnel trnp 
-        left join slm.tranche tr 
         left join slm.statut s 
         where (locate(upper(coalesce(:key, '') ), cast(slm.sousLimMontant as string)) =1
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(trnp.traiNumero, '') ) as string))) >0
-        or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tr.trancheLibelle, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(rs.description, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(trnp.traiLibelle, '') ) as string))) >0
         )       
@@ -41,11 +38,10 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
 
     @Query("""
           select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite(
-          slm.sousLimiteSouscriptionId,slm.sousLimMontant,rs.risqueId,trnp.traiteNpId,tr.trancheId,s.staCode
+          slm.sousLimiteSouscriptionId,slm.sousLimMontant,rs.risqueId,trnp.traiteNpId,s.staCode
           )
           from SousLimite slm left join slm.risqueCouvert rs
           left join slm.traiteNonProportionnel trnp
-          left join slm.tranche tr
           left join slm.statut s
            where slm.sousLimiteSouscriptionId = ?1
      """)

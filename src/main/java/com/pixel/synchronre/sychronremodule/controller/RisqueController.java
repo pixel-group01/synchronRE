@@ -37,12 +37,12 @@ public class RisqueController
     }
 
     @GetMapping(path = "/search")
-    Page<RisqueCouvertResp> create(@RequestParam(required = false) Long traiId,
+    Page<RisqueCouvertResp> search(@RequestParam(required = false) Long traiteNpId,
                                     @RequestParam(defaultValue = "") String key,
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10") int size)
     {
-        return risqueService.search(traiId, key, PageRequest.of(page, size));
+        return risqueService.search(traiteNpId, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/edit/{risqueId}")

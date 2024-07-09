@@ -61,7 +61,6 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
         BeanUtils.copyProperties(dto,ssl);
         ssl.setRisqueCouvert(new RisqueCouvert(dto.getRisqueCouvertId()));
         ssl.setTraiteNonProportionnel(new TraiteNonProportionnel(dto.getTraiteNonProportionnelId()));
-        ssl.setTranche(new Tranche(dto.getTrancheId()));
         ssl = sslRepo.save(ssl);
         logService.logg("Modification d'une sous-limite", oldSsl, ssl, "SousLimite");
         SousLimiteDetailsResp sslResp = sslMapper.mapToSousLimiteResp(ssl);

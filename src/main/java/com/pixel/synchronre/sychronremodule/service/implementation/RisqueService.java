@@ -68,10 +68,10 @@ public class RisqueService implements IServiceRisque
     }
 
     @Override
-    public Page<RisqueCouvertResp> search(Long traiId, String key, Pageable pageable)
+    public Page<RisqueCouvertResp> search(Long traiteNpId, String key, Pageable pageable)
     {
         key = StringUtils.stripAccentsToUpperCase(key);
-        Page<RisqueCouvertResp> risquePage = risqueRepo.search(traiId, key, pageable);
+        Page<RisqueCouvertResp> risquePage = risqueRepo.search(traiteNpId, key, pageable);
         return risquePage;
     }
 

@@ -31,12 +31,12 @@ public class LimiteSouscriptionController
     }
 
     @GetMapping(path = "/search")
-    Page<LimiteSouscriptionResp> create(@RequestParam(required = false) Long traiId,
+    Page<LimiteSouscriptionResp> search(@RequestParam(required = false) Long traiteNpId,
                                @RequestParam(defaultValue = "") String key,
                                @RequestParam(defaultValue = "0") int page,
                                @RequestParam(defaultValue = "10") int size)
     {
-        return limiteSouscriptionService.search(traiId, key, PageRequest.of(page, size));
+        return limiteSouscriptionService.search(traiteNpId, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/edit/{limiteSouscriptionId}")

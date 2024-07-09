@@ -13,7 +13,7 @@ public interface IServiceRisque
 {
     RisqueCouvertResp create(CreateRisqueCouvertReq dto) throws UnknownHostException;
     RisqueCouvertResp update(UpdateRisqueCouvertReq dto) throws UnknownHostException;
-    Page<RisqueCouvertResp> search(Long traiId, String key, Pageable pageable);
+    Page<RisqueCouvertResp> search(Long traiteNpId, String key, Pageable pageable);
 
     boolean delete(Long risqueId) throws UnknownHostException;
 

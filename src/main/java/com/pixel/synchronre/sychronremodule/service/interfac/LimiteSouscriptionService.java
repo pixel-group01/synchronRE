@@ -34,7 +34,7 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
         return this.update(dto);
     }
 
-    @Override
+    @Override @Transactional
     public boolean delete(Long limiteSouscriptionId)
     {
         if(limiteSouscriptionId == null) throw new AppException("Veuillez sélectionner la limite de souscription");
@@ -46,9 +46,9 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     }
 
     @Override
-    public Page<LimiteSouscriptionResp> search(Long traiId, String key, Pageable pageable)
+    public Page<LimiteSouscriptionResp> search(Long traiteNpId, String key, Pageable pageable)
     {
-        return lsRepo.search(traiId, key, pageable);
+        return lsRepo.search(traiteNpId, key, pageable);
     }
 
     @Override @Transactional
