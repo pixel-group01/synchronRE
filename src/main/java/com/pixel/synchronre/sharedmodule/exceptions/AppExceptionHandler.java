@@ -2,7 +2,6 @@ package com.pixel.synchronre.sharedmodule.exceptions;
 
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -17,9 +16,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestControllerAdvice @RequiredArgsConstructor
 public class AppExceptionHandler
