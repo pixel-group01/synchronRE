@@ -231,4 +231,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.repId from Repartition r where r.affaire.affId = ?1 and r.repStatut = true")
     List<Long> findRepIdByAffId(java.lang.Long affId);
+
+    @Query("select r.type.uniqueCode from Repartition r where r.repId = ?1")
+    Optional<String> getTypeRepCode(Long plaId);
 }

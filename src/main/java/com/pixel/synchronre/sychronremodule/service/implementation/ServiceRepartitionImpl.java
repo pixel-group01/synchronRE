@@ -67,6 +67,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
+    private final CedanteTraiteRepository cedTraiRepo;
+
 
     @Override @Transactional //Placemement
     public RepartitionDetailsResp createPlaRepartition(CreatePlaRepartitionReq dto)
@@ -119,7 +121,11 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             mvtService.createMvtAffaire(new MvtReq(modeUpdate ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, dto.getAffId(), EN_COURS_DE_PLACEMENT.staCode, null));
         }
-        rep.setAffaire(aff);
+        Cessionnaire ces = repRepo.getCessionnaireByRepId(dto.getRepId()).orElseThrow(()->new AppException("Auncun cessionnaire trouvé sur le placement " + dto.getRepId()));
+        Affaire affaire = affRepo.getAffaireByRepId(dto.getRepId());
+        if(affaire == null) throw new AppException("Affaire introuvable sur le placement" + dto.getRepId());
+        rep.setCessionnaire(ces);
+        rep.setAffaire(affaire);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 

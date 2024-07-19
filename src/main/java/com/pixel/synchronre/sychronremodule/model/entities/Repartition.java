@@ -12,9 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter
-@Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
 public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,15 +45,15 @@ public class Repartition {
     private Statut repStaCode;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "aff_id")
     private Affaire affaire;
-    @ManyToOne @JoinColumn(name = "ced_trai_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_trai_id")
     private CedanteTraite cedanteTraite;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
-    @ManyToOne @JoinColumn(name = "cessionnaire_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cessionnaire_id")
     private Cessionnaire cessionnaire;
-    @ManyToOne @JoinColumn(name = "typ_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "typ_id")
     private Type type;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "param_ces_legal_id")
     private ParamCessionLegale paramCessionLegale;
@@ -65,7 +63,6 @@ public class Repartition {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "sin_id")
     private Sinistre sinistre;
 

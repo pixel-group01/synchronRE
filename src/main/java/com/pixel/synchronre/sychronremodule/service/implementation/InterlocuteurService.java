@@ -72,7 +72,7 @@ public class InterlocuteurService implements IServiceInterlocuteur
     @Override
     public List<InterlocuteurListResp> getInterlocuteurByPlacement(Long repId)
     {
-        InterlocuteurListResp interlocuteurPrincipal = interRepo.getInterlocuteursPrincipal(repId);
+        InterlocuteurListResp interlocuteurPrincipal = interRepo.getInterlocuteursPrincipalResp(repId);
         Long interlocuteurPrincipalId;
         if(interlocuteurPrincipal == null) interlocuteurPrincipalId = null;
         else interlocuteurPrincipalId = interlocuteurPrincipal.getIntId();
@@ -105,15 +105,17 @@ public class InterlocuteurService implements IServiceInterlocuteur
     public Page<InterlocuteurListResp> searchInterlocuteurForPlacement(String key, Long plaId, Pageable pageable)
     {
         Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement introuvable"));
-
-        Interlocuteur interlocuteurPrincipal = repRepo.getInterlocuteurPrincipal(plaId).orElseThrow(()->new AppException("Aucun interlocuteur principal sur ce placement"));
+        Interlocuteur interlocuteurPrincipal = interRepo.getInterlocuteursPrincipal(plaId);
+        if(interlocuteurPrincipal == null) throw new AppException("Aucun interlocuteur principal sur ce placement");
+        Long cesId = repRepo.getCesIdByRepId(plaId);
+        if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
         Long idInterlocuteurPrincipal =  interlocuteurPrincipal.getIntId();
         String idAutreInterlocuteursString = placement.getAutreInterlocuteurs();
         String[] idAutreInterlocuteursTab = idAutreInterlocuteursString == null ? null : idAutreInterlocuteursString.split(",");
         List<String> idAutreInterlocuteursList = idAutreInterlocuteursTab == null || idAutreInterlocuteursTab.length == 0 ? new ArrayList<>() : Arrays.stream(idAutreInterlocuteursTab).toList();
         List<Long> idAutreInterlocuteurs = idAutreInterlocuteursList.stream().filter(NumberUtils::isDigits).map(Long::parseLong).filter(id->!Objects.equals(interlocuteurPrincipal.getIntId(), id)).collect(Collectors.toList());
 
-        Page<InterlocuteurListResp> interlocuteurPageResps = interRepo.searchInterlocuteur(StringUtils.stripAccentsToUpperCase(key), placement.getCessionnaire().getCesId(), pageable);
+        Page<InterlocuteurListResp> interlocuteurPageResps = interRepo.searchInterlocuteur(StringUtils.stripAccentsToUpperCase(key), cesId, pageable);
         List<InterlocuteurListResp> interlocuteurListResps = interlocuteurPageResps.stream().peek(inter->this.setSelectedOrPrincipal(inter, idInterlocuteurPrincipal, idAutreInterlocuteurs)).collect(Collectors.toList());
 
         return new PageImpl<>(interlocuteurListResps, pageable, interlocuteurPageResps.getTotalElements());

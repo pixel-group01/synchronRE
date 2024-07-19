@@ -38,14 +38,18 @@ public class ReportController
     public void generateNoteCession(HttpServletResponse response, @PathVariable Long plaId) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
-        Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Impossible de trouver une affaire sur la repartition " + plaId));
+        Affaire affaire = affRepo.getAffaireByRepId(plaId);
+        if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
         placement.setAffaire(affaire);
-        if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        String repTypeCode = repRepo.getTypeRepCode(plaId).orElse("");
+        if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Long cesId = repRepo.getCesIdByRepId(plaId);
+        if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affaire.getAffId());
-        params.put("aff_assure", affaire.getAffAssure());
-        params.put("fac_numero_police", affaire.getFacNumeroPolice());
-        params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("ces_id", cesId);
         params.put("param_image", jrConfig.imagesLocation);
             //@Charly
             //Affichage du cachet en fonction d'une expression dans l'etat
@@ -87,14 +91,15 @@ public class ReportController
     public void generateNoteCredit(HttpServletResponse response, @PathVariable Long affId, @PathVariable Long cesId) throws Exception
     {
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(affId,cesId).orElseThrow(()-> new AppException("Placement introuvable"));
-        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        String repTypeCode = repRepo.getTypeRepCode(placement.getRepId()).orElse("");
+        if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable " + affId));
         placement.setAffaire(affaire);
-        if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affaire.getAffId());
-        params.put("aff_assure", affaire.getAffAssure());
-        params.put("fac_numero_police", affaire.getFacNumeroPolice());
-        params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("ces_id", cesId);
         params.put("param_image", jrConfig.imagesLocation);
         byte[] reportBytes = jrService.generateReport(jrConfig.noteCredit, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Note-de-credit");
@@ -104,14 +109,18 @@ public class ReportController
     public void generateNoteCessionSinistre(HttpServletResponse response, @PathVariable Long plaId) throws Exception
     {
         Repartition placement = repRepo.findById(plaId).orElseThrow(()-> new AppException("Placement introuvable"));
-        Affaire affaire = repRepo.getAffairedByRepId(plaId).orElseThrow(()->new AppException("Impossible de trouver une affaire sur la repartition " + plaId));
+        String repTypeCode = repRepo.getTypeRepCode(plaId).orElse("");
+        if(!repTypeCode.equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
+        Long cesId = repRepo.getCesIdByRepId(plaId);
+        if(cesId == null) throw new AppException("Auncun cessionnaire trouvé sur le placement " + plaId);
+        Affaire affaire = affRepo.getAffaireByRepId(plaId);
+        if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
         placement.setAffaire(affaire);
-        if(!placement.getType().getUniqueCode().equals("REP_PLA")) throw new AppException("Cette repartition n'est pas un placement");
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", affaire.getAffId());
-        params.put("aff_assure", affaire.getAffAssure());
-        params.put("fac_numero_police", affaire.getFacNumeroPolice());
-        params.put("ces_id", placement.getCessionnaire().getCesId());
+        params.put("aff_id", placement.getAffaire().getAffId());
+        params.put("aff_assure", placement.getAffaire().getAffAssure());
+        params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());
+        params.put("ces_id", cesId);
         params.put("param_image", jrConfig.imagesLocation);
 
         //Affichage du cachet en fonction d'une expression dans l'etat
