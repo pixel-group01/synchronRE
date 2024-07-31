@@ -399,11 +399,11 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<pageHeader>
 		<band height="43" splitType="Stretch">
 			<rectangle>
-				<reportElement x="20" y="3" width="530" height="31" uuid="8add871f-5550-4e6c-b50c-aa8c1eba7be8"/>
+				<reportElement x="70" y="3" width="430" height="31" uuid="8add871f-5550-4e6c-b50c-aa8c1eba7be8"/>
 			</rectangle>
 			<textField>
-				<reportElement x="20" y="3" width="530" height="31" uuid="654c00bf-98e0-43ef-ac04-99a52799c466"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="70" y="3" width="428" height="31" uuid="654c00bf-98e0-43ef-ac04-99a52799c466"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[" NOTE DE DEBIT DU SINISTRE N°  "+$F{sin_code}]]></textFieldExpression>
