@@ -14,11 +14,10 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class TraiteNPResp
 {
-    private Long traiteNPId;
+    private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
-    private String traiAuteur;
     private String traiEcerciceRattachement;
     private LocalDate traiDateEffet;
     private LocalDate traiDateEcheance;
@@ -26,13 +25,17 @@ public class TraiteNPResp
     private String traiPeriodicite;
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
+    private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
+    private BigDecimal traiTauxAbattement;
     private Long exeCode;
     private String traiSourceRef;
     private String traiSourceLibelle;
     private String natCode;
     private String natLibelle;
+    private Long courtierPlaceurId;
+    private String cesNom;
     private String devCode;
     private String traiCompteDevCode;
     private String traiStaCode;
@@ -43,44 +46,53 @@ public class TraiteNPResp
     protected String traiFonCreatorName;
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
+    private BigDecimal traiTauxDejaPlace;
+    private BigDecimal traiTauxRestantAPlacer;
+    private BigDecimal traiPmd;
+    private BigDecimal traiPmdCourtier;
+    private BigDecimal traiPmdCourtierPlaceur;
+    private BigDecimal traiPmdNette;
 
-    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice) {
-        this.traiteNPId = traiteNPId;
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumeroPolice) {
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
     }
 
-    public TraiteNPResp(Long traiteNPId, String traiReference, String traiNumeroPolice, String traiLibelle,
-                        String traiAuteur, EXERCICE_RATTACHEMENT traiEcerciceRattachement,
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumeroPolice, String traiLibelle,
+                        EXERCICE_RATTACHEMENT traiEcerciceRattachement,
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
-                        Long traiDelaiEnvoi, Long traiDelaiConfirmation,
-                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,
+                        Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
-                        String natCode, String natLibelle, String devCode,
+                        String natCode, String natLibelle,Long courtierPlaceurId,String cesNom,
+                        String devCode,
                         String traiCompteDevCode, String traiStaCode, String traiStaLibelle,
                         String traiUserCreatorEmail, String traiUserCreatorNomPrenom,
                         String traiFonCreatorName, LocalDateTime createdAt,
                         LocalDateTime updatedAt) {
-        this.traiteNPId = traiteNPId;
+        this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumeroPolice;
         this.traiLibelle = traiLibelle;
-        this.traiAuteur = traiAuteur;
-        this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();
+        this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getCode();
         this.traiDateEffet = traiDateEffet;
         this.traiDateEcheance = traiDateEcheance;
         this.traiCoursDevise = traiCoursDevise;
-        this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getLibelle();
+        this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getCode();
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
+        this.traiTauxAbattement=traiTauxAbattement;
         this.exeCode = exeCode;
         this.traiSourceRef = traiSourceRef;
         this.traiSourceLibelle = traiSourceLibelle;
         this.natCode = natCode;
         this.natLibelle = natLibelle;
+        this.courtierPlaceurId=courtierPlaceurId;
+        this.cesNom=cesNom;
         this.devCode = devCode;
         this.traiCompteDevCode = traiCompteDevCode;
         this.traiStaCode = traiStaCode;
@@ -92,4 +104,35 @@ public class TraiteNPResp
         this.updatedAt = updatedAt;
     }
 
+    public TraiteNPResp(Long traiteNpId, String traiReference, String traiNumero, String traiLibelle,
+                        EXERCICE_RATTACHEMENT traiEcerciceRattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance,
+                        BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement, Long exeCode, String traiSourceRef,
+                        String traiSourceLibelle, String natCode, String natLibelle, String devCode, String traiCompteDevCode,Long courtierPlaceurId,String cesNom)
+    {
+        this.traiteNpId = traiteNpId;
+        this.traiReference = traiReference;
+        this.traiNumero = traiNumero;
+        this.traiLibelle = traiLibelle;
+        this.traiEcerciceRattachement = traiEcerciceRattachement == null ? "" : traiEcerciceRattachement.getLibelle();
+        this.traiDateEffet = traiDateEffet;
+        this.traiDateEcheance = traiDateEcheance;
+        this.traiCoursDevise = traiCoursDevise;
+        this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getLibelle();
+        this.traiDelaiEnvoi = traiDelaiEnvoi;
+        this.traiDelaiConfirmation = traiDelaiConfirmation;
+        this.traiDelaiPaiement=traiDelaiPaiement;
+        this.traiTauxCourtier = traiTauxCourtier;
+        this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
+        this.traiTauxAbattement=traiTauxAbattement;
+        this.exeCode = exeCode;
+        this.traiSourceRef = traiSourceRef;
+        this.traiSourceLibelle = traiSourceLibelle;
+        this.natCode = natCode;
+        this.natLibelle = natLibelle;
+        this.devCode = devCode;
+        this.traiCompteDevCode = traiCompteDevCode;
+        this.courtierPlaceurId=courtierPlaceurId;
+        this.cesNom=cesNom;
+    }
 }

@@ -24,7 +24,7 @@ public interface TerritorialiteRepository extends JpaRepository<Territorialite, 
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq(tnp.traiteNpId,
-        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,tnp.traiAuteur,tnp.traiEcerciceRattachement,
+        tnp.traiReference, tnp.traiNumero,tnp.traiLibelle,court.cesNom,tnp.traiEcerciceRattachement,
         tnp.traiDateEffet, tnp.traiDateEcheance,tnp.traiCoursDevise,tnp.traiPeriodicite,tnp.traiDelaiEnvoi,
         tnp.traiDelaiConfirmation, tnp.traiTauxCourtier,tnp.traiTauxCourtierPlaceur,scr.traiReference,nat.natCode,dev.devCode,comp.devCode)
         from TraiteNonProportionnel tnp 
@@ -32,6 +32,7 @@ public interface TerritorialiteRepository extends JpaRepository<Territorialite, 
         left join tnp.nature nat
         left join tnp.traiDevise dev
         left join tnp.traiCompteDevise comp
+        left join tnp.courtierPlaceur court
         where tnp.traiteNpId = ?1
     """)
     TerritorialiteReq getEditDtoById(Long terrId);

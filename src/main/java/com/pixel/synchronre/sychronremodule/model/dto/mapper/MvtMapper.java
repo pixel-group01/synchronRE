@@ -30,4 +30,10 @@ public abstract class MvtMapper
     @Mapping(target = "mvtUser", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "mvtFunction", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     public abstract Mouvement mapToMvtPlacement(MvtReq dto);
+
+    @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(dto.getStaCode()))")
+    @Mapping(target = "traiteNonProportionnel", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getObjectId()))")
+    @Mapping(target = "mvtUser", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
+    @Mapping(target = "mvtFunction", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
+    public abstract Mouvement mapToMvtTraiteNp(MvtReq dto);
 }

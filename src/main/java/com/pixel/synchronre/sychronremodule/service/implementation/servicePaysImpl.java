@@ -13,7 +13,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.pays.request.CreatePaysReq
 import com.pixel.synchronre.sychronremodule.model.dto.pays.request.UpdatePaysReq;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.pays.response.PaysListResp;
-import com.pixel.synchronre.sychronremodule.model.entities.Banque;
 import com.pixel.synchronre.sychronremodule.model.entities.Pays;
 import com.pixel.synchronre.sychronremodule.service.interfac.IservicePays;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.List;
 
 

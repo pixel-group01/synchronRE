@@ -68,11 +68,12 @@ public class ReportController
     public void generateNoteDebit(HttpServletResponse response, @PathVariable Long affId) throws Exception
     {
         Repartition repart = repRepo.repartFindByAffaire(affId).orElseThrow(()-> new AppException("Affaire introuvable"));
-
+        Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
+        repart.setAffaire(affaire);
         Map<String, Object> params = new HashMap<>();
-        params.put("aff_id", repart.getAffaire().getAffId());
-        params.put("aff_assure", repart.getAffaire().getAffAssure());
-        params.put("fac_numero_police", repart.getAffaire().getFacNumeroPolice());
+        params.put("aff_id", affaire.getAffId());
+        params.put("aff_assure", affaire.getAffAssure());
+        params.put("fac_numero_police", affaire.getFacNumeroPolice());
         params.put("param_image", jrConfig.imagesLocation);
 
         //Affichage du cachet en fonction d'une expression dans l'etat

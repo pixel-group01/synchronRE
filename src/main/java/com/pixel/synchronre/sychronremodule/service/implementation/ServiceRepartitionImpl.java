@@ -324,25 +324,4 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         sinRep.setCessionnaire(new Cessionnaire(cesId));
         repRepo.save(sinRep);
     }
-    @Override @Transactional
-    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
-    {
-        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
-        Repartition repartition = repMapper.mapToRepartition(cesLeg, cedTraiId);
-        repRepo.save(repartition);
-        logService.logg("Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition");
-    }
-
-    @Override @Transactional
-    public void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
-    {
-        Repartition repartition;
-        if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
-        if(cesLeg.getRepId() == null) repartition = repRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
-        else repartition  = repRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
-        Repartition oldRepartition = repCopier.copy(repartition);
-        repartition.setRepTaux(cesLeg.getTauxCesLeg());
-        repartition.setRepPrime(cesLeg.getPmd());
-        logService.logg("Modification d'une repartition de type cession légale sur un traité non proportionel", oldRepartition, repartition, "Repartition");
-    }
 }

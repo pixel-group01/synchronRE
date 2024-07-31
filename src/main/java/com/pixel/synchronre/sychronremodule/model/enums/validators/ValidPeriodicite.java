@@ -30,7 +30,7 @@ public @interface ValidPeriodicite
         public boolean isValid(String periodicite, ConstraintValidatorContext context)
         {
             if(periodicite == null) return true;
-            return Arrays.stream(PERIODICITE.values()).anyMatch(p-> Objects.equals(p.name(), periodicite));
+            return Arrays.stream(PERIODICITE.values()).anyMatch(p-> Objects.equals(p.name().toUpperCase(), periodicite.toUpperCase()));
         }
     }
 }

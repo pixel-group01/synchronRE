@@ -14,8 +14,6 @@ public class ReconstitutionResp
 {
     private Long reconstitutionId;
     private Long nbrReconstitution;
-    private BigDecimal tauxReconstitution;
-    private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
     private Long traiteNpId;
     private String traiReference;
@@ -25,11 +23,9 @@ public class ReconstitutionResp
     private Long trancheId;
     private String trancheLibelle;
 
-    public ReconstitutionResp(Long reconstitutionId, Long nbrReconstitution, BigDecimal tauxReconstitution, BigDecimal tauxPrimeReconstitution, String modeCalculReconstitution, Long traiteNpId, String traiReference, String traiNumero, Long trancheId, String trancheLibelle) {
+    public ReconstitutionResp(Long reconstitutionId, Long nbrReconstitution,String modeCalculReconstitution, Long traiteNpId, String traiReference, String traiNumero, Long trancheId, String trancheLibelle) {
         this.reconstitutionId = reconstitutionId;
         this.nbrReconstitution = nbrReconstitution;
-        this.tauxReconstitution = tauxReconstitution;
-        this.tauxPrimeReconstitution = tauxPrimeReconstitution;
         this.modeCalculReconstitution = modeCalculReconstitution;
         this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;

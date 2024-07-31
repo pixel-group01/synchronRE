@@ -13,17 +13,16 @@ public interface IServiceMouvement
 {
     @Transactional
     void createMvtAffaire(MvtReq dto);
-
     @Transactional
     void createMvtPlacement(MvtReq dto);
-
     @Transactional
     void createMvtSinistre(MvtReq dto) throws UnknownHostException;
     Page<MouvementListResp> findMouvementById(Long affId, Long sinId , Pageable pageable);
-
     Mouvement getAvantDernierByAffId(Long affId);
     Mouvement getAvantDernierByPlaId(Long plaId);
     Mouvement getAvantDernierBySinId(Long sinId);
+    @Transactional
+    void createMvtTraite(MvtReq dto);
 
 
 }

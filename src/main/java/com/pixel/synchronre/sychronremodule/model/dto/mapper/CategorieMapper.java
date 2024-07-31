@@ -7,8 +7,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Categorie;
-import com.pixel.synchronre.sychronremodule.model.entities.CategorieCedante;
-import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ public abstract class CategorieMapper
 {
     @Autowired protected IJwtService jwtService;
     @Autowired protected PaysRepository paysRepo;//categorie, dto.getTraiteNPId(), dto.getCedIds()
-
+    
     public abstract CategorieResp mapToCategorieResp(Categorie categorie, TraiteNPResp traite, List<ReadCedanteDTO> cedantes);
 
 //    @Mapping(target = "categorie", expression = "java(categorieId == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Categorie(categorieId))")

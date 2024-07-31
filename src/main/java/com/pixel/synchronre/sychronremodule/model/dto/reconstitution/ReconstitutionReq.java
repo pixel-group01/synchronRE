@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 public class ReconstitutionReq {
     private Long reconstitutionId;
     private Long nbrReconstitution;
-    private BigDecimal tauxReconstitution;
-    private BigDecimal tauxPrimeReconstitution;
     private String modeCalculReconstitution;
     @ExistingTrancheId
     private Long trancheId;

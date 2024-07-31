@@ -21,12 +21,14 @@ public class TerritorialiteController
     private final IServiceTerritorialite territorialiteService;
 
     @PostMapping(path = "/create")
-    TerritorialiteResp create(@Valid @RequestBody TerritorialiteReq dto) throws UnknownHostException {
+    TerritorialiteResp create(@Valid @RequestBody TerritorialiteReq dto)
+    {
         return territorialiteService.create(dto);
     }
 
     @PutMapping(path = "/update")
-    TerritorialiteResp update(@Valid @RequestBody TerritorialiteReq dto) throws UnknownHostException {
+    TerritorialiteResp update(@Valid @RequestBody TerritorialiteReq dto)
+    {
         return territorialiteService.update(dto);
     }
 

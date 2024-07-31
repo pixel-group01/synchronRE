@@ -38,4 +38,7 @@ public class SynchronReActions
     public static final String CREATE_SOUS_LIMITE = "Création d'une sous-limite";
     public static final String UPDATE_SOUS_LIMITE = "Modification d'une sous-limite";
     public static final String DELETE_SOUS_LIMITE = "Suppression d'une sous-limite";
+    public static final String ADD_CEDANTE_TO_TRAITE_NP = "Ajout d'une cédante sur un traité";
+    public static final String UPDATE_CEDANTE_ON_TRAITE_NP = "Modification d'une cédante sur un traité";
+    public static final String REMOVE_CEDANTE_ON_TRAITE_NP = "Retrait d'une cédante sur un traité";
 }

@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.Update
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
+import com.pixel.synchronre.sychronremodule.model.entities.Interlocuteur;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +18,6 @@ import java.util.*;
 
 public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 {
-    @Query("select r from Repartition r where r.cedanteTraite.cedanteTraiteId = ?1 and r.paramCessionLegale.paramCesLegId = ?2 and r.repStatut = true and r.repStaCode.staCode = 'ACT'")
-    Repartition findByCedTraiIdAndPclId(Long cedanteTraiteId, Long paramCesLegId);
     @Query("select r.repSousCommission from Repartition r where r.repId = ?1")
     BigDecimal getTauxSousCommission(Long repId);
 
@@ -127,11 +126,17 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.interlocuteurPrincipal.intNom from Repartition r where r.repId = ?1")
     String getInterlocuteur(Long plaId);
 
+    @Query("select r.interlocuteurPrincipal from Repartition r where r.repId = ?1")
+    Optional<Interlocuteur> getInterlocuteurPrincipal(Long plaId);
+
     @Query("select r.cessionnaire from Repartition r where r.repId = ?1")
     Optional<Cessionnaire> getCessionnaireByRepId(Long repId);
 
     @Query("select r.affaire from Repartition r where r.repId = ?1")
     Optional<Affaire> getAffairedByRepId(Long plaId);
+
+    @Query("select r.affaire.affId from Repartition r where r.repId = ?1")
+    Optional<Long> getAffIdByRepId(Long plaId);
 
     @Query("select r.affaire.facPrime from Repartition r where r.repId = ?1")
     BigDecimal getFacPrimeTotalByPlaId(Long plaId);

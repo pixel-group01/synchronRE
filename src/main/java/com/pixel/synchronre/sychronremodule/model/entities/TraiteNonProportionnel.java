@@ -25,7 +25,6 @@ public class TraiteNonProportionnel
     private String traiReference;
     private String traiNumero;
     private String traiLibelle;
-    private String traiAuteur;
     @Enumerated(EnumType.STRING)
     private EXERCICE_RATTACHEMENT traiEcerciceRattachement;
     private LocalDate traiDateEffet;
@@ -36,8 +35,10 @@ public class TraiteNonProportionnel
     private PERIODICITE traiPeriodicite;
     private Long traiDelaiEnvoi;
     private Long traiDelaiConfirmation;
+    private Long traiDelaiPaiement;
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
+    private BigDecimal traiTauxAbattement;
     @ManyToOne @JoinColumn(name = "exe_code")
     private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")
@@ -48,6 +49,8 @@ public class TraiteNonProportionnel
     private Devise traiDevise;
     @ManyToOne @JoinColumn(name = "comote_devise_code")
     private Devise traiCompteDevise;
+    @ManyToOne @JoinColumn(name = "courtier_placeur_id")
+    private Cessionnaire courtierPlaceur;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "trai_user_creator")

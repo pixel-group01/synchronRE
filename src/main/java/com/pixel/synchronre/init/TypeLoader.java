@@ -24,6 +24,9 @@ public class TypeLoader implements Loader
         Type t2 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_CED", "Répartition de type part cédante", PersStatus.ACTIVE, null, null));
         Type t3 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_PLA", "Répartition de type placement", PersStatus.ACTIVE, null, null));
         Type t4 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_SIN", "Répartition de type sinistre", PersStatus.ACTIVE, null, null));
+        Type t5 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_PLA_TNP", "Répartition de type traite non proportionnel", PersStatus.ACTIVE, null, null));
+        Type t6 = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_CES_LEG_TNP", "Cession légale sur traité non proportionnel", PersStatus.ACTIVE, null, null));
+
 
         Type retention = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_CONSERVATION", "Répartition de type conservation traité", PersStatus.ACTIVE, null, null));
         Type facob = typeRepo.save(new Type(null, TypeGroup.TYPE_REP, "REP_FACOB", "Répartition de type traité FACOB", PersStatus.ACTIVE, null, null));
@@ -42,6 +45,7 @@ public class TypeLoader implements Loader
 
         Type typeCessionnaire= typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "CES", "Cessionnaire", PersStatus.ACTIVE, null, null));
         Type typeCourtier = typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "COURT", "Courtier", PersStatus.ACTIVE, null, null));
+        Type typeCourtierPlaceur = typeRepo.save(new Type(null, TypeGroup.CESSIONNAIRE, "COURT_PLA", "Courtier placeur", PersStatus.ACTIVE, null, null));
 
         Type fil= typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "FIL", "Filiale", PersStatus.ACTIVE, null, null));
         Type rea = typeRepo.save(new Type(null, TypeGroup.TYPE_CED, "REA", "Réassureur", PersStatus.ACTIVE, null, null));
@@ -129,5 +133,12 @@ public class TypeLoader implements Loader
         Type fonctionAdminTech = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_ADM_TECH", "Administrateur technique", PersStatus.ACTIVE, null, null));
 
         Type fonctionDev = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_DEV", "Développeur", PersStatus.ACTIVE, null, null));
+        //Type Association
+        Type organisationPays = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "ORG-PAYS", "Association", PersStatus.ACTIVE, null, null));
+        Type CategorieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "CAT-CED", "Association", PersStatus.ACTIVE, null, null));
+        Type TrancheCategorie = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "TRAN-CAT", "Association", PersStatus.ACTIVE, null, null));
+        Type TerritorialiteDetails = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "TER-DET", "Association", PersStatus.ACTIVE, null, null));
+        Type RisqueCouvertDetails = typeRepo.save(new Type(null, TypeGroup.TYPE_ASSOCIATION, "RISQ-DET", "Association", PersStatus.ACTIVE, null, null));
+
     }
 }

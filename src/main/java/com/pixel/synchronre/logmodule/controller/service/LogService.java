@@ -12,6 +12,7 @@ import com.pixel.synchronre.logmodule.model.entities.Log;
 import com.pixel.synchronre.logmodule.model.entities.LogDetails;
 import com.pixel.synchronre.sharedmodule.utilities.HttpServletManager;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
 import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.lang.reflect.Field;
 import java.net.InetAddress;
@@ -44,6 +47,12 @@ public class LogService implements ILogService
         List<LogDetails> logDetails = this.saveLogDetails(oldObject, newObject, log, tableName, false);
         log.setLogDetails(logDetails);
         return log;
+    }
+
+    @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public Log onLoggingEvent(LoggingEvent event)
+    {
+        return this.logg(event.getAction(), event.getOldObject(), event.getNewObject(), event.getTableName());
     }
 
     @Override @Transactional

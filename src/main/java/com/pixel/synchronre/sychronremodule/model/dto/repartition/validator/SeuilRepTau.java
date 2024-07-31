@@ -123,9 +123,8 @@ public @interface SeuilRepTau
         public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            if(dto.getCedanteTraiteId() == null) return true;
-            Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getCedanteTraiteId());
-            return comptaService.calculateTauxRestantARepartir(traiteNPId).compareTo(dto.getRepTaux()) >= 0;
+            if(dto.getTraiteNpId() == null || dto.getRepTaux() == null) return true;
+            return comptaService.calculateTauxRestantAPlacer(dto.getTraiteNpId()).compareTo(dto.getRepTaux()) >= 0;
         }
     }
 }
