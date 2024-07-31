@@ -57,7 +57,13 @@ public interface InterlocuteurRepository extends JpaRepository <Interlocuteur,Lo
         r.interlocuteurPrincipal.statut.staCode) 
         from Repartition r where r.repId = ?1
 """)
-    InterlocuteurListResp getInterlocuteursPrincipal(Long repId);
+    InterlocuteurListResp getInterlocuteursPrincipalResp(Long repId);
+
+    @Query("""
+        select r.interlocuteurPrincipal
+        from Repartition r where r.repId = ?1
+""")
+    Interlocuteur getInterlocuteursPrincipal(Long repId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp(
