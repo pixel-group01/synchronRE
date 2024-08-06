@@ -32,7 +32,7 @@ pipeline {
                 script {
                     // Démarre la nouvelle instance en arrière-plan
                    // bat "start java -jar ${DEPLOY_DIR}\\jenkins1.jar"
-                    bat "java -jar ${DEPLOY_DIR}\\jenkins1.jar"
+                    bat "java -jar ${DEPLOY_DIR}\\synchronRE.jar"
                 }
             }
         }
