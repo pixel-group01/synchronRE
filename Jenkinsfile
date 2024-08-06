@@ -1,35 +1,49 @@
-pipeline
-{
+pipeline {
     agent any
-    tools
-    {
-        jdk "JDK 17"
-        maven "Maven 3.9.5"
+
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'MAVEN_HOME'
     }
 
-    stages
-    {
-        stage('Git checkout')
-        {
-            steps
-            {
-                git changelog: false, credentialsId: 'eed44918-7624-4bf2-bd56-86b31c94b68e', poll: false, url: 'https://github.com/pixel-group01/synchronRE.git'
+    environment {
+        GIT_REPO_URL = 'https://github.com/pixel-group01/synchronRE.git'
+        BRANCH = 'main'
+        DEPLOY_DIR = 'target'
+    }
+
+    stages {
+        stage('parametrage') {
+            steps {
+                git branch: "${BRANCH}", url: "${GIT_REPO_URL}"
             }
         }
-        stage('Maven package')
-        {
-            steps
-            {
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+        stage('construction du jar') {
+            steps {
+                script {
+                    bat 'mvn package'
+                }
             }
         }
-        stage('OWASP Scan')
-        {
-            steps
-            {
-                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'OWASP DC'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+
+        stage('deploiement') {
+            steps {
+                script {
+                    // Démarre la nouvelle instance en arrière-plan
+                   // bat "start java -jar ${DEPLOY_DIR}\\jenkins1.jar"
+                    bat "java -jar ${DEPLOY_DIR}\\jenkins1.jar"
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and deployment of jenkins1 completed successfully.'
+        }
+        failure {
+            echo 'Build or deployment of jenkins1 failed.'
         }
     }
 }
