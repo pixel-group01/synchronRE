@@ -9,7 +9,9 @@ pipeline {
     environment {
         GIT_REPO_URL = 'https://github.com/pixel-group01/synchronRE.git'
         BRANCH = 'main'
-        DEPLOY_DIR = 'target'
+        BUILD_DIR = 'target'
+        JAR_NAME = 'synchronRE.jar'
+        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Prod\\front'
     }
 
     stages {
@@ -30,9 +32,11 @@ pipeline {
         stage('deploiement') {
             steps {
                 script {
-                    // Démarre la nouvelle instance en arrière-plan
-                   // bat "start java -jar ${DEPLOY_DIR}\\jenkins1.jar"
-                    bat "java -jar ${DEPLOY_DIR}\\synchronRE.jar"
+                    // Copier le fichier jar généré dans le répertoire de déploiement
+                    bat "copy ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+
+                    // Démarrer la nouvelle instance en arrière-plan à partir du répertoire de déploiement
+                    bat "cd ${DEPLOY_DIR} && start java -jar ${JAR_NAME}"
                 }
             }
         }
@@ -40,10 +44,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build and deployment of jenkins1 completed successfully.'
+            echo "Build and deployment of ${JAR_NAME} completed successfully."
         }
         failure {
-            echo 'Build or deployment of jenkins1 failed.'
+            echo "Build or deployment of ${JAR_NAME} failed."
         }
     }
 }
