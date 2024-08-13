@@ -59,7 +59,7 @@ public class SecurityConfig
                 })
                 .authorizeHttpRequests()
                 .requestMatchers("/*/open/**", "/reports/**").permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").authenticated()
+                //.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").authenticated()
                 .anyRequest().authenticated()
                 .and().authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
