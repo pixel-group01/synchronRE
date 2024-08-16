@@ -41,15 +41,12 @@ pipeline {
                         ?.trim()
 
                     if (port) {
-                        // Vérifier si le port est occupé et tuer le processus si nécessaire
+                        // Vérifier si le port est occupé
+                        bat "netstat -ano | findstr :${port}"
+
+                        // Si le port est occupé, arrêter le processus
                         bat """
-                        netstat -ano | findstr :${port}
-                        if %ERRORLEVEL% == 0 (
-                            echo Port ${port} is already in use. Stopping the process.
-                            for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do taskkill /PID %%a /F
-                        ) else (
-                            echo Port ${port} is free to use.
-                        )
+                        for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do taskkill /PID %%a /F
                         """
                     } else {
                         error "Le port n'a pas pu être trouvé dans ${CONFIG_FILE}"
