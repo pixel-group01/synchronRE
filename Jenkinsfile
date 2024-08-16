@@ -36,6 +36,7 @@ pipeline {
                     bat "copy ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     // Démarrer le fichier jar dans une nouvelle fenêtre d'invite de commande
                     bat "start cmd /k \"cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME}\""
+                    bat "echo cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME}"
                     // Démarrer le fichier jar avec un fichier log
                     //bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
                 }
