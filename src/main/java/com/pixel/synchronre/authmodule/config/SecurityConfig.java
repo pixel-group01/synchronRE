@@ -58,7 +58,7 @@ public class SecurityConfig
                     cors.configurationSource(source);
                 })
                 .authorizeHttpRequests()
-                .requestMatchers("/*/open/**", "/reports/**").permitAll()
+                .requestMatchers("/*/open/**", "/reports/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 //.requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").authenticated()
                 .anyRequest().authenticated()
                 .and().authenticationProvider(authenticationProvider())
