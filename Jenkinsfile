@@ -28,6 +28,16 @@ pipeline {
                 }
             }
         }
+         stage('arret de l\'application existante') {
+                    steps {
+                        script {
+                            // Arrêter l'application en utilisant son nom de JAR
+                            bat """
+                            for /f "tokens=1" %%i in ('jps -l ^| findstr "${JAR_NAME}"') do taskkill /F /PID %%i
+                            """
+                        }
+                    }
+                }
 
         stage('deploiement') {
             steps {
