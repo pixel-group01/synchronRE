@@ -44,7 +44,7 @@ pipeline {
                         // Vérifier si le port est occupé et tuer le processus si nécessaire
                         bat """
                         netstat -ano | findstr :${port}
-                        if %errorlevel%==0 (
+                        if %ERRORLEVEL% == 0 (
                             echo Port ${port} is already in use. Stopping the process.
                             for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do taskkill /PID %%a /F
                         ) else (
