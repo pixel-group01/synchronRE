@@ -35,11 +35,10 @@ public class ReglementController
     private final FacultativeMapper affMapper;
     private final SinMapper sinMapper;
 
-    @GetMapping(path = "/affaire/test")
-    public void test()
-    {
-
-    }
+//    @GetMapping(path = "/affaire/test")
+//    public void test()
+//    {
+//    }
     @PostMapping(path = "/affaire/create")
     public ReglementDetailsResp createReglementAffaire(@PathVariable String typeReg, @RequestBody @Validated({REG_AFF_GROUP.class}) CreateReglementReq dto) throws UnknownHostException {
         dto.setTypeReg(typeReg);
