@@ -121,9 +121,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         {
             mvtService.createMvtAffaire(new MvtReq(modeUpdate ? RepartitionActions.UPDATE_PLA_REPARTITION : RepartitionActions.CREATE_PLA_REPARTITION, dto.getAffId(), EN_COURS_DE_PLACEMENT.staCode, null));
         }
-        Cessionnaire ces = repRepo.getCessionnaireByRepId(dto.getRepId()).orElseThrow(()->new AppException("Auncun cessionnaire trouvé sur le placement " + dto.getRepId()));
-        Affaire affaire = affRepo.getAffaireByRepId(dto.getRepId());
-        if(affaire == null) throw new AppException("Affaire introuvable sur le placement" + dto.getRepId());
+        Cessionnaire ces = cesRepo.findById(dto.getCesId()).orElseThrow(()->new AppException("Cessionnaire introuvable "));
+        Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable" ));
         rep.setCessionnaire(ces);
         rep.setAffaire(affaire);
         return repMapper.mapToRepartitionDetailsResp(rep);
