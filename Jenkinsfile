@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('verification du port') {
+        stage('Vérification du port') {
             steps {
                 script {
                     // Lire le port depuis le fichier application-test.properties
@@ -41,13 +41,20 @@ pipeline {
                         ?.trim()
 
                     if (port) {
-                        // Vérifier si le port est occupé jjjjjj
-                        bat "netstat -ano | findstr :${port}"
+                        // Vérifier si le port est occupé
+                        def portOccupied = bat(script: "netstat -ano | findstr :${port}", returnStatus: true) == 0
 
-                        // Si le port est occupé, arrêter le processus
-                        bat """
-                        for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do taskkill /PID %%a /F
-                        """
+                        if (portOccupied) {
+                            // Si le port est occupé, arrêter le processus
+                            bat """
+                            for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do (
+                                echo Arrêt du processus avec le PID %%a
+                                taskkill /PID %%a /F
+                            )
+                            """
+                        } else {
+                            echo "Le port ${port} est libre."
+                        }
                     } else {
                         error "Le port n'a pas pu être trouvé dans ${CONFIG_FILE}"
                     }
@@ -55,12 +62,12 @@ pipeline {
             }
         }
 
-        stage('deploiement') {
+        stage('Déploiement') {
             steps {
                 script {
-                    // Copier le fichier jar généré dans le répertoire de déploiement
-                    bat "copy ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    // Démarrer le fichier jar dans le répertoire de déploiement
+                    // Copier le fichier JAR généré dans le répertoire de déploiement
+                    bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+                    // Démarrer le fichier JAR dans le répertoire de déploiement
                     bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
                 }
             }
