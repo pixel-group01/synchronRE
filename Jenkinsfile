@@ -25,7 +25,7 @@ pipeline {
         stage('construction du jar') {
             steps {
                 script {
-                    bat 'mvn package'
+                    bat 'mvn -e package'
                 }
             }
         }
