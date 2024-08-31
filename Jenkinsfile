@@ -75,7 +75,8 @@ pipeline {
                     @echo off
                     java -jar ${DEPLOY_DIR}\\${JAR_NAME} > ${DEPLOY_DIR}\\app.log 2>&1
                     """
-
+                    // Exécuter le script batch en arrière-plan
+                    bat "start /b cmd /c \"${DEPLOY_DIR}\\start_app.bat ${DEPLOY_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\app.log\""
                 }
             }
         }
