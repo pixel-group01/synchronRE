@@ -68,8 +68,8 @@ pipeline {
                     // Copier le fichier JAR généré dans le répertoire de déploiement
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     // Démarrer le fichier JAR dans le répertoire de déploiement
-                    //bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
-                    bat "start java -jar ${DEPLOY_DIR}\\${JAR_NAME} > ${DEPLOY_DIR}\\app.log 2>&1"
+                    bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
+                    //bat "start java -jar ${DEPLOY_DIR}\\${JAR_NAME} > ${DEPLOY_DIR}\\app.log 2>&1"
                 }
             }
         }
