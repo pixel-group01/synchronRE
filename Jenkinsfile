@@ -41,7 +41,7 @@ pipeline {
                         ?.trim()
 
                     if (port) {
-                        // Vérifier si le port est occupé
+                        // Vérifier si le port est occupé jjjjjj
                         bat "netstat -ano | findstr :${port}"
 
                         // Si le port est occupé, arrêter le processus
