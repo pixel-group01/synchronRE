@@ -64,14 +64,32 @@ pipeline {
 
         stage('Déploiement') {
             steps {
-                script {
-                    // Copier le fichier JAR généré dans le répertoire de déploiement
-                    bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    // Démarrer le fichier JAR dans le répertoire de déploiement
-                    bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
-                    //bat "start java -jar ${DEPLOY_DIR}\\${JAR_NAME} > ${DEPLOY_DIR}\\app.log 2>&1"
+                    script {
+                        // Copier le fichier JAR généré dans le répertoire de déploiement
+                        bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+
+                        // Démarrer le fichier JAR dans le répertoire de déploiement en arrière-plan
+                        bat "start /b cmd /c \"java -jar ${DEPLOY_DIR}\\${JAR_NAME} > ${DEPLOY_DIR}\\app.log 2>&1\""
+
+                        // Attendre 60 secondes pour s'assurer que l'application a démarré correctement
+                        echo "Attente de 60 secondes pour le démarrage de l'application..."
+                        sleep(time: 60, unit: 'SECONDS')
+
+                        // Vérifier les logs pour les erreurs
+                        def logFile = "${DEPLOY_DIR}\\app.log"
+                        def logContents = readFile(logFile)
+
+                        // Exemple simple de vérification d'erreurs
+                        if (logContents.contains("ERROR") || logContents.contains("Exception")) {
+                            error "L'application a rencontré des erreurs lors du démarrage. Consultez ${logFile} pour plus de détails."
+                        } else {
+                            echo "L'application a démarré avec succès. Aucun problème détecté dans les logs."
+                        }
+
+                        // Optionnel : Vérifier si l'application est accessible
+                        bat "curl --silent --fail http://localhost:${port} > NUL || (echo L'application n'est pas accessible) && exit 1"
+                    }
                 }
-            }
         }
     }
 
