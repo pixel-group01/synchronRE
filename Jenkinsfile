@@ -11,7 +11,7 @@ pipeline {
         BRANCH = 'main'
         BUILD_DIR = 'target'
         JAR_NAME = 'synchronRE.jar'
-        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Prod\\front'
+        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
         CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-test.properties"
     }
 
