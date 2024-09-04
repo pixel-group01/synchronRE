@@ -89,7 +89,7 @@ public class serviceCessionnaireImpl implements IserviceCessionnaire
         return cesRepo.findByAffId(affId).stream()
                 .map(ces->repRepo.getPlacementIdByAffIdAndCesId(affId, ces.getCesId()).orElse(null))
                 .filter(Objects::nonNull)
-                .filter(plaId->comptaService.calculateRestAReverserbyCes(plaId).setScale(4).compareTo(BigDecimal.ZERO) != 0)
+                .filter(plaId->comptaService.calculateRestAReverserbyCes(plaId).setScale(4, RoundingMode.HALF_UP).compareTo(BigDecimal.ZERO) != 0)
                 .map(plaId->repRepo.getCessionnaireByRepId(plaId).orElse(null))
                 .filter(Objects::nonNull)
                 .map(ces->cesMapper.mapToCessionnaireListResp(ces))

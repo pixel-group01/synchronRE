@@ -12,7 +12,7 @@ public interface FunctionRepo extends JpaRepository<AppFunction, Long>
     @Query("select p from AppFunction p where p.user.userId= ?1 order by p.fncStatus asc")
     Set<AppFunction> findAllByUser(Long userId);
 
-    @Query("select p from AppFunction p where p.user.userId= ?1 and p.fncStatus in (1, 2) and current_date between coalesce(p.startsAt, current_date ) and coalesce(p.endsAt, current_date)") //coalesce(p.ass.startsAt, current_date ) <= current_date and coalesce(p.ass.endsAt, current_date) >= current_date
+    @Query("select p from AppFunction p where p.user.userId= ?1 and p.fncStatus in (1, 2)") //coalesce(p.ass.startsAt, current_date ) <= current_date and coalesce(p.ass.endsAt, current_date) >= current_date
     Set<AppFunction> findNoneRevokedByUser(Long userId);
 
     @Query("select p from AppFunction p where p.user.userId= ?1 and (p.fncStatus = 1 or p.fncStatus = 2) order by p.fncStatus asc")
