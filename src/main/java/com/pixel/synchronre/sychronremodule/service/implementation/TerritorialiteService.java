@@ -43,18 +43,22 @@ public class TerritorialiteService implements IServiceTerritorialite
         TraiteNonProportionnel traite = traiRepo.findById(dto.getTraiteNpId()).orElseThrow(()->new AppException("Traité introuvable"));
         Territorialite territorialite = terrRepo.save(terrMapper.mapToTerritorialite(dto));
         logService.logg("Création d'une territorialité", null, territorialite, "Association");
+        if(dto.getPaysCodes() == null || dto.getPaysCodes().isEmpty())  throw new AppException("Veuillez sélectionner les pays");
         dto.getPaysCodes().stream().distinct().forEach(p->
         {
             Association terrDetails = terrDetRepo.save(new Association(null, new Pays(p), territorialite,type));
             logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Association");
         });
 
-        dto.getOrgCodes().stream().distinct().forEach(o->
+        if(dto.getOrgCodes() != null && !dto.getOrgCodes().isEmpty())
         {
+            dto.getOrgCodes().stream().distinct().forEach(o->
+            {
 
-            Association terrDetails = terrDetRepo.save(new Association(new Organisation(o), null, territorialite,type));
-            logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "Association");
-        });
+                Association terrDetails = terrDetRepo.save(new Association(new Organisation(o), null, territorialite,type));
+                logService.logg("Ajout d'une organisation à une territorialité", null, terrDetails, "Association");
+            });
+        }
         TerritorialiteResp territorialiteResp = terrMapper.mapToTerritorialiteResp(dto, traite);
         territorialiteResp.setTerrId(territorialite.getTerrId());
         return territorialiteResp;

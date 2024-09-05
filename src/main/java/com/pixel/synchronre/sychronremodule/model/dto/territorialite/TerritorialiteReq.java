@@ -20,7 +20,7 @@ public class TerritorialiteReq
     private String terrDescription;
     @NotNull(message = "Veuillez fournir la liste des pays de la territorialité")
     private List<String> paysCodes;
-    @NotNull(message = "Veuillez fournir la liste des organisations de la territorialité")
+    //@NotNull(message = "Veuillez fournir la liste des organisations de la territorialité")
     private List<String> orgCodes;
     @NotNull(message = "L'ID du traité ne peut être null")
     @ExistingTNPId

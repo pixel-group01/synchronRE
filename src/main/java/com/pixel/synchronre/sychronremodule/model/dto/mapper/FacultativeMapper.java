@@ -92,11 +92,11 @@ public abstract class FacultativeMapper
     @Mapping(target = "mtTotalPrimeNetteCes", expression = "java(comptaService.calculateMtTotalAReverseAuxCes(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "primeNetteCmsCedante", expression = "java(comptaService.calculatePrimeNetteCommissionCed(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "dejaRegle", expression = "java(comptaService.calculateDejaRegle(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
-    @Mapping(target = "resteARegler", expression = "java(comptaService.calculateRestARegler(aff.getAffId()).setScale(5, java.math.RoundingMode.HALF_UP))")
+    @Mapping(target = "resteARegler", expression = "java(comptaService.calculateRestARegler(aff.getAffId()).setScale(3, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "tauxDeReglement", expression = "java(comptaService.calculateTauxDeReglement(aff.getAffId()).setScale(2, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "dejaReverse", expression = "java(comptaService.calculateDejaReverse(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "mtAttenteReversement", expression = "java(comptaService.calculateMtEnAttenteDeAReversement(aff.getAffId()).setScale(0, java.math.RoundingMode.HALF_UP))")
-    @Mapping(target = "resteAReverser", expression = "java(comptaService.calculateRestAReverser(aff.getAffId()).setScale(5, java.math.RoundingMode.HALF_UP))")
+    @Mapping(target = "resteAReverser", expression = "java(comptaService.calculateRestAReverser(aff.getAffId()).setScale(3, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "tauxDeReversement", expression = "java(comptaService.calculateTauxDeReversement(aff.getAffId()).setScale(2, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "detailsEtatComptables", expression = "java(this.getDetailsEtatComptables(aff.getAffId()))")
 
