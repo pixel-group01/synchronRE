@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Territorialite
     private Long terrId;
     private String terrLibelle;
     private BigDecimal terrTaux;
+    @Column(length=4000)
     private String terrDescription;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;

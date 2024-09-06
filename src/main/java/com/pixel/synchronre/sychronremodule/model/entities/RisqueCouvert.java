@@ -23,6 +23,7 @@ public class RisqueCouvert
     @ManyToOne
     @JoinColumn(name = "couverture_id")
     private Couverture couverture;
+    @Column(length = 4000)
     private String description;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
