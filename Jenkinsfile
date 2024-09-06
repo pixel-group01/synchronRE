@@ -65,7 +65,7 @@ pipeline {
                 script {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     // Utilisation de start /b pour lancer en arrière-plan
-                    bat "cd /d ${DEPLOY_DIR} && start /b java -jar ${JAR_NAME} > app.log 2>&1"
+                    bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
                 }
             }
         }
