@@ -104,8 +104,8 @@ public abstract class FacultativeMapper
     @Mapping(target = "statutCode", expression = "java(aff.getStatut() == null ? null : aff.getStatut().getStaCode())")
     @Mapping(target = "devCode", expression = "java(aff.getDevise() == null ? null : aff.getDevise().getDevCode())")
     @Mapping(target = "couvertureId", expression = "java(aff.getCouverture() == null ? null : aff.getCouverture().getCouId())")
-    @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()).setScale(5, java.math.RoundingMode.HALF_UP))")
-    @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()).setScale(5, java.math.RoundingMode.HALF_UP))")
+    @Mapping(target = "restARepartir", expression = "java(comptaService.calculateRestARepartir(aff.getAffId()).setScale(3, java.math.RoundingMode.HALF_UP))")
+    @Mapping(target = "capitalDejaReparti", expression = "java(comptaService.calculateDejaRepartir(aff.getAffId()).setScale(3, java.math.RoundingMode.HALF_UP))")
     @Mapping(target = "mtTotalPrimeBruteCes", expression = "java(repRepo.calculateMtPrimeBruteByAffaire(aff.getAffId()))")
     @Mapping(target = "mtTotalPrimeCessionnaireNetteComCed", expression = "java(comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(aff.getAffId()))")
     public abstract EtatComptableAffaire mapToEtatComptableAffaire(Affaire aff);

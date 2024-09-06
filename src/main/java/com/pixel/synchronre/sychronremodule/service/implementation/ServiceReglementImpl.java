@@ -68,8 +68,9 @@ public class ServiceReglementImpl implements IserviceReglement {
     {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
         BigDecimal primeNetteComCed = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
-
-        if(resteAPayer.compareTo(primeNetteComCed)<0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        BigDecimal futureResteApayer = resteAPayer.subtract(primeNetteComCed);
+        if(futureResteApayer.compareTo(ZERO)<0 && futureResteApayer.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureResteApayer.abs().compareTo(PRECISION.TROIS_CHIFFRES)<0) primeNetteComCed = resteAPayer;
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -115,13 +116,22 @@ public class ServiceReglementImpl implements IserviceReglement {
     {
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
         //if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un reversement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-
-        BigDecimal restAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
+        BigDecimal mtReversement = dto.getRegMontant();
+        BigDecimal resteAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
         BigDecimal mtEnAttenteDeReversement = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
 
-        if(dto.getRegMontant() == null || dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
-        if(dto.getRegMontant().compareTo(restAReverser)>0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + restAReverser.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(dto.getRegMontant().compareTo(mtEnAttenteDeReversement)>0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(mtReversement == null || mtReversement.compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
+
+        BigDecimal futureMtEnAttenteDeReversement = mtEnAttenteDeReversement.subtract(mtReversement);
+        //BigDecimal futureResteAReverser = resteAReverser.subtract(mtReversement);
+
+        if(futureMtEnAttenteDeReversement.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureMtEnAttenteDeReversement.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = mtEnAttenteDeReversement;
+
+        //if(futureResteAReverser.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + resteAReverser.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        //if(futureResteAReverser.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = resteAReverser;
+
+        dto.setRegMontant(mtReversement);
         Reglement reversement = reglementMapper.mapToReglement(dto);
         Repartition placement = repRepo.getPlacementByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()->new AppException("Placement introuvable"));
 
@@ -137,7 +147,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         BigDecimal restARegler = comptaAffaireService.calculateRestARegler(dto.getAffId());
 
-        if(restARegler.compareTo(ZERO) == 0 && restAReverser.compareTo(ZERO) == 0) {
+        if(restARegler.compareTo(ZERO) == 0 && resteAReverser.compareTo(ZERO) == 0) {
             mvtService.createMvtAffaire(new MvtReq(AffaireActions.REVERSER_FAC,dto.getAffId(), SOLDE.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(reversement);

@@ -8,4 +8,5 @@ public class PRECISION
     public static final BigDecimal DEUX_CHIFFRES = new BigDecimal(0.01);
     public static final BigDecimal TROIS_CHIFFRES = new BigDecimal(0.001);
     public static final BigDecimal QUATRE_CHIFFRES = new BigDecimal(0.0001);
+    public static final BigDecimal CINQ_CHIFFRES = new BigDecimal(0.00001);
 }
