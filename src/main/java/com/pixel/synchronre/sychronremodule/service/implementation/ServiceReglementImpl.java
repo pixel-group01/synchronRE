@@ -117,19 +117,19 @@ public class ServiceReglementImpl implements IserviceReglement {
         Long plaId = repRepo.getPlacementIdByAffIdAndCesId(dto.getAffId(), dto.getCesId()).orElseThrow(()-> new AppException("Placement introuvable"));
         //if(dto.getRegMontant().compareTo(ZERO) == 0) throw new AppException("Impossible de faire un reversement à 0 ( " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
         BigDecimal mtReversement = dto.getRegMontant();
-        BigDecimal resteAReverser = comptaAffaireService.calculateRestAReverserbyCes(plaId);
-        BigDecimal mtEnAttenteDeReversement = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
+        BigDecimal resteAReverserAuCessionnaire = comptaAffaireService.calculateRestAReverserbyCes(plaId);
+        BigDecimal mtEnAttenteDeReversementSurAffaire = comptaAffaireService.calculateMtEnAttenteDeAReversement(dto.getAffId());
 
         if(mtReversement == null || mtReversement.compareTo(ZERO) == 0) throw new AppException("Le montant du reversement ne peut être null");
 
-        BigDecimal futureMtEnAttenteDeReversement = mtEnAttenteDeReversement.subtract(mtReversement);
-        //BigDecimal futureResteAReverser = resteAReverser.subtract(mtReversement);
+        BigDecimal futureResteAReverserAuCessionnaire = resteAReverserAuCessionnaire.subtract(mtReversement);
+        BigDecimal futureMtEnAttenteDeReversementSurAffaire = mtEnAttenteDeReversementSurAffaire.subtract(mtReversement);
 
-        if(futureMtEnAttenteDeReversement.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversement.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(futureMtEnAttenteDeReversement.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = mtEnAttenteDeReversement;
+        if(futureResteAReverserAuCessionnaire.compareTo(ZERO) < 0 && futureResteAReverserAuCessionnaire.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + resteAReverserAuCessionnaire.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureResteAReverserAuCessionnaire.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = resteAReverserAuCessionnaire;
 
-        //if(futureResteAReverser.abs().compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + resteAReverser.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        //if(futureResteAReverser.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = resteAReverser;
+        if(futureMtEnAttenteDeReversementSurAffaire.compareTo(ZERO) < 0 && futureMtEnAttenteDeReversementSurAffaire.compareTo(PRECISION.TROIS_CHIFFRES) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversementSurAffaire.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureMtEnAttenteDeReversementSurAffaire.abs().compareTo(PRECISION.TROIS_CHIFFRES) < 0) mtReversement = mtEnAttenteDeReversementSurAffaire;
 
         dto.setRegMontant(mtReversement);
         Reglement reversement = reglementMapper.mapToReglement(dto);
@@ -147,7 +147,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         reversement.setAffaire(affRepo.findById(dto.getAffId()).orElse(new Affaire(dto.getAffId())));
         BigDecimal restARegler = comptaAffaireService.calculateRestARegler(dto.getAffId());
 
-        if(restARegler.compareTo(ZERO) == 0 && resteAReverser.compareTo(ZERO) == 0) {
+        if(restARegler.compareTo(ZERO) == 0 && resteAReverserAuCessionnaire.compareTo(ZERO) == 0) {
             mvtService.createMvtAffaire(new MvtReq(AffaireActions.REVERSER_FAC,dto.getAffId(), SOLDE.staCode, null));
         }
         return reglementMapper.mapToReglementDetailsResp(reversement);
