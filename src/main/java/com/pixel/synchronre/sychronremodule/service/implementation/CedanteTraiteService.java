@@ -1,14 +1,9 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
-import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-
-import static com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions.*;
-import static com.pixel.synchronre.sychronremodule.model.constants.UsualNumbers.CENT;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
@@ -22,8 +17,6 @@ import com.pixel.synchronre.sychronremodule.model.events.CedanteTraiteEvent;
 import com.pixel.synchronre.sychronremodule.model.events.LoggingEvent;
 import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
-import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -38,6 +31,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.UsualNumbers.CENT;
 
 @Service @RequiredArgsConstructor
 public class CedanteTraiteService implements IServiceCedanteTraite
@@ -149,10 +145,12 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     public CedanteTraiteReq getEditDto(CedanteTraiteReq dto)
     {
         if(dto == null) return null;
+        BigDecimal tauxAbattement = traiteRepo.getTauxAbattement(dto.getTraiteNpId());
+        tauxAbattement = tauxAbattement == null || tauxAbattement.compareTo(BigDecimal.ZERO) == 0 ? CENT : tauxAbattement;
         Long cedanteTraiteId = dto.getCedanteTraiteId() != null ? dto.getCedanteTraiteId() : cedTraiRepo.getCedanteTraiteIdByTraiIdAndCedId(dto.getTraiteNpId(), dto.getCedId());
         dto.setCedanteTraiteId(cedanteTraiteId);
         BigDecimal pmd = dto.getAssiettePrime() != null && dto.getTauxPrime() != null ?
-                dto.getAssiettePrime().multiply(dto.getTauxPrime()).divide(CENT, 20, RoundingMode.HALF_UP) :
+                dto.getAssiettePrime().multiply(dto.getTauxPrime()).multiply(CENT.subtract(tauxAbattement)).divide(CENT.multiply(CENT), 20, RoundingMode.HALF_UP) :
                 dto.getPmd();
         dto.setPmd(pmd);
 

@@ -123,4 +123,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("select t from TraiteNonProportionnel t where t.traiteNpId = ?1")
     Optional<TraiteNonProportionnel> findById(Long traiteNpId);
+
+    @Query("select t.traiTauxAbattement from TraiteNonProportionnel t where t.traiteNpId = ?1")
+    BigDecimal getTauxAbattement(Long traiteNpId);
 }
