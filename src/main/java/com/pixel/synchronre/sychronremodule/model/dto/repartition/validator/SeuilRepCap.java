@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
+import com.pixel.synchronre.sychronremodule.model.constants.PRECISION;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.math.BigDecimal;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -23,7 +25,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface SeuilRepCap
 {
-    String message() default "repCapital::Le montant du capital ne peut excéder le reste à repartir";
+    String message() default "Le montant du capital ne peut excéder le reste à repartir";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 
@@ -51,7 +53,7 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
+            return SeuilCapitalChecker.checkSeuilCapital(comptaService, dto.getAffId(), dto.getRepCapital());
         }
     }
 
@@ -65,7 +67,8 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
+            if(dto.getRepCapital() == null) return true;
+            return SeuilCapitalChecker.checkSeuilCapital(comptaService, dto.getAffId(), dto.getRepCapital());
         }
     }
 
@@ -79,8 +82,10 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0 ;
+            return SeuilCapitalChecker.checkSeuilCapital(comptaService, dto.getAffId(), dto.getRepCapital());
         }
+
+
     }
 
     @Component
@@ -93,7 +98,7 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilCapitalChecker.checkSeuilCapital(comptaService, dto.getAffId(), dto.getRepCapital());
         }
     }
 
@@ -107,7 +112,17 @@ public @interface SeuilRepCap
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilCapitalChecker.checkSeuilCapital(comptaService, dto.getAffId(), dto.getRepCapital());
+        }
+    }
+
+    class SeuilCapitalChecker
+    {
+        public static boolean checkSeuilCapital(IServiceCalculsComptables comptaService, Long affId, BigDecimal repCapital) {
+            BigDecimal resteARepartir = comptaService.calculateRestARepartir(affId);
+            resteARepartir = resteARepartir == null ? BigDecimal.ZERO : resteARepartir;
+            BigDecimal futureResteARepartir = resteARepartir.subtract(repCapital);
+            return futureResteARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureResteARepartir.abs().compareTo(PRECISION.TROIS_CHIFFRES) <=0 ;
         }
     }
 }

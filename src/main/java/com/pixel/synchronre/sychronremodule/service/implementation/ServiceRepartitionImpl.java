@@ -9,10 +9,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.constants.RepartitionActions;
-import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
@@ -68,6 +65,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
     private final CedanteTraiteRepository cedTraiRepo;
+    private final IServiceCalculsComptables comptaService;
 
 
     @Override @Transactional //Placemement
@@ -75,15 +73,23 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     {
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal smplCi = aff.getFacSmpLci();
+
         if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
         if(!STATUT_CREATION.REALISEE.name().equals(aff.getAffStatutCreation())) throw new AppException("Impossible de faire un placement sur une affaire en intance ou non réalisée");
+        BigDecimal resteAPlacer = comptaService.calculateRestARepartir(dto.getAffId());
+        resteAPlacer = resteAPlacer == null ? BigDecimal.ZERO : resteAPlacer;
+        BigDecimal futureResteARepartir = resteAPlacer.subtract(dto.getRepCapital());
+        if (futureResteARepartir.abs().compareTo(PRECISION.TROIS_CHIFFRES) <=0 )
+        {
+            dto.setRepCapital(resteAPlacer);
+        }
         BigDecimal repTaux = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0 ? ZERO : dto.getRepCapital().multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
         BigDecimal repPrime = aff.getFacPrime() == null ? ZERO : aff.getFacPrime().multiply(repTaux).divide(CENT, 100, RoundingMode.HALF_UP);
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
-        boolean existsByAffaireAndTypeRepAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+        boolean placementExistsByAffaireAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
         Repartition rep;
         Repartition oldRep = null;
-        boolean modeUpdate = dto.getRepId() != null || existsByAffaireAndTypeRepAndCesId;
+        boolean modeUpdate = dto.getRepId() != null || placementExistsByAffaireAndCesId;
 
         if(modeUpdate)
         {
@@ -94,7 +100,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
                 rep.setAffaire(new Affaire(dto.getAffId()));
             }
-            else // if(existsByAffaireAndTypeRepAndCesId)
+            else // if(placementExistsByAffaireAndCesId)
             {
                 if(dto.getRepId() == null) throw new AppException("Veuillez fournir l'ID du placement");
                 rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
