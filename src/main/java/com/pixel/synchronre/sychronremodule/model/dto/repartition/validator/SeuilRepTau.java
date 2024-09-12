@@ -125,8 +125,7 @@ public @interface SeuilRepTau
         public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            if(dto.getCedanteTraiteId() == null) return true;
-            Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getCedanteTraiteId());
+            Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getTraiteNpId());
             return SeuilTauxChecker.checkSeuilTaux(comptaService, traiteNPId, dto.getRepTaux());
         }
     }
@@ -142,7 +141,7 @@ class SeuilTauxChecker
     }
 
     public static boolean checkSeuilTaux(IServiceCalculsComptablesTraite comptaService, Long traiteNpId, BigDecimal repTaux) {
-        BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestantARepartir(traiteNpId);
+        BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestantAPlacer(traiteNpId);
         tauxRestantARepartir = tauxRestantARepartir == null ? BigDecimal.ZERO : tauxRestantARepartir;
         BigDecimal futureTauxRestantARepartir = tauxRestantARepartir.subtract(repTaux);
         return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(PRECISION.UN_CHIFFRES) <=0 ;
