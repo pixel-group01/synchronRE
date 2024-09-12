@@ -23,10 +23,15 @@ public class CedanteTraiteResp
     private String traiNumero;
     private String staCode;
     private String staLibelle;
+    private BigDecimal pmdCourtier;
+    private BigDecimal pmdCourtierPlaceur;
+    private BigDecimal pmdNette;
 
     private List<CesLeg> cessionsLegales;
 
-    public CedanteTraiteResp(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd, Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId, String traiReference, String traiNumero, String staCode, String staLibelle) {
+    public CedanteTraiteResp(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd,
+                             Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId,
+                             String traiReference, String traiNumero, String staCode, String staLibelle) {
         this.cedanteTraiteId = cedanteTraiteId;
         this.assiettePrime = assiettePrime;
         this.tauxPrime = tauxPrime;
@@ -39,5 +44,27 @@ public class CedanteTraiteResp
         this.traiNumero = traiNumero;
         this.staCode = staCode;
         this.staLibelle = staLibelle;
+    }
+
+    public CedanteTraiteResp(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd,
+                             Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId,
+                             String traiReference, String traiNumero, String staCode, String staLibelle, BigDecimal pmdCourtier,
+                             BigDecimal pmdCourtierPlaceur, BigDecimal pmdNette)
+    {
+        this.cedanteTraiteId = cedanteTraiteId;
+        this.assiettePrime = assiettePrime;
+        this.tauxPrime = tauxPrime;
+        this.pmd = pmd;
+        this.cedId = cedId;
+        this.cedNomFiliale = cedNomFiliale;
+        this.cedSigleFiliale = cedSigleFiliale;
+        this.traiteNpId = traiteNpId;
+        this.traiReference = traiReference;
+        this.traiNumero = traiNumero;
+        this.staCode = staCode;
+        this.staLibelle = staLibelle;
+        this.pmdCourtier = pmdCourtier;
+        this.pmdCourtierPlaceur = pmdCourtierPlaceur;
+        this.pmdNette = pmdNette;
     }
 }

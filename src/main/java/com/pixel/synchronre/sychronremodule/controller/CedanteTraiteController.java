@@ -47,6 +47,12 @@ public class CedanteTraiteController
         return cedanteTraiteService.getEditDto(cedanteTraiteId,traiteNpId, cedId);
     }
 
+    @PostMapping(path = "/edit")
+    public CedanteTraiteReq getEditDto(@RequestBody CedanteTraiteReq dto)
+    {
+        return cedanteTraiteService.getEditDto(dto);
+    }
+
     @GetMapping(path = "/list/{traiteNpId}")
     List <CedanteTraiteResp> list(@PathVariable Long traiteNpId){
         return cedanteTraiteService.getCedanteTraitelist(traiteNpId);

@@ -40,17 +40,6 @@ public class RepartitionFacController
         repService.deletePlacement(repId);
     }
 
-    /*@PostMapping(path = "/create-cession-legale-repartition")
-    public List<RepartitionDetailsResp> createCesLegRep(@Valid @RequestBody List<CreateCesLegReq> dtos) throws UnknownHostException {
-        return repService.createCesLegRepartitions(dtos);
-    }
-
-    @PostMapping(path = "/create-part-cedante-repartition")
-    public RepartitionDetailsResp createPartCedRep(@Valid @RequestBody CreatePartCedRepartitionReq dto) throws UnknownHostException {
-        return repService.createPartCedRepartition(dto);
-    }*/
-
-
     @PostMapping(path = "/save")
     public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto) throws UnknownHostException {
         return this.calculRepartitionService.saveRep(dto);

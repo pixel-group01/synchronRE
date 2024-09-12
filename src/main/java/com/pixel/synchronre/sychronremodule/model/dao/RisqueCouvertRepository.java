@@ -1,5 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
+import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
@@ -51,4 +53,14 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
      where tnp.traiteNpId = ?1 AND sta.staCode='ACT'
 """)
     List<RisqueCouvertResp> getRisqueList(Long traiteNpId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(c.couLibelle)
+         from Association asso join asso.risqueCouvert r
+         join asso.couverture c 
+         where asso.risqueCouvert.risqueId = ?1
+         and asso.type.uniqueCode = 'RISQ-DET'
+        """)
+    List<CouvertureListResp> getActivitesByrisqueId(Long risqueId);
+
 }

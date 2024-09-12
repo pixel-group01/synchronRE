@@ -24,7 +24,10 @@ public class CedanteTraite
     private BigDecimal assiettePrime;
     private BigDecimal tauxPrime;
     private BigDecimal pmd;
-    @ManyToOne @JoinColumn(name = "ced_id")
+    private BigDecimal pmdCourtier;
+    private BigDecimal pmdCourtierPlaceur;
+    private BigDecimal pmdNette;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id")
     private Cedante cedante;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;

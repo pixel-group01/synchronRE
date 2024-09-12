@@ -56,9 +56,5 @@ public interface IserviceRepartition
     @Transactional
     void annulerRepartition(Long repId);
 
-    void createRepartitionCesLegTraite(CesLeg cesLeg, Long tnpId);
-
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
-
-    void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId);
 }

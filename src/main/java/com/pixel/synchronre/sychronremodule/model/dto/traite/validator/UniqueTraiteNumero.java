@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = {UniqueTraiteNumero.UniqueTraiteNumeroValidatorOnUpdate.class})
+@Constraint(validatedBy = {UniqueTraiteNumero.UniqueTraiteNumeroValidator.class, UniqueTraiteNumero.UniqueTraiteNumeroValidatorOnUpdate.class})
 @Documented
 public @interface UniqueTraiteNumero
 {

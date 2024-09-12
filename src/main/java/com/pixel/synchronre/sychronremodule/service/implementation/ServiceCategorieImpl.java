@@ -15,6 +15,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.CategorieMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCategorie;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,8 +38,9 @@ public class ServiceCategorieImpl implements IServiceCategorie
     private final TraiteNPRepository traiRepo;
     private final CedRepo cedRepo;
     private final IJwtService jwtService;
-    private final ObjectCopier<CategorieCedante> catCedCopier;
+    private final ObjectCopier<Association> catCedCopier;
     private final ObjectCopier<Categorie> catCopier;
+    private final TypeRepo typeRepo;
 
     @Override @Transactional
     public CategorieResp create(CategorieReq dto){
@@ -111,17 +114,18 @@ public class ServiceCategorieImpl implements IServiceCategorie
     private void removeCedanteToCategorie(Long cedId, Long categorieId)
     {
         if(!catCedRepo.exitsByCedIdAndCatId(cedId, categorieId)) return;
-        CategorieCedante categorieCedante = catCedRepo.findByCedIdAndCatId(cedId, categorieId);
-        CategorieCedante oldCategorieCedante = catCedCopier.copy(categorieCedante);
+        Association categorieCedante = catCedRepo.findByCedIdAndCatId(cedId, categorieId);
+        Association oldCategorieCedante = catCedCopier.copy(categorieCedante);
         catCedRepo.deleteByCedIdAndCatId(cedId, categorieId);
-        logService.logg("Retrait d'une cédante sur une catégorie", categorieCedante, new CategorieCedante(), "CategorieCedante");
+        logService.logg("Retrait d'une cédante sur une catégorie", categorieCedante, new Association(), "Association");
     }
 
     private void addCedanteToCategorie(Long cedId, Long catId)
     {
         if(catCedRepo.exitsByCedIdAndCatId(cedId, catId)) return;
-        CategorieCedante categorieCedante = new CategorieCedante(new Categorie(catId), new Cedante(cedId));
+        Type type = typeRepo.findByUniqueCode("CAT-CED").orElseThrow(()->new AppException("Type d'assocition introuvable"));
+        Association categorieCedante = new Association(new Categorie(catId), new Cedante(cedId),type);
         categorieCedante = catCedRepo.save(categorieCedante);
-        logService.logg("Ajout d'une cédante à une catégorie", new CategorieCedante(), categorieCedante, "CategorieCedante");
+        logService.logg("Ajout d'une cédante à une catégorie", new Association(), categorieCedante, "Association");
     }
 }

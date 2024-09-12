@@ -1,7 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.sychronremodule.model.dao.OrganisationPaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.PaysRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
@@ -17,7 +16,7 @@ public abstract class TerritorialiteMapper
 {
     @Autowired protected IJwtService jwtService;
     @Autowired protected PaysRepository paysRepo;
-    @Autowired protected OrganisationPaysRepository orgPaysRepo;
+
 
     @Mapping(target = "paysList", expression = "java(paysRepo.getPaysByPaysCodes(dto.getPaysCodes()))")
     @Mapping(target = "organisationList", expression = "java(dto.getOrgCodes() == null ? \"\" : dto.getOrgCodes().stream().collect(java.util.stream.Collectors.joining(\", \")))")

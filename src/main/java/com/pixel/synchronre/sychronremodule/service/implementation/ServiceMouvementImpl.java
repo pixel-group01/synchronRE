@@ -7,10 +7,7 @@ import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
-import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.MouvementRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.SinRepo;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.MvtMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
@@ -34,10 +31,13 @@ public class ServiceMouvementImpl implements IServiceMouvement
     private final AffaireRepository affRepo;
     private final RepartitionRepository repRepo;
     private final SinRepo sinRepo;
+    private final TraiteNPRepository tnpRepo;
     private final ILogService logService;
     private final ObjectCopier<Affaire> affCopier;
     private final ObjectCopier<Sinistre> sinCopier;
     private final ObjectCopier<Repartition> repCopier;
+    private final ObjectCopier<TraiteNonProportionnel> traiCopier;
+
     
 
 
@@ -105,6 +105,17 @@ public class ServiceMouvementImpl implements IServiceMouvement
         List<Mouvement> mvts = mvtRepo.findMouvementById(null, sinId, (Long)null);
         if(mvts == null || mvts.size() < 2) return  null;
         return mvts.get(2);
+    }
+
+    @Override @Transactional
+    public void createMvtTraite(MvtReq dto) {
+        TraiteNonProportionnel tnp = tnpRepo.findById(dto.getObjectId()).orElseThrow(()->new AppException("traité introuvable"));
+        TraiteNonProportionnel oldTraite = traiCopier.copy(tnp);
+        tnp.setStatut(new Statut(dto.getStaCode()));
+        logService.logg(dto.getAction(), oldTraite, tnp, SynchronReTables.TRAITE_NON_PROPORTIONNEL);
+        tnpRepo.save(tnp);
+        Mouvement mvt = mvtMapper.mapToMvtTraiteNp(dto);
+        mvtRepo.save(mvt);
     }
 
 //    public Page<CouvertureListResp> searchCouverture(String key, Pageable pageable) {

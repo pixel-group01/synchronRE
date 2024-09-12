@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public interface ReconstitutionRepository extends JpaRepository<Reconstitution, Long> {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp(
-     r.reconstitutionId,r.nbrReconstitution, r.tauxReconstitution,r.tauxPrimeReconstitution,
+     r.reconstitutionId,r.nbrReconstitution,
         r.modeCalculReconstitution,tnp.traiteNpId,tnp.traiReference,tnp.traiNumero,t.trancheId,t.trancheLibelle)
     from Reconstitution r
     left join r.tranche t
@@ -26,7 +26,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
 
     @Query("""
      select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp(
-                r.reconstitutionId,r.nbrReconstitution, r.tauxReconstitution,r.tauxPrimeReconstitution,
+                r.reconstitutionId,r.nbrReconstitution,
         r.modeCalculReconstitution,tnp.traiteNpId,tnp.traiReference,tnp.traiNumero,s.staCode,s.staLibelle,t.trancheId,t.trancheLibelle)
                 from Reconstitution r
                 left join r.tranche t
@@ -34,8 +34,6 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
                 left join r.statut s 
                 where (
                 locate(upper(coalesce(:key, '') ), cast(r.nbrReconstitution as string)) = 1 or
-                locate(upper(coalesce(:key, '') ), cast(r.tauxReconstitution as string)) = 1 or
-                locate(upper(coalesce(:key, '') ), cast(r.tauxPrimeReconstitution as string)) = 1 or
                 locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  r.modeCalculReconstitution) as string))) >0 or
                 locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  tnp.traiReference) as string))) >0 or
                 locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  tnp.traiNumero) as string))) >0 or
@@ -47,7 +45,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionReq(
-        r.reconstitutionId,r.nbrReconstitution,r.tauxReconstitution,r.tauxPrimeReconstitution,r.modeCalculReconstitution,t.trancheId,tnp.traiteNpId)
+        r.reconstitutionId,r.nbrReconstitution,r.modeCalculReconstitution,t.trancheId,tnp.traiteNpId)
         from Reconstitution r
         left join r.tranche t
         left join r.traiteNonProportionnel tnp

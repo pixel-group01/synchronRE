@@ -10,15 +10,20 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.RisqueMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRisque;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service @RequiredArgsConstructor
 public class RisqueService implements IServiceRisque
@@ -29,6 +34,7 @@ public class RisqueService implements IServiceRisque
     private final ObjectCopier<RisqueCouvert> risqueCopier;
     private final RisqueDetailsRepo risqueDetailsRepo;
     private final CouvertureRepository couRepo;
+    private final TypeRepo typeRepo;
 
     @Override @Transactional
     public RisqueCouvertResp create(CreateRisqueCouvertReq dto)
@@ -72,8 +78,14 @@ public class RisqueService implements IServiceRisque
     {
         key = StringUtils.stripAccentsToUpperCase(key);
         Page<RisqueCouvertResp> risquePage = risqueRepo.search(traiteNpId, key, pageable);
-        return risquePage;
+        List<RisqueCouvertResp> risqueList = risquePage
+                .stream()
+                .filter(Objects::nonNull)
+                .peek(t->t.setSousCouvertures(risqueRepo.getActivitesByrisqueId(t.getRisqueId())))
+                .toList();
+        return new PageImpl<>(risqueList, pageable, risquePage.getTotalElements());
     }
+
 
     @Override @Transactional
     public boolean delete(Long risqueId)
@@ -102,16 +114,18 @@ public class RisqueService implements IServiceRisque
     private void addSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;
-        RisqueCouvertDetails risqueCouvertDetails = new RisqueCouvertDetails(risque, new Couverture(scId));
+        Type type = typeRepo.findByUniqueCode("RISQ-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
+        Association risqueCouvertDetails = new Association(risque, new Couverture(scId),type);
         risqueCouvertDetails = risqueDetailsRepo.save(risqueCouvertDetails);
-        logService.logg("Ajout d'une sous couverture à un risque", new RisqueCouvertDetails(), risqueCouvertDetails, "RisqueCouvertDetails");
+        logService.logg("Ajout d'une sous couverture à un risque", new Association(), risqueCouvertDetails, "Association");
     }
 
     private void removeSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(!risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;
-        RisqueCouvertDetails risqueCouvertDetails = risqueDetailsRepo.findByRisqueIdAndSousCouId(risque.getRisqueId(), scId);
-        logService.logg("Retrait d'une sous couverture sur un risque", risqueCouvertDetails, new RisqueCouvertDetails(), "RisqueCouvertDetails");
-        risqueDetailsRepo.deleteById(risqueCouvertDetails.getRisqueDetailsId());
+        Type type = typeRepo.findByUniqueCode("RISQ-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
+        Association risqueCouvertDetails = risqueDetailsRepo.findByRisqueIdAndSousCouId(risque.getRisqueId(), scId);
+        logService.logg("Retrait d'une sous couverture sur un risque", risqueCouvertDetails, new Association(), "Association");
+        //risqueDetailsRepo.deleteById(risqueCouvertDetails.getRisqueDetailsId());
     }
 }

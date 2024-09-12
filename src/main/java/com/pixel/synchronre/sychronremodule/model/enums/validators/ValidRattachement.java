@@ -30,7 +30,7 @@ public @interface ValidRattachement
         public boolean isValid(String rattachement, ConstraintValidatorContext context)
         {
             if(rattachement == null) return true;
-            return Arrays.stream(EXERCICE_RATTACHEMENT.values()).anyMatch(p-> Objects.equals(p.name(), rattachement));
+            return Arrays.stream(EXERCICE_RATTACHEMENT.values()).anyMatch(p-> Objects.equals(p.name().toUpperCase(), rattachement.toUpperCase()));
         }
     }
 }

@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.net.UnknownHostException;
 
 public interface IServiceTerritorialite {
-    TerritorialiteResp create(TerritorialiteReq dto) throws UnknownHostException;
+    TerritorialiteResp create(TerritorialiteReq dto);
 
-    TerritorialiteResp update(TerritorialiteReq dto) throws UnknownHostException;
+    TerritorialiteResp update(TerritorialiteReq dto);
 
     Page<TerritorialiteResp> search(Long traiId, String key, Pageable pageable);
 

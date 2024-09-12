@@ -22,27 +22,17 @@ import java.util.List;
 public class PlacementTraiteNPReq
 {
     private Long repId;
-    @NotNull(message = "Veuillez saisir le capital")
-    @PositiveOrZero(message = "La prime doit être un nombre positif")
-    private BigDecimal repPrime;
 
     @NotNull(message = "Veuillez saisir le taux")
     @PositiveOrZero(message = "Le taux doit être un nombre positif")
     private BigDecimal repTaux;
 
-    @NotNull(message = "Veuillez saisir la sous commission")
-    @PositiveOrZero(message = "La sous commission doit être un nombre positif")
-    private BigDecimal repTauxCourtierPlaceur; //TODO A Valider
-
-    @NotNull(message = "Veuillez saisir le taux de commission de courtage")
-    @PositiveOrZero(message = "Le taux de commission de courtage doit être un nombre positif")
-    private BigDecimal repTauxCourtier; //Taux NelsonRe
-
     @NotNull(message = "Veuillez selectionner le cessionnaire")
     @ExistingCesId
     private Long cesId;
 
-    @ExistingCedanteTraiteId
-    private Long cedanteTraiteId;
+    @ExistingTNPId
+    @NotNull(message = "Veuillez sélectionner le traité")
+    private Long traiteNpId;
     private boolean isAperiteur;
 }

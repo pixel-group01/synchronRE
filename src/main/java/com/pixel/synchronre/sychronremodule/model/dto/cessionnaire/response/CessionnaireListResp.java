@@ -13,4 +13,10 @@ public class CessionnaireListResp
     private String cesAdressePostale;
     private String cesSituationGeo;
     private String staLibelle;
+
+    public CessionnaireListResp(Long cesId, String cesNom, String cesSigle) {
+        this.cesId = cesId;
+        this.cesNom = cesNom;
+        this.cesSigle = cesSigle;
+    }
 }

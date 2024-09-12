@@ -89,8 +89,8 @@ public class JwtService implements IJwtService
         extraClaims.put("cesNom", ces == null ? null : ces.getCesNom());
         extraClaims.put("cesSigle", ces == null ? null : ces.getCesSigle());
 
-        extraClaims.put("functionStartingDate", function == null ? null : Date.from(function.getStartsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        extraClaims.put("functionEndingDate", function == null ? null : Date.from(function.getEndsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        extraClaims.put("functionStartingDate", function == null || function.getStartsAt() == null ? null : Date.from(function.getStartsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        extraClaims.put("functionEndingDate", function == null || function.getEndsAt() == null ? null : Date.from(function.getEndsAt().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         boolean hasCurrentFonction = functionId != null && functionRepo.functionIsCurrentForUser(functionId, userId);
         boolean doesNotHaveAnyFunction = !functionRepo.userHasAnyAppFunction(userId);

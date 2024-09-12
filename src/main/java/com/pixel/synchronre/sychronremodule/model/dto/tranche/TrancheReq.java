@@ -21,6 +21,9 @@ import java.util.List;
 public class TrancheReq
 {
     private Long trancheId;
+    @NotNull(message = "Veuillez selectionner le type de la tranche")
+    @NotBlank(message = "Veuillez selectionner le type de la tranche")
+    private String trancheType;
     @NotNull(message = "Veuillez saisir le nom de la tranche")
     @NotBlank(message = "Veuillez saisir le nom de la tranche")
     private String trancheLibelle;
@@ -32,5 +35,15 @@ public class TrancheReq
     private Long risqueId;
     @ExistingTNPId
     private Long traiteNpId;
-    private List<Long> categorieCedanteIds;
+    private List<Long> categorieIds;
+
+    public TrancheReq(Long trancheId,String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, Long risqueId, Long traiteNpId) {
+        this.trancheId = trancheId;
+        this.trancheType=trancheType;
+        this.trancheLibelle = trancheLibelle;
+        this.tranchePriorite = tranchePriorite;
+        this.tranchePorte = tranchePorte;
+        this.risqueId = risqueId;
+        this.traiteNpId = traiteNpId;
+    }
 }

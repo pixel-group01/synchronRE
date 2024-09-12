@@ -28,12 +28,12 @@ public class CategorieController
     }
 
     @GetMapping(path = "/search")
-    Page<CategorieResp> create(@RequestParam(required = false) Long traiId,
+    Page<CategorieResp> search(@RequestParam(required = false) Long traiteNpId,
                                     @RequestParam(defaultValue = "") String key,
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "10") int size)
     {
-        return categorieService.search(traiId, key, PageRequest.of(page, size));
+        return categorieService.search(traiteNpId, key, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/list/{traiteNpId}")
