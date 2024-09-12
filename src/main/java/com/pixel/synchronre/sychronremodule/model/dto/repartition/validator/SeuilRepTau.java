@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
+import com.pixel.synchronre.sychronremodule.model.constants.PRECISION;
 import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
+import java.math.BigDecimal;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -38,7 +40,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -53,7 +55,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -67,7 +69,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -81,7 +83,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -95,7 +97,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -109,7 +111,7 @@ public @interface SeuilRepTau
         {
             if(dto == null) return true;
             if(dto.getAffId() == null) return true;
-            return comptaService.calculateRestARepartir(dto.getAffId()).compareTo(dto.getRepCapital()) >= 0;
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, dto.getAffId(), dto.getRepTaux());
         }
     }
 
@@ -123,8 +125,26 @@ public @interface SeuilRepTau
         public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            if(dto.getTraiteNpId() == null || dto.getRepTaux() == null) return true;
-            return comptaService.calculateTauxRestantAPlacer(dto.getTraiteNpId()).compareTo(dto.getRepTaux()) >= 0;
+            if(dto.getCedanteTraiteId() == null) return true;
+            Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getCedanteTraiteId());
+            return SeuilTauxChecker.checkSeuilTaux(comptaService, traiteNPId, dto.getRepTaux());
         }
+    }
+}
+
+class SeuilTauxChecker
+{
+    public static boolean checkSeuilTaux(IServiceCalculsComptables comptaService, Long affId, BigDecimal repTaux) {
+        BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestARepartir(affId);
+        tauxRestantARepartir = tauxRestantARepartir == null ? BigDecimal.ZERO : tauxRestantARepartir;
+        BigDecimal futureTauxRestantARepartir = tauxRestantARepartir.subtract(repTaux);
+        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(PRECISION.UN_CHIFFRES) <=0 ;
+    }
+
+    public static boolean checkSeuilTaux(IServiceCalculsComptablesTraite comptaService, Long traiteNpId, BigDecimal repTaux) {
+        BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestantARepartir(traiteNpId);
+        tauxRestantARepartir = tauxRestantARepartir == null ? BigDecimal.ZERO : tauxRestantARepartir;
+        BigDecimal futureTauxRestantARepartir = tauxRestantARepartir.subtract(repTaux);
+        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(PRECISION.UN_CHIFFRES) <=0 ;
     }
 }
