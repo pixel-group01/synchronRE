@@ -10,10 +10,7 @@ import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
-import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
-import com.pixel.synchronre.sychronremodule.model.constants.STATUT_CREATION;
-import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
+import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
@@ -274,6 +271,6 @@ public class ServiceAffaireImpl implements IserviceAffaire
     {
         BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
         besFac = besFac == null ? BigDecimal.ZERO : besFac;
-        return besFac.compareTo(BigDecimal.ZERO) == 0;
+        return besFac.compareTo(PRECISION.UN) <= 0;
     }
 }

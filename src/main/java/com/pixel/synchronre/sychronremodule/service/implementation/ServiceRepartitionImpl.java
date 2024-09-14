@@ -74,22 +74,34 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Affaire aff = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         BigDecimal smplCi = aff.getFacSmpLci();
 
+        boolean placementExistsByAffaireAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+        boolean modeUpdate = dto.getRepId() != null || placementExistsByAffaireAndCesId;
+
         if(smplCi == null || smplCi.compareTo(ZERO) == 0) throw new AppException("impossible de faire un placement. La LCI de l'affaire est nulle");
         if(!STATUT_CREATION.REALISEE.name().equals(aff.getAffStatutCreation())) throw new AppException("Impossible de faire un placement sur une affaire en intance ou non réalisée");
         BigDecimal resteAPlacer = comptaService.calculateRestARepartir(dto.getAffId());
         resteAPlacer = resteAPlacer == null ? BigDecimal.ZERO : resteAPlacer;
+
+        if(modeUpdate)
+        {
+            BigDecimal capitalToUpdate = dto.getRepId() != null ? repRepo.getRepCapitalByRepId(dto.getRepId()) :
+                    repRepo.getRepCapitalByAffIdAndCesId(dto.getAffId(), dto.getCesId());
+            capitalToUpdate = capitalToUpdate == null ? BigDecimal.ZERO : capitalToUpdate;
+            resteAPlacer = resteAPlacer.add(capitalToUpdate);
+        }
         BigDecimal futureResteARepartir = resteAPlacer.subtract(dto.getRepCapital());
-        if (futureResteARepartir.abs().compareTo(PRECISION.TROIS_CHIFFRES) <=0 )
+
+        if (futureResteARepartir.abs().compareTo(PRECISION.UN) <=0)
         {
             dto.setRepCapital(resteAPlacer);
         }
         BigDecimal repTaux = dto.getRepCapital() == null || dto.getRepCapital().compareTo(ZERO) == 0 ? ZERO : dto.getRepCapital().multiply(CENT).divide(smplCi, 100, RoundingMode.HALF_UP);
         BigDecimal repPrime = aff.getFacPrime() == null ? ZERO : aff.getFacPrime().multiply(repTaux).divide(CENT, 100, RoundingMode.HALF_UP);
         boolean firstPlacement = !repRepo.affaireHasPlacement(dto.getAffId());
-        boolean placementExistsByAffaireAndCesId = repRepo.existsByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
+
         Repartition rep;
         Repartition oldRep = null;
-        boolean modeUpdate = dto.getRepId() != null || placementExistsByAffaireAndCesId;
+
 
         if(modeUpdate)
         {

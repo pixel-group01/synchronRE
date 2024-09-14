@@ -234,4 +234,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r.type.uniqueCode from Repartition r where r.repId = ?1")
     Optional<String> getTypeRepCode(Long plaId);
+
+    @Query("select r.repCapital from Repartition r where r.affaire.affId = ?1 and r.cessionnaire.cesId = ?2 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and (r.repStaCode is null or r.repStaCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULE'))")
+    BigDecimal getRepCapitalByAffIdAndCesId(Long affId, Long cesId);
 }
