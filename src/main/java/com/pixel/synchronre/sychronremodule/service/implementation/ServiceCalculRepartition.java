@@ -112,7 +112,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(aff == null) return null;
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
-        if(capital.subtract(restARepartir).compareTo(PRECISION.TROIS_CHIFFRES)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
+        if(capital.subtract(restARepartir).compareTo(PRECISION.UN)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
         restARepartir = restARepartir == null ? ZERO : restARepartir;
         BigDecimal smplCi = aff.getFacSmpLci() == null ? ZERO : aff.getFacSmpLci();
         if(restARepartir.compareTo(ZERO) < 0 || smplCi.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);

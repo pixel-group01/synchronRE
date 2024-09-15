@@ -18,7 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
-/src/main/resources
+/src/main/resources/*
 
 ### NetBeans ###
 /nbproject/private/
@@ -32,3 +32,8 @@ build/
 
 ### VS Code ###
 .vscode/
+Dockerfile
+Jenkinsfile
+keystore.p12
+/error.log.2024-05-15.0550730930541000.tmp
+/error.log
