@@ -33,6 +33,7 @@ import java.math.RoundingMode;
 import java.net.UnknownHostException;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 import static java.math.BigDecimal.ZERO;
 
 @Service @AllArgsConstructor
@@ -49,7 +50,6 @@ public class ServiceReglementImpl implements IserviceReglement {
     private final IServiceCalculsComptablesSinistre comptaSinistreService;
     private final String PAIEMENT = "paiements";
     private final String REVERSEMENT = "reversements";
-    private final BigDecimal CENT = new BigDecimal(100);
     private final RepartitionRepository repRepo;
 
     @Override @Transactional
@@ -69,8 +69,8 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal resteAPayer = comptaAffaireService.calculateRestARegler(dto.getAffId());
         BigDecimal primeNetteComCed = dto.getRegMontant() == null ? ZERO : dto.getRegMontant();
         BigDecimal futureResteApayer = resteAPayer.subtract(primeNetteComCed);
-        if(futureResteApayer.compareTo(ZERO)<0 && futureResteApayer.abs().compareTo(PRECISION.UN) > 0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(futureResteApayer.abs().compareTo(PRECISION.UN)<0) primeNetteComCed = resteAPayer;
+        if(futureResteApayer.compareTo(ZERO)<0 && futureResteApayer.abs().compareTo(UN) > 0) throw new AppException("Le montant du paiement ne peut exéder le reste à payer (" + resteAPayer.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureResteApayer.abs().compareTo(UN)<0) primeNetteComCed = resteAPayer;
         boolean hasReglement = regRepo.affaireHasReglement(dto.getAffId(), PAIEMENT);
         Reglement paiement = reglementMapper.mapToReglement(dto);
 
@@ -125,11 +125,11 @@ public class ServiceReglementImpl implements IserviceReglement {
         BigDecimal futureResteAReverserAuCessionnaire = resteAReverserAuCessionnaire.subtract(mtReversement);
         BigDecimal futureMtEnAttenteDeReversementSurAffaire = mtEnAttenteDeReversementSurAffaire.subtract(mtReversement);
 
-        if(futureResteAReverserAuCessionnaire.compareTo(ZERO) < 0 && futureResteAReverserAuCessionnaire.abs().compareTo(PRECISION.UN) > 0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + resteAReverserAuCessionnaire.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(futureResteAReverserAuCessionnaire.abs().compareTo(PRECISION.UN) < 0) mtReversement = resteAReverserAuCessionnaire;
+        if(futureResteAReverserAuCessionnaire.compareTo(ZERO) < 0 && futureResteAReverserAuCessionnaire.abs().compareTo(UN) > 0) throw new AppException("Le montant du reversement ne peut exéder le reste à reverser (" + resteAReverserAuCessionnaire.setScale(0, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureResteAReverserAuCessionnaire.abs().compareTo(UN) < 0) mtReversement = resteAReverserAuCessionnaire;
 
-        if(futureMtEnAttenteDeReversementSurAffaire.compareTo(ZERO) < 0 && futureMtEnAttenteDeReversementSurAffaire.compareTo(PRECISION.UN) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversementSurAffaire.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(futureMtEnAttenteDeReversementSurAffaire.abs().compareTo(PRECISION.UN) < 0) mtReversement = mtEnAttenteDeReversementSurAffaire;
+        if(futureMtEnAttenteDeReversementSurAffaire.compareTo(ZERO) < 0 && futureMtEnAttenteDeReversementSurAffaire.compareTo(UN) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversementSurAffaire.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
+        if(futureMtEnAttenteDeReversementSurAffaire.abs().compareTo(UN) < 0) mtReversement = mtEnAttenteDeReversementSurAffaire;
 
         dto.setRegMontant(mtReversement);
         Reglement reversement = reglementMapper.mapToReglement(dto);

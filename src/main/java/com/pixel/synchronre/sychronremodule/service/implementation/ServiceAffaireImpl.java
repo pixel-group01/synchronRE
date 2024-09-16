@@ -6,7 +6,6 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
-import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
@@ -35,13 +34,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_REPARTITION;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service @RequiredArgsConstructor
 public class ServiceAffaireImpl implements IserviceAffaire
@@ -271,6 +270,6 @@ public class ServiceAffaireImpl implements IserviceAffaire
     {
         BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
         besFac = besFac == null ? BigDecimal.ZERO : besFac;
-        return besFac.compareTo(PRECISION.UN) <= 0;
+        return besFac.compareTo(UN) <= 0;
     }
 }

@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static java.math.BigDecimal.ZERO;
 
 @Service @RequiredArgsConstructor
@@ -24,7 +25,6 @@ public class ServiceStatsAffaireImpl implements IServiceStatsAffaire
     private final AffaireStatsRepository statRepo;
     private final CedRepo cedRepo;
     private final CessionnaireRepository cesRepo;
-    private final BigDecimal CENT = new BigDecimal(100);
 
     @Override
     public List<AffaireStats.DetailsAffaireStatParCedante> calculerDetailsAffaireStatsParCedantes(CritereStat criteres)

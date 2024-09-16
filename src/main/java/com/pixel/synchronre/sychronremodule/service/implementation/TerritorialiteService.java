@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -66,6 +67,7 @@ public class TerritorialiteService implements IServiceTerritorialite
 
     @Override  @Transactional
     public TerritorialiteResp update(TerritorialiteReq dto){
+        if(dto.getOrgCodes() == null) dto.setOrgCodes(new ArrayList<>());
         Territorialite territorialite = terrRepo.findById(dto.getTerrId()).orElseThrow(()->new AppException("Territorialité introuvable"));
         Territorialite oldTerritorialite = terrCopier.copy(territorialite);
         territorialite.setTerrLibelle(dto.getTerrLibelle());

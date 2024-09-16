@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sychronremodule.model.constants.SynchronReActions.*;
-import static com.pixel.synchronre.sychronremodule.model.constants.UsualNumbers.CENT;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 
 @Service @RequiredArgsConstructor
 public class CedanteTraiteService implements IServiceCedanteTraite

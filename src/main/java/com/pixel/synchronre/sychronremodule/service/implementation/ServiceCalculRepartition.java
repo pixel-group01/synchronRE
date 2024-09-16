@@ -1,36 +1,27 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.controller.service.PlacementDocUploader;
-import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
-import com.pixel.synchronre.sharedmodule.enums.StatutEnum;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
-import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculRepartitionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.CalculationRepartitionRespDto;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.RepartitionListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service
 @RequiredArgsConstructor
@@ -112,7 +104,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         Affaire aff = affRepo.findById(affId).orElse(null);
         if(aff == null) return null;
         BigDecimal restARepartir = comptaService.calculateRestARepartir(affId, repIdToExclude);
-        if(capital.subtract(restARepartir).compareTo(PRECISION.UN)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
+        if(capital.subtract(restARepartir).compareTo(UN)>0) throw new AppException("Le montant du capital ne doit pas exéder le besoin fac");
         restARepartir = restARepartir == null ? ZERO : restARepartir;
         BigDecimal smplCi = aff.getFacSmpLci() == null ? ZERO : aff.getFacSmpLci();
         if(restARepartir.compareTo(ZERO) < 0 || smplCi.compareTo(ZERO) <= 0) return new CalculRepartitionResp(ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO, ZERO);

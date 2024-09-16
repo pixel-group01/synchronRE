@@ -1,6 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
-import com.pixel.synchronre.sychronremodule.model.constants.PRECISION;
 import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 import java.math.BigDecimal;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -130,20 +131,20 @@ public @interface SeuilRepTau
         }
     }
 }
-
+// Camp commando, 3 chatons, isfm
 class SeuilTauxChecker
 {
     public static boolean checkSeuilTaux(IServiceCalculsComptables comptaService, Long affId, BigDecimal repTaux) {
         BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestARepartir(affId);
         tauxRestantARepartir = tauxRestantARepartir == null ? BigDecimal.ZERO : tauxRestantARepartir;
         BigDecimal futureTauxRestantARepartir = tauxRestantARepartir.subtract(repTaux);
-        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(PRECISION.UN_CHIFFRES) <=0 ;
+        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(UN) <=0 ;
     }
 
     public static boolean checkSeuilTaux(IServiceCalculsComptablesTraite comptaService, Long traiteNpId, BigDecimal repTaux) {
         BigDecimal tauxRestantARepartir = comptaService.calculateTauxRestantAPlacer(traiteNpId);
         tauxRestantARepartir = tauxRestantARepartir == null ? BigDecimal.ZERO : tauxRestantARepartir;
         BigDecimal futureTauxRestantARepartir = tauxRestantARepartir.subtract(repTaux);
-        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(PRECISION.UN_CHIFFRES) <=0 ;
+        return futureTauxRestantARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureTauxRestantARepartir.abs().compareTo(UN) <=0 ;
     }
 }

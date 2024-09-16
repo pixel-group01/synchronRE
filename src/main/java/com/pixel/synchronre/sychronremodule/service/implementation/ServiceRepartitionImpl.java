@@ -11,7 +11,6 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionMapper;
@@ -23,7 +22,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import com.pixel.synchronre.typemodule.controller.resources.TypeResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,11 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service
 @RequiredArgsConstructor
@@ -91,7 +89,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         }
         BigDecimal futureResteARepartir = resteAPlacer.subtract(dto.getRepCapital());
 
-        if (futureResteARepartir.abs().compareTo(PRECISION.UN) <=0)
+        if (futureResteARepartir.abs().compareTo(UN) <=0)
         {
             dto.setRepCapital(resteAPlacer);
         }

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.pixel.synchronre.sychronremodule.model.constants.UsualNumbers.CENT;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 
 @Service @RequiredArgsConstructor
 public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP

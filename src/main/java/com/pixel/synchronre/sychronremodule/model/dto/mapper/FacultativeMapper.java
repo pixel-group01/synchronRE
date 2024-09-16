@@ -4,7 +4,6 @@ import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.sychronremodule.model.constants.PRECISION;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.CessionnaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
@@ -22,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Mapper(componentModel = "spring")
 public abstract class FacultativeMapper
@@ -116,7 +117,7 @@ public abstract class FacultativeMapper
     {
         BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
         besFac = besFac == null ? BigDecimal.ZERO : besFac;
-        return besFac.compareTo(PRECISION.UN) <= 0;
+        return besFac.compareTo(UN) <= 0;
     }
 
     protected List<EtatComptableAffaire.DetailsEtatComptable> getDetailsEtatComptables(Long affId)

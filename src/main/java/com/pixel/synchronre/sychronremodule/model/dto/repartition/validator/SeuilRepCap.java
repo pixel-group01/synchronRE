@@ -1,9 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
-import com.pixel.synchronre.sychronremodule.model.constants.PRECISION;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
-import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -14,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.lang.annotation.*;
 import java.math.BigDecimal;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
@@ -138,7 +138,7 @@ public @interface SeuilRepCap
             BigDecimal resteARepartir = comptaService.calculateRestARepartir(affId);
             resteARepartir = resteARepartir == null ? BigDecimal.ZERO : resteARepartir;
             BigDecimal futureResteARepartir = resteARepartir.subtract(repCapital);
-            return futureResteARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureResteARepartir.abs().compareTo(PRECISION.UN) <=0 ;
+            return futureResteARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureResteARepartir.abs().compareTo(UN) <=0 ;
         }
 
         public static boolean checkSeuilCapital(IServiceCalculsComptables comptaService, Long affId, BigDecimal repCapital, BigDecimal capitalToUpdate) {
@@ -146,7 +146,7 @@ public @interface SeuilRepCap
             resteARepartir = resteARepartir == null ? BigDecimal.ZERO : resteARepartir;
             resteARepartir = resteARepartir.add(capitalToUpdate);
             BigDecimal futureResteARepartir = resteARepartir.subtract(repCapital);
-            return futureResteARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureResteARepartir.abs().compareTo(PRECISION.UN) <=0 ;
+            return futureResteARepartir.compareTo(BigDecimal.ZERO) >= 0 || futureResteARepartir.abs().compareTo(UN) <=0 ;
         }
     }
 }
