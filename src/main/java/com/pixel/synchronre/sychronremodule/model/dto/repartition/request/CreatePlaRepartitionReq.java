@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@SeuilRepCap @SeuilRepTau  /*@CoherentCapitalAndTaux*/ @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
+@SeuilRepCap /*@SeuilRepTau  @CoherentCapitalAndTaux*/ @CoherentTauxCrtAndScms(message = "Le taux de la commission de courtage ne peut exéder celui de la commission de réassurance")
 public class CreatePlaRepartitionReq
 {
     private Long repId;
