@@ -24,7 +24,7 @@ public interface TerritorialiteDetailsRepository extends JpaRepository<Associati
 
 
 
-    @Query("delete from Association td where td.territorialite.terrId = ?1 and td.pays.paysCode = ?2 and td.type.uniqueCode = 'TER-DET'")
+    @Query("delete from Association td where td.assoId in (select asso.assoId from Association asso where asso.territorialite.terrId = ?1 and asso.pays.paysCode = ?2 and asso.type.uniqueCode = 'TER-DET')")
     @Modifying
     void deleteByTerrIdAndPaysCode(Long terrId, String paysCode);
 
