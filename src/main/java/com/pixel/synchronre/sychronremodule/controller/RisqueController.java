@@ -1,10 +1,9 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRisque;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,5 +54,17 @@ public class RisqueController
     List<RisqueCouvertResp> getRisqueList(@PathVariable Long traiteNpId)
     {
         return risqueService.getRisqueList(traiteNpId);
+    }
+
+    @GetMapping(path = "/couvertureParent/{traiteNpId}")
+    List<RisqueCouvertResp> getCouvertureParent(@PathVariable Long traiteNpId)
+    {
+        return risqueService.getCouvertureParent(traiteNpId);
+    }
+
+    @GetMapping(path = "/activites/{risqueId}")
+    List<ActivitesResp> getActivites(@PathVariable Long risqueId)
+    {
+        return risqueService.getActivites(risqueId);
     }
 }

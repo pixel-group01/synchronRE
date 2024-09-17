@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.souslimite.request;
 
 
+import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.ExistingCouId;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.ExistingRisqueId;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.validator.ExistingSousLimiteSouscriptionId;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.ExistingTrancheId;
@@ -18,22 +19,9 @@ public class UpdateSousLimite
     private Long sousLimiteSouscriptionId;
     @NotNull(message = "Veuillez saisir le montant de la sous limite")
     private BigDecimal sousLimMontant;
-    @ExistingRisqueId @NotNull(message = "Veuillez sélectionner le risque couvert")
-    private Long risqueCouvertId;
+    @ExistingCouId @NotNull(message = "Veuillez sélectionner l'activité")
+    private Long couId;
     private Long traiteNonProportionnelId;
-    private String statutCode;
 }
-/*
 
-public class CreateSousLimiteReq
-{
 
-    private BigDecimal sousLimMontant;
-
-    private Long risqueCouvertId;
-    @ExistingTNPId @NotNull(message = "L'ID du traité ne peut être null")
-    private Long traiteNonProportionnelId;
-    @ExistingTrancheId @NotNull(message = "Veuillez sélectionner la tranche")
-    private Long trancheId;
-    private String statutCode;
- */

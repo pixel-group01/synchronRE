@@ -6,6 +6,7 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CouvertureRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RisqueCouvertRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RisqueMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
@@ -109,6 +110,16 @@ public class RisqueService implements IServiceRisque
     @Override
     public List<RisqueCouvertResp> getRisqueList(Long traiteNpId) {
         return risqueRepo.getRisqueList(traiteNpId);
+    }
+
+    @Override
+    public List<ActivitesResp> getActivites(Long risqueId) {
+        return risqueRepo.getActivite(risqueId);
+    }
+
+    @Override
+    public List<RisqueCouvertResp> getCouvertureParent(Long traiteNpId) {
+        return risqueRepo.getCouvertureParent(traiteNpId);
     }
 
     private void addSousCouverture(RisqueCouvert risque, Long scId)

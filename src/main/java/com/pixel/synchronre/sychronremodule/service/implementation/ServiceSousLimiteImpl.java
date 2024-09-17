@@ -12,11 +12,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.SousLimiteMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
-import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
-import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
-import com.pixel.synchronre.sychronremodule.model.entities.SousLimite;
-import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
-import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
+import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSousLimite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +35,8 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
 
     @Override @Transactional
     public SousLimiteDetailsResp create(CreateSousLimiteReq dto) throws UnknownHostException {
+        Optional<SousLimite> ssl$ = sslRepo.findByTraiteAndActivite(dto.getTraiteNpId(), dto.getCouId());
+        if(ssl$.isPresent()) return sslMapper.mapToSousLimiteResp(ssl$.get());
         SousLimite ssl = sslMapper.mapToSousLimite(dto);
         ssl = sslRepo.save(ssl);
         logService.logg("Création d'une sous-limite",null,ssl, "SousLimite");
@@ -59,7 +58,7 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
         SousLimite ssl = sslRepo.findById(dto.getSousLimiteSouscriptionId()).orElseThrow(()->new AppException("Sous-Limite introuvable"));
         SousLimite oldSsl = sousLimiteCopier.copy(ssl);
         BeanUtils.copyProperties(dto,ssl);
-        ssl.setRisqueCouvert(new RisqueCouvert(dto.getRisqueCouvertId()));
+        ssl.setActivite(new Couverture(dto.getCouId()));
         ssl.setTraiteNonProportionnel(new TraiteNonProportionnel(dto.getTraiteNonProportionnelId()));
         ssl = sslRepo.save(ssl);
         logService.logg("Modification d'une sous-limite", oldSsl, ssl, "SousLimite");

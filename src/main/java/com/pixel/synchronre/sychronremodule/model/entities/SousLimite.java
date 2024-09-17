@@ -21,9 +21,10 @@ public class SousLimite
     @SequenceGenerator(name = "SOUS_LIM_ID_GEN", sequenceName = "SOUS_LIM_ID_GEN")
     private Long sousLimiteSouscriptionId;
     private BigDecimal sousLimMontant;
+
     @ManyToOne
-    @JoinColumn(name = "risque_id")
-    private RisqueCouvert risqueCouvert;
+    @JoinColumn(name = "cou_id")
+    private Couverture activite;
     @ManyToOne
     @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;

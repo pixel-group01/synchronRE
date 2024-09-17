@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.CreateRisqueCouvertReq;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq;
@@ -20,4 +21,7 @@ public interface IServiceRisque
     UpdateRisqueCouvertReq getEditDto(Long risqueId);
 
     List<RisqueCouvertResp> getRisqueList(Long traiteNpId);
+    List<ActivitesResp> getActivites(Long risqueId);
+
+    List<RisqueCouvertResp> getCouvertureParent(Long traiteNpId);
 }
