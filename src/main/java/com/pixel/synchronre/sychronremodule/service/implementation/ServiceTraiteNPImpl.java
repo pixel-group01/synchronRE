@@ -74,7 +74,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> search(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable)
     {
         key = StringUtils.stripAccentsToUpperCase(key);
-        staCodes = staCodes == null || staCodes.isEmpty() ? Collections.singletonList("ACT") : staCodes;
+        staCodes = staCodes == null || staCodes.isEmpty() ? Collections.singletonList("SAI-CRT") : staCodes;
         Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, fncId, userId, cedId, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
