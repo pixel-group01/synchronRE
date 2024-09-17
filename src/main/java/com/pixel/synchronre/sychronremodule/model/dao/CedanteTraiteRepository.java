@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp;
@@ -71,4 +72,12 @@ public interface CedanteTraiteRepository extends JpaRepository<CedanteTraite, Lo
         from CedanteTraite ct  where ct.traiteNonProportionnel.traiteNpId = ?1 and ct.statut.staCode = 'ACT' group by ct.traiteNonProportionnel.traiteNpId 
         """)
     PmdGlobalResp getPmdGlobal(Long traiteNpId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO(c.cedId, c.cedNomFiliale, c.cedSigleFiliale) 
+    from Cedante c where c.cedId in 
+    (select ct.cedante.cedId from CedanteTraite ct 
+    where not exists (select ct2 from CedanteTraite ct2 where ct2.cedante.cedId = c.cedId and ct2.traiteNonProportionnel.traiteNpId = ?1) ) 
+""")
+    List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId);
 }

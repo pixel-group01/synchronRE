@@ -5,6 +5,7 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.constants.SynchronReTables;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
@@ -236,6 +237,12 @@ public class CedanteTraiteService implements IServiceCedanteTraite
     @Override
     public List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId) {
         return cedTraiRepo.getCedanteTraitelist(traiteNpId);
+    }
+
+    @Override
+    public List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId)
+    {
+        return cedTraiRepo.getListCedanteAsaisirSurTraite(traiteNpId);
     }
 
 

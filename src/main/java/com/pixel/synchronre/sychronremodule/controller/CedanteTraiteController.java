@@ -1,8 +1,8 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
-import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCedanteTraite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -56,6 +56,11 @@ public class CedanteTraiteController
     @GetMapping(path = "/list/{traiteNpId}")
     List <CedanteTraiteResp> list(@PathVariable Long traiteNpId){
         return cedanteTraiteService.getCedanteTraitelist(traiteNpId);
+    }
+
+    @GetMapping(path = "/a-saisir/{traiteNpId}")
+    List <ReadCedanteDTO> getListCedanteAsaisir(@PathVariable Long traiteNpId){
+        return cedanteTraiteService.getListCedanteAsaisirSurTraite(traiteNpId);
     }
 
 }

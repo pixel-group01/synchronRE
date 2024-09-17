@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
@@ -34,4 +35,6 @@ public interface IServiceCedanteTraite
 
 
     List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId);
+
+    List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId);
 }
