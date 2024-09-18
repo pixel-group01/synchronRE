@@ -65,6 +65,7 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
         """)
     List<CouvertureListResp> getActivitesByrisqueId(Long risqueId);
 
+    //Renvoie la liste des couvertures parents qui ont au moins une sous couverture qui n'est pas sur une sous limite du traité
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
     rc.risqueId, cv.couId, cv.couLibelle, rc.description, 
