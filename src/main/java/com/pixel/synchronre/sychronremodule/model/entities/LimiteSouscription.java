@@ -26,8 +26,8 @@ public class LimiteSouscription
     private BigDecimal limSousMontant;
     @ManyToOne @JoinColumn(name = "risque_id")
     private RisqueCouvert risqueCouvert;
-    @ManyToOne @JoinColumn(name = "ced_trai_id")
-    private CedanteTraite cedanteTraite;
+    @ManyToOne @JoinColumn(name = "categorie_id")
+    private Categorie categorie;
     @ManyToOne @JoinColumn(name = "STA_CODE")
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")

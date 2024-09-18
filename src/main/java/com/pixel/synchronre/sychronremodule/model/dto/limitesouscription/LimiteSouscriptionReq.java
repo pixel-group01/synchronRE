@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.limitesouscription;
 
+import com.pixel.synchronre.sychronremodule.model.dto.categorie.ExistingCategorieId;
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.ExistingRisqueId;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.ExistingTrancheId;
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +19,6 @@ public class LimiteSouscriptionReq
     private BigDecimal limSousMontant;
     @ExistingRisqueId
     private Long risqueId;
-    @ExistingCedanteTraiteId
-    private Long cedanteTraiteId;
+    @ExistingCategorieId
+    private Long categorieId;
 }

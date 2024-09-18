@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
+import com.pixel.synchronre.sychronremodule.model.dao.CategorieCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.LimiteSouscriptionRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq;
@@ -14,10 +15,13 @@ import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -27,6 +31,7 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     private final LimiteSouscriptionMapper lsMapper;
     private final ObjectCopier<LimiteSouscription> lsCopier;
     private final LimiteSouscriptionRepository lsRepo;
+    private final CategorieCedanteRepository catCedRepo;
     @Override
     public LimiteSouscriptionResp save(LimiteSouscriptionReq dto)
     {
@@ -48,7 +53,9 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     @Override
     public Page<LimiteSouscriptionResp> search(Long traiteNpId, String key, Pageable pageable)
     {
-        return lsRepo.search(traiteNpId, key, pageable);
+        Page<LimiteSouscriptionResp> lsPage = lsRepo.search(traiteNpId, key, pageable);
+        List<LimiteSouscriptionResp> lsList = lsPage.stream().peek(ls->ls.setCedantes(catCedRepo.getShortCedantesByCatId(ls.getCategorieId()))).toList();
+        return new PageImpl(lsList, pageable, lsPage.getTotalElements());
     }
 
     @Override @Transactional
@@ -68,7 +75,7 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
         LimiteSouscription oldLimiteSouscription = lsCopier.copy(limiteSouscription);
         limiteSouscription.setLimSousMontant(dto.getLimSousMontant());
         limiteSouscription.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
-        limiteSouscription.setCedanteTraite(new CedanteTraite(dto.getCedanteTraiteId()));
+        limiteSouscription.setCategorie(new Categorie(dto.getCategorieId()));
         logService.logg("Modification d'une limite de souscription", oldLimiteSouscription, limiteSouscription, "LimiteSouscription");
         return lsRepo.findLimiteSouscriptionRespById(dto.getLimiteSouscriptionId());
     }
