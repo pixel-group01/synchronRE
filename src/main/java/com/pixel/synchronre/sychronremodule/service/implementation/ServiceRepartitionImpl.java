@@ -117,6 +117,12 @@ public class ServiceRepartitionImpl implements IserviceRepartition
                 oldRep = repCopier.copy(rep);
             }
             rep.setRepCapital(dto.getRepCapital());
+            rep.setRepTauxComCourt(dto.getRepTauxComCourt());
+            rep.setRepSousCommission(dto.getRepSousCommission());
+            BigDecimal comCed = dto.getRepSousCommission() == null ? ZERO :
+                    dto.getRepTauxComCourt() == null ? dto.getRepSousCommission() :
+                    dto.getRepSousCommission().subtract(dto.getRepTauxComCourt());
+            rep.setRepTauxComCed(comCed);
             rep.setInterlocuteurPrincipal(new Interlocuteur(dto.getInterlocuteurPrincipalId()));
             String stringIntIds = dto.getAutreInterlocuteurIds() == null ? "" : dto.getAutreInterlocuteurIds() .stream().map(String::valueOf).collect(Collectors.joining(","));
             rep.setAutreInterlocuteurs(stringIntIds);
