@@ -134,7 +134,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
         logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
-        if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et les règlements de l'affaire
+        if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et le bordereau lié à l'affaire
         {
             repRepo.findRepIdByAffId(dto.getAffId()).forEach(repId->repService.annulerRepartition(repId));
             affaire.setStatut(new Statut(EN_COURS_DE_REPARTITION.staCode));

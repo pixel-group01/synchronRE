@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DetailsBordereauRepository extends JpaRepository<DetailBordereau, Long>
 {
@@ -16,4 +17,7 @@ public interface DetailsBordereauRepository extends JpaRepository<DetailBorderea
 
     @Query("select db.debId from DetailBordereau db where db.bordereau.bordId = ?1")
     List<Long> findByBordId(Long bordId);
+
+    @Query("select db from DetailBordereau db where db.repartition.repId = ?1 and db.debStatut = true")
+    DetailBordereau findByPlaId(Long plaId);
 }
