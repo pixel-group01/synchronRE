@@ -144,7 +144,8 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r.repPrime from Repartition r where r.repId = ?1")
     BigDecimal getPrimeBruteByPlaId(Long plaId);
 
-    @Query("select (a.facPrime * r.repTaux * r.repTauxComCed /10000) from Repartition r join r.affaire a where r.repId = ?1")
+    @Query("select (a.facPrime * r.repTaux * r.repTau" +
+            "xComCed /10000) from Repartition r join r.affaire a where r.repId = ?1")
     BigDecimal calculateMtCmsCedByCes(Long plaId);
 
     @Query("select (a.facPrime * r.repTaux * r.repTauxComCourt /10000) from Repartition r join r.affaire a where r.repId = ?1")

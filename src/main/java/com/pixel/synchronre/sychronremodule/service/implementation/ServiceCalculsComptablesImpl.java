@@ -165,7 +165,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     @Override
     public BigDecimal calculateMtCmsCedByCes(Long plaId) //TODO Revoir les calcul
     {
-        Repartition placement = repRepo.findPlacementById(plaId).orElseThrow(()->new AppException("Placement inexistant"));
+        if(!repRepo.placementExists(plaId)) throw new AppException("Placement inexistant");
         BigDecimal mtCommissionCed = repRepo.calculateMtCmsCedByCes(plaId);
         return  mtCommissionCed;
     }

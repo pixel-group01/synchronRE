@@ -103,19 +103,13 @@ public class ServiceRepartitionImpl implements IserviceRepartition
 
         if(modeUpdate)
         {
-            if(dto.getRepId() != null)
-            {
-                rep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
-                oldRep = repCopier.copy(rep);
-                rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
-                rep.setAffaire(new Affaire(dto.getAffId()));
-            }
-            else // if(placementExistsByAffaireAndCesId)
-            {
-                if(dto.getRepId() == null) throw new AppException("Veuillez fournir l'ID du placement");
-                rep = repRepo.findByAffaireAndTypeRepAndCesId(dto.getAffId(), "REP_PLA", dto.getCesId());
-                oldRep = repCopier.copy(rep);
-            }
+            if(dto.getRepId() == null) throw new AppException("l'ID du placement n'a pas été fourni");
+
+            rep = repRepo.findById(dto.getRepId()).orElseThrow(()->new AppException("Placement introuvable"));
+            oldRep = repCopier.copy(rep);
+            rep.setCessionnaire(new Cessionnaire(dto.getCesId()));
+            rep.setAffaire(new Affaire(dto.getAffId()));
+
             rep.setRepCapital(dto.getRepCapital());
             rep.setRepTauxComCourt(dto.getRepTauxComCourt());
             rep.setRepSousCommission(dto.getRepSousCommission());
@@ -126,6 +120,10 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             rep.setInterlocuteurPrincipal(new Interlocuteur(dto.getInterlocuteurPrincipalId()));
             String stringIntIds = dto.getAutreInterlocuteurIds() == null ? "" : dto.getAutreInterlocuteurIds() .stream().map(String::valueOf).collect(Collectors.joining(","));
             rep.setAutreInterlocuteurs(stringIntIds);
+            rep.setRepTaux(repTaux);
+            rep.setRepPrime(repPrime);
+            rep = repRepo.save(rep);
+            bordService.updateDetailsBordereaux(rep);
         }
         else // Create
         {
@@ -147,6 +145,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable" ));
         rep.setCessionnaire(ces);
         rep.setAffaire(affaire);
+        rep = repRepo.save(rep);
         return repMapper.mapToRepartitionDetailsResp(rep);
     }
 
