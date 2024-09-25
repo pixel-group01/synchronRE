@@ -43,14 +43,14 @@ public class CouvertureController {
         return couvertureService.searchCouverture(key, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/parents")
-    public List<CouvertureListResp> getCouverturesParents() {
-        return couvertureService.getCouerturesParents();
+    @GetMapping(path = "/parents/{traiteNpId}")
+    public List<CouvertureListResp> getCouverturesParents(@PathVariable Long traiteNpId) {
+        return couvertureService.getCouerturesParents(traiteNpId);
     }
 
-    @GetMapping(path = "/filles/{couParentId}")
-    List<CouvertureListResp>  filles(@PathVariable Long couParentId)
+    @GetMapping(path = "/filles")
+    List<CouvertureListResp>  filles(@RequestParam() Long traiteNpId, @RequestParam() Long couParentId)
     {
-        return couvertureService.getCouerturesFilles(couParentId);
+        return couvertureService.getCouerturesFilles(traiteNpId, couParentId);
     }
 }

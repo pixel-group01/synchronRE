@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Long> {
     @Query("""
@@ -105,6 +106,6 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
     List<ActivitesResp> getActivite(Long risqueId);
 
 
-
-
+    @Query("select rc from RisqueCouvert rc where rc.traiteNonProportionnel.traiteNpId = ?1 and rc.couverture.couId = ?2")
+    Optional<RisqueCouvert> findByTraiteAndCouverture(Long traiteNpId, Long couId);
 }

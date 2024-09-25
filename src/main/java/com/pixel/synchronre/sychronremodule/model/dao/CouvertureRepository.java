@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.Couverture;
 import org.springframework.data.domain.Page;
@@ -37,19 +38,39 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
-        from Couverture cv where cv.couParent is null and cv.statut.staCode = 'ACT'  
+        from Couverture cv where cv.couParent is null 
+        and exists 
+                    (select c from Couverture c where c.couParent.couId = cv.couId and c.couId not in 
+                        (select a.couverture.couId from Association a where a.type.uniqueCode = 'RISQ-DET' 
+                          and a.risqueCouvert.couverture.couId = cv.couId 
+                          and a.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1 
+                          and a.couverture.couId = c.couId)
+                    )
+        and cv.statut.staCode = 'ACT' order by cv.couLibelle
 """)
-    List<CouvertureListResp> getCouerturesParents();
+    List<CouvertureListResp> getCouerturesParents(Long traiteNpId);
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
-         from Couverture cv where cv.statut.staCode = 'ACT' AND cv.couParent.couId = ?1 
-    """)
-    List<CouvertureListResp> getCouerturesFilles(Long couParentId);
+    from Couverture cv
+    where  cv.couParent.couId = ?2 
+    AND cv.couId not in (
+        select a.couverture.couId from Association a where a.type.uniqueCode = 'RISQ-DET' 
+        and a.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1 
+        and a.risqueCouvert.couverture.couId = ?2
+        and a.couverture.couId = cv.couId
+    )
+    ORDER BY cv.couLibelle
+""")
+    List<CouvertureListResp> getCouerturesFilles(Long traiteNpId, Long couParentId);
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
          from Couverture cv where cv.statut.staCode = 'ACT' AND cv.couId in ?1 
     """)
     List<CouvertureListResp> getShortCouverturesByIds(List<Long> couIds);
+
+
+
 }
+

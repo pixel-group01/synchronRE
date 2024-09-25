@@ -18,8 +18,8 @@ public interface IserviceCouverture {
     CouvertureDetailsResp createCouverture(CreateCouvertureReq dto) throws UnknownHostException;
     CouvertureDetailsResp updateCouverture(UpdateCouvertureReq dto) throws UnknownHostException;
 
-    List<CouvertureListResp> getCouerturesParents();
+    List<CouvertureListResp> getCouerturesParents(Long traiteNpId);
 
     Page<CouvertureListResp> searchCouverture(String key, Pageable pageable);
-    List<CouvertureListResp> getCouerturesFilles(Long couParentId);
+    List<CouvertureListResp> getCouerturesFilles(Long traiteNpId, Long couParentId);
 }

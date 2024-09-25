@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service @RequiredArgsConstructor
 public class RisqueService implements IServiceRisque
@@ -40,6 +41,17 @@ public class RisqueService implements IServiceRisque
     @Override @Transactional
     public RisqueCouvertResp create(CreateRisqueCouvertReq dto)
     {
+        Optional<RisqueCouvert> risqueCouvert$ = risqueRepo.findByTraiteAndCouverture(dto.getTraiteNpId(), dto.getCouId());
+        if(risqueCouvert$.isPresent())
+        {
+            RisqueCouvert risqueCouvert = risqueCouvert$.get();
+            risqueCouvert.setDescription(dto.getDescription());
+            if(dto.getSousCouIds() != null && !dto.getSousCouIds().isEmpty())
+            {
+                List<Long> couIdsToAdd = risqueDetailsRepo.getCouIdsToAdd(risqueCouvert.getRisqueId(), dto.getSousCouIds());
+                couIdsToAdd.forEach(scId->this.addSousCouverture(risqueCouvert, scId));
+            }
+        }
         RisqueCouvert risqueCouvert = risqueMapper.mapToRisqueCouvert(dto);
         risqueCouvert = risqueRepo.save(risqueCouvert);
         final RisqueCouvert finalRisqueCouvert = risqueCouvert;
@@ -134,9 +146,8 @@ public class RisqueService implements IServiceRisque
     private void removeSousCouverture(RisqueCouvert risque, Long scId)
     {
         if(!risqueDetailsRepo.risqueHasSousCouverture(risque.getRisqueId(), scId)) return;
-        Type type = typeRepo.findByUniqueCode("RISQ-DET").orElseThrow(()->new AppException("Type d'association inconnu"));
         Association risqueCouvertDetails = risqueDetailsRepo.findByRisqueIdAndSousCouId(risque.getRisqueId(), scId);
         logService.logg("Retrait d'une sous couverture sur un risque", risqueCouvertDetails, new Association(), "Association");
-        //risqueDetailsRepo.deleteById(risqueCouvertDetails.getRisqueDetailsId());
+        risqueDetailsRepo.deleteById(risqueCouvertDetails.getAssoId());
     }
 }

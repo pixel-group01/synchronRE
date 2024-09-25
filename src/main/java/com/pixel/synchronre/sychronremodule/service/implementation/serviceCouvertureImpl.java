@@ -55,9 +55,9 @@ public class serviceCouvertureImpl implements IserviceCouverture {
     }
 
     @Override
-    public List<CouvertureListResp> getCouerturesParents()
+    public List<CouvertureListResp> getCouerturesParents(Long traiteNpId)
     {
-        return couvRepo.getCouerturesParents();
+        return couvRepo.getCouerturesParents(traiteNpId);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class serviceCouvertureImpl implements IserviceCouverture {
     }
 
     @Override
-    public List<CouvertureListResp> getCouerturesFilles(Long couParentId) {
-        return couvRepo.getCouerturesFilles(couParentId);
+    public List<CouvertureListResp> getCouerturesFilles(Long traiteNpId, Long couParentId) {
+        return couvRepo.getCouerturesFilles(traiteNpId, couParentId);
     }
 }
