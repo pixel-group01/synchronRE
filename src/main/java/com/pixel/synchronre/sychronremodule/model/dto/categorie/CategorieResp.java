@@ -18,6 +18,7 @@ public class CategorieResp
     private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
+    private String libellesCedantes;
     private List<ReadCedanteDTO> cedantes;
 
     public CategorieResp(Long categorieId, String categorieLibelle, BigDecimal categorieCapacite, Long traiteNpId, String traiReference, String traiNumero) {

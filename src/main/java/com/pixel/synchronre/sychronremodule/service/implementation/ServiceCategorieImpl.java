@@ -12,6 +12,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieReq;
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CategorieMapper;
+import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCategorie;
@@ -27,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
 public class ServiceCategorieImpl implements IServiceCategorie
@@ -108,7 +111,12 @@ public class ServiceCategorieImpl implements IServiceCategorie
 
     @Override
     public List<CategorieResp> getCategorieList(Long traiteNpId) {
-        return catRepo.getCategorieList(traiteNpId);
+        List<CategorieResp> categorieListe = catRepo.getCategorieList(traiteNpId)
+                .stream()
+                .filter(Objects::nonNull)
+                .peek(this::setLibellesCedantes)
+                .toList();
+        return categorieListe;
     }
 
     private void removeCedanteToCategorie(Long cedId, Long categorieId)
@@ -127,5 +135,11 @@ public class ServiceCategorieImpl implements IServiceCategorie
         Association categorieCedante = new Association(new Categorie(catId), new Cedante(cedId),type);
         categorieCedante = catCedRepo.save(categorieCedante);
         logService.logg("Ajout d'une cédante à une catégorie", new Association(), categorieCedante, "Association");
+    }
+
+    private void setLibellesCedantes(CategorieResp c) {
+        List<String> libellesCedantes = catCedRepo.getLibellesCedantesByCatId(c.getCategorieId());
+        String concatLibellesCedantes = libellesCedantes == null ? "" : libellesCedantes.stream().collect(Collectors.joining(", "));
+        c.setLibellesCedantes(concatLibellesCedantes);
     }
 }

@@ -44,6 +44,7 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
 """)
     UpdateRisqueCouvertReq getEditDto(Long risqueId);
 
+    //Affiche la liste des risques saisis à l'écran
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
     rc.risqueId, cv.couId, cv.couLibelle, rc.description, 
@@ -69,11 +70,12 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp(
     rc.risqueId, cv.couId, cv.couLibelle, rc.description, 
-    tnp.traiteNpId, tnp.traiReference, sta.staCode, sta.staLibelle)
+    tnp.traiteNpId, tnp.traiReference, sta.staCode, sta.staLibelle, ls.limSousMontant)
     from RisqueCouvert rc 
     join rc.couverture cv 
     join rc.traiteNonProportionnel tnp
     join rc.statut sta
+    join LimiteSouscription ls on ls.risqueCouvert.risqueId = rc.risqueId
      where tnp.traiteNpId = ?1 
      and rc.couverture.couId in (
      select c.couId from Couverture c 

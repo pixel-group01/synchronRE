@@ -38,6 +38,10 @@ public interface CategorieCedanteRepository extends JpaRepository<Association, L
 """)
     List<ReadCedanteDTO> getShortCedantesByCatId(Long categorieId);
 
-
+    @Query("""
+        select c.cedNomFiliale
+        from Association cc left join cc.cedante c where cc.categorie.categorieId = ?1 and cc.type.uniqueCode = 'CAT-CED'
+""")
+    List<String> getLibellesCedantesByCatId(Long categorieId);
 
 }
