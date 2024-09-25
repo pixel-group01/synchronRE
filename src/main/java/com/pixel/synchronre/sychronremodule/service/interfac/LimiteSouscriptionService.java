@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -60,7 +61,10 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     @Override @Transactional
     public LimiteSouscriptionResp create(LimiteSouscriptionReq dto)
     {
-        LimiteSouscription limiteSouscription = lsMapper.mapToLimiteSouscription(dto);
+        Optional<LimiteSouscription> limiteSouscription$ = lsRepo.findByRisqueIdAndCatId(dto.getRisqueId(), dto.getCategorieId());
+
+        LimiteSouscription limiteSouscription = limiteSouscription$.isPresent() ? limiteSouscription$.get() : lsMapper.mapToLimiteSouscription(dto);
+        limiteSouscription.setLimSousMontant(dto.getLimSousMontant());
         limiteSouscription = lsRepo.save(limiteSouscription);
         logService.logg("Création d'une limite de souscription", new LimiteSouscription(), limiteSouscription, "LimiteSouscription");
         return lsRepo.findLimiteSouscriptionRespById(dto.getLimiteSouscriptionId());

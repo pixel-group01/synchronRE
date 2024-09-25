@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscription, Long>
 {
     @Query("""
@@ -59,4 +61,9 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     where l.limiteSouscriptionId = ?1
     """)
     LimiteSouscriptionReq getEditDtoById(Long limiteSouscriptionId);
+
+    @Query("""
+        select ls from LimiteSouscription ls where ls.risqueCouvert.risqueId = ?1 and ls.categorie.categorieId = ?2
+    """)
+    Optional<LimiteSouscription> findByRisqueIdAndCatId(Long risqueId, Long categorieId);
 }
