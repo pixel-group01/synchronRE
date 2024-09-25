@@ -20,7 +20,6 @@ public class RisqueCouvertResp
     private  String traiReference;
     private String staCode;
     private String staLibelle;
-    private BigDecimal limSousMontant;
     private List<CouvertureListResp> sousCouvertures;
 
     public RisqueCouvertResp(Long risqueId, Long couId, String couLibelle, String description, Long traiteNpId, String traiReference, String staCode, String staLibelle) {
@@ -32,17 +31,5 @@ public class RisqueCouvertResp
         this.traiReference = traiReference;
         this.staCode = staCode;
         this.staLibelle = staLibelle;
-    }
-
-    public RisqueCouvertResp(Long risqueId, Long couId, String couLibelle, String description, Long traiteNpId, String traiReference, String staCode, String staLibelle, BigDecimal limSousMontant) {
-        this.risqueId = risqueId;
-        this.couId = couId;
-        this.couLibelle = couLibelle;
-        this.description = description;
-        this.traiteNpId = traiteNpId;
-        this.traiReference = traiReference;
-        this.staCode = staCode;
-        this.staLibelle = staLibelle;
-        this.limSousMontant = limSousMontant;
     }
 }
