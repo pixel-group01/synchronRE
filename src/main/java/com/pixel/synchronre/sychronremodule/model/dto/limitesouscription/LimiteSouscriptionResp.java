@@ -22,10 +22,11 @@ public class LimiteSouscriptionResp
     private Long categorieId;
     private String categorieLibelle;
     private BigDecimal categorieCapacite;
-    private List<ReadCedanteDTO> cedantes;
+    private String libellesCedantes;
     private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
+
 
     public LimiteSouscriptionResp(Long limiteSouscriptionId, BigDecimal limSousMontant, Long risqueId, String risqueDescription, Long couId, String couLibelle, String couLibelleAbrege, Long categorieId, String categorieLibelle, BigDecimal categorieCapacite, Long traiteNpId, String traiReference, String traiNumero) {
         this.limiteSouscriptionId = limiteSouscriptionId;

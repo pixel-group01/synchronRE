@@ -5,23 +5,22 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.dao.CategorieCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.LimiteSouscriptionRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.LimiteSouscriptionMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
-import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
-import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
-import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.model.entities.Categorie;
+import com.pixel.synchronre.sychronremodule.model.entities.LimiteSouscription;
+import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
+import com.pixel.synchronre.sychronremodule.model.entities.Statut;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -54,7 +53,7 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     public Page<LimiteSouscriptionResp> search(Long traiteNpId, String key, Pageable pageable)
     {
         Page<LimiteSouscriptionResp> lsPage = lsRepo.search(traiteNpId, key, pageable);
-        List<LimiteSouscriptionResp> lsList = lsPage.stream().peek(ls->ls.setCedantes(catCedRepo.getShortCedantesByCatId(ls.getCategorieId()))).toList();
+        List<LimiteSouscriptionResp> lsList = lsPage.stream().peek(this::setLibellesCedantes).toList();
         return new PageImpl(lsList, pageable, lsPage.getTotalElements());
     }
 
@@ -83,5 +82,11 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     @Override
     public LimiteSouscriptionReq edit(Long limiteSouscriptionId){
         return lsRepo.getEditDtoById(limiteSouscriptionId);
+    }
+
+    private void setLibellesCedantes(LimiteSouscriptionResp ls) {
+        List<String> libellesCedantes = catCedRepo.getLibellesCedantesByCatId(ls.getCategorieId());
+        String concatLibellesCedantes = libellesCedantes == null ? "" : libellesCedantes.stream().collect(Collectors.joining(", "));
+        ls.setLibellesCedantes(concatLibellesCedantes);
     }
 }
