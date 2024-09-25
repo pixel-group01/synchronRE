@@ -65,8 +65,10 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg(
         pcl.paramCesLegTaux, pcl.paramCesLegLibelle, pcl.paramCesLegId, true)
-        from ParamCessionLegale pcl join Cedante ced on ced.pays.paysCode = pcl.pays.paysCode
-        where ced.cedId = ?1
+        from ParamCessionLegale pcl 
+        join Cedante ced on ced.pays.paysCode = pcl.pays.paysCode
+        join pcl.paramType t 
+        where ced.cedId = ?1 and t.uniqueCode='PCL_TRAI'
 """)
     List<CesLeg> findCesLegsByCedId(Long cedId);
 }

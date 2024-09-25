@@ -107,7 +107,7 @@ public class RisqueService implements IServiceRisque
         return dto;
     }
 
-    @Override
+    @Override //Affiche la liste des risques saisis à l'écran
     public List<RisqueCouvertResp> getRisqueList(Long traiteNpId) {
         return risqueRepo.getRisqueList(traiteNpId);
     }
@@ -117,7 +117,7 @@ public class RisqueService implements IServiceRisque
         return risqueRepo.getActivite(risqueId);
     }
 
-    @Override
+    @Override //Renvoie la liste des couvertures parents qui ont au moins une sous couverture qui n'est pas sur une sous limite du traité
     public List<RisqueCouvertResp> getCouvertureParent(Long traiteNpId) {
         return risqueRepo.getCouvertureParent(traiteNpId);
     }

@@ -21,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.net.UnknownHostException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static java.math.BigDecimal.ZERO;
 //Bordereaux de cession = BC+CODE CESSIONNAIRE+CODE FAC+"-"+Numéro d'ordre
@@ -55,6 +55,39 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setBordNum(this.generateBordNum(bordereau.getBordId(), plaId));
        bordRepo.save(bordereau);
        return bordereau;
+    }
+
+    @Override
+    public void updateDetailsBordereaux(Repartition updatedPlacement)
+    {
+        if(updatedPlacement == null) throw  new AppException("Les données sur la mise à jour du placement ne sont pas parvenues");
+        Long plaId = updatedPlacement.getRepId();
+        if(plaId == null) throw new AppException("L'ID du placement n'est pas parvenu");
+        DetailBordereau details = detailBordRepo.findByPlaId(plaId);
+
+        BigDecimal debCommission = comptaService.calculateMtCmsCedByCes(plaId);
+        BigDecimal debPrimeAreverser = comptaService.calculateMtPrimeNetteComCedByCes(plaId);
+        debPrimeAreverser = debPrimeAreverser == null ? ZERO : debPrimeAreverser.setScale(0, RoundingMode.HALF_UP);
+
+        details.setDebCommission(debCommission);
+        details.setDebPrimeAreverser(debPrimeAreverser);
+        details.setDebTaux(updatedPlacement.getRepTaux());
+        details.setDebPrime(updatedPlacement.getRepPrime());
+        Bordereau bordereau = bordRepo.findById(details.getBordereau().getBordId()).orElseThrow(()->new AppException("Bordereau introuvable"));
+
+        Long affId = bordereau.getAffaire().getAffId();
+
+        BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalPrimeBruteByAffId(affId);
+        BigDecimal bordMontantTotalCommission = comptaService.calculateMtTotaleCmsCed(affId);
+        BigDecimal bordMontantTotalPrimeAreverser = comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(affId);
+        bordMontantTotalPrimeAreverser = bordMontantTotalPrimeAreverser == null ? ZERO : bordMontantTotalPrimeAreverser.setScale(0, RoundingMode.HALF_UP);
+        String bordMontantTotalPrimeAreverserLette = ConvertMontant.numberToLetter(bordMontantTotalPrimeAreverser);
+
+        bordereau.setBordMontantTotalPrime(bordMontantTotalPrime);
+        bordereau.setBordMontantTotalCommission(bordMontantTotalCommission);
+        bordereau.setBordMontantTotalPrimeAreverser(bordMontantTotalPrimeAreverser);
+        bordereau.setBordMontantTotalPrimeAreverserLette(bordMontantTotalPrimeAreverserLette);
+        detailBordRepo.save(details);
     }
 
     private String generateBordNum(Long borId, Long plaId)
@@ -94,7 +127,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         bordereau.setBrodDateLimite(this.calculateDateLimite(affaire, bordereau));
         bordereau.setBordNum("ND." + affaire.getAffCode() + "." + String.format("%05d", bordereau.getBordId()));
         bordereau.setType(bordType);
-        this.saveDetailNoteDebit(affaire, bordereau);
+        this.saveDetailsNoteDebit(affaire, bordereau);
         return bordereau;
     }
 
@@ -129,7 +162,7 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         return dateCreationBordereau.plusDays(8);
     }
 
-    private void saveDetailNoteDebit(Affaire aff, Bordereau bordereau)
+    private void saveDetailsNoteDebit(Affaire aff, Bordereau bordereau)
     {
         if(aff == null || bordereau == null) return;
         List<Repartition> placements = repRepo.getActivePlacementsByAffId(aff.getAffId());

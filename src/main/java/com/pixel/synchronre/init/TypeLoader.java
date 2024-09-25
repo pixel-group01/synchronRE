@@ -118,9 +118,9 @@ public class TypeLoader implements Loader
         Type prvRepType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-REP", "Repartition", PersStatus.ACTIVE, null, null));
         Type prvSinType = typeRepo.save(new Type(null, TypeGroup.TYPE_PRV, "PRV-SIN", "Sinistre", PersStatus.ACTIVE, null, null));
 
-
-        Type pclPf = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_PF", "Cession légale au premier franc", PersStatus.ACTIVE, null, null));
-        Type pclSimple = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_SIMPLE", "Cession légale simple", PersStatus.ACTIVE, null, null));
+        Type pclPfFac = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_PF", "Cession légale au premier franc", PersStatus.ACTIVE, null, null));
+        Type pclSimpleFac = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_SIMPLE", "Cession légale simple", PersStatus.ACTIVE, null, null));
+        Type pclTrai = typeRepo.save(new Type(null, TypeGroup.TYPE_PCL, "PCL_TRAI", "Cession légale sur traité", PersStatus.ACTIVE, null, null));
 
         //Type fonction
         Type fonctionOperateurDeSaisieCedante = typeRepo.save(new Type(null, TypeGroup.TYPE_FUNCTION, "TYF_SAI_CED", "Opérateur de saisie cédante", PersStatus.ACTIVE, null, null));
