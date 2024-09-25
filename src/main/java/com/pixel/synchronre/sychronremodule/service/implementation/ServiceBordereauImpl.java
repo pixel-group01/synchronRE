@@ -73,6 +73,20 @@ public class ServiceBordereauImpl implements IserviceBordereau {
         details.setDebPrimeAreverser(debPrimeAreverser);
         details.setDebTaux(updatedPlacement.getRepTaux());
         details.setDebPrime(updatedPlacement.getRepPrime());
+        Bordereau bordereau = bordRepo.findById(details.getBordereau().getBordId()).orElseThrow(()->new AppException("Bordereau introuvable"));
+
+        Long affId = bordereau.getAffaire().getAffId();
+
+        BigDecimal bordMontantTotalPrime = comptaService.calculateMtTotalPrimeBruteByAffId(affId);
+        BigDecimal bordMontantTotalCommission = comptaService.calculateMtTotaleCmsCed(affId);
+        BigDecimal bordMontantTotalPrimeAreverser = comptaService.calculateMtTotalPrimeCessionnaireNetteComCed(affId);
+        bordMontantTotalPrimeAreverser = bordMontantTotalPrimeAreverser == null ? ZERO : bordMontantTotalPrimeAreverser.setScale(0, RoundingMode.HALF_UP);
+        String bordMontantTotalPrimeAreverserLette = ConvertMontant.numberToLetter(bordMontantTotalPrimeAreverser);
+
+        bordereau.setBordMontantTotalPrime(bordMontantTotalPrime);
+        bordereau.setBordMontantTotalCommission(bordMontantTotalCommission);
+        bordereau.setBordMontantTotalPrimeAreverser(bordMontantTotalPrimeAreverser);
+        bordereau.setBordMontantTotalPrimeAreverserLette(bordMontantTotalPrimeAreverserLette);
         detailBordRepo.save(details);
     }
 
