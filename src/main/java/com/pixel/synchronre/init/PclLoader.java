@@ -21,7 +21,7 @@ public class PclLoader implements Loader
     private final TypeRepo typeRepo;
     @Override
     public void load() {
-        Type pclPf = typeRepo.findByUniqueCode("PCL_PF").orElseThrow(()->new AppException("Aucun type ne correspond au uniqueCode PCL_PF"));
+        /*Type pclPf = typeRepo.findByUniqueCode("PCL_PF").orElseThrow(()->new AppException("Aucun type ne correspond au uniqueCode PCL_PF"));
         Type pclSimple = typeRepo.findByUniqueCode("PCL_SIMPLE").orElseThrow(()->new AppException("Aucun type ne correspond au uniqueCode PCL_SIMPLE"));
         ParamCessionLegale franc1 = new ParamCessionLegale(null,"Cession légale au 1er franc SEN RE",new BigDecimal(0),new BigDecimal(6.5), pclPf, new Pays("SEN"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now());
         ParamCessionLegale franc2 = new ParamCessionLegale(null,"Cession légale Fac SEN RE",new BigDecimal(0),new BigDecimal(10),pclSimple,new Pays("SEN"),new Statut("ACT"),2L,LocalDateTime.now(), LocalDateTime.now());
@@ -62,5 +62,18 @@ public class PclLoader implements Loader
         ParamCessionLegale franc21 = new ParamCessionLegale(null,"Cession légale au 1er franc CICA RE",new BigDecimal(0),new BigDecimal(2.25),pclPf,new Pays("MAL"),new Statut("ACT"),1L,LocalDateTime.now(), LocalDateTime.now());
         ParamCessionLegale franc22 = new ParamCessionLegale(null,"Cession légale Fac CICA RE",new BigDecimal(0),new BigDecimal(5),pclSimple,new Pays("MAL"),new Statut("ACT"),2L,LocalDateTime.now(), LocalDateTime.now());
         pclRepo.saveAll(Arrays.asList(franc21, franc22));
+
+        //traités
+        Type pclSimpleTrai = typeRepo.findByUniqueCode("PCL_SIMPLE_TRAI").orElseThrow(()->new AppException("Aucun type ne correspond au uniqueCode PCL_SIMPLE_TRAI"));
+        ParamCessionLegale senReTrai = pclRepo.save(new ParamCessionLegale(null,"Cession légale SEN RE",new BigDecimal(0),new BigDecimal(15), pclSimpleTrai, new Pays("SEN"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+        ParamCessionLegale AfricaReTrai_sen = pclRepo.save(new ParamCessionLegale(null,"Cession légale AFRICA RE",new BigDecimal(0),new BigDecimal(5), pclSimpleTrai, new Pays("SEN"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+        ParamCessionLegale cicaReTrai_sen = pclRepo.save(new ParamCessionLegale(null,"Cession légale SEN RE",new BigDecimal(0),new BigDecimal(20), pclSimpleTrai, new Pays("SEN"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+
+
+
+        ParamCessionLegale sgReTrai = pclRepo.save(new ParamCessionLegale(null,"Cession légale SG RE",new BigDecimal(0),new BigDecimal(5), pclSimpleTrai, new Pays("GAB"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+        ParamCessionLegale africaReTrai_gab = pclRepo.save(new ParamCessionLegale(null,"Cession légale AFRICA RE",new BigDecimal(0),new BigDecimal(5), pclSimpleTrai, new Pays("GAB"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+        ParamCessionLegale cicaReTrai_gab = pclRepo.save(new ParamCessionLegale(null,"Cession légale SEN RE",new BigDecimal(0),new BigDecimal(20), pclSimpleTrai, new Pays("GAB"),new Statut("ACT"),1L, LocalDateTime.now(), LocalDateTime.now()));
+*/
     }
 }

@@ -49,34 +49,5 @@ public class CedCesAffLoader implements Loader
 //        Cedante nsiatg = cedRepo.save(new Cedante(null, "NSIA TG", "NSIA-TG", "05 05 05 05 03", "nsiaci@gmail.com", "NSIA TG", "NSIA FAX", "TG","Atsin Ghislain Herman",new Banque("B00213"), new Pays("TGO"), new AppUser(1l), null,  LocalDateTime.now(), LocalDateTime.now(), new Statut("ACT")));
         //cedRepo.saveAll(Arrays.asList(nsiaci, nsiabn, nsiatg));
         cedRepo.saveAll(Arrays.asList(nsiaci));
-
-        //Affaires
-//        Affaire affnsiaci = new Affaire(new BigDecimal(30000000),"AFF-001", "SNDI", "Affaire NSIA-CI (DEV)", LocalDate.now(), LocalDate.of(2024, 12, 05),new Exercice(2023L),"REALISEE");
-//        affnsiaci.setStatut(new Statut("SAI"));
-//        affnsiaci.setFacSmpLci(new BigDecimal(30000000));
-//        affnsiaci.setAffType(new Type(14L));
-//        affnsiaci.setCedante(nsiaci);
-//        Facultative facnsiaci = new Facultative(affnsiaci, "AFF-001", new BigDecimal(30000000), new BigDecimal(30000000));
-//        facnsiaci.setFacSmpLci(new BigDecimal(30000000));
-//        facRepo.save(facnsiaci);
-
-//        Affaire affnsiabn = new Affaire(new BigDecimal(20000000),"AFF-002", "DGMP", "Affaire NSIA-BN (Marchés Publics)", LocalDate.now(), LocalDate.of(2025, 10, 05),new Exercice(2023L),"REALISEE");
-//        affnsiabn.setStatut(new Statut("SAI"));
-//        affnsiabn.setCedante(nsiabn);
-//        Facultative facaffnsiabn = new Facultative(affnsiabn, "AFF-002", new BigDecimal(20000000), new BigDecimal(20000000));
-//        facRepo.save(facaffnsiabn);
-//
-//        Affaire affnsiatg = new Affaire(new BigDecimal(40000000),"AFF-003", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2028, 11, 02),new Exercice(2023L),"REALISEE");
-//        affnsiatg.setStatut(new Statut("SAI"));
-//        affnsiatg.setCedante(nsiatg);
-//        Facultative facaffnsiatg = new Facultative(affnsiatg, "AFF-003", new BigDecimal(40000000), new BigDecimal(40000000));
-//        facRepo.save(facaffnsiatg);
-//
-//        Affaire aff1 = new Affaire(new BigDecimal(50000000),"AFF-004", "SNDI", "DEV", LocalDate.now(), LocalDate.of(2023, 10, 05),new Exercice(2023L),"REALISEE");
-//        aff1.setStatut(new Statut("SAI"));
-//        Facultative fac = new Facultative(aff1, "AFF-004", new BigDecimal(50000000), new BigDecimal(50000000));
-//        facRepo.save(fac);
-
-
     }
 }
