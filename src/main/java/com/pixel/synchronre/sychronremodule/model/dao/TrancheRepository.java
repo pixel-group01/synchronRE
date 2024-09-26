@@ -15,7 +15,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -27,7 +27,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -47,7 +47,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq(
-        t.trancheId,t.trancheType,t.trancheLibelle,t.tranchePriorite,t.tranchePorte,r.risqueId,tnp.traiteNpId)
+        t.trancheId, t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId,tnp.traiteNpId)
         from Tranche t
         left join t.risqueCouvert r
         left join t.traiteNonProportionnel tnp 
@@ -57,7 +57,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, r.risqueId, r.description,
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 

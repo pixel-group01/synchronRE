@@ -6,8 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.RisqueCouvert;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,18 +30,24 @@ public class TrancheReq
     private BigDecimal tranchePriorite;
     @NotNull(message = "Veuillez saisir la porté de la tranche")
     private BigDecimal tranchePorte;
+    @NotNull(message = "Veuillez saisir le taux de prime")
+    @Min(value = 0, message = "Le taux de prime doit être compris entre 0 et 100")
+    @Max(value = 100, message = "Le taux de prime doit être compris entre 0 et 100")
+    private BigDecimal trancheTauxPrime;
     @ExistingRisqueId
     private Long risqueId;
     @ExistingTNPId
     private Long traiteNpId;
+
     private List<Long> categorieIds;
 
-    public TrancheReq(Long trancheId,String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, Long risqueId, Long traiteNpId) {
+    public TrancheReq(Long trancheId,String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long risqueId, Long traiteNpId) {
         this.trancheId = trancheId;
         this.trancheType=trancheType;
         this.trancheLibelle = trancheLibelle;
         this.tranchePriorite = tranchePriorite;
         this.tranchePorte = tranchePorte;
+        this.trancheTauxPrime = trancheTauxPrime;
         this.risqueId = risqueId;
         this.traiteNpId = traiteNpId;
     }
