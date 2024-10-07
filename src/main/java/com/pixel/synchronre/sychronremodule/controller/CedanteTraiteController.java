@@ -38,19 +38,10 @@ public class CedanteTraiteController
         return cedanteTraiteService.search(traiNpId, key, PageRequest.of(page, size));
     }
 
-    @GetMapping(path = "/edit")
-    public CedanteTraiteReq getEditDto(
-            @RequestParam(required = false) Long cedanteTraiteId,
-            @RequestParam(required = false) Long traiteNpId,
-            @RequestParam(required = false) Long cedId)
-    {
-        return cedanteTraiteService.getEditDto(cedanteTraiteId,traiteNpId, cedId);
-    }
-
     @PostMapping(path = "/edit")
     public CedanteTraiteReq getEditDto(@RequestBody CedanteTraiteReq dto)
     {
-        return cedanteTraiteService.getEditDto(dto);
+        return cedanteTraiteService.getEditDto(dto, 0);
     }
 
     @GetMapping(path = "/list/{traiteNpId}")

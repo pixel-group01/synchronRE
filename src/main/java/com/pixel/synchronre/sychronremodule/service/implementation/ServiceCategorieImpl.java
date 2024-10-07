@@ -16,6 +16,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouver
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCategorie;
+import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,7 @@ public class ServiceCategorieImpl implements IServiceCategorie
     private final ObjectCopier<Association> catCedCopier;
     private final ObjectCopier<Categorie> catCopier;
     private final TypeRepo typeRepo;
+    private final ITrancheCedanteService trancheCedanteService;
 
     @Override @Transactional
     public CategorieResp create(CategorieReq dto){
@@ -126,6 +128,7 @@ public class ServiceCategorieImpl implements IServiceCategorie
         Association oldCategorieCedante = catCedCopier.copy(categorieCedante);
         catCedRepo.deleteByCedIdAndCatId(cedId, categorieId);
         logService.logg("Retrait d'une cédante sur une catégorie", categorieCedante, new Association(), "Association");
+        trancheCedanteService.onAddOrRemoveCedanteToCategorie(cedId, categorieId);
     }
 
     private void addCedanteToCategorie(Long cedId, Long catId)
@@ -135,6 +138,7 @@ public class ServiceCategorieImpl implements IServiceCategorie
         Association categorieCedante = new Association(new Categorie(catId), new Cedante(cedId),type);
         categorieCedante = catCedRepo.save(categorieCedante);
         logService.logg("Ajout d'une cédante à une catégorie", new Association(), categorieCedante, "Association");
+        trancheCedanteService.onAddOrRemoveCedanteToCategorie(cedId, catId);
     }
 
     private void setLibellesCedantes(CategorieResp c) {

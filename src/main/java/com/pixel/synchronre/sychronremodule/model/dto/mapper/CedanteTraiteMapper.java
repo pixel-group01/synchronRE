@@ -13,20 +13,8 @@ public abstract class CedanteTraiteMapper
 {
     @Autowired protected IJwtService jwtService;
     @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
-    @Mapping(target = "traiteNonProportionnel", expression = "java(dto.getTraiteNpId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNpId()))")
     @Mapping(target = "userCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "fonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     @Mapping(target = "statut", expression ="java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"ACT\"))")
     public abstract CedanteTraite mapToCedanteTraite(CedanteTraiteReq dto);
-
-    @Mapping(target = "cedId", source = "cedante.cedId")
-    @Mapping(target = "cedNomFiliale", source = "cedante.cedNomFiliale")
-    @Mapping(target = "cedSigleFiliale", source = "cedante.cedSigleFiliale")
-
-    @Mapping(target = "traiteNpId", source = "traiteNonProportionnel.traiteNpId")
-    @Mapping(target = "traiReference", source = "traiteNonProportionnel.traiReference")
-    @Mapping(target = "traiNumero", source = "traiteNonProportionnel.traiNumero")
-    @Mapping(target = "staCode", source = "statut.staCode")
-    @Mapping(target = "staLibelle", source = "statut.staLibelle")
-    public abstract CedanteTraiteResp mapToCedanteTraiteResp(CedanteTraite cedanteTraite);
 }

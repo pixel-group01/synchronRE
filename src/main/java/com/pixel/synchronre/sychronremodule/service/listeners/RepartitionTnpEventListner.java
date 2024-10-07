@@ -5,12 +5,14 @@ import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePmdDto;
 import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
 import com.pixel.synchronre.sychronremodule.model.events.CedanteTraiteEvent;
 import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
+import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
     private final TraiteNPRepository tnpRepo;
     private final IserviceRepartition repFacService;
     private final IServiceRepartitionTraiteNP repTnpService;
+    private final ITrancheCedanteService trancheCedanteService;
 
     @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onRemoveCedanteFromTraiteEvent(SimpleEvent<CedanteTraite> event)
@@ -57,7 +60,8 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
             throw new AppException("Les données du traité n'ont par été fournies sur à la publication de l'événement");
         Long cedanteTraiteId = event.getCedanteTraite().getCedanteTraiteId();
         Long traiteNpId = event.getCedanteTraite().getTraiteNonProportionnel().getTraiteNpId();
-        List<CesLeg> cesLegs = event.getCesLegDtos();
+        List<CesLeg> cesLegs = event.getDto().getCessionsLegales();
+        List<TranchePmdDto> tranchePmdDtos = event.getDto().getTranchePmdDtos();
 
         recalculateMontantForPlacementsOnTraite(traiteNpId);
         switch (event.getAction())
@@ -68,6 +72,11 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
                 {
                     cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
                 }
+                if(tranchePmdDtos != null && !tranchePmdDtos.isEmpty())
+                {
+                    tranchePmdDtos.stream().forEach(trPmd->trancheCedanteService.addTrancheCedantePmd(event.getDto()));
+                }
+
             }
             case UPDATE_CEDANTE_ON_TRAITE_NP ->
             {
@@ -76,6 +85,10 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
                     cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
                     cesLegs.stream().filter(cesLeg -> !cesLeg.isAccepte()).forEach(cesLeg->
                         repTnpService.desactivateCesLegByTraiteNpIdAndPclId(traiteNpId, cesLeg.getParamCesLegalId()));
+                }
+                if(tranchePmdDtos != null && !tranchePmdDtos.isEmpty())
+                {
+                    tranchePmdDtos.stream().forEach(trPmd->trancheCedanteService.updateTrancheCedantePmd(event.getDto()));
                 }
             }
         }

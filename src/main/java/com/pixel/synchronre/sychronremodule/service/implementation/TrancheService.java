@@ -4,17 +4,21 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
+import com.pixel.synchronre.sychronremodule.model.dao.CategorieRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheCategorieRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
+import com.pixel.synchronre.sychronremodule.model.events.TrancheEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
+import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +37,9 @@ public class TrancheService implements IServiceTranche
     private final ObjectCopier<Tranche> trancheCopier;
     private final TrancheCategorieRepository trancheCatRepo;
     private final TypeRepo typeRepo;
+    private final ApplicationEventPublisher eventPublisher;
+    private final ITrancheCedanteService trancheCedanteService;
+    private final CategorieRepository catRepo;
     @Override
     public TrancheResp save(TrancheReq dto)
     {
@@ -86,6 +93,8 @@ public class TrancheService implements IServiceTranche
         Tranche oldTranche = trancheCopier.copy(tranche);
         BeanUtils.copyProperties(dto, tranche);
         tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
+        tranche = trancheRepo.save(tranche);
+        eventPublisher.publishEvent(new TrancheEvent(this, "Modification de tranche", tranche));
         logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
         final Tranche finalTranche = tranche;
         if(dto.getCategorieIds() != null )
@@ -103,19 +112,28 @@ public class TrancheService implements IServiceTranche
 
     private void removeCategorie(Tranche tranche, Long catId)
     {
+        if(tranche == null || tranche.getTrancheId() == null || catId == null) return;
+        Long traiteNpId =tranche.getTraiteNonProportionnel() == null ? null : tranche.getTraiteNonProportionnel().getTraiteNpId();
+        if(traiteNpId == null) throw new AppException("Le traité de la tranche est inconnu");
+        if(!catRepo.TraiteHasCategorie(traiteNpId, catId))  throw new AppException("La catégorie n'appartient pas au traité de la tranche");
         if(!trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
         Association trancheCategorie = trancheCatRepo.findByTrancheIdAndCatId(tranche.getTrancheId(), catId);
         logService.logg("Retrait d'une catégorie à une tranche", new Association(), trancheCategorie, "Association");
         trancheCatRepo.deleteById(trancheCategorie.getAssoId());
+        trancheCedanteService.onAddOrRemoveCategorieToTranche(catId, tranche.getTrancheId());
     }
 
     private void addCategorie(Tranche tranche, Long catId)
     {
+        if(tranche == null || tranche.getTrancheId() == null || catId == null) return;
+        Long traiteNpId =tranche.getTraiteNonProportionnel() == null ? null : tranche.getTraiteNonProportionnel().getTraiteNpId();
+        if(traiteNpId == null) throw new AppException("Le traité de la tranche est inconnu");
+        if(!catRepo.TraiteHasCategorie(traiteNpId, catId))  throw new AppException("La catégorie n'appartient pas au traité de la tranche");
         if(trancheCatRepo.trancheHasCat(tranche.getTrancheId(),catId )) return ;
-        //TODO Vérifier que la catégorie appartient au traité
        Type type = typeRepo.findByUniqueCode("TRAN-CAT").orElseThrow(()->new AppException("Type de document inconnu"));
         Association trancheCategorie = trancheCatRepo.save(new Association(null,tranche, new Categorie(catId),type));
         logService.logg("Ajout d'une catégorie à une tranche", new Association(), trancheCategorie, "Association");
+        trancheCedanteService.onAddOrRemoveCategorieToTranche(catId, tranche.getTrancheId());
     }
 
     @Override

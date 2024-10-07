@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TrancheRepository extends JpaRepository<Tranche, Long>
@@ -66,4 +67,10 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     where tnp.traiteNpId = ?1 and s.staCode = 'ACT'
     """)
     List<TrancheResp> getTrancheList(Long traiteNpId);
+
+    @Query("select tr.traiteNonProportionnel.traiteNpId from Tranche tr where tr.trancheId = ?1")
+    Long getTraiteNpIdByTrancheId(Long tranchepId);
+
+    @Query("select tr.trancheTauxPrime from Tranche tr where tr.trancheId = ?1")
+    BigDecimal getTrancheTauxPrime(Long tranchepId);
 }

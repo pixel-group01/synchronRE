@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cedantetraite;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.ExistingCedId;
-import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTNPId;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePmdDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,31 +15,20 @@ import java.util.List;
 public class CedanteTraiteReq
 {
     private Long cedanteTraiteId;
-    @NotNull(message = "Veuillez saisir l'assiette de prime")
-    private BigDecimal assiettePrime;
-    @NotNull(message = "Veuillez saisir le taux de prime")
-    private BigDecimal tauxPrime;
-    //@NotNull(message = "Veuillez saisir la PMD")
-    private BigDecimal pmd;
+    private Long traiteNpId;
     @NotNull(message = "Veuillez choisir la cédante")
     @ExistingCedId
     private Long cedId;
-    @NotNull(message = "Veuillez selectionner le traité concerné")
-    @ExistingTNPId
-    private Long traiteNpId;
+    @NotNull(message = "Veuillez saisir l'assiette de prime")
+    private BigDecimal assiettePrime;
+
+    private List<TranchePmdDto> tranchePmdDtos;
     private List<CesLeg> cessionsLegales;
 
-    public CedanteTraiteReq(Long cedanteTraiteId, BigDecimal assiettePrime, BigDecimal tauxPrime, BigDecimal pmd, Long cedId, Long traiteNpId) {
+    public CedanteTraiteReq(Long cedanteTraiteId, Long traiteNpId, BigDecimal assiettePrime, Long cedId) {
         this.cedanteTraiteId = cedanteTraiteId;
+        this.traiteNpId = traiteNpId;
         this.assiettePrime = assiettePrime;
-        this.tauxPrime = tauxPrime;
-        this.pmd = pmd;
         this.cedId = cedId;
-        this.traiteNpId = traiteNpId;
-    }
-
-    public CedanteTraiteReq(Long traiteNpId, Long cedId) {
-        this.cedId = cedId;
-        this.traiteNpId = traiteNpId;
     }
 }

@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePmdDto;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,13 +27,12 @@ public interface IServiceCedanteTraite
     @Transactional
     void removeCedanteOnTraite(Long cedanteTraiteId);
 
-    CedanteTraiteReq getEditDto(Long cedanteTraiteId);
+    CedanteTraiteReq getEditDto(CedanteTraiteReq dto, int scale);
 
-    CedanteTraiteReq getEditDto(CedanteTraiteReq dto);
 
-    CedanteTraiteReq getEditDto(Long traiteNpId, Long cedId);
-    CedanteTraiteReq getEditDto(Long cedanteTraiteId, Long traiteNpId,Long cedId);
+    List<TranchePmdDto> getTranchePmdDtos(CedanteTraiteReq dto, int scale);
 
+    TranchePmdDto calculatePmds(TranchePmdDto trPmd, CedanteTraiteReq dto, int scale);
 
     List<CedanteTraiteResp> getCedanteTraitelist(Long traiteNpId);
 
