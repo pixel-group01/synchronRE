@@ -16,9 +16,9 @@ public class CouvertureLoader implements Loader
     @Override
     public void load()
     {
-        Couverture c1 = couRepo.save(new Couverture(null, "Multirisques professionnelle", "Multirisques professionnelle", null, new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
-        Couverture c2 = couRepo.save(new Couverture(null, "Globale Dommage", "Globale Dommage", new Couverture(1L), new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
-        Couverture c3 = couRepo.save(new Couverture(null, "Décès groupe", "Décès groupe", new Couverture(1L), new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+//        Couverture c1 = couRepo.save(new Couverture(null, "Multirisques professionnelle", "Multirisques professionnelle", null, new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+//        Couverture c2 = couRepo.save(new Couverture(null, "Globale Dommage", "Globale Dommage", new Couverture(1L), new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
+//        Couverture c3 = couRepo.save(new Couverture(null, "Décès groupe", "Décès groupe", new Couverture(1L), new Branche(1L), new Statut("ACT"), LocalDateTime.now(), LocalDateTime.now()));
     }
 }
 

@@ -12,6 +12,8 @@ public class Nature {
     private String natLibelle;
     @Enumerated(EnumType.STRING)
     private FORME forme;
+    @ManyToOne @JoinColumn(name = "bran_id")
+    private Branche branche;
     @ManyToOne @JoinColumn(name = "nat_sta_code")
     private Statut statut;
 

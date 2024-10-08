@@ -59,7 +59,9 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
         and a.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1 
         and a.risqueCouvert.couverture.couId = ?2
         and a.couverture.couId = cv.couId
+         and cv.nature.natCode = a.couverture.nature.natCode
     )
+   
     ORDER BY cv.couLibelle
 """)
     List<CouvertureListResp> getCouerturesFilles(Long traiteNpId, Long couParentId);

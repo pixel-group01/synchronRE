@@ -14,6 +14,8 @@ public class CouvertureListResp
     private String couParentLibelle;
     private Long branId;
     private String brancheLibelle;
+    private String natCode;
+    private String natLibelle;
     private String staLibelle;
 
     public CouvertureListResp(Long couId, String couLibelle, String couLibelleAbrege)
@@ -22,6 +24,7 @@ public class CouvertureListResp
         this.couLibelle = couLibelle;
         this.couLibelleAbrege = couLibelleAbrege;
     }
+
 
     public CouvertureListResp(String couLibelle) {
         this.couLibelle = couLibelle;

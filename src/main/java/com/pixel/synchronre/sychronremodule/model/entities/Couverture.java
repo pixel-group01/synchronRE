@@ -23,6 +23,8 @@ public class Couverture {
   private Couverture couParent;
   @ManyToOne @JoinColumn(name = "branId")
   private Branche branche;
+  @ManyToOne @JoinColumn(name = "nat_code")
+  private Nature nature;
   @ManyToOne @JoinColumn(name = "sta_code")
   private Statut statut;
   @CreationTimestamp
