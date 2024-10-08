@@ -39,6 +39,7 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.couverture.response.CouvertureListResp(cv.couId, cv.couLibelle, cv.couLibelleAbrege) 
         from Couverture cv where cv.couParent is null 
+         and cv.nature.natCode = (select tnp.nature.natCode from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1)
         and exists 
                     (select c from Couverture c where c.couParent.couId = cv.couId and c.couId not in 
                         (select a.couverture.couId from Association a where a.type.uniqueCode = 'RISQ-DET' 
@@ -46,6 +47,7 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
                           and a.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1 
                           and a.couverture.couId = c.couId)
                     )
+                    
         and cv.statut.staCode = 'ACT' order by cv.couLibelle
 """)
     List<CouvertureListResp> getCouerturesParents(Long traiteNpId);
@@ -59,7 +61,7 @@ public interface CouvertureRepository extends JpaRepository<Couverture, Long>
         and a.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1 
         and a.risqueCouvert.couverture.couId = ?2
         and a.couverture.couId = cv.couId
-         and cv.nature.natCode = a.couverture.nature.natCode
+        
     )
    
     ORDER BY cv.couLibelle
