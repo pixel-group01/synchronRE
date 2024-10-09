@@ -31,22 +31,6 @@ public class TrancheCedanteService implements ITrancheCedanteService
     private final CategorieRepository catRepo;
     private final IServiceCedanteTraite cedanteTraiteService;
     private final TrancheCedanteMapper tcMapper;
-    @Override
-    public void addTrancheCedantePmd(CedanteTraiteReq dto)
-    {
-        Long cedTraiId = dto.getCedanteTraiteId();
-        BigDecimal assiettePrime = dto.getAssiettePrime();
-        Long traiteNpId = dto.getTraiteNpId();
-
-        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
-
-    }
-
-    @Override
-    public void updateTrancheCedantePmd(CedanteTraiteReq dto)
-    {
-
-    }
 
     @Override @Transactional
     public void onAddOrRemoveCedanteToCategorie(Long cedId, Long catId)

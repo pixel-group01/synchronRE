@@ -8,10 +8,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 public interface ITrancheCedanteService
 {
-    void addTrancheCedantePmd(CedanteTraiteReq dto);
-
-    void updateTrancheCedantePmd(CedanteTraiteReq dto);
-
     @Transactional
     void onAddOrRemoveCedanteToCategorie(Long cedId, Long catId);
 
