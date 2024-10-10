@@ -7,11 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter @Setter
-@Builder
-@Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
 public class Couverture {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)

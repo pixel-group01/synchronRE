@@ -51,6 +51,9 @@ public class RisqueService implements IServiceRisque
                 List<Long> couIdsToAdd = risqueDetailsRepo.getCouIdsToAdd(risqueCouvert.getRisqueId(), dto.getSousCouIds());
                 couIdsToAdd.forEach(scId->this.addSousCouverture(risqueCouvert, scId));
             }
+            RisqueCouvertResp risqueCouvertResps = risqueRepo.getFullRisqueCouvertById(risqueCouvert.getRisqueId());
+            risqueCouvertResps.setSousCouvertures(couRepo.getShortCouverturesByIds(dto.getSousCouIds()));
+            return risqueCouvertResps;
         }
         RisqueCouvert risqueCouvert = risqueMapper.mapToRisqueCouvert(dto);
         risqueCouvert = risqueRepo.save(risqueCouvert);
