@@ -67,7 +67,8 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         and (:userId is null or :userId = u.userId) 
         and (:cedId is null or :cedId = ced.cedId) 
         and (:exeCode is null or (f.affDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and f.affDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
-        and s.staCode in :staCodes 
+        and s.staCode in :staCodes
+        order by f.updatedAt desc
     """)
     Page<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,
@@ -99,6 +100,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         and (:cedId is null or :cedId = ced.cedId) 
         and (:exeCode is null or (f.affDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and f.affDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
         and s.staCode in :staCodes 
+        order by f.updatedAt desc
 """)
     List<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,
