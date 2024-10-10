@@ -38,7 +38,7 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.UpdateRisqueCouvertReq(
-        r.risqueId, r.couverture.couId, r.description
+        r.risqueId, r.description
         )from RisqueCouvert r where r.risqueId = ?1
 """)
     UpdateRisqueCouvertReq getEditDto(Long risqueId);
