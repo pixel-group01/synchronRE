@@ -43,7 +43,7 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         BigDecimal partCedante = affaire.getPartCedante() ;
         smpLci = smpLci == null ? ZERO : smpLci;
         partCedante = partCedante == null ? ZERO : partCedante;
-        return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti) ;
+        return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti.add(affaire.getReserveCourtier())) ;
     }
 
     @Override

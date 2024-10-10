@@ -75,8 +75,10 @@ public class ServiceAffaireImpl implements IserviceAffaire
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto)
     {
+        if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
         boolean isCourtier = jwtService.UserIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
+        if(dto.getReserveCourtier() == null) aff.setReserveCourtier(BigDecimal.ZERO);
         aff.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
         aff=affRepo.save(aff);
         aff.setAffCode(this.generateAffCode(aff.getAffId()));
@@ -116,11 +118,13 @@ public class ServiceAffaireImpl implements IserviceAffaire
     public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto)
     {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
         boolean smpHasChanged = dto.getFacSmpLci() == null ? false : dto.getFacSmpLci().compareTo(affaire.getFacSmpLci()) != 0;
         boolean facPrimeHasChanged = dto.getFacPrime() == null ? false :  dto.getFacPrime().compareTo(affaire.getFacPrime()) != 0;
         boolean facHasReglement = regRepo.affaireHasValidReglement(dto.getAffId());
         if((smpHasChanged || facPrimeHasChanged) && facHasReglement) throw new AppException("Impossible de modifier la SMP ou la prime d'une affaire ayant déjà fait objet d'un règlement");
         Affaire oldAffaire = affCopier.copy(affaire);
+
         affaire.setAffCapitalInitial(dto.getAffCapitalInitial());
         affaire.setFacPrime(dto.getFacPrime());
         affaire.setFacSmpLci(dto.getFacSmpLci());
@@ -130,6 +134,8 @@ public class ServiceAffaireImpl implements IserviceAffaire
         affaire.setAffDateEffet(dto.getAffDateEffet());
         affaire.setAffStatutCreation(dto.getAffStatutCreation());
         affaire.setAffCoursDevise(dto.getAffCoursDevise());
+        affaire.setReserveCourtier(dto.getReserveCourtier());
+        if(dto.getReserveCourtier() == null) affaire.setReserveCourtier(BigDecimal.ZERO);
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);

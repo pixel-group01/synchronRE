@@ -56,7 +56,8 @@ public class UpdateFacultativeReq
     //@NotNull(message = "Veuillez saisir le montant du Sinistre Maximal Possible (SMP)")
     @PositiveOrZero(message = "Le montant du Sinistre Maximal Possible (SMP) doit être un nombre positif")
     private BigDecimal facSmpLci;
-
+    @PositiveOrZero(message = "Le montant de la reserve courtier doit être un nombre positif")
+    private BigDecimal reserveCourtier;
     @NotNull(message = "Veuillez définir le statut de l'affaire")
     @NotBlank(message = "Veuillez définir le statut de l'affaire")
     @ValidStatutCreation
