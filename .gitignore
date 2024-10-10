@@ -19,6 +19,7 @@ target/
 *.iml
 *.ipr
 /src/main/resources/*
+!src/main/resources/report/
 
 ### NetBeans ###
 /nbproject/private/
