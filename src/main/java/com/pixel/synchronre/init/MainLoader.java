@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MainLoader
 {
-    @Bean(name = "commandLineRunner") //@Profile("dev")
+    //@Bean(name = "commandLineRunner") //@Profile("dev")
     public CommandLineRunner start(TypeLoader typeLoader, FoldersIniter foldersIniter, AdminLoader adminLoader,
                                    StatutLoader statutLoader, DeviseLoader deviseLoader, PaysLoader paysLoader, PclLoader pclLoader,
                                    BrancheLoader brancheLoader, CouvertureLoader couvertureLoader,
