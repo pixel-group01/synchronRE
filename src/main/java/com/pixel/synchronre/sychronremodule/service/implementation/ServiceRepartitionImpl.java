@@ -22,6 +22,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service
@@ -343,5 +345,30 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         sinRep.setRepTaux(repRepo.getTauRep(placement.getRepId()));
         sinRep.setCessionnaire(new Cessionnaire(cesId));
         repRepo.save(sinRep);
+    }
+    @Override @Transactional
+    public void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal reserveCourtier)
+    {
+        Type type = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
+        if(facSmp == null) throw new AppException("La SMPLCI de l'affaire ne peut être nulle.");
+        reserveCourtier = reserveCourtier == null ? BigDecimal.ZERO : reserveCourtier;
+        Repartition repReserveCourtier = repRepo.findReserveCourtierByAffId(affId);
+        BigDecimal tauxReserve = reserveCourtier.multiply(CENT).divide(facSmp, 20, RoundingMode.HALF_UP);
+        if(repReserveCourtier != null)
+        {
+            repReserveCourtier.setRepCapital(reserveCourtier);
+            repReserveCourtier.setRepTaux(tauxReserve);
+            repRepo.save(repReserveCourtier);
+            return;
+        }
+        repReserveCourtier = new Repartition();
+        repReserveCourtier.setAffaire(new Affaire(affId));
+        repReserveCourtier.setRepCapital(reserveCourtier);
+        repReserveCourtier.setRepTaux(tauxReserve);
+        repReserveCourtier.setRepStatut(true);
+        repReserveCourtier.setRepStaCode(new Statut("ACT"));
+        repReserveCourtier.setType(type);
+        repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
+        repRepo.save(repReserveCourtier);
     }
 }

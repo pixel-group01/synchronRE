@@ -8,6 +8,7 @@ import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderSe
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
+import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
@@ -21,6 +22,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.mapper.FacultativeMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
+import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +37,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_REPARTITION;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service @RequiredArgsConstructor
@@ -67,7 +72,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final FacultativeMapper facultativeMapper;
     private final CouvertureRepository couvRepo;
     private final ReglementRepository regRepo;
-    private final IserviceReglement regService;
+    private final TypeRepo typeRepo;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -86,6 +91,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.CREATE_FAC, aff.getAffId(), aff.getStatut().getStaCode(), null));
         aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
+        repService.saveReserveCourtier(aff.getAffId(), aff.getFacSmpLci(), aff.getReserveCourtier());
         return facultativeMapper.mapToFacultativeDetailsResp(aff);
     }
 
@@ -139,6 +145,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
+        repService.saveReserveCourtier(affaire.getAffId(), affaire.getFacSmpLci(), affaire.getReserveCourtier());
         logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
         if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et le bordereau lié à l'affaire
         {

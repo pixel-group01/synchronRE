@@ -37,14 +37,13 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
     {
         boolean affIdExists = affId != null && affRepo.existsById(affId);
         Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable"));
-        BigDecimal reserveCourtier = affaire.getReserveCourtier() == null ? ZERO : affaire.getReserveCourtier();
         BigDecimal dejaReparti = !affIdExists ? ZERO : repRepo.getRepartitionsByAffId(affId);
         dejaReparti = dejaReparti == null ? ZERO : dejaReparti;
         BigDecimal smpLci = affaire.getFacSmpLci();
         BigDecimal partCedante = affaire.getPartCedante() ;
         smpLci = smpLci == null ? ZERO : smpLci;
         partCedante = partCedante == null ? ZERO : partCedante;
-        return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti.add(reserveCourtier)) ;
+        return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti) ;
     }
 
     @Override

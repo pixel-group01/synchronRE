@@ -41,6 +41,7 @@ public class EtatComptableAffaire
     private BigDecimal mtAttenteReversement;
     private BigDecimal resteAReverser;
     private BigDecimal tauxDeReversement;
+    private BigDecimal reserveCourtier;
 
     private List<DetailsEtatComptable> detailsEtatComptables;
 

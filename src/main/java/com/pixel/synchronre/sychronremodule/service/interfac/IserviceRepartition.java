@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -57,4 +58,6 @@ public interface IserviceRepartition
     void annulerRepartition(Long repId);
 
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
+
+    void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal reserveCourtier);
 }
