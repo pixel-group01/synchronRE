@@ -59,5 +59,5 @@ public interface IserviceRepartition
 
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
 
-    void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal reserveCourtier);
+    void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal prime100, BigDecimal reserveCourtier);
 }

@@ -347,17 +347,20 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repRepo.save(sinRep);
     }
     @Override @Transactional
-    public void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal reserveCourtier)
+    public void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal prime100, BigDecimal reserveCourtier)
     {
         Type type = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
         if(facSmp == null) throw new AppException("La SMPLCI de l'affaire ne peut être nulle.");
         reserveCourtier = reserveCourtier == null ? BigDecimal.ZERO : reserveCourtier;
         Repartition repReserveCourtier = repRepo.findReserveCourtierByAffId(affId);
         BigDecimal tauxReserve = reserveCourtier.multiply(CENT).divide(facSmp, 20, RoundingMode.HALF_UP);
+        BigDecimal primeResCourt = tauxReserve.multiply(prime100).divide(CENT, 20, RoundingMode.HALF_UP);
         if(repReserveCourtier != null)
         {
             repReserveCourtier.setRepCapital(reserveCourtier);
             repReserveCourtier.setRepTaux(tauxReserve);
+            repReserveCourtier.setRepPrime(primeResCourt);
+            repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
             repRepo.save(repReserveCourtier);
             return;
         }
@@ -365,6 +368,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repReserveCourtier.setAffaire(new Affaire(affId));
         repReserveCourtier.setRepCapital(reserveCourtier);
         repReserveCourtier.setRepTaux(tauxReserve);
+        repReserveCourtier.setRepPrime(primeResCourt);
         repReserveCourtier.setRepStatut(true);
         repReserveCourtier.setRepStaCode(new Statut("ACT"));
         repReserveCourtier.setType(type);

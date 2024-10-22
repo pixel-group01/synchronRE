@@ -33,6 +33,20 @@ public class UpdateCesLegReq
     private boolean accepte;
     private String paramCesLegLibelle;
 
+    public UpdateCesLegReq(BigDecimal repCapital, boolean accepte, String paramCesLegLibelle) {
+        this.repCapital = repCapital;
+        this.accepte = accepte;
+        this.paramCesLegLibelle = paramCesLegLibelle;
+    }
+
+    public UpdateCesLegReq(BigDecimal repCapital, BigDecimal repTaux, BigDecimal prime, boolean accepte, String paramCesLegLibelle) {
+        this.repCapital = repCapital;
+        this.repTaux = repTaux;
+        this.prime = prime;
+        this.accepte = accepte;
+        this.paramCesLegLibelle = paramCesLegLibelle;
+    }
+
     public UpdateCesLegReq(ParamCessionLegaleListResp pcl, Long repId, BigDecimal repCapital, Long affId, boolean  accepte)
     {
         this.repId = repId;

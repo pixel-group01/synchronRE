@@ -80,6 +80,12 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         SimpleRepDto xlDto = new SimpleRepDto(dto.getXlCapital(), dto.getXlTaux(), dto.getXlRepId(), dto.getXlPrime(), dto.getAffId());
         List<UpdateCesLegReq> pclSimples = dto.getParamCesLegs();
 
+        Type repResCourtType = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
+        if(pclSimples != null && !pclSimples.isEmpty()) //On retire de la liste la réserve courtier si elle s'y trouve
+        {
+            pclSimples = pclSimples.stream().filter(pcl->!pcl.getParamCesLegLibelle().toUpperCase().equals(repResCourtType.getName().toUpperCase())).toList();
+        }
+
         pclPfs = this.savePclReps(pclPfs);
         conservationDto = this.saveTraite(conservationDto, "REP_CONSERVATION");
         facobDto = this.saveTraite(facobDto, "REP_FACOB");
@@ -526,9 +532,11 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         BigDecimal tauxClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getRepTaux).reduce(ZERO, BigDecimal::add);
         BigDecimal primeClSimple = paramCesLegs.stream().filter(UpdateCesLegReq::isAccepte).map(UpdateCesLegReq::getPrime).reduce(ZERO, BigDecimal::add);
 
-        BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple);
-        BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple);
-        BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple);
+        Repartition reserveCourtier = repRepo.findReserveCourtierByAffId(dto.getAffId()); //On récupère la réserve courtier
+
+        BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple).subtract(reserveCourtier.getRepCapital());
+        BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple).subtract(reserveCourtier.getRepTaux());
+        BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple).subtract(reserveCourtier.getRepPrime() == null ? ZERO : reserveCourtier.getRepPrime());
 
         BigDecimal mtPlacements = repRepo.calculateMtTotalPlacementbyAffaire(dto.getAffId());
         mtPlacements = mtPlacements == null ? ZERO : mtPlacements;
@@ -569,6 +577,12 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         resp.setBesoinFacNetCLTaux(besoinFacNetCLTaux.setScale(2, RoundingMode.HALF_UP));
         resp.setBesoinFacNetCLPrime(besoinFacNetCLPrime.setScale(0, RoundingMode.HALF_UP));
         resp.setBesoinFac(besoinFac.setScale(0, RoundingMode.HALF_UP));
+
+
+        Type repResCourtType = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
+
+
+        paramCesLegs.add(new UpdateCesLegReq(reserveCourtier.getRepCapital(), reserveCourtier.getRepTaux().setScale(2, RoundingMode.HALF_UP), reserveCourtier.getRepPrime() == null ? ZERO : reserveCourtier.getRepPrime().setScale(0, RoundingMode.HALF_UP), false, repResCourtType.getName()));
         return resp;
     }
 }

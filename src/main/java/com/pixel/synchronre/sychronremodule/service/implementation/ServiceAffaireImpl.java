@@ -91,7 +91,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         mvtService.createMvtAffaire(new MvtReq(AffaireActions.CREATE_FAC, aff.getAffId(), aff.getStatut().getStaCode(), null));
         aff.setCedante(cedRepo.findById(dto.getCedId()).orElse(new Cedante(dto.getCedId())));
         aff.setCouverture(couvRepo.findById(dto.getCouvertureId()).orElse(new Couverture(dto.getCouvertureId())));
-        repService.saveReserveCourtier(aff.getAffId(), aff.getFacSmpLci(), aff.getReserveCourtier());
+        repService.saveReserveCourtier(aff.getAffId(), aff.getFacSmpLci(), dto.getFacPrime(), aff.getReserveCourtier());
         return facultativeMapper.mapToFacultativeDetailsResp(aff);
     }
 
@@ -145,7 +145,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         if(dto.getCouvertureId() != null) affaire.setCouverture(new Couverture(dto.getCouvertureId()));
         if(dto.getCedId() != null) affaire.setCedante(new Cedante(dto.getCedId()));
         affaire=affRepo.save(affaire);
-        repService.saveReserveCourtier(affaire.getAffId(), affaire.getFacSmpLci(), affaire.getReserveCourtier());
+        repService.saveReserveCourtier(affaire.getAffId(), affaire.getFacSmpLci(), affaire.getFacPrime(), affaire.getReserveCourtier());
         logService.logg(AffaireActions.UPDATE_FAC, oldAffaire, affaire, SynchronReTables.AFFAIRE);
         if(smpHasChanged || facPrimeHasChanged) //annuler les repartitons et le bordereau lié à l'affaire
         {
