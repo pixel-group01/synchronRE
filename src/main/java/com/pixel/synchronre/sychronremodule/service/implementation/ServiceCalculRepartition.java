@@ -534,9 +534,9 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
         Repartition reserveCourtier = repRepo.findReserveCourtierByAffId(dto.getAffId()); //On récupère la réserve courtier
 
-        BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple).subtract(reserveCourtier.getRepCapital());
-        BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple).subtract(reserveCourtier.getRepTaux());
-        BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple).subtract(reserveCourtier.getRepPrime() == null ? ZERO : reserveCourtier.getRepPrime());
+        BigDecimal besoinFacNetCL = bruteBesoinFac.subtract(mtClSimple).subtract(reserveCourtier != null && reserveCourtier.getRepCapital()!= null ? reserveCourtier.getRepCapital() : ZERO);
+        BigDecimal besoinFacNetCLTaux = bruteBesoinFacTaux.subtract(tauxClSimple).subtract(reserveCourtier != null && reserveCourtier.getRepTaux()!= null ? reserveCourtier.getRepTaux() : ZERO);
+        BigDecimal besoinFacNetCLPrime = bruteBesoinFacPrime.subtract(primeClSimple).subtract(reserveCourtier != null && reserveCourtier.getRepPrime()!= null ? reserveCourtier.getRepPrime() : ZERO);
 
         BigDecimal mtPlacements = repRepo.calculateMtTotalPlacementbyAffaire(dto.getAffId());
         mtPlacements = mtPlacements == null ? ZERO : mtPlacements;
@@ -578,11 +578,11 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         resp.setBesoinFacNetCLPrime(besoinFacNetCLPrime.setScale(0, RoundingMode.HALF_UP));
         resp.setBesoinFac(besoinFac.setScale(0, RoundingMode.HALF_UP));
 
-
-        Type repResCourtType = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
-
-
-        paramCesLegs.add(new UpdateCesLegReq(reserveCourtier.getRepCapital(), reserveCourtier.getRepTaux().setScale(2, RoundingMode.HALF_UP), reserveCourtier.getRepPrime() == null ? ZERO : reserveCourtier.getRepPrime().setScale(0, RoundingMode.HALF_UP), false, repResCourtType.getName()));
+        if(reserveCourtier != null)
+        {
+            Type repResCourtType = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
+            paramCesLegs.add(new UpdateCesLegReq(reserveCourtier.getRepCapital(), reserveCourtier.getRepTaux().setScale(2, RoundingMode.HALF_UP), reserveCourtier.getRepPrime() == null ? ZERO : reserveCourtier.getRepPrime().setScale(0, RoundingMode.HALF_UP), false, repResCourtType.getName()));
+        }
         return resp;
     }
 }
