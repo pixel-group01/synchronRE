@@ -33,6 +33,18 @@ public class Type {
     private List<Type> children;
     private String objectFolder;
 
+    public Type(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, List<Type> children, String objectFolder) {
+        this.typeId = typeId;
+        this.typeGroup = typeGroup;
+        this.uniqueCode = uniqueCode;
+        this.name = name;
+        this.status = status;
+        this.children = children;
+        this.objectFolder = objectFolder;
+    }
+
+    private int typeOrdre;
+
     @Override
     public String toString() {
         return name + " (" +uniqueCode + ")"  ;
