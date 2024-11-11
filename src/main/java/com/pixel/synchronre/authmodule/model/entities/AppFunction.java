@@ -4,11 +4,13 @@ import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.*;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDate;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@Entity
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class AppFunction
 {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "FNC_ID_GEN")

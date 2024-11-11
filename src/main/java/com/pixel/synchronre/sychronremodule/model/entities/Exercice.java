@@ -8,10 +8,13 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class Exercice {
     @Id
     private Long exeCode;

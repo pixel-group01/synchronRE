@@ -5,14 +5,12 @@ import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
-import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePmdDto;
-import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel;
-import com.pixel.synchronre.sychronremodule.model.events.CedanteTraiteEvent;
+import com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante;
+import com.pixel.synchronre.sychronremodule.model.events.TrancheCedanteEvent;
 import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
-import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceRepartition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,53 +32,53 @@ public class RepartitionTnpEventListner implements IRepartitionTnpListener
     private final IServiceRepartitionTraiteNP repTnpService;
 
     @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void onRemoveCedanteFromTraiteEvent(SimpleEvent<CedanteTraite> event)
+    public void onRemoveCedanteFromTraiteEvent(SimpleEvent<TrancheCedante> event)
     {
         System.out.println("============Listening event : " + event.getAction() + "=============");
         if(event == null || event.getData() == null) throw new AppException("Evènement publié sans aucune donnée");
-        if(event.getData().getTraiteNonProportionnel() == null || event.getData().getTraiteNonProportionnel().getTraiteNpId() == null)
+        if(event.getData().getTranche() == null || event.getData().getTranche().getTraiteNonProportionnel() == null || event.getData().getTranche().getTraiteNonProportionnel().getTraiteNpId() == null)
             throw new AppException("Les données du traité n'ont pas été fournies sur à la publication de l'événement");
 
-        Long cedanteTraiteId = event.getData().getCedanteTraiteId();
-        Long traiteNpId = event.getData().getTraiteNonProportionnel().getTraiteNpId();
+        Long trancheCedanteId = event.getData().getTrancheCedanteId();
+        Long traiteNpId = event.getData().getTranche().getTraiteNonProportionnel().getTraiteNpId();
         //On annule toutes les repartitions de type cession légale liées à cette cedante sur ce traité
-        rtRepo.findCesLegIdsByCedTraiId(cedanteTraiteId).forEach(repId-> repFacService.annulerRepartition(repId));
+        rtRepo.findCesLegIdsByTrancheCedanteId(trancheCedanteId).forEach(repId-> repFacService.annulerRepartition(repId));
 
         //On recalcule les montants des primes de tous les placements sur le traité
         recalculateMontantForPlacementsOnTraite(traiteNpId);
     }
 
     @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void onAddOrUpdateCedanteToTraiteEvent(CedanteTraiteEvent event)
+    public void onAddOrUpdateCedanteToTraiteEvent(TrancheCedanteEvent event)
     {
         System.out.println("============Listening event : " + event.getAction() + "=============");
-        if(event == null || event.getCedanteTraite() == null) throw new AppException("Evènement publié sans aucune donnée");
-        if(event.getCedanteTraite().getTraiteNonProportionnel() == null || event.getCedanteTraite().getTraiteNonProportionnel().getTraiteNpId() == null)
+        if(event == null || event.getTrancheCedante() == null) throw new AppException("Evènement publié sans aucune donnée");
+        if(event.getTrancheCedante() == null || event.getTrancheCedante().getTranche().getTraiteNonProportionnel() == null || event.getTrancheCedante().getTranche().getTraiteNonProportionnel().getTraiteNpId() == null)
             throw new AppException("Les données du traité n'ont par été fournies sur à la publication de l'événement");
-        Long cedanteTraiteId = event.getCedanteTraite().getCedanteTraiteId();
-        Long traiteNpId = event.getCedanteTraite().getTraiteNonProportionnel().getTraiteNpId();
-        List<CesLeg> cesLegs = event.getDto().getCessionsLegales();
+        Long traiteNpId = event.getTrancheCedante().getTranche().getTraiteNonProportionnel().getTraiteNpId();
 
-        recalculateMontantForPlacementsOnTraite(traiteNpId);
-        switch (event.getAction())
-        {
-            case ADD_CEDANTE_TO_TRAITE_NP ->
+        event.getDto().getTranchePrimeDtos().forEach(dto->{
+            List<CesLeg> cesLegs = dto.getCessionsLegales();
+            recalculateMontantForPlacementsOnTraite(traiteNpId);
+            switch (event.getAction())
             {
-                if(cesLegs != null && !cesLegs.isEmpty())
+                case ADD_CEDANTE_TO_TRAITE_NP ->
                 {
-                    cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
+                    if(cesLegs != null && !cesLegs.isEmpty())
+                    {
+                        cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg));
+                    }
+                }
+                case UPDATE_CEDANTE_ON_TRAITE_NP ->
+                {
+                    if(cesLegs != null && !cesLegs.isEmpty())
+                    {
+                        cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg));
+                        cesLegs.stream().filter(cesLeg -> !cesLeg.isAccepte()).forEach(cesLeg-> repTnpService.desactivateCesLegByTraiteNpIdAndPclId(traiteNpId, cesLeg.getParamCesLegalId()));
+                    }
                 }
             }
-            case UPDATE_CEDANTE_ON_TRAITE_NP ->
-            {
-                if(cesLegs != null && !cesLegs.isEmpty())
-                {
-                    cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg, cedanteTraiteId));
-                    cesLegs.stream().filter(cesLeg -> !cesLeg.isAccepte()).forEach(cesLeg->
-                        repTnpService.desactivateCesLegByTraiteNpIdAndPclId(traiteNpId, cesLeg.getParamCesLegalId()));
-                }
-            }
-        }
+        });
     }
 
     @Override @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
