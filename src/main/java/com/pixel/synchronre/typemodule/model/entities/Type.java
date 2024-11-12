@@ -12,9 +12,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import java.util.List;
 
-@Table(name = "type") @Entity
+@Table(name = "type") @Entity  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Type {
     @Id

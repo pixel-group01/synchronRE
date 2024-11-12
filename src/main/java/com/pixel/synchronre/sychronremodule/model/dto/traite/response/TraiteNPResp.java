@@ -48,6 +48,7 @@ public class TraiteNPResp
     protected LocalDateTime updatedAt;
     private BigDecimal traiTauxDejaPlace;
     private BigDecimal traiTauxRestantAPlacer;
+    private BigDecimal traiAssiettePrime;
     private BigDecimal traiPmd;
     private BigDecimal traiPmdCourtier;
     private BigDecimal traiPmdCourtierPlaceur;
@@ -65,6 +66,8 @@ public class TraiteNPResp
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                         Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
                         BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement,
+                        BigDecimal traiAssiettePrime, BigDecimal traiPmd, BigDecimal traiPmdCourtier,
+                        BigDecimal traiPmdCourtierPlaceur, BigDecimal traiPmdNette,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
                         String natCode, String natLibelle,Long courtierPlaceurId,String cesNom,
                         String devCode,
@@ -83,9 +86,15 @@ public class TraiteNPResp
         this.traiPeriodicite = traiPeriodicite == null ? "" : traiPeriodicite.getCode();
         this.traiDelaiEnvoi = traiDelaiEnvoi;
         this.traiDelaiConfirmation = traiDelaiConfirmation;
+        this.traiDelaiPaiement = traiDelaiPaiement;
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
         this.traiTauxAbattement=traiTauxAbattement;
+        this.traiAssiettePrime = traiAssiettePrime;
+        this.traiPmd = traiPmd;
+        this.traiPmdCourtier =traiPmdCourtier;
+        this.traiPmdCourtierPlaceur = traiPmdCourtierPlaceur;
+        this.traiPmdNette = traiPmdNette;
         this.exeCode = exeCode;
         this.traiSourceRef = traiSourceRef;
         this.traiSourceLibelle = traiSourceLibelle;

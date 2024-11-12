@@ -64,7 +64,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
-    private final CedanteTraiteRepository cedTraiRepo;
     private final IServiceCalculsComptables comptaService;
 
 

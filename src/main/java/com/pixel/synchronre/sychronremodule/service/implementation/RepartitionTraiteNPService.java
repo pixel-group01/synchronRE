@@ -2,9 +2,9 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
-import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionTraiteRepo;
 import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.TrancheCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.RepartitionTraiteNPMapper;
@@ -41,7 +41,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     private final RepartitionTraiteNPMapper repTnpMapper;
     private final ObjectCopier<Repartition> repCopier;
     private final TypeRepo typeRepo;
-    private final CedanteTraiteRepository cedTraiRepo;
+    private final TrancheCedanteRepository trancheCedanteRepo;
     private final TraiteNPRepository tnpRepo;
 
     private final ApplicationEventPublisher eventPublisher;
@@ -66,7 +66,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     @Override @Transactional
     public RepartitionTraiteNPResp create(PlacementTraiteNPReq dto)
     {
-        Optional<Long> plaId$ = rtRepo.getPlacementIdByTraiteNpIdAndCesId(dto.getTraiteNpId(), dto.getCesId());
+        Optional<Long> plaId$ = rtRepo.getPlacementIdByTraiteNpIdAndCesId(dto.getTraiteNpId() ==null ? 0l : dto.getTraiteNpId(), dto.getCesId());
         if(plaId$.isPresent())
         {
             dto.setRepId(plaId$.get());
@@ -106,21 +106,21 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     }
 
     @Override @Transactional
-    public void createRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
+    public void createRepartitionCesLegTraite(CesLeg cesLeg)
     {
-        if(cedTraiId == null || !cedTraiRepo.existsById(cedTraiId)) throw new AppException("Cédante non prise en compte par le traité");
-        Repartition repartition = repTnpMapper.mapToCesLegRepartition(cesLeg, cedTraiId);
+        Repartition repartition = repTnpMapper.mapToCesLegRepartition(cesLeg);
         rtRepo.save(repartition);
         setMontantPrimesForCesLegRep(cesLeg, repartition);
         eventPublisher.publishEvent(new LoggingEvent(this,"Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition"));
     }
 
     @Override @Transactional
-    public void updateRepartitionCesLegTraite(CesLeg cesLeg, Long cedTraiId)
+    public void updateRepartitionCesLegTraite(CesLeg cesLeg)
     {
         Repartition repartition;
-        if(cesLeg.getRepId() == null && cedTraiId == null) throw new AppException("Repartition nulle");
-        else if(cesLeg.getRepId() == null) repartition = rtRepo.findByCedTraiIdAndPclId(cedTraiId, cesLeg.getParamCesLegalId());
+        Long trancheCedanteId = cesLeg.getTrancheCedanteId();
+        if(cesLeg.getRepId() == null && trancheCedanteId == null) throw new AppException("Repartition nulle");
+        else if(cesLeg.getRepId() == null) repartition = rtRepo.findByTrancheCedanteIdAndPclId(trancheCedanteId, cesLeg.getParamCesLegalId());
         else repartition  = rtRepo.findById(cesLeg.getRepId()).orElseThrow(()->new AppException("Repartition introuvable"));
 
         Repartition oldRepartition = repCopier.copy(repartition);
@@ -137,7 +137,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     @Override @Transactional
     public void setMontantsPrimes(Long traiteNpId, BigDecimal repTaux, BigDecimal tauxCoutier, BigDecimal tauxCourtierPlaceur, Repartition repartition)
     {
-        PmdGlobalResp pmdGlobal = cedTraiRepo.getPmdGlobal(traiteNpId);
+        PmdGlobalResp pmdGlobal = trancheCedanteRepo.getPmdGlobal(traiteNpId);
         if(pmdGlobal == null || repartition == null) return;
 
         BigDecimal repPrime = pmdGlobal.getTraiPmd() == null ? BigDecimal.ZERO : pmdGlobal.getTraiPmd().multiply(repTaux).divide(CENT, 20, RoundingMode.HALF_UP);
@@ -176,13 +176,14 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
 
     @Override @Transactional
     public void setMontantPrimesForCesLegRep(CesLeg cesLeg, Repartition repartition) {
-        if(repartition.getCedanteTraite() == null || repartition.getCedanteTraite().getCedanteTraiteId() == null)
+        if(repartition.getTrancheCedante() == null || repartition.getTrancheCedante().getTrancheCedanteId() == null)
             throw new AppException("Impossible de récupérer l'ID du traité de la CedanteTraite lié à répartition " + repartition.getRepId());
-        Long traiteNpId = cedTraiRepo.getTraiteIdByCedTraiId(repartition.getCedanteTraite().getCedanteTraiteId());
+        Long traiteNpId = trancheCedanteRepo.getTraiteIdByTrancheCedanteId(repartition.getTrancheCedante().getTrancheCedanteId());
         this.setMontantsPrimes(traiteNpId,cesLeg.getTauxCesLeg(), cesLeg.getTauxCourtier(), cesLeg.getTauxCourtierPlaceur(), repartition);
     }
 
-    private Repartition recalculateMontantPrimeOnPlacement(PlacementTraiteNPReq dto, Repartition placement) {
+    @Override
+    public Repartition recalculateMontantPrimeOnPlacement(PlacementTraiteNPReq dto, Repartition placement) {
         TauxCourtiersResp tauxCourtiers = tnpRepo.getTauxCourtiers(dto.getTraiteNpId());
         BigDecimal tauxCourtier = tauxCourtiers == null ? BigDecimal.ZERO : tauxCourtiers.getTraiTauxCourtier();
         BigDecimal tauxCourtierPlaceur = tauxCourtiers ==  null ? BigDecimal.ZERO  :  tauxCourtiers.getTraiTauxCourtierPlaceur();
@@ -190,5 +191,20 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         placement.setRepTauxComCourtPlaceur(tauxCourtierPlaceur);
         setMontantsPrimes(dto.getTraiteNpId(), dto.getRepTaux(), tauxCourtier, tauxCourtierPlaceur, placement);
         return placement;
+    }
+
+    @Override
+    public void recalculateMontantPrimeForPlacementOnTraite(Long traiteNpId)
+    {
+        List<PlacementTraiteNPReq> placementDtos = rtRepo.findPlacementTraiteDtos(traiteNpId);
+        if(placementDtos != null && !placementDtos.isEmpty())
+        {
+            placementDtos.forEach(dto->
+            {
+                Repartition placement = rtRepo.findById(dto.getRepId()).orElseThrow(null);
+                if(placement == null) return;
+                this.recalculateMontantPrimeOnPlacement(dto, placement);
+            });
+        }
     }
 }

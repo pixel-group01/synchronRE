@@ -3,9 +3,11 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 import com.pixel.synchronre.sychronremodule.model.enums.FORME;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
+@Entity  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class Nature {
     @Id
     private String natCode;

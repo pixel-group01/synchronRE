@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class CedanteTraiteResp
+public class TrancheCedanteResp
 {
     private Long cedanteTraiteId;
     private BigDecimal assiettePrime;
@@ -29,7 +29,7 @@ public class CedanteTraiteResp
 
     private List<CesLeg> cessionsLegales;
 
-    public CedanteTraiteResp(Long cedanteTraiteId, BigDecimal assiettePrime, Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId, String traiReference, String traiNumero, String staCode, String staLibelle) {
+    public TrancheCedanteResp(Long cedanteTraiteId, BigDecimal assiettePrime, Long cedId, String cedNomFiliale, String cedSigleFiliale, Long traiteNpId, String traiReference, String traiNumero, String staCode, String staLibelle) {
         this.cedanteTraiteId = cedanteTraiteId;
         this.assiettePrime = assiettePrime;
         this.cedId = cedId;

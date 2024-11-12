@@ -1,7 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.limitesouscription;
 
-import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.TrancheCedanteRepository;
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -25,7 +24,7 @@ public @interface ExistingCedanteTraiteId
     @RequiredArgsConstructor
     class ExistingCedanteTraiteIdValidator implements ConstraintValidator<ExistingCedanteTraiteId, Long>
     {
-        private final CedanteTraiteRepository trancheRepo;
+        private final TrancheCedanteRepository trancheRepo;
         @Override
         public boolean isValid(Long trancheId, ConstraintValidatorContext context)
         {
