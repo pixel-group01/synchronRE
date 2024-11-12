@@ -540,7 +540,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
         BigDecimal mtPlacements = repRepo.calculateMtTotalPlacementbyAffaire(dto.getAffId());
         mtPlacements = mtPlacements == null ? ZERO : mtPlacements;
-        if(mtPlacements.compareTo(besoinFacNetCL)>0) throw new AppException("Le besoin  fac net de cessions légales (" + decimalFormat.format(besoinFacNetCL) + devise +") doit être supérieur au montant des capitaux déjà placé (" + decimalFormat.format(mtPlacements)+ " " + devise +")");
+        if(mtPlacements.subtract(besoinFacNetCL).abs().compareTo(UN)>0) throw new AppException("Le besoin  fac net de cessions légales (" + decimalFormat.format(besoinFacNetCL) + devise +") doit être supérieur au montant des capitaux déjà placé (" + decimalFormat.format(mtPlacements)+ " " + devise +")");
         BigDecimal besoinFac = besoinFacNetCL.subtract(mtPlacements);
 
         CalculationRepartitionRespDto resp = new CalculationRepartitionRespDto();
