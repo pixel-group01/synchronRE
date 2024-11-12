@@ -49,7 +49,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         select new com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp(
         f.affId, f.affCode, f.affAssure, f.affActivite, f.affDateEffet, f.affDateEcheance, f.facNumeroPolice, f.affCapitalInitial,
         f.facSmpLci, f.facPrime, f.affStatutCreation, d.devCode, ced.cedId, s.staCode, concat(s.staLibelle, '(', f.affStatutCreation, ')'),
-         c.couId, c.couLibelle, c.branche.branId, c.branche.branLibelle, ced.cedNomFiliale, ced.cedSigleFiliale, concat(year(f.affDateEffet), ' - ', year(f.affDateEcheance)) ) 
+         c.couId, c.couLibelle, c.branche.branId, c.branche.branLibelle, ced.cedNomFiliale, ced.cedSigleFiliale, concat(year(f.affDateEffet), ' - ', year(f.affDateEcheance)),f.reserveCourtier ) 
         from Affaire f left join f.statut s left join f.couverture c left join f.affUserCreator u left join f.affFonCreator fnc 
             left join f.cedante ced left join f.devise d 
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
@@ -67,7 +67,8 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         and (:userId is null or :userId = u.userId) 
         and (:cedId is null or :cedId = ced.cedId) 
         and (:exeCode is null or (f.affDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and f.affDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
-        and s.staCode in :staCodes 
+        and s.staCode in :staCodes
+        order by f.updatedAt desc
     """)
     Page<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,
@@ -80,7 +81,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         select new com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp(
         f.affId, f.affCode, f.affAssure, f.affActivite, f.affDateEffet, f.affDateEcheance, f.facNumeroPolice, f.affCapitalInitial,
         f.facSmpLci, f.facPrime, f.affStatutCreation, d.devCode, ced.cedId, s.staCode, concat(s.staLibelle, '(', f.affStatutCreation, ')'), 
-        c.couId, c.couLibelle, c.branche.branId, c.branche.branLibelle, ced.cedNomFiliale, ced.cedSigleFiliale, concat(year(f.affDateEffet), ' - ', year(f.affDateEcheance))) 
+        c.couId, c.couLibelle, c.branche.branId, c.branche.branLibelle, ced.cedNomFiliale, ced.cedSigleFiliale, concat(year(f.affDateEffet), ' - ', year(f.affDateEcheance)),f.reserveCourtier) 
         from Affaire f left join f.statut s left join f.couverture c left join f.affUserCreator u left join f.affFonCreator fnc 
             left join f.cedante ced left join f.devise d 
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(f.affCode, '') ) as string))) >0 
@@ -99,6 +100,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
         and (:cedId is null or :cedId = ced.cedId) 
         and (:exeCode is null or (f.affDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and f.affDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
         and s.staCode in :staCodes 
+        order by f.updatedAt desc
 """)
     List<FacultativeListResp> searchAffaires(@Param("key") String key,
                                              @Param("fncId") Long fncId,

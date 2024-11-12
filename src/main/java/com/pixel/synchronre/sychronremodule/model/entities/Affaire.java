@@ -40,7 +40,10 @@ public class Affaire
     private BigDecimal facSmpLci; // Sinistre max
     @Column(precision = 50, scale = 20)
     private BigDecimal facPrime;
+    @Column(precision = 50, scale = 20)
     private BigDecimal partCedante; //montant de la smplci soumuise en réassurance
+    @Column(precision = 50, scale = 20)
+    private BigDecimal reserveCourtier = BigDecimal.ZERO; //montant de la smplci non soumuise en réassurance et reservé par NelsonRE
     protected String affStatutCreation; //Statut à la création de l'affaire ( Réalisée:REALISEE / En instance:INSTANCE / Non Réalisée:NON_REALISEE )
     @ManyToOne @JoinColumn(name = "cedente_id")
     protected Cedante cedante;
