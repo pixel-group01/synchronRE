@@ -350,12 +350,15 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     {
         Type type = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
         if(facSmp == null) throw new AppException("La SMPLCI de l'affaire ne peut être nulle.");
+        Repartition repReserveCourtier = repRepo.findReserveCourtierByAffId(affId);
+        BigDecimal oldReserveCourtier = repReserveCourtier == null || repReserveCourtier.getRepCapital() == null ? ZERO : repReserveCourtier.getRepCapital();
+
         BigDecimal besoinFac = comptaService.calculateRestARepartir(affId);
         besoinFac = besoinFac == null ? ZERO : besoinFac;
-        if(reserveCourtier != null && reserveCourtier.compareTo(besoinFac)>1) throw new AppException("La réserve courtier ne peut être supérieure au besoin fac (" + besoinFac + ")");
-        if(reserveCourtier != null && reserveCourtier.compareTo(besoinFac)<=1) reserveCourtier = besoinFac;
+        if(reserveCourtier != null && reserveCourtier.subtract(besoinFac.add(oldReserveCourtier)).compareTo(UN)>0) throw new AppException("La réserve courtier ne peut être supérieure au besoin fac (" + besoinFac + ")");
+        if(reserveCourtier != null && reserveCourtier.subtract(besoinFac.add(oldReserveCourtier)).abs().compareTo(UN)<=0) reserveCourtier = besoinFac;
         reserveCourtier = reserveCourtier == null ? BigDecimal.ZERO : reserveCourtier;
-        Repartition repReserveCourtier = repRepo.findReserveCourtierByAffId(affId);
+
         BigDecimal tauxReserve = reserveCourtier.multiply(CENT).divide(facSmp, 20, RoundingMode.HALF_UP);
         BigDecimal primeResCourt = tauxReserve.multiply(prime100).divide(CENT, 20, RoundingMode.HALF_UP);
         if(repReserveCourtier != null)
