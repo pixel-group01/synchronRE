@@ -39,6 +39,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
     private final ParamCessionLegaleRepository paramCesLegRepo;
     private final IServiceRepartitionTraiteNP repTnpService;
     private final CedanteTraiteRepo cedanteTraiteRepo;
+    private final TrancheRepository trancheRepo;
 
     @Override
     public List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId)
@@ -62,15 +63,15 @@ public class TrancheCedanteService implements ITrancheCedanteService
         return dto;
     }
     @Override
-    public TrancheCedanteResp save(TrancheCedanteReq dto)
+    public TrancheCedanteReq save(TrancheCedanteReq dto)
     {
         dto = this.getEditDto(dto, 20);
         List<TranchePrimeDto> tranchePrimeDtos = dto.getTranchePrimeDtos();
-        tranchePrimeDtos.forEach(tranchePrime ->
+        tranchePrimeDtos.stream().filter(TranchePrimeDto::isChanged).forEach(tranchePrime ->
         {
             this.saveTranchePrime(tranchePrime);
         });
-        return null;
+        return dto;
     }
 
     @Override @Transactional
@@ -154,12 +155,24 @@ public class TrancheCedanteService implements ITrancheCedanteService
         if(naturalTranchePrimes == null) return Collections.emptyList();
         naturalTranchePrimes.forEach(trPmd->
         {
+            BigDecimal oldAssiettePrime = trancheCedanteRepo.getAssiettePrimeByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
+            BigDecimal assiettePrime = this.getAssiettePrime(dto, trPmd.getTrancheId());
             trPmd.setTraiteNpId(traiteNpId);
             trPmd.setCedId(cedId);
-            trPmd.setAssiettePrime(this.getAssiettePrime(dto, trPmd.getTrancheId()));
+            trPmd.setAssiettePrime(assiettePrime);
             this.calculatePrimesAndCesLegs(trPmd, scale);
+            boolean hasChanged = this.trPmdHasChange(assiettePrime, oldAssiettePrime);
+            trPmd.setChanged(hasChanged);
         });
         return naturalTranchePrimes;
+    }
+
+    private boolean trPmdHasChange(BigDecimal assiettePrime, BigDecimal oldAssiettePrime)
+    {
+        assiettePrime = assiettePrime == null ? BigDecimal.ZERO : assiettePrime;
+        oldAssiettePrime = oldAssiettePrime == null ? BigDecimal.ZERO : oldAssiettePrime;
+        if(assiettePrime == oldAssiettePrime) return false;
+        return assiettePrime.compareTo(oldAssiettePrime) != 0;
     }
 
     private BigDecimal getAssiettePrime(TrancheCedanteReq dto, Long trancheId)

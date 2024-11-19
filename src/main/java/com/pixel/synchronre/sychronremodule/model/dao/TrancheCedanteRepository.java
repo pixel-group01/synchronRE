@@ -7,6 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, Long>
@@ -37,6 +38,9 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
 
     @Query("select tc from TrancheCedante tc where tc.tranche.trancheId = ?1 and tc.cedante.cedId = ?2")
     TrancheCedante findByTrancheIdAndCedId(Long trancheId, Long cedId);
+
+    @Query("select tc.assiettePrime from TrancheCedante tc where tc.tranche.trancheId = ?1 and tc.cedante.cedId = ?2")
+    BigDecimal getAssiettePrimeByTrancheIdAndCedId(Long trancheId, Long cedId);
 
     //Recupère les ids des tranche qui sont persistées qui ne sont pas dans les tranches naturelles
     @Query("""

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ITrancheCedanteService
 {
-    TrancheCedanteResp save(TrancheCedanteReq dto);
+    TrancheCedanteReq save(TrancheCedanteReq dto);
 
     List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId);
 

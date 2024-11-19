@@ -24,6 +24,7 @@ public class TranchePrimeDto
     private BigDecimal pmdNette;
     private Long cedId;
     private Long traiteNpId;
+    private boolean changed;
     private List<CesLeg> cessionsLegales;
 
     public TranchePrimeDto(Long trancheId, String trancheLibelle, BigDecimal assiettePrime, BigDecimal trancheTauxPrime) {
