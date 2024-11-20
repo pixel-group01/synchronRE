@@ -27,4 +27,18 @@ public class ReadCedanteDTO
         this.cedNomFiliale = cedNomFiliale;
         this.cedSigleFiliale = cedSigleFiliale;
     }
+
+    @Getter @Setter @NoArgsConstructor
+    public static class ReadCedanteDTOLite
+    {
+        private Long cedId;
+        private String cedNomFiliale;
+        private String cedSigleFiliale;
+
+        public ReadCedanteDTOLite(Long cedId, String cedNomFiliale, String cedSigleFiliale) {
+            this.cedId = cedId;
+            this.cedNomFiliale = cedNomFiliale;
+            this.cedSigleFiliale = cedSigleFiliale;
+        }
+    }
 }

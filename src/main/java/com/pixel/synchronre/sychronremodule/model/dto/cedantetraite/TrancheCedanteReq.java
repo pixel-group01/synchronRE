@@ -18,10 +18,8 @@ public class TrancheCedanteReq
     @NotNull(message = "Veuillez choisir la cédante")
     @ExistingCedId
     private Long cedId;
-    private List<ReadCedanteDTO> cedantes;
-
-
     private List<TranchePrimeDto> tranchePrimeDtos;
+    private List<ReadCedanteDTO.ReadCedanteDTOLite> cedantes;
 
     public TrancheCedanteReq(Long traiteNpId, Long cedId) {
         this.traiteNpId = traiteNpId;

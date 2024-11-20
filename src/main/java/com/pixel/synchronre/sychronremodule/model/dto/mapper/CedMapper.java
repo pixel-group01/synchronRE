@@ -44,4 +44,6 @@ public abstract class CedMapper
     @Mapping(target = "banLibelle", expression = "java(ced.getBanque().getBanLibelle())")
     @Mapping(target = "banLibelleAbrege", expression = "java(ced.getBanque().getBanLibelleAbrege())")
     public abstract ReadCedanteDTO mapToReadCedenteDTO(Cedante ced);
+
+    public abstract ReadCedanteDTO.ReadCedanteDTOLite mapToReadCedenteDTOLite(ReadCedanteDTO ced);
 }

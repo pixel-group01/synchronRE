@@ -112,11 +112,19 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq(
-            r.repId, r.repTaux, r.cessionnaire.cesId, ?1, r.isAperiteur) 
+            r.repId, r.repTaux, r.cessionnaire.cesId, r.traiteNonProportionnel.traiteNpId, r.isAperiteur) 
         from Repartition r where r.traiteNonProportionnel.traiteNpId = ?1 
         and r.type.uniqueCode = 'REP_PLA_TNP' 
         and r.repStatut = true 
         and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')
 """)
     List<PlacementTraiteNPReq> findPlacementTraiteDtos(Long traiteNpId);
+
+    @Query("""
+        select (count(r.repId)>0) from Repartition r where r.repStatut = true 
+        and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE') 
+        and r.trancheCedante.tranche.traiteNonProportionnel.traiteNpId = ?1 
+        and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
+    """)
+    boolean existsByTrancheCedanteIdAndPclId(Long trancheCedanteId, Long paramCesLegalId);
 }

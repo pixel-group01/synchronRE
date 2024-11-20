@@ -106,10 +106,22 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     }
 
     @Override @Transactional
+    public void saveRepartitionCesLegTraite(CesLeg cesLeg)
+    {
+        boolean modeCreate = true;
+        if(cesLeg.getRepId() != null)  modeCreate = false;
+        else if(cesLeg.getTrancheCedanteId() == null || cesLeg.getParamCesLegalId() ==null ) throw new AppException("ID de TrancheCedante ou de Paramètre de cession légal non fournie");
+        else if(rtRepo.existsByTrancheCedanteIdAndPclId(cesLeg.getTrancheCedanteId(), cesLeg.getParamCesLegalId()))  modeCreate = false;
+
+        if(modeCreate) this.createRepartitionCesLegTraite(cesLeg);
+        else updateRepartitionCesLegTraite(cesLeg);
+    }
+
+    @Override @Transactional
     public void createRepartitionCesLegTraite(CesLeg cesLeg)
     {
         Repartition repartition = repTnpMapper.mapToCesLegRepartition(cesLeg);
-        rtRepo.save(repartition);
+        repartition = rtRepo.save(repartition);
         setMontantPrimesForCesLegRep(cesLeg, repartition);
         eventPublisher.publishEvent(new LoggingEvent(this,"Ajout d'une repartition de type cession légale sur un traité non proportionel", new Repartition(), repartition, "Repartition"));
     }
@@ -177,7 +189,7 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
     @Override @Transactional
     public void setMontantPrimesForCesLegRep(CesLeg cesLeg, Repartition repartition) {
         if(repartition.getTrancheCedante() == null || repartition.getTrancheCedante().getTrancheCedanteId() == null)
-            throw new AppException("Impossible de récupérer l'ID du traité de la CedanteTraite lié à répartition " + repartition.getRepId());
+            throw new AppException("Impossible de récupérer l'ID de la TrancheCedante lié à répartition " + repartition.getRepId());
         Long traiteNpId = trancheCedanteRepo.getTraiteIdByTrancheCedanteId(repartition.getTrancheCedante().getTrancheCedanteId());
         this.setMontantsPrimes(traiteNpId,cesLeg.getTauxCesLeg(), cesLeg.getTauxCourtier(), cesLeg.getTauxCourtierPlaceur(), repartition);
     }

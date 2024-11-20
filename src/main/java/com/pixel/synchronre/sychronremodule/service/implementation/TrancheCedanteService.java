@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteResp;
+import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheCedanteMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto;
@@ -46,14 +47,16 @@ public class TrancheCedanteService implements ITrancheCedanteService
     {
         return trancheCedanteRepo.getListCedanteAsaisirSurTraite(traiteNpId);
     }
-
+    private final CedMapper cedMapper;
     @Override
     public TrancheCedanteReq getEditDto(TrancheCedanteReq dto, int scale)
     {
         if(dto == null) return null;
         Long traiteNpId = dto.getTraiteNpId();
         Long cedId = dto.getCedId();
-        dto.setCedantes(cedanteTraiteRepo.findCedanteByTraite(traiteNpId));
+        List<ReadCedanteDTO> readCedanteDTOS = cedanteTraiteRepo.findCedanteByTraite(traiteNpId);
+        List<ReadCedanteDTO.ReadCedanteDTOLite> readCedantes = readCedanteDTOS.stream().map(cedMapper::mapToReadCedenteDTOLite).toList();
+        dto.setCedantes(readCedantes);
 
         List<TranchePrimeDto> tranchePrimeDtos = this.getNaturalTranchePrimeDtos(dto, scale);
 
@@ -62,7 +65,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
         dto.setTranchePrimeDtos(tranchePrimeDtos);
         return dto;
     }
-    @Override
+    @Override @Transactional
     public TrancheCedanteReq save(TrancheCedanteReq dto)
     {
         dto = this.getEditDto(dto, 20);
@@ -128,17 +131,20 @@ public class TrancheCedanteService implements ITrancheCedanteService
         trancheCedante.setPmdCourtierPlaceur(dto.getPmdCourtierPlaceur());
         trancheCedante.setPmdNette(dto.getPmdNette());
         trancheCedante = trancheCedanteRepo.save(trancheCedante);
+        Long trancheCedanteId = trancheCedante.getTrancheCedanteId();
         List<CesLeg> cesLegs= dto.getCessionsLegales();
 
         if(cesLegs != null && !cesLegs.isEmpty())
         {
-            if(modeCreate)
+            cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->
             {
-                cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.createRepartitionCesLegTraite(cesLeg));
-            }
-            else
+                cesLeg.setTrancheCedanteId(trancheCedanteId);
+                repTnpService.saveRepartitionCesLegTraite(cesLeg);
+            });
+
+            if(!modeCreate)
             {
-                cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg));
+                //cesLegs.stream().filter(cesLeg -> cesLeg.isAccepte()).forEach(cesLeg->repTnpService.updateRepartitionCesLegTraite(cesLeg));
                 cesLegs.stream().filter(cesLeg -> !cesLeg.isAccepte()).forEach(cesLeg->
                         repTnpService.desactivateCesLegByTraiteNpIdAndPclId(dto.getTraiteNpId(), cesLeg.getParamCesLegalId()));
             }
