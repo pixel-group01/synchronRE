@@ -76,6 +76,13 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
         return traiteNPResps;
     }
 
+    @Override
+    public List<TraiteNPResp> list(Long cedId, List<String> staCodes, Long exeCode)
+    {
+        staCodes = staCodes == null || staCodes.isEmpty() ? Collections.singletonList("SAI-CRT") : staCodes;
+        return traiteNPRepo.getList(cedId, staCodes, exeCode);
+    }
+
     @Override @Transactional
     public TraiteNPResp update(UpdateTraiteNPReq dto)
     {

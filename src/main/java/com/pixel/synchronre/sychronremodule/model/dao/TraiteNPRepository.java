@@ -140,4 +140,38 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
 
     @Query("select t.traiTauxAbattement from TraiteNonProportionnel t where t.traiteNpId = ?1")
     BigDecimal getTauxAbattement(Long traiteNpId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
+        tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, 
+        sum(ct.assiettePrime), sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette), e.exeCode, 
+        src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
+        d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
+        tnp.updatedAt)
+        from 
+        TraiteNonProportionnel tnp 
+        left join tnp.exercice e 
+        left join tnp.traiSource src 
+        left join tnp.nature n 
+        left join tnp.traiDevise d 
+        left join tnp.statut s 
+        left join tnp.traiUserCreator u 
+        left join tnp.traiFonCreator f 
+        left join tnp.traiCompteDevise dc 
+        left join CedanteTraite ct on tnp.traiteNpId = ct.traiteNpId 
+        where
+        (:cedId is null or exists(select ct0 from CedanteTraite ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
+        and (:exeCode is null or (tnp.traiDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and tnp.traiDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
+        and s.staCode in :staCodes
+        group by tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
+        tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, e.exeCode, 
+        src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
+        d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
+        tnp.updatedAt
+""")
+    List<TraiteNPResp> getList(Long cedId, List<String> staCodes, Long exeCode);
 }

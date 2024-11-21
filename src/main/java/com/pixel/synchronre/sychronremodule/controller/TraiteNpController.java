@@ -31,6 +31,14 @@ public class TraiteNpController
         return traiteNpService.update(dto);
     }
 
+    @GetMapping(path = "/list")
+    List<TraiteNPResp> list(@RequestParam(required = false) Long cedId,
+                      @RequestParam(required = false) List<String> staCodes,
+                      Long exeCode)
+    {
+        return traiteNpService.list(cedId, staCodes, exeCode);
+    }
+
     //Tab saisie par le souscripteur : affiche les traites saisies par le souscripteur
     @GetMapping(path = "/saisi-by-souscripteur")
     public Page<TraiteNPResp> searchTraiteBySouscripteur(@RequestParam(defaultValue = "") String key,
