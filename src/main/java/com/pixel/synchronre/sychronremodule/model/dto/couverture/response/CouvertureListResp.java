@@ -18,6 +18,17 @@ public class CouvertureListResp
     private String natLibelle;
     private String staLibelle;
 
+    public CouvertureListResp(Long couId, String couLibelle, String couLibelleAbrege, Long couParentId, String couParentLibelle, Long branId, String brancheLibelle, String staLibelle) {
+        this.couId = couId;
+        this.couLibelle = couLibelle;
+        this.couLibelleAbrege = couLibelleAbrege;
+        this.couParentId = couParentId;
+        this.couParentLibelle = couParentLibelle;
+        this.branId = branId;
+        this.brancheLibelle = brancheLibelle;
+        this.staLibelle = staLibelle;
+    }
+
     public CouvertureListResp(Long couId, String couLibelle, String couLibelleAbrege)
     {
         this.couId = couId;
