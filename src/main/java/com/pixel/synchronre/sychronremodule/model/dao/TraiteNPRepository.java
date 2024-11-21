@@ -17,24 +17,21 @@ import java.util.Optional;
 
 public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel, Long>
 {
+    /*
+    traiAssiettePrime, BigDecimal traiPmd, BigDecimal traiPmdCourtier,
+                        BigDecimal traiPmdCourtierPlaceur, BigDecimal traiPmdNette,
+     */
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp0.traiteNpId,
-        tnp0.traiReference, tnp0.traiNumero, tnp0.traiLibelle,tnp0.traiEcerciceRattachement, 
-        tnp0.traiDateEffet, tnp0.traiDateEcheance, tnp0.traiCoursDevise, tnp0.traiPeriodicite, tnp0.traiDelaiEnvoi,
-        tnp0.traiDelaiConfirmation,tnp0.traiDelaiPaiement, tnp0.traiTauxCourtier, tnp0.traiTauxCourtierPlaceur,tnp0.traiTauxAbattement, e0.exeCode, src0.traiReference, 
-        src0.traiLibelle, n0.natCode, n0.natLibelle,tnp0.courtierPlaceur.cesId,tnp0.courtierPlaceur.cesNom, d0.devCode, dc0.devCode, s0.staCode, s0.staLibelle, u0.email, 
-        concat(u0.firstName, ' ', u0.lastName), f0.name, tnp0.createdAt, tnp0.updatedAt) 
-        from TraiteNonProportionnel tnp0 
-        left join tnp0.exercice e0 
-        left join tnp0.traiSource src0 
-        left join tnp0.nature n0 
-        left join tnp0.traiDevise d0
-        left join tnp0.statut s0 
-        left join tnp0.traiUserCreator u0 
-        left join tnp0.traiFonCreator f0 
-        left join tnp0.traiCompteDevise dc0
-        where tnp0.traiteNpId in 
-        (select tnp.traiteNpId from TraiteNonProportionnel tnp 
+        select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
+        tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, 
+        sum(ct.assiettePrime), sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette), e.exeCode, 
+        src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
+        d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
+        tnp.updatedAt)
+        from 
+        TraiteNonProportionnel tnp 
         left join tnp.exercice e 
         left join tnp.traiSource src 
         left join tnp.nature n 
@@ -43,7 +40,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         left join tnp.traiUserCreator u 
         left join tnp.traiFonCreator f 
         left join tnp.traiCompteDevise dc 
-        left join CedanteTraite ct on ct.traiteNonProportionnel.traiteNpId = tnp.traiteNpId left join ct.cedante ced
+        left join CedanteTraite ct on tnp.traiteNpId = ct.traiteNpId 
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(tnp.traiReference, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumero, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiLibelle, '') ) as string))) >0
@@ -65,12 +62,19 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staCode, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(s.staLibelle, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(u.email, '') ) as string))) >0
-        )       
+        )
         and (:fncId is null or :fncId = f.id) 
         and (:userId is null or :userId = u.userId) 
-        and (:cedId is null or :cedId = ced.cedId) 
+        and (:cedId is null or exists(select ct0 from CedanteTraite ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
         and (:exeCode is null or (tnp.traiDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and tnp.traiDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
-        and s.staCode in :staCodes) 
+        and s.staCode in :staCodes
+        group by tnp.traiteNpId,
+        tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
+        tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, e.exeCode, 
+        src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
+        d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
+        tnp.updatedAt
 """)
     Page<TraiteNPResp> search(@Param("key") String key,
                               @Param("fncId") Long fncId,

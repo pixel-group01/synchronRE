@@ -70,5 +70,5 @@ public interface ParamCessionLegaleRepository extends JpaRepository<ParamCession
         join pcl.paramType t 
         where ced.cedId = ?1 and t.uniqueCode='PCL_TRAI'
 """)
-    List<CesLeg> findCesLegsByCedId(Long cedId);
+    List<CesLeg> findTraiteCesLegsByCedId(Long cedId);
 }

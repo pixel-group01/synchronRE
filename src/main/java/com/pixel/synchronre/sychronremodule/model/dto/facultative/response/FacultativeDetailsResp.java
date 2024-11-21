@@ -37,6 +37,7 @@ public class FacultativeDetailsResp
     private Long exeCode;
     private boolean placementTermine;
     private BigDecimal affCoursDevise;
+    private BigDecimal reserveCourtier;
 
     private EtatComptableAffaire etatComptable;
 

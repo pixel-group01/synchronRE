@@ -26,6 +26,7 @@ public class CesLeg {
     private boolean accepte;
     private BigDecimal tauxCourtier;
     private BigDecimal tauxCourtierPlaceur;
+    private Long trancheCedanteId;
 
     public CesLeg(BigDecimal tauxCesLeg, String paramCesLegalLibelle, Long paramCesLegalId, boolean accepte) {
         this.tauxCesLeg = tauxCesLeg;

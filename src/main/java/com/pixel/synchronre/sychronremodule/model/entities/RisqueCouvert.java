@@ -9,10 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDateTime;
 
-@Entity
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class RisqueCouvert
 {

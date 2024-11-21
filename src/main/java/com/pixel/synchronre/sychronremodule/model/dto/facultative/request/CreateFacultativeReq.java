@@ -60,6 +60,10 @@ public class CreateFacultativeReq
     @PositiveOrZero(message = "Le montant de la prime doit être un nombre positif")
     private BigDecimal facPrime;
 
+
+    @PositiveOrZero(message = "Le montant de la reserve courtier doit être un nombre positif")
+    private BigDecimal reserveCourtier;
+
     @NotNull(message = "Veuillez définir le statut de l'affaire")
     @NotBlank(message = "Veuillez définir le statut de l'affaire")
     @ValidStatutCreation

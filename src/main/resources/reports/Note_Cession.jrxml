@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-09-16T15:23:21 -->
+<!-- 2024-10-22T15:12:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Cession" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="54a6edc6-296d-48b8-a151-dc15e0c35d6f">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE_DEV"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -255,7 +255,11 @@ WHERE repartition.aff_id = affaire.aff_id
 	</subDataset>
 	<subDataset name="cessions_legales" uuid="56cbe35e-f6c9-4e10-9b9d-f5a694af8312">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE_DEV"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="836"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="152"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="178"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="816"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT
@@ -271,7 +275,7 @@ WHERE repartition.aff_id = affaire.aff_id
              WHERE t.type_id = r.typ_id)
         ) AS type_libelle,
     r.rep_capital,
-   regexp_replace(to_char(r.rep_capital, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1,
+    regexp_replace(to_char(r.rep_capital, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1,
     r.rep_taux,
     ROUND(r.rep_taux, 2) AS taux,
     r.typ_id,
@@ -288,20 +292,31 @@ FROM affaire a
 WHERE r.rep_id IN (
     SELECT r.rep_id
     FROM repartition r
-             JOIN param_cession_legale pc ON r.param_ces_legal_id = pc.param_ces_leg_id
+            JOIN param_cession_legale pc ON r.param_ces_legal_id = pc.param_ces_leg_id
              JOIN type t ON pc.type_id = t.type_id
     WHERE r.aff_id = a.aff_id
-      AND t.unique_code = 'PCL_SIMPLE'
+      AND t.unique_code in('PCL_SIMPLE')
       AND r.aff_id = $P{aff_id}
-)
+    )
+   or
+        r.rep_id IN (
+        SELECT r.rep_id
+        FROM repartition r
+                 JOIN type t ON r.typ_id = t.type_id
+        WHERE r.aff_id = a.aff_id
+         AND t.unique_code in('REP_RES_COURT')
+         AND r.aff_id = $P{aff_id}
+    )
 GROUP BY r.rep_id, r.aff_id, COALESCE(
-            (SELECT pc.param_ces_leg_libelle
-             FROM param_cession_legale pc
-             WHERE pc.param_ces_leg_id = r.param_ces_legal_id),
-            (SELECT t.name
-             FROM type t
-             WHERE t.type_id = r.typ_id)
-        ), r.rep_capital, r.rep_taux, r.typ_id, a.part_cedante, a.fac_smp_lci, vcltc.diffrence_montant,vcltc.diffrence_taux]]>
+    (SELECT pc.param_ces_leg_libelle
+    FROM param_cession_legale pc
+    WHERE pc.param_ces_leg_id = r.param_ces_legal_id),
+    (SELECT t.name
+    FROM type t
+    WHERE t.type_id = r.typ_id)
+    ), r.rep_capital, r.rep_taux, r.typ_id, a.part_cedante, a.fac_smp_lci, vcltc.diffrence_montant,vcltc.diffrence_taux
+order by r.typ_id asc
+]]>
 		</queryString>
 		<field name="rep_id" class="java.lang.Long"/>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -322,6 +337,8 @@ GROUP BY r.rep_id, r.aff_id, COALESCE(
 	<subDataset name="repart_traite" uuid="0ee68134-306c-4252-a6a0-f3abdfd14174">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="861"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="128"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT
@@ -369,7 +386,8 @@ WHERE t.unique_code IN ('REP_CONSERVATION','REP_FACOB','REP_XL')
   AND r.aff_id = a.aff_id
   AND r.aff_id = $P{aff_id}
     )
-GROUP BY r.rep_id, r.aff_id, type_libelle, r.rep_capital, r.rep_taux, r.typ_id, a.part_cedante, a.fac_smp_lci]]>
+GROUP BY r.rep_id, r.aff_id, type_libelle, r.rep_capital, r.rep_taux, r.typ_id, a.part_cedante, a.fac_smp_lci
+]]>
 		</queryString>
 		<field name="rep_id" class="java.lang.Long"/>
 		<field name="aff_id" class="java.lang.Long"/>
@@ -1178,7 +1196,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textFieldExpression><![CDATA["Abidjan, le "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<componentElement>
-				<reportElement x="8" y="275" width="546" height="33" uuid="eb4a9303-f47b-40aa-bc53-5c4e93d83ccd">
+				<reportElement positionType="Float" x="8" y="275" width="546" height="33" uuid="eb4a9303-f47b-40aa-bc53-5c4e93d83ccd">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -1281,7 +1299,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<text><![CDATA[Effet de la cession : ]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement positionType="Float" x="8" y="309" width="546" height="19" uuid="31742c4b-36d8-4256-9bfb-801329c7d845">
+				<reportElement style="Table 1_TH" positionType="Float" x="8" y="309" width="546" height="19" uuid="31742c4b-36d8-4256-9bfb-801329c7d845">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>

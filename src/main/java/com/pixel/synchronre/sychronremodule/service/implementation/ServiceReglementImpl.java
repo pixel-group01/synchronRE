@@ -129,7 +129,7 @@ public class ServiceReglementImpl implements IserviceReglement {
         if(futureResteAReverserAuCessionnaire.abs().compareTo(UN) < 0) mtReversement = resteAReverserAuCessionnaire;
 
         if(futureMtEnAttenteDeReversementSurAffaire.compareTo(ZERO) < 0 && futureMtEnAttenteDeReversementSurAffaire.compareTo(UN) > 0) throw new AppException("Le montant du reversement ne peut exéder le montant en attente de reversement (" + mtEnAttenteDeReversementSurAffaire.setScale(3, RoundingMode.HALF_UP) + " " + affRepo.getDevCodeByAffId(dto.getAffId()) + ")");
-        if(futureMtEnAttenteDeReversementSurAffaire.abs().compareTo(UN) < 0) mtReversement = mtEnAttenteDeReversementSurAffaire;
+        //if(futureMtEnAttenteDeReversementSurAffaire.abs().compareTo(UN) < 0) mtReversement = mtEnAttenteDeReversementSurAffaire;
 
         dto.setRegMontant(mtReversement);
         Reglement reversement = reglementMapper.mapToReglement(dto);
