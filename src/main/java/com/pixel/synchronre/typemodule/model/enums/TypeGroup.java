@@ -19,7 +19,9 @@ public enum TypeGroup
     TYPE_FUNCTION("TYP_FNC", "Type de fonction"),
     TYPE_PCL("TYPE_PCL", "Type de paramètre de cession légale"),
     TYPE_ASSOCIATION("TYPE_ASSO", "Type de table d'association"),
-    TYPE_DET_COMPTE("TYPE_DET_COMPTE", "Type de détail de compte"),;
+    TYPE_DET_COMPTE("TYPE_DET_COMPTE", "Type de détail de compte"),
+    PERIODICITE("PERIODICITE", "Type de périodicité"),
+    ;
     private String groupCode;
     private String groupName;
 }

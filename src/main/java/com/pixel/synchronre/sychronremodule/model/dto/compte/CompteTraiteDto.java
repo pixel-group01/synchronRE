@@ -20,6 +20,8 @@ public class CompteTraiteDto {
     private String natLibelle;
     private String traiPeriodicite;
     private String traiEcerciceRattachement;
+    private Long trancheIdSelected;
+    private Long periodeId;
     private List<TrancheCompteDto> trancheCompteDtos;
 
     public CompteTraiteDto(Long traiteNpId, Long exeCode, String traiReference, String traiNumero, String natCode, String natLibelle, PERIODICITE traiPeriodicite, EXERCICE_RATTACHEMENT traiEcerciceRattachement) {

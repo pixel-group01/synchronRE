@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +18,6 @@ public class Compte {
     private Long compteId;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "tranche_id")
     private Tranche tranche;
-    private LocalDate periode;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "periode_id")
+    private Periode periode;
 }

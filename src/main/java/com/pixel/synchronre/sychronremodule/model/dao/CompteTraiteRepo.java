@@ -3,9 +3,9 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteCessionnaireDto;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteTraiteDto;
-import com.pixel.synchronre.sychronremodule.model.dto.compte.DetailCompte;
+import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.TrancheCompteDto;
-import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
+import com.pixel.synchronre.sychronremodule.model.entities.Periode;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -42,12 +42,12 @@ public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
     List<ReadCedanteDTO> getCompteCedantes(Long trancheId);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.compte.DetailCompte(t.name)
+        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.typeId, t.name)
         from Type t 
         where t.typeGroup = 'TYPE_DET_COMPTE' 
         order by t.typeOrdre
 """)
-    List<DetailCompte> getDetailComptes();
+    List<CompteDetailDto> getDetailComptes();
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteCessionnaireDto(ces.cesId, ces.cesNom, ces.cesSigle, rep.repTaux) 
@@ -58,4 +58,7 @@ public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
 """)
     List<CompteCessionnaireDto> getCompteCessionnaires(Long trancheId);
 
+
+    @Query("select p from Periode p where year(p.periode) = ?1 and p.type.typeId = ?2")
+    List<Periode> getPeriodesByTypeId(Long exeCode, Long typeId);
 }
