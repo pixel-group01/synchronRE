@@ -14,9 +14,11 @@ public class CompteDetailDto
     private BigDecimal debit;
     private BigDecimal credit;
     private Long typeId;
-    public CompteDetailDto(Long typeId, String designation)
+    private String uniqueCode;
+    public CompteDetailDto(Long typeId, String designation, String uniqueCode)
     {
         this.typeId = typeId;
+        this.uniqueCode = uniqueCode;
         this.designation = designation;
         this.debit = BigDecimal.ZERO;
         this.credit = BigDecimal.ZERO;

@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteCessionnaireD
 import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteTraiteDto;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.TrancheCompteDto;
+import com.pixel.synchronre.sychronremodule.model.entities.Compte;
 import com.pixel.synchronre.sychronremodule.model.entities.Periode;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,7 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
+public interface CompteTraiteRepo extends JpaRepository<Compte, Long>
 {
     @Query("select sum(r.repTaux) from Repartition r where r.type.uniqueCode = 'REP_PLA_TNP' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'ANNULE') and r.traiteNonProportionnel.traiteNpId = ?1")
     BigDecimal calculateTauxDejaPlace(Long traiteNpId);
@@ -42,7 +43,7 @@ public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
     List<ReadCedanteDTO> getCompteCedantes(Long trancheId);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.typeId, t.name)
+        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.typeId, t.name, t.uniqueCode)
         from Type t 
         where t.typeGroup = 'TYPE_DET_COMPTE' 
         order by t.typeOrdre
@@ -58,7 +59,6 @@ public interface CompteTraiteRepo extends JpaRepository<Repartition, Long>
 """)
     List<CompteCessionnaireDto> getCompteCessionnaires(Long trancheId);
 
-
-    @Query("select p from Periode p where year(p.periode) = ?1 and p.type.typeId = ?2")
-    List<Periode> getPeriodesByTypeId(Long exeCode, Long typeId);
+    @Query("select c from Compte c where c.tranche.trancheId = ?1 and c.periode.periodeId = ?2")
+    Compte findByTrancheIdAndPeriodeId(Long trancheId, Long periodeId);
 }

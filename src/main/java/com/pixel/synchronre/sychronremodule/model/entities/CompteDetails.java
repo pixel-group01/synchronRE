@@ -24,4 +24,8 @@ public class CompteDetails
     String typeCode;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "compte_ced_id")
     private CompteCedante compteCedante;
+
+    public CompteDetails(Long compteDetId) {
+        this.compteDetId = compteDetId;
+    }
 }

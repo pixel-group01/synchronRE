@@ -24,4 +24,17 @@ public class CompteCessionnaire
     private CompteCedante compteCedante;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ces_id")
     private Cessionnaire cessionnaire;
+
+    public CompteCessionnaire(BigDecimal taux, BigDecimal prime, CompteCedante compteCedante, Cessionnaire cessionnaire)
+    {
+        this.taux = taux;
+        this.prime = prime;
+        this.compteCedante = compteCedante;
+        this.cessionnaire = cessionnaire;
+    }
+
+    public CompteCessionnaire(CompteCedante compteCedante, Cessionnaire cessionnaire) {
+        this.compteCedante = compteCedante;
+        this.cessionnaire = cessionnaire;
+    }
 }

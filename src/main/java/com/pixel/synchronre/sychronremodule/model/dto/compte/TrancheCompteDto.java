@@ -15,7 +15,7 @@ public class TrancheCompteDto
     private String trancheLibelle;
     private List<ReadCedanteDTO.ReadCedanteDTOLite> cedantes;
     private Long cedIdSelected;
-    private List<CompteDetailDto> detailComptes;
+    private List<CompteDetailDto> compteDetails;
     private List<CompteCessionnaireDto> compteCessionnaires;
 
     public TrancheCompteDto(Long trancheId, String trancheLibelle) {

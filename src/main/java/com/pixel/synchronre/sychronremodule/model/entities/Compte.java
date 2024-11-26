@@ -20,4 +20,13 @@ public class Compte {
     private Tranche tranche;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "periode_id")
     private Periode periode;
+
+    public Compte(Tranche tranche, Periode periode) {
+        this.tranche = tranche;
+        this.periode = periode;
+    }
+
+    public Compte(Long compteId) {
+        this.compteId = compteId;
+    }
 }

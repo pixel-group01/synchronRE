@@ -20,4 +20,13 @@ public class CompteCedante
     private Compte compte;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id")
     private Cedante cedante;
+
+    public CompteCedante(Compte compte, Cedante cedante) {
+        this.compte = compte;
+        this.cedante = cedante;
+    }
+
+    public CompteCedante(Long compteCedId) {
+        this.compteCedId = compteCedId;
+    }
 }
