@@ -56,8 +56,8 @@ public class CompteService implements IserviceCompte {
         return compteTraiteDto;
     }
 
-
-    private CompteTraiteDto create(CompteTraiteDto dto)
+    @Override
+    public CompteTraiteDto save(CompteTraiteDto dto)
     {
         Long trancheId = dto.getTrancheIdSelected();
         Long periodeId = dto.getPeriodeId();
@@ -88,7 +88,7 @@ public class CompteService implements IserviceCompte {
         {
             compteCessionnaires.stream().map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
         }
-
+        //TODO setter les champs du dto
         return dto;
     }
 
@@ -104,19 +104,6 @@ public class CompteService implements IserviceCompte {
 
         compteCessionnaire = compteCesRepo.save(compteCessionnaire);
         return compteCessionnaire;
-    }
-
-
-    private CompteTraiteDto update(CompteTraiteDto dto)
-    {
-        return null;
-    }
-
-    @Override
-    public CompteTraiteDto save(CompteTraiteDto dto)
-    {
-        if(dto.getCompteId() == null) return this.create(dto);
-        else return this.update(dto);
     }
 
     @Override

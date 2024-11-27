@@ -35,7 +35,7 @@ public class Type {
     @Transient
     private List<Type> children;
     private String objectFolder;
-    private int typeOrdre;
+    private int typeOrdre = 0;
 
     public Type(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, List<Type> children, String objectFolder) {
         this.typeId = typeId;

@@ -5,11 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
+@Entity @Audited
 public class CompteCedante
 {
     @Id
@@ -18,7 +21,7 @@ public class CompteCedante
     private Long compteCedId;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "compte_id")
     private Compte compte;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Cedante cedante;
 
     public CompteCedante(Compte compte, Cedante cedante) {

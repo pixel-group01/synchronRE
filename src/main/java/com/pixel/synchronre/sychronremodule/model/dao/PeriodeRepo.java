@@ -10,6 +10,6 @@ import java.util.List;
 public interface PeriodeRepo extends JpaRepository<Compte, Long>
 {
 
-    @Query("select p from Periode p where year(p.periode) = ?1 and p.type.typeId = ?2")
+    @Query("select p from Periode p where year(p.periode) = ?1 and p.type.typeId = ?2 and p.periode <= CURRENT_DATE")
     List<Periode> getPeriodesByTypeId(Long exeCode, Long typeId);
 }

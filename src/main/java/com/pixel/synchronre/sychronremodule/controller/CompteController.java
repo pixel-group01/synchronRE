@@ -24,7 +24,7 @@ public class CompteController {
         return compteService.getCompteTraite(traiteNpId);
     }
 
-    @GetMapping(path = "/traites/save")
+    @PostMapping(path = "/traites/save")
     CompteTraiteDto saveCompteTraite(@RequestBody CompteTraiteDto dto){
         return compteService.save(dto);
     }

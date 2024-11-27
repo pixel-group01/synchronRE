@@ -5,6 +5,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.cedante.CreateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.UpdateCedanteDTO;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICedanteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +22,12 @@ public class CedanteController
     private final CedRepo cedRepo;
     
     @PostMapping(path = "/create")
-    public ReadCedanteDTO createCedente(@RequestBody CreateCedanteDTO dto) throws UnknownHostException {
+    public ReadCedanteDTO createCedente(@RequestBody @Valid CreateCedanteDTO dto) throws UnknownHostException {
         return cedService.createCedente(dto);
     }
 
     @PutMapping(path = "/update")
-    public ReadCedanteDTO updateCedente(@RequestBody UpdateCedanteDTO dto) throws UnknownHostException {
+    public ReadCedanteDTO updateCedente(@RequestBody @Valid UpdateCedanteDTO dto) throws UnknownHostException {
         return cedService.updateCedente(dto);
     }
 

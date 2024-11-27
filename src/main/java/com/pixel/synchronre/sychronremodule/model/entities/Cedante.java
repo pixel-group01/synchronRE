@@ -14,7 +14,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
-@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Entity
 public class Cedante {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
