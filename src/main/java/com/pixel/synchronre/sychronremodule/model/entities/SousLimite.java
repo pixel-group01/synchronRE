@@ -41,4 +41,9 @@ public class SousLimite
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return sousLimiteSouscriptionId + "_" + sousLimMontant + "_" + activite;
+    }
 }

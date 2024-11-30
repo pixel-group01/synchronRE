@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class TraiteNonProportionnel
 {

@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,6 +96,7 @@ public class LogService implements ILogService
         }
         Log log = jwtService.getUserInfosFromJwt(token);
         log.setAction(action);
+        log.setActionDateTime(LocalDateTime.now());
         log.setIpAddress(HttpServletManager.getClientIpAddressIfServletRequestExist());
         log.setMacAddress(Ip.getAddress());
         log.setHostName(Ip.getHostName());

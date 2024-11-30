@@ -20,4 +20,9 @@ public class PrvToRoleAss extends Assignation
         this.privilege = privilege;
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return assId +"_"+ privilege + "_" + role;
+    }
 }

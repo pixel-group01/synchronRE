@@ -14,4 +14,9 @@ public class PrvToFunctionAss extends Assignation
     private AppPrivilege privilege;
     @ManyToOne @JoinColumn(name = "FNC_ID")
     private AppFunction function;
+
+    @Override
+    public String toString() {
+        return assId + "_" + privilege + "_" + function;
+    }
 }

@@ -26,4 +26,9 @@ public class Periode
     public Periode(Long periodeId) {
         this.periodeId = periodeId;
     }
+
+    @Override
+    public String toString() {
+        return periodeId + "_" + periode + "_" + type;
+    }
 }

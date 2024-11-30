@@ -54,10 +54,6 @@ public class TrancheCedante extends HistoDetails
 
     @Override
     public String toString() {
-        return "TrancheCedante{" +
-                "trancheCedanteId=" + trancheCedanteId +
-                ", cedante=" + cedante +
-                ", tranche=" + tranche +
-                '}';
+        return trancheCedanteId + "_" + cedante + "_" + tranche;
     }
 }

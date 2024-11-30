@@ -101,5 +101,8 @@ public class Affaire
         this.affStatutCreation=affStatutCreation;
     }
 
-
+    @Override
+    public String toString() {
+        return affId  + "_"+ affCode ;
+    }
 }

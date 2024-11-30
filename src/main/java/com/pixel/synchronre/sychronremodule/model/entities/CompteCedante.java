@@ -32,4 +32,9 @@ public class CompteCedante
     public CompteCedante(Long compteCedId) {
         this.compteCedId = compteCedId;
     }
+
+    @Override
+    public String toString() {
+        return compteCedId +"_"+ compte +"_"+ cedante;
+    }
 }

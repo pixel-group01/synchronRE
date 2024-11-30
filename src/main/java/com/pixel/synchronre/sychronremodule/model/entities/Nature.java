@@ -22,4 +22,9 @@ public class Nature {
     public Nature(String natCode) {
         this.natCode = natCode;
     }
+
+    @Override
+    public String toString() {
+        return natCode + "_" + natLibelle;
+    }
 }

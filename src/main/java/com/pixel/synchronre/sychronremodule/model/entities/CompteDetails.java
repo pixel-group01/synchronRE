@@ -30,4 +30,9 @@ public class CompteDetails
     public CompteDetails(Long compteDetId) {
         this.compteDetId = compteDetId;
     }
+
+    @Override
+    public String toString() {
+        return compteDetId +"_"+ typeCompteDet +"_"+ typeCode +"_"+ compteCedante ;
+    }
 }

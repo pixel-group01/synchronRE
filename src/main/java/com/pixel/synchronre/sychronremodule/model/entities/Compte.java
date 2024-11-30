@@ -31,4 +31,9 @@ public class Compte {
     public Compte(Long compteId) {
         this.compteId = compteId;
     }
+
+    @Override
+    public String toString() {
+        return compteId +"_"+ tranche + "_" + periode;
+    }
 }

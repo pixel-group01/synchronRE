@@ -32,4 +32,9 @@ public class Organisation {
     public Organisation(String organisationCode) {
         this.organisationCode = organisationCode;
     }
+
+    @Override
+    public String toString() {
+        return organisationCode + "_" + organisationLibelle;
+    }
 }

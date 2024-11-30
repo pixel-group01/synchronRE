@@ -4,10 +4,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Data @Builder
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity
 public class Reglement {
   @Id
@@ -53,6 +50,11 @@ public class Reglement {
   private LocalDateTime createdAt;
   @UpdateTimestamp
   private LocalDateTime updatedAt;
+
+  @Override
+  public String toString() {
+    return regId + "_" + regReference + "_" + regMontant + "_" + typeReglement;
+  }
 
   public Reglement(Long regId) {
     this.regId = regId;

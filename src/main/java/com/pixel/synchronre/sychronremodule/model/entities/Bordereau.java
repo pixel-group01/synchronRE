@@ -34,4 +34,9 @@ public class Bordereau {
     protected LocalDateTime createdAt;
     @UpdateTimestamp
     protected LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return bordId + "_" + bordNum ;
+    }
 }

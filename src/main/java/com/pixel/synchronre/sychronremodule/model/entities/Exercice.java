@@ -27,6 +27,11 @@ public class Exercice {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Override
+    public String toString() {
+        return String.valueOf(exeCode);
+    }
+
     public Exercice(Long exeCode) {
         this.exeCode = exeCode;
     }

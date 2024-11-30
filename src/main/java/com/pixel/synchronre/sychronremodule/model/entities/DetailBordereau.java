@@ -40,4 +40,9 @@ public class DetailBordereau {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return  debId +"_"+ bordereau +"_"+ type;
+    }
 }

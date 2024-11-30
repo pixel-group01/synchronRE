@@ -3,10 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,7 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Data @Builder @Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+@Entity
 public class Sinistre
 {
     @Id
@@ -48,5 +46,11 @@ public class Sinistre
 
     public Sinistre(Long sinId) {
         this.sinId = sinId;
+    }
+
+    @Override
+    public String toString()
+    {
+        return sinId + "_" + sinCode + "_" + sinMontant100 + "_" + affaire;
     }
 }

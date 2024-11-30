@@ -36,4 +36,9 @@ public class ParamCessionLegale {
     {
         this.paramCesLegId = paramCesLegalId;
     }
+
+    @Override
+    public String toString() {
+        return  paramCesLegId + "_" + paramCesLegLibelle + "_" + paramType + "_" + pays;
+    }
 }

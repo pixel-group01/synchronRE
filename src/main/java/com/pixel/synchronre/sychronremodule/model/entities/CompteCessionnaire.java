@@ -39,4 +39,9 @@ public class CompteCessionnaire
         this.compteCedante = compteCedante;
         this.cessionnaire = cessionnaire;
     }
+
+    @Override
+    public String toString() {
+        return compteCesId +"_" + compteCedante +"_"+ cessionnaire;
+    }
 }

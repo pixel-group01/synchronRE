@@ -36,4 +36,8 @@ public class Banque {
   public Banque(String banNumCompte) {
     this.banNumCompte = banNumCompte;
   }
+  @Override
+  public String toString() {
+    return banNumCompte  + "_"+ banLibelleAbrege ;
+  }
 }

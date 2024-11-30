@@ -4,9 +4,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 
 @Entity
-@Data @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Document
 {
 	@Id
@@ -49,4 +47,9 @@ public class Document
 
 	@Transient
 	private MultipartFile file;
+
+	@Override
+	public String toString() {
+		return docId + "_" + docType;
+	}
 }

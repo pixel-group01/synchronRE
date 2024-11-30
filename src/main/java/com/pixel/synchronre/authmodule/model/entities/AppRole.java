@@ -43,4 +43,9 @@ public class AppRole
     public int hashCode() {
         return Objects.hash(getRoleId(), getRoleCode(), getRoleName());
     }
+
+    @Override
+    public String toString() {
+        return roleId + "_" + roleCode + "_"+ roleName ;
+    }
 }

@@ -45,4 +45,9 @@ public class AppPrivilege
     public int hashCode() {
         return Objects.hash(privilegeId);
     }
+
+    @Override
+    public String toString() {
+        return privilegeId + "_"+ privilegeCode + "_" + prvType;
+    }
 }
