@@ -1,10 +1,8 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionReq;
 import com.pixel.synchronre.sychronremodule.model.dto.reconstitution.ReconstitutionResp;
-import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Reconstitution;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -73,7 +73,6 @@ public class RisqueService implements IServiceRisque
     {
         RisqueCouvert risqueCouvert = risqueRepo.findById(dto.getRisqueId()).orElseThrow(()->new AppException("Risque introuvable"));
         RisqueCouvert oldRisqueCouvert = risqueCopier.copy(risqueCouvert);
-        risqueCouvert.setCouverture(new Couverture(dto.getCouId()));
         risqueCouvert.setDescription(dto.getDescription());
         logService.logg("Modification d'un risque", oldRisqueCouvert, risqueCouvert, "RisqueCouvert");
         final RisqueCouvert finalRisqueCouvert = risqueCouvert;

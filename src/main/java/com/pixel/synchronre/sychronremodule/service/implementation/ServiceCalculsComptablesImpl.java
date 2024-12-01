@@ -41,8 +41,9 @@ public class ServiceCalculsComptablesImpl implements IServiceCalculsComptables
         dejaReparti = dejaReparti == null ? ZERO : dejaReparti;
         BigDecimal smpLci = affaire.getFacSmpLci();
         BigDecimal partCedante = affaire.getPartCedante() ;
+
         smpLci = smpLci == null ? ZERO : smpLci;
-        partCedante = partCedante == null ? ZERO : partCedante;
+        partCedante = partCedante == null ? smpLci : partCedante;
         return smpLci.doubleValue() == 0 ? ZERO : partCedante.subtract(dejaReparti) ;
     }
 

@@ -22,6 +22,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.repartition.response.Repar
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service
@@ -62,7 +64,6 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final IserviceBordereau bordService;
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
-    private final CedanteTraiteRepository cedTraiRepo;
     private final IServiceCalculsComptables comptaService;
 
 
@@ -343,5 +344,41 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         sinRep.setRepTaux(repRepo.getTauRep(placement.getRepId()));
         sinRep.setCessionnaire(new Cessionnaire(cesId));
         repRepo.save(sinRep);
+    }
+    @Override @Transactional
+    public void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal prime100, BigDecimal reserveCourtier)
+    {
+        Type type = typeRepo.findByUniqueCode("REP_RES_COURT").orElseThrow(()->new AppException("Type introuvable : REP_RES_COURT"));
+        if(facSmp == null) throw new AppException("La SMPLCI de l'affaire ne peut être nulle.");
+        Repartition repReserveCourtier = repRepo.findReserveCourtierByAffId(affId);
+        BigDecimal oldReserveCourtier = repReserveCourtier == null || repReserveCourtier.getRepCapital() == null ? ZERO : repReserveCourtier.getRepCapital();
+
+        BigDecimal besoinFac = comptaService.calculateRestARepartir(affId);
+        besoinFac = besoinFac == null ? ZERO : besoinFac;
+        if(reserveCourtier != null && reserveCourtier.subtract(besoinFac.add(oldReserveCourtier)).compareTo(UN)>0) throw new AppException("La réserve courtier ne peut être supérieure au besoin fac (" + besoinFac + ")");
+        if(reserveCourtier != null && reserveCourtier.subtract(besoinFac.add(oldReserveCourtier)).abs().compareTo(UN)<=0) reserveCourtier = besoinFac;
+        reserveCourtier = reserveCourtier == null ? BigDecimal.ZERO : reserveCourtier;
+
+        BigDecimal tauxReserve = reserveCourtier.multiply(CENT).divide(facSmp, 20, RoundingMode.HALF_UP);
+        BigDecimal primeResCourt = tauxReserve.multiply(prime100).divide(CENT, 20, RoundingMode.HALF_UP);
+        if(repReserveCourtier != null)
+        {
+            repReserveCourtier.setRepCapital(reserveCourtier);
+            repReserveCourtier.setRepTaux(tauxReserve);
+            repReserveCourtier.setRepPrime(primeResCourt);
+            repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
+            repRepo.save(repReserveCourtier);
+            return;
+        }
+        repReserveCourtier = new Repartition();
+        repReserveCourtier.setAffaire(new Affaire(affId));
+        repReserveCourtier.setRepCapital(reserveCourtier);
+        repReserveCourtier.setRepTaux(tauxReserve);
+        repReserveCourtier.setRepPrime(primeResCourt);
+        repReserveCourtier.setRepStatut(true);
+        repReserveCourtier.setRepStaCode(new Statut("ACT"));
+        repReserveCourtier.setType(type);
+        repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
+        repRepo.save(repReserveCourtier);
     }
 }

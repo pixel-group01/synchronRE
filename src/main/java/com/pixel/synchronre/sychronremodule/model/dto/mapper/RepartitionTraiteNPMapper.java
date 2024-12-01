@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.mapper;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.sychronremodule.model.dao.TrancheCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.PlacementTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
@@ -23,8 +24,8 @@ public abstract class RepartitionTraiteNPMapper
     @Mapping(target = "paramCessionLegale", expression = "java(cesLeg.getParamCesLegalId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.ParamCessionLegale(cesLeg.getParamCesLegalId()))")
     @Mapping(target = "repStatut", expression = "java(true)")
     @Mapping(target = "type", expression = "java(typeRepo.findByUniqueCode(\"REP_CES_LEG_TNP\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type (REP_CES_LEG_TNP) introuvable\")))")
-    @Mapping(target = "cedanteTraite", expression = "java(cedTraiId == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite(cedTraiId))")
-    public abstract Repartition mapToCesLegRepartition(CesLeg cesLeg, Long cedTraiId);
+    @Mapping(target = "trancheCedante", expression = "java(cesLeg.getTrancheCedanteId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante(cesLeg.getTrancheCedanteId()))")
+    public abstract Repartition mapToCesLegRepartition(CesLeg cesLeg);
 
     @Mapping(target = "traiteNonProportionnel", expression = "java(dto.getTraiteNpId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.TraiteNonProportionnel(dto.getTraiteNpId()))")
     @Mapping(target = "cessionnaire", expression = "java(dto.getCesId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire(dto.getCesId()))")

@@ -35,15 +35,13 @@ public interface CategorieRepository extends JpaRepository<Categorie, Long>
     List<CategorieResp> getCategorieList(Long traiteNpId);
 
     @Query("""
-        select ct.cedanteTraiteId from CedanteTraite ct where ct.cedante.cedId = ?1 and ct.traiteNonProportionnel.traiteNpId = (select cat.traiteNonProportionnel.traiteNpId from Categorie cat where cat.categorieId = ?2)
-""")
-    Long getCedanteTraiteIdByCedIdAndCatId(Long cedId, Long catId);
-
-    @Query("""
     select a.cedante.cedId from Association a where a.type.uniqueCode = 'CAT-CED' and a.categorie.categorieId = ?1
 """)
     List<Long> getCedIdsByCatId(Long catId);
 
     @Query("select (count(c.categorieId) > 0) from Categorie c where c.traiteNonProportionnel.traiteNpId = ?1 and c.categorieId = ?2")
     boolean TraiteHasCategorie(Long traiteNpId, Long catId);
+
+    @Query("select c.traiteNonProportionnel.traiteNpId from Categorie c where c.categorieId = ?1")
+    Long getTraiteIdByCatId(Long catId);
 }

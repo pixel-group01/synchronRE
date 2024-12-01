@@ -1,6 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dto.repartition.validator;
 
-import com.pixel.synchronre.sychronremodule.model.dao.CedanteTraiteRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.TrancheCedanteRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptables;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
@@ -121,12 +121,12 @@ public @interface SeuilRepTau
     class SeuilRepTauValidatorOnTraiteNP implements ConstraintValidator<SeuilRepTau, PlacementTraiteNPReq>
     {
         private final IServiceCalculsComptablesTraite comptaService;
-        private final CedanteTraiteRepository cedTraiRepo;
+        private final TrancheCedanteRepository trancheCedanteRepo;
         @Override
         public boolean isValid(PlacementTraiteNPReq dto, ConstraintValidatorContext context)
         {
             if(dto == null) return true;
-            Long traiteNPId = cedTraiRepo.getTraiteIdByCedTraiId(dto.getTraiteNpId());
+            Long traiteNPId = trancheCedanteRepo.getTraiteIdByTrancheCedanteId(dto.getTraiteNpId());
             return SeuilTauxChecker.checkSeuilTaux(comptaService, traiteNPId, dto.getRepTaux());
         }
     }

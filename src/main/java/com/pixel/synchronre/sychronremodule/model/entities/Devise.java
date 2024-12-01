@@ -1,10 +1,14 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
-import com.pixel.synchronre.sharedmodule.enums.PersStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+@Entity  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class Devise {
     @Id
     private String devCode;

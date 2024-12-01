@@ -45,8 +45,8 @@ public class Repartition {
     private Statut repStaCode;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "aff_id")
     private Affaire affaire;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_trai_id")
-    private CedanteTraite cedanteTraite;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "tranche_cedante_id")
+    private TrancheCedante trancheCedante;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)

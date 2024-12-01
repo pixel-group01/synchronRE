@@ -48,7 +48,17 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     boolean sinistreHasReglement(Long sinId, String typeReg);
 
 
-    @Query("select sum(r.regMontant) from Reglement r join r.cessionnaire c join Repartition rep on rep.cessionnaire.cesId = c.cesId where rep.repId = ?1 and r.typeReglement.uniqueCode = 'reversements' and r.regStatut = true")
+    @Query("""
+        select sum(r.regMontant) 
+        from Reglement r 
+            join r.cessionnaire c 
+            join r.affaire a 
+        where 
+            c.cesId = (select rep.cessionnaire.cesId from Repartition  rep where rep.repId = ?1) 
+            and a.affId = (select rep.affaire.affId from Repartition  rep where rep.repId = ?1)
+            and r.typeReglement.uniqueCode = 'reversements' 
+            and r.regStatut = true
+    """)
     BigDecimal calculateMtDejaReverseByCes(Long plaId);
 
     @Query("select sum(r.regCommissionCed) from Reglement r where r.affaire.affId = ?1 and r.regStatut = true and r.typeReglement.uniqueCode = 'paiements'")

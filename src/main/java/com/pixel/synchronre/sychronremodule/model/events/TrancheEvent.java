@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.model.events;
 
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CedanteTraiteReq;
-import com.pixel.synchronre.sychronremodule.model.entities.CedanteTraite;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

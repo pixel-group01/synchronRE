@@ -30,11 +30,12 @@ public class FacultativeListResp
     private String cedNomFiliale;
     private String cedSigleFiliale;
     private String exeCode;
+    private BigDecimal reserveCourtier;
     private boolean placementTermine;
     private BigDecimal affCoursDevise;
 
     public FacultativeListResp(Long affId, String affCode, String affAssure, String affActivite, LocalDate affDateEffet, LocalDate affDateEcheance, String facNumeroPolice, BigDecimal facCapitaux, BigDecimal facSmpLci, BigDecimal facPrime, String affStatutCreation, String devCode, Long cedanteId, String statutCode, String staLibelle, Long couId,
-            String couLibelle, Long branId, String branLibelle, String cedNomFiliale, String cedSigleFiliale, String exeCode) {
+            String couLibelle, Long branId, String branLibelle, String cedNomFiliale, String cedSigleFiliale, String exeCode,BigDecimal reserveCourtier) {
         this.affId = affId;
         this.affCode = affCode;
         this.affAssure = affAssure;
@@ -57,5 +58,6 @@ public class FacultativeListResp
         this.cedNomFiliale = cedNomFiliale;
         this.cedSigleFiliale = cedSigleFiliale;
         this.exeCode = exeCode;
+        this.reserveCourtier=reserveCourtier;
     }
 }
