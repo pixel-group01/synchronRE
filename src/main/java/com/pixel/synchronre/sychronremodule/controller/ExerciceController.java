@@ -20,7 +20,7 @@ public class ExerciceController {
     private final IserviceExercie exoService;
 
     @GetMapping(path = "/list")
-    public List<ExerciceListResp> searchExercice(@RequestParam(defaultValue = "") String key) throws UnknownHostException {
+    public List<ExerciceListResp> searchExercice(@RequestParam(defaultValue = "") String key) {
         return exoService.searchExercice(key);
     }
 

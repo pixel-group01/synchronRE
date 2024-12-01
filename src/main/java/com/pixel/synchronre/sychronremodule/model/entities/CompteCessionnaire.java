@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class CompteCessionnaire
 {
     @Id
@@ -24,4 +26,22 @@ public class CompteCessionnaire
     private CompteCedante compteCedante;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ces_id")
     private Cessionnaire cessionnaire;
+
+    public CompteCessionnaire(BigDecimal taux, BigDecimal prime, CompteCedante compteCedante, Cessionnaire cessionnaire)
+    {
+        this.taux = taux;
+        this.prime = prime;
+        this.compteCedante = compteCedante;
+        this.cessionnaire = cessionnaire;
+    }
+
+    public CompteCessionnaire(CompteCedante compteCedante, Cessionnaire cessionnaire) {
+        this.compteCedante = compteCedante;
+        this.cessionnaire = cessionnaire;
+    }
+
+    @Override
+    public String toString() {
+        return compteCesId +"_" + compteCedante +"_"+ cessionnaire;
+    }
 }

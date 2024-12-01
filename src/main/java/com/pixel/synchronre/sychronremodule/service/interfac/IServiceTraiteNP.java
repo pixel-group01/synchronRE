@@ -18,6 +18,9 @@ public interface IServiceTraiteNP
 
     Page<TraiteNPResp> search(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable);
 
+    List<TraiteNPResp> list(Long cedId, List<String> staCodes, Long exeCode);
+
+
     TraiteNPResp update(UpdateTraiteNPReq dto);
 
     UpdateTraiteNPReq edit(Long traiId);

@@ -38,4 +38,9 @@ public class LimiteSouscription
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public String toString() {
+        return limiteSouscriptionId + "_" + risqueCouvert + "_" + categorie;
+    }
 }

@@ -70,4 +70,9 @@ public class Association
         this.couverture = couverture;
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return assoId + "_" + type;
+    }
 }

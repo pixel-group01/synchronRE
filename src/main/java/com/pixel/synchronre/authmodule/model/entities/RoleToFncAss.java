@@ -22,4 +22,9 @@ public class RoleToFncAss extends Assignation
         this.role = role;
         this.function = function;
     }
+
+    @Override
+    public String toString() {
+        return assId + "_" + role + "_" + function;
+    }
 }

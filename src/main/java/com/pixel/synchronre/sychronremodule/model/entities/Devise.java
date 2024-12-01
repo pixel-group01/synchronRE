@@ -31,7 +31,10 @@ public class Devise {
     @JoinColumn(name = "devStatut")
     private Statut statut;
 
-
+    @Override
+    public String toString() {
+        return devCode + "_"+ devLibelle;
+    }
 
     public Devise(String devCode, String devLibelle, String devLibelleAbrege, String devSymbole, Statut statut) {
         this.devCode = devCode;

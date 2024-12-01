@@ -5,40 +5,36 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
-public class CompteCedante {
+@Entity @Audited
+public class CompteCedante
+{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "COMPTE_CED_ID_GEN", sequenceName = "COMPTE_CED_ID_GEN")
     private Long compteCedId;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal primeOrigine;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal primeAjustement;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal sinistrePaye;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal depotSapConstitue;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal depotSapLibere;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal interetDepotLibere;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal sousTotal;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal soldeCedante;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal soldeReassureur;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal totalMouvement;
-    @Column(precision = 50, scale = 20)
-    private BigDecimal totalPrimeCessionnaire;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "compte_id")
     private Compte compte;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Cedante cedante;
+
+    public CompteCedante(Compte compte, Cedante cedante) {
+        this.compte = compte;
+        this.cedante = cedante;
+    }
+
+    public CompteCedante(Long compteCedId) {
+        this.compteCedId = compteCedId;
+    }
+
+    @Override
+    public String toString() {
+        return compteCedId +"_"+ compte +"_"+ cedante;
+    }
 }

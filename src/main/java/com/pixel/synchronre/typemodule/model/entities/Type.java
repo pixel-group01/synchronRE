@@ -35,6 +35,19 @@ public class Type {
     @Transient
     private List<Type> children;
     private String objectFolder;
+    private int typeOrdre = 0;
+
+    public Type(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, List<Type> children, String objectFolder) {
+        this.typeId = typeId;
+        this.typeGroup = typeGroup;
+        this.uniqueCode = uniqueCode;
+        this.name = name;
+        this.status = status;
+        this.children = children;
+        this.objectFolder = objectFolder;
+    }
+
+
 
     @Override
     public String toString() {

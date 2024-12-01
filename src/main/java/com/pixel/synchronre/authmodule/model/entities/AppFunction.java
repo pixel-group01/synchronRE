@@ -27,6 +27,11 @@ public class AppFunction
     protected LocalDate startsAt;
     protected LocalDate endsAt;
 
+    @Override
+    public String toString() {
+        return id + "_" + name + "_"+ user + "_" + typeFunction;
+    }
+
     public AppFunction(Long fncId) {
         this.id = fncId;
     }

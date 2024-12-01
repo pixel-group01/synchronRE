@@ -45,6 +45,11 @@ public class Tranche
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Override
+    public String toString() {
+        return trancheId +"_" + trancheType + "_" + trancheLibelle + "_" + trancheTauxPrime;
+    }
+
     public Tranche(Long trancheId) {
         this.trancheId = trancheId;
     }

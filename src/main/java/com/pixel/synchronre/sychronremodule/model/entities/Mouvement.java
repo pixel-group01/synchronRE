@@ -3,15 +3,13 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor @NoArgsConstructor @Data @Builder @Entity
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter
+@Entity
 public class Mouvement {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -34,4 +32,9 @@ public class Mouvement {
   private TraiteNonProportionnel traiteNonProportionnel;
   @CreationTimestamp
   private LocalDateTime mvtDate;
+
+  @Override
+  public String toString() {
+    return String.valueOf(mvtId) ;
+  }
 }

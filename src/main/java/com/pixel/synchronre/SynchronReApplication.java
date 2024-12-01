@@ -15,7 +15,7 @@ public class SynchronReApplication
     public static void main(String[] args) {
         SpringApplication.run(SynchronReApplication.class, args);
     }
-    @Bean
+   @Bean
     public DecimalFormat decimalFormat()
     {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();

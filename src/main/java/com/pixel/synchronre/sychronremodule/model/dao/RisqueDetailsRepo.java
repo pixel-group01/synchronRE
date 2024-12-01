@@ -1,5 +1,6 @@
-package com.pixel.synchronre.sychronremodule.model.entities;
+package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.entities.Association;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

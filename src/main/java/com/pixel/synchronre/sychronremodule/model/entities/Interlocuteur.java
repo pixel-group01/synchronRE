@@ -36,4 +36,9 @@ public class Interlocuteur {
   public Interlocuteur(Long intId) {
     this.intId = intId;
   }
+
+  @Override
+  public String toString() {
+    return intId +"_" + intEmail +"_"+ cessionnaire;
+  }
 }

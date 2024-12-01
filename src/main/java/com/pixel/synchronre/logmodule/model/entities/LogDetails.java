@@ -1,16 +1,10 @@
 package com.pixel.synchronre.logmodule.model.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
 @Entity
-@Builder
 public class LogDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +19,12 @@ public class LogDetails {
     private String tableName;
     @ManyToOne @JoinColumn(name = "log_Id")
     private Log log;
+
+    @Override
+    public String toString() {
+        return id +
+                ", columnName = " + columnName +
+                ", NV = " + newValue +
+                ", OV = " + oldValue;
+    }
 }

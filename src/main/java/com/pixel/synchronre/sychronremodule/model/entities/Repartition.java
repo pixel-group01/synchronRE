@@ -72,6 +72,6 @@ public class Repartition {
 
     @Override
     public String toString() {
-        return String.valueOf(repId) ;
+        return repId + "_" + repCapital + "_"+ type;
     }
 }

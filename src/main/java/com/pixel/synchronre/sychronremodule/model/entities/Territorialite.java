@@ -58,4 +58,9 @@ public class Territorialite
     public Territorialite(Long terrId) {
         this.terrId = terrId;
     }
+
+    @Override
+    public String toString() {
+        return terrId +"_" + terrLibelle + "_" + terrTaux;
+    }
 }

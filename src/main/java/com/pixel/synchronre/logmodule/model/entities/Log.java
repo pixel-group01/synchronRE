@@ -36,4 +36,9 @@ public class Log
     private String stackTrace;
     @Transient
     private List<LogDetails> logDetails;
+
+    @Override
+    public String toString() {
+        return id + "_" + userId + "_" + userEmail + "_" + action;
+    }
 }

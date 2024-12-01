@@ -38,4 +38,9 @@ public class AccountToken
         this.creationDate = LocalDateTime.now();
         this.expirationDate = LocalDateTime.now().plusDays(1);
     }
+
+    @Override
+    public String toString() {
+        return tokenId + "_"+ token ;
+    }
 }

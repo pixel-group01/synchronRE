@@ -29,4 +29,9 @@ public class Branche {
   public Branche(Long branId) {
     this.branId = branId;
   }
+
+  @Override
+  public String toString() {
+    return branId +"_" + branLibelleAbrege ;
+  }
 }

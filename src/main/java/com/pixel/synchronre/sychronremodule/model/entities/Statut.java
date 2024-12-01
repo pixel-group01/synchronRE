@@ -27,7 +27,7 @@ public class Statut {
   @Override
   public String toString()
   {
-    return staCode + '-' + staLibelle;
+    return staCode + '_' + staLibelle;
   }
 
   public Statut(String staCode) {

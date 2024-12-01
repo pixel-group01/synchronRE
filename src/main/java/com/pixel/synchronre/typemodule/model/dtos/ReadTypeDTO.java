@@ -18,6 +18,7 @@ public class ReadTypeDTO
     private String name;
     private String status;
     private String objectFolder;
+    private int typeOrdre;
     private List<ReadTypeDTO> children;
 
     public ReadTypeDTO(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status) {
@@ -28,13 +29,14 @@ public class ReadTypeDTO
         this.status = status.name();
     }
 
-    public ReadTypeDTO(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, String objectFolder) {
+    public ReadTypeDTO(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, String objectFolder, int typeOrdre) {
         this.typeId = typeId;
         this.typeGroup = typeGroup.name();
         this.uniqueCode = uniqueCode;
         this.name = name;
         this.status = status.name();
         this.objectFolder = objectFolder;
+        this.typeOrdre = typeOrdre;
     }
 
     public ReadTypeDTO(Type type) {

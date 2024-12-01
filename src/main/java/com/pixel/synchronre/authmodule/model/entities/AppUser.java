@@ -77,12 +77,6 @@ public class AppUser
 
     @Override
     public String toString() {
-        return  "userId=" + userId +
-                ", nom ='" + firstName + " " + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", tel='" + tel + '\'' +
-                ", active=" + active +
-                ", notBlocked=" + notBlocked +
-                ", currentFunctionId=" + currentFunctionId ;
+        return  userId +"_"+ firstName + "_" + lastName + "_" + email;
     }
 }

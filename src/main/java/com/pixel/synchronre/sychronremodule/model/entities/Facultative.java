@@ -20,6 +20,10 @@ public class Facultative extends Affaire
   @Column(precision = 50, scale = 20)
   private BigDecimal facPrime;
 
+  @Override
+  public String toString() {
+    return super.toString();
+  }
 
   public Facultative(Affaire aff, String facNumeroPolice, BigDecimal facSmpLci, BigDecimal facPrime)
   {

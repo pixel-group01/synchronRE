@@ -39,4 +39,9 @@ public class Cessionnaire {
     {
       this.cesId = cesId;
     }
+
+  @Override
+  public String toString() {
+    return cesId +"_"+ cesSigle;
+  }
 }

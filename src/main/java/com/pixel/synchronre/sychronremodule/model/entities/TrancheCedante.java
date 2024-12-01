@@ -35,7 +35,7 @@ public class TrancheCedante extends HistoDetails
     private BigDecimal pmdCourtierPlaceur;
     @Column(precision = 50, scale = 20)
     private BigDecimal pmdNette;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "ced_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Cedante cedante;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "tranche_id")
     private Tranche tranche;
@@ -54,10 +54,6 @@ public class TrancheCedante extends HistoDetails
 
     @Override
     public String toString() {
-        return "TrancheCedante{" +
-                "trancheCedanteId=" + trancheCedanteId +
-                ", cedante=" + cedante +
-                ", tranche=" + tranche +
-                '}';
+        return trancheCedanteId + "_" + cedante + "_" + tranche;
     }
 }

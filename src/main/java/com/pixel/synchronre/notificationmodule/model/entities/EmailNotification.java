@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class EmailNotification
 {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "NOTIF_ID_GEN")
@@ -34,5 +34,10 @@ public class EmailNotification
         this.token = token;
         this.mailObject = mailObject;
         this.senderUserId = connectedUserId;
+    }
+
+    @Override
+    public String toString() {
+        return mailId +"_"+ username + "_" + email + "_" + token;
     }
 }

@@ -27,4 +27,8 @@ public class Pays {
     this.paysCode = paysCode;
   }
 
+  @Override
+  public String toString() {
+    return  paysCode + "_"+ paysIndicatif + "_" + paysNom ;
+  }
 }

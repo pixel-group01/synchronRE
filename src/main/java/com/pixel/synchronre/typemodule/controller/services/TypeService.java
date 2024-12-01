@@ -181,6 +181,12 @@ public class TypeService implements ITypeService
     }
 
     @Override
+    public List<ReadTypeDTO> getTypesByGroup(TypeGroup typeGroup)
+    {
+        return typeRepo.findByTypeGroup(typeGroup);
+    }
+
+    @Override
     public Page<Type> searchPageOfTypes(String key, String typeGroup, int pageNum, int pageSize)
     {
         if("".equals(key)) return typeRepo.searchPageOfTypes(PersStatus.ACTIVE, PageRequest.of(pageNum, pageSize));
