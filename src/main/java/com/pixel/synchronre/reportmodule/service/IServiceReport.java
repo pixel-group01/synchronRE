@@ -1,7 +1,10 @@
 package com.pixel.synchronre.reportmodule.service;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,4 +28,6 @@ public interface IServiceReport
     byte[] generateChequeSinistre(Long regId) throws Exception;
 
     byte[] generateNoteCessionFac(Long plaId) throws Exception;
+
+    byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, LocalDate periode) throws Exception;
 }

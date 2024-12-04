@@ -14,13 +14,12 @@ import com.pixel.synchronre.sychronremodule.model.entities.Repartition;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController @RequestMapping(path = "/reports") @RequiredArgsConstructor @ResponseStatus(HttpStatus.OK)
 public class ReportRestController
@@ -124,4 +123,16 @@ public class ReportRestController
         return new Base64FileDto(base64Url, reportBytes);
     }
 
+    @GetMapping("/compte-traites/{traitenpId}/{cedenteId}/{trancheId}/{periodicite}/{periode}")
+    public Base64FileDto generateCompteTraite(@PathVariable Long traitenpId,
+                                                @PathVariable Long cedenteId,
+                                                @PathVariable Long trancheId,
+                                                @PathVariable String periodicite,
+                                                @PathVariable @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate periode
+                                                ) throws Exception
+    {
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periode);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
+    }
 }

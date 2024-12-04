@@ -1,9 +1,11 @@
 package com.pixel.synchronre.reportmodule.controller;
 
 import com.pixel.synchronre.archivemodule.controller.service.AbstractDocumentService;
+import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
 import com.pixel.synchronre.sychronremodule.model.dao.AffaireRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.ReglementRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
@@ -19,7 +21,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,5 +169,18 @@ public class ReportController
         params.put("reg_id", reglement.getRegId());
         byte[] reportBytes = jrService.generateReport(jrConfig.chequeSinistre, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Cheque-sinistre");
+    }
+
+    @GetMapping("/compte-traites/{traitenpId}/{cedenteId}/{trancheId}/{periodicite}/{periode}")
+    public Base64FileDto generateCompteTraite(@PathVariable Long traitenpId,
+                                                @PathVariable Long cedenteId,
+                                                @PathVariable Long trancheId,
+                                                @PathVariable String periodicite,
+                                                @PathVariable LocalDate periode
+    ) throws Exception
+    {
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periode);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
     }
 }

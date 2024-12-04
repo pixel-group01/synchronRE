@@ -22,10 +22,8 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.io.*;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service @RequiredArgsConstructor
 public class ServiceReportImpl implements IServiceReport
@@ -40,6 +38,9 @@ public class ServiceReportImpl implements IServiceReport
     private final InterlocuteurRepository interRepo;
     private final BordereauRepository bordRep;
     private final IserviceBordereau bordService;
+    private final TraiteNPRepository traiteNPRepo;
+    private final CedRepo cedRepo;
+    private final TrancheRepository trancheRepo;
 
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
@@ -241,5 +242,21 @@ public class ServiceReportImpl implements IServiceReport
     public byte[] generateNoteCessionFac(Long plaId) throws Exception {
         InterlocuteurListResp interlocuteur = interRepo.getInterlocuteursPrincipalResp(plaId);
         return this.generateNoteCessionFac(plaId, interlocuteur == null ? "Non spécifié" : interlocuteur.getIntNom() + " " + interlocuteur.getIntPrenom());
+    }
+
+    @Override
+    public byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, LocalDate periode) throws Exception {
+        TraiteNonProportionnel traite = traiteNPRepo.findById(traitenpId).orElseThrow(()-> new AppException("Traité introuvable"));
+        Cedante cedante = cedRepo.findById(cedenteId).orElseThrow(()-> new AppException("Cédante introuvable"));
+        Tranche tranche = trancheRepo.findById(trancheId).orElseThrow(()-> new AppException("Tranche introuvable"));
+        Map<String, Object> params = new HashMap<>();
+        params.put("traitenpId", traite.getTraiteNpId());
+        params.put("cedenteId", cedante.getCedId());
+        params.put("trancheId", tranche.getTrancheId());
+        params.put("periodicite", periodicite);
+        params.put("periode", periode);
+        params.put("param_image", this.getImagesPath());
+        byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        return reportBytes;
     }
 }
