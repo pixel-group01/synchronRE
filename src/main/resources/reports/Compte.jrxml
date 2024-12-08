@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-12-03T18:01:49 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Etat_Compte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81f528b8-b33b-4207-aaf1-ad1232d2fe58">
+<!-- 2024-12-08T01:07:24 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Compte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81f528b8-b33b-4207-aaf1-ad1232d2fe58">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -88,9 +88,9 @@
 	<subDataset name="Cessionnaires" uuid="a6ee8a2c-ffac-4d7e-aeda-2aa260f2643c">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
-		<parameter name="tranche_id" class="java.lang.Long">
+		<parameter name="trancheId" class="java.lang.Long">
 			<parameterDescription><![CDATA[]]></parameterDescription>
-			<defaultValueExpression><![CDATA[$P{tranche_id}]]></defaultValueExpression>
+			<defaultValueExpression><![CDATA[$P{trancheId}]]></defaultValueExpression>
 		</parameter>
 		<queryString language="SQL">
 			<![CDATA[WITH TotalSums AS (
@@ -104,7 +104,7 @@ from compte_cessionnaire cc,
 where cc.ces_id=ces.ces_id
   and cc.compte_ced_id = ced.compte_ced_id
 and ced.compte_id=c.compte_id
-and c.tranche_id =$P{tranche_id}
+and c.tranche_id =$P{trancheId}
 )
 
 SELECT 
@@ -127,7 +127,7 @@ FROM compte_cessionnaire cc,
            and cc.ces_id=ces.ces_id
           and cc.compte_ced_id = ced.compte_ced_id
           and ced.compte_id=c.compte_id
-          and c.tranche_id=$P{tranche_id}
+          and c.tranche_id=$P{trancheId}
 GROUP BY 
 ces.ces_id
 ,ces.ces_nom
@@ -152,8 +152,8 @@ ces.ces_id
 	<subDataset name="Cedentes_bis" uuid="e51e5f0b-365f-49cd-8929-ae2f6304b129">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
-		<parameter name="tranche_id" class="java.lang.Long"/>
-		<parameter name="cedente_id" class="java.lang.Long"/>
+		<parameter name="trancheId" class="java.lang.Long"/>
+		<parameter name="cedenteId" class="java.lang.Long"/>
 		<queryString language="SQL">
 			<![CDATA[select c.tranche_id
 ,t.name designation
@@ -169,8 +169,8 @@ where c.compte_id=cc.compte_ced_id
   and cd.type_id= t.type_id
   and cc.ced_id = ced.ced_id
   and t.type_group='TYPE_DET_COMPTE'
-and c.tranche_id=$P{tranche_id}
-and cc.ced_id=$P{cedente_id}
+and c.tranche_id=$P{trancheId}
+and cc.ced_id=$P{cedenteId}
 order by t.type_ordre]]>
 		</queryString>
 		<field name="tranche_id" class="java.lang.Long"/>
@@ -179,14 +179,14 @@ order by t.type_ordre]]>
 		<field name="credit" class="java.lang.String"/>
 		<field name="unique_code" class="java.lang.String"/>
 	</subDataset>
-	<parameter name="cedente_id" class="java.lang.Long"/>
-	<parameter name="tranche_id" class="java.lang.Long"/>
 	<parameter name="logo_nre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="Param_traitenpId" class="java.lang.Long">
+	<parameter name="traitenpId" class="java.lang.Long">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
+	<parameter name="cedenteId" class="java.lang.Long"/>
+	<parameter name="trancheId" class="java.lang.Long"/>
 	<parameter name="periodicite" class="java.lang.String"/>
 	<parameter name="periode" class="java.sql.Date"/>
 	<queryString language="SQL">
@@ -209,9 +209,9 @@ order by t.type_ordre]]>
    and per.type_id=t.type_id
    and per.periode=$P{periode}
    and t.unique_code=$P{periodicite}
-and tnp.traite_np_id=  $P{Param_traitenpId}
-and ct.ced_id=$P{cedente_id}
-and tr.tranche_id= $P{tranche_id}]]>
+and tnp.traite_np_id=  $P{traitenpId}
+and ct.ced_id=$P{cedenteId}
+and tr.tranche_id= $P{trancheId}]]>
 	</queryString>
 	<field name="traite_np_id" class="java.lang.Long"/>
 	<field name="exe_code" class="java.lang.Long"/>
@@ -299,9 +299,9 @@ and tr.tranche_id= $P{tranche_id}]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Cessionnaires" uuid="fd73ba68-cdc9-4570-8692-92e5bb1464eb">
-						<datasetParameter name="tranche_id">
-							<datasetParameterExpression><![CDATA[$F{tranche_id}]]></datasetParameterExpression>
+					<datasetRun subDataset="Cessionnaires" uuid="56aa7b62-fd75-474d-8e37-2e8e8af3edcc">
+						<datasetParameter name="trancheId">
+							<datasetParameterExpression><![CDATA[$P{trancheId}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
@@ -474,12 +474,12 @@ and tr.tranche_id= $P{tranche_id}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Cedentes_bis" uuid="f1c0bf40-f20a-48dc-93a2-315828083d3b">
-						<datasetParameter name="cedente_id">
+					<datasetRun subDataset="Cedentes_bis" uuid="6cea486c-492c-4d21-aa27-2d7f3c03e2ec">
+						<datasetParameter name="cedenteId">
 							<datasetParameterExpression><![CDATA[$F{ced_id}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="tranche_id">
-							<datasetParameterExpression><![CDATA[$F{tranche_id}]]></datasetParameterExpression>
+						<datasetParameter name="trancheId">
+							<datasetParameterExpression><![CDATA[$P{trancheId}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
