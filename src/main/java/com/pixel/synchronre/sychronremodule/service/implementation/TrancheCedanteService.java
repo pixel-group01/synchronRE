@@ -163,6 +163,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
         {
             BigDecimal oldAssiettePrime = trancheCedanteRepo.getAssiettePrimeByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
             BigDecimal assiettePrime = this.getAssiettePrime(dto, trPmd.getTrancheId());
+            assiettePrime = assiettePrime == null || assiettePrime.compareTo(BigDecimal.ZERO)==0 ? oldAssiettePrime : assiettePrime;
             trPmd.setTraiteNpId(traiteNpId);
             trPmd.setCedId(cedId);
             trPmd.setAssiettePrime(assiettePrime);
