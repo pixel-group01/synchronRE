@@ -12,25 +12,17 @@ import java.util.List;
 
 public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, Long>
 {
+    //TrancheCedanteNat est une vue qui permet de déterminer les tranches d'une cédante sur un traité
+    // selon les catégories auxquelles appartient la cédante et les tranches auxquelles appartiennent ces catégories
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto
         (t.trancheId, t.trancheLibelle, t.trancheTauxPrime) 
         from Tranche t 
-        where t.trancheId in ( 
-                                select a.tranche.trancheId 
-                                from Association a 
-                                where a.type.uniqueCode = 'TRAN-CAT' and a.tranche.trancheId = t.trancheId and 
-                                exists(
-                                        select a2 
-                                        from Association a2 
-                                        where a2.type.uniqueCode = 'CAT-CED' 
-                                        and a2.cedante.cedId = ?1 
-                                        and a2.categorie.categorieId = a.categorie.categorieId
-                                      ) 
-                                and a.tranche.traiteNonProportionnel.traiteNpId = ?2
-                             )
-              order by t.trancheLibelle asc
-""")//07 09 16 48 89 caire
+        where t.trancheId in (select tcn.trancheId 
+                              from TrancheCedanteNat tcn 
+                              where tcn.cedId = ?1 and tcn.traiteNpId = ?2)
+        order by t.trancheLibelle asc
+""")
     List<TranchePrimeDto> findNaturalTranchePmdForCedanteAndTraite(Long cedId, Long traiteNpId);
 
     @Query("select tc.trancheCedanteId from TrancheCedante tc where tc.tranche.trancheId = ?1 and tc.cedante.cedId = ?2")
@@ -48,47 +40,26 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
         (select tc.tranche.trancheId from TrancheCedante tc where tc.cedante.cedId = ?2) and 
         tc.tranche.trancheId not in 
         (
-            select tr1.trancheId from Tranche tr1 where tr1.trancheId in 
-            (
-                select a.tranche.trancheId 
-                                from Association a 
-                                where a.type.uniqueCode = 'TRAN-CAT' and a.tranche.trancheId = tr1.trancheId and 
-                                exists(
-                                        select a2 
-                                        from Association a2 
-                                        where a2.type.uniqueCode = 'CAT-CED' 
-                                        and a2.cedante.cedId = tc.cedante.cedId 
-                                        and a2.categorie.categorieId = a.categorie.categorieId
-                                      ) 
-                                and a.tranche.traiteNonProportionnel.traiteNpId = tc.tranche.traiteNonProportionnel.traiteNpId
-                                and tc.tranche.traiteNonProportionnel.traiteNpId = ?1
-            )
+            select tcn.trancheId 
+                              from TrancheCedanteNat tcn 
+                              where tcn.cedId = ?1 and tcn.traiteNpId = ?2
         )
 """)
-    List<Long> getTrancheCedanteIdsToRemove(Long traiteNpId, Long cedId);
+    List<Long> getTrancheCedanteIdsToRemove(Long cedId, Long traiteNpId);
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto
         (tr1.trancheId, tr1.trancheLibelle, tr1.trancheTauxPrime)  
-        from Tranche tr1 where tr1.traiteNonProportionnel.traiteNpId = ?1 and tr1.trancheId in 
+        from Tranche tr1 where tr1.traiteNonProportionnel.traiteNpId = ?2 and tr1.trancheId in 
             (
-                select a.tranche.trancheId 
-                                from Association a 
-                                where a.type.uniqueCode = 'TRAN-CAT'  and a.tranche.trancheId = tr1.trancheId and 
-                                exists(
-                                        select a2 
-                                        from Association a2 
-                                        where a2.type.uniqueCode = 'CAT-CED' 
-                                        and a2.cedante.cedId = ?2 
-                                        and a2.categorie.categorieId = a.categorie.categorieId
-                                      ) 
+                select tcn.trancheId from TrancheCedanteNat tcn where tcn.cedId = ?1 and tcn.traiteNpId = ?2
             )
             and tr1.trancheId not in 
             (
-                select tc.tranche.trancheId from TrancheCedante tc where tc.tranche.traiteNonProportionnel.traiteNpId = ?1 and tc.cedante.cedId = ?2
+                select tc.tranche.trancheId from TrancheCedante tc where tc.tranche.traiteNonProportionnel.traiteNpId = ?2 and tc.cedante.cedId = ?1
             )
         """)
-    List<TranchePrimeDto> getTranchePmdToAdd(Long traiteNpId, Long cedId);
+    List<TranchePrimeDto> getTranchePmdToAdd(Long cedId, Long traiteNpId);
 
     @Query("""
     select tc from TrancheCedante tc where tc.tranche.trancheId = ?1

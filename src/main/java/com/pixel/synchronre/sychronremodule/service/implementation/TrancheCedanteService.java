@@ -82,9 +82,9 @@ public class TrancheCedanteService implements ITrancheCedanteService
     {
         Long traiteNpId = catRepo.getTraiteIdByCatId(catId);
         if(traiteNpId == null) return;
-        List<Long> trancheCedantesIdsToRemove = trancheCedanteRepo.getTrancheCedanteIdsToRemove(traiteNpId, cedId);
+        List<Long> trancheCedantesIdsToRemove = trancheCedanteRepo.getTrancheCedanteIdsToRemove(cedId, traiteNpId);
         this.removeObsoleteTrancheCedantes(trancheCedantesIdsToRemove);
-        List<TranchePrimeDto> tranchePmdsToAdd = trancheCedanteRepo.getTranchePmdToAdd(traiteNpId, cedId);
+        List<TranchePrimeDto> tranchePmdsToAdd = trancheCedanteRepo.getTranchePmdToAdd(cedId, traiteNpId);
         this.addTranchePmds(tranchePmdsToAdd);
     }
 
@@ -98,9 +98,9 @@ public class TrancheCedanteService implements ITrancheCedanteService
             Long traiteNpId = catRepo.getTraiteIdByCatId(catId);
             if(traiteNpId != null)
             {
-                List<Long> trancheCedantesIdsToRemove = trancheCedanteRepo.getTrancheCedanteIdsToRemove(traiteNpId, cedId);
+                List<Long> trancheCedantesIdsToRemove = trancheCedanteRepo.getTrancheCedanteIdsToRemove(cedId, traiteNpId);
                 this.removeObsoleteTrancheCedantes(trancheCedantesIdsToRemove);
-                List<TranchePrimeDto> tranchePmdsToAdd = trancheCedanteRepo.getTranchePmdToAdd(traiteNpId, cedId);
+                List<TranchePrimeDto> tranchePmdsToAdd = trancheCedanteRepo.getTranchePmdToAdd(cedId, traiteNpId);
                 this.addTranchePmds(tranchePmdsToAdd);
             }
         });
@@ -282,6 +282,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
 
     private void removeObsoleteTrancheCedantes(List<Long> trancheCedantesIdsToRemove) {
         if(trancheCedantesIdsToRemove == null || trancheCedantesIdsToRemove.isEmpty()) return;
+        //repTraiRepo.deleteByTrancheCedanteIds(trancheCedantesIdsToRemove); //TODO à décommenter après test
         trancheCedanteRepo.deleteAllById(trancheCedantesIdsToRemove);
     }
 }

@@ -127,4 +127,8 @@ public interface RepartitionTraiteRepo extends JpaRepository<Repartition, Long>
         and r.paramCessionLegale.paramCesLegId = ?2 and r.type.uniqueCode = 'REP_CES_LEG_TNP'
     """)
     boolean existsByTrancheCedanteIdAndPclId(Long trancheCedanteId, Long paramCesLegalId);
+
+    @Modifying
+    @Query("delete from Repartition r where r.trancheCedante.trancheCedanteId in ?1")
+    void deleteByTrancheCedanteIds(List<Long> trancheCedantesIdsToRemove);
 }
