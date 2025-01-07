@@ -43,10 +43,7 @@ public class TrancheCedante extends HistoDetails
     private AppUser userCreator;
     @ManyToOne @JoinColumn(name = "fon_creator")
     private AppFunction fonCreator;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+
 
     public TrancheCedante(Long trancheCedanteId) {
         this.trancheCedanteId = trancheCedanteId;

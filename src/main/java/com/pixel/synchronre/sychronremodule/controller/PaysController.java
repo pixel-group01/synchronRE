@@ -35,7 +35,7 @@ public class PaysController {
     }
 
     @GetMapping(path = "/list")
-    public Page<PaysListResp> searchPays(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) throws UnknownHostException {
+    public Page<PaysListResp> searchPays(@RequestParam(defaultValue = "") String key, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "1000") int size) throws UnknownHostException {
         return paysService.searchPays(key, PageRequest.of(page, size));
     }
 
