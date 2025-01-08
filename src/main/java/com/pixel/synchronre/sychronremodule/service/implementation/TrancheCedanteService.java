@@ -123,9 +123,8 @@ public class TrancheCedanteService implements ITrancheCedanteService
             trancheCedante = new TrancheCedante();
             trancheCedante.setTranche(new Tranche(dto.getTrancheId()));
             trancheCedante.setCedante(new Cedante(dto.getCedId()));
-            trancheCedante.setAssiettePrime(dto.getAssiettePrime());
         }
-
+        trancheCedante.setAssiettePrime(dto.getAssiettePrime());
         trancheCedante.setPmd(dto.getPmd());
         trancheCedante.setPmdCourtier(dto.getPmdCourtier());
         trancheCedante.setPmdCourtierPlaceur(dto.getPmdCourtierPlaceur());
@@ -162,6 +161,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
         naturalTranchePrimes.forEach(trPmd->
         {
             BigDecimal oldAssiettePrime = trancheCedanteRepo.getAssiettePrimeByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
+            oldAssiettePrime = Optional.ofNullable(oldAssiettePrime).orElse(BigDecimal.ZERO);
             BigDecimal assiettePrime = this.getAssiettePrime(dto, trPmd.getTrancheId());
             assiettePrime = assiettePrime == null || assiettePrime.compareTo(BigDecimal.ZERO)==0 ? oldAssiettePrime : assiettePrime;
             trPmd.setTraiteNpId(traiteNpId);
@@ -282,7 +282,6 @@ public class TrancheCedanteService implements ITrancheCedanteService
 
     private void removeObsoleteTrancheCedantes(List<Long> trancheCedantesIdsToRemove) {
         if(trancheCedantesIdsToRemove == null || trancheCedantesIdsToRemove.isEmpty()) return;
-        //repTraiRepo.deleteByTrancheCedanteIds(trancheCedantesIdsToRemove); //TODO à décommenter après test
         trancheCedanteRepo.deleteAllById(trancheCedantesIdsToRemove);
     }
 }
