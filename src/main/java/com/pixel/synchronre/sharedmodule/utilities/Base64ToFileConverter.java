@@ -38,7 +38,7 @@ public class Base64ToFileConverter
         }
 
     public static String convertBytesToJSBase64UrlString(byte[] bytes) throws IOException {
-        return convertBytesToBase64UrlString(bytes).replace("-", "+").replace("_", "/");
+        return Base64.getEncoder().encodeToString(bytes);// convertBytesToBase64UrlString(bytes).replace("-", "+").replace("_", "/");
     }
 }
 
