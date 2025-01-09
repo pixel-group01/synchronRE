@@ -13,10 +13,10 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "v_tranche_cedante_nat")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class TrancheCedanteNat
+public class V_TrancheCedanteNat
 {
     @Id
-    private Long rowNum;
+    private Long rId;
     private Long traiteNpId;
     private Long trancheId;
     private String trancheLibelle;

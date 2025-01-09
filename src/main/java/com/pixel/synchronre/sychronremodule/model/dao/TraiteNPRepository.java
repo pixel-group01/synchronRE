@@ -40,7 +40,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         left join tnp.traiUserCreator u 
         left join tnp.traiFonCreator f 
         left join tnp.traiCompteDevise dc 
-        left join CedanteTraite ct on tnp.traiteNpId = ct.traiteNpId 
+        left join V_CedanteTraiteCalcule ct on tnp.traiteNpId = ct.traiteNpId 
         where (locate(upper(coalesce(:key, '')), upper(cast(function('strip_accents',  coalesce(tnp.traiReference, '') ) as string))) >0 
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiNumero, '') ) as string))) >0
         or locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  coalesce(tnp.traiLibelle, '') ) as string))) >0
@@ -65,7 +65,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         )
         and (:fncId is null or :fncId = f.id) 
         and (:userId is null or :userId = u.userId) 
-        and (:cedId is null or exists(select ct0 from CedanteTraite ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
+        and (:cedId is null or exists(select ct0 from V_CedanteTraiteCalcule ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
         and (:exeCode is null or (tnp.traiDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and tnp.traiDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
         and s.staCode in :staCodes
         group by tnp.traiteNpId,
@@ -160,9 +160,9 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         left join tnp.traiUserCreator u 
         left join tnp.traiFonCreator f 
         left join tnp.traiCompteDevise dc 
-        left join CedanteTraite ct on tnp.traiteNpId = ct.traiteNpId 
+        left join V_CedanteTraiteCalcule ct on tnp.traiteNpId = ct.traiteNpId 
         where
-        (:cedId is null or exists(select ct0 from CedanteTraite ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
+        (:cedId is null or exists(select ct0 from V_CedanteTraiteCalcule ct0 where ct0.cedId = :cedId and ct0.traiteNpId = tnp.traiteNpId)) 
         and (:exeCode is null or (tnp.traiDateEffet <= cast(CONCAT(:exeCode, '-12-31') as date)   and tnp.traiDateEcheance  >= cast(CONCAT(:exeCode, '-01-01') as date))) 
         and s.staCode in :staCodes
         group by tnp.traiteNpId,

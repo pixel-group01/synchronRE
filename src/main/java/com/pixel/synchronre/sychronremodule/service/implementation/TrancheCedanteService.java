@@ -4,7 +4,6 @@ import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.CesLeg;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteReq;
-import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.CedMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheCedanteMapper;
@@ -12,7 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante;
-import com.pixel.synchronre.sychronremodule.model.views.CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.views.V_CedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import lombok.RequiredArgsConstructor;
@@ -107,9 +106,9 @@ public class TrancheCedanteService implements ITrancheCedanteService
     }
 
     @Override
-    public List<CedanteTraite> getAllCedanteTraites()
+    public List<V_CedanteTraite> getAllCedanteTraites()
     {
-        List<CedanteTraite> cedanteTraites = cedanteTraiteRepo.findAll();
+        List<V_CedanteTraite> cedanteTraites = cedanteTraiteRepo.findAll();
         return cedanteTraites;
     }
 

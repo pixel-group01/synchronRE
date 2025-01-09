@@ -12,18 +12,12 @@ import java.math.BigDecimal;
 
 @Table(name = "v_cedante_traite")
 @Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class CedanteTraite
+public class V_CedanteTraite
 {
     @Id
-    private Long rowNum;
+    private Long rId;
     private Long cedId;
     private String cedNomFiliale;
     private Long traiteNpId;
     private String traiNumero;
-    
-    private BigDecimal assiettePrime;
-    private BigDecimal pmd;
-    private BigDecimal pmdCourtier;
-    private BigDecimal pmdCourtierPlaceur;
-    private BigDecimal pmdNette;
 }
