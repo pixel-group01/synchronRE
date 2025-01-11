@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
-public class Bordereau {
+public class Bordereau
+{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "BORD_ID_GEN")
     @SequenceGenerator(name = "BORD_ID_GEN", sequenceName = "BORD_ID_GEN")

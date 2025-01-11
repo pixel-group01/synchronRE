@@ -4,10 +4,7 @@ import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
 import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
@@ -17,9 +14,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class TrancheCedante extends HistoDetails
+public class TrancheCedante //extends HistoDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CED_TRAI_ID_GEN")
@@ -43,6 +40,10 @@ public class TrancheCedante extends HistoDetails
     private AppUser userCreator;
     @ManyToOne @JoinColumn(name = "fon_creator")
     private AppFunction fonCreator;
+    @CreationTimestamp
+    protected LocalDateTime createdAt;
+    @UpdateTimestamp
+    protected LocalDateTime updatedAt;
 
 
     public TrancheCedante(Long trancheCedanteId) {
