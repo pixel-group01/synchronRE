@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sychronremodule.model.dao.CompteDetailsRepo;
 import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto;
+import com.pixel.synchronre.sychronremodule.model.entities.CompteCedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CompteDetails;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICompteDetailsService;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
@@ -19,7 +20,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
     public CompteDetails saveCompteDetails(CompteDetailDto dto, Long compteCedanteId)
     {
         CompteDetails compteDetails = compteDetailsRepo.findByCompteCedIdAndtypeId(compteCedanteId, dto.getTypeId());
-        compteDetails = compteDetails == null ? new CompteDetails() : compteDetails;
+        compteDetails = compteDetails == null ? new CompteDetails(new CompteCedante(compteCedanteId)) : compteDetails;
         CompteDetailDto calculatedDto = this.calculateCompteDetails(dto.getUniqueCode(), dto.getDebit(), dto.getCredit(), compteCedanteId, null, 20);
         compteDetails.setDebit(calculatedDto.getDebit());
         compteDetails.setCredit(calculatedDto.getCredit());
@@ -52,61 +53,61 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
     //TODO à implementer
     private CompteDetailDto calculateTotalMouv(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Total mouvements");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateSousTotalRea(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Sous total réassureur");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateSousTotalCed(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Sous total cedante");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateSousTotal(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Sous total");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateIntereDepotLibere(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Intérêt dépôt libéré");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateDepoSapLibere(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Dépôt SAP libéré");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateDepoSapConstitue(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Depôt SAP constitué");
     }
 
     //TODO à implementer
     private CompteDetailDto calculateSinistrePaye(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Sinistre payé");
     }
 
     //TODO à implementer
     private CompteDetailDto calculatePrimeReconstitution(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Prime de reconstitution");
     }
 
     //TODO à implementer
     private CompteDetailDto calculatePrimeApresAjust(BigDecimal debit, BigDecimal credit, Long compteCedId, Long compteDetId, int precision)
     {
-        return null;
+        return new CompteDetailDto(null, "", "Prime après ajustement");
     }
 
 

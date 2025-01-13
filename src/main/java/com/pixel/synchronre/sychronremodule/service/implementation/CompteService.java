@@ -16,6 +16,7 @@ import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -56,7 +57,7 @@ public class CompteService implements IserviceCompte {
         return compteTraiteDto;
     }
 
-    @Override
+    @Override @Transactional
     public CompteTraiteDto save(CompteTraiteDto dto)
     {
         Long trancheId = dto.getTrancheIdSelected();

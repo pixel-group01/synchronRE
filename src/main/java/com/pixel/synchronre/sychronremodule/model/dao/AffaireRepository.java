@@ -162,9 +162,7 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
     Page<CessionnaireListResp> searchCessionnaires(@Param("key") String key, @Param("fncId") Long userFncId, @Param("userId") Long userId,
                                                    @Param("cedId")Long cedId, @Param("cedParentId")Long cedParentId,
                                                    @Param("staCodes")List<String> staCodes, Pageable pageable);
-
      */
-
     @Query("select a.cedante.pays.paysCode from Affaire a where a.affId = ?1")
     String getPaysCodebyAffId(Long affId);
 
