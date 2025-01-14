@@ -20,7 +20,7 @@ public class Compte {
     private Long compteId;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "tranche_id")
     private Tranche tranche;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "periode_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "periode_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Periode periode;
 
     public Compte(Tranche tranche, Periode periode) {

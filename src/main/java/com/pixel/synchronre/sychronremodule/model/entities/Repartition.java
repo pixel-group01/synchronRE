@@ -8,11 +8,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
+@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Repartition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +42,10 @@ public class Repartition {
     private BigDecimal repMontantCourtierPlaceur; //Prime à reverser au courtier placeur
     private String autreInterlocuteurs;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "rep_interlocuteur_principal_id")
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Interlocuteur interlocuteurPrincipal;
     private boolean repStatut;
-    @ManyToOne @JoinColumn(name = "sta_code")
+    @ManyToOne @JoinColumn(name = "sta_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut repStaCode;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "aff_id")
     private Affaire affaire;
@@ -51,11 +55,11 @@ public class Repartition {
     private TraiteNonProportionnel traiteNonProportionnel;
     @Column(precision = 50, scale = 20)
     protected BigDecimal repCoursDevise;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cessionnaire_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "cessionnaire_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Cessionnaire cessionnaire;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "typ_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "typ_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Type type;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "param_ces_legal_id")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "param_ces_legal_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private ParamCessionLegale paramCessionLegale;
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isAperiteur;

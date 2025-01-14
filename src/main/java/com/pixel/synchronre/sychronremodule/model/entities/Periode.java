@@ -12,7 +12,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import java.time.LocalDate;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Entity
 public class Periode
 {
     @Id

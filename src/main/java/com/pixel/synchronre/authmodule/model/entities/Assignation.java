@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDate;
 
 @Entity @DiscriminatorColumn(name = "ASS_TYPE") @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Assignation
 {
     @Id

@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Territorialite
 {
     @Id
@@ -29,7 +31,7 @@ public class Territorialite
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne
-    @JoinColumn(name = "STA_CODE")
+    @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
     protected AppUser userCreator;

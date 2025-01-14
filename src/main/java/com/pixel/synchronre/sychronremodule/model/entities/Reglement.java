@@ -7,13 +7,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Reglement {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REG_ID_GEN")
@@ -34,13 +36,13 @@ public class Reglement {
   private BigDecimal regCommissionCed;
   private boolean regStatut;
   private String regMode;
-  @ManyToOne @JoinColumn(name = "type_id")
+  @ManyToOne @JoinColumn(name = "type_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private Type typeReglement;
   @ManyToOne @JoinColumn(name = "aff_id")
   private Affaire affaire;
   @ManyToOne @JoinColumn(name = "sin_id")
   private Sinistre sinistre;
-  @ManyToOne @JoinColumn(name = "ces_id")
+  @ManyToOne @JoinColumn(name = "ces_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
   private Cessionnaire cessionnaire;
   @ManyToOne @JoinColumn(name = "user_id")
   private AppUser appUser;

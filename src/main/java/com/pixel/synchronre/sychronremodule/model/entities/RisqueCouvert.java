@@ -14,7 +14,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDateTime;
 
-@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class RisqueCouvert
 {
@@ -23,13 +23,13 @@ public class RisqueCouvert
     @SequenceGenerator(name = "RISQUE_ID_GEN", sequenceName = "RISQUE_ID_GEN")
     private Long risqueId;
     @ManyToOne
-    @JoinColumn(name = "couverture_id")
+    @JoinColumn(name = "couverture_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Couverture couverture;
     @Column(length = 4000)
     private String description;
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @ManyToOne @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
     private AppUser userCreator;

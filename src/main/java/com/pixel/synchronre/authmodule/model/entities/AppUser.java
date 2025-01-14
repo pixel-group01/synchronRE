@@ -38,7 +38,7 @@ public class AppUser
     private LocalDateTime creationDate;
     @UpdateTimestamp
     private LocalDateTime lastModificationDate;
-    @ManyToOne
+    @ManyToOne @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
 
     public AppUser(Long userId, String firstName, String lastName, Long visibilityId, Long cesId, String password, String email, String tel, boolean active, boolean notBlocked, Long currentFunctionId, LocalDateTime changePasswordDate, LocalDateTime creationDate, LocalDateTime lastModificationDate) {

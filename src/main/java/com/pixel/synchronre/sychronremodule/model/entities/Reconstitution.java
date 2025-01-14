@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Reconstitution
 {
     @Id
@@ -27,7 +29,7 @@ public class Reconstitution
     private TraiteNonProportionnel traiteNonProportionnel;
     @ManyToOne @JoinColumn(name = "tranche_ID")
     private Tranche tranche;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @ManyToOne @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
     private AppUser userCreator;
