@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "affType")
 @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class Affaire
+public class Affaire extends HistoDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -60,10 +61,6 @@ public class Affaire
 
     @ManyToOne @JoinColumn(name = "type_code")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Type affType;
-    @CreationTimestamp
-    protected LocalDateTime createdAt;
-    @UpdateTimestamp
-    protected LocalDateTime updatedAt;
 
     @ManyToOne @JoinColumn(name = "aff_user_creator")
     private AppUser affUserCreator;

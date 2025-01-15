@@ -13,15 +13,13 @@ public class HistoDetailsService implements IHistoDetailsService
 {
     private final IJwtService jwtService;
     @Override
-    public HistoDetails getActionIdentifierFromSecurityContext(String actionName)
+    public HistoDetails getHistoDetailsFromSecurityContext(String actionName)
     {
         String actionId = UUID.randomUUID().toString();
         String connectionId = jwtService.getCurrentJwt() == null ? null : jwtService.getJwtInfos().getConnectionId();
 
-        HistoDetails actionIdentifier = HistoDetails
-                .builder()
-                .actionId(actionId).actionName(actionName).connexionId(connectionId)
-                .build();
+        HistoDetails actionIdentifier = new HistoDetails(actionName, actionId, connectionId);
+
         return actionIdentifier;
     }
 }

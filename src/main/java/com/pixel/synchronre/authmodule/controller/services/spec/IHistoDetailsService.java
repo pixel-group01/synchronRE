@@ -4,5 +4,5 @@ import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 
 public interface IHistoDetailsService
 {
-    HistoDetails getActionIdentifierFromSecurityContext(String actionName);
+    HistoDetails getHistoDetailsFromSecurityContext(String actionName);
 }

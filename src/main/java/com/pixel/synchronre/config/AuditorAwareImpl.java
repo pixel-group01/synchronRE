@@ -1,4 +1,4 @@
-package com.pixel.synchronre;
+package com.pixel.synchronre.config;
 
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import lombok.RequiredArgsConstructor;

@@ -3,6 +3,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
@@ -78,11 +79,12 @@ public class ServiceAffaireImpl implements IserviceAffaire
 
 
     @Override @Transactional
-    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto)
+    public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto, HistoDetails hd)
     {
         if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
         boolean isCourtier = jwtService.UserIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
+        BeanUtils.copyProperties(hd, aff);
         if(dto.getReserveCourtier() == null) aff.setReserveCourtier(BigDecimal.ZERO);
         aff.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
         aff=affRepo.save(aff);
@@ -121,9 +123,10 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override @Transactional
-    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto)
+    public FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto, HistoDetails hd)
     {
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
+        BeanUtils.copyProperties(hd, affaire);
         if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
         boolean smpHasChanged = dto.getFacSmpLci() == null ? false : dto.getFacSmpLci().compareTo(affaire.getFacSmpLci()) != 0;
         boolean facPrimeHasChanged = dto.getFacPrime() == null ? false :  dto.getFacPrime().compareTo(affaire.getFacPrime()) != 0;

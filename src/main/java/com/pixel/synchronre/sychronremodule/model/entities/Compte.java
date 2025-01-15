@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class Compte {
+public class Compte extends HistoDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "COMPTE_ID_GEN", sequenceName = "COMPTE_ID_GEN")

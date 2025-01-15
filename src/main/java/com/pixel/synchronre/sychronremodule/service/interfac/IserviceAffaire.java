@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
 import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
@@ -15,12 +16,12 @@ import java.net.UnknownHostException;
 import java.util.List;
 
 public interface IserviceAffaire {
-    FacultativeDetailsResp createFacultative(CreateFacultativeReq dto);
+    FacultativeDetailsResp createFacultative(CreateFacultativeReq dto, HistoDetails hd);
     boolean deleteAffaire(Long affId);
 
     String generateAffCode(Long affId);
 
-    FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto);
+    FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto, HistoDetails hd);
     Page<FacultativeListResp> searchFacultative(String key, Pageable pageable);
 
     FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto);
