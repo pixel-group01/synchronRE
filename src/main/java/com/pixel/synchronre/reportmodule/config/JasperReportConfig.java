@@ -42,4 +42,10 @@ public class JasperReportConfig {
 
     @Value("${report.location.compteTraite}")
     public String compteTraite;
+
+    @Value("${report.location.situation_financiere_par_cedante_et_rea}")
+    public String situationFinanciereParCedanteEtRea;
+
+    @Value("${report.location.situation_financiere_par_cedante}")
+    public String situationFinanciereParCedante;
 }

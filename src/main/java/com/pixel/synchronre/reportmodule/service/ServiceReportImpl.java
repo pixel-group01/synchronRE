@@ -7,6 +7,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
+import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
+import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
@@ -41,6 +43,7 @@ public class ServiceReportImpl implements IServiceReport
     private final TraiteNPRepository traiteNPRepo;
     private final CedRepo cedRepo;
     private final TrancheRepository trancheRepo;
+    private final VStatSituationFinReaCedRepository SituationFinReaCedRepo;
 
 
     private void setQrCodeParam(Map<String, Object> parameters, String qrText) throws Exception
@@ -257,6 +260,32 @@ public class ServiceReportImpl implements IServiceReport
         params.put("periode", periode);
         params.put("param_image", this.getImagesPath());
         byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception {
+        //VStatSituationFinParReaCed stat = SituationFinReaCedRepo.findById(rId).orElseThrow(()-> new AppException("Traité introuvable"));
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+        byte[] reportBytes = this.generateReport(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+        byte[] reportBytes = this.generateReport(jrConfig.situationFinanciereParCedante, params, new ArrayList<>(), null);
         return reportBytes;
     }
 }

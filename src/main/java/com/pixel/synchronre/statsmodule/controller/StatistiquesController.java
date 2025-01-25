@@ -3,6 +3,7 @@ package com.pixel.synchronre.statsmodule.controller;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.services.IServiceStatistiques;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
@@ -10,6 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.Couver
 import com.pixel.synchronre.sychronremodule.model.dto.devise.response.DeviseListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.response.ExerciceListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
+import com.pixel.synchronre.sychronremodule.model.views.V_StatStuationFinCed;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -72,4 +74,26 @@ public class StatistiquesController
     {
         return statistiquesService.calculerCommissionStats(criteres);
     }
+
+    @GetMapping(path = "/affaires-fac/situation-par-cedante-reassureur")
+    public List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(@RequestParam(required = false) Long exeCode,
+                                                                             @RequestParam(required = false) Long cedId,
+                                                                             @RequestParam(required = false) Long cesId,
+                                                                             @RequestParam(required = false) String statutEnvoie,
+                                                                             @RequestParam(required = false) String statutEncaissement)
+    {
+        return statistiquesService.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement);
+    }
+
+    @GetMapping(path = "/affaires-fac/situation-par-cedante")
+    public List<V_StatStuationFinCed> getSituationParCedante(@RequestParam(required = false) Long exeCode,
+                                                                             @RequestParam(required = false) Long cedId,
+                                                                             @RequestParam(required = false) String statutEnvoie,
+                                                                             @RequestParam(required = false) String statutEncaissement)
+    {
+        return statistiquesService.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
+    }
+
+
+
 }

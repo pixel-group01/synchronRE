@@ -135,4 +135,27 @@ public class ReportRestController
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
     }
+
+    @GetMapping("/situation-note-debit-par-cedante-reassureur")
+    public Base64FileDto generateSituationFinanciereCedRea(@RequestParam(required = false) Long exeCode,
+                                                           @RequestParam(required = false) Long cedId,
+                                                           @RequestParam(required = false) Long cesId,
+                                                           @RequestParam(required = false) String statutEnvoi,
+                                                           @RequestParam(required = false) String statutEncaissement) throws Exception
+    {
+        byte[] reportBytes = jrService.generateSituationFinanciereCedRea(exeCode,cedId,cesId,statutEnvoi,statutEncaissement);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
+    }
+
+    @GetMapping("/situation-note-debit-par-cedante")
+    public Base64FileDto generateSituationFinanciereCed(@RequestParam(required = false) Long exeCode,
+                                                           @RequestParam(required = false) Long cedId,
+                                                           @RequestParam(required = false) String statutEnvoie,
+                                                           @RequestParam(required = false) String statutEncaissement) throws Exception
+    {
+        byte[] reportBytes = jrService.generateSituationFinanciereCed(exeCode,cedId,statutEnvoie,statutEncaissement);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
+    }
 }
