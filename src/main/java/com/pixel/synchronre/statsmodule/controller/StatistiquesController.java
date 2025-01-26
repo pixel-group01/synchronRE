@@ -11,6 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.response.Couver
 import com.pixel.synchronre.sychronremodule.model.dto.devise.response.DeviseListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.exercice.response.ExerciceListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.statut.response.StatutListResp;
+import com.pixel.synchronre.sychronremodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.sychronremodule.model.views.V_StatStuationFinCed;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import lombok.RequiredArgsConstructor;
@@ -94,6 +95,12 @@ public class StatistiquesController
         return statistiquesService.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
     }
 
-
+    @GetMapping(path = "/affaires-fac/situation-note-de-credit")
+    public List<VStatSituationNoteCred> getSituationNoteCredit(@RequestParam(required = false) Long exeCode,
+                                                             @RequestParam(required = false) Long cedId,
+                                                             @RequestParam(required = false) Long cesId)
+    {
+        return statistiquesService.getSituationNoteCredit(exeCode,cedId,cesId);
+    }
 
 }

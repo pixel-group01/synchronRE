@@ -5,6 +5,7 @@ import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import com.pixel.synchronre.sychronremodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.sychronremodule.model.views.V_StatStuationFinCed;
 
 import java.util.List;
@@ -18,4 +19,6 @@ public interface IServiceStatistiques
     List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement);
 
     List<V_StatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement);
+
+    List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId);
 }

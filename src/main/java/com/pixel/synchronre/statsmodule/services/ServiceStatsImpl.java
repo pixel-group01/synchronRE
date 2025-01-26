@@ -6,7 +6,9 @@ import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
 import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.repositories.AffaireStatsRepository;
 import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
+import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationNoteCredRepository;
 import com.pixel.synchronre.statsmodule.model.repositories.V_StatStuationFinCedRepository;
+import com.pixel.synchronre.sychronremodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.sychronremodule.model.views.V_StatStuationFinCed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +25,8 @@ public class ServiceStatsImpl implements IServiceStatistiques
     private final IServiceCritereStats critereStatsService;
     private final VStatSituationFinReaCedRepository situationReaCedRepo;
     private final V_StatStuationFinCedRepository situationCedRepo;
+    private final VStatSituationNoteCredRepository situationNoteCredRepo;
+
 
     @Override
     public AffaireStats calculerAffaireStats(CritereStat criteres)
@@ -59,5 +63,10 @@ public class ServiceStatsImpl implements IServiceStatistiques
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
         statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
         return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
+    }
+
+    @Override
+    public List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId) {
+        return situationNoteCredRepo.getSituationNoteCredit(exeCode,cedId,cesId);
     }
 }
