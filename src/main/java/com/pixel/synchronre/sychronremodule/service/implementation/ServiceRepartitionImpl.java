@@ -65,6 +65,7 @@ public class ServiceRepartitionImpl implements IserviceRepartition
     private final TypeRepo typeRepo;
     private final IServiceCalculsComptablesSinistre sinComptaService;
     private final IServiceCalculsComptables comptaService;
+    private final DetailsBordereauRepository dbRepo;
 
 
     @Override @Transactional //Placemement
@@ -168,6 +169,12 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             Repartition oldPlacement = repCopier.copy(placement);
             placement.setRepStatut(false);
             repRepo.save(placement);
+            DetailBordereau detailBordereau = dbRepo.findByPlaId(repId);
+            if(detailBordereau != null)
+            {
+                detailBordereau.setDebStatut(false);
+                dbRepo.save(detailBordereau);
+            }
             logService.logg(SynchronReActions.DELETE_PLACEMENT, oldPlacement, new Repartition(),SynchronReTables.REPARTITION);
         }
     }
