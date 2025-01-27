@@ -19,7 +19,7 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
         (t.trancheId, t.trancheLibelle, t.trancheTauxPrime) 
         from Tranche t 
         where t.trancheId in (select tcn.trancheId 
-                              from V_TrancheCedanteNat tcn 
+                              from VTrancheCedanteNat tcn 
                               where tcn.cedId = ?1 and tcn.traiteNpId = ?2)
         order by t.trancheLibelle asc
 """)
@@ -41,7 +41,7 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
         tc.tranche.trancheId not in 
         (
             select tcn.trancheId 
-                              from V_TrancheCedanteNat tcn 
+                              from VTrancheCedanteNat tcn 
                               where tcn.cedId = ?1 and tcn.traiteNpId = ?2
         )
 """)
@@ -52,7 +52,7 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
         (tr1.trancheId, tr1.trancheLibelle, tr1.trancheTauxPrime)  
         from Tranche tr1 where tr1.traiteNonProportionnel.traiteNpId = ?2 and tr1.trancheId in 
             (
-                select tcn.trancheId from V_TrancheCedanteNat tcn where tcn.cedId = ?1 and tcn.traiteNpId = ?2
+                select tcn.trancheId from VTrancheCedanteNat tcn where tcn.cedId = ?1 and tcn.traiteNpId = ?2
             )
             and tr1.trancheId not in 
             (

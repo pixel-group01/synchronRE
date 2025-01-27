@@ -3,6 +3,7 @@ package com.pixel.synchronre.statsmodule.controller;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.services.IServiceStatistiques;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController @RequiredArgsConstructor @RequestMapping(path = "/statistiques")
@@ -101,6 +103,18 @@ public class StatistiquesController
                                                                @RequestParam(required = false) Long cesId)
     {
         return statistiquesService.getSituationNoteCredit(exeCode,cedId,cesId);
+    }
+
+    @GetMapping(path = "/affaires-fac/chiffre-affaire")
+    public List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(@RequestParam(required = false) Long exeCode,
+                                                                        @RequestParam(required = false) Long cedId,
+                                                                        @RequestParam(required = false) Long cesId,
+                                                                        @RequestParam(required = false) LocalDate debut,
+                                                                        @RequestParam(required = false) LocalDate fin)
+
+
+    {
+        return statistiquesService.getStatsChiffreAffaire(exeCode,cedId,cesId, debut, fin);
     }
 
 }

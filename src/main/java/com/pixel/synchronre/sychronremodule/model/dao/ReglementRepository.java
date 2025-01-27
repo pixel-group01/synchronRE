@@ -72,7 +72,7 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
     List<Long> findRegIdByAffId(Long affId);
 
     @Query("""
-        select sum(p.montantEncaisse) from V_Paiement p where p.affId = ?1 and p.dateReglement between ?2 and ?3
+        select sum(p.montantEncaisse) from VPaiement p where p.affId = ?1 and p.dateReglement between ?2 and ?3
     """)
     BigDecimal calculateEncaissementBetween(Long affId, LocalDate debut, LocalDate fin);
 }

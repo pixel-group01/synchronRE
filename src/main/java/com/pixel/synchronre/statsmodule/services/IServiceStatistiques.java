@@ -3,10 +3,13 @@ package com.pixel.synchronre.statsmodule.services;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IServiceStatistiques
@@ -20,4 +23,6 @@ public interface IServiceStatistiques
     List<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement);
 
     List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId);
+
+    List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode,Long cedId, Long cesId, LocalDate debut, LocalDate fin);
 }

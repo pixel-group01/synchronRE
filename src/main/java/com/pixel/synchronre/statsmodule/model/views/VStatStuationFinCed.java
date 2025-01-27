@@ -31,3 +31,6 @@ public class VStatStuationFinCed
     private String statutEnvoie;           // Statut d'envoi
     private String statutEncaissement;     // Statut d'encaissement
 }
+// Cicare
+// ZEPRE SUPR--> CICARE DOUALA
+// CICARE ABIDJAN SUR NOTE DEBIT ( avec les information de zepre)

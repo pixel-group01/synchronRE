@@ -3,16 +3,15 @@ package com.pixel.synchronre.statsmodule.services;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
+import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
+import com.pixel.synchronre.statsmodule.model.repositories.*;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
-import com.pixel.synchronre.statsmodule.model.repositories.AffaireStatsRepository;
-import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
-import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationNoteCredRepository;
-import com.pixel.synchronre.statsmodule.model.repositories.VStatStuationFinCedRepository;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
@@ -24,6 +23,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     private final VStatSituationFinReaCedRepository situationReaCedRepo;
     private final VStatStuationFinCedRepository situationCedRepo;
     private final VStatSituationNoteCredRepository situationNoteCredRepo;
+    private final ChiffreAffaireRepo caRepo;
 
 
     @Override
@@ -66,5 +66,11 @@ public class ServiceStatsImpl implements IServiceStatistiques
     @Override
     public List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId) {
         return situationNoteCredRepo.getSituationNoteCredit(exeCode,cedId,cesId);
+    }
+
+    @Override
+    public List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode, Long cedId, Long cesId, LocalDate debut, LocalDate fin) {
+        List<StatChiffreAffaireParPeriodeDTO>  stats = caRepo.getStatsChiffreAffaire(exeCode, cedId, cesId, debut, fin);
+        return stats;
     }
 }
