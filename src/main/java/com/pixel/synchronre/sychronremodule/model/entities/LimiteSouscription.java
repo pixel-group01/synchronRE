@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.beans.BeanInfo;
 import java.math.BigDecimal;
@@ -16,7 +18,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class LimiteSouscription
 {
     @Id
@@ -28,7 +30,7 @@ public class LimiteSouscription
     private RisqueCouvert risqueCouvert;
     @ManyToOne @JoinColumn(name = "categorie_id")
     private Categorie categorie;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @ManyToOne @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
     private AppUser userCreator;

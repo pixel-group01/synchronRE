@@ -41,19 +41,19 @@ public class TraiteNonProportionnel
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private BigDecimal traiTauxAbattement;
-    @ManyToOne @JoinColumn(name = "exe_code")
+    @ManyToOne @JoinColumn(name = "exe_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")
     private TraiteNonProportionnel traiSource;
-    @ManyToOne @JoinColumn(name = "nat_code")
+    @ManyToOne @JoinColumn(name = "nat_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Nature nature;
-    @ManyToOne @JoinColumn(name = "devise_code")
+    @ManyToOne @JoinColumn(name = "devise_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Devise traiDevise;
-    @ManyToOne @JoinColumn(name = "comote_devise_code")
+    @ManyToOne @JoinColumn(name = "comote_devise_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Devise traiCompteDevise;
-    @ManyToOne @JoinColumn(name = "courtier_placeur_id")
+    @ManyToOne @JoinColumn(name = "courtier_placeur_id") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Cessionnaire courtierPlaceur;
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @ManyToOne @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "trai_user_creator")
     private AppUser traiUserCreator;

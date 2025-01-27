@@ -54,7 +54,7 @@ public class RepartitionFacController
     public Page<RepartitionListResp> searchPlacementSaisie(@PathVariable(required = false) Long affId,
                                                 @RequestParam(defaultValue = "", required = false) String key,
                                                @RequestParam(defaultValue = "0", required = false) int page,
-                                               @RequestParam(defaultValue = "10", required = false) int size)
+                                               @RequestParam(defaultValue = "1000", required = false) int size)
     {
         return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabSaisie,PageRequest.of(page, size));
     }
@@ -63,7 +63,7 @@ public class RepartitionFacController
     public Page<RepartitionListResp> searchPlacementValideEnAttenteDeValidation(@PathVariable(required = false) Long affId,
                                                      @RequestParam(defaultValue = "", required = false) String key,
                                                      @RequestParam(defaultValue = "0", required = false) int page,
-                                                     @RequestParam(defaultValue = "10", required = false) int size)
+                                                     @RequestParam(defaultValue = "1000", required = false) int size)
     {
         return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabAttenteValidation,PageRequest.of(page, size));
     }
@@ -72,7 +72,7 @@ public class RepartitionFacController
     public Page<RepartitionListResp> searchPlacementValide(@PathVariable(required = false) Long affId,
                                                            @RequestParam(defaultValue = "", required = false) String key,
                                                            @RequestParam(defaultValue = "0", required = false) int page,
-                                                           @RequestParam(defaultValue = "10", required = false) int size)
+                                                           @RequestParam(defaultValue = "1000", required = false) int size)
     {
         return repService.searchRepartition(key, affId, "REP_PLA", RepStatutGroup.tabValide,PageRequest.of(page, size));
     }

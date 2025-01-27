@@ -31,6 +31,10 @@ public class CompteDetails
         this.compteDetId = compteDetId;
     }
 
+    public CompteDetails(CompteCedante compteCedante) {
+        this.compteCedante = compteCedante;
+    }
+
     @Override
     public String toString() {
         return compteDetId +"_"+ typeCompteDet +"_"+ typeCode +"_"+ compteCedante ;

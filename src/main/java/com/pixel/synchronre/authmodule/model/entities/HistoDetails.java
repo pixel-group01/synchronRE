@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor //@Builder
 @MappedSuperclass
 @Audited @EntityListeners(AuditingEntityListener.class)
 public class HistoDetails
@@ -39,4 +39,10 @@ public class HistoDetails
     protected String deletedBy;
     @Column(name = "isDeleted", length = 50)
     protected Boolean isDeleted = false;
+
+    public HistoDetails(String actionName, String actionId, String connexionId) {
+        this.actionName = actionName;
+        this.actionId = actionId;
+        this.connexionId = connexionId;
+    }
 }

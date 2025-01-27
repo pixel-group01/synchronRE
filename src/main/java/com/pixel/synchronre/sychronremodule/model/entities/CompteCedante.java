@@ -12,7 +12,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity @Audited
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class CompteCedante
 {
     @Id

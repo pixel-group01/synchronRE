@@ -11,7 +11,7 @@ import org.hibernate.envers.RelationTargetAuditMode;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder
-@Entity @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Entity
 public class Statut {
   @Id
   private String staCode;

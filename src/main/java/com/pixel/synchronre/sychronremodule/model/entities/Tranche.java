@@ -34,7 +34,7 @@ public class Tranche
     @ManyToOne @JoinColumn(name = "traite_np_id")
     private TraiteNonProportionnel traiteNonProportionnel;
 
-    @ManyToOne @JoinColumn(name = "STA_CODE")
+    @ManyToOne @JoinColumn(name = "STA_CODE") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_creator")
     private AppUser userCreator;

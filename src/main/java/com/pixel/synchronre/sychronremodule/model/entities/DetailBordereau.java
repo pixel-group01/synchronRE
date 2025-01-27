@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @Entity
+@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class DetailBordereau {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DEB_ID_GEN")

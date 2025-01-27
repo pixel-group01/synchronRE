@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Builder @Entity
+@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Bordereau
 {
     @Id
@@ -27,9 +30,9 @@ public class Bordereau
     private BigDecimal bordMontantTotalPrimeAreverser;
     private String bordMontantTotalPrimeAreverserLette;
     private LocalDate brodDateLimite;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "type_code")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "type_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Type type;
-    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "bord_statut")
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "bord_statut") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @CreationTimestamp
     protected LocalDateTime createdAt;

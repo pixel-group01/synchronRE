@@ -7,7 +7,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+@Entity
 public class Nature {
     @Id
     private String natCode;

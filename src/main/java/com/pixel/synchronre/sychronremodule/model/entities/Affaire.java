@@ -3,11 +3,14 @@ package com.pixel.synchronre.sychronremodule.model.entities;
 
 import com.pixel.synchronre.authmodule.model.entities.AppFunction;
 import com.pixel.synchronre.authmodule.model.entities.AppUser;
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,7 +21,8 @@ import java.util.Optional;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "affType")
-public class Affaire
+@Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
+public class Affaire extends HistoDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -45,28 +49,24 @@ public class Affaire
     @Column(precision = 50, scale = 20)
     private BigDecimal reserveCourtier = BigDecimal.ZERO; //montant de la smplci non soumuise en réassurance et reservé par NelsonRE
     protected String affStatutCreation; //Statut à la création de l'affaire ( Réalisée:REALISEE / En instance:INSTANCE / Non Réalisée:NON_REALISEE )
-    @ManyToOne @JoinColumn(name = "cedente_id")
+    @ManyToOne @JoinColumn(name = "cedente_id")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Cedante cedante;
-    @ManyToOne @JoinColumn(name = "statut_code")
+    @ManyToOne @JoinColumn(name = "statut_code")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Statut statut;
-    @ManyToOne @JoinColumn(name = "couverture_id")
+    @ManyToOne @JoinColumn(name = "couverture_id")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Couverture couverture;
 
-    @ManyToOne @JoinColumn(name = "exe_code")
+    @ManyToOne @JoinColumn(name = "exe_code")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Exercice exercice;
 
-    @ManyToOne @JoinColumn(name = "type_code")
+    @ManyToOne @JoinColumn(name = "type_code")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Type affType;
-    @CreationTimestamp
-    protected LocalDateTime createdAt;
-    @UpdateTimestamp
-    protected LocalDateTime updatedAt;
 
     @ManyToOne @JoinColumn(name = "aff_user_creator")
     private AppUser affUserCreator;
     @ManyToOne @JoinColumn(name = "aff_fon_creator")
     private AppFunction affFonCreator;
-    @ManyToOne @JoinColumn(name = "devise_code")
+    @ManyToOne @JoinColumn(name = "devise_code")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     protected Devise devise;
     @Column(precision = 50, scale = 20)
     protected BigDecimal affCoursDevise;

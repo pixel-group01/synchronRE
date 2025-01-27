@@ -6,13 +6,15 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-@Entity
+@Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
 public class Sinistre
 {
     @Id
@@ -33,7 +35,7 @@ public class Sinistre
 
     @ManyToOne @JoinColumn(name = "aff_id")
     private Affaire affaire;
-    @ManyToOne @JoinColumn(name = "sta_code")
+    @ManyToOne @JoinColumn(name = "sta_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
     @ManyToOne @JoinColumn(name = "user_id")
     private AppUser userCreator;

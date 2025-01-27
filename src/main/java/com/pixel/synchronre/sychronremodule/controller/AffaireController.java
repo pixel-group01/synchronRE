@@ -2,7 +2,9 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.archivemodule.controller.service.AffaireDocUploader;
 import com.pixel.synchronre.archivemodule.model.dtos.request.UploadDocReq;
+import com.pixel.synchronre.authmodule.controller.services.spec.IHistoDetailsService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.AffStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.constants.AffaireActions;
@@ -25,7 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,6 +51,7 @@ public class AffaireController
     private final IserviceAffaire affService;
     private final IserviceExercie exoService;
     private final AffaireDocUploader docService;
+    private final IHistoDetailsService hds;
 
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
@@ -61,7 +63,8 @@ public class AffaireController
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto){
-        return affService.createFacultative(dto);
+        HistoDetails hd = hds.getHistoDetailsFromSecurityContext("Enregistrement d'une affaire");
+        return affService.createFacultative(dto, hd);
     }
 
     @PostMapping("/facultative/delete/{affId}")
@@ -74,7 +77,8 @@ public class AffaireController
     @PutMapping("/facultative/update")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp updateAffaire(@RequestBody @Valid UpdateFacultativeReq dto) throws UnknownHostException {
-        return affService.updateFacultative(dto);
+        HistoDetails hd = hds.getHistoDetailsFromSecurityContext("Modification d'une affaire");
+        return affService.updateFacultative(dto, hd);
     }
     @PostMapping("/facultative/renew")
     @ResponseStatus(HttpStatus.CREATED)

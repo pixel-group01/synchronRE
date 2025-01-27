@@ -38,7 +38,7 @@ public abstract class FacultativeMapper
     @Mapping(target = "cedante", expression = "java(dto.getCedId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Cedante(dto.getCedId()))")
     @Mapping(target = "statut", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Statut(\"SAI\"))")
     @Mapping(target = "couverture", expression = "java(dto.getCouvertureId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Couverture(dto.getCouvertureId()))")
-    @Mapping(target = "devise", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Devise(dto.getDevCode()))")
+    @Mapping(target = "devise", expression = "java(dto.getDevCode() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Devise(dto.getDevCode()))")
     @Mapping(target = "affType", expression = "java(typeRepo.findByUniqueCode(\"FAC\").orElseThrow(()->new com.pixel.synchronre.sharedmodule.exceptions.AppException(\"Type de document inconnu\")))")
     @Mapping(target = "affUserCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "affFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
