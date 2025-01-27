@@ -10,9 +10,9 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Table(name = "v_cedante_traite")
+@Table(name = "v_cedante_traite_calcule")
 @Entity @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class V_CedanteTraite
+public class VCedanteTraiteCalcule
 {
     @Id
     private Long rId;
@@ -20,4 +20,10 @@ public class V_CedanteTraite
     private String cedNomFiliale;
     private Long traiteNpId;
     private String traiNumero;
+
+    private BigDecimal assiettePrime;
+    private BigDecimal pmd;
+    private BigDecimal pmdCourtier;
+    private BigDecimal pmdCourtierPlaceur;
+    private BigDecimal pmdNette;
 }

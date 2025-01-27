@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "v_tranche_cedante_nat")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class V_TrancheCedanteNat
+public class VTrancheCedanteNat
 {
     @Id
     private Long rId;

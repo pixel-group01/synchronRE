@@ -7,7 +7,6 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
-import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;

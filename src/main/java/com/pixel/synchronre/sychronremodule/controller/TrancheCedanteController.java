@@ -1,7 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteReq;
-import com.pixel.synchronre.sychronremodule.model.views.V_CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.views.VCedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +27,9 @@ public class TrancheCedanteController
     }
 
     @GetMapping(path = "/traites")
-    public List<V_CedanteTraite> getAllCedanteTraite()
+    public List<VCedanteTraite> getAllCedanteTraite()
     {
-        List<V_CedanteTraite> cedanteTraites = trancheCedanteService.getAllCedanteTraites();
+        List<VCedanteTraite> cedanteTraites = trancheCedanteService.getAllCedanteTraites();
         return cedanteTraites;
     }
 }

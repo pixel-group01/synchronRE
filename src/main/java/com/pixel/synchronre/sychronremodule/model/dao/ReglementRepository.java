@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReglementRepository extends JpaRepository<Reglement, Long> {
@@ -69,4 +70,9 @@ public interface ReglementRepository extends JpaRepository<Reglement, Long> {
 
     @Query("select r.regId from Reglement r where r.affaire.affId = ?1 and r.regStatut = true")
     List<Long> findRegIdByAffId(Long affId);
+
+    @Query("""
+        select sum(p.montantEncaisse) from V_Paiement p where p.affId = ?1 and p.dateReglement between ?2 and ?3
+    """)
+    BigDecimal calculateEncaissementBetween(Long affId, LocalDate debut, LocalDate fin);
 }

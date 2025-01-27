@@ -1,4 +1,4 @@
-package com.pixel.synchronre.statsmodule.model.dtos;
+package com.pixel.synchronre.statsmodule.model.views;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -2,7 +2,7 @@ package com.pixel.synchronre.sychronremodule.service.interfac;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.TrancheCedanteReq;
-import com.pixel.synchronre.sychronremodule.model.views.V_CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.views.VCedanteTraite;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,5 +20,5 @@ public interface ITrancheCedanteService
 
     void onAddOrRemoveCategorieToTranche(Long catId, Long trancheId);
 
-    List<V_CedanteTraite> getAllCedanteTraites();
+    List<VCedanteTraite> getAllCedanteTraites();
 }

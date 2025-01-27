@@ -344,4 +344,3 @@ public class AffaireController
         return affService.senNoteDebitFac(affId);
     }
 }
-

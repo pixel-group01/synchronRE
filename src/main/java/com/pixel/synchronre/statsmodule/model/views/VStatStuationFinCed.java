@@ -1,4 +1,4 @@
-package com.pixel.synchronre.sychronremodule.model.views;
+package com.pixel.synchronre.statsmodule.model.views;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 @Entity
 @Table(name = "v_stat_situation_fin_par_ced") // Nom de la vue dans PostgreSQL
-public class V_StatStuationFinCed
+public class VStatStuationFinCed
 {
     @Id
     private Long rId;                      // Identifiant de la ligne

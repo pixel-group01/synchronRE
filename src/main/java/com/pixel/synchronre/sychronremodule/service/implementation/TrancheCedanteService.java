@@ -11,7 +11,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto;
 import com.pixel.synchronre.sychronremodule.model.entities.Cedante;
 import com.pixel.synchronre.sychronremodule.model.entities.Tranche;
 import com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante;
-import com.pixel.synchronre.sychronremodule.model.views.V_CedanteTraite;
+import com.pixel.synchronre.sychronremodule.model.views.VCedanteTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceRepartitionTraiteNP;
 import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import lombok.RequiredArgsConstructor;
@@ -106,9 +106,9 @@ public class TrancheCedanteService implements ITrancheCedanteService
     }
 
     @Override
-    public List<V_CedanteTraite> getAllCedanteTraites()
+    public List<VCedanteTraite> getAllCedanteTraites()
     {
-        List<V_CedanteTraite> cedanteTraites = cedanteTraiteRepo.findAll();
+        List<VCedanteTraite> cedanteTraites = cedanteTraiteRepo.findAll();
         return cedanteTraites;
     }
 

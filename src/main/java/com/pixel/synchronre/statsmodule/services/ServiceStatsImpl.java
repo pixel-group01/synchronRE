@@ -3,18 +3,16 @@ package com.pixel.synchronre.statsmodule.services;
 import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
 import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
-import com.pixel.synchronre.statsmodule.model.dtos.VStatSituationFinParReaCed;
+import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.repositories.AffaireStatsRepository;
 import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
 import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationNoteCredRepository;
-import com.pixel.synchronre.statsmodule.model.repositories.V_StatStuationFinCedRepository;
-import com.pixel.synchronre.sychronremodule.model.views.VStatSituationNoteCred;
-import com.pixel.synchronre.sychronremodule.model.views.V_StatStuationFinCed;
+import com.pixel.synchronre.statsmodule.model.repositories.VStatStuationFinCedRepository;
+import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
+import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
@@ -24,7 +22,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     private final AffaireStatsRepository statRepo;
     private final IServiceCritereStats critereStatsService;
     private final VStatSituationFinReaCedRepository situationReaCedRepo;
-    private final V_StatStuationFinCedRepository situationCedRepo;
+    private final VStatStuationFinCedRepository situationCedRepo;
     private final VStatSituationNoteCredRepository situationNoteCredRepo;
 
 
@@ -59,7 +57,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     }
 
     @Override
-    public List<V_StatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) {
+    public List<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) {
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
         statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
         return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
