@@ -1,9 +1,6 @@
 package com.pixel.synchronre.statsmodule.services;
 
-import com.pixel.synchronre.statsmodule.model.dtos.AffaireStats;
-import com.pixel.synchronre.statsmodule.model.dtos.CommissionStats;
-import com.pixel.synchronre.statsmodule.model.dtos.CritereStat;
-import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
+import com.pixel.synchronre.statsmodule.model.dtos.*;
 import com.pixel.synchronre.statsmodule.model.repositories.*;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
@@ -24,6 +21,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     private final VStatStuationFinCedRepository situationCedRepo;
     private final VStatSituationNoteCredRepository situationNoteCredRepo;
     private final ChiffreAffaireRepo caRepo;
+    private final StatsChiffreAffaireMapper statsChiffreAffaireMapper;
 
 
     @Override
@@ -70,7 +68,8 @@ public class ServiceStatsImpl implements IServiceStatistiques
 
     @Override
     public List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode, Long cedId, Long cesId, LocalDate debut, LocalDate fin) {
-        List<StatChiffreAffaireParPeriodeDTO>  stats = caRepo.getStatsChiffreAffaire(exeCode, cedId, cesId, debut, fin);
+        List<Object[]>  statObjs = caRepo.getStatsChiffreAffaire(exeCode, cedId, cesId, debut, fin);
+        List<StatChiffreAffaireParPeriodeDTO> stats = statsChiffreAffaireMapper.mapToStatsChiffreAffaireDTOList(statObjs);
         return stats;
     }
 }

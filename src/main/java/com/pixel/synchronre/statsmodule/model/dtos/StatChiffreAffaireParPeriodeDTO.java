@@ -24,7 +24,7 @@ public class StatChiffreAffaireParPeriodeDTO
     private String couLibelle;
     private LocalDate affDateEffet;
     private LocalDate affDateEcheance;
-    private String exeCode;
+    private Long exeCode;
     private Long repId;
     private BigDecimal montantCede;
     private BigDecimal commissionNelsonre;
