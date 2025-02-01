@@ -22,6 +22,7 @@ public class Periode
     private LocalDate periode;
     @ManyToOne @JoinColumn(name = "type_id")
     private Type type;
+    private String periodeName;
 
     public Periode(Long periodeId) {
         this.periodeId = periodeId;

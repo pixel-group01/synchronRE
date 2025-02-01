@@ -40,5 +40,4 @@ public class CompteController {
     {
         return compteService.getPeriode(exeCode, typeId);
     }
-
 }
