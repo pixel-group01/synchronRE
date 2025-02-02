@@ -87,7 +87,7 @@ public class CompteService implements IserviceCompte {
         List<CompteCessionnaireDto> compteCessionnaires = trancheCompteDto.getCompteCessionnaires();
         if(compteCessionnaires != null && !compteCessionnaires.isEmpty())
         {
-            compteCessionnaires.stream().map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
+            compteCessionnaires.stream().peek(cc->cc.setCompteCedId(compteCedanteId)).map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
         }
         //TODO setter les champs du dto
         return dto;
