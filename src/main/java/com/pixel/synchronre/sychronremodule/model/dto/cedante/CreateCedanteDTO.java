@@ -35,13 +35,8 @@ public class CreateCedanteDTO
     private String cedFax;
     private String cedSituationGeo;
     private String cedInterlocuteur;
-    @UniquePaysCode
     private String paysCode;
     @NotBlank(message = "Veuillez selectionner le numéro de compte")
     @NotNull(message = "Veuillez selectionner le numéro de compte")
     private String banNumCompte;
-    /*@ExistingUserId
-    private Long cedUserCreator;
-    @ExistingFncId
-    private Long cedFonCreator;*/
 }
