@@ -48,4 +48,10 @@ public class JasperReportConfig {
 
     @Value("${report.location.situation_financiere_par_cedante}")
     public String situationFinanciereParCedante;
+
+    @Value("${report.location.situation.financiere.note.credit}")
+    public String situationNoteCreditCedRea;
+
+    @Value("${report.location.chiffre.affaires.periode.rea.ced}")
+    public String chiffreAffairesPeriodeCedRea;
 }

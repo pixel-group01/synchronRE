@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-01-26T17:29:50 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante_et_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
+<!-- 2025-02-07T17:57:02 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Chiffre_affaire_par_periode_ced_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -31,32 +31,6 @@
 			<rightPen lineWidth="0.5" lineColor="#000000"/>
 		</box>
 	</style>
-	<subDataset name="Dataset1" uuid="8f91bfb2-ae56-4596-b439-46aa58813eb6">
-		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
-		<parameter name="exe_code" class="java.lang.Long"/>
-		<parameter name="ced_id" class="java.lang.Long"/>
-		<parameter name="ces_id" class="java.lang.Long"/>
-		<queryString language="SQL">
-			<![CDATA[select bord_num,aff_code,aff_assure
-from v_stat_situation_fin_par_rea_ced
-where exe_code=2024
-and ced_id=9
-and ces_id=10]]>
-		</queryString>
-		<field name="bord_num" class="java.lang.String"/>
-		<field name="aff_code" class="java.lang.String"/>
-		<field name="aff_assure" class="java.lang.String"/>
-		<group name="bord_num">
-			<groupExpression><![CDATA[$F{bord_num}]]></groupExpression>
-		</group>
-		<group name="aff_code">
-			<groupExpression><![CDATA[$F{aff_code}]]></groupExpression>
-		</group>
-		<group name="aff_assure">
-			<groupExpression><![CDATA[$F{aff_assure}]]></groupExpression>
-		</group>
-	</subDataset>
 	<subDataset name="table_ced_par_rea" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
@@ -67,48 +41,89 @@ and ces_id=10]]>
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
 		</parameter>
 		<parameter name="ces_id" class="java.lang.Long"/>
-		<parameter name="statut_envoie" class="java.lang.String">
-			<defaultValueExpression><![CDATA[$P{statut_envoie}]]></defaultValueExpression>
+		<parameter name="DateDeb" class="java.lang.String">
+			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
-		<parameter name="statut_encaissement" class="java.lang.String">
-			<defaultValueExpression><![CDATA[$P{statut_encaissement}]]></defaultValueExpression>
-		</parameter>
+		<parameter name="DateFin" class="java.lang.String"/>
 		<queryString language="SQL">
-			<![CDATA[select stat.bord_num,
-       stat.aff_code,
-       stat.aff_assure,
-       stat.cou_libelle,
-       stat.aff_date_effet,
-       stat.aff_date_echeance,
-      stat.montant_cede,
-       stat.montant_encaisse ,
-       stat.commission_nelsonre ,
-       stat.montant_a_reverser,
-       stat.montant_reverse,
-       stat.reste_a_reverse,
-       stat.statut_envoie,
-       statut_encaissement
-from v_stat_situation_fin_par_rea_ced stat
-where exe_code=COALESCE($P{exe_code},exe_code)
-and ced_id=COALESCE($P{ced_id}, ced_id)
-and ces_id=COALESCE($P{ces_id}, ces_id)
-AND stat.statut_envoie = COALESCE($P{statut_envoie}, stat.statut_envoie)
-AND stat.statut_encaissement = COALESCE($P{statut_encaissement}, stat.statut_encaissement)]]>
+			<![CDATA[WITH encaissement AS (
+    SELECT
+        p.aff_id,
+        SUM(p.montant_encaisse) AS montant_encaisse
+    FROM V_paiement p
+    WHERE p.date_reglement BETWEEN TO_DATE($P{DateDeb}, 'YYYY-MM-DD') AND TO_DATE($P{DateFin}, 'YYYY-MM-DD')
+    GROUP BY p.aff_id
+    ORDER BY p.aff_id
+),
+     reversement AS (
+         SELECT
+             rev.aff_id,
+             rev.ces_id,
+             MAX(rev.date_reglement) AS date_reversement,
+             SUM(rev.montant_reverse) AS montant_reverse
+         FROM V_reversement rev
+         WHERE rev.date_reglement BETWEEN TO_DATE($P{DateDeb}, 'YYYY-MM-DD') AND TO_DATE($P{DateFin}, 'YYYY-MM-DD')
+         GROUP BY rev.aff_id, rev.ces_id
+         ORDER BY rev.aff_id, rev.ces_id
+     )
+select
+            ROW_NUMBER() OVER (ORDER BY aff.aff_id) AS r_id
+     ,db.deb_id
+     ,aff.aff_id
+     ,notDeb.bord_num
+     ,aff.aff_code
+     ,ced.ced_id
+     ,ced.ced_nom_filiale
+     ,ces.ces_id
+     ,ces.ces_nom
+     ,aff.aff_assure
+     ,cou.cou_libelle
+     ,aff.aff_date_effet
+     ,aff.aff_date_echeance
+     ,aff.exe_code
+     ,pla.rep_id,
+     COALESCE(pla.rep_prime, 0)                           AS montant_cede,
+     COALESCE(pla.commission_court, 0)                    AS commission_nelsonre,
+     COALESCE(pla.prime_nette, 0)                        AS montant_a_reverser,
+     COALESCE(rev.montant_reverse, 0) AS         montant_reverse,
+     COALESCE(rev.date_reversement, NULL)  AS date_reversement,
+     COALESCE(enc.montant_encaisse, 0) as montant_encaisse
+
+from affaire aff
+         left join encaissement enc on enc.aff_id = aff.aff_id
+         JOIN cedante ced on aff.cedente_id = ced.ced_id
+         JOIN couverture cou on aff.couverture_id = cou.cou_id
+         left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
+         left JOIN detail_bordereau db on notDeb.bord_id = db.deb_bord_id
+
+         LEFT JOIN V_placement pla ON db.deb_rep = pla.rep_id
+         left JOIN cessionnaire ces ON pla.cessionnaire_id = ces.ces_id
+         left join reversement rev on aff.aff_id = rev.aff_id and ces.ces_id = rev.ces_id
+where aff.exe_code = COALESCE($P{exe_code},aff.exe_code)
+  and ced.ced_id = COALESCE($P{ced_id},ced.ced_id)
+  and ces.ces_id = COALESCE($P{ces_id},ces.ces_id)]]>
 		</queryString>
+		<field name="r_id" class="java.lang.Long"/>
+		<field name="deb_id" class="java.lang.Long"/>
+		<field name="aff_id" class="java.lang.Long"/>
 		<field name="bord_num" class="java.lang.String"/>
 		<field name="aff_code" class="java.lang.String"/>
+		<field name="ced_id" class="java.lang.Long"/>
+		<field name="ced_nom_filiale" class="java.lang.String"/>
+		<field name="ces_id" class="java.lang.Long"/>
+		<field name="ces_nom" class="java.lang.String"/>
 		<field name="aff_assure" class="java.lang.String"/>
 		<field name="cou_libelle" class="java.lang.String"/>
 		<field name="aff_date_effet" class="java.sql.Date"/>
 		<field name="aff_date_echeance" class="java.sql.Date"/>
+		<field name="exe_code" class="java.lang.Long"/>
+		<field name="rep_id" class="java.lang.Long"/>
 		<field name="montant_cede" class="java.math.BigDecimal"/>
-		<field name="montant_encaisse" class="java.math.BigDecimal"/>
 		<field name="commission_nelsonre" class="java.math.BigDecimal"/>
 		<field name="montant_a_reverser" class="java.math.BigDecimal"/>
 		<field name="montant_reverse" class="java.math.BigDecimal"/>
-		<field name="reste_a_reverse" class="java.math.BigDecimal"/>
-		<field name="statut_envoie" class="java.lang.String"/>
-		<field name="statut_encaissement" class="java.lang.String"/>
+		<field name="date_reversement" class="java.sql.Date"/>
+		<field name="montant_encaisse" class="java.math.BigDecimal"/>
 		<variable name="total_montant_cede" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_cede}]]></variableExpression>
 		</variable>
@@ -123,9 +138,6 @@ AND stat.statut_encaissement = COALESCE($P{statut_encaissement}, stat.statut_enc
 		</variable>
 		<variable name="total_reverse" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_reverse}]]></variableExpression>
-		</variable>
-		<variable name="total_reste" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{reste_a_reverse}]]></variableExpression>
 		</variable>
 		<group name="bord_num">
 			<groupExpression><![CDATA[$F{bord_num}]]></groupExpression>
@@ -160,17 +172,12 @@ AND stat.statut_encaissement = COALESCE($P{statut_encaissement}, stat.statut_enc
 		<group name="montant_reverse">
 			<groupExpression><![CDATA[$F{montant_reverse}]]></groupExpression>
 		</group>
-		<group name="reste_a_reverse">
-			<groupExpression><![CDATA[$F{reste_a_reverse}]]></groupExpression>
-		</group>
 	</subDataset>
 	<parameter name="exe_code" class="java.lang.Long"/>
 	<parameter name="ced_id" class="java.lang.Long">
 		<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ces_id" class="java.lang.Long"/>
-	<parameter name="statut_envoie" class="java.lang.String"/>
-	<parameter name="statut_encaissement" class="java.lang.String"/>
 	<parameter name="param_image" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -181,32 +188,54 @@ AND stat.statut_encaissement = COALESCE($P{statut_encaissement}, stat.statut_enc
 	<parameter name="logo_synre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
+	<parameter name="DateDeb" class="java.lang.String"/>
+	<parameter name="DateFin" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[select distinct exe_code,ced_nom_filiale,ces_nom
-from v_stat_situation_fin_par_rea_ced
-where exe_code=COALESCE($P{exe_code},exe_code)
-and ced_id=COALESCE($P{ced_id}, ced_id)
-and ces_id=COALESCE($P{ces_id}, ces_id)
-and statut_envoie = COALESCE($P{statut_envoie}, statut_envoie)
-and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)]]>
+		<![CDATA[select distinct
+     ROW_NUMBER() OVER (ORDER BY aff.aff_id) AS r_id
+     ,ced.ced_nom_filiale
+     ,ces.ces_nom
+     ,aff.aff_date_effet
+     ,aff.aff_date_echeance
+     ,aff.exe_code,
+     pai.date_reglement
+
+from affaire aff
+         JOIN cedante ced on aff.cedente_id = ced.ced_id
+         JOIN couverture cou on aff.couverture_id = cou.cou_id
+         left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
+         left JOIN detail_bordereau db on notDeb.bord_id = db.deb_bord_id
+
+         LEFT JOIN V_placement pla ON db.deb_rep = pla.rep_id
+         left Join v_paiement pai ON aff.aff_id = pai.aff_id
+         left JOIN cessionnaire ces ON pla.cessionnaire_id = ces.ces_id
+where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
+  and ced.ced_id = COALESCE($P{ced_id},ced.ced_id)
+  and ces.ces_id = COALESCE($P{ces_id},ces.ces_id)
+  and pai.date_reglement BETWEEN TO_DATE($P{DateDeb}, 'YYYY-MM-DD') AND TO_DATE($P{DateFin}, 'YYYY-MM-DD')]]>
 	</queryString>
-	<field name="exe_code" class="java.lang.Long"/>
+	<field name="r_id" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
 	<field name="ces_nom" class="java.lang.String"/>
+	<field name="aff_date_effet" class="java.sql.Date"/>
+	<field name="aff_date_echeance" class="java.sql.Date"/>
+	<field name="exe_code" class="java.lang.Long"/>
+	<field name="date_reglement" class="java.sql.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="275" splitType="Stretch">
 			<componentElement>
-				<reportElement x="27" y="180" width="745" height="90" uuid="e6a287af-0384-4c6e-9a85-f977cdfc2e28">
+				<reportElement x="27" y="180" width="749" height="90" uuid="e6a287af-0384-4c6e-9a85-f977cdfc2e28">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="table_ced_par_rea" uuid="a01a98cb-39f1-4f9b-b1bb-8d201178d144">
+					<datasetRun subDataset="table_ced_par_rea" uuid="60608f74-7fca-449a-9db8-340e9daa458b">
 						<datasetParameter name="exe_code">
 							<datasetParameterExpression><![CDATA[$P{exe_code}]]></datasetParameterExpression>
 						</datasetParameter>
@@ -216,11 +245,11 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 						<datasetParameter name="ces_id">
 							<datasetParameterExpression><![CDATA[$P{ces_id}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="statut_envoie">
-							<datasetParameterExpression><![CDATA[$P{statut_envoie}]]></datasetParameterExpression>
+						<datasetParameter name="DateDeb">
+							<datasetParameterExpression><![CDATA[$P{DateDeb}]]></datasetParameterExpression>
 						</datasetParameter>
-						<datasetParameter name="statut_encaissement">
-							<datasetParameterExpression><![CDATA[$P{statut_encaissement}]]></datasetParameterExpression>
+						<datasetParameter name="DateFin">
+							<datasetParameterExpression><![CDATA[$P{DateFin}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
@@ -231,7 +260,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="ffc7180e-d687-46e7-a2f2-0520a299ed54"/>
+								<reportElement x="0" y="0" width="74" height="30" forecolor="#FFFFFF" uuid="ffc7180e-d687-46e7-a2f2-0520a299ed54"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -293,7 +322,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="63" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -345,7 +374,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="51" height="30" isPrintWhenDetailOverflows="true" uuid="67c49d7d-e972-4c8e-b999-0d2f10370bb1"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -371,19 +400,10 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 								<text><![CDATA[DATE ECHEANCE]]></text>
 							</staticText>
 						</jr:columnHeader>
-						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
-							<staticText>
-								<reportElement x="0" y="0" width="51" height="30" forecolor="#FFFFFF" uuid="4e7fa86b-81fc-445c-b901-771eaeac60b8"/>
-								<box leftPadding="3" rightPadding="3"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
-									<font size="8" isBold="true"/>
-								</textElement>
-								<text><![CDATA[TOTAL]]></text>
-							</staticText>
-						</jr:columnFooter>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="50" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="51" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font size="7"/>
@@ -392,36 +412,40 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="d247c4a3-c2bf-476f-a037-fdce430afdc8">
+					<jr:column width="65" uuid="d247c4a3-c2bf-476f-a037-fdce430afdc8">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne7"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="5b7d2874-c823-4cc2-84eb-07d56e7e68aa"/>
+								<reportElement x="0" y="0" width="65" height="30" forecolor="#FFFFFF" uuid="5b7d2874-c823-4cc2-84eb-07d56e7e68aa">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
-									<font size="8" isBold="true"/>
+									<font size="7" isBold="true"/>
 								</textElement>
-								<text><![CDATA[MONTANT CEDE ]]></text>
+								<text><![CDATA[DATE REVERSEMENT]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
-							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFCFC" uuid="e5c95179-c21c-423b-8e77-cc850ab4c305"/>
+							<staticText>
+								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="b93fc723-eae7-4566-8f19-8019cd52c699"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_montant_cede})]]></textFieldExpression>
-							</textField>
+								<text><![CDATA[TOTAL]]></text>
+							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
+							<textField isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="65" height="30" isPrintWhenDetailOverflows="true" uuid="e4c8c079-86a9-40e2-a6b5-7479d3199358"/>
 								<box leftPadding="3" rightPadding="3"/>
-								<textElement textAlignment="Right" verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_cede})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{date_reversement} != null ? new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{date_reversement}) : "Aucune date"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -438,18 +462,17 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
-							<textField>
+							<textField isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="fb0cb9da-dcaa-49a1-ae7c-43b7f2e9b116"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_encaisse})
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_encaisse})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -478,9 +501,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_commission})
-
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_commission})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -513,12 +534,11 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_a_reverser})
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_a_reverser})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="114a6d5f-a7dd-4ed3-bbc0-2809d0830932"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -547,8 +567,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_reverse})
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_reverse})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -562,53 +581,43 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="9cb5212a-204f-40ab-be4e-bac59a2a6618">
+					<jr:column width="63" uuid="9cb5212a-204f-40ab-be4e-bac59a2a6618">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne12"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="54e8dccc-fdd9-491c-84d4-c7f1bbd6b40e"/>
+								<reportElement x="0" y="0" width="63" height="30" forecolor="#FFFFFF" uuid="54e8dccc-fdd9-491c-84d4-c7f1bbd6b40e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[RESTE A REVERSER]]></text>
+								<text><![CDATA[MONTANT CEDE]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="c609a767-2dc8-41a4-afca-28ada769a600"/>
+								<reportElement x="0" y="0" width="63" height="30" forecolor="#FFFFFF" uuid="c609a767-2dc8-41a4-afca-28ada769a600"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_reste})
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_montant_cede})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="63" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{reste_a_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_cede})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<textField isBlankWhenNull="true">
-				<reportElement x="479" y="142" width="144" height="30" uuid="e7cf2f5b-6dfd-4e60-a658-4629b2a1c067">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$P{statut_envoie}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="27" y="142" width="243" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
+				<reportElement x="27" y="142" width="233" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -618,7 +627,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 				<textFieldExpression><![CDATA["FILIALE : "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="270" y="142" width="209" height="30" uuid="f3ffd342-a966-4859-b3bc-efea5d778d91">
+				<reportElement x="266" y="142" width="209" height="30" uuid="f3ffd342-a966-4859-b3bc-efea5d778d91">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -655,21 +664,28 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SITUATION FINANCIERE DES NOTES DE DEBIT "+$F{exe_code}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CHIFFRE D'AFFAIRES "+$F{exe_code}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="607" y="144" width="163" height="30" uuid="31cee0c9-8a3d-45ec-bb2c-19d785f9daba">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				</reportElement>
+			<textField>
+				<reportElement x="491" y="143" width="280" height="30" uuid="2c8ce3a2-0e63-4c5d-a59f-80c91319536a"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[""+$P{statut_encaissement}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Période : "+ "Du " + 
+($P{DateDeb} != null && !$P{DateDeb}.isEmpty() ? 
+    new java.text.SimpleDateFormat("dd/MM/yyyy").format(
+        new java.text.SimpleDateFormat("yyyy-MM-dd").parse($P{DateDeb})
+    ) : "Aucune date de début") + 
+" au " + 
+($P{DateFin} != null && !$P{DateFin}.isEmpty() ? 
+    new java.text.SimpleDateFormat("dd/MM/yyyy").format(
+        new java.text.SimpleDateFormat("yyyy-MM-dd").parse($P{DateFin})
+    ) : "Aucune date de fin")]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageFooter>
-		<band height="18">
+		<band height="17">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="ContainerHeight" x="500" y="2" width="280" height="15" uuid="f7941a5f-b5d5-4c04-929c-15f8510d228d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
@@ -684,7 +700,7 @@ and statut_encaissement = COALESCE($P{statut_encaissement}, statut_encaissement)
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+ " / "+$V{PAGE_COUNT}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Page " +$V{PAGE_NUMBER}+ " / "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

@@ -287,4 +287,28 @@ public class ServiceReportImpl implements IServiceReport
         byte[] reportBytes = this.generateReport(jrConfig.situationFinanciereParCedante, params, new ArrayList<>(), null);
         return reportBytes;
     }
+
+    @Override
+    public byte[] generateSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("param_image", this.getImagesPath());
+        byte[] reportBytes = this.generateReport(jrConfig.situationNoteCreditCedRea, params, new ArrayList<>(), null);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateChiffreAffairesPeriodeCedRea(Long exeCode, Long cedId, Long cesId, String dateDebut, String dateFin) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("DateDeb", dateDebut);
+        params.put("DateFin", dateFin);
+        params.put("param_image", this.getImagesPath());
+        byte[] reportBytes = this.generateReport(jrConfig.chiffreAffairesPeriodeCedRea, params, new ArrayList<>(), null);
+        return reportBytes;
+    }
 }

@@ -158,4 +158,27 @@ public class ReportRestController
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
     }
+
+    @GetMapping("/situation-note-credit-par-cedante-reassureur")
+    public Base64FileDto generateSituationNoteCredit(@RequestParam(required = false) Long exeCode,
+                                                        @RequestParam(required = false) Long cedId,
+                                                        @RequestParam(required = false) Long cesId) throws Exception
+    {
+        byte[] reportBytes = jrService.generateSituationNoteCredit(exeCode,cedId,cesId);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
+    }
+
+    @GetMapping("/chiffre-affaires-par-periode-par-ced-rea")
+    public Base64FileDto generateChiffreAffairesPeriodeCedRea(@RequestParam(required = false) Long exeCode,
+                                                        @RequestParam(required = false) Long cedId,
+                                                        @RequestParam(required = false) Long cesId,
+                                                        @RequestParam(required = false) String dateDebut,
+                                                        @RequestParam(required = false) String dateFin) throws Exception
+    {
+        byte[] reportBytes = jrService.generateChiffreAffairesPeriodeCedRea(exeCode,cedId,cesId,dateDebut,dateFin);
+        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
+        return new Base64FileDto(base64Url, reportBytes);
+    }
+
 }

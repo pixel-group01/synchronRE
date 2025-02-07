@@ -34,4 +34,8 @@ public interface IServiceReport
     byte[] generateSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception;
 
     byte[] generateSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception;
+
+    byte[] generateSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception;
+
+    byte[] generateChiffreAffairesPeriodeCedRea(Long exeCode, Long cedId, Long cesId, String dateDebut, String dateFin) throws Exception;
 }
