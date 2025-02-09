@@ -2,6 +2,8 @@ package com.pixel.synchronre.statsmodule.model.repositories;
 
 import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -68,9 +70,9 @@ public interface ChiffreAffaireRepo extends JpaRepository<Affaire, Long>
                          left join reversement rev on aff.aff_id = rev.aff_id and ces.ces_id = rev.ces_id
                 where aff.exe_code = coalesce(:exeCode, aff.exe_code) and ced.ced_id = coalesce(:cedId, ced.ced_id) and ces.ces_id = coalesce(:cesId, ces.ces_id)
             """)
-    List<Object[]> getStatsChiffreAffaire(@Param(value = "exeCode") Long exeCode,
-                                                                 @Param(value = "cedId")Long cedId,
-                                                                 @Param(value = "cesId")Long cesId,
-                                                                 @Param(value = "debut")LocalDate debut,
-                                                                 @Param(value = "fin")LocalDate fin);
+    Page<Object[]> getStatsChiffreAffaire(@Param(value = "exeCode") Long exeCode,
+                                          @Param(value = "cedId")Long cedId,
+                                          @Param(value = "cesId")Long cesId,
+                                          @Param(value = "debut")LocalDate debut,
+                                          @Param(value = "fin")LocalDate fin, Pageable pageable);
 }

@@ -18,6 +18,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
@@ -79,42 +80,48 @@ public class StatistiquesController
     }
 
     @GetMapping(path = "/affaires-fac/situation-par-cedante-reassureur")
-    public List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(@RequestParam(required = false) Long exeCode,
+    public Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(@RequestParam(required = false) Long exeCode,
                                                                              @RequestParam(required = false) Long cedId,
                                                                              @RequestParam(required = false) Long cesId,
                                                                              @RequestParam(required = false) String statutEnvoie,
-                                                                             @RequestParam(required = false) String statutEncaissement)
+                                                                             @RequestParam(required = false) String statutEncaissement,
+                                                                             @RequestParam(required = false, defaultValue = "0") int page,
+                                                                             @RequestParam(required = false, defaultValue = "10") int size)
     {
-        return statistiquesService.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement);
+        return statistiquesService.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/affaires-fac/situation-par-cedante")
-    public List<VStatStuationFinCed> getSituationParCedante(@RequestParam(required = false) Long exeCode,
+    public Page<VStatStuationFinCed> getSituationParCedante(@RequestParam(required = false) Long exeCode,
                                                             @RequestParam(required = false) Long cedId,
                                                             @RequestParam(required = false) String statutEnvoie,
-                                                            @RequestParam(required = false) String statutEncaissement)
+                                                            @RequestParam(required = false) String statutEncaissement,
+                                                            @RequestParam(required = false, defaultValue = "0") int page,
+                                                            @RequestParam(required = false, defaultValue = "10") int size)
     {
-        return statistiquesService.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
+        return statistiquesService.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/affaires-fac/situation-note-de-credit")
-    public List<VStatSituationNoteCred> getSituationNoteCredit(@RequestParam(required = false) Long exeCode,
+    public Page<VStatSituationNoteCred> getSituationNoteCredit(@RequestParam(required = false) Long exeCode,
                                                                @RequestParam(required = false) Long cedId,
-                                                               @RequestParam(required = false) Long cesId)
+                                                               @RequestParam(required = false) Long cesId,
+                                                               @RequestParam(required = false, defaultValue = "0") int page,
+                                                               @RequestParam(required = false, defaultValue = "10") int size)
     {
-        return statistiquesService.getSituationNoteCredit(exeCode,cedId,cesId);
+        return statistiquesService.getSituationNoteCredit(exeCode,cedId,cesId, PageRequest.of(page, size));
     }
 
     @GetMapping(path = "/affaires-fac/chiffre-affaire")
-    public List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(@RequestParam(required = false) Long exeCode,
+    public Page<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(@RequestParam(required = false) Long exeCode,
                                                                         @RequestParam(required = false) Long cedId,
                                                                         @RequestParam(required = false) Long cesId,
-                                                                        @RequestParam(required = false) LocalDate debut,
-                                                                        @RequestParam(required = false) LocalDate fin)
-
-
+                                                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
+                                                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
+                                                                        @RequestParam(required = false, defaultValue = "0") int page,
+                                                                        @RequestParam(required = false, defaultValue = "10") int size)
     {
-        return statistiquesService.getStatsChiffreAffaire(exeCode,cedId,cesId, debut, fin);
+        return statistiquesService.getStatsChiffreAffaire(exeCode,cedId,cesId, debut, fin, PageRequest.of(page, size));
     }
 
 }

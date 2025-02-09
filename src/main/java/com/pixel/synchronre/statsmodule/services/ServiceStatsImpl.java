@@ -6,6 +6,9 @@ import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,28 +51,29 @@ public class ServiceStatsImpl implements IServiceStatistiques
     }
 
     @Override
-    public List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) {
+    public Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
         statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
-        return situationReaCedRepo.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement);
+        return situationReaCedRepo.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement, pageable);
     }
 
     @Override
-    public List<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) {
+    public Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
         statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
-        return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement);
+        return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement, pageable);
     }
 
     @Override
-    public List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId) {
-        return situationNoteCredRepo.getSituationNoteCredit(exeCode,cedId,cesId);
+    public Page<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId, Pageable pageable) {
+        return situationNoteCredRepo.getSituationNoteCredit(exeCode,cedId,cesId, pageable);
     }
 
     @Override
-    public List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode, Long cedId, Long cesId, LocalDate debut, LocalDate fin) {
-        List<Object[]>  statObjs = caRepo.getStatsChiffreAffaire(exeCode, cedId, cesId, debut, fin);
+    public Page<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode, Long cedId, Long cesId, LocalDate debut, LocalDate fin, Pageable pageable) {
+        Page<Object[]>  statObjsPage = caRepo.getStatsChiffreAffaire(exeCode, cedId, cesId, debut, fin, pageable);
+        List<Object[]>  statObjs = statObjsPage.getContent();
         List<StatChiffreAffaireParPeriodeDTO> stats = statsChiffreAffaireMapper.mapToStatsChiffreAffaireDTOList(statObjs);
-        return stats;
+        return new PageImpl<>(stats, pageable, statObjsPage.getTotalElements());
     }
 }
