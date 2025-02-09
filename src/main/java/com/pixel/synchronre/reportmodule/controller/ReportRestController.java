@@ -123,15 +123,15 @@ public class ReportRestController
         return new Base64FileDto(base64Url, reportBytes);
     }
 
-    @GetMapping("/compte-traites/{traitenpId}/{cedenteId}/{trancheId}/{periodicite}/{periode}")
-    public Base64FileDto generateCompteTraite(@PathVariable Long traitenpId,
-                                                @PathVariable Long cedenteId,
-                                                @PathVariable Long trancheId,
-                                                @PathVariable String periodicite,
-                                                @PathVariable @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate periode
+    @GetMapping("/compte-traites")
+    public Base64FileDto generateCompteTraite(@RequestParam(required = false) Long traitenpId,
+                                                @RequestParam(required = false) Long cedenteId,
+                                                @RequestParam(required = false) Long trancheId,
+                                                @RequestParam(required = false) String periodicite,
+                                                @RequestParam(required = false) Long periodeId
                                                 ) throws Exception
     {
-        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periode);
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periodeId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
         return new Base64FileDto(base64Url, reportBytes);
     }

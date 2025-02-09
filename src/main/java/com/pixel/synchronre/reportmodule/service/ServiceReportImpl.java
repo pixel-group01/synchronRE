@@ -247,7 +247,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, LocalDate periode) throws Exception {
+    public byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, Long periodeId) throws Exception {
         TraiteNonProportionnel traite = traiteNPRepo.findById(traitenpId).orElseThrow(()-> new AppException("Traité introuvable"));
         Cedante cedante = cedRepo.findById(cedenteId).orElseThrow(()-> new AppException("Cédante introuvable"));
         Tranche tranche = trancheRepo.findById(trancheId).orElseThrow(()-> new AppException("Tranche introuvable"));
@@ -256,7 +256,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("cedenteId", cedante.getCedId());
         params.put("trancheId", tranche.getTrancheId());
         params.put("periodicite", periodicite);
-        params.put("periode", periode);
+        params.put("periodeId", periodeId);
         params.put("param_image", this.getImagesPath());
         byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
         return reportBytes;

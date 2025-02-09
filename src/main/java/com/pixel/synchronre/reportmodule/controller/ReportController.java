@@ -170,17 +170,4 @@ public class ReportController
         byte[] reportBytes = jrService.generateReport(jrConfig.chequeSinistre, params, new ArrayList<>(), null);
         docService.displayPdf(response, reportBytes, "Cheque-sinistre");
     }
-
-    @GetMapping("/compte-traites/{traitenpId}/{cedenteId}/{trancheId}/{periodicite}/{periode}")
-    public Base64FileDto generateCompteTraite(@PathVariable Long traitenpId,
-                                                @PathVariable Long cedenteId,
-                                                @PathVariable Long trancheId,
-                                                @PathVariable String periodicite,
-                                                @PathVariable LocalDate periode
-    ) throws Exception
-    {
-        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periode);
-        String base64Url = Base64ToFileConverter.convertBytesToBase64UrlString(reportBytes).replace("_", "/").replace("-", "+");
-        return new Base64FileDto(base64Url, reportBytes);
-    }
 }

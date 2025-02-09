@@ -30,7 +30,7 @@ public interface IServiceReport
 
     byte[] generateNoteCessionFac(Long plaId) throws Exception;
 
-    byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, LocalDate periode) throws Exception;
+    byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, Long periodeId) throws Exception;
     byte[] generateSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception;
 
     byte[] generateSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception;

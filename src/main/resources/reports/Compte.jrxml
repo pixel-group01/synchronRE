@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-12-08T01:07:24 -->
+<!-- 2025-02-09T15:42:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Compte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81f528b8-b33b-4207-aaf1-ad1232d2fe58">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-dev-ovh"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="808"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="181"/>
 	<style name="Table 1_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -188,7 +190,10 @@ order by t.type_ordre]]>
 	<parameter name="cedenteId" class="java.lang.Long"/>
 	<parameter name="trancheId" class="java.lang.Long"/>
 	<parameter name="periodicite" class="java.lang.String"/>
-	<parameter name="periode" class="java.sql.Date"/>
+	<parameter name="logo_synre" class="java.io.InputStream">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="periodeId" class="java.lang.Long"/>
 	<queryString language="SQL">
 		<![CDATA[select tnp.traite_np_id,
        tnp.exe_code,
@@ -207,7 +212,7 @@ order by t.type_ordre]]>
    and tnp.traite_np_id=ct.traite_np_id
    and ct.traite_np_id=tnp.traite_np_id
    and per.type_id=t.type_id
-   and per.periode=$P{periode}
+   and per.periode_id=$P{periodeId}
    and t.unique_code=$P{periodicite}
 and tnp.traite_np_id=  $P{traitenpId}
 and ct.ced_id=$P{cedenteId}
@@ -234,6 +239,15 @@ and tr.tranche_id= $P{trancheId}]]>
 				<reportElement x="2" y="1" width="190" height="48" uuid="80969ade-9f22-45c9-b15a-e785d54a6d97"/>
 				<imageExpression><![CDATA[$P{logo_nre}]]></imageExpression>
 			</image>
+			<image>
+				<reportElement x="383" y="10" width="170" height="32" uuid="969da143-3f41-4c54-b0c5-04e2aa2a6d34">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{logo_synre}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -255,7 +269,7 @@ and tr.tranche_id= $P{trancheId}]]>
 				<textElement verticalAlignment="Middle">
 					<font size="11"/>
 				</textElement>
-				<textFieldExpression><![CDATA["PERIODE : " +new SimpleDateFormat("dd/MM/yyyy").format($P{periode}) +"                                         "+"  Nature du traité :  "+$F{nat_tranche_libelle}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["PERIODE : " +new SimpleDateFormat("dd/MM/yyyy").format($F{periode}) +"                                         "+"  Nature du traité :  "+$F{nat_tranche_libelle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="1" y="95" width="553" height="19" uuid="668a0b5b-8843-41fe-a7d1-df10651ff46a">
