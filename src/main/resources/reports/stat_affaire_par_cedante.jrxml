@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2023-11-24T16:13:08 -->
+<!-- 2025-02-10T12:11:57 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stat_affaire_par_cedante" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9f0721f5-3a94-47a5-8bb4-9b8e58d31cb9">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="478"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="512"/>
@@ -62,7 +62,7 @@
 	</style>
 	<subDataset name="total_affaires" uuid="7ba5a5cb-dfb8-484e-ba82-662a6c66cb2a">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="636"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="354"/>
 		<parameter name="param_exe_code" class="java.lang.String"/>
@@ -88,7 +88,7 @@ where s.sta_code not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE')
 	</subDataset>
 	<subDataset name="affaires_par_cedante" uuid="6844a231-e3f7-40d1-9792-d0944f19ac39">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 		<parameter name="param_exe_code" class="java.lang.String"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT ced.ced_id, ced.ced_nom_filiale,
@@ -136,9 +136,7 @@ GROUP BY ced.ced_id, ced.ced_nom_filiale]]>
        sum(a.aff_capital_initial) as mt_total_capital_initial, sum(a.fac_smp_lci) as mt_total_smp_lci
 from affaire a left join statut s on a.statut_code = s.sta_code
 where s.sta_code not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE', 'ANNULEE')
-AND a.exe_code  IN ('2023','2024')
-
-]]>
+AND a.exe_code  IN ('2023','2024')]]>
 	</queryString>
 	<field name="total_affaire" class="java.lang.Long"/>
 	<field name="mt_total_capital_initial" class="java.math.BigDecimal"/>
@@ -243,8 +241,7 @@ AND a.exe_code  IN ('2023','2024')
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[($F{mt_total_capital_initial} != null) ? new java.text.DecimalFormat("#,##0").format($F{mt_total_capital_initial}) : "0"
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[($F{mt_total_capital_initial} != null) ? new java.text.DecimalFormat("#,##0").format($F{mt_total_capital_initial}) : "0"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -328,9 +325,7 @@ AND a.exe_code  IN ('2023','2024')
 							<textField>
 								<reportElement x="0" y="0" width="150" height="15" uuid="5651b7c0-b791-44ca-a457-46cbe1d7e81f"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[($F{somme_affaires} != null) ? new java.text.DecimalFormat("#,##0").format($F{somme_affaires}) : "0"
-
-]]></textFieldExpression>
+								<textFieldExpression><![CDATA[($F{somme_affaires} != null) ? new java.text.DecimalFormat("#,##0").format($F{somme_affaires}) : "0"]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

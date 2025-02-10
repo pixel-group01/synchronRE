@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-01-25T20:06:01 -->
+<!-- 2025-02-10T12:12:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -33,7 +33,7 @@
 	</style>
 	<subDataset name="table_ced" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
