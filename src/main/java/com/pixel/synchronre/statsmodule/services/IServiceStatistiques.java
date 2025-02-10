@@ -7,6 +7,8 @@ import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeD
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
@@ -18,11 +20,11 @@ public interface IServiceStatistiques
 
     CommissionStats calculerCommissionStats(CritereStat criteres);
 
-    List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement);
+    Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 
-    List<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement);
+    Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 
-    List<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId);
+    Page<VStatSituationNoteCred> getSituationNoteCredit(Long exeCode, Long cedId, Long cesId, Pageable pageable);
 
-    List<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode,Long cedId, Long cesId, LocalDate debut, LocalDate fin);
+    Page<StatChiffreAffaireParPeriodeDTO> getStatsChiffreAffaire(Long exeCode, Long cedId, Long cesId, LocalDate debut, LocalDate fin, Pageable pageable);
 }

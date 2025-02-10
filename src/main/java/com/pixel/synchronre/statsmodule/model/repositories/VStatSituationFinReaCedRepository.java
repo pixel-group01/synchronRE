@@ -1,6 +1,8 @@
 package com.pixel.synchronre.statsmodule.model.repositories;
 
 import com.pixel.synchronre.statsmodule.model.views.VStatSituationFinParReaCed;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -17,5 +19,5 @@ public interface VStatSituationFinReaCedRepository extends JpaRepository<VStatSi
         and stat.statutEnvoie= COALESCE(?4, stat.statutEnvoie)
         and stat.statutEncaissement= COALESCE(?5, stat.statutEncaissement)
         """)
-    List<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement);
+Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 }
