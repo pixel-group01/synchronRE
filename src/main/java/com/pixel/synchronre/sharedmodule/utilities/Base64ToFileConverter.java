@@ -37,7 +37,7 @@ public class Base64ToFileConverter
             return convertBytesToBase64UrlString(Files.readAllBytes(Paths.get(filePath)));
         }
 
-    public static String convertBytesToJSBase64UrlString(byte[] bytes) throws IOException {
+    public static String convertBytesToBase64String(byte[] bytes) throws IOException {
         return Base64.getEncoder().encodeToString(bytes);// convertBytesToBase64UrlString(bytes).replace("-", "+").replace("_", "/");
     }
 }

@@ -9,10 +9,8 @@ import com.pixel.synchronre.statsmodule.model.views.VStatSituationNoteCred;
 import com.pixel.synchronre.statsmodule.model.views.VStatStuationFinCed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface IServiceStatistiques
 {

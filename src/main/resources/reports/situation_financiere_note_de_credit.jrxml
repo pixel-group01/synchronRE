@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-01-28T11:21:59 -->
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_note_de_credit" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
@@ -179,7 +178,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="84" height="30" isPrintWhenDetailOverflows="true" uuid="75f82383-1dec-4e6f-88ea-eb50053c349e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -205,7 +204,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="79" height="30" isPrintWhenDetailOverflows="true" uuid="08e39680-20f6-49b0-853c-62b238581131"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -231,7 +230,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="77" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -257,7 +256,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="67" height="30" isPrintWhenDetailOverflows="true" uuid="a236eab6-2ce3-48df-8300-cf00ab98713d"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -283,7 +282,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="61" height="30" isPrintWhenDetailOverflows="true" uuid="67c49d7d-e972-4c8e-b999-0d2f10370bb1"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -320,7 +319,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="61" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -355,7 +354,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="66" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -388,7 +387,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -421,7 +420,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="618199cf-7c9b-4d82-8b9f-ecd2e5b056b2"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -454,7 +453,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="114a6d5f-a7dd-4ed3-bbc0-2809d0830932"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -487,7 +486,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="3419ef87-7d0b-4c98-b4e9-3c060b916326"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -499,7 +498,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="27" y="142" width="243" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -553,7 +552,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 	</title>
 	<pageFooter>
 		<band height="18">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="ContainerHeight" x="500" y="2" width="280" height="15" uuid="f7941a5f-b5d5-4c04-929c-15f8510d228d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>

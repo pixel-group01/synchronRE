@@ -36,8 +36,6 @@ public class StatistiquesController
     private final IServiceDevise deviseService;
     private final IServiceStatut statutService;
 
-
-
     @GetMapping(path = "/exercices")
     public List<ExerciceListResp> searchExercice(@RequestParam(defaultValue = "") String key) throws UnknownHostException {
         return exoService.searchExercice(key);

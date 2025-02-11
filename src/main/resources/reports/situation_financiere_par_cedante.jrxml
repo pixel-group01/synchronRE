@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-02-10T12:12:53 -->
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -33,7 +32,7 @@
 	</style>
 	<subDataset name="table_ced" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -62,38 +61,102 @@ FROM
         FROM
             v_stat_situation_fin_par_ced
         WHERE
-            exe_code = $P{exe_code}
-          AND ced_id = $P{ced_id}
+                exe_code = coalesce($P{exe_code}, exe_code) 
+          AND ced_id = coalesce($P{ced_id}, ced_id)
     ) total
 WHERE
-        st.exe_code = $P{exe_code}
-  AND st.ced_id = $P{ced_id}
-  AND st.statut_envoie=$P{statut_envoie}
-  AND st.statut_encaissement=$P{statut_encaissement}]]>
+        st.exe_code = coalesce($P{exe_code}, st.exe_code)
+  AND st.ced_id = coalesce($P{ced_id}, st.ced_id)
+  
+and replace(unaccent(upper(st.statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, st.statut_envoie))), ' ', '')
+and replace(unaccent(upper(st.statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, st.statut_encaissement))), ' ', '')]]>
 		</queryString>
-		<field name="r_id" class="java.lang.Long"/>
-		<field name="exe_code" class="java.lang.Long"/>
-		<field name="ced_id" class="java.lang.Long"/>
-		<field name="ced_nom_filiale" class="java.lang.String"/>
-		<field name="unique_code" class="java.lang.String"/>
-		<field name="aff_id" class="java.lang.Long"/>
-		<field name="aff_code" class="java.lang.String"/>
-		<field name="aff_assure" class="java.lang.String"/>
-		<field name="aff_date_effet" class="java.sql.Date"/>
-		<field name="aff_date_echeance" class="java.sql.Date"/>
-		<field name="cou_libelle" class="java.lang.String"/>
-		<field name="bord_num" class="java.lang.String"/>
-		<field name="montant_note_debit" class="java.math.BigDecimal"/>
-		<field name="montant_encaisse" class="java.math.BigDecimal"/>
-		<field name="reste_a_encaisser" class="java.math.BigDecimal"/>
-		<field name="statut_envoie" class="java.lang.String"/>
-		<field name="statut_encaissement" class="java.lang.String"/>
-		<field name="montant_note_debit_new" class="java.lang.String"/>
-		<field name="montant_encaisse_new" class="java.lang.String"/>
-		<field name="reste_a_encaisser_new" class="java.lang.String"/>
-		<field name="total_montant_note_debit" class="java.lang.String"/>
-		<field name="total_montant_encaisse" class="java.lang.String"/>
-		<field name="total_reste_a_encaisser" class="java.lang.String"/>
+		<field name="r_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="r_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="exe_code" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="exe_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="ced_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="ced_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="ced_nom_filiale" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ced_nom_filiale"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="unique_code" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="unique_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="aff_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="aff_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="aff_code" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aff_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="aff_assure" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aff_assure"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="aff_date_effet" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.label" value="aff_date_effet"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="aff_date_echeance" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.label" value="aff_date_echeance"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="cou_libelle" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="cou_libelle"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="bord_num" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="montant_note_debit" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="montant_note_debit"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="montant_encaisse" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="reste_a_encaisser" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="reste_a_encaisser"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="statut_envoie" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="statut_envoie"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="statut_encaissement" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="statut_encaissement"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_ced"/>
+		</field>
+		<field name="montant_note_debit_new" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_note_debit_new"/>
+		</field>
+		<field name="montant_encaisse_new" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse_new"/>
+		</field>
+		<field name="reste_a_encaisser_new" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="reste_a_encaisser_new"/>
+		</field>
+		<field name="total_montant_note_debit" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_note_debit"/>
+		</field>
+		<field name="total_montant_encaisse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_encaisse"/>
+		</field>
+		<field name="total_reste_a_encaisser" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_reste_a_encaisser"/>
+		</field>
 		<group name="bord_num">
 			<groupExpression><![CDATA[$F{bord_num}]]></groupExpression>
 		</group>
@@ -130,10 +193,10 @@ WHERE
 	<queryString language="SQL">
 		<![CDATA[select distinct stat.exe_code,stat.ced_nom_filiale
 from v_stat_situation_fin_par_ced stat
-where stat.exe_code=$P{exe_code}
-  and stat.ced_id=$P{ced_id}
-  and stat.statut_envoie=$P{statut_envoie}
-  and stat.statut_encaissement=$P{statut_encaissement}]]>
+where stat.exe_code=COALESCE($P{exe_code}, stat.exe_code)
+  and stat.ced_id=COALESCE($P{ced_id}, stat.ced_id)
+and replace(unaccent(upper(statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, statut_envoie))), ' ', '')
+and replace(unaccent(upper(statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), ' ', '')]]>
 	</queryString>
 	<field name="exe_code" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
@@ -185,7 +248,7 @@ where stat.exe_code=$P{exe_code}
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="74" height="30" isPrintWhenDetailOverflows="true" uuid="75f82383-1dec-4e6f-88ea-eb50053c349e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -211,7 +274,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true" uuid="08e39680-20f6-49b0-853c-62b238581131"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -235,7 +298,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="63" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -261,7 +324,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="64" height="30" isPrintWhenDetailOverflows="true" uuid="a236eab6-2ce3-48df-8300-cf00ab98713d"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -289,7 +352,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="56" height="30" isPrintWhenDetailOverflows="true" uuid="67c49d7d-e972-4c8e-b999-0d2f10370bb1"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -328,7 +391,7 @@ where stat.exe_code=$P{exe_code}
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="56" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b">
 									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 								</reportElement>
@@ -364,7 +427,7 @@ where stat.exe_code=$P{exe_code}
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="72" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -398,7 +461,7 @@ where stat.exe_code=$P{exe_code}
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="72" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -432,7 +495,7 @@ where stat.exe_code=$P{exe_code}
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="72" height="30" isPrintWhenDetailOverflows="true" uuid="618199cf-7c9b-4d82-8b9f-ecd2e5b056b2"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -458,7 +521,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="72" height="30" isPrintWhenDetailOverflows="true" uuid="3419ef87-7d0b-4c98-b4e9-3c060b916326"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -484,7 +547,7 @@ where stat.exe_code=$P{exe_code}
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="72" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -539,7 +602,7 @@ where stat.exe_code=$P{exe_code}
 				</textElement>
 				<textFieldExpression><![CDATA["FILIALE : "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="493" y="282" width="280" height="15" uuid="63d11b63-3618-4659-aa10-7f279cfde157">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>

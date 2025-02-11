@@ -16,8 +16,8 @@ public interface VStatSituationFinReaCedRepository extends JpaRepository<VStatSi
         where stat.exeCode= COALESCE(?1, stat.exeCode) 
         and stat.cedId= COALESCE(?2, stat.cedId)
         and stat.cesId= COALESCE(?3, stat.cesId)
-        and stat.statutEnvoie= COALESCE(?4, stat.statutEnvoie)
-        and stat.statutEncaissement= COALESCE(?5, stat.statutEncaissement)
+        and upper(cast(function('unaccent',  coalesce(stat.statutEnvoie, '') ) as string)) = COALESCE(upper(cast(function('unaccent',  coalesce(?4, '') ) as string)), upper(cast(function('unaccent',  coalesce(stat.statutEnvoie, '') ) as string)))
+        and upper(cast(function('unaccent',  coalesce(stat.statutEncaissement, '') ) as string)) = COALESCE(upper(cast(function('unaccent',  coalesce(?5, '') ) as string)), upper(cast(function('unaccent',  coalesce(stat.statutEncaissement, '') ) as string)))
         """)
 Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 }

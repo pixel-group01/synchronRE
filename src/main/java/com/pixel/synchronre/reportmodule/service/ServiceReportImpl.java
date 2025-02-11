@@ -1,10 +1,11 @@
 package com.pixel.synchronre.reportmodule.service;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.pixel.synchronre.reportmodule.config.JasperReportConfig;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.statsmodule.model.repositories.VStatSituationFinReaCedRepository;
@@ -12,7 +13,6 @@ import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.interlocuteur.response.InterlocuteurListResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
-import com.google.zxing.EncodeHintType;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -21,10 +21,17 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.pixel.synchronre.sharedmodule.utilities.StringUtils.stripAccentsToUpperCase;
 
 @Service @RequiredArgsConstructor
 public class ServiceReportImpl implements IServiceReport
@@ -263,8 +270,13 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception {
-        //VStatSituationFinParReaCed stat = SituationFinReaCedRepo.findById(rId).orElseThrow(()-> new AppException("Traité introuvable"));
+    public byte[] generateSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception
+    {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
         Map<String, Object> params = new HashMap<>();
         params.put("exe_code", exeCode);
         params.put("ced_id", cedId);
@@ -277,7 +289,13 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception {
+    public byte[] generateSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception
+    {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
         Map<String, Object> params = new HashMap<>();
         params.put("exe_code", exeCode);
         params.put("ced_id", cedId);

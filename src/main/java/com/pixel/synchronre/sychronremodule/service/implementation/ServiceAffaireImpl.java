@@ -9,7 +9,6 @@ import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderSe
 import com.pixel.synchronre.reportmodule.service.IServiceReport;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.Base64ToFileConverter;
-import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
@@ -24,7 +23,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
@@ -38,14 +36,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.*;
 import static com.pixel.synchronre.sharedmodule.enums.StatutEnum.EN_COURS_DE_REPARTITION;
-import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.UN;
 
 @Service @RequiredArgsConstructor
@@ -223,7 +219,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     {
 
         byte[] bytes = this.reportService.generateNoteCreditFac(affId, cesId);
-        String base64String = Base64ToFileConverter.convertBytesToJSBase64UrlString(bytes);
+        String base64String = Base64ToFileConverter.convertBytesToBase64String(bytes);
         Base64FileDto dto = new Base64FileDto(base64String, bytes);
         return dto;
     }
