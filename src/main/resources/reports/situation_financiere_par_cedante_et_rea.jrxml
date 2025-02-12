@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2025-02-12T00:59:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante_et_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -58,11 +59,9 @@ and ces_id=10]]>
 	</subDataset>
 	<subDataset name="table_ced_par_rea" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="838"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="152"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="233"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="762"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -97,62 +96,20 @@ AND replace(unaccent(upper(stat.statut_envoie)), ' ', '') = replace(upper(unacce
 AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')
 ]]>
 		</queryString>
-		<field name="bord_num" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_code" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="aff_code"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_assure" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="aff_assure"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="cou_libelle" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="cou_libelle"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_date_effet" class="java.sql.Date">
-			<property name="com.jaspersoft.studio.field.label" value="aff_date_effet"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_date_echeance" class="java.sql.Date">
-			<property name="com.jaspersoft.studio.field.label" value="aff_date_echeance"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_cede" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_cede"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_encaisse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="commission_nelsonre" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="commission_nelsonre"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_a_reverser" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_a_reverser"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_reverse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_reverse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="reste_a_reverse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="reste_a_reverse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="statut_envoie" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="statut_envoie"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="statut_encaissement" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="statut_encaissement"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
+		<field name="bord_num" class="java.lang.String"/>
+		<field name="aff_code" class="java.lang.String"/>
+		<field name="aff_assure" class="java.lang.String"/>
+		<field name="cou_libelle" class="java.lang.String"/>
+		<field name="aff_date_effet" class="java.sql.Date"/>
+		<field name="aff_date_echeance" class="java.sql.Date"/>
+		<field name="montant_cede" class="java.math.BigDecimal"/>
+		<field name="montant_encaisse" class="java.math.BigDecimal"/>
+		<field name="commission_nelsonre" class="java.math.BigDecimal"/>
+		<field name="montant_a_reverser" class="java.math.BigDecimal"/>
+		<field name="montant_reverse" class="java.math.BigDecimal"/>
+		<field name="reste_a_reverse" class="java.math.BigDecimal"/>
+		<field name="statut_envoie" class="java.lang.String"/>
+		<field name="statut_encaissement" class="java.lang.String"/>
 		<variable name="total_montant_cede" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_cede}]]></variableExpression>
 		</variable>
@@ -244,11 +201,12 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 	<title>
 		<band height="275" splitType="Stretch">
 			<componentElement>
-				<reportElement x="27" y="180" width="745" height="90" uuid="e6a287af-0384-4c6e-9a85-f977cdfc2e28">
+				<reportElement x="-9" y="177" width="818" height="90" uuid="e6a287af-0384-4c6e-9a85-f977cdfc2e28">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
 					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
 					<datasetRun subDataset="table_ced_par_rea" uuid="a01a98cb-39f1-4f9b-b1bb-8d201178d144">
@@ -269,15 +227,14 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
-					<jr:column width="74" uuid="f79b121d-ec28-400f-9b19-1db85d758532">
+					<jr:column width="69" uuid="f79b121d-ec28-400f-9b19-1db85d758532">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="ffc7180e-d687-46e7-a2f2-0520a299ed54"/>
-								<box leftPadding="3" rightPadding="3"/>
+								<reportElement x="0" y="0" width="69" height="30" forecolor="#FFFFFF" uuid="76af88d2-7774-491f-9907-c91b56dda255"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
@@ -288,8 +245,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="74" height="30" isPrintWhenDetailOverflows="true" uuid="75f82383-1dec-4e6f-88ea-eb50053c349e"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true" uuid="75f82383-1dec-4e6f-88ea-eb50053c349e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
 									<font size="7"/>
@@ -314,7 +271,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true" uuid="08e39680-20f6-49b0-853c-62b238581131"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -324,11 +281,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="63" uuid="8520b3ec-1795-45e8-9931-38c37adbddae">
+					<jr:column width="59" uuid="8520b3ec-1795-45e8-9931-38c37adbddae">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="63" height="30" forecolor="#FFFFFF" uuid="5a13b451-c4d0-41bf-b269-b8f822ac455e"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="5a13b451-c4d0-41bf-b269-b8f822ac455e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -338,8 +297,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="63" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font size="7"/>
@@ -348,13 +307,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="64" uuid="92bbd713-e499-4ffb-afac-61a949577377">
+					<jr:column width="59" uuid="92bbd713-e499-4ffb-afac-61a949577377">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne4"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="64" height="30" forecolor="#FFFFFF" uuid="35ce258d-7f35-4d0d-a462-7852f26b4341"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="35ce258d-7f35-4d0d-a462-7852f26b4341"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -364,8 +323,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="64" height="30" isPrintWhenDetailOverflows="true" uuid="a236eab6-2ce3-48df-8300-cf00ab98713d"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="a236eab6-2ce3-48df-8300-cf00ab98713d"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
 									<font size="7"/>
@@ -390,7 +349,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="51" height="30" isPrintWhenDetailOverflows="true" uuid="67c49d7d-e972-4c8e-b999-0d2f10370bb1"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -427,7 +386,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="50" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -437,11 +396,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="d247c4a3-c2bf-476f-a037-fdce430afdc8">
+					<jr:column width="58" uuid="d247c4a3-c2bf-476f-a037-fdce430afdc8">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne7"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="5b7d2874-c823-4cc2-84eb-07d56e7e68aa"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFFFF" uuid="5b7d2874-c823-4cc2-84eb-07d56e7e68aa"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -451,7 +412,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFCFC" uuid="e5c95179-c21c-423b-8e77-cc850ab4c305"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFCFC" uuid="e5c95179-c21c-423b-8e77-cc850ab4c305"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -460,8 +421,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -470,11 +431,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="25bd0a97-cbb6-443f-9484-eeb91b7231e4">
+					<jr:column width="59" uuid="25bd0a97-cbb6-443f-9484-eeb91b7231e4">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne8"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="c7fb4f88-bd9a-4d88-a8b7-a184ac3cea24"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="c7fb4f88-bd9a-4d88-a8b7-a184ac3cea24"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -484,7 +447,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="fb0cb9da-dcaa-49a1-ae7c-43b7f2e9b116"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="fb0cb9da-dcaa-49a1-ae7c-43b7f2e9b116"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -493,8 +456,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -503,11 +466,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="04749bce-cb8d-4e88-ba14-9dd18a0d4276">
+					<jr:column width="59" uuid="04749bce-cb8d-4e88-ba14-9dd18a0d4276">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne9"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="5b0ea258-ee78-4190-b915-6f0d4fd7ac39"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="5b0ea258-ee78-4190-b915-6f0d4fd7ac39"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -517,7 +482,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="0cd6071e-7450-4146-a754-7d7f798bc197"/>
+								<reportElement x="0" y="0" width="59" height="30" forecolor="#FFFFFF" uuid="0cd6071e-7450-4146-a754-7d7f798bc197"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -526,8 +491,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="618199cf-7c9b-4d82-8b9f-ecd2e5b056b2"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="618199cf-7c9b-4d82-8b9f-ecd2e5b056b2"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -536,11 +501,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="0a8f62be-8b01-4c83-aec7-5d5a82bc4cd3">
+					<jr:column width="60" uuid="0a8f62be-8b01-4c83-aec7-5d5a82bc4cd3">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne10"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="ce543c69-5081-4ac6-a698-10467ba36f48"/>
+								<reportElement x="0" y="0" width="60" height="30" forecolor="#FFFFFF" uuid="ce543c69-5081-4ac6-a698-10467ba36f48"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -550,7 +517,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="b05f4a14-1b21-46a0-9e75-e27212dcfa2e"/>
+								<reportElement x="0" y="0" width="60" height="30" forecolor="#FFFFFF" uuid="b05f4a14-1b21-46a0-9e75-e27212dcfa2e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -559,8 +526,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="114a6d5f-a7dd-4ed3-bbc0-2809d0830932"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="60" height="30" isPrintWhenDetailOverflows="true" uuid="114a6d5f-a7dd-4ed3-bbc0-2809d0830932"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -569,21 +536,25 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="8ea2872a-f616-4115-9806-afc1914ac0c6">
+					<jr:column width="58" uuid="8ea2872a-f616-4115-9806-afc1914ac0c6">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne11"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="e6b77550-d7bf-49d0-8f17-2fe039914c2e"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFFFF" uuid="e6b77550-d7bf-49d0-8f17-2fe039914c2e">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<text><![CDATA[MONTANT REVERSES]]></text>
+								<text><![CDATA[MONTANT REVERSE]]></text>
 							</staticText>
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="ca161e5e-b53d-4bc4-8c3c-1bc52252172c"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFFFF" uuid="ca161e5e-b53d-4bc4-8c3c-1bc52252172c"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -592,8 +563,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="3419ef87-7d0b-4c98-b4e9-3c060b916326"/>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="3419ef87-7d0b-4c98-b4e9-3c060b916326"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -602,11 +573,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="62" uuid="9cb5212a-204f-40ab-be4e-bac59a2a6618">
+					<jr:column width="58" uuid="9cb5212a-204f-40ab-be4e-bac59a2a6618">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne12"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<staticText>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="54e8dccc-fdd9-491c-84d4-c7f1bbd6b40e"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFFFF" uuid="54e8dccc-fdd9-491c-84d4-c7f1bbd6b40e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -616,7 +589,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1">
 							<textField>
-								<reportElement x="0" y="0" width="62" height="30" forecolor="#FFFFFF" uuid="c609a767-2dc8-41a4-afca-28ada769a600"/>
+								<reportElement x="0" y="0" width="58" height="30" forecolor="#FFFFFF" uuid="c609a767-2dc8-41a4-afca-28ada769a600"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
@@ -625,8 +598,8 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="62" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
@@ -635,19 +608,62 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:detailCell>
 					</jr:column>
+					<jr:column width="52" uuid="4c183517-6812-4d53-ab85-03ab4f4b5e69">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne13"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<staticText>
+								<reportElement x="0" y="0" width="52" height="30" forecolor="#FFFFFF" uuid="0f9a2f0a-e1ba-44d6-8cfc-d25a3fa832c8"/>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[STATUT D'ENVOI]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="52" height="30" uuid="530dbde3-e020-4729-bffc-1040de0be7b1"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{statut_envoie}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="55" uuid="68d5c450-ec81-409f-a58f-6d4ca62ca2d5">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne14"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							<staticText>
+								<reportElement x="0" y="0" width="55" height="30" forecolor="#FFFFFF" uuid="0786b76a-77c0-4fba-ae19-a588e975ac99">
+									<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+								</reportElement>
+								<box leftPadding="3" rightPadding="3"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" isBold="true"/>
+								</textElement>
+								<text><![CDATA[STATUT ENCAISSEMENT]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="55" height="30" uuid="a25bd309-854e-4349-bf6a-1a04f8e60f34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="7"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{statut_encaissement}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
 				</jr:table>
 			</componentElement>
-			<textField isBlankWhenNull="true">
-				<reportElement x="479" y="142" width="144" height="30" uuid="e7cf2f5b-6dfd-4e60-a658-4629b2a1c067">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$P{statut_envoie}]]></textFieldExpression>
-			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="27" y="142" width="243" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="-6" y="142" width="243" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -657,7 +673,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 				<textFieldExpression><![CDATA["FILIALE : "+$F{ced_nom_filiale}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="270" y="142" width="209" height="30" uuid="f3ffd342-a966-4859-b3bc-efea5d778d91">
+				<reportElement x="596" y="142" width="209" height="30" uuid="f3ffd342-a966-4859-b3bc-efea5d778d91">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -696,20 +712,11 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 				</textElement>
 				<textFieldExpression><![CDATA["SITUATION FINANCIERE DES NOTES DE DEBIT "+$F{exe_code}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="607" y="144" width="163" height="30" uuid="31cee0c9-8a3d-45ec-bb2c-19d785f9daba">
-					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
-				</reportElement>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="12" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[""+$P{statut_encaissement}]]></textFieldExpression>
-			</textField>
 		</band>
 	</title>
 	<pageFooter>
 		<band height="18">
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="ContainerHeight" x="500" y="2" width="280" height="15" uuid="f7941a5f-b5d5-4c04-929c-15f8510d228d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
