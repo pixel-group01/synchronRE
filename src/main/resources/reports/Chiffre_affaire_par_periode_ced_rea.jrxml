@@ -91,7 +91,7 @@ select
      COALESCE(enc.montant_encaisse, 0) as montant_encaisse
 
 from affaire aff
-         left join encaissement enc on enc.aff_id = aff.aff_id
+         join encaissement enc on enc.aff_id = aff.aff_id
          JOIN cedante ced on aff.cedente_id = ced.ced_id
          JOIN couverture cou on aff.couverture_id = cou.cou_id
          left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
@@ -545,7 +545,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_encaisse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_encaisse})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -555,7 +555,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_encaisse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_encaisse})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -578,7 +578,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_commission})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_commission})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -588,7 +588,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{commission_nelsonre})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{commission_nelsonre})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -611,7 +611,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_a_reverser})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_a_reverser})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -621,7 +621,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_a_reverser})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_a_reverser})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -644,7 +644,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_reverse})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -654,7 +654,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_reverse})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -677,7 +677,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0").format($V{total_montant_cede})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_montant_cede})]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -687,7 +687,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_cede})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_cede})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

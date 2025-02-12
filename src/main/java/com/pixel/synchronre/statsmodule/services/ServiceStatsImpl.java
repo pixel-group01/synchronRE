@@ -68,6 +68,8 @@ public class ServiceStatsImpl implements IServiceStatistiques
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
 
         statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement.replace("'", "");
+        statutEncaissement = statutEncaissement.replace(" ", "");
         statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
         return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement, pageable);
     }

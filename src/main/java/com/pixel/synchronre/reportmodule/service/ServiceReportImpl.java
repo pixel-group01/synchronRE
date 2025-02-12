@@ -26,10 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.pixel.synchronre.sharedmodule.utilities.StringUtils.stripAccentsToUpperCase;
 
@@ -77,6 +74,7 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
+        parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
         qrText =  qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
         String resourcePath = "classpath:"+jrConfig.reportLocation + "/" + reportName;
@@ -122,6 +120,7 @@ public class ServiceReportImpl implements IServiceReport
         Affaire affaire = affRepo.getAffaireByRepId(plaId);
         if(affaire == null) throw new AppException("Aucune affaire trouvée sur le placement " + plaId);
         placement.setAffaire(affaire);
+
         params.put("aff_id", placement.getAffaire().getAffId());
         params.put("aff_assure", placement.getAffaire().getAffAssure());
         params.put("fac_numero_police", placement.getAffaire().getFacNumeroPolice());

@@ -33,6 +33,8 @@
 	<subDataset name="table_ced" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="796"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="193"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -69,7 +71,7 @@ WHERE
   AND st.ced_id = coalesce($P{ced_id}, st.ced_id)
   
 and replace(unaccent(upper(st.statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, st.statut_envoie))), ' ', '')
-and replace(unaccent(upper(st.statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, st.statut_encaissement))), ' ', '')]]>
+AND replace(replace(unaccent(upper(st.statut_encaissement)), '''', ''), ' ', '') = replace(replace(unaccent(upper(COALESCE($P{statut_encaissement}, st.statut_encaissement))), '''', ''), ' ', '')]]>
 		</queryString>
 		<field name="r_id" class="java.lang.Long">
 			<property name="com.jaspersoft.studio.field.label" value="r_id"/>
@@ -196,7 +198,7 @@ from v_stat_situation_fin_par_ced stat
 where stat.exe_code=COALESCE($P{exe_code}, stat.exe_code)
   and stat.ced_id=COALESCE($P{ced_id}, stat.ced_id)
 and replace(unaccent(upper(statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, statut_envoie))), ' ', '')
-and replace(unaccent(upper(statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), ' ', '')]]>
+AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = replace(replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), '''', ''), ' ', '')]]>
 	</queryString>
 	<field name="exe_code" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>

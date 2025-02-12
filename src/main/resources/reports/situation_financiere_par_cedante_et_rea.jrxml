@@ -94,7 +94,8 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 and ced_id=COALESCE($P{ced_id}, ced_id)
 and ces_id=COALESCE($P{ces_id}, ces_id)
 AND replace(unaccent(upper(stat.statut_envoie)), ' ', '') = replace(upper(unaccent(COALESCE($P{statut_envoie}, stat.statut_envoie))), ' ', '')
-AND replace(unaccent(upper(stat.statut_encaissement)), ' ', '') = replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), ' ', '')]]>
+AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')
+]]>
 		</queryString>
 		<field name="bord_num" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
@@ -231,7 +232,8 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 and ced_id=COALESCE($P{ced_id}, ced_id)
 and ces_id=COALESCE($P{ces_id}, ces_id)
 and replace(unaccent(upper(statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, statut_envoie))), ' ', '')
-and replace(unaccent(upper(statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), ' ', '')]]>
+AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = replace(replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), '''', ''), ' ', '')
+]]>
 	</queryString>
 	<field name="exe_code" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>

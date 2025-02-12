@@ -2,6 +2,7 @@ package com.pixel.synchronre.statsmodule.model.views;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,6 +31,8 @@ public class VStatStuationFinCed
     private BigDecimal resteAEncaisser;        // Reste à encaisser
     private String statutEnvoie;           // Statut d'envoi
     private String statutEncaissement;     // Statut d'encaissement
+    @Formula("(SELECT REPLACE(UNACCENT(UPPER(REPLACE(stat.statut_encaissement, ' ', ''))), '''', '') FROM v_stat_situation_fin_par_ced stat WHERE stat.r_Id = r_Id)")
+    private String statutEncaissementNormalise;
 }
 // Cicare
 // ZEPRE SUPR--> CICARE DOUALA

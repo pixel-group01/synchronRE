@@ -1,6 +1,5 @@
 package com.pixel.synchronre.statsmodule.model.repositories;
 
-import com.pixel.synchronre.statsmodule.model.dtos.StatChiffreAffaireParPeriodeDTO;
 import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface ChiffreAffaireRepo extends JpaRepository<Affaire, Long>
 {
@@ -59,7 +57,7 @@ public interface ChiffreAffaireRepo extends JpaRepository<Affaire, Long>
                                         ,enc.montant_encaisse as montant_encaisse
                 
                 from affaire aff
-                         left join encaissement enc on enc.aff_id = aff.aff_id
+                         join encaissement enc on enc.aff_id = aff.aff_id
                          JOIN cedante ced on aff.cedente_id = ced.ced_id
                          JOIN couverture cou on aff.couverture_id = cou.cou_id
                          left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
@@ -113,7 +111,7 @@ public interface ChiffreAffaireRepo extends JpaRepository<Affaire, Long>
                                         ,enc.montant_encaisse as montant_encaisse
                 
                 from affaire aff
-                         left join encaissement enc on enc.aff_id = aff.aff_id
+                         join encaissement enc on enc.aff_id = aff.aff_id
                          JOIN cedante ced on aff.cedente_id = ced.ced_id
                          JOIN couverture cou on aff.couverture_id = cou.cou_id
                          left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
