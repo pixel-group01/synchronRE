@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\DataAdapter.xml"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -32,9 +32,9 @@
 	</style>
 	<subDataset name="table_ced" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="796"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="193"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\DataAdapter.xml"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -192,6 +192,7 @@ AND replace(replace(unaccent(upper(st.statut_encaissement)), '''', ''), ' ', '')
 	<parameter name="statut_encaissement" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
+	<parameter name="logo_synchronre" class="java.io.InputStream"/>
 	<queryString language="SQL">
 		<![CDATA[select distinct stat.exe_code,stat.ced_nom_filiale
 from v_stat_situation_fin_par_ced stat
@@ -584,6 +585,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
+				<imageExpression><![CDATA[$P{logo_synchronre}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
 				<reportElement x="27" y="142" width="163" height="30" uuid="e7cf2f5b-6dfd-4e60-a658-4629b2a1c067">

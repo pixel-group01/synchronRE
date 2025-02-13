@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -38,5 +39,7 @@ public class VStatSituationFinParReaCed {
     private String resteAReverse;
     private String statutEnvoie;
     private String statutEncaissement;
+    @Formula("(SELECT REPLACE(UNACCENT(UPPER(REPLACE(stat.statut_encaissement, ' ', ''))), '''', '') FROM v_stat_situation_fin_par_rea_ced stat WHERE stat.r_Id = r_Id)")
+    private String statutEncaissementNormalise;
 
 }

@@ -242,7 +242,7 @@ where aff.exe_code = COALESCE($P{exe_code},aff.exe_code)
 	<parameter name="logo_nre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="logo_synre" class="java.io.InputStream">
+	<parameter name="logo_synchronre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<parameter name="DateDeb" class="java.lang.String"/>
@@ -726,7 +726,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<imageExpression><![CDATA[$P{logo_synre}]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_synchronre}]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement mode="Opaque" x="150" y="86" width="480" height="40" forecolor="#FFFFFF" backcolor="#CFA61F" uuid="789f79a0-4f4c-4786-a141-a8c83e6ae2a7">
