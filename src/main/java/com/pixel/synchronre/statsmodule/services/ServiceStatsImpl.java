@@ -55,6 +55,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     @Override
     public Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
         statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie.replace("'", "").replace(" ", "");
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
 
         statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
@@ -66,6 +67,7 @@ public class ServiceStatsImpl implements IServiceStatistiques
     @Override
     public Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
         statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie.replace("'", "").replace(" ", "");
         statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
 
         statutEncaissement = stripAccentsToUpperCase(statutEncaissement);

@@ -35,3 +35,4 @@ Jenkinsfile
 keystore.p12
 /error.log.2024-05-15.0550730930541000.tmp
 /error.log
+/bin/

@@ -31,6 +31,9 @@ public class VStatStuationFinCed
     private BigDecimal resteAEncaisser;        // Reste à encaisser
     private String statutEnvoie;           // Statut d'envoi
     private String statutEncaissement;     // Statut d'encaissement
+    @Formula("(SELECT REPLACE(UNACCENT(UPPER(REPLACE(stat.statut_envoie, ' ', ''))), '''', '') FROM v_stat_situation_fin_par_ced stat WHERE stat.r_Id = r_Id)")
+    private String statutEnvoieNormalise;
+
     @Formula("(SELECT REPLACE(UNACCENT(UPPER(REPLACE(stat.statut_encaissement, ' ', ''))), '''', '') FROM v_stat_situation_fin_par_ced stat WHERE stat.r_Id = r_Id)")
     private String statutEncaissementNormalise;
 }
