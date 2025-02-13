@@ -10,8 +10,8 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
-@UniqueCedEmail(message = "cedEmail::Adresse mail déjà attribuée")
-@UniqueCedTel(message = "cedTel::Numéro de téléphone déjà attribué")
+@UniqueCedEmail(message = "Adresse mail déjà attribuée")
+@UniqueCedTel(message = "Numéro de téléphone déjà attribué")
 public class UpdateCedanteDTO
 {
     @ExistingCedId

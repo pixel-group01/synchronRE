@@ -1,11 +1,7 @@
 package com.pixel.synchronre.sychronremodule.model.dto.cedante;
 
-import com.pixel.synchronre.authmodule.model.dtos.appfunction.ExistingFncId;
-import com.pixel.synchronre.authmodule.model.dtos.appuser.ExistingUserId;
-import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.ExistingCedId;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedEmail;
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.validator.UniqueCedTel;
-import com.pixel.synchronre.sychronremodule.model.dto.pays.validator.UniquePaysCode;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -35,13 +31,8 @@ public class CreateCedanteDTO
     private String cedFax;
     private String cedSituationGeo;
     private String cedInterlocuteur;
-    @UniquePaysCode
     private String paysCode;
     @NotBlank(message = "Veuillez selectionner le numéro de compte")
     @NotNull(message = "Veuillez selectionner le numéro de compte")
     private String banNumCompte;
-    /*@ExistingUserId
-    private Long cedUserCreator;
-    @ExistingFncId
-    private Long cedFonCreator;*/
 }
