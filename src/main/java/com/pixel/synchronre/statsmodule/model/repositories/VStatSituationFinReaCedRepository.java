@@ -13,8 +13,8 @@ public interface VStatSituationFinReaCedRepository extends JpaRepository<VStatSi
             where stat.exeCode= COALESCE(?1, stat.exeCode) 
             and stat.cedId= COALESCE(?2, stat.cedId)
             and stat.cesId= COALESCE(?3, stat.cesId)
-            and stat.statutEnvoieNormalise = COALESCE(?4, stat.statutEnvoieNormalise)
-            AND stat.statutEncaissementNormalise = COALESCE(?5, stat.statutEncaissementNormalise)
+            and stat.statutEnvoie = COALESCE(?4, stat.statutEnvoie)
+            AND stat.statutEncaissement = COALESCE(?5, stat.statutEncaissement)
             """)
     Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 }
