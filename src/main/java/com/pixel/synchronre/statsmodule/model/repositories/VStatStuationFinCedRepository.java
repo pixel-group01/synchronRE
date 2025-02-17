@@ -10,8 +10,8 @@ public interface VStatStuationFinCedRepository extends org.springframework.data.
     SELECT stat FROM VStatStuationFinCed stat 
     WHERE stat.exeCode = COALESCE(?1, stat.exeCode) 
     AND stat.cedId = COALESCE(?2, stat.cedId)
-    AND stat.statutEnvoieNormalise = COALESCE(?3, stat.statutEnvoieNormalise)
-    AND stat.statutEncaissementNormalise = COALESCE(?4, stat.statutEncaissementNormalise)
+    AND stat.statutEnvoie = COALESCE(?3, stat.statutEnvoie)
+    AND stat.statutEncaissement = COALESCE(?4, stat.statutEncaissement)
     """)
     Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable);
 }

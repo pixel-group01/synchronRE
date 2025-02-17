@@ -52,27 +52,37 @@ public class ServiceStatsImpl implements IServiceStatistiques
         return commissionStats;
     }
 
+    private String getStatut(String statutFromUi)
+    {
+        if(statutFromUi == null) return null;
+        String statutNormalise = stripAccentsToUpperCase(statutFromUi);
+        statutNormalise = statutNormalise.replace("'", "").replace(" ", "");
+        statutNormalise = statutNormalise == null || statutNormalise.trim().equals("") ? null : statutNormalise;
+        String statutEnvoie = switch (statutNormalise)
+        {
+            case "ENVOYE"-> "Envoyé";
+            case "NONENVOYE"-> "Non envoyé";
+            case "ENCAISSE"-> "Encaissé";
+            case "NONENCAISSE"-> "Non encaissé";
+            case "ENCOURSDENCAISSEMENT", "ENCAISSEMENTENCOURS"-> "Encaissement en cours";
+            default -> null;
+        };
+        return statutEnvoie;
+    }
+
     @Override
     public Page<VStatSituationFinParReaCed> getSituationParCedanteReassureur(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
-        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
-        statutEnvoie = statutEnvoie.replace("'", "").replace(" ", "");
-        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
 
-        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
-        statutEncaissement = statutEncaissement.replace("'", "").replace(" ", "");
-        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        statutEnvoie = this.getStatut(statutEnvoie);
+        statutEncaissement = this.getStatut(statutEncaissement);
         return situationReaCedRepo.getSituationParCedanteReassureur(exeCode,cedId,cesId,statutEnvoie,statutEncaissement, pageable);
     }
 
     @Override
-    public Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable) {
-        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
-        statutEnvoie = statutEnvoie.replace("'", "").replace(" ", "");
-        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
-
-        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
-        statutEncaissement = statutEncaissement.replace("'", "").replace(" ", "");
-        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+    public Page<VStatStuationFinCed> getSituationParCedante(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement, Pageable pageable)
+    {
+        statutEnvoie = this.getStatut(statutEnvoie);
+        statutEncaissement = this.getStatut(statutEncaissement);
         return situationCedRepo.getSituationParCedante(exeCode,cedId,statutEnvoie,statutEncaissement, pageable);
     }
 
