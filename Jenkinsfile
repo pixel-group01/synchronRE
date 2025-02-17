@@ -79,7 +79,8 @@ pipeline {
                    // bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1 && type app.log"
                    // bat "cd /d ${DEPLOY_DIR} && start cmd /c java -jar ${JAR_NAME} > app.log 2>&1"
                   //  bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
-                    bat "cd /d ${DEPLOY_DIR} && start /B java -jar ${JAR_NAME} > app.log 2>&1"
+                   // bat "cd /d ${DEPLOY_DIR} && start /B java -jar ${JAR_NAME} > app.log 2>&1"
+                    bat "cd /d ${DEPLOY_DIR} && set > env.log"
                 }
             }
         }
