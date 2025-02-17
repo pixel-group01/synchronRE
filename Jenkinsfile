@@ -76,7 +76,7 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                     echo "Démarrage de l'application en arrière-plan..."
-                    bat "cd /d ${DEPLOY_DIR} && start /B java -jar ${JAR_NAME} > app.log 2>&1"
+                    bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1 && type app.log"
                 }
             }
         }
