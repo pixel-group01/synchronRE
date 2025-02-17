@@ -16,13 +16,13 @@ pipeline {
     }
 
     stages {
-        stage('parametrage') {
+        stage('Paramétrage') {
             steps {
                 git branch: "${BRANCH}", url: "${GIT_REPO_URL}"
             }
         }
 
-        stage('construction du jar') {
+        stage('Construction du JAR') {
             steps {
                 script {
                     bat 'mvn -e package'
@@ -33,18 +33,27 @@ pipeline {
         stage('Vérification du port') {
             steps {
                 script {
-                    def port = readFile(file: "${CONFIG_FILE}")
-                        .split('\\n')
-                        .find { it.startsWith('server.port=') }
-                        ?.replace('server.port=', '')
-                        ?.trim()
+                    def port = null
+                    try {
+                        def configContent = readFile(file: "${CONFIG_FILE}")
+                        echo "Contenu du fichier de config:\n${configContent}"
+                        port = configContent
+                            .split('[\\r\\n]+') // Gère CRLF et LF
+                            .find { it.startsWith('server.port=') }
+                            ?.replace('server.port=', '')
+                            ?.trim()
+                    } catch (Exception e) {
+                        error "Impossible de lire ${CONFIG_FILE} : ${e.message}"
+                    }
 
                     if (port) {
-                        def portOccupied = bat(script: "netstat -ano | findstr :${port}", returnStatus: true) == 0
+                        echo "Vérification du port : ${port}"
+                        def portOccupied = bat(script: "netstat -ano | findstr LISTENING | findstr :${port}", returnStatus: true) == 0
 
                         if (portOccupied) {
+                            echo "Le port ${port} est occupé, arrêt du processus..."
                             bat """
-                            for /f "tokens=5" %%a in ('netstat -ano ^| findstr :${port}') do (
+                            for /f "tokens=5" %%a in ('netstat -ano ^| findstr LISTENING ^| findstr :${port}') do (
                                 echo Arrêt du processus avec le PID %%a
                                 taskkill /PID %%a /F
                             )
@@ -63,9 +72,11 @@ pipeline {
         stage('Déploiement') {
             steps {
                 script {
+                    echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    // Utilisation de start /b pour lancer en arrière-plan
-                    bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
+
+                    echo "Démarrage de l'application en arrière-plan..."
+                    bat "cd /d ${DEPLOY_DIR} && start /B java -jar ${JAR_NAME} > app.log 2>&1"
                 }
             }
         }
