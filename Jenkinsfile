@@ -27,7 +27,7 @@ pipeline {
             steps {
                 script {
                     echo "Nettoyage et construction du JAR..."
-                    bat "mvn clean package -e -DargLine='-Xmx1024m -Xms512m'"
+                    bat "mvn clean package -e -DargLine=\"-Xmx1024m -Xms512m\""
                 }
             }
         }
