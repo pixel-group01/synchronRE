@@ -26,7 +26,8 @@ pipeline {
         stage('Construction du JAR') {
             steps {
                 script {
-                    bat 'mvn clean package -e'
+                    echo "Nettoyage et construction du JAR..."
+                    bat "mvn clean package -e -DargLine='-Xmx1024m -Xms512m'"
                 }
             }
         }
