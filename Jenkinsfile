@@ -40,8 +40,6 @@ pipeline {
                     echo "Démarrage de l'application..."
                    echo "Installation du service Windows avec NSSM..."
                     bat """
-                    ${NSSM_PATH} stop MyAppService
-                    ${NSSM_PATH} remove MyAppService confirm
                     ${NSSM_PATH} install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
                     ${NSSM_PATH} set MyAppService AppDirectory ${DEPLOY_DIR}
                     ${NSSM_PATH} set MyAppService AppStdout ${DEPLOY_DIR}\\app.log
