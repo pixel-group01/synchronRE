@@ -78,7 +78,7 @@ pipeline {
                 script {
                     echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    //
+                    
                     echo "Démarrage de l'application..."
                   bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
                 }
