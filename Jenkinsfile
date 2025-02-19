@@ -16,7 +16,7 @@ pipeline {
     }
 
     stages {
-        stage('Paramétrage') {
+        stage('Parametrage') {
             steps {
                 git branch: "${BRANCH}", url: "${GIT_REPO_URL}"
             }
@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Vérification du port') {
+        stage('Verification du port') {
             steps {
                 script {
                     def port = null
@@ -80,9 +80,7 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                     echo "Démarrage de l'application..."
-                   bat """
-                   nssm restart synchronRE
-                   """
+                  bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1 && type app.log"
                 }
             }
         }
