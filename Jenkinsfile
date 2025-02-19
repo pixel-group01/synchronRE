@@ -80,14 +80,12 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     
                     echo "Démarrage de l'application..."
+                    echo "Installation du service Windows avec NSSM..."
                     bat """
-                    cd /d ${DEPLOY_DIR}
-                    start /B java -jar ${JAR_NAME} > app.log 2>&1
-                    powershell -Command "(Get-WmiObject Win32_Process -Filter 'commandline like \\\"%${JAR_NAME}%\\\"').ProcessId > app.pid"
+                    nssm install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                    nssm set MyAppService AppDirectory ${DEPLOY_DIR}
+                    nssm start MyAppService
                     """
-        
-                    echo "Vérification que l'application est en cours d'exécution..."
-                    bat "tasklist /FI \"IMAGENAME eq java.exe\""
                 }
             }
         }
