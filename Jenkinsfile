@@ -76,6 +76,10 @@ pipeline {
         stage('Déploiement') {
             steps {
                 script {
+                    // Ajouter NSSM au PATH
+                    bat """
+                    set PATH=%PATH%;C:\\nssm
+                    """
                     echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     
