@@ -81,7 +81,8 @@ pipeline {
 
                     echo "Démarrage de l'application..."
                  // bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
-                 bat "cd /d ${DEPLOY_DIR} && wmic process call create \"java -jar ${JAR_NAME}\""
+                //  bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
+                  bat "cd /d ${DEPLOY_DIR} && wmic process call create \"java -jar ${JAR_NAME}\""
                 }
             }
         }
