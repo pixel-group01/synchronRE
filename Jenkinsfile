@@ -25,7 +25,7 @@ pipeline {
         stage('Construction du JAR') {
             steps {
                 script {
-                    bat 'mvn -e package'
+                    bat 'mvn clean package -e'
                 }
             }
         }
@@ -38,10 +38,14 @@ pipeline {
                         def configContent = readFile(file: "${CONFIG_FILE}")
                         echo "Contenu du fichier de config:\n${configContent}"
                         port = configContent
-                            .split('[\\r\\n]+') // Gère CRLF et LF
+                            .split('[\\r\\n]+')
                             .find { it.startsWith('server.port=') }
                             ?.replace('server.port=', '')
                             ?.trim()
+
+                        if (!port?.isInteger()) {
+                            error "Le port extrait (${port}) n'est pas valide."
+                        }
                     } catch (Exception e) {
                         error "Impossible de lire ${CONFIG_FILE} : ${e.message}"
                     }
@@ -58,7 +62,7 @@ pipeline {
                                 taskkill /PID %%a /F
                             )
                             """
-                            sleep time: 5, unit: 'SECONDS'  // Délai pour s'assurer que le port est libéré
+                            sleep time: 10, unit: 'SECONDS'  // Délai plus long pour éviter les conflits
                         } else {
                             echo "Le port ${port} est libre."
                         }
@@ -75,8 +79,11 @@ pipeline {
                     echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                    echo "Démarrage de l'application en arrière-plan..."
-                    bat "cd /d ${DEPLOY_DIR} && start /B java -jar ${JAR_NAME} > app.log 2>&1"
+                    echo "Démarrage de l'application..."
+                    bat """
+                    cd /d ${DEPLOY_DIR}
+                    wmic process call create "java -jar ${JAR_NAME} > app.log 2>&1"
+                    """
                 }
             }
         }
@@ -84,10 +91,10 @@ pipeline {
 
     post {
         success {
-            echo "Build and deployment of ${JAR_NAME} completed successfully."
+            echo "Build et déploiement de ${JAR_NAME} réussis."
         }
         failure {
-            echo "Build or deployment of ${JAR_NAME} failed."
+            echo "Échec du build ou du déploiement de ${JAR_NAME}."
         }
     }
 }
