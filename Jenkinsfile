@@ -81,8 +81,7 @@ pipeline {
 
                     echo "Démarrage de l'application..."
                    bat """
-                   cd /d ${DEPLOY_DIR}
-                   start "synchronRE" /min java -jar ${JAR_NAME} > app.log 2>&1
+                   nssm restart synchronRE
                    """
                 }
             }
