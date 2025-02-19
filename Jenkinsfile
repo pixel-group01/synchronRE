@@ -80,7 +80,14 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
                     
                     echo "Démarrage de l'application..."
-                  bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
+                    bat """
+                    cd /d ${DEPLOY_DIR}
+                    start /B java -jar ${JAR_NAME} > app.log 2>&1
+                    powershell -Command "(Get-WmiObject Win32_Process -Filter 'commandline like \\\"%${JAR_NAME}%\\\"').ProcessId > app.pid"
+                    """
+        
+                    echo "Vérification que l'application est en cours d'exécution..."
+                    bat "tasklist /FI \"IMAGENAME eq java.exe\""
                 }
             }
         }
