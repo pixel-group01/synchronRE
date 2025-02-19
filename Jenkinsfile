@@ -80,7 +80,7 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                     echo "Démarrage de l'application..."
-                  bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1 && type app.log"
+                  bat "cd /d ${DEPLOY_DIR} && start cmd /c java -jar ${JAR_NAME} > app.log 2>&1"
                 }
             }
         }
