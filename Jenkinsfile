@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         GIT_REPO_URL = 'https://github.com/pixel-group01/synchronRE.git'
-        BRANCH = 'Comptes'
+        BRANCH = 'configs-jenkis'
         BUILD_DIR = 'target'
         JAR_NAME = 'synchronRE.jar'
         DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
