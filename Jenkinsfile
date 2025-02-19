@@ -49,7 +49,6 @@ pipeline {
                     ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
                     ${NSSM_PATH} start MyAppService
                     """
-
                     echo "Service installé et démarré avec succès."
                 }
             }
