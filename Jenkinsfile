@@ -80,12 +80,11 @@ pipeline {
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                     echo "Démarrage de l'application..."
-                 // bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
+                  bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
                 //  bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
                  // bat "cd /d ${DEPLOY_DIR} && wmic process call create \"java -jar ${JAR_NAME}\""
                   //  bat "cd /d ${DEPLOY_DIR} && powershell Start-Process -NoNewWindow -FilePath java -ArgumentList '-jar ${JAR_NAME}'"
                   //  bat "cd /d ${DEPLOY_DIR} && cmd /c start /min java -jar ${JAR_NAME}"
-                    bat "java -version"
                 }
             }
         }
