@@ -13,6 +13,7 @@ pipeline {
         JAR_NAME = 'synchronRE.jar'
         DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
         CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-test.properties"
+        NSSM_PATH = 'C:\\nssm\\nssm.exe'
     }
 
     stages {
@@ -25,7 +26,8 @@ pipeline {
         stage('Construction du JAR') {
             steps {
                 script {
-                    bat 'mvn clean package -e'
+                    echo "Nettoyage et construction du JAR..."
+                    bat "mvn clean package -e -DargLine=\"-Xmx1024m -Xms512m\""
                 }
             }
         }
@@ -78,13 +80,20 @@ pipeline {
                 script {
                     echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-
                     echo "Démarrage de l'application..."
-                  bat "cd /d ${DEPLOY_DIR} && java -jar ${JAR_NAME} > app.log 2>&1"
-                //  bat "cd /d ${DEPLOY_DIR} && start java -jar ${JAR_NAME} > app.log 2>&1"
-                 // bat "cd /d ${DEPLOY_DIR} && wmic process call create \"java -jar ${JAR_NAME}\""
-                  //  bat "cd /d ${DEPLOY_DIR} && powershell Start-Process -NoNewWindow -FilePath java -ArgumentList '-jar ${JAR_NAME}'"
-                  //  bat "cd /d ${DEPLOY_DIR} && cmd /c start /min java -jar ${JAR_NAME}"
+                   echo "Installation du service Windows avec NSSM..."
+                    bat """
+                    ${NSSM_PATH} stop MyAppService
+                    ${NSSM_PATH} remove MyAppService confirm
+                    ${NSSM_PATH} install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                    ${NSSM_PATH} set MyAppService AppDirectory ${DEPLOY_DIR}
+                    ${NSSM_PATH} set MyAppService AppStdout ${DEPLOY_DIR}\\app.log
+                    ${NSSM_PATH} set MyAppService AppStderr ${DEPLOY_DIR}\\app.log
+                    ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
+                    ${NSSM_PATH} start MyAppService
+                    """
+
+                    echo "Service installé et démarré avec succès."
                 }
             }
         }
