@@ -82,13 +82,13 @@ pipeline {
                     """
                     echo "Copie du JAR vers ${DEPLOY_DIR}"
                     bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    
+                    bat "echo %PATH%"
                     echo "Démarrage de l'application..."
                     echo "Installation du service Windows avec NSSM..."
                     bat """
-                    nssm install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                    nssm set MyAppService AppDirectory ${DEPLOY_DIR}
-                    nssm start MyAppService
+                    C:\\nssm\\nssm.exe install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                    C:\\nssm\\nssm.exe set MyAppService AppDirectory ${DEPLOY_DIR}
+                    C:\\nssm\\nssm.exe start MyAppService
                     """
                 }
             }
