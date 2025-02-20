@@ -36,8 +36,7 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                    script {
-                                echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+                    echo "Vérification de l'existence du service ${SERVICE_NAME}..."
                                 def serviceExists = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"SERVICE_NAME\"", returnStatus: true) == 0
 
                                 if (serviceExists) {
