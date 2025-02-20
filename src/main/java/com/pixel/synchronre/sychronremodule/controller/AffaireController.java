@@ -53,11 +53,6 @@ public class AffaireController
     private final AffaireDocUploader docService;
     private final IHistoDetailsService hds;
 
-
-
-    @GetMapping("/facultative/test-jenkins")
-    public void testJenkins(){
-    }
     @GetMapping("/facultative/details/{affId}")
     @ResponseStatus(HttpStatus.OK)
     public FacultativeDetailsResp getDetailsAffaire(@PathVariable Long affId){
