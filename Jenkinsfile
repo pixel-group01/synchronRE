@@ -46,7 +46,13 @@ pipeline {
 
                                  sc query %SERVICE_NAME% >nul 2>&1
                                  if %ERRORLEVEL% EQU 1060 (
-                                     echo "Le service %SERVICE_NAME% n'existe pas. Il sera créé."
+                                     rem Le service n'existe pas, création immédiate du service
+                                         ${NSSM_PATH} install ${SERVICE_NAME} "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                                         ${NSSM_PATH} set ${SERVICE_NAME} AppDirectory ${DEPLOY_DIR}
+                                         ${NSSM_PATH} set ${SERVICE_NAME} AppStdout ${DEPLOY_DIR}\\app.log
+                                         ${NSSM_PATH} set ${SERVICE_NAME} AppStderr ${DEPLOY_DIR}\\app.log
+                                         ${NSSM_PATH} set ${SERVICE_NAME} Start SERVICE_AUTO_START
+                                         ${NSSM_PATH} start ${SERVICE_NAME}
                                  ) else (
                                      echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
                                      sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
