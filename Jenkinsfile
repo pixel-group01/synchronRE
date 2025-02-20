@@ -36,15 +36,23 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                    echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+                    script {
+                                echo "Vérification de l'existence du service ${SERVICE_NAME}..."
                                 def serviceExists = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"SERVICE_NAME\"", returnStatus: true) == 0
 
                                 if (serviceExists) {
                                     echo "Service ${SERVICE_NAME} trouvé. Arrêt et suppression..."
                                     bat "${NSSM_PATH} stop ${SERVICE_NAME} || echo Service non démarré"
+                                    sleep 5
                                     bat "${NSSM_PATH} remove ${SERVICE_NAME} confirm"
                                 } else {
                                     echo "Service ${SERVICE_NAME} non trouvé, création d'un nouveau service."
+                                }
+
+                                echo "Vérification de l'existence du fichier JAR..."
+                                def jarExists = fileExists("${BUILD_DIR}\\${JAR_NAME}")
+                                if (!jarExists) {
+                                    error "Fichier JAR introuvable : ${BUILD_DIR}\\${JAR_NAME}"
                                 }
 
                                 echo "Copie du JAR vers ${DEPLOY_DIR}"
@@ -59,6 +67,12 @@ pipeline {
                                 ${NSSM_PATH} set ${SERVICE_NAME} Start SERVICE_AUTO_START
                                 ${NSSM_PATH} start ${SERVICE_NAME}
                                 """
+
+                                echo "Vérification de l'état du service après démarrage..."
+                                def serviceStarted = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"RUNNING\"", returnStatus: true) == 0
+                                if (!serviceStarted) {
+                                    error "Le service ${SERVICE_NAME} n'a pas démarré correctement."
+                                }
 
                                 echo "Service ${SERVICE_NAME} installé et démarré avec succès."
                    }
