@@ -36,8 +36,7 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                    script {
-                                echo "Vérification de l'espace disque disponible..."
+                    echo "Vérification de l'espace disque disponible..."
                                 def freeSpace = bat(script: "wmic logicaldisk where DeviceID='C:' get FreeSpace", returnStdout: true).trim()
                                 if (freeSpace.toLong() < 500000000) { // Moins de 500 Mo libres
                                     error "Espace disque insuffisant pour le déploiement."
