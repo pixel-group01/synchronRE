@@ -15,6 +15,7 @@ pipeline {
         CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-test.properties"
         NSSM_PATH = 'C:\\nssm\\nssm.exe'
         SERVICE_NAME = 'synchronreTest' // Nom du service Windows
+        JAVA_TOOL_OPTIONS = "-Dfile.encoding=UTF-8"
     }
 
     stages {
@@ -53,7 +54,7 @@ pipeline {
 
                     sc query %SERVICE_NAME% >nul 2>&1
                     if %ERRORLEVEL% EQU 1060 (
-                        echo "Le service %SERVICE_NAME% n'existe pas. Il sera créé."
+                        echo "Le service %SERVICE_NAME% n'existe pas. Il sera cree."
                     ) else (
                         echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
                         sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
