@@ -55,39 +55,47 @@ pipeline {
                     sc query %SERVICE_NAME% >nul 2>&1
                     if %ERRORLEVEL% EQU 1060 (
                         echo "Le service %SERVICE_NAME% n'existe pas. Il sera créé."
-                        goto :deployment
+                        goto :Creation_et_Deploiement_du_Service
                     ) else (
                         echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
-                        sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
+                        sc stop %SERVICE_NAME% >nul 2>&1
+                        if %ERRORLEVEL% NEQ 0 (
+                            echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
+                        )
+
                         timeout /t 15 >nul
 
-                        rem Vérification que le service est bien arrêté
-                        echo "Vérification de l'état du service après l'arrêt..."
-                        for /L %%i in (1,1,30) do (
-                            sc query %SERVICE_NAME% | find "STATE" | find "STOPPED" >nul 2>&1
-                            if %ERRORLEVEL% EQU 0 (
-                                echo "Le service %SERVICE_NAME% a été arrêté correctement."
-                                goto :service_stopped
+                            rem Vérification que le service est bien arrêté
+                            echo "Vérification de l'état du service après l'arrêt..."
+                            for /L %%i in (1,1,30) do (
+                                sc query %SERVICE_NAME% | find "STATE" | find "STOPPED" >nul 2>&1
+                                if %ERRORLEVEL% EQU 0 (
+                                    echo "Le service %SERVICE_NAME% a été arrêté correctement."
+                                    goto :service_stopped
+                                )
+                                echo "Tentative %%i de vérification... Le service n'est toujours pas arrêté."
+                                timeout /t 5 >nul
                             )
-                            echo "Tentative %%i de vérification... Le service n'est toujours pas arrêté."
-                            timeout /t 5 >nul
-                        )
-                        echo "Le service %SERVICE_NAME% n'a pas pu être arrêté correctement après plusieurs tentatives."
-                        exit /b 1
 
-                        :service_stopped
-                        sc delete %SERVICE_NAME% || (
-                            echo "Le service %SERVICE_NAME% ne peut pas être supprimé."
+                            echo "Le service %SERVICE_NAME% n'a pas pu être arrêté correctement après plusieurs tentatives."
                             exit /b 1
-                        )
-                        timeout /t 5 >nul
-                        echo "Service %SERVICE_NAME% supprimé."
-                    )
 
-                    :deployment
-                    echo "Passage au stage de déploiement pour la création du service..."
-                    rem Ajouter ici les commandes de création du service
-                    """
+                            :service_stopped
+                            echo "Suppression du service %SERVICE_NAME%..."
+                            sc delete %SERVICE_NAME% >nul 2>&1
+                            if %ERRORLEVEL% NEQ 0 (
+                                echo "Le service %SERVICE_NAME% ne peut pas être supprimé."
+                                exit /b 1
+                            )
+
+                            timeout /t 5 >nul
+                            echo "Service %SERVICE_NAME% supprimé avec succès."
+                        )
+
+                        :Creation_et_Deploiement_du_Service
+                        echo "Passage au stage de Création et Déploiement du Service..."
+                        rem Ajouter ici les commandes de création et de déploiement du service
+                        """
                 }
             }
         }
