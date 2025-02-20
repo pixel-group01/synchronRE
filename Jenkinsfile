@@ -34,24 +34,29 @@ pipeline {
 
         stage('Déploiement') {
             steps {
-                script {
-                    echo "Copie du JAR vers ${DEPLOY_DIR}"
-                    bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-                    echo "Démarrage de l'application..."
-                   echo "Installation du service Windows avec NSSM..."
-                    bat """
-                    ${NSSM_PATH} stop MyAppService
-                    ${NSSM_PATH} remove MyAppService confirm
-                    ${NSSM_PATH} install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                    ${NSSM_PATH} set MyAppService AppDirectory ${DEPLOY_DIR}
-                    ${NSSM_PATH} set MyAppService AppStdout ${DEPLOY_DIR}\\app.log
-                    ${NSSM_PATH} set MyAppService AppStderr ${DEPLOY_DIR}\\app.log
-                    ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
-                    ${NSSM_PATH} start MyAppService
-                    """
-                    echo "Service installé et démarré avec succès."
+                    script {
+                        echo "Copie du JAR vers ${DEPLOY_DIR}"
+                        bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+
+                        echo "Suppression de l'ancien service s'il existe..."
+                        bat """
+                        sc stop MyAppService
+                        sc delete MyAppService
+                        timeout /t 5 /nobreak
+                        """
+
+                        echo "Installation du service Windows avec NSSM..."
+                        bat """
+                        ${NSSM_PATH} install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                        ${NSSM_PATH} set MyAppService AppDirectory ${DEPLOY_DIR}
+                        ${NSSM_PATH} set MyAppService AppStdout ${DEPLOY_DIR}\\app.log
+                        ${NSSM_PATH} set MyAppService AppStderr ${DEPLOY_DIR}\\app.log
+                        ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
+                        ${NSSM_PATH} start MyAppService
+                        """
+                        echo "Service installé et démarré avec succès."
+                    }
                 }
-            }
         }
     }
 
