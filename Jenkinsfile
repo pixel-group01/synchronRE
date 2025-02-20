@@ -38,17 +38,15 @@ pipeline {
                         echo "Copie du JAR vers ${DEPLOY_DIR}"
                         bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                        echo "Vérification et gestion du service synchronreTest..."
+                        echo "Vérification et suppression du service synchronreTest si nécessaire..."
                         bat """
-                        sc query synchronreTest | findstr /I /C:"SERVICE_NAME" > nul
-                        if %ERRORLEVEL% == 0 (
+                        sc query synchronreTest > nul 2>&1
+                        if %ERRORLEVEL% EQU 0 (
                             echo "Arrêt et suppression du service existant..."
                             sc stop synchronreTest
                             ping -n 6 127.0.0.1 > nul
                             sc delete synchronreTest
                             ping -n 6 127.0.0.1 > nul
-                        ) else (
-                            echo "Le service n'existe pas, pas besoin de le supprimer."
                         )
                         """
 
