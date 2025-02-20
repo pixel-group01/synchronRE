@@ -54,7 +54,8 @@ pipeline {
 
                     sc query %SERVICE_NAME% >nul 2>&1
                     if %ERRORLEVEL% EQU 1060 (
-                        echo "Le service %SERVICE_NAME% n'existe pas. Il sera cree."
+                        echo "Le service %SERVICE_NAME% n'existe pas. Il sera créé."
+                        goto :deployment
                     ) else (
                         echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
                         sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
@@ -82,6 +83,10 @@ pipeline {
                         timeout /t 5 >nul
                         echo "Service %SERVICE_NAME% supprimé."
                     )
+
+                    :deployment
+                    echo "Passage au stage de déploiement pour la création du service..."
+                    rem Ajouter ici les commandes de création du service
                     """
                 }
             }
