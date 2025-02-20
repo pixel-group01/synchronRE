@@ -14,6 +14,7 @@ pipeline {
         DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
         CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-test.properties"
         NSSM_PATH = 'C:\\nssm\\nssm.exe'
+        SERVICE_NAME = 'synchronreTest' // Nom du service Windows
     }
 
     stages {
@@ -34,35 +35,38 @@ pipeline {
 
         stage('Déploiement') {
             steps {
-                    script {
-                        echo "Copie du JAR vers ${DEPLOY_DIR}"
-                        bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+                script {
+                    echo "Copie du JAR vers ${DEPLOY_DIR}"
+                    bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                        echo "Vérification et suppression du service synchronreTest si nécessaire..."
-                        bat """
-                        sc query synchronreTest > nul 2>&1
-                        if %ERRORLEVEL% EQU 0 (
-                            echo "Arrêt et suppression du service existant..."
-                            sc stop synchronreTest
-                            ping -n 6 127.0.0.1 > nul
-                            sc delete synchronreTest
-                            ping -n 6 127.0.0.1 > nul
-                        )
-                        """
+                    echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+                    bat """
+                    sc query ${SERVICE_NAME} > nul 2>&1
+                    if %ERRORLEVEL% EQU 0 (
+                        echo "Le service ${SERVICE_NAME} existe déjà. Arrêt et suppression..."
+                        sc stop ${SERVICE_NAME}
+                        timeout /t 5 > nul
+                        sc delete ${SERVICE_NAME}
+                        timeout /t 5 > nul
+                        echo "Service ${SERVICE_NAME} supprimé."
+                    ) else (
+                        echo "Le service ${SERVICE_NAME} n'existe pas. Il sera créé."
+                    )
+                    """
 
-                        echo "Installation du service Windows avec NSSM..."
-                        bat """
-                        ${NSSM_PATH} install synchronreTest "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                        ${NSSM_PATH} set synchronreTest AppDirectory ${DEPLOY_DIR}
-                        ${NSSM_PATH} set synchronreTest AppStdout ${DEPLOY_DIR}\\app.log
-                        ${NSSM_PATH} set synchronreTest AppStderr ${DEPLOY_DIR}\\app.log
-                        ${NSSM_PATH} set synchronreTest Start SERVICE_AUTO_START
-                        ${NSSM_PATH} start synchronreTest
-                        """
+                    echo "Création du service ${SERVICE_NAME} avec NSSM..."
+                    bat """
+                    ${NSSM_PATH} install ${SERVICE_NAME} "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                    ${NSSM_PATH} set ${SERVICE_NAME} AppDirectory ${DEPLOY_DIR}
+                    ${NSSM_PATH} set ${SERVICE_NAME} AppStdout ${DEPLOY_DIR}\\app.log
+                    ${NSSM_PATH} set ${SERVICE_NAME} AppStderr ${DEPLOY_DIR}\\app.log
+                    ${NSSM_PATH} set ${SERVICE_NAME} Start SERVICE_AUTO_START
+                    ${NSSM_PATH} start ${SERVICE_NAME}
+                    """
 
-                        echo "Service synchronreTest installé et démarré avec succès."
-                    }
+                    echo "Service ${SERVICE_NAME} installé et démarré avec succès."
                 }
+            }
         }
     }
 
