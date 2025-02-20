@@ -11,10 +11,10 @@ pipeline {
         BRANCH = 'Comptes'
         BUILD_DIR = 'target'
         JAR_NAME = 'synchronRE.jar'
-        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
-        CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-test.properties"
+        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Dev\\back'
+        CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-dev.properties"
         NSSM_PATH = 'C:\\nssm\\nssm.exe'
-        SERVICE_NAME = 'synchronreTest' // Nom du service Windows
+        SERVICE_NAME = 'synchronreDev' // Nom du service Windows
     }
 
     stages {
