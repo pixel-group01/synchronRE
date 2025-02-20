@@ -36,7 +36,20 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                    echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+                    script {
+                                echo "Vérification de l'espace disque disponible..."
+                                def freeSpace = bat(script: "wmic logicaldisk where DeviceID='C:' get FreeSpace", returnStdout: true).trim()
+                                if (freeSpace.toLong() < 500000000) { // Moins de 500 Mo libres
+                                    error "Espace disque insuffisant pour le déploiement."
+                                }
+
+                                echo "Vérification des permissions du répertoire ${DEPLOY_DIR}..."
+                                def hasWriteAccess = bat(script: "echo test > ${DEPLOY_DIR}\\write_test.tmp && del ${DEPLOY_DIR}\\write_test.tmp", returnStatus: true) == 0
+                                if (!hasWriteAccess) {
+                                    error "Permissions insuffisantes sur le répertoire ${DEPLOY_DIR}."
+                                }
+
+                                echo "Vérification de l'existence du service ${SERVICE_NAME}..."
                                 def serviceExists = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"SERVICE_NAME\"", returnStatus: true) == 0
 
                                 if (serviceExists) {
@@ -54,8 +67,17 @@ pipeline {
                                     error "Fichier JAR introuvable : ${BUILD_DIR}\\${JAR_NAME}"
                                 }
 
+                                echo "Sauvegarde de l'ancien JAR avant déploiement..."
+                                bat "if exist ${DEPLOY_DIR}\\${JAR_NAME} move ${DEPLOY_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\backup_${JAR_NAME}_%date:~6,4%%date:~3,2%%date:~0,2%.jar"
+
                                 echo "Copie du JAR vers ${DEPLOY_DIR}"
                                 bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+
+                                echo "Vérification si le port ${APP_PORT} est occupé..."
+                                def portInUse = bat(script: "netstat -ano | findstr :${APP_PORT}", returnStatus: true) == 0
+                                if (portInUse) {
+                                    error "Le port ${APP_PORT} est déjà utilisé, arrêt du déploiement."
+                                }
 
                                 echo "Création du service ${SERVICE_NAME} avec NSSM..."
                                 bat """
@@ -70,7 +92,10 @@ pipeline {
                                 echo "Vérification de l'état du service après démarrage..."
                                 def serviceStarted = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"RUNNING\"", returnStatus: true) == 0
                                 if (!serviceStarted) {
-                                    error "Le service ${SERVICE_NAME} n'a pas démarré correctement."
+                                    echo "Le service ${SERVICE_NAME} n'a pas démarré correctement. Restauration de l'ancienne version..."
+                                    bat "move ${DEPLOY_DIR}\\backup_${JAR_NAME}_%date:~6,4%%date:~3,2%%date:~0,2%.jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                                    bat "${NSSM_PATH} start ${SERVICE_NAME}"
+                                    error "Déploiement annulé et ancienne version restaurée."
                                 }
 
                                 echo "Service ${SERVICE_NAME} installé et démarré avec succès."
