@@ -60,10 +60,6 @@ public class AffaireController
         return facMapper.mapToFacultativeDetailsResp(affaire);
     }
 
-    @GetMapping("/facultative/test")
-    public void test(){
-    }
-
     @PostMapping("/facultative/create")
     @ResponseStatus(HttpStatus.CREATED)
     public FacultativeDetailsResp saveAffaire(@RequestBody @Valid CreateFacultativeReq dto){
