@@ -38,11 +38,17 @@ pipeline {
                         echo "Copie du JAR vers ${DEPLOY_DIR}"
                         bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                        echo "Suppression de l'ancien service s'il existe..."
+                        echo "Vérification si le service existe..."
                         bat """
-                        sc stop MyAppService
-                        sc delete MyAppService
-                        timeout /t 5 /nobreak
+                        sc query MyAppService | findstr /I /C:"SERVICE_NAME" > nul
+                        if %ERRORLEVEL% == 0 (
+                            echo "Arrêt et suppression du service existant..."
+                            sc stop MyAppService
+                            sc delete MyAppService
+                            ping -n 6 127.0.0.1 > nul
+                        ) else (
+                            echo "Le service n'existe pas, pas besoin de le supprimer."
+                        )
                         """
 
                         echo "Installation du service Windows avec NSSM..."
@@ -54,6 +60,7 @@ pipeline {
                         ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
                         ${NSSM_PATH} start MyAppService
                         """
+
                         echo "Service installé et démarré avec succès."
                     }
                 }
