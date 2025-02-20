@@ -40,11 +40,11 @@ pipeline {
 
                         echo "Vérification si le service existe..."
                         bat """
-                        sc query MyAppService | findstr /I /C:"SERVICE_NAME" > nul
+                        sc query synchronreTest | findstr /I /C:"SERVICE_NAME" > nul
                         if %ERRORLEVEL% == 0 (
                             echo "Arrêt et suppression du service existant..."
-                            sc stop MyAppService
-                            sc delete MyAppService
+                            sc stop synchronreTest
+                            sc delete synchronreTest
                             ping -n 6 127.0.0.1 > nul
                         ) else (
                             echo "Le service n'existe pas, pas besoin de le supprimer."
@@ -53,15 +53,15 @@ pipeline {
 
                         echo "Installation du service Windows avec NSSM..."
                         bat """
-                        ${NSSM_PATH} install MyAppService "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                        ${NSSM_PATH} set MyAppService AppDirectory ${DEPLOY_DIR}
-                        ${NSSM_PATH} set MyAppService AppStdout ${DEPLOY_DIR}\\app.log
-                        ${NSSM_PATH} set MyAppService AppStderr ${DEPLOY_DIR}\\app.log
-                        ${NSSM_PATH} set MyAppService Start SERVICE_AUTO_START
-                        ${NSSM_PATH} start MyAppService
+                        ${NSSM_PATH} install synchronreTest "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                        ${NSSM_PATH} set synchronreTest AppDirectory ${DEPLOY_DIR}
+                        ${NSSM_PATH} set synchronreTest AppStdout ${DEPLOY_DIR}\\app.log
+                        ${NSSM_PATH} set synchronreTest AppStderr ${DEPLOY_DIR}\\app.log
+                        ${NSSM_PATH} set synchronreTest Start SERVICE_AUTO_START
+                        ${NSSM_PATH} start synchronreTest
                         """
 
-                        echo "Service installé et démarré avec succès."
+                        echo "Service synchronreTest installé et démarré avec succès."
                     }
                 }
         }
