@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage('Vérification du service') {
+        stage('Verification du service') {
             steps {
                 script {
                     echo "Vérification de l'existence du service ${SERVICE_NAME}..."
@@ -85,7 +85,7 @@ pipeline {
             }
         }
 
-        stage('Création et Déploiement du Service') {
+        stage('Creation et Déploiement du Service') {
             steps {
                 script {
                     echo "Création du service ${SERVICE_NAME} avec NSSM..."
