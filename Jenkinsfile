@@ -36,24 +36,31 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                     echo "Vérification et arrêt du service ${SERVICE_NAME} si existant..."
-                                 bat "${NSSM_PATH} stop ${SERVICE_NAME} || echo Service non démarré"
-                                 bat "${NSSM_PATH} remove ${SERVICE_NAME} confirm"
+                    echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+                                def serviceExists = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"SERVICE_NAME\"", returnStatus: true) == 0
 
-                                 echo "Copie du JAR vers ${DEPLOY_DIR}"
-                                 bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+                                if (serviceExists) {
+                                    echo "Service ${SERVICE_NAME} trouvé. Arrêt et suppression..."
+                                    bat "${NSSM_PATH} stop ${SERVICE_NAME} || echo Service non démarré"
+                                    bat "${NSSM_PATH} remove ${SERVICE_NAME} confirm"
+                                } else {
+                                    echo "Service ${SERVICE_NAME} non trouvé, création d'un nouveau service."
+                                }
 
-                                 echo "Création du service ${SERVICE_NAME} avec NSSM..."
-                                 bat """
-                                 ${NSSM_PATH} install ${SERVICE_NAME} "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                                 ${NSSM_PATH} set ${SERVICE_NAME} AppDirectory ${DEPLOY_DIR}
-                                 ${NSSM_PATH} set ${SERVICE_NAME} AppStdout ${DEPLOY_DIR}\\app.log
-                                 ${NSSM_PATH} set ${SERVICE_NAME} AppStderr ${DEPLOY_DIR}\\app.log
-                                 ${NSSM_PATH} set ${SERVICE_NAME} Start SERVICE_AUTO_START
-                                 ${NSSM_PATH} start ${SERVICE_NAME}
-                                 """
+                                echo "Copie du JAR vers ${DEPLOY_DIR}"
+                                bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                                 echo "Service ${SERVICE_NAME} installé et démarré avec succès."
+                                echo "Création du service ${SERVICE_NAME} avec NSSM..."
+                                bat """
+                                ${NSSM_PATH} install ${SERVICE_NAME} "${JAVA_HOME}\\bin\\java.exe" "-jar ${DEPLOY_DIR}\\${JAR_NAME}"
+                                ${NSSM_PATH} set ${SERVICE_NAME} AppDirectory ${DEPLOY_DIR}
+                                ${NSSM_PATH} set ${SERVICE_NAME} AppStdout ${DEPLOY_DIR}\\app.log
+                                ${NSSM_PATH} set ${SERVICE_NAME} AppStderr ${DEPLOY_DIR}\\app.log
+                                ${NSSM_PATH} set ${SERVICE_NAME} Start SERVICE_AUTO_START
+                                ${NSSM_PATH} start ${SERVICE_NAME}
+                                """
+
+                                echo "Service ${SERVICE_NAME} installé et démarré avec succès."
                    }
                }
         }
