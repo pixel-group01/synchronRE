@@ -36,16 +36,21 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                    echo "Vérification de l'espace disque disponible..."
-                                def freeSpace = bat(script: "wmic logicaldisk where DeviceID='C:' get FreeSpace", returnStdout: true).trim()
-                                if (freeSpace.toLong() < 500000000) { // Moins de 500 Mo libres
-                                    error "Espace disque insuffisant pour le déploiement."
-                                }
+                     echo "Vérification de l'espace disque disponible..."
+                                def freeSpaceCmd = 'wmic logicaldisk where DeviceID="C:" get FreeSpace /value'
+                                def freeSpaceOutput = bat(script: freeSpaceCmd, returnStdout: true).trim()
 
-                                echo "Vérification des permissions du répertoire ${DEPLOY_DIR}..."
-                                def hasWriteAccess = bat(script: "echo test > ${DEPLOY_DIR}\\write_test.tmp && del ${DEPLOY_DIR}\\write_test.tmp", returnStatus: true) == 0
-                                if (!hasWriteAccess) {
-                                    error "Permissions insuffisantes sur le répertoire ${DEPLOY_DIR}."
+                                def freeSpaceMatch = freeSpaceOutput.find(/\d+/)
+                                if (freeSpaceMatch) {
+                                    def freeSpace = freeSpaceMatch.toLong()
+                                    echo "Espace libre sur C: ${freeSpace} octets"
+
+                                    // Vérifier si l'espace est suffisant (500 Mo en exemple)
+                                    if (freeSpace < 500 * 1024 * 1024) {
+                                        error "Espace disque insuffisant pour le déploiement !"
+                                    }
+                                } else {
+                                    error "Impossible de récupérer l'espace libre sur le disque C:"
                                 }
 
                                 echo "Vérification de l'existence du service ${SERVICE_NAME}..."
@@ -66,17 +71,16 @@ pipeline {
                                     error "Fichier JAR introuvable : ${BUILD_DIR}\\${JAR_NAME}"
                                 }
 
-                                echo "Sauvegarde de l'ancien JAR avant déploiement..."
-                                bat "if exist ${DEPLOY_DIR}\\${JAR_NAME} move ${DEPLOY_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\backup_${JAR_NAME}_%date:~6,4%%date:~3,2%%date:~0,2%.jar"
-
-                                echo "Copie du JAR vers ${DEPLOY_DIR}"
-                                bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
-
-                                echo "Vérification si le port ${APP_PORT} est occupé..."
-                                def portInUse = bat(script: "netstat -ano | findstr :${APP_PORT}", returnStatus: true) == 0
-                                if (portInUse) {
-                                    error "Le port ${APP_PORT} est déjà utilisé, arrêt du déploiement."
+                                echo "Sauvegarde de l'ancien JAR si nécessaire..."
+                                def oldJarPath = "${DEPLOY_DIR}\\${JAR_NAME}"
+                                if (fileExists(oldJarPath)) {
+                                    def backupPath = "${DEPLOY_DIR}\\backup_${JAR_NAME}_${new Date().format('yyyyMMddHHmmss')}"
+                                    echo "Sauvegarde de l'ancien JAR vers ${backupPath}"
+                                    bat "move /Y ${oldJarPath} ${backupPath}"
                                 }
+
+                                echo "Copie du nouveau JAR vers ${DEPLOY_DIR}"
+                                bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                                 echo "Création du service ${SERVICE_NAME} avec NSSM..."
                                 bat """
@@ -90,11 +94,24 @@ pipeline {
 
                                 echo "Vérification de l'état du service après démarrage..."
                                 def serviceStarted = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"RUNNING\"", returnStatus: true) == 0
+
                                 if (!serviceStarted) {
-                                    echo "Le service ${SERVICE_NAME} n'a pas démarré correctement. Restauration de l'ancienne version..."
-                                    bat "move ${DEPLOY_DIR}\\backup_${JAR_NAME}_%date:~6,4%%date:~3,2%%date:~0,2%.jar ${DEPLOY_DIR}\\${JAR_NAME}"
-                                    bat "${NSSM_PATH} start ${SERVICE_NAME}"
-                                    error "Déploiement annulé et ancienne version restaurée."
+                                    echo "Le service ${SERVICE_NAME} n'a pas démarré correctement. Restauration de l'ancien JAR..."
+
+                                    def backupFiles = bat(script: "dir /B /O-D ${DEPLOY_DIR}\\backup_*.jar", returnStdout: true).trim().split("\n")
+                                    if (backupFiles.length > 0) {
+                                        def lastBackup = backupFiles[0].trim()
+                                        bat "move /Y ${DEPLOY_DIR}\\${lastBackup} ${DEPLOY_DIR}\\${JAR_NAME}"
+                                        echo "Ancien JAR restauré. Tentative de redémarrage du service..."
+                                        bat "${NSSM_PATH} start ${SERVICE_NAME}"
+
+                                        def restartSuccess = bat(script: "sc query ${SERVICE_NAME} | findstr /C:\"RUNNING\"", returnStatus: true) == 0
+                                        if (!restartSuccess) {
+                                            error "Impossible de restaurer et redémarrer le service ${SERVICE_NAME}."
+                                        }
+                                    } else {
+                                        error "Aucun backup trouvé pour restaurer l'ancien JAR."
+                                    }
                                 }
 
                                 echo "Service ${SERVICE_NAME} installé et démarré avec succès."
