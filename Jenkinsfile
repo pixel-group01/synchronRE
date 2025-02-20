@@ -50,13 +50,13 @@ pipeline {
                                   ) else (
                                       echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
                                       sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
-                                      timeout /t 5 >nul
+                                      timeout /t 10 >nul
 
                                       rem Vérification que le service est bien arrêté
-                                      for /L %%i in (1,1,10) do (
+                                      for /L %%i in (1,1,20) do (
                                           sc query %SERVICE_NAME% | find "STATE" | find "STOPPED" >nul 2>&1
                                           if %ERRORLEVEL% EQU 0 goto :service_stopped
-                                          timeout /t 2 >nul
+                                          timeout /t 5 >nul
                                       )
                                       echo "Le service %SERVICE_NAME% n'a pas pu être arrêté correctement."
                                       exit /b 1
