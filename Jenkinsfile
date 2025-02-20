@@ -39,20 +39,20 @@ pipeline {
                        echo "Copie du JAR vers ${DEPLOY_DIR}"
                        bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
-                       echo "Vérification de l'existence du service ${SERVICE_NAME}..."
-                       bat """
-                       sc query ${SERVICE_NAME} > nul 2>&1
-                       if %ERRORLEVEL% EQU 1060 (
-                           echo "Le service ${SERVICE_NAME} n'existe pas. Il sera créé."
-                       ) else (
-                           echo "Le service ${SERVICE_NAME} existe déjà. Arrêt et suppression..."
-                           sc stop ${SERVICE_NAME} || echo "Le service ${SERVICE_NAME} est déjà arrêté ou ne peut pas être arrêté."
-                           timeout /t 5 > nul
-                           sc delete ${SERVICE_NAME} || echo "Le service ${SERVICE_NAME} ne peut pas être supprimé."
-                           timeout /t 5 > nul
-                           echo "Service ${SERVICE_NAME} supprimé."
-                       )
-                       """
+//                        echo "Vérification de l'existence du service ${SERVICE_NAME}..."
+//                        bat """
+//                        sc query ${SERVICE_NAME} > nul 2>&1
+//                        if %ERRORLEVEL% EQU 1060 (
+//                            echo "Le service ${SERVICE_NAME} n'existe pas. Il sera créé."
+//                        ) else (
+//                            echo "Le service ${SERVICE_NAME} existe déjà. Arrêt et suppression..."
+//                            sc stop ${SERVICE_NAME} || echo "Le service ${SERVICE_NAME} est déjà arrêté ou ne peut pas être arrêté."
+//                            timeout /t 5 > nul
+//                            sc delete ${SERVICE_NAME} || echo "Le service ${SERVICE_NAME} ne peut pas être supprimé."
+//                            timeout /t 5 > nul
+//                            echo "Service ${SERVICE_NAME} supprimé."
+//                        )
+//                        """
 
                        echo "Création du service ${SERVICE_NAME} avec NSSM..."
                        bat """
