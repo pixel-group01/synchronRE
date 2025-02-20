@@ -36,45 +36,12 @@ pipeline {
         stage('Deploiement') {
            steps {
                    script {
-                     echo "Copie du JAR vers ${DEPLOY_DIR}"
-                                 bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
+                     echo "Vérification et arrêt du service ${SERVICE_NAME} si existant..."
+                                 bat "${NSSM_PATH} stop ${SERVICE_NAME} || echo Service non démarré"
+                                 bat "${NSSM_PATH} remove ${SERVICE_NAME} confirm"
 
-//                                  echo "Vérification de l'existence du service ${SERVICE_NAME}..."
-//                                  bat """
-//                                  @echo off
-//                                  set SERVICE_NAME=${SERVICE_NAME}
-//
-//                                  sc query %SERVICE_NAME% >nul 2>&1
-//                                  if %ERRORLEVEL% EQU 1060 (
-//                                      echo "Le service %SERVICE_NAME% n'existe pas. Il sera créé."
-//                                  ) else (
-//                                      echo "Le service %SERVICE_NAME% existe déjà. Arrêt et suppression..."
-//                                      sc stop %SERVICE_NAME% || echo "Le service %SERVICE_NAME% est déjà arrêté ou ne peut pas être arrêté."
-//                                      timeout /t 15 >nul
-//
-//                                      rem Vérification que le service est bien arrêté
-//                                      echo "Vérification de l'état du service après l'arrêt..."
-//                                      for /L %%i in (1,1,30) do (
-//                                          sc query %SERVICE_NAME% | find "STATE" | find "STOPPED" >nul 2>&1
-//                                          if %ERRORLEVEL% EQU 0 (
-//                                              echo "Le service %SERVICE_NAME% a été arrêté correctement."
-//                                              goto :service_stopped
-//                                          )
-//                                          echo "Tentative %%i de vérification... Le service n'est toujours pas arrêté."
-//                                          timeout /t 5 >nul
-//                                      )
-//                                      echo "Le service %SERVICE_NAME% n'a pas pu être arrêté correctement après plusieurs tentatives."
-//                                      exit /b 1
-//
-//                                      :service_stopped
-//                                      sc delete %SERVICE_NAME% || (
-//                                          echo "Le service %SERVICE_NAME% ne peut pas être supprimé."
-//                                          exit /b 1
-//                                      )
-//                                      timeout /t 5 >nul
-//                                      echo "Service %SERVICE_NAME% supprimé."
-//                                  )
-//                                  """
+                                 echo "Copie du JAR vers ${DEPLOY_DIR}"
+                                 bat "copy /Y ${BUILD_DIR}\\${JAR_NAME} ${DEPLOY_DIR}\\${JAR_NAME}"
 
                                  echo "Création du service ${SERVICE_NAME} avec NSSM..."
                                  bat """
