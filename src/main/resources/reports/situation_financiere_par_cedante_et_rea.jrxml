@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante_et_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="307"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="688"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -60,11 +60,11 @@ and ces_id=10]]>
 	</subDataset>
 	<subDataset name="table_ced_par_rea" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\DataAdapter.xml"/>
-		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="561"/>
-		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="428"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="147"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="848"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="676"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="314"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="260"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="734"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -83,7 +83,7 @@ and ces_id=10]]>
        stat.cou_libelle,
        stat.aff_date_effet,
        stat.aff_date_echeance,
-      stat.montant_cede,
+       stat.montant_cede,
        stat.montant_encaisse ,
        stat.commission_nelsonre ,
        stat.montant_a_reverser,
@@ -98,13 +98,37 @@ and ces_id=10]]>
        regexp_replace(to_char(stat.montant_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_reverse_format,
        regexp_replace(to_char(stat.reste_a_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS reste_a_reverse_format,
        --regexp_replace(to_char((sum(stat.montant_cede) over() )::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_cede_format as total_montant_cede
-       sum(stat.montant_cede) over() as total_montant_cede
-from v_stat_situation_fin_par_rea_ced stat
+
+       --Totaux globaux sur toutes les lignes pour un ced_id donné
+       regexp_replace(to_char(total.total_montant_cede, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_cede,
+       regexp_replace(to_char(total.total_montant_encaisse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_encaisse,
+       regexp_replace(to_char(total.total_commission_nelsonre, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission_nelsonre,
+       regexp_replace(to_char(total.total_montant_a_reverser, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_a_reverser,
+       regexp_replace(to_char(total.total_montant_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_reverse,
+       regexp_replace(to_char(total.total_reste_a_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_reste_a_reverse
+
+from v_stat_situation_fin_par_rea_ced stat,
+
+     (
+         SELECT
+             SUM(montant_cede::numeric) AS total_montant_cede,
+             SUM(montant_encaisse::numeric) AS total_montant_encaisse,
+             SUM(commission_nelsonre::numeric) AS total_commission_nelsonre,
+             SUM(montant_a_reverser::numeric) AS total_montant_a_reverser,
+             SUM(montant_reverse::numeric) AS total_montant_reverse,
+             SUM(reste_a_reverse::numeric) AS total_reste_a_reverse
+         FROM
+             v_stat_situation_fin_par_rea_ced
+         WHERE
+           exe_code = COALESCE($P{exe_code},exe_code)
+           AND ced_id = COALESCE($P{ced_id},ced_id)
+           AND ces_id = COALESCE($P{ces_id},ces_id)
+     ) total
 where exe_code=COALESCE($P{exe_code},exe_code)
-and ced_id=COALESCE($P{ced_id}, ced_id)
-and ces_id=COALESCE($P{ces_id}, ces_id)
-AND replace(unaccent(upper(stat.statut_envoie)), ' ', '') = replace(upper(unaccent(COALESCE($P{statut_envoie}, stat.statut_envoie))), ' ', '')
-AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')]]>
+  and ced_id=COALESCE($P{ced_id}, ced_id)
+  and ces_id=COALESCE($P{ces_id}, ces_id)
+  AND replace(unaccent(upper(stat.statut_envoie)), ' ', '') = replace(upper(unaccent(COALESCE($P{statut_envoie}, stat.statut_envoie))), ' ', '')
+  AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')]]>
 		</queryString>
 		<field name="bord_num" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
@@ -180,8 +204,23 @@ AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '
 		<field name="reste_a_reverse_format" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="reste_a_reverse_format"/>
 		</field>
-		<field name="total_montant_cede" class="java.math.BigDecimal">
+		<field name="total_montant_cede" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="total_montant_cede"/>
+		</field>
+		<field name="total_montant_encaisse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_encaisse"/>
+		</field>
+		<field name="total_commission_nelsonre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_commission_nelsonre"/>
+		</field>
+		<field name="total_montant_a_reverser" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_a_reverser"/>
+		</field>
+		<field name="total_montant_reverse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_reverse"/>
+		</field>
+		<field name="total_reste_a_reverse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_reste_a_reverse"/>
 		</field>
 		<variable name="total_montant_cede" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_cede}]]></variableExpression>
@@ -492,7 +531,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$V{total_montant_cede}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_cede}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -527,7 +566,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_montant_encaisse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_encaisse}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -562,7 +601,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_commission})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_commission_nelsonre}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -597,7 +636,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_a_reverser})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_a_reverser}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -634,7 +673,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_reverse}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -669,7 +708,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($V{total_reste})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_reste_a_reverse}]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
