@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Chiffre_affaire_par_periode_ced_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_PROD_OVH"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -32,7 +32,7 @@
 	</style>
 	<subDataset name="table_ced_par_rea" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="693"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="296"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
@@ -50,10 +50,10 @@
         p.aff_id,
         SUM(p.montant_encaisse) AS montant_encaisse
     FROM V_paiement p
-    WHERE p.date_reglement 
-      BETWEEN COALESCE(NULLIF($P{DateDeb}, '')::DATE, p.date_reglement) AND COALESCE(NULLIF($P{DateFin}, '')::DATE, p.date_reglement)
+    WHERE p.date_reglement
+              BETWEEN COALESCE(NULLIF($P{DateDeb}, '')::DATE, p.date_reglement)
+              AND COALESCE(NULLIF($P{DateFin}, '')::DATE, p.date_reglement)
     GROUP BY p.aff_id
-    ORDER BY p.aff_id
 ),
      reversement AS (
          SELECT
@@ -62,47 +62,78 @@
              MAX(rev.date_reglement) AS date_reversement,
              SUM(rev.montant_reverse) AS montant_reverse
          FROM V_reversement rev
-         WHERE rev.date_reglement 
-      BETWEEN COALESCE(NULLIF(TRIM($P{DateDeb}), '')::DATE, rev.date_reglement) AND COALESCE(NULLIF(TRIM($P{DateFin}), '')::DATE, rev.date_reglement)
+         WHERE rev.date_reglement
+                   BETWEEN COALESCE(NULLIF(TRIM($P{DateDeb}), '')::DATE, rev.date_reglement)
+                   AND COALESCE(NULLIF(TRIM($P{DateFin}), '')::DATE, rev.date_reglement)
          GROUP BY rev.aff_id, rev.ces_id
-         ORDER BY rev.aff_id, rev.ces_id
+     ),
+     totaux AS (
+         SELECT
+             ced.ced_id,
+             ces.ces_id,
+             SUM(COALESCE(pla.rep_prime, 0)) AS total_montant_cede,
+             SUM(COALESCE(pla.commission_court, 0)) AS total_commission_nelsonre,
+             SUM(COALESCE(pla.prime_nette, 0)) AS total_montant_a_reverser,
+             SUM(COALESCE(rev.montant_reverse, 0)) AS total_montant_reverse,
+             SUM(COALESCE(enc.montant_encaisse, 0)) AS total_montant_encaisse
+         FROM affaire aff
+                  LEFT JOIN encaissement enc ON enc.aff_id = aff.aff_id
+                  LEFT JOIN reversement rev ON aff.aff_id = rev.aff_id
+                  LEFT JOIN V_placement pla ON aff.aff_id = pla.aff_id
+                  LEFT JOIN cedante ced ON aff.cedente_id = ced.ced_id
+                  LEFT JOIN cessionnaire ces ON pla.cessionnaire_id = ces.ces_id
+         WHERE aff.exe_code = COALESCE($P{exe_code}, aff.exe_code)
+           AND ced.ced_id = COALESCE($P{ced_id}, ced.ced_id)
+           AND ces.ces_id = COALESCE($P{ces_id}, ces.ces_id)
+         GROUP BY ced.ced_id, ces.ces_id
      )
-select
-            ROW_NUMBER() OVER (ORDER BY aff.aff_id) AS r_id
-     ,db.deb_id
-     ,aff.aff_id
-     ,notDeb.bord_num
-     ,aff.aff_code
-     ,ced.ced_id
-     ,ced.ced_nom_filiale
-     ,ces.ces_id
-     ,ces.ces_nom
-     ,aff.aff_assure
-     ,cou.cou_libelle
-     ,aff.aff_date_effet
-     ,aff.aff_date_echeance
-     ,aff.exe_code
-     ,pla.rep_id,
-     COALESCE(pla.rep_prime, 0)                           AS montant_cede,
-     COALESCE(pla.commission_court, 0)                    AS commission_nelsonre,
-     COALESCE(pla.prime_nette, 0)                        AS montant_a_reverser,
-     COALESCE(rev.montant_reverse, 0) AS         montant_reverse,
-     COALESCE(rev.date_reversement, NULL)  AS date_reversement,
-     COALESCE(enc.montant_encaisse, 0) as montant_encaisse
-
-from affaire aff
-         join encaissement enc on enc.aff_id = aff.aff_id
-         JOIN cedante ced on aff.cedente_id = ced.ced_id
-         JOIN couverture cou on aff.couverture_id = cou.cou_id
-         left join (select * from bordereau b join type t on b.type_code = t.type_id and t.unique_code = 'NOT_DEB_FAC') notDeb on aff.aff_id = notDeb.aff_id
-         left JOIN detail_bordereau db on notDeb.bord_id = db.deb_bord_id
-
+SELECT
+            ROW_NUMBER() OVER (ORDER BY aff.aff_id) AS r_id,
+            db.deb_id,
+            aff.aff_id,
+            notDeb.bord_num,
+            aff.aff_code,
+            ced.ced_id,
+            ced.ced_nom_filiale,
+            ces.ces_id,
+            ces.ces_nom,
+            aff.aff_assure,
+            cou.cou_libelle,
+            aff.aff_date_effet,
+            aff.aff_date_echeance,
+            aff.exe_code,
+            pla.rep_id,
+            COALESCE(pla.rep_prime, 0) AS montant_cede,
+            COALESCE(pla.commission_court, 0) AS commission_nelsonre,
+            COALESCE(pla.prime_nette, 0) AS montant_a_reverser,
+            COALESCE(rev.montant_reverse, 0) AS montant_reverse,
+            COALESCE(rev.date_reversement, NULL) AS date_reversement,
+            COALESCE(enc.montant_encaisse, 0) AS montant_encaisse,
+            ---Montant avec les séparateurs de milliers ---------------
+            regexp_replace(to_char(COALESCE(pla.rep_prime, 0), 'FM999,999,999,999'), ',', ' ', 'g') AS montant_cede_sep,
+            regexp_replace(to_char(COALESCE(pla.commission_court, 0), 'FM999,999,999,999'), ',', ' ', 'g') AS commission_nelsonre_sep,
+            regexp_replace(to_char(COALESCE(pla.prime_nette, 0), 'FM999,999,999,999'), ',', ' ', 'g') AS montant_a_reverser_sep,
+            regexp_replace(to_char(COALESCE(rev.montant_reverse, 0), 'FM999,999,999,999'), ',', ' ', 'g') AS montant_reverse_sep,
+            regexp_replace(to_char(COALESCE(enc.montant_encaisse, 0), 'FM999,999,999,999'), ',', ' ', 'g') AS montant_encaisse_sep,
+            -- Totaux globaux sur toutes les lignes pour un ced_id et ces_id donnés
+            regexp_replace(to_char(totaux.total_montant_cede, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_cede,
+            regexp_replace(to_char(totaux.total_montant_encaisse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_encaisse,
+            regexp_replace(to_char(totaux.total_commission_nelsonre, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission_nelsonre,
+            regexp_replace(to_char(totaux.total_montant_a_reverser, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_a_reverser,
+            regexp_replace(to_char(totaux.total_montant_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_reverse
+FROM affaire aff
+         JOIN cedante ced ON aff.cedente_id = ced.ced_id
+         JOIN couverture cou ON aff.couverture_id = cou.cou_id
+         LEFT JOIN (SELECT * FROM bordereau b JOIN type t ON b.type_code = t.type_id AND t.unique_code = 'NOT_DEB_FAC') notDeb ON aff.aff_id = notDeb.aff_id
+         LEFT JOIN detail_bordereau db ON notDeb.bord_id = db.deb_bord_id
          LEFT JOIN V_placement pla ON db.deb_rep = pla.rep_id
-         left JOIN cessionnaire ces ON pla.cessionnaire_id = ces.ces_id
-         left join reversement rev on aff.aff_id = rev.aff_id and ces.ces_id = rev.ces_id
-where aff.exe_code = COALESCE($P{exe_code},aff.exe_code)
-  and ced.ced_id = COALESCE($P{ced_id},ced.ced_id)
-  and ces.ces_id = COALESCE($P{ces_id},ces.ces_id)]]>
+         LEFT JOIN cessionnaire ces ON pla.cessionnaire_id = ces.ces_id
+         LEFT JOIN reversement rev ON aff.aff_id = rev.aff_id AND ces.ces_id = rev.ces_id
+         LEFT JOIN encaissement enc ON enc.aff_id = aff.aff_id
+         JOIN totaux ON totaux.ced_id = ced.ced_id AND totaux.ces_id = ces.ces_id
+WHERE aff.exe_code = COALESCE($P{exe_code}, aff.exe_code)
+  AND ced.ced_id = COALESCE($P{ced_id}, ced.ced_id)
+  AND ces.ces_id = COALESCE($P{ces_id}, ces.ces_id)]]>
 		</queryString>
 		<field name="r_id" class="java.lang.Long">
 			<property name="com.jaspersoft.studio.field.label" value="r_id"/>
@@ -180,6 +211,36 @@ where aff.exe_code = COALESCE($P{exe_code},aff.exe_code)
 		</field>
 		<field name="montant_encaisse" class="java.math.BigDecimal">
 			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse"/>
+		</field>
+		<field name="montant_cede_sep" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_cede_sep"/>
+		</field>
+		<field name="commission_nelsonre_sep" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="commission_nelsonre_sep"/>
+		</field>
+		<field name="montant_a_reverser_sep" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_a_reverser_sep"/>
+		</field>
+		<field name="montant_reverse_sep" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_reverse_sep"/>
+		</field>
+		<field name="montant_encaisse_sep" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse_sep"/>
+		</field>
+		<field name="total_montant_cede" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_cede"/>
+		</field>
+		<field name="total_montant_encaisse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_encaisse"/>
+		</field>
+		<field name="total_commission_nelsonre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_commission_nelsonre"/>
+		</field>
+		<field name="total_montant_a_reverser" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_a_reverser"/>
+		</field>
+		<field name="total_montant_reverse" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_montant_reverse"/>
 		</field>
 		<variable name="total_montant_cede" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_cede}]]></variableExpression>
@@ -545,7 +606,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_encaisse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_encaisse}+" "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -555,7 +616,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_encaisse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_encaisse_sep}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -578,7 +639,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_commission})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_commission_nelsonre}+" "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -588,7 +649,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{commission_nelsonre})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{commission_nelsonre_sep}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -611,7 +672,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_a_reverser})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_a_reverser}+" "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -621,7 +682,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_a_reverser})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_a_reverser_sep}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -644,7 +705,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_reverse}+" "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -654,7 +715,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_reverse})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_reverse_sep}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -677,7 +738,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="8" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($V{total_montant_cede})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_montant_cede}+" "]]></textFieldExpression>
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
@@ -687,7 +748,7 @@ where aff.exe_code = coalesce($P{exe_code},aff.exe_code)
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[NumberFormat.getInstance(Locale.FRENCH).format($F{montant_cede})]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_cede_sep}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
