@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-05-21T19:03:43 -->
+<!-- 2025-03-06T16:51:17 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="891"/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="99"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="740"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="249"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -204,7 +204,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 	</subDataset>
 	<subDataset name="Quote_filiale" uuid="95cf0ddb-2e2d-44d6-9afa-02f875775642">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
 		<parameter name="aff_id" class="java.lang.Long"/>
 		<queryString language="SQL">
 			<![CDATA[SELECT distinct affaire.aff_id,
@@ -226,29 +226,31 @@ WHERE affaire.couverture_id = couverture.cou_id
 	</subDataset>
 	<subDataset name="Réassureurs" uuid="3baf6a36-8ef2-4960-9d41-84a453e6d9db">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
 		<parameter name="aff_id" class="java.lang.Long">
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
 		<queryString language="SQL">
-			<![CDATA[select b.aff_id,
-       c.ces_id,
-       c.ces_nom,
-       ROUND(db.deb_taux, 2) deb_taux,
-       regexp_replace(to_char(db.deb_prime, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime,
-       regexp_replace(to_char(db.deb_commission, 'FM999,999,999,999'), ',', ' ', 'g') deb_commission,
-       regexp_replace(to_char(db.deb_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime_areverser,
-       regexp_replace(to_char(b.bord_montant_total_prime, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_prime,
-       regexp_replace(to_char(b.bord_montant_total_commission, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_commission,
-       regexp_replace(to_char(b.bord_montant_total_prime_areverser, 'FM999,999,999,999'), ',', ' ', 'g') bord_montant_total_prime_areverser,
-       b.bord_montant_total_prime_areverser_lette
-
-from detail_bordereau db,bordereau b,cessionnaire c
-where b.bord_id = db.deb_bord_id
-  and db.deb_ces_id=c.ces_id
-  and b.aff_id = $P{aff_id}
-  and db.deb_statut=true]]>
+			<![CDATA[select  row_number() OVER ()  AS r_id,
+       vn.montant_total_prime_separateur,
+       vn.montant_total_commission_separateur,
+       vn.montant_total_prime_areverser_separateur,
+       vp.aff_id,
+       vp.cessionnaire_id ces_id,
+       vp.ces_nom,
+       ROUND(vp.rep_taux, 2) deb_taux,
+       regexp_replace(to_char(vp.rep_prime, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime,
+       regexp_replace(to_char(vp.commission_ced, 'FM999,999,999,999'), ',', ' ', 'g') deb_commission,
+       regexp_replace(to_char(vp.prime_nette_com_ced, 'FM999,999,999,999'), ',', ' ', 'g') deb_prime_areverser
+from v_placement vp,
+     v_note_debit vn
+where  vp.aff_id = vn.aff_id
+  and vp.aff_id = $P{aff_id}]]>
 		</queryString>
+		<field name="r_id" class="java.lang.Long"/>
+		<field name="montant_total_prime_separateur" class="java.lang.String"/>
+		<field name="montant_total_commission_separateur" class="java.lang.String"/>
+		<field name="montant_total_prime_areverser_separateur" class="java.lang.String"/>
 		<field name="aff_id" class="java.lang.Long"/>
 		<field name="ces_id" class="java.lang.Long"/>
 		<field name="ces_nom" class="java.lang.String"/>
@@ -256,10 +258,6 @@ where b.bord_id = db.deb_bord_id
 		<field name="deb_prime" class="java.lang.String"/>
 		<field name="deb_commission" class="java.lang.String"/>
 		<field name="deb_prime_areverser" class="java.lang.String"/>
-		<field name="bord_montant_total_prime" class="java.lang.String"/>
-		<field name="bord_montant_total_commission" class="java.lang.String"/>
-		<field name="bord_montant_total_prime_areverser" class="java.lang.String"/>
-		<field name="bord_montant_total_prime_areverser_lette" class="java.lang.String"/>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
 		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
@@ -277,50 +275,17 @@ where b.bord_id = db.deb_bord_id
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT distinct affaire.aff_id,
-                affaire.aff_activite,
-                affaire.aff_assure,
-                affaire.fac_numero_police,
-                affaire.aff_capital_initial,
-                affaire.aff_code,
-                affaire.aff_date_echeance,
-                affaire.aff_date_effet,
-                affaire.devise_code,
-                affaire.fac_prime,
-                affaire.fac_smp_lci,
-                affaire.cedente_id,
-                cedante.ced_nom_filiale,
-                couverture.cou_libelle,
-                branche.bran_libelle,
-                banque.ban_num_compte,
-                banque.ban_code_bic,
-                banque.ban_iban,
-                banque.ban_libelle,
-                bordereau.bord_num,
-                UPPER(bordereau.bord_montant_total_prime_areverser_lette) AS bord_montant_total_prime_areverser_lette,
-                bordereau.brod_date_limite
-FROM affaire,
-     cedante,
-     couverture,
-     branche,
-     banque,
-     bordereau,
-     type
-WHERE affaire.couverture_id = couverture.cou_id
-  AND affaire.cedente_id = cedante.ced_id
-  AND couverture.bran_id = branche.bran_id
-  AND affaire.aff_id = bordereau.aff_id
-  AND cedante.ban_num_compte = banque.ban_num_compte
-  and bordereau.type_code=type.type_id
-  and type.unique_code='NOT_DEB_FAC'
-  AND affaire.aff_id=$P{aff_id}]]>
+		<![CDATA[select *
+from v_note_debit v
+where v.aff_id=$P{aff_id}]]>
 	</queryString>
+	<field name="r_id" class="java.lang.Long"/>
 	<field name="aff_id" class="java.lang.Long"/>
-	<field name="aff_activite" class="java.lang.String"/>
+	<field name="aff_code" class="java.lang.String"/>
 	<field name="aff_assure" class="java.lang.String"/>
 	<field name="fac_numero_police" class="java.lang.String"/>
+	<field name="aff_activite" class="java.lang.String"/>
 	<field name="aff_capital_initial" class="java.math.BigDecimal"/>
-	<field name="aff_code" class="java.lang.String"/>
 	<field name="aff_date_echeance" class="java.sql.Date"/>
 	<field name="aff_date_effet" class="java.sql.Date"/>
 	<field name="devise_code" class="java.lang.String"/>
@@ -335,8 +300,15 @@ WHERE affaire.couverture_id = couverture.cou_id
 	<field name="ban_iban" class="java.lang.String"/>
 	<field name="ban_libelle" class="java.lang.String"/>
 	<field name="bord_num" class="java.lang.String"/>
-	<field name="bord_montant_total_prime_areverser_lette" class="java.lang.String"/>
 	<field name="brod_date_limite" class="java.sql.Date"/>
+	<field name="bord_montant_total_prime" class="java.math.BigDecimal"/>
+	<field name="bord_montant_total_commission" class="java.math.BigDecimal"/>
+	<field name="bord_montant_total_prime_areverser" class="java.math.BigDecimal"/>
+	<field name="bord_montant_total_prime_areverser_arrondi" class="java.lang.Integer"/>
+	<field name="bord_montant_total_prime_areverser_lettre" class="java.lang.String"/>
+	<field name="montant_total_prime_separateur" class="java.lang.String"/>
+	<field name="montant_total_commission_separateur" class="java.lang.String"/>
+	<field name="montant_total_prime_areverser_separateur" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -703,7 +675,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_prime}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_total_prime_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="15">
@@ -735,7 +707,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_commission}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_total_commission_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="15">
@@ -767,7 +739,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="8"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{bord_montant_total_prime_areverser}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{montant_total_prime_areverser_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="15">
@@ -835,7 +807,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				<textElement textAlignment="Left" verticalAlignment="Top">
 					<font size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Arrêté la présente note à la somme de "+$F{devise_code}+" "+$F{bord_montant_total_prime_areverser_lette}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Arrêté la présente note à la somme de "+$F{devise_code}+" "+$F{bord_montant_total_prime_areverser_lettre}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
