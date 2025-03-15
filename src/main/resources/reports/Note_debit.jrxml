@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-03-06T16:51:17 -->
+<!-- 2025-03-15T14:47:08 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_debit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE-ovh-Prod"/>
@@ -520,7 +520,7 @@ where v.aff_id=$P{aff_id}]]>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="9" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Date de Paiement : " +  new SimpleDateFormat("dd/MM/yy").format($F{brod_date_limite})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Date de Paiement :         Immédiat" ]]></textFieldExpression>
 			</textField>
 			<componentElement>
 				<reportElement x="1" y="104" width="553" height="15" uuid="447314b9-0787-4174-8f97-207d1a2f5eee">
