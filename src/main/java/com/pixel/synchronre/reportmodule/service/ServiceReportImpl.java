@@ -16,6 +16,10 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -101,6 +105,61 @@ public class ServiceReportImpl implements IServiceReport
         connection.close();
 
         return reportBytes;
+    }
+
+
+    @Override
+    public byte[] generateReportExcel(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception {
+        parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
+        qrText = qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id")
+                + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
+
+        // Charger le fichier .jrxml
+        String resourcePath = "classpath:" + jrConfig.reportLocation + "/" + reportName;
+        Resource resource = resourceLoader.getResource(resourcePath);
+        System.out.println(resource.getURL());
+
+        // Ajout des images et QR Code aux paramètres
+        this.setQrCodeParam(parameters, qrText);
+        parameters.put("logo_nre", this.getImages(jrConfig.nreLogo));
+        parameters.put("logo_synchronre", this.getImages(jrConfig.synchronRelogo));
+        parameters.put("visa", this.getImages(jrConfig.visa));
+
+        // Compilation du rapport
+        JasperReport jasperReport = JasperCompileManager.compileReport(resource.getInputStream());
+
+        // Connexion à la base de données
+        Connection connection = dataSource.getConnection();
+        JRBeanCollectionDataSource jrBeanCollectionDataSource = (data == null || data.isEmpty()) ? null : new JRBeanCollectionDataSource(data);
+
+        // Remplissage du rapport
+        JasperPrint jasperPrint = (jrBeanCollectionDataSource == null)
+                ? JasperFillManager.fillReport(jasperReport, parameters, connection)
+                : JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
+
+        // Exportation au format Excel
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setDetectCellType(true);  // Détection automatique du type des cellules
+        configuration.setOnePagePerSheet(false); // Éviter d'avoir une seule page par feuille
+        configuration.setRemoveEmptySpaceBetweenRows(true); // Suppression des espaces vides
+        configuration.setWhitePageBackground(false); // Pas de fond blanc inutile
+        configuration.setCollapseRowSpan(true); // Fusionner les cellules si possible
+        configuration.setIgnoreGraphics(false); // Garder les images et graphiques
+        //configuration.setSheetNames(new String[]{"Mon Rapport"}); // Nom de la feuille
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        // Fermer la connexion
+        connection.close();
+
+        // Retourner le fichier Excel sous forme de tableau de bytes
+        return byteArrayOutputStream.toByteArray();
     }
 
     private String getImagesPath() throws IOException {
@@ -264,7 +323,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("periodicite", periodicite);
         params.put("periodeId", periodeId);
         params.put("param_image", this.getImagesPath());
-        byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        byte[] reportBytes = this.generateReportExcel(jrConfig.compteTraite, params, new ArrayList<>(), null);
         return reportBytes;
     }
 

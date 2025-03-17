@@ -13,6 +13,8 @@ public interface IServiceReport
 {
     byte[] generateReport(String reportName, Map<String, Object> params, List<Object> data, String qrText) throws Exception;
 
+    byte[] generateReportExcel(String reportName, Map<String, Object> params, List<Object> data, String qrText) throws Exception;
+
     byte[] generateNoteCessionFac(Long plaId, String interlocuteur) throws Exception;
 
     byte[] generateNoteDebitFac(Long affId) throws Exception;
