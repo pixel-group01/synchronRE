@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class CompteCedante
+public class CompteCedante extends HistoDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

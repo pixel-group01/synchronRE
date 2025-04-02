@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter @Entity
 @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class Repartition {
+public class Repartition extends HistoDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long repId;

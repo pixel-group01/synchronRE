@@ -25,4 +25,11 @@ public class CompteDetailDto
         this.debit = BigDecimal.ZERO;
         this.credit = BigDecimal.ZERO;
     }
+
+    public CompteDetailDto(BigDecimal debit, BigDecimal credit, String uniqueCode)
+    {
+        this.debit = debit;
+        this.credit = credit;
+        this.uniqueCode = uniqueCode;
+    }
 }

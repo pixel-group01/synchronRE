@@ -78,6 +78,22 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Exportez le rapport au format PDF
+        byte[] reportBytes = this.exportReportToPdf(jasperPrint);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateReportExcel(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Retourner le fichier Excel sous forme de tableau de bytes
+        return this.exportReportToExcel(jasperPrint);
+    }
+
+    private JasperPrint generateJasperPrint(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
         parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
         qrText =  qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
@@ -97,47 +113,16 @@ public class ServiceReportImpl implements IServiceReport
         JasperPrint jasperPrint = jrBeanCollectionDataSource == null
                 ? JasperFillManager.fillReport(jasperReport, parameters, connection)
                 : JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-
-        // Exportez le rapport au format PDF
-        byte[] reportBytes = JasperExportManager.exportReportToPdf(jasperPrint);
-
-        // Fermez la connexion
         connection.close();
-
-        return reportBytes;
+        return jasperPrint;
     }
 
+    private byte[] exportReportToPdf(JasperPrint jasperPrint) throws JRException {
+        return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
 
-    @Override
-    public byte[] generateReportExcel(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception {
-        parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
-        qrText = qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id")
-                + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
-
-        // Charger le fichier .jrxml
-        String resourcePath = "classpath:" + jrConfig.reportLocation + "/" + reportName;
-        Resource resource = resourceLoader.getResource(resourcePath);
-        System.out.println(resource.getURL());
-
-        // Ajout des images et QR Code aux paramètres
-        this.setQrCodeParam(parameters, qrText);
-        parameters.put("logo_nre", this.getImages(jrConfig.nreLogo));
-        parameters.put("logo_synchronre", this.getImages(jrConfig.synchronRelogo));
-        parameters.put("visa", this.getImages(jrConfig.visa));
-
-        // Compilation du rapport
-        JasperReport jasperReport = JasperCompileManager.compileReport(resource.getInputStream());
-
-        // Connexion à la base de données
-        Connection connection = dataSource.getConnection();
-        JRBeanCollectionDataSource jrBeanCollectionDataSource = (data == null || data.isEmpty()) ? null : new JRBeanCollectionDataSource(data);
-
-        // Remplissage du rapport
-        JasperPrint jasperPrint = (jrBeanCollectionDataSource == null)
-                ? JasperFillManager.fillReport(jasperReport, parameters, connection)
-                : JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-
-        // Exportation au format Excel
+    private byte[] exportReportToExcel(JasperPrint jasperPrint) throws JRException
+    {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         JRXlsxExporter exporter = new JRXlsxExporter();
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
@@ -155,10 +140,6 @@ public class ServiceReportImpl implements IServiceReport
         exporter.setConfiguration(configuration);
         exporter.exportReport();
 
-        // Fermer la connexion
-        connection.close();
-
-        // Retourner le fichier Excel sous forme de tableau de bytes
         return byteArrayOutputStream.toByteArray();
     }
 

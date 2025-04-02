@@ -11,4 +11,6 @@ public interface IserviceCompte {
     CompteTraiteDto save(CompteTraiteDto dto);
 
     List<Periode> getPeriode(Long exeCode, Long typeId);
+
+    CompteTraiteDto getCompteTraite(CompteTraiteDto dto, int precision);
 }
