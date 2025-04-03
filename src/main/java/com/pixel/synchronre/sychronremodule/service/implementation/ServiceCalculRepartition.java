@@ -93,7 +93,11 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
 
 
         pclSimples = this.savePclReps(pclSimples);
-        mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+        String affStaCode = affaire.getStatut().getStaCode();
+        if(affStaCode == null || !affStaCode.equals("CPLA"))
+        {
+            mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+        }
 
         dto.setParamCesLegsPremierFranc(pclPfs);
         dto.setConservationRepId(conservationDto.getRepId());
