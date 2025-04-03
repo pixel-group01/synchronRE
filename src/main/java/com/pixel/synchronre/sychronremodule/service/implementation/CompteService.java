@@ -120,8 +120,8 @@ public class CompteService implements IserviceCompte {
     @Override
     public CompteTraiteDto getCompteTraite(CompteTraiteDto dto, int precision)
     {
-        CompteTraiteDto compteTraiteDto = compteTraiteRepo.getCompteByTraite(dto.getTraiteNpId());
-        Long trancheIdSelected = compteTraiteDto.getTrancheIdSelected();
+        CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId());
+        Long trancheIdSelected = dto.getTrancheIdSelected();
         Long periodeId = dto.getPeriodeId();
 
         TrancheCompteDto trancheCompteDto = compteTraiteDto.getTrancheCompteDtos().stream()
