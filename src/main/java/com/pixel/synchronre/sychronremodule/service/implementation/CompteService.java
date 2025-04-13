@@ -10,14 +10,16 @@ import com.pixel.synchronre.sychronremodule.service.interfac.ICompteCalculServic
 import com.pixel.synchronre.sychronremodule.service.interfac.ICompteDetailsService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCompte;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
-import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+
+import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static java.math.BigDecimal.ZERO;
 
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,9 +33,11 @@ public class CompteService implements IserviceCompte {
     private final ICompteDetailsService compteDetailsService;
     private final CompteCessionnaireRepo compteCesRepo;
     private final ICompteCalculService compteCalculService;
+    private final TypeRepo typeRepo;
+    private final CompteDetailsRepo cdRepo;
 
     @Override
-    public CompteTraiteDto getCompteTraite(Long traiteNpId)
+    public CompteTraiteDto getCompteTraite(Long traiteNpId, Long periodeId)
     {
         CompteTraiteDto compteTraiteDto = compteTraiteRepo.getCompteByTraite(traiteNpId);
         if(compteTraiteDto == null) return null;
@@ -45,8 +49,10 @@ public class CompteService implements IserviceCompte {
             List<ReadCedanteDTO.ReadCedanteDTOLite> liteCedantes = cedantes == null ? Collections.emptyList() :
                     cedantes.stream().map(cedMapper::mapToReadCedenteDTOLite).collect(Collectors.toList());
             tc.setCedantes(liteCedantes);
-            List<CompteDetailDto> compteDetails = compteTraiteRepo.getDetailComptes();
+            List<CompteDetailDto> compteDetails = periodeId == null ? cdRepo.getDetailComptes() : cdRepo.findByTrancheIdAndCedIdAndPeriodeId(tc.getTrancheId(), tc.getCedIdSelected(), periodeId);
+            //List<CompteDetailDto> compteDetailsDto = cdRepo.findByTrancheIdAndCedIdAndPeriodeId(tc.getTrancheId(), tc.getCedIdSelected(), periodeId);
             tc.setCompteDetails(compteDetails);
+
             List<CompteCessionnaireDto> cessionnaires = compteTraiteRepo.getCompteCessionnaires(tc.getTrancheId());
             tc.setCompteCessionnaires(cessionnaires);
         });
@@ -87,7 +93,6 @@ public class CompteService implements IserviceCompte {
         {
             compteCessionnaires.stream().peek(cc->cc.setCompteCedId(compteCedanteId)).map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
         }
-        //TODO setter les champs du dto
         return compteTraiteDto;
     }
 
@@ -113,18 +118,24 @@ public class CompteService implements IserviceCompte {
 
     CompteDetailDto getCompteDetailsItem(List<CompteDetailDto> compteDetails, String typeCode)
     {
-        if(compteDetails == null || compteDetails.isEmpty()) return new CompteDetailDto(ZERO, ZERO, "");
+        if(compteDetails == null || compteDetails.isEmpty()) return new CompteDetailDto(null, ZERO, ZERO, "");
         return compteDetails.stream().filter(cd->cd.getUniqueCode().equals(typeCode)).findFirst().orElse(new CompteDetailDto());
     }
 
     @Override
     public CompteTraiteDto getCompteTraite(CompteTraiteDto dto, int precision)
     {
-        CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId());
+        CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId(), dto.getPeriodeId());
         Long trancheIdSelected = dto.getTrancheIdSelected();
         Long periodeId = dto.getPeriodeId();
+        compteTraiteDto.setTrancheIdSelected(trancheIdSelected);
+        compteTraiteDto.setPeriodeId(periodeId);
 
-        TrancheCompteDto trancheCompteDto = compteTraiteDto.getTrancheCompteDtos().stream()
+        List<ReadCedanteDTO.ReadCedanteDTOLite> cedantes = compteTraiteDto.getTrancheCompteDtos().stream()
+                .filter(tc->tc.getTrancheId().equals(trancheIdSelected))
+                .findFirst().orElseThrow(()->new AppException("Données de tranche introuvables")).getCedantes();
+
+        TrancheCompteDto trancheCompteDto = dto.getTrancheCompteDtos().stream()
                 .filter(tc->tc.getTrancheId().equals(trancheIdSelected))
                 .findFirst().orElseThrow(()->new AppException("Données de tranche introuvables")); //Récupération de la tranche sélctionnée
         Long cedId = trancheCompteDto.getCedIdSelected(); //Récupération de la cédante sélctionnée
@@ -132,23 +143,25 @@ public class CompteService implements IserviceCompte {
         Long compteCedanteId = null;
 
         List<CompteDetailDto> compteDetailsDtoList = trancheCompteDto.getCompteDetails();
+        CompteDetailsItems calculatedCompteDetailsItems = null;
         if(compteDetailsDtoList != null && !compteDetailsDtoList.isEmpty()) //Si des détails de compte ont été saisi
         {
             if(compte == null)
             {
                 CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedId, compteDetailsDtoList);
-                CompteDetailsItems calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
+                calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                 List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                 trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
             }
             else
             {
                 Long compteId = compte.getCompteId();
+                compteTraiteDto.setCompteId(compteId);
                 CompteCedante compteCedante = compteCedanteRepo.findByCompteIdAndCedId(compteId, cedId);
                 if(compteCedante == null)
                 {
                     CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedId, compteDetailsDtoList);
-                    CompteDetailsItems calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
+                    calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
                 }
@@ -156,19 +169,34 @@ public class CompteService implements IserviceCompte {
                 {
                     compteCedanteId = compteCedante.getCompteCedId();
                     CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(compteCedanteId, compteDetailsDtoList);
-                    CompteDetailsItems calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
+                    calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
                 }
             }
         }
+        trancheCompteDto.setCedIdSelected(cedId);
+        trancheCompteDto.setCedantes(cedantes);
 
-        List<CompteCessionnaireDto> compteCessionnaires = trancheCompteDto.getCompteCessionnaires();
+        List<CompteCessionnaireDto> compteCessionnaires  = compteTraiteDto.getTrancheCompteDtos().stream()
+                .filter(tc->tc.getTrancheId().equals(trancheIdSelected))
+                .findFirst().orElseThrow(()->new AppException("Données de tranche introuvables")).getCompteCessionnaires();
         Long finalCompteCedanteId = compteCedanteId;
         if(compteCessionnaires != null && !compteCessionnaires.isEmpty())
         {
-            compteCessionnaires.stream().peek(cc->cc.setCompteCedId(finalCompteCedanteId)).map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
+            compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setCompteCedId(finalCompteCedanteId)).collect(Collectors.toList());
+            if(calculatedCompteDetailsItems != null)
+            {
+                BigDecimal sousTotalDebit = calculatedCompteDetailsItems.getSousTotalDebit() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalDebit();
+                BigDecimal sousTotalCredit = calculatedCompteDetailsItems.getSousTotalCredit() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalCredit();
+                BigDecimal minSousTotal = sousTotalDebit.min(sousTotalCredit);
+                compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(minSousTotal.multiply(cc.getTaux()).divide(CENT, precision, RoundingMode.HALF_UP))).collect(Collectors.toList());
+            }
+            trancheCompteDto.setCompteCessionnaires(compteCessionnaires);
         }
+        compteTraiteDto.getTrancheCompteDtos().replaceAll(
+                tc -> tc.getTrancheId().equals(trancheIdSelected) ? trancheCompteDto : tc
+        );
         return compteTraiteDto;
     }
 
@@ -193,18 +221,20 @@ public class CompteService implements IserviceCompte {
         return compteDetailsItems;
     }
 
-    private List<CompteDetailDto> mapCompteDetailsItemsToCompteDetailsDtoList(CompteDetailsItems calculatedCompteDetailsItems) {
-        CompteDetailDto primeOrigineCompteDetails = new CompteDetailDto(calculatedCompteDetailsItems.getPrimeOrigine(), ZERO, "PRIM_ORIG");
-        CompteDetailDto primeApresAjustementCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getPrimeApresAjustement(), "PRIM_APR_AJUST");
-        CompteDetailDto sinistrePayeCompteDetails = new CompteDetailDto(calculatedCompteDetailsItems.getSinistrePaye(), ZERO, "SIN_PAYE");
-        CompteDetailDto depotSapConstCompteDetails = new CompteDetailDto(calculatedCompteDetailsItems.getDepotSapConst(), ZERO, "DEP_SAP_CONST");
-        CompteDetailDto depotSapLibCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getDepotSapLib(), "DEP_SAP_LIB");
-        CompteDetailDto interetDepotLibCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getInteretDepotLib(), "INT_DEP_LIB");
-        CompteDetailDto sousTotalDebitCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getSousTotalDebit(), "SOUS_TOTAL_DEBIT");
-        CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), "SOUS_TOTAL_CREDIT");
-        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getSoldeCedante(), "SOLD_CED");
-        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getSoldeRea(), "SOLD_REA");
-        CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(ZERO, calculatedCompteDetailsItems.getTotalMouvement(), "TOTAL_MOUV");
+
+    private List<CompteDetailDto> mapCompteDetailsItemsToCompteDetailsDtoList(CompteDetailsItems calculatedCompteDetailsItems)
+    {
+        CompteDetailDto primeOrigineCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("PRIM_ORIG"), calculatedCompteDetailsItems.getPrimeOrigine(), ZERO, "PRIM_ORIG");
+        CompteDetailDto primeApresAjustementCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("PRIM_ORIG"), ZERO, calculatedCompteDetailsItems.getPrimeApresAjustement(), "PRIM_APR_AJUST");
+        CompteDetailDto sinistrePayeCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SIN_PAYE"), calculatedCompteDetailsItems.getSinistrePaye(), ZERO, "SIN_PAYE");
+        CompteDetailDto depotSapConstCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("DEP_SAP_CONST"), calculatedCompteDetailsItems.getDepotSapConst(), ZERO, "DEP_SAP_CONST");
+        CompteDetailDto depotSapLibCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("DEP_SAP_LIB"), ZERO, calculatedCompteDetailsItems.getDepotSapLib(), "DEP_SAP_LIB");
+        CompteDetailDto interetDepotLibCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("INT_DEP_LIB"), ZERO, calculatedCompteDetailsItems.getInteretDepotLib(), "INT_DEP_LIB");
+        CompteDetailDto sousTotalDebitCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOUS_TOTAL_DEBIT"), calculatedCompteDetailsItems.getSousTotalDebit(), ZERO, "SOUS_TOTAL_DEBIT");
+        CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOUS_TOTAL_CREDIT"), ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), "SOUS_TOTAL_CREDIT");
+        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOLD_CED"), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), "SOLD_CED");
+        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOLD_REA"), ZERO, calculatedCompteDetailsItems.getSoldeRea(), "SOLD_REA");
+        CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("TOTAL_MOUV"), ZERO, calculatedCompteDetailsItems.getTotalMouvement(), "TOTAL_MOUV");
 
         List<CompteDetailDto> compteDetailsList = Arrays.asList(
                 primeOrigineCompteDetails,

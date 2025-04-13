@@ -26,8 +26,9 @@ public class CompteDetailDto
         this.credit = BigDecimal.ZERO;
     }
 
-    public CompteDetailDto(BigDecimal debit, BigDecimal credit, String uniqueCode)
+    public CompteDetailDto(Long typeId, BigDecimal debit, BigDecimal credit, String uniqueCode)
     {
+        this.typeId = typeId;
         this.debit = debit;
         this.credit = credit;
         this.uniqueCode = uniqueCode;

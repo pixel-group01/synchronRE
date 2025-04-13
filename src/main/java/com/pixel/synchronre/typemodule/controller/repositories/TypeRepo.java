@@ -123,4 +123,6 @@ public interface TypeRepo extends JpaRepository<Type, Long>
     @Query("select tp.child from TypeParam tp where tp.parent.typeId = ?1 and tp.status = 'ACTIVE'")
     List<Type> getChildren(Long typeId);
 
+    @Query("select t.typeId from Type t where t.uniqueCode = ?1")
+    Long getTypeIdbyUniqueCode(String uniqueCode);
 }

@@ -43,14 +43,6 @@ public interface CompteTraiteRepo extends JpaRepository<Compte, Long>
     List<ReadCedanteDTO> getCompteCedantes(Long trancheId);
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.typeId, t.name, t.uniqueCode)
-        from Type t 
-        where t.typeGroup = 'TYPE_DET_COMPTE' 
-        order by t.typeOrdre
-""")
-    List<CompteDetailDto> getDetailComptes();
-
-    @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteCessionnaireDto(ces.cesId, ces.cesNom, ces.cesSigle, rep.repTaux) 
         from Repartition rep join rep.cessionnaire ces 
         where rep.traiteNonProportionnel.traiteNpId = (select tr.traiteNonProportionnel.traiteNpId from Tranche tr where tr.trancheId = ?1) 

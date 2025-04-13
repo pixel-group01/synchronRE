@@ -13,10 +13,13 @@ import com.pixel.synchronre.sychronremodule.model.views.VStatCompte;
 import com.pixel.synchronre.sychronremodule.service.interfac.ICompteDetailsService;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static java.math.BigDecimal.ZERO;
@@ -28,6 +31,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
     private final VCompteCedanteRepo vccRepo;
     private final VStatCompteRepository vscRepo;
     private final CompteCedanteRepo ccRepo;
+
     @Override
     public CompteDetails saveCompteDetails(CompteDetailDto dto, Long compteCedanteId)
     {
@@ -49,7 +53,9 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         Long compteCedId = items.getCompteCedId();
         StatCompteIds statCompteIds =compteCedId == null ? new StatCompteIds(items.getCedIdSelected(), items.getTrancheIdSelected(), items.getPeriodeId()) : ccRepo.getStatCompteIdsByCompteCedId(compteCedId);
         if(items == null) return null;
-        VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
+        //VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
+        VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getTrancheId(), PageRequest.of(0, 1)).get(0);
+
         BigDecimal assiettePrimeExercice = vsc.getAssiettePrimeExercice();
         BigDecimal trancheTauxPrime = vsc.getTrancheTauxPrime();
 
@@ -57,9 +63,9 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         BigDecimal primeApresAjustement = assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
 
         BigDecimal sousTotalDebit = primeOrigine.add(items.getSinistrePaye()).add(items.getDepotSapConst());
-        BigDecimal sousTotalCredit = primeOrigine.add(items.getPrimeApresAjustement()).add(items.getDepotSapLib()).add(items.getInteretDepotLib());
+        BigDecimal sousTotalCredit = primeApresAjustement.add(items.getDepotSapLib()).add(items.getInteretDepotLib());
         BigDecimal soldeCedante = sousTotalDebit.compareTo(sousTotalCredit) >= 0 ? sousTotalDebit.subtract(sousTotalCredit) : ZERO;
-        BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalDebit.subtract(sousTotalDebit) : ZERO;
+        BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalCredit.subtract(sousTotalDebit) : ZERO;
         BigDecimal totalMouvement = soldeCedante.max(soldeRea);
 
         items.setPrimeApresAjustement(primeApresAjustement);
