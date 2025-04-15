@@ -172,6 +172,12 @@ public class CompteService implements IserviceCompte {
                     CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(compteCedanteId, compteDetailsDtoList);
                     calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
+                    List<CompteDetailDto> finalCompteDetailsDtoList = compteDetailsDtoList;
+                    calculatedCompteDetailsDtoList.forEach(ccddl->
+                    {
+                        CompteDetailDto compteDetailDto = finalCompteDetailsDtoList.stream().filter(cddl->ccddl.getTypeId().equals(cddl.getTypeId())).findFirst().orElse(null);
+                        ccddl.setCompteDetId(compteDetailDto == null ? null : compteDetailDto.getCompteDetId());
+                    });
                     trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
                 }
             }
@@ -197,6 +203,7 @@ public class CompteService implements IserviceCompte {
                 {
                     compteCedanteId = compteCedante.getCompteCedId();
                     compteDetailsDtoList = cdRepo.findByCompteCedI(compteCedanteId);
+                    if(compteDetailsDtoList == null || compteDetailsDtoList.isEmpty()) compteDetailsDtoList = cdRepo.getDetailComptes();
                     trancheCompteDto.setCompteDetails(compteDetailsDtoList);
                 }
             }
@@ -226,7 +233,8 @@ public class CompteService implements IserviceCompte {
         return compteTraiteDto;
     }
 
-    private CompteDetailsItems mapToCompteDetailsItems(Long compteCedanteId, List<CompteDetailDto> compteDetails) {
+    private CompteDetailsItems mapToCompteDetailsItems(Long compteCedanteId, List<CompteDetailDto> compteDetails)
+    {
         BigDecimal primeOrigine = this.getCompteDetailsItem(compteDetails, "PRIM_ORIG").getDebit();
         BigDecimal primeApresAjustement = this.getCompteDetailsItem(compteDetails, "PRIM_APR_AJUST").getCredit();
         BigDecimal sinistrePaye = this.getCompteDetailsItem(compteDetails, "SIN_PAYE").getDebit();
@@ -236,7 +244,8 @@ public class CompteService implements IserviceCompte {
         CompteDetailsItems compteDetailsItems = new CompteDetailsItems(compteCedanteId, primeOrigine, primeApresAjustement, sinistrePaye, depotSapConst, depotSapLib, interetDepotLib);
         return compteDetailsItems;
     }
-    private CompteDetailsItems mapToCompteDetailsItems(Long trancheIdSelected, Long periodeId, Long cedId, List<CompteDetailDto> compteDetails) {
+    private CompteDetailsItems mapToCompteDetailsItems(Long trancheIdSelected, Long periodeId, Long cedId, List<CompteDetailDto> compteDetails)
+    {
         BigDecimal primeOrigine = this.getCompteDetailsItem(compteDetails, "PRIM_ORIG").getDebit();
         BigDecimal primeApresAjustement = this.getCompteDetailsItem(compteDetails, "PRIM_APR_AJUST").getCredit();
         BigDecimal sinistrePaye = this.getCompteDetailsItem(compteDetails, "SIN_PAYE").getDebit();
