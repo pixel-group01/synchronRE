@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class CompteDetailDto
 {
+    private Long compteDetId;
     private String designation;
     private BigDecimal debit;
     private BigDecimal credit;

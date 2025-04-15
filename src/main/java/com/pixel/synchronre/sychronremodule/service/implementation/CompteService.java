@@ -127,6 +127,7 @@ public class CompteService implements IserviceCompte {
     {
         CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId(), dto.getPeriodeId());
         Long trancheIdSelected = dto.getTrancheIdSelected();
+        if(trancheIdSelected == null) return compteTraiteDto;
         Long periodeId = dto.getPeriodeId();
         compteTraiteDto.setTrancheIdSelected(trancheIdSelected);
         compteTraiteDto.setPeriodeId(periodeId);
@@ -172,6 +173,31 @@ public class CompteService implements IserviceCompte {
                     calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
+                }
+            }
+        }
+        else //Si des détails de compte n'ont pas été saisi
+        {
+            if(compte == null)
+            {
+                compteDetailsDtoList = cdRepo.getDetailComptes();
+                trancheCompteDto.setCompteDetails(compteDetailsDtoList);
+            }
+            else
+            {
+                Long compteId = compte.getCompteId();
+                compteTraiteDto.setCompteId(compteId);
+                CompteCedante compteCedante = compteCedanteRepo.findByCompteIdAndCedId(compteId, cedId);
+                if(compteCedante == null)
+                {
+                    compteDetailsDtoList = cdRepo.getDetailComptes();
+                    trancheCompteDto.setCompteDetails(compteDetailsDtoList);
+                }
+                else
+                {
+                    compteCedanteId = compteCedante.getCompteCedId();
+                    compteDetailsDtoList = cdRepo.findByCompteCedI(compteCedanteId);
+                    trancheCompteDto.setCompteDetails(compteDetailsDtoList);
                 }
             }
         }

@@ -22,9 +22,15 @@ public interface CompteDetailsRepo extends JpaRepository<CompteDetails, Long>
     List<CompteDetailDto> getDetailComptes();
 
     @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.name, c.debit, c.credit, t.typeId, t.uniqueCode)
+        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(c.compteDetId, t.name, c.debit, c.credit, t.typeId, t.uniqueCode)
          from CompteDetails c join c.typeCompteDet t where c.compteCedante.compte.tranche.trancheId = ?1 and 
         c.compteCedante.cedante.cedId = ?2 and c.compteCedante.compte.periode.periodeId =?3
     """)
     List<CompteDetailDto> findByTrancheIdAndCedIdAndPeriodeId(Long trancheId, Long cedIdSelected, Long periodeId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(c.compteDetId, t.name, c.debit, c.credit, t.typeId, t.uniqueCode)
+         from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1 
+    """)
+    List<CompteDetailDto> findByCompteCedI(Long compteCedId);
 }
