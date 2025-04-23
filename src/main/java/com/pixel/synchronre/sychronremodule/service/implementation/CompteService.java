@@ -10,6 +10,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.ICompteCalculServic
 import com.pixel.synchronre.sychronremodule.service.interfac.ICompteDetailsService;
 import com.pixel.synchronre.sychronremodule.service.interfac.IserviceCompte;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
+import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,7 +119,7 @@ public class CompteService implements IserviceCompte {
 
     CompteDetailDto getCompteDetailsItem(List<CompteDetailDto> compteDetails, String typeCode)
     {
-        if(compteDetails == null || compteDetails.isEmpty()) return new CompteDetailDto(null, ZERO, ZERO, "");
+        if(compteDetails == null || compteDetails.isEmpty()) return new CompteDetailDto(null, "", ZERO, ZERO, "", 0, true, true);
         return compteDetails.stream().filter(cd->cd.getUniqueCode().equals(typeCode)).findFirst().orElse(new CompteDetailDto());
     }
 
@@ -259,17 +260,38 @@ public class CompteService implements IserviceCompte {
 
     private List<CompteDetailDto> mapCompteDetailsItemsToCompteDetailsDtoList(CompteDetailsItems calculatedCompteDetailsItems)
     {
-        CompteDetailDto primeOrigineCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("PRIM_ORIG"), calculatedCompteDetailsItems.getPrimeOrigine(), ZERO, "PRIM_ORIG");
-        CompteDetailDto primeApresAjustementCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("PRIM_ORIG"), ZERO, calculatedCompteDetailsItems.getPrimeApresAjustement(), "PRIM_APR_AJUST");
-        CompteDetailDto sinistrePayeCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SIN_PAYE"), calculatedCompteDetailsItems.getSinistrePaye(), ZERO, "SIN_PAYE");
-        CompteDetailDto depotSapConstCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("DEP_SAP_CONST"), calculatedCompteDetailsItems.getDepotSapConst(), ZERO, "DEP_SAP_CONST");
-        CompteDetailDto depotSapLibCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("DEP_SAP_LIB"), ZERO, calculatedCompteDetailsItems.getDepotSapLib(), "DEP_SAP_LIB");
-        CompteDetailDto interetDepotLibCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("INT_DEP_LIB"), ZERO, calculatedCompteDetailsItems.getInteretDepotLib(), "INT_DEP_LIB");
-        CompteDetailDto sousTotalDebitCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOUS_TOTAL_DEBIT"), calculatedCompteDetailsItems.getSousTotalDebit(), ZERO, "SOUS_TOTAL_DEBIT");
-        CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOUS_TOTAL_CREDIT"), ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), "SOUS_TOTAL_CREDIT");
-        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOLD_CED"), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), "SOLD_CED");
-        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("SOLD_REA"), ZERO, calculatedCompteDetailsItems.getSoldeRea(), "SOLD_REA");
-        CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(typeRepo.getTypeIdbyUniqueCode("TOTAL_MOUV"), ZERO, calculatedCompteDetailsItems.getTotalMouvement(), "TOTAL_MOUV");
+        Type primOrigType = typeRepo.findByUniqueCode("PRIM_ORIG").orElseThrow(()->new AppException("Type introuvable : PRIM_ORIG"));
+        CompteDetailDto primeOrigineCompteDetails = new CompteDetailDto(primOrigType.getTypeId(), primOrigType.getName(), calculatedCompteDetailsItems.getPrimeOrigine(), ZERO, primOrigType.getUniqueCode(), primOrigType.getTypeOrdre(), primOrigType.isDebitDisabled(), primOrigType.isCreditDisabled());
+
+        Type primAprAjustType = typeRepo.findByUniqueCode("PRIM_APR_AJUST").orElseThrow(()->new AppException("Type introuvable : PRIM_APR_AJUST"));
+        CompteDetailDto primeApresAjustementCompteDetails = new CompteDetailDto(primAprAjustType.getTypeId(), primAprAjustType.getName(), ZERO, calculatedCompteDetailsItems.getPrimeApresAjustement(), primAprAjustType.getUniqueCode(), primAprAjustType.getTypeOrdre(), primAprAjustType.isDebitDisabled(), primAprAjustType.isCreditDisabled());
+
+        Type sinPayeType = typeRepo.findByUniqueCode("SIN_PAYE").orElseThrow(()->new AppException("Type introuvable : SIN_PAYE"));
+        CompteDetailDto sinistrePayeCompteDetails = new CompteDetailDto(sinPayeType.getTypeId(), sinPayeType.getName(), calculatedCompteDetailsItems.getSinistrePaye(), ZERO, sinPayeType.getUniqueCode(), sinPayeType.getTypeOrdre(), sinPayeType.isDebitDisabled(), sinPayeType.isCreditDisabled());
+
+        Type depSapConstType = typeRepo.findByUniqueCode("DEP_SAP_CONST").orElseThrow(()->new AppException("Type introuvable : DEP_SAP_CONST"));
+        CompteDetailDto depotSapConstCompteDetails = new CompteDetailDto(depSapConstType.getTypeId(), depSapConstType.getName(), calculatedCompteDetailsItems.getDepotSapConst(), ZERO, depSapConstType.getUniqueCode(), depSapConstType.getTypeOrdre(), depSapConstType.isDebitDisabled(), depSapConstType.isCreditDisabled());
+
+        Type depSapLibType = typeRepo.findByUniqueCode("DEP_SAP_LIB").orElseThrow(()->new AppException("Type introuvable : DEP_SAP_LIB"));
+        CompteDetailDto depotSapLibCompteDetails = new CompteDetailDto(depSapLibType.getTypeId(), depSapLibType.getName(), ZERO, calculatedCompteDetailsItems.getDepotSapLib(), depSapLibType.getUniqueCode(), depSapLibType.getTypeOrdre(), depSapLibType.isDebitDisabled(), depSapLibType.isCreditDisabled());
+
+        Type intDepLibLibType = typeRepo.findByUniqueCode("INT_DEP_LIB").orElseThrow(()->new AppException("Type introuvable : INT_DEP_LIB"));
+        CompteDetailDto interetDepotLibCompteDetails = new CompteDetailDto(intDepLibLibType.getTypeId(), intDepLibLibType.getName(), ZERO, calculatedCompteDetailsItems.getInteretDepotLib(), intDepLibLibType.getUniqueCode(), intDepLibLibType.getTypeOrdre(), intDepLibLibType.isDebitDisabled(), intDepLibLibType.isCreditDisabled());
+
+        Type sousTotalDebitType = typeRepo.findByUniqueCode("SOUS_TOTAL_DEBIT").orElseThrow(()->new AppException("Type introuvable : SOUS_TOTAL_DEBIT"));
+        CompteDetailDto sousTotalDebitCompteDetails = new CompteDetailDto(sousTotalDebitType.getTypeId(), sousTotalDebitType.getName(), calculatedCompteDetailsItems.getSousTotalDebit(), ZERO, sousTotalDebitType.getUniqueCode(), sousTotalDebitType.getTypeOrdre(), sousTotalDebitType.isDebitDisabled(), sousTotalDebitType.isCreditDisabled());
+
+        Type sousTotalCreditType = typeRepo.findByUniqueCode("SOUS_TOTAL_CREDIT").orElseThrow(()->new AppException("Type introuvable : SOUS_TOTAL_CREDIT"));
+        CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalCreditType.getName(), ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
+
+        Type soldCedType = typeRepo.findByUniqueCode("SOLD_CED").orElseThrow(()->new AppException("Type introuvable : SOLD_CED"));
+        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
+
+        Type soldReaType = typeRepo.findByUniqueCode("SOLD_REA").orElseThrow(()->new AppException("Type introuvable : SOLD_REA"));
+        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(soldReaType.getTypeId(), soldReaType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeRea(), soldReaType.getUniqueCode(), soldReaType.getTypeOrdre(), soldReaType.isDebitDisabled(), soldReaType.isCreditDisabled());
+
+        Type totalMouvType = typeRepo.findByUniqueCode("TOTAL_MOUV").orElseThrow(()->new AppException("Type introuvable : TOTAL_MOUV"));
+        CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(totalMouvType.getTypeId(), totalMouvType.getName(), ZERO, calculatedCompteDetailsItems.getTotalMouvement(), totalMouvType.getUniqueCode(), totalMouvType.getTypeOrdre(), totalMouvType.isDebitDisabled(), totalMouvType.isCreditDisabled());
 
         List<CompteDetailDto> compteDetailsList = Arrays.asList(
                 primeOrigineCompteDetails,
