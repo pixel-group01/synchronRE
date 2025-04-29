@@ -124,14 +124,16 @@ public class TrancheCedanteService implements ITrancheCedanteService
             trancheCedante.setTranche(new Tranche(dto.getTrancheId()));
             trancheCedante.setCedante(new Cedante(dto.getCedId()));
         }
+        TranchePrimeDto calculatedDto = this.calculatePrimesAndCesLegs(dto, 20); //On calcule les primes
         trancheCedante.setAssiettePrime(dto.getAssiettePrime());
-        trancheCedante.setPmd(dto.getPmd());
-        trancheCedante.setPmdCourtier(dto.getPmdCourtier());
-        trancheCedante.setPmdCourtierPlaceur(dto.getPmdCourtierPlaceur());
-        trancheCedante.setPmdNette(dto.getPmdNette());
+        trancheCedante.setAssiettePrimeRealsee(dto.getAssiettePrimeRealisee());
+        trancheCedante.setPmd(calculatedDto.getPmd());
+        trancheCedante.setPmdCourtier(calculatedDto.getPmdCourtier());
+        trancheCedante.setPmdCourtierPlaceur(calculatedDto.getPmdCourtierPlaceur());
+        trancheCedante.setPmdNette(calculatedDto.getPmdNette());
         trancheCedante = trancheCedanteRepo.save(trancheCedante);
         Long trancheCedanteId = trancheCedante.getTrancheCedanteId();
-        List<CesLeg> cesLegs= dto.getCessionsLegales();
+        List<CesLeg> cesLegs= calculatedDto.getCessionsLegales();
 
         if(cesLegs != null && !cesLegs.isEmpty())
         {
