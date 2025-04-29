@@ -178,7 +178,8 @@ public class TrancheCedanteService implements ITrancheCedanteService
             trPmd.setAssiettePrime(assiettePrime);
             trPmd.setAssiettePrimeRealisee(assiettePrimeRealisee);
             this.calculatePrimesAndCesLegs(trPmd, scale);
-            boolean hasChanged = this.trPmdHasChange(assiettePrime, oldAssiettePrime);
+            boolean hasChanged = this.trPmdHasChange(assiettePrime, oldAssiettePrime) || this.trPmdHasChange(assiettePrimeRealisee, oldAssiettePrimeRealisee);
+
             trPmd.setChanged(hasChanged);
         });
         return naturalTranchePrimes;
