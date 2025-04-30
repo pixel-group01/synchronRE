@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 
 import static com.pixel.synchronre.sychronremodule.model.constants.USUAL_NUMBERS.CENT;
 import static java.math.BigDecimal.ZERO;
@@ -54,7 +55,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         StatCompteIds statCompteIds =compteCedId == null ? new StatCompteIds(items.getCedIdSelected(), items.getTrancheIdSelected(), items.getPeriodeId()) : ccRepo.getStatCompteIdsByCompteCedId(compteCedId);
         if(items == null) return null;
         //VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
-        VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getTrancheId(), PageRequest.of(0, 1)).get(0);
+        VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
 
 
         BigDecimal assiettePrimeExercice = vsc.getAssiettePrimeExercice();
@@ -64,8 +65,8 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
 
         BigDecimal primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd()); //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
 
-        BigDecimal sousTotalDebit = primeOrigine.add(items.getSinistrePaye()).add(items.getDepotSapConst());
-        BigDecimal sousTotalCredit = primeApresAjustement.add(items.getDepotSapLib()).add(items.getInteretDepotLib());
+        BigDecimal sousTotalDebit = primeOrigine.add(Optional.ofNullable(items.getSinistrePaye()).orElse(ZERO)).add(Optional.ofNullable(items.getDepotSapConst()).orElse(ZERO));
+        BigDecimal sousTotalCredit = primeApresAjustement.add(Optional.ofNullable(items.getDepotSapLib()).orElse(ZERO)).add(Optional.ofNullable(items.getInteretDepotLib()).orElse(ZERO));
         BigDecimal soldeCedante = sousTotalDebit.compareTo(sousTotalCredit) >= 0 ? sousTotalDebit.subtract(sousTotalCredit) : ZERO;
         BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalCredit.subtract(sousTotalDebit) : ZERO;
         BigDecimal totalMouvement = soldeCedante.max(soldeRea);

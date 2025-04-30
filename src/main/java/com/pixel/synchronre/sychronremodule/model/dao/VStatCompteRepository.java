@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface VStatCompteRepository extends JpaRepository<VStatCompte, Long>
 {
-    @Query("select vsc from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and vsc.periodeId = ?3")
+    @Query("select vsc from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and (vsc.periodeId = ?3 or vsc.periodeId is null)")
     VStatCompte getStatsCompte(Long cedId, Long trancheId, Long periodeId);
 
-    @Query("select vsc.primeOrigine from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and vsc.periodeId = ?3")
+    @Query("select vsc.primeOrigine from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and (vsc.periodeId = ?3 or vsc.periodeId is null)")
     BigDecimal getPrimeOrigine(Long cedId, Long trancheId, Long periodeId);
 
-    @Query("select vsc.assiettePrimeExercice from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and vsc.periodeId = ?3")
+    @Query("select vsc.assiettePrimeExercice from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and (vsc.periodeId = ?3 or vsc.periodeId is null)")
     BigDecimal getAssiettePrimeExercice(Long cedId, Long trancheId, Long periodeId);
 
     @Query("select vsc from VStatCompte  vsc where vsc.trancheId = ?1 ")
