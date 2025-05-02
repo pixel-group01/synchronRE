@@ -64,10 +64,6 @@ public class Repartition extends HistoDetails {
     private ParamCessionLegale paramCessionLegale;
     @Column(columnDefinition = "BOOLEAN DEFAULT false")
     private boolean isAperiteur;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "sin_id")
     private Sinistre sinistre;
 

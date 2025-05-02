@@ -375,6 +375,8 @@ public class ServiceRepartitionImpl implements IserviceRepartition
             repReserveCourtier.setRepPrime(primeResCourt);
             repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
             repRepo.save(repReserveCourtier);
+            Affaire affaire = affRepo.findById(affId).orElseThrow(()->new AppException("Affaire introuvable " + affId));
+            affaire.setReserveCourtier(reserveCourtier);
             return;
         }
         repReserveCourtier = new Repartition();
