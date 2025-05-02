@@ -16,6 +16,10 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -74,6 +78,22 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Exportez le rapport au format PDF
+        byte[] reportBytes = this.exportReportToPdf(jasperPrint);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateReportExcel(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Retourner le fichier Excel sous forme de tableau de bytes
+        return this.exportReportToExcel(jasperPrint);
+    }
+
+    private JasperPrint generateJasperPrint(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
         parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
         qrText =  qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
@@ -93,14 +113,34 @@ public class ServiceReportImpl implements IServiceReport
         JasperPrint jasperPrint = jrBeanCollectionDataSource == null
                 ? JasperFillManager.fillReport(jasperReport, parameters, connection)
                 : JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-
-        // Exportez le rapport au format PDF
-        byte[] reportBytes = JasperExportManager.exportReportToPdf(jasperPrint);
-
-        // Fermez la connexion
         connection.close();
+        return jasperPrint;
+    }
 
-        return reportBytes;
+    private byte[] exportReportToPdf(JasperPrint jasperPrint) throws JRException {
+        return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+
+    private byte[] exportReportToExcel(JasperPrint jasperPrint) throws JRException
+    {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setDetectCellType(true);  // Détection automatique du type des cellules
+        configuration.setOnePagePerSheet(false); // Éviter d'avoir une seule page par feuille
+        configuration.setRemoveEmptySpaceBetweenRows(true); // Suppression des espaces vides
+        configuration.setWhitePageBackground(false); // Pas de fond blanc inutile
+        configuration.setCollapseRowSpan(true); // Fusionner les cellules si possible
+        configuration.setIgnoreGraphics(false); // Garder les images et graphiques
+        //configuration.setSheetNames(new String[]{"Mon Rapport"}); // Nom de la feuille
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        return byteArrayOutputStream.toByteArray();
     }
 
     private String getImagesPath() throws IOException {
@@ -264,7 +304,7 @@ public class ServiceReportImpl implements IServiceReport
         params.put("periodicite", periodicite);
         params.put("periodeId", periodeId);
         params.put("param_image", this.getImagesPath());
-        byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        byte[] reportBytes = this.generateReportExcel(jrConfig.compteTraite, params, new ArrayList<>(), null);
         return reportBytes;
     }
 

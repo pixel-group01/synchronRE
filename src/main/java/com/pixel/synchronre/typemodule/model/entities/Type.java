@@ -36,6 +36,10 @@ public class Type {
     private List<Type> children;
     private String objectFolder;
     private int typeOrdre = 0;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean debitDisabled;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean creditDisabled;
 
     public Type(Long typeId, TypeGroup typeGroup, String uniqueCode, String name, PersStatus status, List<Type> children, String objectFolder) {
         this.typeId = typeId;

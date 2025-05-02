@@ -17,6 +17,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteServ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import static java.math.BigDecimal.ZERO;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -123,7 +124,9 @@ public class TrancheCedanteService implements ITrancheCedanteService
             trancheCedante.setTranche(new Tranche(dto.getTrancheId()));
             trancheCedante.setCedante(new Cedante(dto.getCedId()));
         }
+        //TranchePrimeDto calculatedDto = this.calculatePrimesAndCesLegs(dto, 20); //On calcule les primes
         trancheCedante.setAssiettePrime(dto.getAssiettePrime());
+        trancheCedante.setAssiettePrimeRealsee(dto.getAssiettePrimeRealisee());
         trancheCedante.setPmd(dto.getPmd());
         trancheCedante.setPmdCourtier(dto.getPmdCourtier());
         trancheCedante.setPmdCourtierPlaceur(dto.getPmdCourtierPlaceur());
@@ -159,15 +162,24 @@ public class TrancheCedanteService implements ITrancheCedanteService
         if(naturalTranchePrimes == null) return Collections.emptyList();
         naturalTranchePrimes.forEach(trPmd->
         {
-            BigDecimal oldAssiettePrime = trancheCedanteRepo.getAssiettePrimeByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
-            oldAssiettePrime = Optional.ofNullable(oldAssiettePrime).orElse(BigDecimal.ZERO);
+            TrancheCedante trancheCedante = trancheCedanteRepo.findByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
+            BigDecimal oldAssiettePrime = trancheCedante.getAssiettePrime();
+            oldAssiettePrime = Optional.ofNullable(oldAssiettePrime).orElse(ZERO);
             BigDecimal assiettePrime = this.getAssiettePrime(dto, trPmd.getTrancheId());
-            assiettePrime = assiettePrime == null || assiettePrime.compareTo(BigDecimal.ZERO)==0 ? oldAssiettePrime : assiettePrime;
+            assiettePrime = assiettePrime == null || assiettePrime.compareTo(ZERO)==0 ? oldAssiettePrime : assiettePrime;
+
+            BigDecimal oldAssiettePrimeRealisee = trancheCedante.getAssiettePrimeRealsee();
+            oldAssiettePrimeRealisee = Optional.ofNullable(oldAssiettePrimeRealisee).orElse(ZERO);
+            BigDecimal assiettePrimeRealisee = this.getAssiettePrimeRealisee(dto, trPmd.getTrancheId());
+            assiettePrimeRealisee = assiettePrimeRealisee == null || assiettePrimeRealisee.compareTo(ZERO)==0 ? oldAssiettePrimeRealisee : assiettePrimeRealisee;
+
             trPmd.setTraiteNpId(traiteNpId);
             trPmd.setCedId(cedId);
             trPmd.setAssiettePrime(assiettePrime);
+            trPmd.setAssiettePrimeRealisee(assiettePrimeRealisee);
             this.calculatePrimesAndCesLegs(trPmd, scale);
-            boolean hasChanged = this.trPmdHasChange(assiettePrime, oldAssiettePrime);
+            boolean hasChanged = this.trPmdHasChange(assiettePrime, oldAssiettePrime) || this.trPmdHasChange(assiettePrimeRealisee, oldAssiettePrimeRealisee);
+
             trPmd.setChanged(hasChanged);
         });
         return naturalTranchePrimes;
@@ -175,17 +187,28 @@ public class TrancheCedanteService implements ITrancheCedanteService
 
     private boolean trPmdHasChange(BigDecimal assiettePrime, BigDecimal oldAssiettePrime)
     {
-        assiettePrime = assiettePrime == null ? BigDecimal.ZERO : assiettePrime;
-        oldAssiettePrime = oldAssiettePrime == null ? BigDecimal.ZERO : oldAssiettePrime;
+        assiettePrime = assiettePrime == null ? ZERO : assiettePrime;
+        oldAssiettePrime = oldAssiettePrime == null ? ZERO : oldAssiettePrime;
         if(assiettePrime == oldAssiettePrime) return false;
         return assiettePrime.compareTo(oldAssiettePrime) != 0;
     }
 
+    private TranchePrimeDto getTranchePrimeDto(TrancheCedanteReq dto, Long trancheId)
+    {
+        if(dto == null || dto.getTranchePrimeDtos() == null) return null;
+        TranchePrimeDto tranchePrimeDto = dto.getTranchePrimeDtos().stream().filter(Objects::nonNull).filter(trPmd->trPmd.getTrancheId().equals(trancheId)).findFirst().orElse(null);
+        return tranchePrimeDto;
+    }
+
     private BigDecimal getAssiettePrime(TrancheCedanteReq dto, Long trancheId)
     {
-        if(dto == null || dto.getTranchePrimeDtos() == null) return BigDecimal.ZERO;
-        TranchePrimeDto tranchePrimeDto = dto.getTranchePrimeDtos().stream().filter(Objects::nonNull).filter(trPmd->trPmd.getTrancheId().equals(trancheId)).findFirst().orElse(null);
-        return tranchePrimeDto == null ? BigDecimal.ZERO : tranchePrimeDto.getAssiettePrime();
+        TranchePrimeDto tranchePrimeDto = this.getTranchePrimeDto(dto, trancheId);
+        return tranchePrimeDto == null ? ZERO : tranchePrimeDto.getAssiettePrime();
+    }
+    private BigDecimal getAssiettePrimeRealisee(TrancheCedanteReq dto, Long trancheId)
+    {
+        TranchePrimeDto tranchePrimeDto = this.getTranchePrimeDto(dto, trancheId);
+        return tranchePrimeDto == null ? ZERO : tranchePrimeDto.getAssiettePrimeRealisee();
     }
 
     private TranchePrimeDto calculatePrimesAndCesLegs(TranchePrimeDto trPime, int scale)
@@ -193,13 +216,13 @@ public class TrancheCedanteService implements ITrancheCedanteService
         Long traiteNpId = trPime.getTraiteNpId();
 
         BigDecimal tauxAbattement = traiteRepo.getTauxAbattement(traiteNpId);
-        BigDecimal finalTauxAbattement = tauxAbattement == null || tauxAbattement.compareTo(BigDecimal.ZERO) == 0 ? CENT : tauxAbattement;
+        BigDecimal finalTauxAbattement = tauxAbattement == null || tauxAbattement.compareTo(ZERO) == 0 ? ZERO : tauxAbattement;
         TauxCourtiersResp tauxCourtiersResp = traiteRepo.getTauxCourtiers(traiteNpId);
         BigDecimal pmd = trPime.getAssiettePrime() != null && trPime.getTrancheTauxPrime() != null ?
-                trPime.getAssiettePrime().multiply(trPime.getTrancheTauxPrime()).multiply(CENT.subtract(finalTauxAbattement)).divide(CENT.multiply(CENT), 20, RoundingMode.HALF_UP) : BigDecimal.ZERO;
+                trPime.getAssiettePrime().multiply(trPime.getTrancheTauxPrime()).multiply(CENT.subtract(finalTauxAbattement)).divide(CENT.multiply(CENT), 20, RoundingMode.HALF_UP) : ZERO;
 
-        BigDecimal pmdCourtier = tauxCourtiersResp == null || tauxCourtiersResp.getTraiTauxCourtier() == null ? BigDecimal.ZERO : pmd.multiply(tauxCourtiersResp.getTraiTauxCourtier()).divide(CENT, scale, RoundingMode.HALF_UP);
-        BigDecimal pmdCourtierPlaceur = tauxCourtiersResp == null || tauxCourtiersResp.getTraiTauxCourtier() == null ? BigDecimal.ZERO : pmd.multiply(tauxCourtiersResp.getTraiTauxCourtierPlaceur()).divide(CENT, scale, RoundingMode.HALF_UP);
+        BigDecimal pmdCourtier = tauxCourtiersResp == null || tauxCourtiersResp.getTraiTauxCourtier() == null ? ZERO : pmd.multiply(tauxCourtiersResp.getTraiTauxCourtier()).divide(CENT, scale, RoundingMode.HALF_UP);
+        BigDecimal pmdCourtierPlaceur = tauxCourtiersResp == null || tauxCourtiersResp.getTraiTauxCourtier() == null ? ZERO : pmd.multiply(tauxCourtiersResp.getTraiTauxCourtierPlaceur()).divide(CENT, scale, RoundingMode.HALF_UP);
         BigDecimal pmdNette = pmd.subtract(pmdCourtier.add(pmdCourtierPlaceur));
         trPime.setPmd(pmd);
         trPime.setPmdCourtier(pmdCourtier);

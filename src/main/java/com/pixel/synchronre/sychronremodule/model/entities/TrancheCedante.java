@@ -25,6 +25,8 @@ public class TrancheCedante //extends HistoDetails
     @Column(precision = 50, scale = 20)
     private BigDecimal assiettePrime;
     @Column(precision = 50, scale = 20)
+    private BigDecimal assiettePrimeRealsee;
+    @Column(precision = 50, scale = 20)
     private BigDecimal pmd;
     @Column(precision = 50, scale = 20)
     private BigDecimal pmdCourtier;

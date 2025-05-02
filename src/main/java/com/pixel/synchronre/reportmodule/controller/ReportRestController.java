@@ -9,7 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceInterlocuteur;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Base64;
@@ -130,6 +130,25 @@ public class ReportRestController
         String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
         return new Base64FileDto(base64Url, reportBytes);
     }
+    // avec telechargement directe du fichier excel sans retourner un byte ou base 64 url
+    @GetMapping("/compte-traites/download-excel")
+    public ResponseEntity<byte[]> downloadCompteTraite(@RequestParam(required = false) Long traitenpId,
+                                                       @RequestParam(required = false) Long cedenteId,
+                                                       @RequestParam(required = false) Long trancheId,
+                                                       @RequestParam(required = false) String periodicite,
+                                                       @RequestParam(required = false) Long periodeId) throws Exception {
+        // Génération du rapport Excel
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId, cedenteId, trancheId, periodicite, periodeId);
+
+        // Définition des en-têtes pour forcer le téléchargement
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("compte_traite.xlsx").build());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // Retourne le fichier en tant que réponse HTTP
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
+    }
+
 
     @GetMapping("/situation-note-debit-par-cedante-reassureur")
     public Base64FileDto generateSituationFinanciereCedRea(@RequestParam(required = false) Long exeCode,
