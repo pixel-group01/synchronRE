@@ -546,7 +546,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SITUATION FINANCIERE DES NOTES DE CREDIT "+$F{exe_code}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SITUATION FINANCIERE "+$F{exe_code}+" (NOTES DE CREDIT)"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

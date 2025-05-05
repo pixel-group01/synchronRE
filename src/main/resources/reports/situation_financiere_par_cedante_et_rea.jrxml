@@ -785,7 +785,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SITUATION FINANCIERE DES NOTES DE DEBIT "+$F{exe_code}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SITUATION FINANCIERE "+$F{exe_code}+" (NOTES DE DEBIT)"]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
