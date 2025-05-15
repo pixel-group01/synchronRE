@@ -69,7 +69,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         BigDecimal sousTotalCredit = primeApresAjustement.add(Optional.ofNullable(items.getDepotSapLib()).orElse(ZERO)).add(Optional.ofNullable(items.getInteretDepotLib()).orElse(ZERO));
         BigDecimal soldeCedante = sousTotalDebit.compareTo(sousTotalCredit) >= 0 ? sousTotalDebit.subtract(sousTotalCredit) : ZERO;
         BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalCredit.subtract(sousTotalDebit) : ZERO;
-        BigDecimal totalMouvement = soldeCedante.max(soldeRea);
+        BigDecimal totalMouvement = sousTotalDebit.max(sousTotalCredit);
 
         items.setPrimeApresAjustement(primeApresAjustement);
         items.setSousTotalDebit(sousTotalDebit);
