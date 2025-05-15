@@ -317,10 +317,10 @@ public class CompteService implements IserviceCompte {
         CompteDetailDto sousTotalCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalType.getName(), calculatedCompteDetailsItems.getSousTotalDebit(), calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
 
         Type soldCedType = typeRepo.findByUniqueCode("SOLD_CED").orElseThrow(()->new AppException("Type introuvable : SOLD_CED"));
-        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), calculatedCompteDetailsItems.getSoldeCedante(), ZERO, soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
+        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
 
         Type soldReaType = typeRepo.findByUniqueCode("SOLD_REA").orElseThrow(()->new AppException("Type introuvable : SOLD_REA"));
-        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(soldReaType.getTypeId(), soldReaType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeRea(), soldReaType.getUniqueCode(), soldReaType.getTypeOrdre(), soldReaType.isDebitDisabled(), soldReaType.isCreditDisabled());
+        CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(soldReaType.getTypeId(), soldReaType.getName(), calculatedCompteDetailsItems.getSoldeRea(), ZERO, soldReaType.getUniqueCode(), soldReaType.getTypeOrdre(), soldReaType.isDebitDisabled(), soldReaType.isCreditDisabled());
 
         Type totalMouvType = typeRepo.findByUniqueCode("TOTAL_MOUV").orElseThrow(()->new AppException("Type introuvable : TOTAL_MOUV"));
         CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(totalMouvType.getTypeId(), totalMouvType.getName(), calculatedCompteDetailsItems.getTotalMouvement(), calculatedCompteDetailsItems.getTotalMouvement(), totalMouvType.getUniqueCode(), totalMouvType.getTypeOrdre(), totalMouvType.isDebitDisabled(), totalMouvType.isCreditDisabled());
@@ -333,7 +333,7 @@ public class CompteService implements IserviceCompte {
                 depotSapLibCompteDetails,
                 interetDepotLibCompteDetails,
                 sousTotalCompteDetails,
-                soldeCedanteCompteDetails.getDebit().compareTo(ZERO) == 0 ? soldeReaCompteDetails : soldeCedanteCompteDetails,
+                soldeCedanteCompteDetails.getCredit().compareTo(ZERO) == 0 ? soldeReaCompteDetails : soldeCedanteCompteDetails,
                 totalMouvementCompteDetails
         );
         return compteDetailsList;
