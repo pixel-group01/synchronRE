@@ -313,8 +313,11 @@ public class CompteService implements IserviceCompte {
         Type sousTotalCreditType = typeRepo.findByUniqueCode("SOUS_TOTAL_CREDIT").orElseThrow(()->new AppException("Type introuvable : SOUS_TOTAL_CREDIT"));
         CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalCreditType.getName(), ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
 
+        Type sousTotalType = typeRepo.findByUniqueCode("SOUS_TOTAL").orElseThrow(()->new AppException("Type introuvable : SOUS_TOTAL"));
+        CompteDetailDto sousTotalCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalType.getName(), calculatedCompteDetailsItems.getSousTotalDebit(), calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
+
         Type soldCedType = typeRepo.findByUniqueCode("SOLD_CED").orElseThrow(()->new AppException("Type introuvable : SOLD_CED"));
-        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
+        CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), calculatedCompteDetailsItems.getSoldeCedante(), ZERO, soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
 
         Type soldReaType = typeRepo.findByUniqueCode("SOLD_REA").orElseThrow(()->new AppException("Type introuvable : SOLD_REA"));
         CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(soldReaType.getTypeId(), soldReaType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeRea(), soldReaType.getUniqueCode(), soldReaType.getTypeOrdre(), soldReaType.isDebitDisabled(), soldReaType.isCreditDisabled());
@@ -329,8 +332,7 @@ public class CompteService implements IserviceCompte {
                 depotSapConstCompteDetails,
                 depotSapLibCompteDetails,
                 interetDepotLibCompteDetails,
-                sousTotalDebitCompteDetails,
-                sousTotalCreditCompteDetails,
+                sousTotalCompteDetails,
                 soldeCedanteCompteDetails.getDebit().compareTo(ZERO) == 0 ? soldeReaCompteDetails : soldeCedanteCompteDetails,
                 totalMouvementCompteDetails
         );
