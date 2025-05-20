@@ -18,6 +18,12 @@ public class CompteCessionnaireDto
     private BigDecimal prime;
     private Long compteCedId;
 
+    public CompteCessionnaireDto(String cesNom, BigDecimal taux, BigDecimal prime) {
+        this.cesNom = cesNom;
+        this.taux = taux;
+        this.prime = prime;
+    }
+
     public CompteCessionnaireDto(Long cesId, String cesNom, String cesSigle, BigDecimal taux) {
         this.cesId = cesId;
         this.cesNom = cesNom;
