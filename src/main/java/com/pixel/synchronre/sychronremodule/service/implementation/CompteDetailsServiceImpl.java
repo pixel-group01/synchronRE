@@ -71,12 +71,12 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalCredit.subtract(sousTotalDebit) : ZERO;
         BigDecimal totalMouvement = sousTotalDebit.max(sousTotalCredit);
 
-        items.setPrimeApresAjustement(primeApresAjustement);
-        items.setSousTotalDebit(sousTotalDebit);
-        items.setSousTotalCredit(sousTotalCredit);
-        items.setSoldeCedante(soldeCedante);
-        items.setSoldeRea(soldeRea);
-        items.setTotalMouvement(totalMouvement);
+        items.setPrimeApresAjustement(primeApresAjustement.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setSousTotalDebit(sousTotalDebit.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setSousTotalCredit(sousTotalCredit.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setSoldeCedante(soldeCedante.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setSoldeRea(soldeRea.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setTotalMouvement(totalMouvement.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         return items;
     }
 
