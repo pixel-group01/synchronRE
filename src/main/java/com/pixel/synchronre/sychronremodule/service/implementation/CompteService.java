@@ -39,7 +39,7 @@ public class CompteService implements IserviceCompte {
     private final VStatCompteRepository vscRepo;
 
     @Override
-    public CompteTraiteDto getCompteTraite(Long traiteNpId, Long periodeId)
+    public CompteTraiteDto getCompteTraite(Long traiteNpId, Long periodeId, int precision)
     {
         CompteTraiteDto compteTraiteDto = compteTraiteRepo.getCompteByTraite(traiteNpId);
         if(compteTraiteDto == null) return null;
@@ -143,7 +143,7 @@ public class CompteService implements IserviceCompte {
     @Override
     public CompteTraiteDto getCompteTraite(CompteTraiteDto dto, int precision)
     {
-        CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId(), dto.getPeriodeId());
+        CompteTraiteDto compteTraiteDto = this.getCompteTraite(dto.getTraiteNpId(), dto.getPeriodeId(), precision);
         Long trancheIdSelected = dto.getTrancheIdSelected();
         if(trancheIdSelected == null) return compteTraiteDto;
         Long periodeId = dto.getPeriodeId();

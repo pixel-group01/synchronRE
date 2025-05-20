@@ -22,7 +22,7 @@ public class CompteController {
     @GetMapping(path = "/traites/{traiteNpId}/{periodeId}")
     CompteTraiteDto getCompteTraite(@PathVariable Long traiteNpId, @PathVariable(required = false) Long periodeId)
     {
-        return compteService.getCompteTraite(traiteNpId, periodeId);
+        return compteService.getCompteTraite(traiteNpId, periodeId, 2);
     }
 
     @PostMapping(path = "/traites")

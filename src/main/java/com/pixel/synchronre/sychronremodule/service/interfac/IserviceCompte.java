@@ -7,7 +7,7 @@ import com.pixel.synchronre.sychronremodule.model.views.VStatCompte;
 import java.util.List;
 
 public interface IserviceCompte {
-    CompteTraiteDto getCompteTraite(Long traiteNpId, Long periodeId);
+    CompteTraiteDto getCompteTraite(Long traiteNpId, Long periodeId, int precision);
 
     CompteTraiteDto save(CompteTraiteDto dto);
 
