@@ -250,9 +250,9 @@ public class CompteService implements IserviceCompte {
             compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setCompteCedId(finalCompteCedanteId)).collect(Collectors.toList());
             if(calculatedCompteDetailsItems != null)
             {
-                BigDecimal sousTotalDebit = calculatedCompteDetailsItems.getSousTotalDebit() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalDebit();
-                BigDecimal sousTotalCredit = calculatedCompteDetailsItems.getSousTotalCredit() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalCredit();
-                BigDecimal minSousTotal = sousTotalDebit.min(sousTotalCredit);
+                BigDecimal soldeCedante = calculatedCompteDetailsItems.getSoldeCedante() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalDebit();
+                BigDecimal soldeRea = calculatedCompteDetailsItems.getSoldeRea() == null ? ZERO : calculatedCompteDetailsItems.getSousTotalCredit();
+                BigDecimal minSousTotal = soldeCedante.min(soldeRea);
                 compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(minSousTotal.multiply(cc.getTaux()).divide(CENT, precision, RoundingMode.HALF_UP))).collect(Collectors.toList());
             }
             trancheCompteDto.setCompteCessionnaires(compteCessionnaires);
@@ -322,8 +322,14 @@ public class CompteService implements IserviceCompte {
         Type soldReaType = typeRepo.findByUniqueCode("SOLD_REA").orElseThrow(()->new AppException("Type introuvable : SOLD_REA"));
         CompteDetailDto soldeReaCompteDetails = new CompteDetailDto(soldReaType.getTypeId(), soldReaType.getName(), calculatedCompteDetailsItems.getSoldeRea(), ZERO, soldReaType.getUniqueCode(), soldReaType.getTypeOrdre(), soldReaType.isDebitDisabled(), soldReaType.isCreditDisabled());
 
+        Type soldReaNeutre = typeRepo.findByUniqueCode("SOLD_NEUTRE").orElseThrow(()->new AppException("Type introuvable : SOLD_NEUTRE"));
+        CompteDetailDto soldeNeutreCompteDetails = new CompteDetailDto(soldReaNeutre.getTypeId(), soldReaNeutre.getName(), ZERO, ZERO, soldReaNeutre.getUniqueCode(), soldReaNeutre.getTypeOrdre(), soldReaNeutre.isDebitDisabled(), soldReaNeutre.isCreditDisabled());
+
+
         Type totalMouvType = typeRepo.findByUniqueCode("TOTAL_MOUV").orElseThrow(()->new AppException("Type introuvable : TOTAL_MOUV"));
         CompteDetailDto totalMouvementCompteDetails = new CompteDetailDto(totalMouvType.getTypeId(), totalMouvType.getName(), calculatedCompteDetailsItems.getTotalMouvement(), calculatedCompteDetailsItems.getTotalMouvement(), totalMouvType.getUniqueCode(), totalMouvType.getTypeOrdre(), totalMouvType.isDebitDisabled(), totalMouvType.isCreditDisabled());
+
+        CompteDetailDto solde = soldeCedanteCompteDetails.getCredit().compareTo(ZERO) == 0 && soldeReaCompteDetails.getDebit().compareTo(ZERO) == 0 ? soldeNeutreCompteDetails : soldeCedanteCompteDetails.getCredit().compareTo(ZERO) == 0 ?  soldeReaCompteDetails : soldeCedanteCompteDetails;
 
         List<CompteDetailDto> compteDetailsList = Arrays.asList(
                 primeOrigineCompteDetails,
@@ -333,7 +339,7 @@ public class CompteService implements IserviceCompte {
                 depotSapLibCompteDetails,
                 interetDepotLibCompteDetails,
                 sousTotalCompteDetails,
-                soldeCedanteCompteDetails.getCredit().compareTo(ZERO) == 0 ? soldeReaCompteDetails : soldeCedanteCompteDetails,
+                solde,
                 totalMouvementCompteDetails
         );
         return compteDetailsList;
