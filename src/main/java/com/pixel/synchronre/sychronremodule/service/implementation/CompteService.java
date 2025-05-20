@@ -252,8 +252,8 @@ public class CompteService implements IserviceCompte {
             {
                 BigDecimal soldeCedante = calculatedCompteDetailsItems.getSoldeCedante() == null ? ZERO : calculatedCompteDetailsItems.getSoldeCedante();
                 BigDecimal soldeRea = calculatedCompteDetailsItems.getSoldeRea() == null ? ZERO : calculatedCompteDetailsItems.getSoldeRea();
-                BigDecimal minSousTotal = soldeCedante.min(soldeRea);
-                compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(minSousTotal.multiply(cc.getTaux()).divide(CENT, precision, RoundingMode.HALF_UP))).collect(Collectors.toList());
+                BigDecimal solde = soldeCedante.max(soldeRea);
+                compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(solde.multiply(cc.getTaux()).divide(CENT, precision, RoundingMode.HALF_UP))).collect(Collectors.toList());
             }
             trancheCompteDto.setCompteCessionnaires(compteCessionnaires);
         }
