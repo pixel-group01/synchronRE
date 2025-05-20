@@ -61,7 +61,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         BigDecimal assiettePrimeExercice = vsc.getAssiettePrimeExercice();
         BigDecimal trancheTauxPrime = vsc.getTrancheTauxPrime();
 
-        BigDecimal primeOrigine = items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
+        BigDecimal primeOrigine = Optional.ofNullable(vsc.getPrimeOrigine()).orElse(ZERO); //items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
 
         BigDecimal primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd()); //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
 
@@ -71,6 +71,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         BigDecimal soldeRea = sousTotalCredit.compareTo(sousTotalDebit) >= 0 ? sousTotalCredit.subtract(sousTotalDebit) : ZERO;
         BigDecimal totalMouvement = sousTotalDebit.max(sousTotalCredit);
 
+        items.setPrimeOrigine(primeOrigine.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         items.setPrimeApresAjustement(primeApresAjustement.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         items.setSousTotalDebit(sousTotalDebit.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         items.setSousTotalCredit(sousTotalCredit.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));

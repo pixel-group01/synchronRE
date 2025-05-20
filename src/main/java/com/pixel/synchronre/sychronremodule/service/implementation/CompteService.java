@@ -231,7 +231,7 @@ public class CompteService implements IserviceCompte {
                     compteDetailsItems.setTrancheIdSelected(trancheIdSelected);
                     compteDetailsItems.setPeriodeId(periodeId);
                     compteDetailsItems.setPrimeOrigine(pmdOrigine);
-                    calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, 2);
+                    calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     compteDetailsDtoList = this.mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(compteDetailsDtoList);
                 }
