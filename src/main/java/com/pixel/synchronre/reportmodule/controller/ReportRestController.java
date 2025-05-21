@@ -249,6 +249,7 @@ public class ReportRestController
         return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 
+    //En pdf
     @GetMapping("/chiffre-affaires-par-periode-par-ced-rea")
     public Base64FileDto generateChiffreAffairesPeriodeCedRea(@RequestParam(required = false) Long exeCode,
                                                         @RequestParam(required = false) Long cedId,
@@ -259,6 +260,25 @@ public class ReportRestController
         byte[] reportBytes = jrService.generateChiffreAffairesPeriodeCedRea(exeCode,cedId,cesId,dateDebut,dateFin);
         String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
         return new Base64FileDto(base64Url, reportBytes);
+    }
+
+    //Export en CSV
+    // avec telechargement directe du fichier excel sans retourner un byte ou base 64 url
+    @GetMapping("/export-chiffre-affaires-par-periode-par-ced-rea")
+    public ResponseEntity<byte[]> exportChiffreAffairesPeriodeCedRea(@RequestParam(required = false) Long exeCode,
+                                                              @RequestParam(required = false) Long cedId,
+                                                              @RequestParam(required = false) Long cesId,
+                                                              @RequestParam(required = false) String dateDebut,
+                                                              @RequestParam(required = false) String dateFin) throws Exception
+    {
+        // Génération du rapport Excel
+        byte[] reportBytes = jrService.exportChiffreAffairesPeriodeCedRea(exeCode,cedId,cesId,dateDebut,dateFin);
+        // Définition des en-têtes pour forcer le téléchargement
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("Chiffres d'affaires par cedante et par reassureur.xlsx").build());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // Retourne le fichier en tant que réponse HTTP
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 
 }
