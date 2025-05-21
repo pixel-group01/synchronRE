@@ -236,7 +236,6 @@ public class CompteService implements IserviceCompte {
                     compteDetailsDtoList = this.mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(compteDetailsDtoList);
                 }
-
             }
         }
         trancheCompteDto.setCedIdSelected(cedIdSelected);
@@ -248,14 +247,13 @@ public class CompteService implements IserviceCompte {
         Long finalCompteCedanteId = compteCedanteId;
         if(compteCessionnaires != null && !compteCessionnaires.isEmpty())
         {
-            compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setCompteCedId(finalCompteCedanteId)).collect(Collectors.toList());
+            compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setCompteCedId(finalCompteCedanteId)).sorted(Comparator.comparing(CompteCessionnaireDto::getTaux, Comparator.nullsLast(BigDecimal::compareTo)).reversed()).collect(Collectors.toList());
             if(calculatedCompteDetailsItems != null)
             {
                 BigDecimal soldeCedante = calculatedCompteDetailsItems.getSoldeCedante() == null ? ZERO : calculatedCompteDetailsItems.getSoldeCedante();
                 BigDecimal soldeRea = calculatedCompteDetailsItems.getSoldeRea() == null ? ZERO : calculatedCompteDetailsItems.getSoldeRea();
                 BigDecimal solde = soldeCedante.max(soldeRea);
-                compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(solde.multiply(cc.getTaux()).divide(CENT, precision == 2 ? 0 : precision, RoundingMode.HALF_UP)))
-                        .sorted(Comparator.comparing(CompteCessionnaireDto::getTaux, Comparator.nullsLast(BigDecimal::compareTo)).reversed()).collect(Collectors.toList());
+                compteCessionnaires = compteCessionnaires.stream().peek(cc->cc.setPrime(solde.multiply(cc.getTaux()).divide(CENT, precision == 2 ? 0 : precision, RoundingMode.HALF_UP))).collect(Collectors.toList());
                 compteCessionnaires.add(new CompteCessionnaireDto("TOTAL", CENT, solde));
             }
             trancheCompteDto.setCompteCessionnaires(compteCessionnaires);
@@ -317,7 +315,7 @@ public class CompteService implements IserviceCompte {
         CompteDetailDto sousTotalCreditCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalCreditType.getName(), ZERO, calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
 
         Type sousTotalType = typeRepo.findByUniqueCode("SOUS_TOTAL").orElseThrow(()->new AppException("Type introuvable : SOUS_TOTAL"));
-        CompteDetailDto sousTotalCompteDetails = new CompteDetailDto(sousTotalCreditType.getTypeId(), sousTotalType.getName(), calculatedCompteDetailsItems.getSousTotalDebit(), calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalCreditType.getUniqueCode(), sousTotalCreditType.getTypeOrdre(), sousTotalCreditType.isDebitDisabled(), sousTotalCreditType.isCreditDisabled());
+        CompteDetailDto sousTotalCompteDetails = new CompteDetailDto(sousTotalType.getTypeId(), sousTotalType.getName(), calculatedCompteDetailsItems.getSousTotalDebit(), calculatedCompteDetailsItems.getSousTotalCredit(), sousTotalType.getUniqueCode(), sousTotalType.getTypeOrdre(), sousTotalType.isDebitDisabled(), sousTotalType.isCreditDisabled());
 
         Type soldCedType = typeRepo.findByUniqueCode("SOLD_CED").orElseThrow(()->new AppException("Type introuvable : SOLD_CED"));
         CompteDetailDto soldeCedanteCompteDetails = new CompteDetailDto(soldCedType.getTypeId(), soldCedType.getName(), ZERO, calculatedCompteDetailsItems.getSoldeCedante(), soldCedType.getUniqueCode(), soldCedType.getTypeOrdre(), soldCedType.isDebitDisabled(), soldCedType.isCreditDisabled());
