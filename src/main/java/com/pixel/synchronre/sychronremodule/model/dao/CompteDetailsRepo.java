@@ -28,9 +28,10 @@ public interface CompteDetailsRepo extends JpaRepository<CompteDetails, Long>
     """)
     List<CompteDetailDto> findByTrancheIdAndCedIdAndPeriodeId(Long trancheId, Long cedIdSelected, Long periodeId);
 
+
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(c.compteDetId, t.name, c.debit, c.credit, t.typeId, t.uniqueCode, t.typeOrdre, t.debitDisabled, t.creditDisabled)
-         from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1 
+         from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1 and t.uniqueCode not in ("SOLD_REA", "SOUS_TOTAL_CREDIT", "SOLD_CED", "SOUS_TOTAL_DEBIT")
     """)
     List<CompteDetailDto> findByCompteCedI(Long compteCedId);
 }
