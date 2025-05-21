@@ -221,7 +221,7 @@ public class ReportRestController
     }
 
 
-
+   //En PDF
     @GetMapping("/situation-note-credit-par-cedante-reassureur")
     public Base64FileDto generateSituationNoteCredit(@RequestParam(required = false) Long exeCode,
                                                         @RequestParam(required = false) Long cedId,
@@ -230,6 +230,23 @@ public class ReportRestController
         byte[] reportBytes = jrService.generateSituationNoteCredit(exeCode,cedId,cesId);
         String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
         return new Base64FileDto(base64Url, reportBytes);
+    }
+
+    //Export en CSV
+    // avec telechargement directe du fichier excel sans retourner un byte ou base 64 url
+    @GetMapping("/export-situation-note-credit-par-cedante-reassureur")
+    public ResponseEntity<byte[]> exportSituationNoteCredit(@RequestParam(required = false) Long exeCode,
+                                                     @RequestParam(required = false) Long cedId,
+                                                     @RequestParam(required = false) Long cesId) throws Exception
+    {
+        // Génération du rapport Excel
+        byte[] reportBytes = jrService.exportSituationNoteCredit(exeCode,cedId,cesId);
+        // Définition des en-têtes pour forcer le téléchargement
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("Situation des notes de credits par cedante et par reassureur.xlsx").build());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // Retourne le fichier en tant que réponse HTTP
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 
     @GetMapping("/chiffre-affaires-par-periode-par-ced-rea")

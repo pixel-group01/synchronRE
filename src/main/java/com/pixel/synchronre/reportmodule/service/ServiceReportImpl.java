@@ -428,4 +428,14 @@ public class ServiceReportImpl implements IServiceReport
         return this.generateReportExcel(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
     }
 
+    @Override
+    public byte[] exportSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("param_image", this.getImagesPath());
+        return this.generateReportExcel(jrConfig.situationNoteCreditCedRea, params, new ArrayList<>(), null);
+    }
+
 }
