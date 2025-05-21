@@ -53,11 +53,7 @@ public class CompteService implements IserviceCompte {
             tc.setCedantes(liteCedantes);
             List<CompteDetailDto> compteDetails = periodeId == null ? cdRepo.getDetailComptes() : cdRepo.findByTrancheIdAndCedIdAndPeriodeId(tc.getTrancheId(), tc.getCedIdSelected(), periodeId);
             //List<CompteDetailDto> compteDetailsDto = cdRepo.findByTrancheIdAndCedIdAndPeriodeId(tc.getTrancheId(), tc.getCedIdSelected(), periodeId);
-            List<String> notStartingCompteDetails = Arrays.asList("SOLD_REA", "SOUS_TOTAL_CREDIT", "SOLD_CED", "SOUS_TOTAL_DEBIT");
-            if(compteDetails != null)
-            {
-                compteDetails = compteDetails.stream().filter(cd->!notStartingCompteDetails.contains(cd.getUniqueCode())).collect(Collectors.toList());
-            }
+
             BigDecimal pmdOrigine = vscRepo.getPrimeOrigine(tc.getTrancheId(), tc.getCedIdSelected(), periodeId);
 
             if(pmdOrigine != null && pmdOrigine.compareTo(ZERO) != 0)
