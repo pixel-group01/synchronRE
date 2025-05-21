@@ -368,6 +368,24 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
+    public byte[] exportSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception
+    {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+        return this.generateReportExcel(jrConfig.situationFinanciereParCedante, params, new ArrayList<>(), null);
+    }
+
+
+    @Override
     public byte[] generateSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("exe_code", exeCode);
