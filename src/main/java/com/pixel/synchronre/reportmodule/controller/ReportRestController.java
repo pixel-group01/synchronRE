@@ -149,7 +149,7 @@ public class ReportRestController
         return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 
-
+    //Telechargement en PDF
     @GetMapping("/situation-note-debit-par-cedante-reassureur")
     public Base64FileDto generateSituationFinanciereCedRea(@RequestParam(required = false) Long exeCode,
                                                            @RequestParam(required = false) Long cedId,
@@ -165,6 +165,28 @@ public class ReportRestController
         byte[] reportBytes = jrService.generateSituationFinanciereCedRea(exeCode,cedId,cesId,statutEnvoie,statutEncaissement);
         String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
         return new Base64FileDto(base64Url, reportBytes);
+    }
+
+    //Export en CSV
+    // avec telechargement directe du fichier excel sans retourner un byte ou base 64 url
+    @GetMapping("/export-situation-note-debit-par-cedante-reassureur")
+    public ResponseEntity<byte[]> exportSituationFinanciereCedRea(@RequestParam(required = false) Long exeCode,
+                                                                  @RequestParam(required = false) Long cedId,
+                                                                  @RequestParam(required = false) Long cesId,
+                                                                  @RequestParam(required = false) String statutEnvoie,
+                                                                  @RequestParam(required = false) String statutEncaissement) throws Exception {
+        statutEnvoie = stripAccents(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+        statutEncaissement = stripAccents(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        // Génération du rapport Excel
+        byte[] reportBytes = jrService.exportSituationFinanciereCedRea(exeCode,cedId,cesId,statutEnvoie,statutEncaissement);
+        // Définition des en-têtes pour forcer le téléchargement
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("situation_cedante_reassureur.xlsx").build());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        // Retourne le fichier en tant que réponse HTTP
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
 
     @GetMapping("/situation-note-debit-par-cedante")

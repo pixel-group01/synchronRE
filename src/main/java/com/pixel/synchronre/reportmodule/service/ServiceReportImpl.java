@@ -92,6 +92,28 @@ public class ServiceReportImpl implements IServiceReport
         return this.exportReportToExcel(jasperPrint);
     }
 
+    @Override
+    public byte[] exportReportToExcels(JasperPrint jasperPrint) throws JRException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setDetectCellType(true);
+        configuration.setOnePagePerSheet(false); // ⚠️ très important pour éviter l'entête à chaque page
+        configuration.setRemoveEmptySpaceBetweenRows(true);
+        configuration.setWhitePageBackground(false);
+        configuration.setCollapseRowSpan(true);
+        configuration.setIgnoreGraphics(false);
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
     private JasperPrint generateJasperPrint(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
         parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
@@ -368,4 +390,24 @@ public class ServiceReportImpl implements IServiceReport
         byte[] reportBytes = this.generateReport(jrConfig.chiffreAffairesPeriodeCedRea, params, new ArrayList<>(), null);
         return reportBytes;
     }
+
+    @Override
+    public byte[] exportSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+       // byte[] reportBytes = this.generateReportExcel(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
+       // return reportBytes;
+        return this.generateReportExcel(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
+    }
+
 }
