@@ -65,10 +65,6 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         //VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
         VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
 
-
-        BigDecimal assiettePrimeExercice = vsc.getAssiettePrimeExercice();
-        BigDecimal trancheTauxPrime = vsc.getTrancheTauxPrime();
-
         BigDecimal primeOrigine = Optional.ofNullable(vsc.getPrimeOrigine()).orElse(ZERO); //items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
 
         BigDecimal primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd()); //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
