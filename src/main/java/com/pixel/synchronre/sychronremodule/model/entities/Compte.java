@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
+@Table(name = "Compte", uniqueConstraints = {@UniqueConstraint(columnNames = {"tranche_id", "periode_id"})})
 public class Compte extends HistoDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

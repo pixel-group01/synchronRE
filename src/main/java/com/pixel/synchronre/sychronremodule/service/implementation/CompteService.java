@@ -105,7 +105,7 @@ public class CompteService implements IserviceCompte {
         List<CompteCessionnaireDto> compteCessionnaires = trancheCompteDto.getCompteCessionnaires();
         if(compteCessionnaires != null && !compteCessionnaires.isEmpty())
         {
-            compteCessionnaires.stream().peek(cc->cc.setCompteCedId(compteCedanteId)).map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
+            compteCessionnaires.stream().filter(cc->!cc.getCesNom().equals("TOTAL")).peek(cc->cc.setCompteCedId(compteCedanteId)).map(cc->this.saveCompteCessionnaire(cc)).collect(Collectors.toList());
         }
         return compteTraiteDto;
     }
@@ -115,10 +115,11 @@ public class CompteService implements IserviceCompte {
         Long compteCedId = dto.getCompteCedId();
         Long cesId = dto.getCesId();
         CompteCessionnaire compteCessionnaire = compteCesRepo.findByCompteCedIdAndCesId(dto.getCompteCedId(), dto.getCesId());
-        BigDecimal primeCes = compteCalculService.calculatePrimeCessionnaireOnCompte(compteCedId, cesId);
         compteCessionnaire = compteCessionnaire == null ?
-                new CompteCessionnaire(dto.getTaux(), primeCes, new CompteCedante(compteCedId), new Cessionnaire(cesId)) :
+                new CompteCessionnaire(dto.getTaux(), dto.getPrime(), new CompteCedante(compteCedId), new Cessionnaire(cesId)) :
                 compteCessionnaire;
+        compteCessionnaire.setTaux(dto.getTaux());
+        compteCessionnaire.setPrime(dto.getPrime());
 
         compteCessionnaire = compteCesRepo.save(compteCessionnaire);
         return compteCessionnaire;

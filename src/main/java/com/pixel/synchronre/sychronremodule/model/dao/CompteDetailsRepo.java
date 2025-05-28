@@ -4,7 +4,9 @@ import com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto;
 import com.pixel.synchronre.sychronremodule.model.entities.CompteCedante;
 import com.pixel.synchronre.sychronremodule.model.entities.CompteDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,4 +36,13 @@ public interface CompteDetailsRepo extends JpaRepository<CompteDetails, Long>
          from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1
     """)
     List<CompteDetailDto> findByCompteCedI(Long compteCedId);
+
+    @Modifying
+    @Query("""
+        delete from CompteDetails cd where cd.compteCedante.compteCedId = ?1 and cd.typeCode = ?2
+    """)
+    void deleteByCompteCedanteIdAndUniqueCode(Long compteCedanteId, String uniqueCode);
+
+    @Query("select (count(cd)>0) from CompteDetails cd where cd.compteCedante.compteCedId = ?1 and cd.typeCode = ?2")
+    boolean existsByCompteCedIdAndTypeCode(Long compteCedanteId, String uniqueCode);
 }

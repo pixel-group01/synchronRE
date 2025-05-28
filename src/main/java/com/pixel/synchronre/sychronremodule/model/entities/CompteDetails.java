@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
+@Table(name = "Compte_Details", uniqueConstraints = @UniqueConstraint(columnNames = {"type_id", "compte_ced_id"}))
 public class CompteDetails extends HistoDetails
 {
     @Id

@@ -37,6 +37,14 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
     public CompteDetails saveCompteDetails(CompteDetailDto dto, Long compteCedanteId)
     {
         CompteDetails compteDetails = compteDetailsRepo.findByCompteCedIdAndtypeId(compteCedanteId, dto.getTypeId());
+        if(dto.getUniqueCode().equals("SOLD_CED") && compteDetailsRepo.existsByCompteCedIdAndTypeCode(compteCedanteId, "SOLD_REA"))
+        {
+            compteDetailsRepo.deleteByCompteCedanteIdAndUniqueCode(compteCedanteId, "SOLD_REA");
+        }
+        if(dto.getUniqueCode().equals("SOLD_REA") && compteDetailsRepo.existsByCompteCedIdAndTypeCode(compteCedanteId, "SOLD_CED"))
+        {
+            compteDetailsRepo.deleteByCompteCedanteIdAndUniqueCode(compteCedanteId, "SOLD_CED");
+        }
         compteDetails = compteDetails == null ? new CompteDetails(new CompteCedante(compteCedanteId)) : compteDetails;
         compteDetails.setDebit(dto.getDebit());
         compteDetails.setCredit(dto.getCredit());

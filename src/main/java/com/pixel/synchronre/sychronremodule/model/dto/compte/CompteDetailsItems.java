@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 public class CompteDetailsItems
 {
+    private Long compteDetailsId;
     private Long compteCedId;
     private Long trancheIdSelected;
     private Long periodeId;
