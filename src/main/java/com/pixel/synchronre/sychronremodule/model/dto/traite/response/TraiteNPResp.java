@@ -29,6 +29,7 @@ public class TraiteNPResp
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private BigDecimal traiTauxAbattement;
+    private BigDecimal traiInteretDepotLib;
     private Long exeCode;
     private String traiSourceRef;
     private String traiSourceLibelle;

@@ -49,6 +49,7 @@ public class UpdateTraiteNPReq
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private BigDecimal traiTauxAbattement;
+    private BigDecimal traiInteretDepotLib;
     private String traiSourceRef;
     @ExistingNatCode
     private String natCode;
