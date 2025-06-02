@@ -28,6 +28,7 @@ public class Tranche
     private BigDecimal tranchePriorite;
     private BigDecimal tranchePorte;
     private BigDecimal trancheTauxPrime;
+    private int trancheNumero;
     @ManyToOne @JoinColumn(name = "risque_couvert_ID")
     private RisqueCouvert risqueCouvert;
 

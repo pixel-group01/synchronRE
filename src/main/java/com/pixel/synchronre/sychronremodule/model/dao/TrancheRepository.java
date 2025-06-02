@@ -16,7 +16,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
+    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -28,7 +28,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -58,7 +58,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, r.risqueId, r.description,
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
     c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
     left join t.risqueCouvert r 
@@ -73,4 +73,10 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("select tr.trancheTauxPrime from Tranche tr where tr.trancheId = ?1")
     BigDecimal getTrancheTauxPrime(Long tranchepId);
+
+    @Query("select (count(tr)>0) from Tranche tr where tr.traiteNonProportionnel.traiteNpId =?1 and tr.trancheNumero = ?2")
+    boolean existsByTnpIdAndNumero(Long traiteNpId, int trancheNumero);
+
+    @Query("select( max(tr.trancheNumero) + 1) from Tranche tr where tr.traiteNonProportionnel.traiteNpId =?1 ")
+    int getNextTrancheNum(Long traiteNpId);
 }

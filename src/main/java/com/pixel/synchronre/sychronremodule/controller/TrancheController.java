@@ -49,4 +49,10 @@ public class TrancheController
     {
         return trancheService.getTrancheList(traiteNpId);
     }
+
+    @GetMapping(path = "/next-num")
+    String getNextTrancheNum(@PathVariable Long traiteNpId)
+    {
+        return "Tranche " + trancheService.getNextTrancheNum(traiteNpId);
+    }
 }
