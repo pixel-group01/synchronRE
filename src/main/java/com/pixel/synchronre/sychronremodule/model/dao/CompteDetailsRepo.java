@@ -33,7 +33,7 @@ public interface CompteDetailsRepo extends JpaRepository<CompteDetails, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(c.compteDetId, t.name, c.debit, c.credit, t.typeId, t.uniqueCode, t.typeOrdre, t.debitDisabled, t.creditDisabled)
-         from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1
+         from CompteDetails c join c.typeCompteDet t where c.compteCedante.compteCedId = ?1 order by t.typeOrdre
     """)
     List<CompteDetailDto> findByCompteCedI(Long compteCedId);
 

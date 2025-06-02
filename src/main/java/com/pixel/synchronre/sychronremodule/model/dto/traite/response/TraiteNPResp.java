@@ -66,7 +66,7 @@ public class TraiteNPResp
                         LocalDate traiDateEffet, LocalDate traiDateEcheance,
                         BigDecimal traiCoursDevise, PERIODICITE traiPeriodicite,
                         Long traiDelaiEnvoi, Long traiDelaiConfirmation,Long traiDelaiPaiement,
-                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement,
+                        BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur,BigDecimal traiTauxAbattement,BigDecimal traiInteretDepotLib,
                         BigDecimal traiAssiettePrime, BigDecimal traiPmd, BigDecimal traiPmdCourtier,
                         BigDecimal traiPmdCourtierPlaceur, BigDecimal traiPmdNette,
                         Long exeCode, String traiSourceRef, String traiSourceLibelle,
@@ -91,6 +91,8 @@ public class TraiteNPResp
         this.traiTauxCourtier = traiTauxCourtier;
         this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
         this.traiTauxAbattement=traiTauxAbattement;
+        this.traiInteretDepotLib = traiInteretDepotLib;
+        this.traiDelaiPaiement=traiDelaiPaiement;
         this.traiAssiettePrime = traiAssiettePrime;
         this.traiPmd = traiPmd;
         this.traiPmdCourtier =traiPmdCourtier;
