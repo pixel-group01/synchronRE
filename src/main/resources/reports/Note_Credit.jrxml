@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-12-26T17:50:15 -->
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Credit" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b258cd63-2ea2-4241-8959-d0231463b3ee">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-prod"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="target\classes\reports\DataAdapter.xml"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#FFFFFF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -33,7 +32,11 @@
 	</style>
 	<subDataset name="placement" uuid="4c798617-bb2f-4489-9620-40ae84627d3a">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="src\main\resources\reports\DataAdapter.xml"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="649"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="341"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="198"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="797"/>
 		<parameter name="aff_id" class="java.lang.Long">
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
@@ -41,85 +44,154 @@
 			<parameterDescription><![CDATA[]]></parameterDescription>
 		</parameter>
 		<queryString language="SQL">
-			<![CDATA[SELECT repartition.aff_id,
-       repartition.rep_capital,
-       regexp_replace(to_char(repartition.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
-       repartition.rep_taux,
-       ROUND(repartition.rep_taux, 2) AS taux,
-       repartition.rep_sous_commission,
-       ROUND(repartition.rep_sous_commission, 2) AS taux_sous_commission,
-       repartition.rep_taux_com_ced,
-       ROUND(repartition.rep_taux_com_ced, 2) AS taux_com_cedante,
-       repartition.rep_taux_com_court,
-       ROUND(repartition.rep_taux_com_court, 2) AS taux_com_courtage,
-       repartition.typ_id,
-       repartition.cessionnaire_id,
-       repartition.rep_taux * affaire.fac_prime / 100::numeric AS prime_cedee,
-       regexp_replace(to_char(repartition.rep_taux * affaire.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
-       repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
-       regexp_replace(to_char(repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_cedante1 ,
-       repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
-       regexp_replace(to_char(repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_courtage1 ,
-       (repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
-       regexp_replace(to_char((repartition.rep_taux * affaire.fac_prime / 100::numeric) - (repartition.rep_taux_com_ced * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric) - (repartition.rep_taux_com_court * (repartition.rep_taux * affaire.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1 ,
-       cessionnaire.ces_nom,
-       affaire.aff_activite,
-       affaire.aff_assure,
-       affaire.aff_capital_initial,
-       affaire.aff_code,
-       affaire.aff_date_echeance,
-       affaire.aff_date_effet,
-       affaire.fac_prime,
-       affaire.fac_smp_lci,
-       cedante.ced_nom_filiale,
-       couverture.cou_libelle
-FROM affaire,
-     cedante,
-     couverture,
-     repartition,
-     cessionnaire,
-     type
-WHERE repartition.cessionnaire_id = cessionnaire.ces_id
-  AND repartition.aff_id = affaire.aff_id
-  AND repartition.typ_id = type.type_id
-  AND affaire.couverture_id = couverture.cou_id
-  AND affaire.cedente_id = cedante.ced_id
-  AND type.unique_code in ('REP_PLA')
-  AND repartition.aff_id = $P{aff_id}
-  AND  repartition.cessionnaire_id =$P{ces_id}]]>
+			<![CDATA[SELECT pla.aff_id,
+       pla.rep_capital,
+       regexp_replace(to_char(pla.rep_capital::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS rep_capital1 ,
+       pla.rep_taux,
+       ROUND(pla.rep_taux, 2) AS taux,
+       pla.rep_sous_commission,
+       ROUND(pla.rep_sous_commission, 2) AS taux_sous_commission,
+       pla.rep_taux_com_ced,
+       ROUND(pla.rep_taux_com_ced, 2) AS taux_com_cedante,
+       pla.rep_taux_com_court,
+       ROUND(pla.rep_taux_com_court, 2) AS taux_com_courtage,
+       pla.cessionnaire_id,
+       pla.rep_taux * aff.fac_prime / 100::numeric AS prime_cedee,
+       regexp_replace(to_char(pla.rep_taux * aff.fac_prime / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cedee1 ,
+       pla.rep_taux_com_ced * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric AS com_cedante,
+       regexp_replace(to_char(pla.rep_taux_com_ced * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_cedante1 ,
+       pla.rep_taux_com_court * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric AS com_courtage,
+       regexp_replace(to_char(pla.rep_taux_com_court * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS com_courtage1 ,
+       (pla.rep_taux * aff.fac_prime / 100::numeric) - (pla.rep_taux_com_ced * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric) - (pla.rep_taux_com_court * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric) AS prime_nette_cedee,
+       regexp_replace(to_char((pla.rep_taux * aff.fac_prime / 100::numeric) - (pla.rep_taux_com_ced * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric) - (pla.rep_taux_com_court * (pla.rep_taux * aff.fac_prime / 100::numeric) / 100::numeric)::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_nette_cedee1 ,
+       ces.ces_nom,
+       aff.aff_activite,
+       aff.aff_assure,
+       aff.aff_capital_initial,
+       aff.aff_code,
+       aff.aff_date_echeance,
+       aff.aff_date_effet,
+       aff.fac_prime,
+       aff.fac_smp_lci,
+       ced.ced_nom_filiale,
+       couv.cou_libelle
+FROM affaire aff join cedante ced on aff.cedente_id = ced.ced_id
+     join couverture couv on aff.couverture_id = couv.cou_id
+     join v_placement pla on aff.aff_id = pla.aff_id
+     join cessionnaire ces on pla.cessionnaire_id = ces.ces_id
+WHERE pla.aff_id = $P{aff_id} AND  pla.cessionnaire_id =$P{ces_id}]]>
 		</queryString>
-		<field name="aff_id" class="java.lang.Long"/>
-		<field name="rep_capital" class="java.math.BigDecimal"/>
-		<field name="rep_capital1" class="java.lang.String"/>
-		<field name="rep_taux" class="java.math.BigDecimal"/>
-		<field name="taux" class="java.math.BigDecimal"/>
-		<field name="rep_sous_commission" class="java.math.BigDecimal"/>
-		<field name="taux_sous_commission" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_ced" class="java.math.BigDecimal"/>
-		<field name="taux_com_cedante" class="java.math.BigDecimal"/>
-		<field name="rep_taux_com_court" class="java.math.BigDecimal"/>
-		<field name="taux_com_courtage" class="java.math.BigDecimal"/>
-		<field name="typ_id" class="java.lang.Long"/>
-		<field name="cessionnaire_id" class="java.lang.Long"/>
-		<field name="prime_cedee" class="java.math.BigDecimal"/>
-		<field name="prime_cedee1" class="java.lang.String"/>
-		<field name="com_cedante" class="java.math.BigDecimal"/>
-		<field name="com_cedante1" class="java.lang.String"/>
-		<field name="com_courtage" class="java.math.BigDecimal"/>
-		<field name="com_courtage1" class="java.lang.String"/>
-		<field name="prime_nette_cedee" class="java.math.BigDecimal"/>
-		<field name="prime_nette_cedee1" class="java.lang.String"/>
-		<field name="ces_nom" class="java.lang.String"/>
-		<field name="aff_activite" class="java.lang.String"/>
-		<field name="aff_assure" class="java.lang.String"/>
-		<field name="aff_capital_initial" class="java.math.BigDecimal"/>
-		<field name="aff_code" class="java.lang.String"/>
-		<field name="aff_date_echeance" class="java.sql.Date"/>
-		<field name="aff_date_effet" class="java.sql.Date"/>
-		<field name="fac_prime" class="java.math.BigDecimal"/>
-		<field name="fac_smp_lci" class="java.math.BigDecimal"/>
-		<field name="ced_nom_filiale" class="java.lang.String"/>
-		<field name="cou_libelle" class="java.lang.String"/>
+		<field name="aff_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="aff_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="rep_capital" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="rep_capital"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="rep_capital1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="rep_capital1"/>
+		</field>
+		<field name="rep_taux" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="rep_taux"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="taux" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="taux"/>
+		</field>
+		<field name="rep_sous_commission" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="rep_sous_commission"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="taux_sous_commission" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="taux_sous_commission"/>
+		</field>
+		<field name="rep_taux_com_ced" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="rep_taux_com_ced"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="taux_com_cedante" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="taux_com_cedante"/>
+		</field>
+		<field name="rep_taux_com_court" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="rep_taux_com_court"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="taux_com_courtage" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="taux_com_courtage"/>
+		</field>
+		<field name="cessionnaire_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="cessionnaire_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+		</field>
+		<field name="prime_cedee" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="prime_cedee"/>
+		</field>
+		<field name="prime_cedee1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="prime_cedee1"/>
+		</field>
+		<field name="com_cedante" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="com_cedante"/>
+		</field>
+		<field name="com_cedante1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="com_cedante1"/>
+		</field>
+		<field name="com_courtage" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="com_courtage"/>
+		</field>
+		<field name="com_courtage1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="com_courtage1"/>
+		</field>
+		<field name="prime_nette_cedee" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="prime_nette_cedee"/>
+		</field>
+		<field name="prime_nette_cedee1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="prime_nette_cedee1"/>
+		</field>
+		<field name="ces_nom" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ces_nom"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cessionnaire"/>
+		</field>
+		<field name="aff_activite" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aff_activite"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="aff_assure" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aff_assure"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="aff_capital_initial" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="aff_capital_initial"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="aff_code" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="aff_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="aff_date_echeance" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.label" value="aff_date_echeance"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="aff_date_effet" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.label" value="aff_date_effet"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="fac_prime" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="fac_prime"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="fac_smp_lci" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="fac_smp_lci"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+		</field>
+		<field name="ced_nom_filiale" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ced_nom_filiale"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="cedante"/>
+		</field>
+		<field name="cou_libelle" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="cou_libelle"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="couverture"/>
+		</field>
 	</subDataset>
 	<parameter name="param_image" class="java.lang.String">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -136,62 +208,112 @@ WHERE repartition.cessionnaire_id = cessionnaire.ces_id
 	<parameter name="qrCode" class="java.io.ByteArrayInputStream"/>
 	<parameter name="param_visible" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT distinct affaire.aff_id,
-                affaire.aff_activite,
-                affaire.aff_assure,
-                affaire.fac_numero_police,
-                affaire.aff_capital_initial,
-                regexp_replace(to_char(affaire.aff_capital_initial::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS aff_capital_initial1 ,
-                affaire.aff_code,
-                affaire.aff_date_echeance,
-                affaire.aff_date_effet,
-                affaire.fac_prime,
-                regexp_replace(to_char(affaire.fac_prime::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_prime1 ,
-                affaire.fac_smp_lci,
-                regexp_replace(to_char(affaire.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
-                affaire.cedente_id,
-                cedante.ced_nom_filiale,
-                couverture.cou_libelle,
-                branche.bran_libelle,
-                repartition.cessionnaire_id,
-                bordereau.bord_num,
-                cessionnaire.ces_nom
-FROM affaire,
-     cedante,
-     couverture,
-     branche,
-     repartition,
-     bordereau,
-     cessionnaire
-WHERE affaire.couverture_id = couverture.cou_id
-  AND affaire.cedente_id = cedante.ced_id
-  AND repartition.cessionnaire_id = cessionnaire.ces_id
-  AND couverture.bran_id = branche.bran_id
-  AND affaire.aff_id = repartition.aff_id
-  AND bordereau.rep_id = repartition.rep_id
-  AND affaire.aff_id = $P{aff_id}
-  AND repartition.cessionnaire_id = $P{ces_id}]]>
+		<![CDATA[SELECT distinct aff.aff_id,
+                aff.aff_activite,
+                aff.aff_assure,
+                aff.fac_numero_police,
+                aff.aff_capital_initial,
+                regexp_replace(to_char(aff.aff_capital_initial::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS aff_capital_initial1 ,
+                aff.aff_code,
+                aff.aff_date_echeance,
+                aff.aff_date_effet,
+                aff.fac_prime,
+                regexp_replace(to_char(aff.fac_prime::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_prime1 ,
+                aff.fac_smp_lci,
+                regexp_replace(to_char(aff.fac_smp_lci::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS fac_smp_lci1 ,
+                aff.cedente_id,
+                ced.ced_nom_filiale,
+                couv.cou_libelle,
+                bran.bran_libelle,
+                pla.cessionnaire_id,
+                bor.bord_num,
+                ces.ces_nom
+FROM affaire aff
+    join cedante ced on aff.cedente_id = ced.ced_id
+    join couverture couv on aff.couverture_id = couv.cou_id
+    join branche bran on couv.bran_id = bran.bran_id
+    join v_placement pla on aff.aff_id = pla.aff_id
+    join bordereau bor on bor.rep_id = pla.rep_id
+    join cessionnaire ces on pla.cessionnaire_id = ces.ces_id
+WHERE aff.aff_id = $P{aff_id} AND pla.cessionnaire_id = $P{ces_id}]]>
 	</queryString>
-	<field name="aff_id" class="java.lang.Long"/>
-	<field name="aff_activite" class="java.lang.String"/>
-	<field name="aff_assure" class="java.lang.String"/>
-	<field name="fac_numero_police" class="java.lang.String"/>
-	<field name="aff_capital_initial" class="java.math.BigDecimal"/>
-	<field name="aff_capital_initial1" class="java.lang.String"/>
-	<field name="aff_code" class="java.lang.String"/>
-	<field name="aff_date_echeance" class="java.sql.Date"/>
-	<field name="aff_date_effet" class="java.sql.Date"/>
-	<field name="fac_prime" class="java.math.BigDecimal"/>
-	<field name="fac_prime1" class="java.lang.String"/>
-	<field name="fac_smp_lci" class="java.math.BigDecimal"/>
-	<field name="fac_smp_lci1" class="java.lang.String"/>
-	<field name="cedente_id" class="java.lang.Long"/>
-	<field name="ced_nom_filiale" class="java.lang.String"/>
-	<field name="cou_libelle" class="java.lang.String"/>
-	<field name="bran_libelle" class="java.lang.String"/>
-	<field name="cessionnaire_id" class="java.lang.Long"/>
-	<field name="bord_num" class="java.lang.String"/>
-	<field name="ces_nom" class="java.lang.String"/>
+	<field name="aff_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="aff_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_activite" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="aff_activite"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_assure" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="aff_assure"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="fac_numero_police" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="fac_numero_police"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_capital_initial" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="aff_capital_initial"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_capital_initial1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="aff_capital_initial1"/>
+	</field>
+	<field name="aff_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="aff_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_date_echeance" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="aff_date_echeance"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="aff_date_effet" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="aff_date_effet"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="fac_prime" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="fac_prime"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="fac_prime1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="fac_prime1"/>
+	</field>
+	<field name="fac_smp_lci" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="fac_smp_lci"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="fac_smp_lci1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="fac_smp_lci1"/>
+	</field>
+	<field name="cedente_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="cedente_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="affaire"/>
+	</field>
+	<field name="ced_nom_filiale" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ced_nom_filiale"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cedante"/>
+	</field>
+	<field name="cou_libelle" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="cou_libelle"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="couverture"/>
+	</field>
+	<field name="bran_libelle" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bran_libelle"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="branche"/>
+	</field>
+	<field name="cessionnaire_id" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="cessionnaire_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="v_placement"/>
+	</field>
+	<field name="bord_num" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="bordereau"/>
+	</field>
+	<field name="ces_nom" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ces_nom"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="cessionnaire"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -206,7 +328,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 		</band>
 	</title>
 	<detail>
-		<band height="660" splitType="Stretch">
+		<band height="646" splitType="Stretch">
 			<rectangle>
 				<reportElement x="0" y="32" width="554" height="33" backcolor="#DEDCDC" uuid="7e43f0d5-6454-4c47-8866-0fb63a0d98d0">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -730,7 +852,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</textElement>
 				<text><![CDATA[Le Département Réassurance]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="156" y="525" width="280" height="15" uuid="7577464c-c573-44a5-840b-1acaefb80a4a">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
