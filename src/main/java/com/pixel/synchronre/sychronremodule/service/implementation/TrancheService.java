@@ -77,7 +77,7 @@ public class TrancheService implements IServiceTranche
     public TrancheResp create(TrancheReq dto)
     {
         Tranche tranche = trancheMapper.mapToTranche(dto);
-        int trancheNumero = trancheRepo.getNextTrancheNum(dto.getTraiteNpId());
+        Long trancheNumero = trancheRepo.getNextTrancheNum(dto.getTraiteNpId());
         tranche.setTrancheNumero(trancheNumero);
         tranche = trancheRepo.save(tranche);
         logService.logg("Création d'une tranche", new Tranche(), tranche, "Tranche");
@@ -90,11 +90,11 @@ public class TrancheService implements IServiceTranche
     }
 
     @Override
-    public int getNextTrancheNum(Long traiteNpId)
+    public Long getNextTrancheNum(Long traiteNpId)
     {
         if(traiteNpId == null) throw new AppException("Veuillez fournir l'ID du traité");
         if(!tnpRepo.existsById(traiteNpId)) throw new AppException("Traité introuvable " + traiteNpId);
-        int trancheNumero = trancheRepo.getNextTrancheNum(traiteNpId);
+        Long trancheNumero = trancheRepo.getNextTrancheNum(traiteNpId);
         return trancheNumero;
     }
 

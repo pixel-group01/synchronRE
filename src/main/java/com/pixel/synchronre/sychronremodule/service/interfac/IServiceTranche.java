@@ -19,7 +19,7 @@ public interface IServiceTranche
     TrancheResp create(TrancheReq dto);
 
     @Transactional
-    int getNextTrancheNum(Long traiteNpId);
+    Long getNextTrancheNum(Long traiteNpId);
 
     TrancheResp update(TrancheReq dto);
 

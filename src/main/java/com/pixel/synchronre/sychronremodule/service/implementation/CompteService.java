@@ -160,11 +160,12 @@ public class CompteService implements IserviceCompte {
 
         List<CompteDetailDto> compteDetailsDtoList = trancheCompteDto.getCompteDetails();
         CompteDetailsItems calculatedCompteDetailsItems = null;
+        CompteDetailsItems compteDetailsItems = null;
         if(compteDetailsDtoList != null && !compteDetailsDtoList.isEmpty()) //Si des détails de compte ont été saisi
         {
             if(compte == null)
             {
-                CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedIdSelected, compteDetailsDtoList);
+                compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedIdSelected, compteDetailsDtoList);
                 calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                 List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                 trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
@@ -176,7 +177,7 @@ public class CompteService implements IserviceCompte {
                 CompteCedante compteCedante = compteCedanteRepo.findByCompteIdAndCedId(compteId, cedIdSelected);
                 if(compteCedante == null)
                 {
-                    CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedIdSelected, compteDetailsDtoList);
+                    compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedIdSelected, compteDetailsDtoList);
                     calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     trancheCompteDto.setCompteDetails(calculatedCompteDetailsDtoList);
@@ -184,7 +185,7 @@ public class CompteService implements IserviceCompte {
                 else
                 {
                     compteCedanteId = compteCedante.getCompteCedId();
-                    CompteDetailsItems compteDetailsItems = mapToCompteDetailsItems(compteCedanteId, compteDetailsDtoList);
+                    compteDetailsItems = mapToCompteDetailsItems(compteCedanteId, compteDetailsDtoList);
                     calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
                     List<CompteDetailDto> calculatedCompteDetailsDtoList = mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
                     List<CompteDetailDto> finalCompteDetailsDtoList = compteDetailsDtoList;
@@ -222,13 +223,18 @@ public class CompteService implements IserviceCompte {
                     trancheCompteDto.setCompteDetails(compteDetailsDtoList);
                 }
             }
+            compteDetailsItems = mapToCompteDetailsItems(trancheIdSelected, periodeId, cedIdSelected, compteDetailsDtoList);
+            calculatedCompteDetailsItems = compteDetailsService.calculateDetailsComptesItems(compteDetailsItems, precision);
+            compteDetailsDtoList = this.mapCompteDetailsItemsToCompteDetailsDtoList(calculatedCompteDetailsItems);
+            trancheCompteDto.setCompteDetails(compteDetailsDtoList);
+
             BigDecimal pmdOrigine = vscRepo.getPrimeOrigine(cedIdSelected, trancheIdSelected, periodeId);
             if(pmdOrigine != null && pmdOrigine.compareTo(ZERO) != 0 )
             {
                 CompteDetailDto primOrigCompteDetailDto = this.getCompteDetailsItem(compteDetailsDtoList, "PRIM_ORIG");
                 if(compteDetailsDtoList == null || compteDetailsDtoList.isEmpty() || primOrigCompteDetailDto == null || primOrigCompteDetailDto.getDebit() == null || primOrigCompteDetailDto.getDebit().compareTo(ZERO) == 0)
                 {
-                    CompteDetailsItems compteDetailsItems = new CompteDetailsItems();
+                    compteDetailsItems = new CompteDetailsItems();
                     compteDetailsItems.setCedIdSelected(cedIdSelected);
                     compteDetailsItems.setTrancheIdSelected(trancheIdSelected);
                     compteDetailsItems.setPeriodeId(periodeId);
