@@ -17,6 +17,7 @@ public class TrancheCompteDto
     private Long cedIdSelected;
     private List<CompteDetailDto> compteDetails;
     private List<CompteCessionnaireDto> compteCessionnaires;
+    private Long compteCedIdSelected;
 
     public TrancheCompteDto(Long trancheId, String trancheLibelle) {
         this.trancheId = trancheId;

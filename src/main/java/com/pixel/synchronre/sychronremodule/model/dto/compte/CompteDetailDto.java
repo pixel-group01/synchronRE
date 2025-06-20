@@ -19,6 +19,7 @@ public class CompteDetailDto
     private int order;
     private boolean debitDisabled;
     private boolean creditDisabled;
+    private Long compteCedId;
     public CompteDetailDto(Long typeId, String designation, String uniqueCode, int order, boolean debitDisabled, boolean creditDisabled)
     {
         this.typeId = typeId;
@@ -31,7 +32,7 @@ public class CompteDetailDto
         this.creditDisabled = creditDisabled;
     }
 
-    public CompteDetailDto(Long typeId, String designation, BigDecimal debit, BigDecimal credit, String uniqueCode, int order, boolean debitDisabled, boolean creditDisabled)
+    public CompteDetailDto(Long typeId, String designation, BigDecimal debit, BigDecimal credit, String uniqueCode, int order, boolean debitDisabled, boolean creditDisabled, Long compteCedId)
     {
         this.typeId = typeId;
         this.designation = designation;
@@ -41,5 +42,6 @@ public class CompteDetailDto
         this.order = order;
         this.debitDisabled = debitDisabled;
         this.creditDisabled = creditDisabled;
+        this.compteCedId = compteCedId;
     }
 }

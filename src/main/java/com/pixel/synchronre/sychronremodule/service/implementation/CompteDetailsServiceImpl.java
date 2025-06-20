@@ -82,6 +82,7 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
         items.setSoldeCedante(soldeCedante.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         items.setSoldeRea(soldeRea.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
         items.setTotalMouvement(totalMouvement.setScale(precision == 2 ? 0 : precision, RoundingMode.HALF_UP));
+        items.setCompteCedId(compteCedId);
         return items;
     }
 
