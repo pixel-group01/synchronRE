@@ -174,4 +174,13 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         tnp.updatedAt
 """)
     List<TraiteNPResp> getList(Long cedId, List<String> staCodes, Long exeCode);
+
+    @Query("""
+    select coalesce(tnp.traiInteretDepotLib, 0)
+    from Tranche t
+    join t.traiteNonProportionnel tnp 
+    where t.trancheId = ?1
+    """)
+    BigDecimal getIntereDepotLibByTrancheId(Long trancheId);
+
 }
