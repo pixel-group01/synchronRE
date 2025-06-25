@@ -14,6 +14,9 @@ public interface VStatCompteRepository extends JpaRepository<VStatCompte, Long>
     @Query("select vsc from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and (vsc.periodeId = ?3 or vsc.periodeId is null)")
     VStatCompte getStatsCompte(Long cedId, Long trancheId, Long periodeId);
 
+    @Query("select vsc from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2")
+    VStatCompte getStatsCompte(Long cedId, Long trancheId);
+
     @Query("select vsc.primeOrigine from VStatCompte  vsc where vsc.cedId = ?1 and vsc.trancheId = ?2 and (vsc.periodeId = ?3 or vsc.periodeId is null)")
     BigDecimal getPrimeOrigine(Long cedId, Long trancheId, Long periodeId);
 

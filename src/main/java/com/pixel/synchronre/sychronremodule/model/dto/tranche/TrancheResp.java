@@ -20,7 +20,7 @@ public class TrancheResp
     private BigDecimal tranchePriorite;
     private BigDecimal tranchePorte;
     private BigDecimal trancheTauxPrime;
-    private int trancheNumero;
+    private Long trancheNumero;
     private Long risqueId;
     private String risqueDescription;
     private Long couId;
@@ -31,7 +31,7 @@ public class TrancheResp
     private String traiNumero;
     private List<CategorieResp> categories;
 
-    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, int trancheNumero, Long risqueId, String risqueDescription, Long couId, String couLibelle, String couLibelleAbrege, Long traiteNpId, String traiReference, String traiNumero) {
+    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero, Long risqueId, String risqueDescription, Long couId, String couLibelle, String couLibelleAbrege, Long traiteNpId, String traiReference, String traiNumero) {
         this.trancheId = trancheId;
         this.trancheType = trancheType;
         this.trancheLibelle = trancheLibelle;
