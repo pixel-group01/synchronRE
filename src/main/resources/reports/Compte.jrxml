@@ -88,7 +88,7 @@
 	</style>
 	<subDataset name="Cessionnaires" uuid="a6ee8a2c-ffac-4d7e-aeda-2aa260f2643c">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-dev-ovh"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="610"/>
 		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="380"/>
 		<parameter name="trancheId" class="java.lang.Long">
@@ -130,15 +130,14 @@ and cces.ced_id = $P{cedenteId}]]>
 	</subDataset>
 	<subDataset name="Cedentes_bis" uuid="e51e5f0b-365f-49cd-8929-ae2f6304b129">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-dev-ovh"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
 		<parameter name="trancheId" class="java.lang.Long"/>
 		<parameter name="cedenteId" class="java.lang.Long"/>
 		<queryString language="SQL">
-			<![CDATA[select cd.tranche_id,cd.designation,cd.debit,cd.credit,cd.unique_code
+			<![CDATA[select cd.tranche_id,cd.designation,cd.debit,cd.credit,cd.unique_code,cd.debit_separateur, cd.credit_separateur
 from v_compte_details cd
 where cd.tranche_id=$P{trancheId}
-and cd.ced_id=$P{cedenteId}
-]]>
+and cd.ced_id=$P{cedenteId}]]>
 		</queryString>
 		<field name="tranche_id" class="java.lang.Long">
 			<property name="com.jaspersoft.studio.field.label" value="tranche_id"/>
@@ -148,16 +147,24 @@ and cd.ced_id=$P{cedenteId}
 			<property name="com.jaspersoft.studio.field.label" value="designation"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
 		</field>
-		<field name="debit" class="java.lang.String">
+		<field name="debit" class="java.math.BigDecimal">
 			<property name="com.jaspersoft.studio.field.label" value="debit"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
 		</field>
-		<field name="credit" class="java.lang.String">
+		<field name="credit" class="java.math.BigDecimal">
 			<property name="com.jaspersoft.studio.field.label" value="credit"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
 		</field>
 		<field name="unique_code" class="java.lang.String">
 			<property name="com.jaspersoft.studio.field.label" value="unique_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="debit_separateur" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="debit_separateur"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="credit_separateur" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="credit_separateur"/>
 			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
 		</field>
 	</subDataset>
@@ -575,7 +582,7 @@ and tr.tranche_id= $P{trancheId}]]>
 								</reportElement>
 								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{debit} == null ? "0" : $F{debit}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{debit_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -616,7 +623,7 @@ and tr.tranche_id= $P{trancheId}]]>
 								</reportElement>
 								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{credit} == null ? "0" : $F{credit}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{credit_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
