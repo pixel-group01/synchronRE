@@ -61,22 +61,28 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
 
         BigDecimal depoSapLibereSaisi = items.getDepotSapLib();
 
-        BigDecimal depotSapConstAnterieur = compteDetailsRepo.getDepotSapConstAnterieur(trancheId, periodeId, cedId);
+        BigDecimal depotSapConstAnterieurBd = compteDetailsRepo.getDepotSapConstAnterieur(trancheId, periodeId, cedId);
+        depotSapConstAnterieurBd = depotSapConstAnterieurBd == null ? ZERO : depotSapConstAnterieurBd;
+
         BigDecimal depotSapConstActuel = compteDetailsRepo.getDepotSapConstActuel(trancheId, periodeId, cedId);
-        BigDecimal depoSapLibereRecupereBd = depotSapConstActuel  == null || depotSapConstActuel.compareTo(ZERO) == 0 ? depotSapConstAnterieur : depotSapConstActuel;
+        depotSapConstActuel = depotSapConstActuel == null ? ZERO : depotSapConstActuel;
+        BigDecimal depoSapLibereRecupereBd = depotSapConstAnterieurBd.compareTo(ZERO) == 0 ? ZERO : depotSapConstAnterieurBd;
 
         BigDecimal depoSapLibere= depoSapLibereSaisi  == null || depoSapLibereSaisi.compareTo(ZERO) == 0 ? depoSapLibereRecupereBd : depoSapLibereSaisi;
         BigDecimal interetDepotLib = depoSapLibere.multiply(traiInteretDepotLib).divide(CENT, precision == 2 ? 0 : precision, RoundingMode.HALF_UP);
+
+
 
         Long compteCedId = items.getCompteCedId();
         StatCompteIds statCompteIds =compteCedId == null ? new StatCompteIds(items.getCedIdSelected(), items.getTrancheIdSelected(), items.getPeriodeId()) : ccRepo.getStatCompteIdsByCompteCedId(compteCedId);
 
         //VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
         VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
-
+        if(vsc == null) vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId());
         BigDecimal primeOrigine = Optional.ofNullable(vsc.getPrimeOrigine()).orElse(ZERO); //items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
 
         BigDecimal primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd()); //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
+        items.setDepotSapConst(depotSapConstActuel);
         items.setDepotSapLib(depoSapLibere);
         items.setInteretDepotLib(interetDepotLib);
 
