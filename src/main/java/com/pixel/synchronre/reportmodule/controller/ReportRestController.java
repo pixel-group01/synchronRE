@@ -126,7 +126,7 @@ public class ReportRestController
                                                 @RequestParam(required = false) Long periodeId
                                                 ) throws Exception
     {
-        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periodeId);
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periodeId, "PDF");
         String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
         return new Base64FileDto(base64Url, reportBytes);
     }
@@ -138,7 +138,7 @@ public class ReportRestController
                                                        @RequestParam(required = false) String periodicite,
                                                        @RequestParam(required = false) Long periodeId) throws Exception {
         // Génération du rapport Excel
-        byte[] reportBytes = jrService.generateCompteTraite(traitenpId, cedenteId, trancheId, periodicite, periodeId);
+        byte[] reportBytes = jrService.generateCompteTraite(traitenpId, cedenteId, trancheId, periodicite, periodeId, "XLSX");
 
         // Définition des en-têtes pour forcer le téléchargement
         HttpHeaders headers = new HttpHeaders();
