@@ -78,10 +78,17 @@ public class CompteDetailsServiceImpl implements ICompteDetailsService
 
         //VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
         VStatCompte vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId(), statCompteIds.getPeriodeId());
+        BigDecimal primeOrigine = ZERO;
+        BigDecimal primeApresAjustement = ZERO;
         if(vsc == null) vsc = vscRepo.getStatsCompte(statCompteIds.getCedId(), statCompteIds.getTrancheId());
-        BigDecimal primeOrigine = Optional.ofNullable(vsc.getPrimeOrigine()).orElse(ZERO); //items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
+        if(vsc != null)
+        {
+            primeOrigine = Optional.ofNullable(vsc.getPrimeOrigine()).orElse(ZERO);
+            primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd());
+        }
+         //items.getPrimeOrigine() == null ? ZERO : items.getPrimeOrigine();
 
-        BigDecimal primeApresAjustement = primeOrigine.add(vsc.getRepartitionSurplusPmd()); //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
+        ; //assiettePrimeExercice.multiply(trancheTauxPrime).divide(CENT, precision, RoundingMode.HALF_UP);
         items.setDepotSapConst(depotSapConstActuel);
         items.setDepotSapLib(depoSapLibere);
         items.setInteretDepotLib(interetDepotLib);
