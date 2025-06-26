@@ -31,7 +31,7 @@ public interface CompteTraiteRepo extends JpaRepository<Compte, Long>
     @Query("""
             select new com.pixel.synchronre.sychronremodule.model.dto.compte.TrancheCompteDto(tr.trancheId,tr.trancheLibelle)
             from Tranche tr 
-            where tr.traiteNonProportionnel.traiteNpId = ?1
+            where tr.traiteNonProportionnel.traiteNpId = ?1 order by tr.trancheNumero
             """)
     List<TrancheCompteDto> getCompteTranches(Long traitNpId);
     @Query("""
