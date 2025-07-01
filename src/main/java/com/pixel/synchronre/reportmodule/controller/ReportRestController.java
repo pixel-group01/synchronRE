@@ -119,7 +119,7 @@ public class ReportRestController
     }
 
     @GetMapping("/compte-traites")
-    public Base64FileDto generateCompteTraite(@RequestParam(required = false) Long traitenpId,
+    public ResponseEntity<byte[]> generateCompteTraite(@RequestParam(required = false) Long traitenpId,
                                                 @RequestParam(required = false) Long cedenteId,
                                                 @RequestParam(required = false) Long trancheId,
                                                 @RequestParam(required = false) String periodicite,
@@ -127,8 +127,12 @@ public class ReportRestController
                                                 ) throws Exception
     {
         byte[] reportBytes = jrService.generateCompteTraite(traitenpId,cedenteId,trancheId,periodicite,periodeId, "PDF");
-        String base64Url = Base64ToFileConverter.convertBytesToBase64String(reportBytes);
-        return new Base64FileDto(base64Url, reportBytes);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDisposition(ContentDisposition.attachment().filename("compte_traite.pdf").build());
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // Retourne le fichier en tant que réponse HTTP
+        return new ResponseEntity<>(reportBytes, headers, HttpStatus.OK);
     }
     // avec telechargement directe du fichier excel sans retourner un byte ou base 64 url
     @GetMapping("/compte-traites/download-excel")

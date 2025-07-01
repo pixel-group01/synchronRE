@@ -177,10 +177,13 @@ and cd.ced_id=$P{cedenteId}]]>
 	<parameter name="cedenteId" class="java.lang.Long"/>
 	<parameter name="trancheId" class="java.lang.Long"/>
 	<parameter name="periodicite" class="java.lang.String"/>
-	<parameter name="logo_synre" class="java.io.InputStream">
+	<parameter name="logo_synchronre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<parameter name="periodeId" class="java.lang.Long"/>
+	<parameter name="param_image" class="java.lang.String">
+		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[select tnp.traite_np_id,
        tnp.exe_code,
@@ -233,7 +236,7 @@ and tr.tranche_id= $P{trancheId}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<imageExpression><![CDATA[$P{logo_synre}]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_synchronre}]]></imageExpression>
 			</image>
 		</band>
 	</title>
