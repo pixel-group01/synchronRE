@@ -77,6 +77,6 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     @Query("select (count(tr)>0) from Tranche tr where tr.traiteNonProportionnel.traiteNpId =?1 and tr.trancheNumero = ?2")
     boolean existsByTnpIdAndNumero(Long traiteNpId, int trancheNumero);
 
-    @Query("select( max(tr.trancheNumero) + 1) from Tranche tr where tr.traiteNonProportionnel.traiteNpId =?1 ")
+    @Query("select( coalesce(max(tr.trancheNumero), 0) + 1) from Tranche tr where tr.traiteNonProportionnel.traiteNpId =?1 ")
     Long getNextTrancheNum(Long traiteNpId);
 }
