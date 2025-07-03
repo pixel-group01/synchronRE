@@ -42,7 +42,7 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelle) as string))) >0 or 
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelleAbrege) as string))) >0 
     )
-    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT'
+    and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT' order by t.trancheNumero
     """)
     Page<TrancheResp> search(@Param("traiteNpId") Long traiteNpId, @Param("key")String key, Pageable pageable);
 
