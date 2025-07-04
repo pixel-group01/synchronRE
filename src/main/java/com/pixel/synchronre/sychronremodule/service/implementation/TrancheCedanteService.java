@@ -163,6 +163,15 @@ public class TrancheCedanteService implements ITrancheCedanteService
         naturalTranchePrimes.forEach(trPmd->
         {
             TrancheCedante trancheCedante = trancheCedanteRepo.findByTrancheIdAndCedId(trPmd.getTrancheId(), cedId);
+            if(trancheCedante == null)
+            {
+                Tranche tranche = new Tranche(trPmd.getTrancheId(), trPmd.getTrancheLibelle(), trPmd.getTrancheTauxPrime());
+                trancheCedante = new TrancheCedante();
+                trancheCedante.setTranche(tranche);
+                trancheCedante.setCedante(new Cedante(cedId));
+                trancheCedante.setAssiettePrime(ZERO);
+                trancheCedante.setAssiettePrimeRealsee(ZERO);
+            }
             BigDecimal oldAssiettePrime = trancheCedante.getAssiettePrime();
             oldAssiettePrime = Optional.ofNullable(oldAssiettePrime).orElse(ZERO);
             BigDecimal assiettePrime = this.getAssiettePrime(dto, trPmd.getTrancheId());

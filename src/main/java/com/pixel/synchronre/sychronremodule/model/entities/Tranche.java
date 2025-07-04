@@ -55,4 +55,10 @@ public class Tranche
         this.trancheId = trancheId;
     }
 
+    public Tranche(Long trancheId, String trancheLibelle, BigDecimal trancheTauxPrime)
+    {
+        this.trancheId = trancheId;
+        this.trancheLibelle = trancheLibelle;
+        this.trancheTauxPrime = trancheTauxPrime;
+    }
 }
