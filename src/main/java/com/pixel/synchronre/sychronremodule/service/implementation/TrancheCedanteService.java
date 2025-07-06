@@ -40,7 +40,6 @@ public class TrancheCedanteService implements ITrancheCedanteService
     private final ParamCessionLegaleRepository paramCesLegRepo;
     private final IServiceRepartitionTraiteNP repTnpService;
     private final CedanteTraiteRepo cedanteTraiteRepo;
-    private final TrancheRepository trancheRepo;
 
     @Override
     public List<ReadCedanteDTO> getListCedanteAsaisirSurTraite(Long traiteNpId)
@@ -70,10 +69,7 @@ public class TrancheCedanteService implements ITrancheCedanteService
     {
         dto = this.getEditDto(dto, 20);
         List<TranchePrimeDto> tranchePrimeDtos = dto.getTranchePrimeDtos();
-        tranchePrimeDtos.stream().filter(TranchePrimeDto::isChanged).forEach(tranchePrime ->
-        {
-            this.saveTranchePrime(tranchePrime);
-        });
+        tranchePrimeDtos.stream().filter(TranchePrimeDto::isChanged).forEach(tranchePrime -> this.saveTranchePrime(tranchePrime));
         return dto;
     }
 
