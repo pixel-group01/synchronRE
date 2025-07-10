@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscription, Long>
@@ -66,4 +67,28 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
         select ls from LimiteSouscription ls where ls.risqueCouvert.risqueId = ?1 and ls.categorie.categorieId = ?2
     """)
     Optional<LimiteSouscription> findByRisqueIdAndCatId(Long risqueId, Long categorieId);
+
+    @Query("""
+    SELECT ls FROM LimiteSouscription ls 
+    WHERE ls.risqueCouvert.risqueId = :risqueId 
+    AND ls.categorie.categorieId = :categorieId 
+    AND (
+        SELECT COUNT(a.couverture.couId) 
+        FROM Association a 
+        WHERE a.limiteSouscription.limiteSouscriptionId = ls.limiteSouscriptionId 
+        AND a.type.uniqueCode = 'LIM-SOU-COUV'
+    ) = :couverturesTotalCount
+    AND (
+        SELECT COUNT(a.couverture.couId) 
+        FROM Association a 
+        WHERE a.limiteSouscription.limiteSouscriptionId = ls.limiteSouscriptionId 
+        AND a.type.uniqueCode = 'LIM-SOU-COUV'
+        AND a.couverture.couId IN :couIds
+    ) = :couverturesTotalCount
+""")
+    Optional<LimiteSouscription> findByRisqueIdAndCatIdAndExactCouvertures(
+            @Param("risqueId") Long risqueId,
+            @Param("categorieId") Long categorieId,
+            @Param("couIds") List<Long> couIds,
+            @Param("couverturesTotalCount") int couverturesTotalCount);
 }
