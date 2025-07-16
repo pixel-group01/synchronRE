@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2024-01-23T15:18:38 -->
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Note_Debit_Sinistres" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="18ef3122-13d0-4102-b6c3-938efb8a7a24">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SynchronRE"/>
@@ -503,7 +502,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<jr:tableHeader style="Table_TH" height="19" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="277" height="19" uuid="259a1c84-ae29-4d7f-935c-81254f104d3f"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -512,7 +511,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							</textField>
 						</jr:tableHeader>
 						<jr:tableFooter style="Table_TH" height="19" rowSpan="1">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="277" height="19" uuid="569a9d92-3df5-4a86-bada-7e43f9441431"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -521,7 +520,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							</textField>
 						</jr:tableFooter>
 						<jr:columnHeader style="Table_CH" height="19" rowSpan="1">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="277" height="19" uuid="c7f30c42-c7e4-4116-b4ee-548214f2c49d"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -531,7 +530,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="19" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="277" height="19" uuid="3a65a287-3f44-4076-8fc5-808c4e9601f2"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -540,7 +539,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="19">
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="277" height="19" uuid="bf54f158-4f50-4f31-b7b1-f3a751becc4c"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -711,7 +710,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						</jr:tableHeader>
 						<jr:tableFooter style="Table 3_TH" height="19" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="203" height="19" uuid="cdf749dd-2c13-4071-8031-6f1587d6b8f9"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -721,7 +720,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 						</jr:tableFooter>
 						<jr:detailCell style="Table 3_TD" height="19">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="203" height="19" uuid="15d91be6-5fa2-4f4e-82e3-06c073a0a316"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font fontName="SansSerif" size="11"/>
@@ -733,14 +732,14 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</jr:table>
 			</componentElement>
 			<image>
-				<reportElement style="Table_CH" x="10" y="359" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
+				<reportElement style="Table_CH" positionType="Float" x="10" y="359" width="117" height="111" uuid="63aaddde-38a5-4490-b2e7-3eec2022f9f0"/>
 				<box>
 					<pen lineWidth="1.0" lineColor="#FFFFFF"/>
 				</box>
 				<imageExpression><![CDATA[$P{qrCode}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement style="Table_CH" x="352" y="414" width="178" height="55" uuid="efd38a83-7177-4e4a-ab13-b4066f680633">
+				<reportElement style="Table_CH" positionType="Float" x="352" y="414" width="178" height="55" uuid="efd38a83-7177-4e4a-ab13-b4066f680633">
 					<printWhenExpression><![CDATA[$P{param_visible}.equals( "true" )]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -748,7 +747,7 @@ WHERE affaire.couverture_id = couverture.cou_id
 				</box>
 				<imageExpression><![CDATA[$P{visa}]]></imageExpression>
 			</image>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="2" y="316" width="548" height="35" uuid="cd62f046-3209-48c6-97f8-863a9df722bf"/>
 				<textElement markup="html">
 					<font size="12"/>
