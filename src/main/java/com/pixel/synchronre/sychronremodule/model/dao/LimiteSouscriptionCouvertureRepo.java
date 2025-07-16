@@ -24,11 +24,11 @@ public interface LimiteSouscriptionCouvertureRepo extends JpaRepository<Associat
      */
     @Query("""
         select c.couId from Couverture c where c.couId in ?2 and 
-        not exists(select a from Association a where a.limiteSouscription.limiteSouscriptionId = ?1 and a.couverture.couId = c.couId and a.type.uniqueCode = 'LIMIT-SOUS-COUV')
+        not exists(select a from Association a where a.limiteSouscription.limiteSouscriptionId = ?1 and a.couverture.couId = c.couId and a.type.uniqueCode = 'LIM-SOU-COUV')
         """)
     List<Long> getCouIdsToAdd(Long limiteSouscriptionId, List<Long> couIds);
 
     @Modifying
-    @Query("delete from Association a where a.limiteSouscription.limiteSouscriptionId = ?1 and a.couverture.couId = ?2 and a.type.uniqueCode = 'LIMIT-SOUS-COUV'")
+    @Query("delete from Association a where a.limiteSouscription.limiteSouscriptionId = ?1 and a.couverture.couId = ?2 and a.type.uniqueCode = 'LIM-SOU-COUV'")
     void removeCouvertureOnLimite(Long limiteSouscriptionId, Long couId);
 }

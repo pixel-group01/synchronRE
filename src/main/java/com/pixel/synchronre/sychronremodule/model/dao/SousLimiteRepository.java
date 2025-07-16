@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
@@ -36,6 +37,24 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
     Page<SousLimiteDetailsResp> search(@Param("key") String key,
                                        @Param("traiteNpId") Long traiteNpId,
                                        Pageable pageable);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp(
+    c.couId,c.couLibelle)
+    from Association a 
+    join a.limiteSouscription ls
+    join a.couverture c
+    join a.type t
+    where ls.risqueCouvert = ?1 
+    AND t.uniqueCode='LIM-SOU-COUV' 
+    AND c.couId NOT IN (
+                select sl.activite.couId
+                from SousLimite sl
+                where sl.activite.couId = a.couverture.couId        
+    )
+    ORDER BY c.couLibelle
+""")
+    List<ActivitesResp> getActivite(Long risqueId);
 
     @Query("""
           select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite(
