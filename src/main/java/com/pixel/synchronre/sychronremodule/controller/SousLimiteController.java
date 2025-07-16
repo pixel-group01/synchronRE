@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 
 @RestController
@@ -39,6 +41,12 @@ public class SousLimiteController {
                               @RequestParam(defaultValue = "10") int size)
     {
         return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
+    }
+
+    @GetMapping(path = "/activites/{traiteNpId}")
+    List<ActivitesResp> getActivites( @PathVariable Long traiteNpId)
+    {
+        return iServiceSousLimite.getActivites(traiteNpId);
     }
 
     @GetMapping(path = "/edit/{sousLimiteSouscriptionId}")
