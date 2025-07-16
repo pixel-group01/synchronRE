@@ -67,7 +67,7 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     {
         List<Long> couIds = dto.getCouIds();
         couIds = couIds == null ? List.of() : couIds;
-        Optional<LimiteSouscription> limiteSouscription$ = lsRepo.findByRisqueIdAndCatIdAndExactCouvertures(dto.getRisqueId(), dto.getCategorieId(), couIds, couIds.size());
+        Optional<LimiteSouscription> limiteSouscription$ = lsRepo.findByRisqueIdAndCatId(dto.getRisqueId(), dto.getCategorieId());
         LimiteSouscription limiteSouscription;
         if(limiteSouscription$.isPresent())
         {
