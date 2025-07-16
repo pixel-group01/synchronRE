@@ -22,5 +22,3 @@ public class AffStatutGroup
             EN_ATTENTE_DE_PLACEMENT.staCode, EN_COURS_DE_PLACEMENT.staCode, TRANSMIS.staCode);
 
 }
-
-
