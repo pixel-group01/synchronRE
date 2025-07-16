@@ -66,7 +66,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
     @Query("""
         select ls from LimiteSouscription ls where ls.risqueCouvert.risqueId = ?1 and ls.categorie.categorieId = ?2
     """)
-    Optional<LimiteSouscription> findByRisqueIdAndCatId(Long risqueId, Long categorieId);
+    List<LimiteSouscription> findByRisqueIdAndCatId(Long risqueId, Long categorieId);
 
     @Query("""
     SELECT ls FROM LimiteSouscription ls 

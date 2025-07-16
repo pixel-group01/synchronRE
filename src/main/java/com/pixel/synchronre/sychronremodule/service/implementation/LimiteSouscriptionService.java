@@ -67,13 +67,60 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     {
         List<Long> couIds = dto.getCouIds();
         couIds = couIds == null ? List.of() : couIds;
-        Optional<LimiteSouscription> limiteSouscription$ = lsRepo.findByRisqueIdAndCatId(dto.getRisqueId(), dto.getCategorieId());
+        List<LimiteSouscription> limiteSouscriptions = lsRepo.findByRisqueIdAndCatId(dto.getRisqueId(), dto.getCategorieId());
+        /**
+         * J'ai une contrainte métier selon laquelle le même couId ne peut pas être associé
+         * à deux limite de souscription différentes ayant le même risqueId et le même catId.
+         * Donc, si dans la liste des couIds, il y a un seul qui est déjà associé
+         * à une limite de souscription du même risqueId et du même catId que celui du dto,
+         * On évite de créer une nouvelle limite de souscription. Dans ce caas,
+         * on récupère la limite de souscription en question puis on met à jour ses couIds
+         * Si par contre, il existe au moins deux couIds qui sont associés à des limites de soucription différentes
+         * mais qui ont le même risqueId et la même catId lever une exception
+         */
         LimiteSouscription limiteSouscription;
-        if(limiteSouscription$.isPresent())
+        if(!limiteSouscriptions.isEmpty())
         {
-            limiteSouscription = limiteSouscription$.get();
-            dto.setLimiteSouscriptionId(limiteSouscription.getLimiteSouscriptionId());
-            return this.update(dto);
+            // Map to track which LimiteSouscription each couId is associated with
+            java.util.Map<Long, LimiteSouscription> couIdToLimiteSouscription = new java.util.HashMap<>();
+
+            // For each couId in the input list, check if it's already associated with any LimiteSouscription
+            for(Long couId : couIds)
+            {
+                for(LimiteSouscription ls : limiteSouscriptions)
+                {
+                    // Check if the couId is already associated with this LimiteSouscription
+                    // We use getCouIdsToAdd to check if the couId needs to be added (i.e., it's not already associated)
+                    List<Long> couIdsToAdd = lscRepo.getCouIdsToAdd(ls.getLimiteSouscriptionId(), java.util.List.of(couId));
+
+                    // If couIdsToAdd is empty, it means the couId is already associated with this LimiteSouscription
+                    if(couIdsToAdd.isEmpty())
+                    {
+                        couIdToLimiteSouscription.put(couId, ls);
+                        break;
+                    }
+                }
+            }
+
+            // If no couIds are associated with any LimiteSouscription, create a new one
+            if(!couIdToLimiteSouscription.isEmpty())
+            {
+                // Check if all couIds are associated with the same LimiteSouscription
+                java.util.Set<LimiteSouscription> uniqueLimiteSouscriptions = new java.util.HashSet<>(couIdToLimiteSouscription.values());
+
+                if(uniqueLimiteSouscriptions.size() > 1)
+                {
+                    // If couIds are associated with different LimiteSouscriptions, throw an exception
+                    throw new AppException("Impossible de créer une limite de souscription car certains couIds sont déjà associés à différentes limites de souscription avec le même risqueId et categorieId");
+                }
+                else
+                {
+                    // If all couIds are associated with the same LimiteSouscription, update that LimiteSouscription
+                    LimiteSouscription existingLimiteSouscription = uniqueLimiteSouscriptions.iterator().next();
+                    dto.setLimiteSouscriptionId(existingLimiteSouscription.getLimiteSouscriptionId());
+                    return this.update(dto);
+                }
+            }
         }
         limiteSouscription = lsMapper.mapToLimiteSouscription(dto);
         limiteSouscription.setLimSousMontant(dto.getLimSousMontant());
@@ -93,14 +140,14 @@ public class LimiteSouscriptionService implements IServiceLimiteSouscription
     {
         List<Long> couIds = dto.getCouIds();
         couIds = couIds == null ? List.of() : couIds;
-        
+
         if(dto.getLimiteSouscriptionId() == null) throw new AppException("Veuillez sélectionner la limite de souscription");
         LimiteSouscription limiteSouscription = lsRepo.findById(dto.getLimiteSouscriptionId()).orElseThrow(()->new AppException("Limite de souscription introuvable"));
         LimiteSouscription oldLimiteSouscription = lsCopier.copy(limiteSouscription);
         limiteSouscription.setLimSousMontant(dto.getLimSousMontant());
         limiteSouscription.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         limiteSouscription.setCategorie(new Categorie(dto.getCategorieId()));
-        
+
         List<Long> couIdsToRemove = lscRepo.getCouIdsToRemove(limiteSouscription.getLimiteSouscriptionId(), couIds);
         List<Long> couIdsToAdd = lscRepo.getCouIdsToAdd(limiteSouscription.getLimiteSouscriptionId(), couIds);
 
