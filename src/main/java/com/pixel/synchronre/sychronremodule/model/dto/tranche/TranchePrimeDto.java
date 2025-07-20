@@ -17,6 +17,7 @@ public class TranchePrimeDto
     private Long trancheId;
     private String trancheLibelle;
     private BigDecimal assiettePrime;
+    private BigDecimal assiettePrimeRealisee;
     private BigDecimal trancheTauxPrime;
     private BigDecimal pmd;
     private BigDecimal pmdCourtier;

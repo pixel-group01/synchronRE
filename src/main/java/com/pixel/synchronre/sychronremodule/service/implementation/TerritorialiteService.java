@@ -45,7 +45,7 @@ public class TerritorialiteService implements IServiceTerritorialite
         Territorialite territorialite = terrRepo.save(terrMapper.mapToTerritorialite(dto));
         logService.logg("Création d'une territorialité", null, territorialite, "Association");
         if(dto.getPaysCodes() == null || dto.getPaysCodes().isEmpty())  throw new AppException("Veuillez sélectionner les pays");
-        dto.getPaysCodes().stream().distinct().forEach(p->
+        dto.getPaysCodes().stream().filter(code->code != null && !code.trim().equals("")).distinct().forEach(p->
         {
             Association terrDetails = terrDetRepo.save(new Association(null, new Pays(p), territorialite,type));
             logService.logg("Ajout d'un pays à une territorialité", null, terrDetails, "Association");

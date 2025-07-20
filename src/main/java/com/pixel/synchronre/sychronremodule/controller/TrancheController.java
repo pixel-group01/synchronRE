@@ -1,7 +1,5 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
-import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.RisqueCouvertResp;
-import com.pixel.synchronre.sychronremodule.model.dto.territorialite.TerritorialiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
@@ -48,5 +46,11 @@ public class TrancheController
     List<TrancheResp> getTrancheList(@PathVariable Long traiteNpId)
     {
         return trancheService.getTrancheList(traiteNpId);
+    }
+
+    @GetMapping(path = "/next-num/{traiteNpId}")
+    String getNextTrancheNum(@PathVariable Long traiteNpId)
+    {
+        return "Tranche " + trancheService.getNextTrancheNum(traiteNpId);
     }
 }

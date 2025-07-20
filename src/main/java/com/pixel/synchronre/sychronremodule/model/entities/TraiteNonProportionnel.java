@@ -41,6 +41,7 @@ public class TraiteNonProportionnel
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private BigDecimal traiTauxAbattement;
+    private BigDecimal traiInteretDepotLib;
     @ManyToOne @JoinColumn(name = "exe_code") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Exercice exercice;
     @ManyToOne @JoinColumn(name = "trai_source_id")

@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
+import java.util.List;
 
 public interface IServiceSousLimite {
 
@@ -19,4 +21,6 @@ public interface IServiceSousLimite {
     UpdateSousLimite edit(Long sousLimiteSouscriptionId);
 
     void delete(Long sousLimiteSouscriptionId);
+
+    List<ActivitesResp> getActivites(Long traiteNpId);
 }

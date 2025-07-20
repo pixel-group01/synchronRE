@@ -28,6 +28,7 @@ public class Tranche
     private BigDecimal tranchePriorite;
     private BigDecimal tranchePorte;
     private BigDecimal trancheTauxPrime;
+    private Long trancheNumero;
     @ManyToOne @JoinColumn(name = "risque_couvert_ID")
     private RisqueCouvert risqueCouvert;
 
@@ -54,4 +55,10 @@ public class Tranche
         this.trancheId = trancheId;
     }
 
+    public Tranche(Long trancheId, String trancheLibelle, BigDecimal trancheTauxPrime)
+    {
+        this.trancheId = trancheId;
+        this.trancheLibelle = trancheLibelle;
+        this.trancheTauxPrime = trancheTauxPrime;
+    }
 }

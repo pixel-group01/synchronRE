@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.entities;
 
+import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,8 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
 @Entity @Audited(targetAuditMode = RelationTargetAuditMode.AUDITED)
-public class CompteDetails
+@Table(name = "Compte_Details", uniqueConstraints = @UniqueConstraint(columnNames = {"type_id", "compte_ced_id"}))
+public class CompteDetails extends HistoDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

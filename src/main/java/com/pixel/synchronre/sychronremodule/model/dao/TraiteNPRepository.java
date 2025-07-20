@@ -25,7 +25,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
         tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
-        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, 
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, tnp.traiInteretDepotLib,
         sum(ct.assiettePrime), sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette), e.exeCode, 
         src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
         d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
@@ -145,7 +145,7 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         select new com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp(tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
         tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
-        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, 
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, tnp.traiInteretDepotLib,
         sum(ct.assiettePrime), sum(ct.pmd), sum(ct.pmdCourtier), sum(ct.pmdCourtierPlaceur), sum(ct.pmdNette), e.exeCode, 
         src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
         d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
@@ -168,10 +168,19 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
         group by tnp.traiteNpId,
         tnp.traiReference, tnp.traiNumero, tnp.traiLibelle,tnp.traiEcerciceRattachement, tnp.traiDateEffet, 
         tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite, tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation,
-        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, e.exeCode, 
+        tnp.traiDelaiPaiement, tnp.traiTauxCourtier, tnp.traiTauxCourtierPlaceur,tnp.traiTauxAbattement, tnp.traiInteretDepotLib, e.exeCode, 
         src.traiReference, src.traiLibelle, n.natCode, n.natLibelle,tnp.courtierPlaceur.cesId,tnp.courtierPlaceur.cesNom, 
         d.devCode, dc.devCode, s.staCode, s.staLibelle, u.email, concat(u.firstName, ' ', u.lastName), f.name, tnp.createdAt, 
         tnp.updatedAt
 """)
     List<TraiteNPResp> getList(Long cedId, List<String> staCodes, Long exeCode);
+
+    @Query("""
+    select coalesce(tnp.traiInteretDepotLib, 0)
+    from Tranche t
+    join t.traiteNonProportionnel tnp 
+    where t.trancheId = ?1
+    """)
+    BigDecimal getIntereDepotLibByTrancheId(Long trancheId);
+
 }

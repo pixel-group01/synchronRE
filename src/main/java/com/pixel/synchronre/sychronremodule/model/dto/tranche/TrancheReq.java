@@ -34,6 +34,7 @@ public class TrancheReq
     @Min(value = 0, message = "Le taux de prime doit être compris entre 0 et 100")
     @Max(value = 100, message = "Le taux de prime doit être compris entre 0 et 100")
     private BigDecimal trancheTauxPrime;
+    private Long trancheNumero;
     @ExistingRisqueId
     private Long risqueId;
     @ExistingTNPId
@@ -41,13 +42,14 @@ public class TrancheReq
 
     private List<Long> categorieIds;
 
-    public TrancheReq(Long trancheId,String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long risqueId, Long traiteNpId) {
+    public TrancheReq(Long trancheId,String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero, Long risqueId, Long traiteNpId) {
         this.trancheId = trancheId;
         this.trancheType=trancheType;
         this.trancheLibelle = trancheLibelle;
         this.tranchePriorite = tranchePriorite;
         this.tranchePorte = tranchePorte;
         this.trancheTauxPrime = trancheTauxPrime;
+        this.trancheNumero = trancheNumero;
         this.risqueId = risqueId;
         this.traiteNpId = traiteNpId;
     }

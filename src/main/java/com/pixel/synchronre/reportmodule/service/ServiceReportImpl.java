@@ -16,6 +16,10 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IserviceBordereau;
 import lombok.RequiredArgsConstructor;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleXlsxReportConfiguration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -74,6 +78,44 @@ public class ServiceReportImpl implements IServiceReport
     @Override
     public byte[] generateReport(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
     {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Exportez le rapport au format PDF
+        byte[] reportBytes = this.exportReportToPdf(jasperPrint);
+        return reportBytes;
+    }
+
+    @Override
+    public byte[] generateReportExcel(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
+        JasperPrint jasperPrint = this.generateJasperPrint(reportName, parameters, data, qrText);
+        // Retourner le fichier Excel sous forme de tableau de bytes
+        return this.exportReportToExcel(jasperPrint);
+    }
+
+    @Override
+    public byte[] exportReportToExcels(JasperPrint jasperPrint) throws JRException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setDetectCellType(true);
+        configuration.setOnePagePerSheet(false); // ⚠️ très important pour éviter l'entête à chaque page
+        configuration.setRemoveEmptySpaceBetweenRows(true);
+        configuration.setWhitePageBackground(false);
+        configuration.setCollapseRowSpan(true);
+        configuration.setIgnoreGraphics(false);
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    private JasperPrint generateJasperPrint(String reportName, Map<String, Object> parameters, List<Object> data, String qrText) throws Exception
+    {
         parameters.put(JRParameter.REPORT_LOCALE, Locale.FRENCH);
         qrText =  qrText != null ? qrText : "Application SynchronRE : Numéro Fac : " + parameters.get("aff_id") + " Assuré : " + parameters.get("aff_assure") + " Numéro de Police : " + parameters.get("fac_numero_police");
         // Génération du code QR
@@ -93,14 +135,34 @@ public class ServiceReportImpl implements IServiceReport
         JasperPrint jasperPrint = jrBeanCollectionDataSource == null
                 ? JasperFillManager.fillReport(jasperReport, parameters, connection)
                 : JasperFillManager.fillReport(jasperReport, parameters, jrBeanCollectionDataSource);
-
-        // Exportez le rapport au format PDF
-        byte[] reportBytes = JasperExportManager.exportReportToPdf(jasperPrint);
-
-        // Fermez la connexion
         connection.close();
+        return jasperPrint;
+    }
 
-        return reportBytes;
+    private byte[] exportReportToPdf(JasperPrint jasperPrint) throws JRException {
+        return JasperExportManager.exportReportToPdf(jasperPrint);
+    }
+
+    private byte[] exportReportToExcel(JasperPrint jasperPrint) throws JRException
+    {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        JRXlsxExporter exporter = new JRXlsxExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(byteArrayOutputStream));
+
+        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+        configuration.setDetectCellType(true);  // Détection automatique du type des cellules
+        configuration.setOnePagePerSheet(false); // Éviter d'avoir une seule page par feuille
+        configuration.setRemoveEmptySpaceBetweenRows(true); // Suppression des espaces vides
+        configuration.setWhitePageBackground(false); // Pas de fond blanc inutile
+        configuration.setCollapseRowSpan(true); // Fusionner les cellules si possible
+        configuration.setIgnoreGraphics(false); // Garder les images et graphiques
+        //configuration.setSheetNames(new String[]{"Mon Rapport"}); // Nom de la feuille
+
+        exporter.setConfiguration(configuration);
+        exporter.exportReport();
+
+        return byteArrayOutputStream.toByteArray();
     }
 
     private String getImagesPath() throws IOException {
@@ -253,7 +315,7 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
-    public byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, Long periodeId) throws Exception {
+    public byte[] generateCompteTraite(Long traitenpId, Long cedenteId, Long trancheId, String periodicite, Long periodeId, String format) throws Exception {
         TraiteNonProportionnel traite = traiteNPRepo.findById(traitenpId).orElseThrow(()-> new AppException("Traité introuvable"));
         Cedante cedante = cedRepo.findById(cedenteId).orElseThrow(()-> new AppException("Cédante introuvable"));
         Tranche tranche = trancheRepo.findById(trancheId).orElseThrow(()-> new AppException("Tranche introuvable"));
@@ -264,7 +326,15 @@ public class ServiceReportImpl implements IServiceReport
         params.put("periodicite", periodicite);
         params.put("periodeId", periodeId);
         params.put("param_image", this.getImagesPath());
-        byte[] reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        byte[] reportBytes = null;
+        if("PDF".equals(format))
+        {
+            reportBytes = this.generateReport(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        }
+        else if("XLSX".equals(format))
+        {
+            reportBytes = this.generateReportExcel(jrConfig.compteTraite, params, new ArrayList<>(), null);
+        }
         return reportBytes;
     }
 
@@ -306,6 +376,24 @@ public class ServiceReportImpl implements IServiceReport
     }
 
     @Override
+    public byte[] exportSituationFinanciereCed(Long exeCode, Long cedId, String statutEnvoie, String statutEncaissement) throws Exception
+    {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+        return this.generateReportExcel(jrConfig.situationFinanciereParCedante, params, new ArrayList<>(), null);
+    }
+
+
+    @Override
     public byte[] generateSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("exe_code", exeCode);
@@ -328,4 +416,46 @@ public class ServiceReportImpl implements IServiceReport
         byte[] reportBytes = this.generateReport(jrConfig.chiffreAffairesPeriodeCedRea, params, new ArrayList<>(), null);
         return reportBytes;
     }
+
+    @Override
+    public byte[] exportSituationFinanciereCedRea(Long exeCode, Long cedId, Long cesId, String statutEnvoie, String statutEncaissement) throws Exception {
+        statutEnvoie = stripAccentsToUpperCase(statutEnvoie);
+        statutEnvoie = statutEnvoie == null || statutEnvoie.trim().equals("") ? null : statutEnvoie;
+
+        statutEncaissement = stripAccentsToUpperCase(statutEncaissement);
+        statutEncaissement = statutEncaissement == null || statutEncaissement.trim().equals("") ? null : statutEncaissement;
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("statut_envoie", statutEnvoie);
+        params.put("statut_encaissement", statutEncaissement);
+        params.put("param_image", this.getImagesPath());
+       // byte[] reportBytes = this.generateReportExcel(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
+       // return reportBytes;
+        return this.generateReportExcel(jrConfig.situationFinanciereParCedanteEtRea, params, new ArrayList<>(), null);
+    }
+
+    @Override
+    public byte[] exportSituationNoteCredit(Long exeCode, Long cedId, Long cesId) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("param_image", this.getImagesPath());
+        return this.generateReportExcel(jrConfig.situationNoteCreditCedRea, params, new ArrayList<>(), null);
+    }
+
+    @Override
+    public byte[] exportChiffreAffairesPeriodeCedRea(Long exeCode, Long cedId, Long cesId, String dateDebut, String dateFin) throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("exe_code", exeCode);
+        params.put("ced_id", cedId);
+        params.put("ces_id", cesId);
+        params.put("DateDeb", dateDebut);
+        params.put("DateFin", dateFin);
+        params.put("param_image", this.getImagesPath());
+        return this.generateReportExcel(jrConfig.chiffreAffairesPeriodeCedRea, params, new ArrayList<>(), null);
+    }
+
 }

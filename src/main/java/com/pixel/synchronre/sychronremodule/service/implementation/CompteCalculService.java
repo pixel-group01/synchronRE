@@ -1,5 +1,6 @@
-package com.pixel.synchronre.sychronremodule.service.interfac;
+package com.pixel.synchronre.sychronremodule.service.implementation;
 
+import com.pixel.synchronre.sychronremodule.service.interfac.ICompteCalculService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

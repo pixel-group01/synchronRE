@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
@@ -36,6 +37,25 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
     Page<SousLimiteDetailsResp> search(@Param("key") String key,
                                        @Param("traiteNpId") Long traiteNpId,
                                        Pageable pageable);
+
+    @Query("""
+    select DISTINCT new com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp(
+    c.couId,c.couLibelle)
+    from Association a 
+    join a.limiteSouscription ls
+    join a.couverture c
+    join a.type t  
+    join ls.categorie.traiteNonProportionnel tnp
+    where t.uniqueCode='LIM-SOU-COUV' 
+    and tnp.traiteNpId=?1
+    AND c.couId NOT IN (
+                select sl.activite.couId
+                from SousLimite sl
+                where sl.activite.couId = a.couverture.couId and sl.traiteNonProportionnel.traiteNpId=tnp.traiteNpId       
+    )
+    ORDER BY c.couLibelle
+""")
+    List<ActivitesResp> getActivite(Long traiteNpId);
 
     @Query("""
           select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite(

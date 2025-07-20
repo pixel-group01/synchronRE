@@ -37,6 +37,8 @@ public class Association
     private Territorialite territorialite;
     @ManyToOne @JoinColumn(name = "TYP_ID") @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Type type;
+    @ManyToOne @JoinColumn(name = "limite_souscription_id")
+    private LimiteSouscription limiteSouscription;
     @ManyToOne @JoinColumn(name = "STA_CODE")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
 
@@ -53,22 +55,32 @@ public class Association
         this.type=type;
     }
 
-    public Association(Pays pays, Tranche tranche,Categorie categorie,  Type type) {
+    public Association(Pays pays, Tranche tranche,Categorie categorie,  Type type)
+    {
         this.pays = pays;
         this.tranche = tranche;
         this.categorie = categorie;
         this.type = type;
     }
 
-    public Association(Organisation organisation, Pays pays, Territorialite territorialite, Type type) {
+    public Association(Organisation organisation, Pays pays, Territorialite territorialite, Type type)
+    {
         this.organisation = organisation;
         this.pays = pays;
         this.territorialite = territorialite;
         this.type = type;
     }
 
-    public Association(RisqueCouvert risqueCouvert,Couverture couverture, Type type) {
+    public Association(RisqueCouvert risqueCouvert,Couverture couverture, Type type)
+    {
         this.risqueCouvert = risqueCouvert;
+        this.couverture = couverture;
+        this.type = type;
+    }
+
+    public Association(LimiteSouscription limiteSouscription, Couverture couverture, Type type)
+    {
+        this.limiteSouscription = limiteSouscription;
         this.couverture = couverture;
         this.type = type;
     }

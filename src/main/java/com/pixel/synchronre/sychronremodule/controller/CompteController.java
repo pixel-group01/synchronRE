@@ -19,9 +19,16 @@ public class CompteController {
     private final IserviceCompte compteService;
     private final ITypeService typeService;
 
-    @GetMapping(path = "/traites/{traiteNpId}")
-    CompteTraiteDto getCompteTraite(@PathVariable Long traiteNpId){
-        return compteService.getCompteTraite(traiteNpId);
+    @GetMapping(path = "/traites/{traiteNpId}/{periodeId}")
+    CompteTraiteDto getCompteTraite(@PathVariable Long traiteNpId, @PathVariable(required = false) Long periodeId)
+    {
+        return compteService.getCompteTraite(traiteNpId, periodeId, 2);
+    }
+
+    @PostMapping(path = "/traites")
+    CompteTraiteDto getCompteTraite(@RequestBody CompteTraiteDto dto)
+    {
+        return compteService.getCompteTraite(dto, 2);
     }
 
     @PostMapping(path = "/traites/save")

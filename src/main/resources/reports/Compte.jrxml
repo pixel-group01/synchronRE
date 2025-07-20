@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2025-02-09T15:42:53 -->
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Compte" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81f528b8-b33b-4207-aaf1-ad1232d2fe58">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="synchronRE-dev-ovh"/>
@@ -90,65 +89,43 @@
 	<subDataset name="Cessionnaires" uuid="a6ee8a2c-ffac-4d7e-aeda-2aa260f2643c">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="610"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="380"/>
 		<parameter name="trancheId" class="java.lang.Long">
 			<parameterDescription><![CDATA[]]></parameterDescription>
 			<defaultValueExpression><![CDATA[$P{trancheId}]]></defaultValueExpression>
 		</parameter>
+		<parameter name="cedenteId" class="java.lang.Long"/>
 		<queryString language="SQL">
-			<![CDATA[WITH TotalSums AS (
-select
-        SUM(cc.prime) AS total_prime_v1
-       ,SUM(cc.taux) AS total_taux_v1
-from compte_cessionnaire cc,
-     cessionnaire ces,
-     compte_cedante ced,
-     compte c
-where cc.ces_id=ces.ces_id
-  and cc.compte_ced_id = ced.compte_ced_id
-and ced.compte_id=c.compte_id
-and c.tranche_id =$P{trancheId}
-)
-
-SELECT 
-       ces.ces_id
-       ,ces.ces_nom
-       ,ROUND(cc.taux, 2) AS taux_prime
-       ,cc.prime
-       ,regexp_replace(to_char(cc.prime, 'FM999,999,999,999'), ',', ' ', 'g') AS prime_cessionnaire
-       ,SUM(cc.prime) AS total_prime
-       ,SUM(cc.taux) AS total_taux
-       ,regexp_replace(to_char(TotalSums.total_prime_v1, 'FM999,999,999,999'), ',', ' ', 'g') AS total_prime_cessionnaire
-       , ROUND(TotalSums.total_taux_v1, 2) AS total_taux_cessionnaire
-FROM compte_cessionnaire cc,
-     compte_cedante ced,
-     compte c,
-     cessionnaire ces
-	  JOIN
-    TotalSums ON 1=1 
-  where cc.compte_ced_id = ced.compte_ced_id
-           and cc.ces_id=ces.ces_id
-          and cc.compte_ced_id = ced.compte_ced_id
-          and ced.compte_id=c.compte_id
-          and c.tranche_id=$P{trancheId}
-GROUP BY 
-ces.ces_id
-,ces.ces_nom
-,cc.taux
-,taux_prime
-,cc.prime
-,prime_cessionnaire
-,totalsums.total_prime_v1
-,TotalSums.total_taux_v1]]>
+			<![CDATA[select cces.ces_id,cces.ces_nom,cces.taux_arrondi,cces.prime_arrondi,cces.total_taux_arrondi,cces.total_prime_arrondi
+from v_compte_cessionnaires cces
+where cces.tranche_id=$P{trancheId}
+and cces.ced_id = $P{cedenteId}]]>
 		</queryString>
-		<field name="ces_id" class="java.lang.Long"/>
-		<field name="ces_nom" class="java.lang.String"/>
-		<field name="taux_prime" class="java.math.BigDecimal"/>
-		<field name="prime" class="java.math.BigDecimal"/>
-		<field name="prime_cessionnaire" class="java.lang.String"/>
-		<field name="total_prime" class="java.math.BigDecimal"/>
-		<field name="total_taux" class="java.math.BigDecimal"/>
-		<field name="total_prime_cessionnaire" class="java.lang.String"/>
-		<field name="total_taux_cessionnaire" class="java.math.BigDecimal"/>
+		<field name="ces_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="ces_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
+		<field name="ces_nom" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="ces_nom"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
+		<field name="taux_arrondi" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="taux_arrondi"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
+		<field name="prime_arrondi" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="prime_arrondi"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
+		<field name="total_taux_arrondi" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_taux_arrondi"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
+		<field name="total_prime_arrondi" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="total_prime_arrondi"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_cessionnaires"/>
+		</field>
 		<variable name="Somme_taux" class="java.math.BigDecimal" calculation="Sum"/>
 	</subDataset>
 	<subDataset name="Cedentes_bis" uuid="e51e5f0b-365f-49cd-8929-ae2f6304b129">
@@ -157,29 +134,39 @@ ces.ces_id
 		<parameter name="trancheId" class="java.lang.Long"/>
 		<parameter name="cedenteId" class="java.lang.Long"/>
 		<queryString language="SQL">
-			<![CDATA[select c.tranche_id
-,t.name designation
-,regexp_replace(to_char(cd.debit, 'FM999,999,999,999'), ',', ' ', 'g') AS debit 
-,regexp_replace(to_char(cd.credit, 'FM999,999,999,999'), ',', ' ', 'g') AS credit
-,t.unique_code
-from compte c,compte_cedante cc
-,cedante ced
-,compte_details cd
-,type t
-where c.compte_id=cc.compte_ced_id
-  and cc.compte_ced_id=cd.compte_ced_id
-  and cd.type_id= t.type_id
-  and cc.ced_id = ced.ced_id
-  and t.type_group='TYPE_DET_COMPTE'
-and c.tranche_id=$P{trancheId}
-and cc.ced_id=$P{cedenteId}
-order by t.type_ordre]]>
+			<![CDATA[select cd.tranche_id,cd.designation,cd.debit,cd.credit,cd.unique_code,cd.debit_separateur, cd.credit_separateur
+from v_compte_details cd
+where cd.tranche_id=$P{trancheId}
+and cd.ced_id=$P{cedenteId}]]>
 		</queryString>
-		<field name="tranche_id" class="java.lang.Long"/>
-		<field name="designation" class="java.lang.String"/>
-		<field name="debit" class="java.lang.String"/>
-		<field name="credit" class="java.lang.String"/>
-		<field name="unique_code" class="java.lang.String"/>
+		<field name="tranche_id" class="java.lang.Long">
+			<property name="com.jaspersoft.studio.field.label" value="tranche_id"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="designation" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="designation"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="debit" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="debit"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="credit" class="java.math.BigDecimal">
+			<property name="com.jaspersoft.studio.field.label" value="credit"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="unique_code" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="unique_code"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="debit_separateur" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="debit_separateur"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
+		<field name="credit_separateur" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.label" value="credit_separateur"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="v_compte_details"/>
+		</field>
 	</subDataset>
 	<parameter name="logo_nre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
@@ -190,10 +177,13 @@ order by t.type_ordre]]>
 	<parameter name="cedenteId" class="java.lang.Long"/>
 	<parameter name="trancheId" class="java.lang.Long"/>
 	<parameter name="periodicite" class="java.lang.String"/>
-	<parameter name="logo_synre" class="java.io.InputStream">
+	<parameter name="logo_synchronre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<parameter name="periodeId" class="java.lang.Long"/>
+	<parameter name="param_image" class="java.lang.String">
+		<defaultValueExpression><![CDATA["images/"]]></defaultValueExpression>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[select tnp.traite_np_id,
        tnp.exe_code,
@@ -246,14 +236,14 @@ and tr.tranche_id= $P{trancheId}]]>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<imageExpression><![CDATA[$P{logo_synre}]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_synchronre}]]></imageExpression>
 			</image>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="118">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="1" y="51" width="553" height="19" uuid="7ee57dd2-f532-43d1-ba2f-0e98232b1611">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -262,7 +252,7 @@ and tr.tranche_id= $P{trancheId}]]>
 				</textElement>
 				<textFieldExpression><![CDATA["EXERCICE : " +$F{exe_code}+"                                                               "+"  Branche :  "+$F{bran_libelle}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="1" y="71" width="553" height="19" uuid="d6166521-e4fb-4d62-b6b6-2a00ac2ac981">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -271,7 +261,7 @@ and tr.tranche_id= $P{trancheId}]]>
 				</textElement>
 				<textFieldExpression><![CDATA["PERIODE : " +new SimpleDateFormat("dd/MM/yyyy").format($F{periode}) +"                                         "+"  Nature du traité :  "+$F{nat_tranche_libelle}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement x="1" y="95" width="553" height="19" uuid="668a0b5b-8843-41fe-a7d1-df10651ff46a">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -313,9 +303,12 @@ and tr.tranche_id= $P{trancheId}]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="Cessionnaires" uuid="56aa7b62-fd75-474d-8e37-2e8e8af3edcc">
+					<datasetRun subDataset="Cessionnaires" uuid="cbd8d82a-ca3a-43de-9c3a-05d1b02b71d2">
 						<datasetParameter name="trancheId">
 							<datasetParameterExpression><![CDATA[$P{trancheId}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="cedenteId">
+							<datasetParameterExpression><![CDATA[$P{cedenteId}]]></datasetParameterExpression>
 						</datasetParameter>
 						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 					</datasetRun>
@@ -368,6 +361,7 @@ and tr.tranche_id= $P{trancheId}]]>
 								<reportElement x="0" y="0" width="303" height="20" uuid="c3da7734-678b-46c9-ac28-b7134330d11d">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
+								<box leftPadding="3"/>
 								<textElement verticalAlignment="Middle">
 									<font size="11" isBold="false"/>
 								</textElement>
@@ -402,10 +396,11 @@ and tr.tranche_id= $P{trancheId}]]>
 							</box>
 							<textField>
 								<reportElement x="0" y="0" width="120" height="20" uuid="779c2ff6-841a-4d07-96fb-aa9a14626268"/>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_taux_cessionnaire}+"  % "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_taux_arrondi}+"  % "]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="20">
@@ -419,10 +414,11 @@ and tr.tranche_id= $P{trancheId}]]>
 								<reportElement x="0" y="0" width="120" height="20" uuid="e315c16b-ddff-45e9-8060-029cdf160bbb">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="11" isBold="false"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{taux_prime}+" %  "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{taux_arrondi}+" %  "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -453,10 +449,11 @@ and tr.tranche_id= $P{trancheId}]]>
 							</box>
 							<textField>
 								<reportElement x="0" y="0" width="120" height="20" uuid="5fe7fc02-a237-4821-91a8-f412eede08a1"/>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{total_prime_cessionnaire}+" "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{total_prime_arrondi}+" "]]></textFieldExpression>
 							</textField>
 						</jr:tableFooter>
 						<jr:detailCell style="Table_TD" height="20">
@@ -469,10 +466,11 @@ and tr.tranche_id= $P{trancheId}]]>
 							</box>
 							<textField>
 								<reportElement x="0" y="0" width="120" height="20" uuid="0819b580-737e-4b46-a139-aefbc73fef4c"/>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="11" isBold="false"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{prime_cessionnaire}+" "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{prime_arrondi}+" "]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -512,7 +510,7 @@ and tr.tranche_id= $P{trancheId}]]>
 							</box>
 							<staticText>
 								<reportElement x="0" y="0" width="303" height="20" uuid="82435841-aad4-4c97-95d2-c4991f7bb900"/>
-								<box>
+								<box leftPadding="0">
 									<bottomPen lineWidth="1.0"/>
 								</box>
 								<textElement verticalAlignment="Middle">
@@ -529,11 +527,11 @@ and tr.tranche_id= $P{trancheId}]]>
 								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="303" height="20" uuid="918790e2-002d-423b-9a15-31f2edbae2b2">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
-								<box>
+								<box leftPadding="3">
 									<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 									<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -567,7 +565,7 @@ and tr.tranche_id= $P{trancheId}]]>
 									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[  DEBIT]]></text>
@@ -581,12 +579,13 @@ and tr.tranche_id= $P{trancheId}]]>
 								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="120" height="20" uuid="43cd716f-ff12-44f8-a3da-3aa7d921566a">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{debit} +" "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{debit_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -608,7 +607,7 @@ and tr.tranche_id= $P{trancheId}]]>
 									<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 									<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								</box>
-								<textElement verticalAlignment="Middle">
+								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font size="11" isBold="true"/>
 								</textElement>
 								<text><![CDATA[  CREDIT]]></text>
@@ -621,12 +620,13 @@ and tr.tranche_id= $P{trancheId}]]>
 								<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 								<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 							</box>
-							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="120" height="20" uuid="a1279421-5246-46b9-a138-83e7494b4bda">
 									<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 								</reportElement>
+								<box rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle"/>
-								<textFieldExpression><![CDATA[$F{credit}+" "]]></textFieldExpression>
+								<textFieldExpression><![CDATA[$F{credit_separateur}]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>

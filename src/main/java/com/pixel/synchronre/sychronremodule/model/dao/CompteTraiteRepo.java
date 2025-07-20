@@ -31,7 +31,7 @@ public interface CompteTraiteRepo extends JpaRepository<Compte, Long>
     @Query("""
             select new com.pixel.synchronre.sychronremodule.model.dto.compte.TrancheCompteDto(tr.trancheId,tr.trancheLibelle)
             from Tranche tr 
-            where tr.traiteNonProportionnel.traiteNpId = ?1
+            where tr.traiteNonProportionnel.traiteNpId = ?1 order by tr.trancheNumero
             """)
     List<TrancheCompteDto> getCompteTranches(Long traitNpId);
     @Query("""
@@ -41,14 +41,6 @@ public interface CompteTraiteRepo extends JpaRepository<Compte, Long>
             (select trCat.categorie.categorieId from Association trCat where trCat.type.uniqueCode = 'TRAN-CAT' and trCat.tranche.trancheId = ?1) )
 """)
     List<ReadCedanteDTO> getCompteCedantes(Long trancheId);
-
-    @Query("""
-        select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteDetailDto(t.typeId, t.name, t.uniqueCode)
-        from Type t 
-        where t.typeGroup = 'TYPE_DET_COMPTE' 
-        order by t.typeOrdre
-""")
-    List<CompteDetailDto> getDetailComptes();
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.compte.CompteCessionnaireDto(ces.cesId, ces.cesNom, ces.cesSigle, rep.repTaux) 

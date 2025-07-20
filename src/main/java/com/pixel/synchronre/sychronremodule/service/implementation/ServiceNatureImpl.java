@@ -1,8 +1,9 @@
-package com.pixel.synchronre.sychronremodule.service.interfac;
+package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.sychronremodule.model.dao.NatureRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.nature.response.NatureListResp;
 import com.pixel.synchronre.sychronremodule.model.enums.FORME;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceNature;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.stereotype.Service;

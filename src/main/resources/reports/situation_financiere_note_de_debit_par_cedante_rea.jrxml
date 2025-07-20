@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_par_cedante_et_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2025-02-20T15:39:28 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="situation_financiere_note_de_debit_par_cedante_rea" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="547d38be-cbdd-451c-9397-cd84046cc045">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="307"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="688"/>
-	<property name="net.sf.jasperreports.export.xls.one.page.per.sheet" value="false"/>
-	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
-	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
-	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -64,11 +59,9 @@ and ces_id=10]]>
 	</subDataset>
 	<subDataset name="table_ced_par_rea" uuid="f6b64409-eea2-4d2c-ba7d-58844c8fc7de">
 		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="676"/>
-		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="314"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="260"/>
-		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="734"/>
 		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SYNCHRONE_DEV_OVH"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="838"/>
+		<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="152"/>
 		<parameter name="exe_code" class="java.lang.Long"/>
 		<parameter name="ced_id" class="java.lang.Long">
 			<defaultValueExpression><![CDATA[$P{ced_id}]]></defaultValueExpression>
@@ -81,151 +74,95 @@ and ces_id=10]]>
 			<defaultValueExpression><![CDATA[$P{statut_encaissement}]]></defaultValueExpression>
 		</parameter>
 		<queryString language="SQL">
-			<![CDATA[select stat.bord_num,
-       stat.aff_code,
-       stat.aff_assure,
-       stat.cou_libelle,
-       stat.aff_date_effet,
-       stat.aff_date_echeance,
-       stat.montant_cede,
-       stat.montant_encaisse ,
-       stat.commission_nelsonre ,
-       stat.montant_a_reverser,
-       stat.montant_reverse,
-       stat.reste_a_reverse,
-       stat.statut_envoie,
-       statut_encaissement,
-       regexp_replace(to_char(stat.montant_cede::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_cede_format,
-       regexp_replace(to_char(stat.montant_encaisse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_encaisse_format,
-       regexp_replace(to_char(stat.commission_nelsonre::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS commission_nelsonre_format,
-       regexp_replace(to_char(stat.montant_a_reverser::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_a_reverser_format,
-       regexp_replace(to_char(stat.montant_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_reverse_format,
-       regexp_replace(to_char(stat.reste_a_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS reste_a_reverse_format,
-       --regexp_replace(to_char((sum(stat.montant_cede) over() )::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_cede_format as total_montant_cede
+			<![CDATA[SELECT
+    stat.exe_code,
+    stat.ced_nom_filiale,
+    stat.ced_id,
+    stat.ces_id,
+   stat.bord_num,
+    stat.aff_code,
+    stat.aff_assure,
+    stat.cou_libelle,
+    stat.aff_date_effet,
+    stat.aff_date_echeance,
+    stat.montant_cede,
+    stat.montant_encaisse ,
+    stat.commission_nelsonre ,
+    stat.montant_a_reverser,
+    stat.montant_reverse,
+    stat.reste_a_reverse,
+    stat.statut_envoie,
+    statut_encaissement,
+    --Les montants avec séparateur de milliers
+    regexp_replace(to_char(stat.montant_cede::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_cede_sep,
+    regexp_replace(to_char(stat.montant_encaisse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_encaisse_sep,
+    regexp_replace(to_char(stat.commission_nelsonre::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS commission_nelsonre_sep,
+    regexp_replace(to_char(stat.montant_a_reverser::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_a_reverser_sep,
+    regexp_replace(to_char(stat.montant_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS montant_reverse_sep,
+    regexp_replace(to_char(stat.reste_a_reverse::numeric, 'FM999,999,999,999'), ',', ' ', 'g') AS reste_a_reverse_sep,
+    --Totaux globaux sur toutes les lignes pour un ced_id donné
+    regexp_replace(to_char(total.total_montant_cede, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_cede,
+    regexp_replace(to_char(total.total_montant_encaisse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_encaisse,
+    regexp_replace(to_char(total.total_commission_nelsonre, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission_nelsonre,
+    regexp_replace(to_char(total.total_montant_a_reverser, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_a_reverser,
+    regexp_replace(to_char(total.total_montant_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_reverse,
+    regexp_replace(to_char(total.total_reste_a_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_reste_a_reverse
 
-       --Totaux globaux sur toutes les lignes pour un ced_id donné
-       regexp_replace(to_char(total.total_montant_cede, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_cede,
-       regexp_replace(to_char(total.total_montant_encaisse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_encaisse,
-       regexp_replace(to_char(total.total_commission_nelsonre, 'FM999,999,999,999'), ',', ' ', 'g') AS total_commission_nelsonre,
-       regexp_replace(to_char(total.total_montant_a_reverser, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_a_reverser,
-       regexp_replace(to_char(total.total_montant_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_montant_reverse,
-       regexp_replace(to_char(total.total_reste_a_reverse, 'FM999,999,999,999'), ',', ' ', 'g') AS total_reste_a_reverse
-
-from v_stat_situation_fin_par_rea_ced stat,
-
-     (
-         SELECT
-             SUM(montant_cede::numeric) AS total_montant_cede,
-             SUM(montant_encaisse::numeric) AS total_montant_encaisse,
-             SUM(commission_nelsonre::numeric) AS total_commission_nelsonre,
-             SUM(montant_a_reverser::numeric) AS total_montant_a_reverser,
-             SUM(montant_reverse::numeric) AS total_montant_reverse,
-             SUM(reste_a_reverse::numeric) AS total_reste_a_reverse
-         FROM
-             v_stat_situation_fin_par_rea_ced
-         WHERE
-           exe_code = COALESCE($P{exe_code},exe_code)
-           AND ced_id = COALESCE($P{ced_id},ced_id)
-           AND ces_id = COALESCE($P{ces_id},ces_id)
-     ) total
-where exe_code=COALESCE($P{exe_code},exe_code)
-  and ced_id=COALESCE($P{ced_id}, ced_id)
-  and ces_id=COALESCE($P{ces_id}, ces_id)
+FROM
+    v_stat_situation_fin_par_rea_ced stat,
+-- Sous-requête pour obtenir les totaux des colonnes sur toutes les lignes
+    (
+        SELECT
+            SUM(montant_cede::numeric) AS total_montant_cede,
+            SUM(montant_encaisse::numeric) AS total_montant_encaisse,
+            SUM(commission_nelsonre::numeric) AS total_commission_nelsonre,
+            SUM(montant_a_reverser::numeric) AS total_montant_a_reverser,
+            SUM(montant_reverse::numeric) AS total_montant_reverse,
+            SUM(reste_a_reverse::numeric) AS total_reste_a_reverse
+        FROM
+            v_stat_situation_fin_par_rea_ced
+        WHERE
+          exe_code =COALESCE($P{exe_code},exe_code)
+          AND ced_id = COALESCE($P{ced_id},ced_id)
+          AND ces_id = COALESCE($P{ces_id},ces_id)
+    ) total
+WHERE
+  stat.exe_code=COALESCE($P{exe_code},stat.exe_code)
+  and stat.ced_id=COALESCE($P{ced_id},stat.ced_id)
+  and stat.ces_id=COALESCE($P{ces_id},stat.ces_id)
   AND replace(unaccent(upper(stat.statut_envoie)), ' ', '') = replace(upper(unaccent(COALESCE($P{statut_envoie}, stat.statut_envoie))), ' ', '')
-  AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')]]>
+AND replace(replace(unaccent(upper(stat.statut_encaissement)), '''', ''), ' ', '') = replace(replace(upper(unaccent(COALESCE($P{statut_encaissement}, stat.statut_encaissement))), '''', ''), ' ', '')]]>
 		</queryString>
-		<field name="bord_num" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="bord_num"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_code" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="aff_code"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_assure" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="aff_assure"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="cou_libelle" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="cou_libelle"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_date_effet" class="java.sql.Date">
-			<property name="com.jaspersoft.studio.field.label" value="aff_date_effet"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="aff_date_echeance" class="java.sql.Date">
-			<property name="com.jaspersoft.studio.field.label" value="aff_date_echeance"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_cede" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_cede"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_encaisse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="commission_nelsonre" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="commission_nelsonre"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_a_reverser" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_a_reverser"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_reverse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="montant_reverse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="reste_a_reverse" class="java.math.BigDecimal">
-			<property name="com.jaspersoft.studio.field.label" value="reste_a_reverse"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="statut_envoie" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="statut_envoie"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="statut_encaissement" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="statut_encaissement"/>
-			<property name="com.jaspersoft.studio.field.tree.path" value="v_stat_situation_fin_par_rea_ced"/>
-		</field>
-		<field name="montant_cede_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="montant_cede_format"/>
-		</field>
-		<field name="montant_encaisse_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="montant_encaisse_format"/>
-		</field>
-		<field name="commission_nelsonre_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="commission_nelsonre_format"/>
-		</field>
-		<field name="montant_a_reverser_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="montant_a_reverser_format"/>
-		</field>
-		<field name="montant_reverse_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="montant_reverse_format"/>
-		</field>
-		<field name="reste_a_reverse_format" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="reste_a_reverse_format"/>
-		</field>
-		<field name="total_montant_cede" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_montant_cede"/>
-		</field>
-		<field name="total_montant_encaisse" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_montant_encaisse"/>
-		</field>
-		<field name="total_commission_nelsonre" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_commission_nelsonre"/>
-		</field>
-		<field name="total_montant_a_reverser" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_montant_a_reverser"/>
-		</field>
-		<field name="total_montant_reverse" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_montant_reverse"/>
-		</field>
-		<field name="total_reste_a_reverse" class="java.lang.String">
-			<property name="com.jaspersoft.studio.field.label" value="total_reste_a_reverse"/>
-		</field>
+		<field name="exe_code" class="java.lang.Long"/>
+		<field name="ced_nom_filiale" class="java.lang.String"/>
+		<field name="ced_id" class="java.lang.Long"/>
+		<field name="ces_id" class="java.lang.Long"/>
+		<field name="bord_num" class="java.lang.String"/>
+		<field name="aff_code" class="java.lang.String"/>
+		<field name="aff_assure" class="java.lang.String"/>
+		<field name="cou_libelle" class="java.lang.String"/>
+		<field name="aff_date_effet" class="java.sql.Date"/>
+		<field name="aff_date_echeance" class="java.sql.Date"/>
+		<field name="montant_cede" class="java.math.BigDecimal"/>
+		<field name="montant_encaisse" class="java.math.BigDecimal"/>
+		<field name="commission_nelsonre" class="java.math.BigDecimal"/>
+		<field name="montant_a_reverser" class="java.math.BigDecimal"/>
+		<field name="montant_reverse" class="java.math.BigDecimal"/>
+		<field name="reste_a_reverse" class="java.math.BigDecimal"/>
+		<field name="statut_envoie" class="java.lang.String"/>
+		<field name="statut_encaissement" class="java.lang.String"/>
+		<field name="montant_cede_sep" class="java.lang.String"/>
+		<field name="montant_encaisse_sep" class="java.lang.String"/>
+		<field name="commission_nelsonre_sep" class="java.lang.String"/>
+		<field name="montant_a_reverser_sep" class="java.lang.String"/>
+		<field name="montant_reverse_sep" class="java.lang.String"/>
+		<field name="reste_a_reverse_sep" class="java.lang.String"/>
+		<field name="total_montant_cede" class="java.lang.String"/>
+		<field name="total_montant_encaisse" class="java.lang.String"/>
+		<field name="total_commission_nelsonre" class="java.lang.String"/>
+		<field name="total_montant_a_reverser" class="java.lang.String"/>
+		<field name="total_montant_reverse" class="java.lang.String"/>
+		<field name="total_reste_a_reverse" class="java.lang.String"/>
 		<variable name="total_montant_cede" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{montant_cede}]]></variableExpression>
 		</variable>
@@ -243,9 +180,6 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 		</variable>
 		<variable name="total_reste" class="java.math.BigDecimal" calculation="Sum">
 			<variableExpression><![CDATA[$F{reste_a_reverse}]]></variableExpression>
-		</variable>
-		<variable name="total_montant_encaisse" class="java.math.BigDecimal" calculation="Sum">
-			<variableExpression><![CDATA[$F{montant_encaisse}]]></variableExpression>
 		</variable>
 		<group name="bord_num">
 			<groupExpression><![CDATA[$F{bord_num}]]></groupExpression>
@@ -298,7 +232,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 	<parameter name="logo_nre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
-	<parameter name="logo_synchronre" class="java.io.InputStream">
+	<parameter name="logo_synre" class="java.io.InputStream">
 		<parameterDescription><![CDATA[]]></parameterDescription>
 	</parameter>
 	<queryString language="SQL">
@@ -308,7 +242,7 @@ where exe_code=COALESCE($P{exe_code},exe_code)
 and ced_id=COALESCE($P{ced_id}, ced_id)
 and ces_id=COALESCE($P{ces_id}, ces_id)
 and replace(unaccent(upper(statut_envoie)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_envoie}, statut_envoie))), ' ', '')
-AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = replace(replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), '''', ''), ' ', '')]]>
+and replace(unaccent(upper(statut_encaissement)), ' ', '') = replace(unaccent(upper(COALESCE($P{statut_encaissement}, statut_encaissement))), ' ', '')]]>
 	</queryString>
 	<field name="exe_code" class="java.lang.Long"/>
 	<field name="ced_nom_filiale" class="java.lang.String"/>
@@ -363,7 +297,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true" uuid="75f82383-1dec-4e6f-88ea-eb50053c349e"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -389,7 +323,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true" uuid="08e39680-20f6-49b0-853c-62b238581131"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -415,7 +349,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="ed66edec-6f50-4818-ae9f-34fc76c998b7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -441,7 +375,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="a236eab6-2ce3-48df-8300-cf00ab98713d"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement verticalAlignment="Middle">
@@ -467,7 +401,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 						</jr:columnHeader>
 						<jr:columnFooter style="Table_CH" height="30" rowSpan="1"/>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="51" height="30" isPrintWhenDetailOverflows="true" uuid="67c49d7d-e972-4c8e-b999-0d2f10370bb1"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -504,7 +438,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</staticText>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="50" height="30" isPrintWhenDetailOverflows="true" uuid="4b0e7d10-9a7b-4e22-ba52-3bc3b623265b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -539,13 +473,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="15c12ac3-c490-4635-8543-c7e6085a561b"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{montant_cede_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_cede})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -574,13 +508,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="11725784-03a3-43d0-b8fa-deadfc5d43c4"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{montant_encaisse_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_encaisse})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -609,13 +543,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="59" height="30" isPrintWhenDetailOverflows="true" uuid="618199cf-7c9b-4d82-8b9f-ecd2e5b056b2"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{commission_nelsonre_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{commission_nelsonre})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -644,13 +578,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="60" height="30" isPrintWhenDetailOverflows="true" uuid="114a6d5f-a7dd-4ed3-bbc0-2809d0830932"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{montant_a_reverser_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_a_reverser})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -681,13 +615,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="3419ef87-7d0b-4c98-b4e9-3c060b916326"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{montant_reverse_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{montant_reverse})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -716,13 +650,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 							</textField>
 						</jr:columnFooter>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
+							<textField isStretchWithOverflow="true">
 								<reportElement x="0" y="0" width="58" height="30" isPrintWhenDetailOverflows="true" uuid="75dc573a-e906-4e97-a233-87c5662aa5d7"/>
 								<box leftPadding="3" rightPadding="3"/>
 								<textElement textAlignment="Right" verticalAlignment="Middle">
 									<font size="7"/>
 								</textElement>
-								<textFieldExpression><![CDATA[$F{reste_a_reverse_format}]]></textFieldExpression>
+								<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{reste_a_reverse})]]></textFieldExpression>
 							</textField>
 						</jr:detailCell>
 					</jr:column>
@@ -780,7 +714,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 					</jr:column>
 				</jr:table>
 			</componentElement>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="-6" y="142" width="243" height="30" uuid="48da221a-d1a5-43bb-b0eb-95ef30d5d1cb">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -813,7 +747,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
-				<imageExpression><![CDATA[$P{logo_synchronre}]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo_synre}]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement mode="Opaque" x="150" y="86" width="480" height="40" forecolor="#FFFFFF" backcolor="#CFA61F" uuid="789f79a0-4f4c-4786-a141-a8c83e6ae2a7">
@@ -828,13 +762,13 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["SITUATION FINANCIERE "+$F{exe_code}+" (NOTES DE DEBIT)"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["SITUATION FINANCIERE DES NOTES DE DEBIT "+$F{exe_code}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
 	<pageFooter>
 		<band height="18">
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="ContainerHeight" x="500" y="2" width="280" height="15" uuid="f7941a5f-b5d5-4c04-929c-15f8510d228d">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>

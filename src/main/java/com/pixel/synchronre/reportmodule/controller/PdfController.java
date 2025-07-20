@@ -27,4 +27,22 @@ public class PdfController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+
+    @PostMapping("/decode-base64-excel")
+    public ResponseEntity<byte[]> decodeBase64ToExcel(@RequestBody Base64Request request) {
+        try {
+            // Décoder la chaîne Base64
+            byte[] excelBytes = Base64.getDecoder().decode(request.getBase64UrlString());
+
+            // Définir les en-têtes HTTP pour la réponse
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "attachment; filename=document.xlsx");
+            headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
 import com.pixel.synchronre.sychronremodule.model.dao.CategorieRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheCategorieRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
@@ -40,6 +41,7 @@ public class TrancheService implements IServiceTranche
     private final ApplicationEventPublisher eventPublisher;
     private final ITrancheCedanteService trancheCedanteService;
     private final CategorieRepository catRepo;
+    private final TraiteNPRepository tnpRepo;
     @Override
     public TrancheResp save(TrancheReq dto)
     {
@@ -75,6 +77,8 @@ public class TrancheService implements IServiceTranche
     public TrancheResp create(TrancheReq dto)
     {
         Tranche tranche = trancheMapper.mapToTranche(dto);
+        Long trancheNumero = trancheRepo.getNextTrancheNum(dto.getTraiteNpId());
+        tranche.setTrancheNumero(trancheNumero);
         tranche = trancheRepo.save(tranche);
         logService.logg("Création d'une tranche", new Tranche(), tranche, "Tranche");
         final Tranche finalTranche = tranche;
@@ -85,13 +89,22 @@ public class TrancheService implements IServiceTranche
         return trancheRepo.getTrancheResp(dto.getTrancheId());
     }
 
+    @Override
+    public Long getNextTrancheNum(Long traiteNpId)
+    {
+        if(traiteNpId == null) throw new AppException("Veuillez fournir l'ID du traité");
+        if(!tnpRepo.existsById(traiteNpId)) throw new AppException("Traité introuvable " + traiteNpId);
+        Long trancheNumero = trancheRepo.getNextTrancheNum(traiteNpId);
+        return trancheNumero;
+    }
+
     @Override @Transactional
     public TrancheResp update(TrancheReq dto)
     {
         if(dto.getRisqueId() == null) throw new AppException("Veuillez sélectionner la tranche à modifier");
         Tranche tranche = trancheRepo.findById(dto.getTrancheId()).orElseThrow(()->new AppException("Tranche introuvable"));
         Tranche oldTranche = trancheCopier.copy(tranche);
-        BeanUtils.copyProperties(dto, tranche);
+        BeanUtils.copyProperties(dto, tranche, "trancheNumero");
         tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         tranche = trancheRepo.save(tranche);
         eventPublisher.publishEvent(new TrancheEvent(this, "Modification de tranche", tranche));

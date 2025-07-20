@@ -54,6 +54,7 @@ public class CreateTraiteNPReq
     private BigDecimal traiTauxCourtier;
     private BigDecimal traiTauxCourtierPlaceur;
     private BigDecimal traiTauxAbattement;
+    private BigDecimal traiInteretDepotLib;
     @NotNull(message = "Veuillez sélectionner la gestion du traité")
     @ExistingExeCode @ActiveExercice
     private Long exeCode;

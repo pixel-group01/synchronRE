@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @NotNull(message = "Aucune donnée parvenue")
 public class LimiteSouscriptionReq
 {
@@ -21,4 +25,5 @@ public class LimiteSouscriptionReq
     private Long risqueId;
     @ExistingCategorieId
     private Long categorieId;
+    private List<Long> couIds;
 }

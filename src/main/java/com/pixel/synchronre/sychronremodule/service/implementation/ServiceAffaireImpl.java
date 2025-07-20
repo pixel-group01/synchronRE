@@ -211,6 +211,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
         Cedante ced = cedRepo.getCedanteByAffId(affId);
         if(!bordRep.noteDebExistsByAffId(affId)) bordService.createNoteDebit(affId);
         mailSenderService.sendNoteDebitFacEmail(synchronreEmail, ced.getCedEmail(),affId);
+        mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENVOYER_NOTE_DEBIT_A_LA_CEDANTE, affId, MAIL.staCode, null));
         return true;
     }
 
