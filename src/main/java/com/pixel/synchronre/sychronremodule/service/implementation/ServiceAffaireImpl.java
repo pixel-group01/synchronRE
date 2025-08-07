@@ -24,6 +24,7 @@ import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -284,5 +285,41 @@ public class ServiceAffaireImpl implements IserviceAffaire
         BigDecimal besFac = this.comptaAffaireService.calculateRestARepartir(affId);
         besFac = besFac == null ? BigDecimal.ZERO : besFac;
         return besFac.compareTo(UN) <= 0;
+    }
+
+    @Transactional
+    @Override
+    public Page<FacultativeListResp> supprimerAffaire(Long affId, Pageable pageable) {
+            // Vérifie si l'affaire existe
+            Affaire affaire = affRepo.findByAffId(affId)
+                    .orElseThrow(() -> new AppException("Affaire non trouvée avec l'ID : " + affId));
+            // Étape 0 : Supprimer les documents liés aux règlements
+            affRepo.deleteDocumentsByAffaireId(affId);
+            // Étape 1 : Supprimer les règlements
+            affRepo.deleteReglementsByAffaireId(affId);
+            // Étape 2 : Supprimer les mouvements liés à l'affaire
+            affRepo.deleteMouvementsByAffaireId(affId);
+            // Étape 3 : Supprimer les détails de bordereaux
+            List<Long> bordereauIds = affRepo.findBordereauxIdsByAffaireId(affId);
+            if (!bordereauIds.isEmpty()) {
+                affRepo.deleteDetailBordereauxByBordereauIds(bordereauIds);
+            }
+            // Étape 4 : Supprimer les bordereaux
+            affRepo.deleteBordereauxByAffaireId(affId);
+            // Étape 5 : Supprimer les mouvements liés aux placements (repartitions)
+            List<Long> repIds = affRepo.findRepartitionIdsByAffaireId(affId);
+            if (!repIds.isEmpty()) {
+                affRepo.deleteMouvementsByRepartitionIds(repIds);
+            }
+            // Étape 6 : Supprimer les répartitions
+            affRepo.deleteRepartitionsByAffaireId(affId);
+            // Étape 7 : Supprimer l'affaire
+            affRepo.deleteAffaireById(affId);
+           //Rechargement de la liste des affaires
+        Page<FacultativeListResp> facPages = affRepo.searchAffaires("", null, null,
+                jwtService.getConnectedUserCedId(),
+                Arrays.asList(SAISIE.staCode, RETOURNE.staCode, EN_COURS_DE_REPARTITION.staCode), exoService.getExerciceCourant().getExeCode(), pageable);
+        List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
+        return new PageImpl<>(facList, pageable, facPages.getTotalElements());
     }
 }

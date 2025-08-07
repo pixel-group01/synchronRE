@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -342,5 +343,23 @@ public class AffaireController
     @PutMapping(path = "/envoyer-note-debit-fac/{affId}")
     boolean envoyerNoteDebitFac(@PathVariable Long affId) throws Exception {
         return affService.senNoteDebitFac(affId);
+    }
+
+
+//    @PutMapping(path = "/facultative/transmettre/{affId}")
+//    public Page<FacultativeListResp> transmettreAffaire(@PathVariable Long affId,
+//                                                        @RequestParam(defaultValue = "0") int page,
+//                                                        @RequestParam(defaultValue = "10") int size) throws UnknownHostException
+//    {
+//        return affService.transmettreAffaireAuSouscripteur(affId, PageRequest.of(page, size));
+//    }
+
+    @DeleteMapping("/supprimer/{affId}")
+    public Page<FacultativeListResp> supprimerAffaire(@PathVariable Long affId,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
+
+        return affService.supprimerAffaire(affId, PageRequest.of(page, size));
+
     }
 }

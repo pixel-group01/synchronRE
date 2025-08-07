@@ -9,8 +9,10 @@ import com.pixel.synchronre.sychronremodule.model.entities.Sinistre;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -168,4 +170,57 @@ public interface AffaireRepository extends JpaRepository<Affaire, Long>
 
     @Query("select a.devise.devCode from Affaire a where a.affId = ?1")
     String getDevCodeByAffId(Long affId);
+
+
+    ///Suppression d'une affaires//
+    Optional<Affaire> findByAffId(Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Document d WHERE d.reglement.regId IN (SELECT r.regId FROM Reglement r WHERE r.affaire.affId = :affId)")
+    void deleteDocumentsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Reglement r WHERE r.affaire.affId = :affId")
+    void deleteReglementsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Mouvement m WHERE m.affaire.affId = :affId")
+    void deleteMouvementsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DetailBordereau db WHERE db.bordereau.bordId IN :bordereauIds")
+    void deleteDetailBordereauxByBordereauIds(@Param("bordereauIds") List<Long> bordereauIds);
+
+    @Query("SELECT b.bordId FROM Bordereau b WHERE b.affaire.affId = :affId")
+    List<Long> findBordereauxIdsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Bordereau b WHERE b.affaire.affId = :affId")
+    void deleteBordereauxByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Mouvement m WHERE m.placement.repId IN :repIds")
+    void deleteMouvementsByRepartitionIds(@Param("repIds") List<Long> repIds);
+
+    @Query("SELECT r.repId FROM Repartition r WHERE r.affaire.affId = :affId")
+    List<Long> findRepartitionIdsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Repartition r WHERE r.affaire.affId = :affId")
+    void deleteRepartitionsByAffaireId(@Param("affId") Long affId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Affaire a WHERE a.affId = :affId")
+    void deleteAffaireById(@Param("affId") Long affId);
+
+
+
 }

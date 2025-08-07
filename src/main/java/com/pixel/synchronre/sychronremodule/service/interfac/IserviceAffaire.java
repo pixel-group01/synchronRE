@@ -10,6 +10,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.Facul
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.net.UnknownHostException;
@@ -45,6 +46,7 @@ public interface IserviceAffaire {
     boolean placementIsFinished(Long affId);
 
 
+    Page<FacultativeListResp> supprimerAffaire(Long affId, Pageable pageable);
 
 
 
