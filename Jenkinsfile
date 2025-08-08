@@ -8,13 +8,13 @@ pipeline {
 
     environment {
         GIT_REPO_URL = 'https://github.com/pixel-group01/synchronRE.git'
-        BRANCH = 'test'
+        BRANCH = 'main'
         BUILD_DIR = 'target'
         JAR_NAME = 'synchronRE.jar'
-        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Test\\back'
-        CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-dev.properties"
+        DEPLOY_DIR = 'C:\\Users\\Administrator\\Desktop\\synchronRE\\nsia-group\\Prod\\back'
+        CONFIG_FILE = "${DEPLOY_DIR}\\config\\application-prod.properties"
         NSSM_PATH = 'C:\\nssm\\nssm.exe'
-        SERVICE_NAME = 'synchronreTest' // Nom du service Windows
+        SERVICE_NAME = 'synchronreProd' // Nom du service Windows
     }
 
     stages {
