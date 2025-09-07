@@ -23,6 +23,7 @@ import com.pixel.synchronre.sychronremodule.model.events.SimpleEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComptablesTraite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceMouvement;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
+import com.pixel.synchronre.sychronremodule.service.interfac.IserviceExercie;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.BeanUtils;
@@ -52,6 +53,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     private final IServiceMouvement mvtService;
     private final UserRepo userRepo;
     private final EmailSenderService emailSenderService;
+    private final IserviceExercie exeService;
 
     @Override @Transactional
     public TraiteNPResp create(CreateTraiteNPReq dto)
@@ -136,7 +138,9 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> searchSaisieSouscripteur(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
         staCodes = staCodes == null || staCodes.isEmpty() ? TraiteStatutGroup.tabSaisieSouscripteur : staCodes;
-        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, 2024L, pageable);
+        Exercice exeCourant = exeService.getExerciceCourant();
+        exeCode = exeCode == null ? exeCourant.getExeCode() : exeCode;
+        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
 
@@ -144,7 +148,9 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> enCoursDeValidation(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
         staCodes = staCodes == null || staCodes.isEmpty() ? TraiteStatutGroup.tabEncoursValidattion : staCodes;
-        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, 2024L, pageable);
+        Exercice exeCourant = exeService.getExerciceCourant();
+        exeCode = exeCode == null ? exeCourant.getExeCode() : exeCode;
+        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
 
@@ -152,7 +158,9 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> enCoursDeReglement(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
         staCodes = staCodes == null || staCodes.isEmpty() ? TraiteStatutGroup.tabEnReglement : staCodes;
-        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, 2024L, pageable);
+        Exercice exeCourant = exeService.getExerciceCourant();
+        exeCode = exeCode == null ? exeCourant.getExeCode() : exeCode;
+        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
 
@@ -160,7 +168,9 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> solde(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
         staCodes = staCodes == null || staCodes.isEmpty() ? TraiteStatutGroup.tabSolde : staCodes;
-        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, 2024L, pageable);
+        Exercice exeCourant = exeService.getExerciceCourant();
+        exeCode = exeCode == null ? exeCourant.getExeCode() : exeCode;
+        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
 
@@ -168,7 +178,9 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     public Page<TraiteNPResp> archive(String key, Long fncId, Long userId, Long cedId, List<String> staCodes, Long exeCode, Pageable pageable) {
         key = StringUtils.stripAccentsToUpperCase(key);
         staCodes = staCodes == null || staCodes.isEmpty() ? TraiteStatutGroup.tabArchive : staCodes;
-        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, 2024L, pageable);
+        Exercice exeCourant = exeService.getExerciceCourant();
+        exeCode = exeCode == null ? exeCourant.getExeCode() : exeCode;
+        Page<TraiteNPResp> traiteNPResps = traiteNPRepo.search(key, jwtService.getConnectedUserCedId(), null, null, staCodes, exeCode, pageable);
         return traiteNPResps;
     }
 
