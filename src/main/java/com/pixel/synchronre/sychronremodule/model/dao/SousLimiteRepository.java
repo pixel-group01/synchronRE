@@ -39,22 +39,23 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
                                        Pageable pageable);
 
     @Query("""
-    select new com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp(
+    select DISTINCT new com.pixel.synchronre.sychronremodule.model.dto.association.response.ActivitesResp(
     c.couId,c.couLibelle)
     from Association a 
     join a.limiteSouscription ls
     join a.couverture c
-    join a.type t
-    where ls.risqueCouvert = ?1 
-    AND t.uniqueCode='LIM-SOU-COUV' 
+    join a.type t  
+    join ls.categorie.traiteNonProportionnel tnp
+    where t.uniqueCode='LIM-SOU-COUV' 
+    and tnp.traiteNpId=?1
     AND c.couId NOT IN (
                 select sl.activite.couId
                 from SousLimite sl
-                where sl.activite.couId = a.couverture.couId        
+                where sl.activite.couId = a.couverture.couId and sl.traiteNonProportionnel.traiteNpId=tnp.traiteNpId       
     )
     ORDER BY c.couLibelle
 """)
-    List<ActivitesResp> getActivite(Long risqueId);
+    List<ActivitesResp> getActivite(Long traiteNpId);
 
     @Query("""
           select new com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite(
