@@ -146,5 +146,4 @@ public class TraiteNpController
         traiteNpService.valider(traiteNpId);
         return true;
     }
-
 }
