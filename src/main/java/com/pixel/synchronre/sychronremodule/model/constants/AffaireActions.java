@@ -20,4 +20,5 @@ public class AffaireActions {
     public static final String ENREGISTRER_REPARTITION = "Enregistrement d'une repartition sur une affaire";
     public static final String RENOUVELER_FAC = "Renouvelement d'une affaire facultative";
     public static final String DELETE_FAC = "Suppression d'une affaire facultative";
+    public static final String ENVOYER_NOTE_DEBIT_A_LA_CEDANTE = "Envoie de la note de débit à la cédante";
 }

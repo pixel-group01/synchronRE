@@ -340,7 +340,7 @@ public class AffaireController
     }
 
     @PutMapping(path = "/envoyer-note-debit-fac/{affId}")
-    boolean envoyerNoteCession(@PathVariable Long affId) throws Exception {
+    boolean envoyerNoteDebitFac(@PathVariable Long affId) throws Exception {
         return affService.senNoteDebitFac(affId);
     }
 }

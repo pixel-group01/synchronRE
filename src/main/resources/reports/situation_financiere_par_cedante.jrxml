@@ -577,7 +577,7 @@ AND replace(replace(unaccent(upper(statut_encaissement)), '''', ''), ' ', '') = 
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="15" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SITUATION FINANCIERE DE LA NOTE DE DEBIT]]></text>
+				<text><![CDATA[SITUATION FINANCIERE ( NOTES DE DEBIT )]]></text>
 			</staticText>
 			<image>
 				<reportElement x="609" y="30" width="170" height="32" uuid="e6206cd6-9171-473f-ba69-372542016436">
