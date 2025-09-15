@@ -59,6 +59,19 @@ public abstract class RepartitionMapper {
     @Mapping(target = "autreInterlocuteurs", expression = "java(this.mapIntIdstoString(dto.getAutreInterlocuteurIds()))")
     public abstract Repartition mapToPlaRepartition(CreatePlaRepartitionReq dto);
 
+    @Mapping(target = "interlocuteurPrincipalId", source = "interlocuteurPrincipal.intId")
+    @Mapping(target = "cesId", source = "cessionnaire.cesId")
+    @Mapping(target = "affId", source = "affaire.affId")
+    @Mapping(target = "repId", ignore = true)
+    @Mapping(target = "repCapital", source = "repCapital")
+    @Mapping(target = "repTaux", source = "repTaux")
+    @Mapping(target = "repSousCommission", source = "repSousCommission")
+    @Mapping(target = "repTauxComCourt", source = "repTauxComCourt")
+    @Mapping(target = "affCoursDevise", source = "repCoursDevise")
+    // autreInterlocuteurIds : il faut une méthode custom car c'est une String dans Repartition
+    @Mapping(target = "autreInterlocuteurIds", ignore = true)
+    public abstract CreatePlaRepartitionReq mapToCreatePlaRepartitionReq(Repartition repartition);
+
     /*@Mapping(target = "affId", source = "affaire.affId")
     @Mapping(target = "paramCesLegalId", source = "paramCessionLegale.paramCesLegId")
     @Mapping(target = "paramCesLegLibelle", source = "paramCessionLegale.paramCesLegLibelle")

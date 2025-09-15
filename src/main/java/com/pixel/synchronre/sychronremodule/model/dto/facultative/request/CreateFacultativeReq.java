@@ -76,4 +76,6 @@ public class CreateFacultativeReq
     @ExistingCouId
     private Long couvertureId;
     protected String devCode;
+
+    private Long affSourceId;
 }

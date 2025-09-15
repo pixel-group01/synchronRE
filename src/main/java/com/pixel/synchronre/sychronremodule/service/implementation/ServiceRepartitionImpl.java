@@ -390,4 +390,19 @@ public class ServiceRepartitionImpl implements IserviceRepartition
         repReserveCourtier.setRepCapitalLettre(ConvertMontant.numberToLetter(reserveCourtier.setScale(0, RoundingMode.HALF_UP)));
         repRepo.save(repReserveCourtier);
     }
+
+    @Override @Transactional
+    public void reconduirePlacement(Long oldAffId, Long newAffId)
+    {
+        List<Repartition> placements = repRepo.getActivePlacementsByAffId(oldAffId);
+        if(placements != null)
+        {
+            placements.forEach(p->
+            {
+                CreatePlaRepartitionReq dto = repMapper.mapToCreatePlaRepartitionReq(p);
+                dto.setAffId(newAffId);
+                this.createPlaRepartition(dto);
+            });
+        }
+    }
 }

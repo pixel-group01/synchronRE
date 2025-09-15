@@ -15,6 +15,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.IServiceCalculsComp
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,7 +44,40 @@ public abstract class FacultativeMapper
     @Mapping(target = "affUserCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppUser(jwtService.getConnectedUserId()))")
     @Mapping(target = "affFonCreator", expression = "java(new com.pixel.synchronre.authmodule.model.entities.AppFunction(jwtService.getConnectedUserFunctionId()))")
     @Mapping(target = "exercice", expression = "java(new com.pixel.synchronre.sychronremodule.model.entities.Exercice(dto.getExeCode()))")
+    @Mapping(target = "affSource", expression = "java(dto.getAffSourceId() == null ? null : new com.pixel.synchronre.sychronremodule.model.entities.Affaire(dto.getAffSourceId()))")
     public abstract Affaire mapToAffaire(CreateFacultativeReq dto);
+
+    @Mapping(source = "exercice.exeCode", target = "exeCode")
+    @Mapping(source = "cedante.cedId", target = "cedId")
+    @Mapping(source = "couverture.couId", target = "couvertureId")
+    @Mapping(source = "devise.devCode", target = "devCode")
+    @Mapping(source = "affId", target = "affSourceId")
+    public abstract CreateFacultativeReq mapToCreateFacultativeReq(Affaire affaire);
+
+    /**
+     * Exemple si tu veux ignorer les champs null pour éviter les NPE
+     */
+    @Named("safeMapToCreateFacultativeReq")
+    public CreateFacultativeReq safeMapToCreateFacultativeReq(Affaire affaire) {
+        if (affaire == null) return null;
+        CreateFacultativeReq dto = new CreateFacultativeReq();
+        dto.setAffAssure(affaire.getAffAssure());
+        dto.setAffActivite(affaire.getAffActivite());
+        dto.setAffDateEffet(affaire.getAffDateEffet());
+        dto.setAffDateEcheance(affaire.getAffDateEcheance());
+        dto.setExeCode(affaire.getExercice() != null ? affaire.getExercice().getExeCode() : null);
+        dto.setFacNumeroPolice(affaire.getFacNumeroPolice());
+        dto.setAffCapitalInitial(affaire.getAffCapitalInitial());
+        dto.setFacSmpLci(affaire.getFacSmpLci());
+        dto.setFacPrime(affaire.getFacPrime());
+        dto.setReserveCourtier(affaire.getReserveCourtier());
+        dto.setAffStatutCreation(affaire.getAffStatutCreation());
+        dto.setAffCoursDevise(affaire.getAffCoursDevise());
+        dto.setCedId(affaire.getCedante() != null ? affaire.getCedante().getCedId() : null);
+        dto.setCouvertureId(affaire.getCouverture() != null ? affaire.getCouverture().getCouId() : null);
+        dto.setDevCode(affaire.getDevise() != null ? affaire.getDevise().getDevCode() : null);
+        return dto;
+    }
 
     public Facultative mapToFacultative(CreateFacultativeReq dto)
     {

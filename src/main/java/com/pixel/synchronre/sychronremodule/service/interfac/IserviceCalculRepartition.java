@@ -12,6 +12,9 @@ public interface IserviceCalculRepartition {
     @Transactional
     CalculationRepartitionRespDto saveRep(CalculationRepartitionRespDto dto) throws UnknownHostException;
 
+    @Transactional
+    CalculationRepartitionRespDto reconduireRepartitions(Long oldAffId, Long newAffId) throws UnknownHostException;
+
     CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);
 
     CalculRepartitionResp calculateRepByTaux(Long affId, BigDecimal taux, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude);

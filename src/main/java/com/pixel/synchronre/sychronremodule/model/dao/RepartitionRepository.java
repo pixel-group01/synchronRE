@@ -79,7 +79,7 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = ?2 and r.cessionnaire.cesId = ?3 and r.repStatut =true")
     Repartition findByAffaireAndTypeRepAndCesId(Long affId, String typeRep, Long cesId);
 
-    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA'")
+    @Query("select (count(r.repId)>0) from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and r.repStaCode.staCode not in ('REFUSE', 'SUP', 'SUPP', 'ANNULE')")
     boolean affaireHasPlacement(Long affId);
 
     @Query("select r.cessionnaire.cesId from Repartition r left join r.repStaCode s where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_PLA' and r.repStatut = true and (s.staCode is null or s.staCode not in('REFUSE'))")
@@ -240,4 +240,53 @@ public interface RepartitionRepository extends JpaRepository<Repartition, Long>
 
     @Query("select r from Repartition r where r.affaire.affId = ?1 and r.type.uniqueCode = 'REP_RES_COURT' and r.repStatut= true and (r.repStaCode is null or r.repStaCode not in('REFUSE', 'SUP', 'SUPP', 'ANNULE'))")
     Repartition findReserveCourtierByAffId(Long affId);
+
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq(
+        r.repId, r.repCapital, r.repTaux, r.repPrime, r.affaire.affId, 
+        r.paramCessionLegale.paramCesLegId, true, r.paramCessionLegale.paramCesLegLibelle)
+        from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_CES_LEG') and r.paramCessionLegale.paramType.uniqueCode = 'PCL_PF'
+        and r.repStatut = true
+    """)
+    List<UpdateCesLegReq> findRepartitionCessionsLegalesPFByAffId(Long affId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq(
+        r.repId, r.repCapital, r.repTaux, r.repPrime, r.affaire.affId, 
+        r.paramCessionLegale.paramCesLegId, true, r.paramCessionLegale.paramCesLegLibelle)
+        
+        from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode in ('REP_CES_LEG') and r.paramCessionLegale.paramType.uniqueCode = 'PCL_SIMPLE'
+        and r.repStatut = true
+    """)
+    List<UpdateCesLegReq> findRepartitionCessionsLegalesSimpleByAffId(Long affId);
+
+    @Query("""
+        select new com.pixel.synchronre.sychronremodule.model.dto.repartition.request.UpdateCesLegReq(
+        r.repId, r.repCapital, r.repTaux, r.repPrime, r.affaire.affId, 
+        r.paramCessionLegale.paramCesLegId, true, r.paramCessionLegale.paramCesLegLibelle)
+        
+        from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode = 'REP_CONSERVATION'
+        and r.repStatut = true
+    """)
+    Repartition findRepartitionConservationByAffId(Long affId);
+
+    @Query("""
+        select r
+        from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode = 'REP_XL'
+        and r.repStatut = true
+    """)
+    Repartition findRepartitionXLByAffId(Long affId);
+
+    @Query("""
+        select r
+        from Repartition r where r.affaire.affId = ?1 
+        and r.type.uniqueCode = 'REP_FACOB'
+        and r.repStatut = true
+    """)
+    Repartition findRepartitionFacobByAffId(Long affId);
 }

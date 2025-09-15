@@ -41,7 +41,7 @@ public interface IJwtService
     Long getConnectedUserCedId();
     Long getConnectedUserCesId();
 
-    boolean UserIsCourtier();
+    boolean userIsCourtier();
 
     boolean hasAnyAuthority(String ...s);
     Set<String> getAuthorities();

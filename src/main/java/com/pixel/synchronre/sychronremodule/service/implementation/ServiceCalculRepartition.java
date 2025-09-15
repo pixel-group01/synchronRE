@@ -1,6 +1,7 @@
 package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.controller.service.PlacementDocUploader;
+import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.notificationmodule.controller.services.EmailSenderService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
@@ -21,6 +22,7 @@ import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import com.pixel.synchronre.typemodule.model.entities.Type;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +61,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
     private String synchronreEmail;
     private final DecimalFormat decimalFormat;
     private final IServiceInterlocuteur intService;
+    private final IJwtService jwtService;
 
     private final ParamCessionLegaleRepository pclRepoo;
 
@@ -96,7 +99,15 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         String affStaCode = affaire.getStatut().getStaCode();
         if(affStaCode == null || !affStaCode.equals("CPLA"))
         {
-            mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+            boolean isCourtier = jwtService.userIsCourtier();
+            if(isCourtier)
+            {
+                mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_ATTENTE_DE_PLACEMENT.staCode, null));
+            }
+            else
+            {
+                mvtService.createMvtAffaire(new MvtReq(AffaireActions.ENREGISTRER_REPARTITION, dto.getAffId(), EN_COURS_DE_REPARTITION.staCode, null));
+            }
         }
 
         dto.setParamCesLegsPremierFranc(pclPfs);
@@ -106,6 +117,62 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         dto.setParamCesLegs(pclSimples);
         return dto;
     }
+
+
+    @Override @Transactional
+    public CalculationRepartitionRespDto reconduireRepartitions(Long oldAffId, Long newAffId) throws UnknownHostException {
+        // 1. Récupérer l'affaire source
+        Affaire oldAff = affRepo.findById(oldAffId)
+                .orElseThrow(() -> new AppException("Affaire introuvable: " + oldAffId));
+
+        // 2. Charger les PCL
+        List<UpdateCesLegReq> pclSimples = repRepo.findRepartitionCessionsLegalesSimpleByAffId(oldAffId);
+        pclSimples.forEach(pcl -> {
+            pcl.setRepId(null);
+            pcl.setAffId(newAffId);
+        });
+
+        List<UpdateCesLegReq> pclPf = repRepo.findRepartitionCessionsLegalesPFByAffId(oldAffId);
+        pclPf.forEach(pcl -> {
+            pcl.setRepId(null);
+            pcl.setAffId(newAffId);
+        });
+
+        // 3. Charger les répartitions principales
+        Repartition repConservation = repRepo.findRepartitionConservationByAffId(oldAffId);
+        Repartition repXL = repRepo.findRepartitionXLByAffId(oldAffId);
+        Repartition repFacob = repRepo.findRepartitionFacobByAffId(oldAffId);
+
+        // 4. Construire le DTO pour le nouvel Affaire
+        CalculationRepartitionRespDto dto = new CalculationRepartitionRespDto();
+        dto.setAffId(newAffId);
+        dto.setMtPartCedante(oldAff.getPartCedante());
+        dto.setParamCesLegsPremierFranc(pclPf);
+        dto.setParamCesLegs(pclSimples);
+
+        // ⚡ Ajout du contrôle NULL
+        if (repConservation != null) {
+            dto.setConservationCapital(repConservation.getRepCapital());
+            dto.setConservationTaux(repConservation.getRepTaux());
+            dto.setConservationPrime(repConservation.getRepPrime());
+        }
+
+        if (repXL != null) {
+            dto.setXlCapital(repXL.getRepCapital());
+            dto.setXlTaux(repXL.getRepTaux());
+            dto.setXlPrime(repXL.getRepPrime());
+        }
+
+        if (repFacob != null) {
+            dto.setFacobCapital(repFacob.getRepCapital());
+            dto.setFacobTaux(repFacob.getRepTaux());
+            dto.setFacobPrime(repFacob.getRepPrime());
+        }
+
+        // 5. Sauvegarde via la méthode existante
+        return this.saveRep(dto);
+    }
+
 
     @Override
     public CalculRepartitionResp calculateRepByCapital(Long affId, BigDecimal capital, BigDecimal tauxCmsRea, BigDecimal tauxCmsCourtage, Long repIdToExclude)
@@ -386,6 +453,7 @@ public class ServiceCalculRepartition implements IserviceCalculRepartition
         BigDecimal partCedante = aff.getPartCedante() != null ? aff.getPartCedante() : aff.getFacSmpLci();
         dto.setAffId(affId);
         dto.setPartCedante(partCedante);
+        dto.setModeUpdate(modeUpdate);
         dto.setModeUpdate(modeUpdate);
         if(modeUpdate)
         {

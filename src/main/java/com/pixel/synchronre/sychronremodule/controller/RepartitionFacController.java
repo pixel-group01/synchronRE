@@ -1,8 +1,10 @@
 package com.pixel.synchronre.sychronremodule.controller;
 
+import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sychronremodule.model.constants.RepStatutGroup;
 import com.pixel.synchronre.sychronremodule.model.dao.ParamCessionLegaleRepository;
 import com.pixel.synchronre.sychronremodule.model.dao.RepartitionRepository;
+import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.validator.ExistingAffId;
 import com.pixel.synchronre.sychronremodule.model.dto.paramCessionLegale.response.ParamCessionLegaleListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.repartition.request.*;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +46,17 @@ public class RepartitionFacController
     @PostMapping(path = "/save")
     public CalculationRepartitionRespDto saveRep(@RequestBody CalculationRepartitionRespDto dto) throws UnknownHostException {
         return this.calculRepartitionService.saveRep(dto);
+    }
+
+    @PostMapping("/reconduireRepartition/{olfAffId}/{newAffId}")
+    public ResponseEntity<CalculationRepartitionRespDto> reconduireRepartition(@PathVariable("olfAffId") Long olfAffId,@PathVariable("newAffId") Long newAffId) {
+
+        try {
+            CalculationRepartitionRespDto rep = calculRepartitionService.reconduireRepartitions(olfAffId,newAffId);
+            return ResponseEntity.ok(rep);
+        } catch (AppException | UnknownHostException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PostMapping(path = "/create-placement")

@@ -124,15 +124,31 @@ public class ConvertMontant {
     public static String numberToLetter(BigDecimal nombre)
     {
         long partieEntiere = (long) nombre.doubleValue();
+        long partieDecimale = getPartieDecimale(nombre);
         String partieEntiereLettre = numberToLetter(partieEntiere);
         String decimalString = nombre.subtract(new BigDecimal(partieEntiere)).toString();
         int decimalIndex = decimalString.indexOf(".");
         if(decimalIndex<0 || decimalString.equals("0")) return partieEntiereLettre;
-        long partieDecimal = Integer.parseInt(decimalString.substring(decimalIndex + 1));
-        String partieDecimaleLettre = numberToLetter(partieDecimal);
+
+        String partieDecimaleLettre = numberToLetter(partieDecimale);
         String nombreLettre = partieEntiereLettre + " virgule " + partieDecimaleLettre;
         return nombreLettre;
     }
+
+    static long getPartieDecimale(BigDecimal valeur)
+    {
+        long partieEntiere = valeur.longValue();
+        BigDecimal partieDecimale = valeur.subtract(BigDecimal.valueOf(partieEntiere));
+        partieDecimale = partieDecimale.stripTrailingZeros();
+
+        String texte = partieDecimale.toPlainString();
+        if (!texte.contains(".")) return 0L;
+        String decimal = texte.substring(texte.indexOf('.') + 1);
+        if (decimal.isEmpty()) return 0L;
+
+        return Long.parseLong(decimal);
+    }
+
 
     public static String numberToLetter(long nombre) {
         int n;

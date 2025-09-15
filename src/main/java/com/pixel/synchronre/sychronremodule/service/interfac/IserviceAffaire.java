@@ -9,6 +9,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatC
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
+import com.pixel.synchronre.sychronremodule.model.entities.Affaire;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public interface IserviceAffaire {
     FacultativeDetailsResp updateFacultative(UpdateFacultativeReq dto, HistoDetails hd);
     Page<FacultativeListResp> searchFacultative(String key, Pageable pageable);
 
-    FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto);
+    FacultativeDetailsResp reconduireAffaire(Long oldAffId) throws UnknownHostException;
 
     EtatComptableAffaire getEtatComptable(Long affId);
 

@@ -60,4 +60,7 @@ public interface IserviceRepartition
     void doRepartitionSinistre(Affaire aff, Long sinId, CessionnaireListResp ces);
 
     void saveReserveCourtier(Long affId, BigDecimal facSmp, BigDecimal prime100, BigDecimal reserveCourtier);
+
+    @Transactional
+    void reconduirePlacement(Long oldAffId, Long newAffId);
 }

@@ -81,11 +81,24 @@ public class AffaireController
         HistoDetails hd = hds.getHistoDetailsFromSecurityContext("Modification d'une affaire");
         return affService.updateFacultative(dto, hd);
     }
-    @PostMapping("/facultative/renew")
-    @ResponseStatus(HttpStatus.CREATED)
-    public FacultativeDetailsResp renewAffaire(@RequestBody @Valid RenewFacultativeReq dto) throws UnknownHostException {
-        return affService.renewAffaire(dto);
+//    @PostMapping("/facultative/reconduire")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public FacultativeDetailsResp renewAffaire(@RequestBody @Valid RenewFacultativeReq dto){
+//        return affService.reconduireAffaire(dto);
+//    }
+
+    @PostMapping("/reconduire/{id}")
+    public FacultativeDetailsResp reconduireAffaire(@PathVariable("id") Long oldAffId) throws UnknownHostException
+    {
+        FacultativeDetailsResp resp = affService.reconduireAffaire(oldAffId);
+        return resp;
     }
+
+//    @PostMapping("/facultative/reconduire")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public FacultativeDetailsResp renewAffaire(@RequestBody @Valid RenewFacultativeReq dto){
+//        return affService.reconduireAffaire(dto);
+//    }
     //Tab all affaires : affiche toutes les affaires qui sont pas supprimées quelques soit l'acteur
     @GetMapping(path = "/facultative/all")
     public Page<FacultativeListResp> searchAllAffaires(@RequestParam(required = false) Long exeCode, @RequestParam(required = false) Long cedId,

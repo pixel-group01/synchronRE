@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.service.implementation;
 
 import com.pixel.synchronre.archivemodule.model.dtos.response.Base64FileDto;
 import com.pixel.synchronre.authmodule.controller.repositories.UserRepo;
+import com.pixel.synchronre.authmodule.controller.services.spec.IHistoDetailsService;
 import com.pixel.synchronre.authmodule.controller.services.spec.IJwtService;
 import com.pixel.synchronre.authmodule.model.entities.HistoDetails;
 import com.pixel.synchronre.logmodule.controller.service.ILogService;
@@ -13,7 +14,6 @@ import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.CreateFacultativeReq;
-import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.RenewFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.request.UpdateFacultativeReq;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.EtatComptableAffaire;
 import com.pixel.synchronre.sychronremodule.model.dto.facultative.response.FacultativeDetailsResp;
@@ -24,7 +24,6 @@ import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -37,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,16 +70,21 @@ public class ServiceAffaireImpl implements IserviceAffaire
     private final FacultativeMapper facultativeMapper;
     private final CouvertureRepository couvRepo;
     private final ReglementRepository regRepo;
+    private final IserviceCalculRepartition serviceCalculRepartition;
+
+
+
     private final TypeRepo typeRepo;
     @PersistenceContext
     private EntityManager entityManager;
+    private final IHistoDetailsService hds;
 
 
     @Override @Transactional
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto, HistoDetails hd)
     {
         if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
         BeanUtils.copyProperties(hd, aff);
         if(dto.getReserveCourtier() == null) aff.setReserveCourtier(BigDecimal.ZERO);
@@ -162,24 +167,23 @@ public class ServiceAffaireImpl implements IserviceAffaire
     }
 
     @Override
-    public FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) {
-        Affaire oldAffaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
-        boolean isCourtier = jwtService.UserIsCourtier();
-        entityManager.detach(oldAffaire);
-        Affaire newAffaire = new Affaire();
-        BeanUtils.copyProperties(oldAffaire, newAffaire, "affId");
-        BeanUtils.copyProperties(dto, newAffaire, "affId");
-        newAffaire.setAffSource(oldAffaire);
-        newAffaire.setAffCode(null);
-        newAffaire.setExercice(new Exercice(oldAffaire.getExercice().getExeCode() + 1));
-        newAffaire.setStatut(isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode));
-        newAffaire = affRepo.save(newAffaire);
-        String newAffCode = this.generateAffCode(newAffaire.getAffId());
-        newAffaire.setAffCode(newAffCode);
-
-        logService.logg(AffaireActions.RENOUVELER_FAC, null, newAffaire, SynchronReTables.AFFAIRE);
-        return facultativeMapper.mapToFacultativeDetailsResp(newAffaire);
+    @Transactional
+    public FacultativeDetailsResp reconduireAffaire(Long oldAffId) throws UnknownHostException {
+        // 1. Récupérer l'affaire existante
+        Affaire oldAff = affRepo.findById(oldAffId)
+                .orElseThrow(() -> new AppException("Affaire introuvable : " + oldAffId));
+        // 2. Mapper l'ancienne affaire dans un DTO pour createFacultative
+        CreateFacultativeReq dto = facultativeMapper.mapToCreateFacultativeReq(oldAff);
+        dto.setExeCode(oldAff.getExercice().getExeCode() + 1);
+        dto.setAffDateEffet(oldAff.getAffDateEffet().plusYears(1));
+        dto.setAffDateEcheance(oldAff.getAffDateEcheance().plusYears(1));
+        HistoDetails hd = hds.getHistoDetailsFromSecurityContext("Reconduction de l'affaire " + oldAff.getAffCode());
+       FacultativeDetailsResp newAffaire = createFacultative(dto, hd);
+        serviceCalculRepartition.reconduireRepartitions(oldAffId,newAffaire.getAffId());
+        repService.reconduirePlacement(oldAffId,newAffaire.getAffId());
+        return newAffaire;
     }
+
 
     @Override
     public EtatComptableAffaire getEtatComptable(Long affId)
@@ -322,4 +326,5 @@ public class ServiceAffaireImpl implements IserviceAffaire
         List<FacultativeListResp> facList = facPages.stream().peek(fac->fac.setPlacementTermine(this.placementIsFinished(fac.getAffId()))).collect(Collectors.toList());
         return new PageImpl<>(facList, pageable, facPages.getTotalElements());
     }
+
 }
