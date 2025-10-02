@@ -38,7 +38,7 @@ public class SousLimiteController {
     Page<SousLimiteDetailsResp> create(@RequestParam(defaultValue = "") String key,
                               @RequestParam(required = true) Long traiteNpId,
                               @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size)
+                              @RequestParam(defaultValue = "100") int size)
     {
         return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
     }
