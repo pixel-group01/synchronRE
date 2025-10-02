@@ -78,7 +78,6 @@ public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
         repartition = recalculateMontantPrimeOnPlacement(dto, repartition);
         repartition = rtRepo.save(repartition);
         if(dto.isAperiteur()) setAsAperiteur(repartition);
-        eventPublisher.publishEvent(new LoggingEvent(this, "Enregistrement d'un placement sur traité non proportionnel", new Repartition(), repartition, "Repartition"));
 
         RepartitionTraiteNPResp repartitionTraiteNPResp = rtRepo.getRepartitionTraiteNPResp(repartition.getRepId());
         repartitionTraiteNPResp.setTauxDejaReparti(comptaTraiteService.calculateTauxDejaPlace(dto.getTraiteNpId()));

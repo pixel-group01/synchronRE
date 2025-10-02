@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface CategorieRepository extends JpaRepository<Categorie, Long>
@@ -44,4 +45,13 @@ public interface CategorieRepository extends JpaRepository<Categorie, Long>
 
     @Query("select c.traiteNonProportionnel.traiteNpId from Categorie c where c.categorieId = ?1")
     Long getTraiteIdByCatId(Long catId);
+
+    @Query("select c.categorieId from Categorie c where c.traiteNonProportionnel.traiteNpId = ?1 and c.categorieLibelle = ?2 and c.categorieCapacite = ?3")
+    Long findCatIdByTnpIdAndLibelleAndCapacite(Long newTraiteNpId, String categorieLibelle, BigDecimal categorieCapacite);
+
+    @Query("""
+        select c.categorieId from Categorie c where c.traiteNonProportionnel.traiteNpId = ?1 
+        and exists (select c2 from Categorie c2 where c2.categorieId in ?2 and c2.categorieLibelle = c.categorieLibelle and c2.categorieCapacite = c.categorieCapacite)
+                """)
+    List<Long> findCorrespondingCatIdsByTnpIdsAndCatIdsIn(Long newTraiteNpId, List<Long> categoryIds);
 }

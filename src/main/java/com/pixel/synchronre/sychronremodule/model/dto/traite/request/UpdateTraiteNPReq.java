@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.traite.request;
 
 import com.pixel.synchronre.sychronremodule.model.dto.devise.validator.ExistingDevCode;
 import com.pixel.synchronre.sychronremodule.model.dto.nature.validator.ExistingNatCode;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTNPId;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 @ExistingTraiteNpRef(message = "La référence du traité source est introuvable")
 public class UpdateTraiteNPReq
 {
+    @ExistingTNPId
     private Long traiteNpId;
     @NotNull(message = "La référence unique est obligatoire")
     @NotBlank(message = "La référence unique est obligatoire")

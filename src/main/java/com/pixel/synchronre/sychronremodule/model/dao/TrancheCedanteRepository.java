@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dao;
 
 import com.pixel.synchronre.sychronremodule.model.dto.cedante.ReadCedanteDTO;
 import com.pixel.synchronre.sychronremodule.model.dto.cedantetraite.PmdGlobalResp;
+import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheCedanteIdsDto;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TranchePrimeDto;
 import com.pixel.synchronre.sychronremodule.model.entities.TrancheCedante;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -84,4 +85,14 @@ public interface TrancheCedanteRepository extends JpaRepository<TrancheCedante, 
 
     @Query("select tc.tranche.traiteNonProportionnel.traiteNpId from TrancheCedante tc where tc.trancheCedanteId = ?1")
     Long getTraiteIdByTrancheCedanteId(Long trancheCedanteId);
+
+
+    @Query("select tc from TrancheCedante tc where tc.tranche.traiteNonProportionnel.traiteNpId = ?1")
+    List<TrancheCedante> findByTnpId(Long traiteNpId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheCedanteIdsDto(tc.tranche.trancheId, tc.cedante.cedId)
+         from TrancheCedante tc where tc.trancheCedanteId = ?1
+    """)
+    TrancheCedanteIdsDto findTrancheIdAndCedIdByTrancheCedanteId(Long trancheCedanteId );
 }

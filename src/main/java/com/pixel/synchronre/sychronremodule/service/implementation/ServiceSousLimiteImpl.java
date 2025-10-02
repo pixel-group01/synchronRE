@@ -28,7 +28,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceSousLimiteImpl implements IServiceSousLimite {
+public class ServiceSousLimiteImpl implements IServiceSousLimite
+{
   private final ILogService logService;
   private final SousLimiteRepository sslRepo;
   private final SousLimiteMapper sslMapper;
@@ -36,7 +37,8 @@ public class ServiceSousLimiteImpl implements IServiceSousLimite {
 
 
     @Override @Transactional
-    public SousLimiteDetailsResp create(CreateSousLimiteReq dto) throws UnknownHostException {
+    public SousLimiteDetailsResp create(CreateSousLimiteReq dto) throws UnknownHostException
+    {
         Optional<SousLimite> ssl$ = sslRepo.findByTraiteAndActivite(dto.getTraiteNpId(), dto.getCouId());
         if(ssl$.isPresent()) return sslMapper.mapToSousLimiteResp(ssl$.get());
         SousLimite ssl = sslMapper.mapToSousLimite(dto);

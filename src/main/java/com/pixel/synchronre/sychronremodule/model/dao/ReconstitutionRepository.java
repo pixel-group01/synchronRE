@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public interface ReconstitutionRepository extends JpaRepository<Reconstitution, Long> {
     @Query("""
@@ -52,4 +53,7 @@ public interface ReconstitutionRepository extends JpaRepository<Reconstitution, 
         where r.reconstitutionId = ?1
     """)
     ReconstitutionReq getEditDtoById(Long reconstitutionId);
+
+    @Query("SELECT r FROM Reconstitution r WHERE r.traiteNonProportionnel.traiteNpId = ?1")
+    List<Reconstitution> findByTnpId(Long traiteNpId);
 }

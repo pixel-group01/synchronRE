@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.model.dto.reconstitution;
 
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingTNPId;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.ExistingTrancheId;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,13 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @AllArgsConstructor @NoArgsConstructor @Getter @Setter
-public class ReconstitutionReq {
+public class ReconstitutionReq
+{
     private Long reconstitutionId;
     private Long nbrReconstitution;
     private String modeCalculReconstitution;
-    @ExistingTrancheId
+    @ExistingTrancheId @NotNull(message = "Veuillez selectionner une tranche")
     private Long trancheId;
-    @ExistingTNPId
+    @ExistingTNPId @NotNull(message = "Veuillez selectionner le traité")
     private Long traiteNpId;
-
 }

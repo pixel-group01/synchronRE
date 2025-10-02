@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface TerritorialiteRepository extends JpaRepository<Territorialite, Long>
 {
     @Query("""
@@ -36,4 +38,7 @@ public interface TerritorialiteRepository extends JpaRepository<Territorialite, 
         where tnp.traiteNpId = ?1
     """)
     TerritorialiteReq getEditDtoById(Long terrId);
+
+    @Query("select t from Territorialite t where t.traiteNonProportionnel.traiteNpId = ?1")
+    List<Territorialite> findByTnpId(Long traiteNpId);
 }

@@ -9,6 +9,8 @@ import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.ExistingT
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNpRef;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.validator.UniqueTraiteNumero;
 import com.pixel.synchronre.sychronremodule.model.entities.Cessionnaire;
+import com.pixel.synchronre.sychronremodule.model.enums.EXERCICE_RATTACHEMENT;
+import com.pixel.synchronre.sychronremodule.model.enums.PERIODICITE;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidPeriodicite;
 import com.pixel.synchronre.sychronremodule.model.enums.validators.ValidRattachement;
 import jakarta.validation.constraints.NotBlank;
@@ -72,4 +74,27 @@ public class CreateTraiteNPReq
     private String traiCompteDevCode;
     @NotNull(message = "Veuillez sélectionner le courtier placeur")
     private Long courtierPlaceurId;
+
+    public CreateTraiteNPReq(String traiLibelle, EXERCICE_RATTACHEMENT rattachement, LocalDate traiDateEffet, LocalDate traiDateEcheance, BigDecimal traiCoursDevise, PERIODICITE periodicite, Long traiDelaiEnvoi, Long traiDelaiConfirmation, Long traiDelaiPaiement, BigDecimal traiTauxCourtier, BigDecimal traiTauxCourtierPlaceur, BigDecimal traiTauxAbattement, BigDecimal traiInteretDepotLib, Long exeCode, String traiSourceRef, String natCode, String devCode, String traiCompteDevCode, Long courtierPlaceurId)
+    {
+        this.traiLibelle = traiLibelle;
+        this.traiEcerciceRattachement = rattachement.name();
+        this.traiDateEffet = traiDateEffet;
+        this.traiDateEcheance = traiDateEcheance;
+        this.traiCoursDevise = traiCoursDevise;
+        this.traiPeriodicite = periodicite.name();
+        this.traiDelaiEnvoi = traiDelaiEnvoi;
+        this.traiDelaiConfirmation = traiDelaiConfirmation;
+        this.traiDelaiPaiement = traiDelaiPaiement;
+        this.traiTauxCourtier = traiTauxCourtier;
+        this.traiTauxCourtierPlaceur = traiTauxCourtierPlaceur;
+        this.traiTauxAbattement = traiTauxAbattement;
+        this.traiInteretDepotLib = traiInteretDepotLib;
+        this.exeCode = exeCode;
+        this.traiSourceRef = traiSourceRef;
+        this.natCode = natCode;
+        this.devCode = devCode;
+        this.traiCompteDevCode = traiCompteDevCode;
+        this.courtierPlaceurId = courtierPlaceurId;
+    }
 }

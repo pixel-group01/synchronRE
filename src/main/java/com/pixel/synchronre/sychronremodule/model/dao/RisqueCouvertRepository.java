@@ -63,7 +63,16 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
          where asso.risqueCouvert.risqueId = ?1
          and asso.type.uniqueCode = 'RISQ-DET'
         """)
-    List<CouvertureListResp> getActivitesByrisqueId(Long risqueId);
+    List<CouvertureListResp> getActivitesByRisqueId(Long risqueId);
+
+    @Query("""
+        select c.couId
+         from Association asso join asso.risqueCouvert r
+         join asso.couverture c 
+         where asso.risqueCouvert.risqueId = ?1
+         and asso.type.uniqueCode = 'RISQ-DET'
+        """)
+    List<Long> getActiviteIdsByRisqueId(Long risqueId);
 
     //Renvoie la liste des couvertures parents qui ont au moins une sous couverture qui n'est pas sur une sous limite du traité
     @Query("""
@@ -105,7 +114,9 @@ public interface RisqueCouvertRepository extends JpaRepository<RisqueCouvert, Lo
 """)
     List<ActivitesResp> getActivite(Long risqueId);
 
-
     @Query("select rc from RisqueCouvert rc where rc.traiteNonProportionnel.traiteNpId = ?1 and rc.couverture.couId = ?2")
     Optional<RisqueCouvert> findByTraiteAndCouverture(Long traiteNpId, Long couId);
+
+    @Query("select rc from RisqueCouvert rc where rc.traiteNonProportionnel.traiteNpId = ?1 and rc.couverture.couId = ?2")
+    Long findRisqueIdByTnpIdAndCouverture(Long newTraiteNpId, Long couId);
 }

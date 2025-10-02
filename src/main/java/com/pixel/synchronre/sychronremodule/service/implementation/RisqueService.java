@@ -96,7 +96,7 @@ public class RisqueService implements IServiceRisque
         List<RisqueCouvertResp> risqueList = risquePage
                 .stream()
                 .filter(Objects::nonNull)
-                .peek(t->t.setSousCouvertures(risqueRepo.getActivitesByrisqueId(t.getRisqueId())))
+                .peek(t->t.setSousCouvertures(risqueRepo.getActivitesByRisqueId(t.getRisqueId())))
                 .toList();
         return new PageImpl<>(risqueList, pageable, risquePage.getTotalElements());
     }

@@ -69,4 +69,7 @@ public interface SousLimiteRepository extends JpaRepository<SousLimite, Long> {
 
     @Query("select ssl from SousLimite ssl where ssl.traiteNonProportionnel.traiteNpId = ?1 and ssl.activite.couId = ?2")
     Optional<SousLimite> findByTraiteAndActivite(Long traiteNpId, Long couId);
+
+    @Query("select sl from SousLimite  sl where sl.traiteNonProportionnel.traiteNpId  = ?1")
+    List<SousLimite> findByTnpId(Long traiteNpId);
 }

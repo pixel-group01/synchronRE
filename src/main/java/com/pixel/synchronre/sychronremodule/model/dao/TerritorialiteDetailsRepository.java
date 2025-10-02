@@ -35,6 +35,12 @@ public interface TerritorialiteDetailsRepository extends JpaRepository<Associati
 """)
     List<PaysListResp> getPaysByTerrId(Long terrId);
 
+    @Query("""
+    select p.paysCode
+    from Association td join td.pays p where td.territorialite.terrId = ?1 and td.type.uniqueCode = 'TER-DET'
+""")
+    List<String> getPaysCodesByTerrId(Long terrId);
+
     @Query(" select (count(td.assoId)>0) from Association td where td.territorialite.terrId = ?1 and td.pays.paysCode = ?2 and td.type.uniqueCode = 'TER-DET'")
     boolean terrHasPays(Long terrId, String paysCode);
 

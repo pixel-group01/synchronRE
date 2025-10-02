@@ -1,15 +1,13 @@
 package com.pixel.synchronre.sychronremodule.service.interfac;
 
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
-import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.ReconduireTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.net.UnknownHostException;
 import java.util.List;
 
 public interface IServiceTraiteNP
@@ -44,6 +42,8 @@ public interface IServiceTraiteNP
     void retournerAuValidateur(MvtReq dto);
 
     void valider(Long traiteNpId);
+
+    TraiteNPResp reconduireTraiteAndCondtions(ReconduireTraiteReq dto) ;
 
 }
 

@@ -54,8 +54,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.limitesouscription.LimiteSouscriptionReq(
-    l.limiteSouscriptionId,l.limSousMontant,r.risqueId,cat.categorieId
-    )
+    l.limiteSouscriptionId,l.limSousMontant,r.risqueId,cat.categorieId)
     from LimiteSouscription l 
     left join l.risqueCouvert r 
     left join l.categorie cat 
@@ -91,4 +90,7 @@ public interface LimiteSouscriptionRepository extends JpaRepository<LimiteSouscr
             @Param("categorieId") Long categorieId,
             @Param("couIds") List<Long> couIds,
             @Param("couverturesTotalCount") int couverturesTotalCount);
+
+    @Query("select ls from LimiteSouscription ls where ls.risqueCouvert.traiteNonProportionnel.traiteNpId = ?1")
+    List<LimiteSouscription> findByTnpId(Long traiteNpId);
 }

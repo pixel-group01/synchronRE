@@ -2,6 +2,7 @@ package com.pixel.synchronre.sychronremodule.controller;
 
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.ReconduireTraiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTraiteNP;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.UnknownHostException;
 import java.util.List;
 
 @RestController @RequiredArgsConstructor
@@ -25,6 +25,13 @@ public class TraiteNpController
     {
         return traiteNpService.create(dto);
     }
+
+    @PostMapping(path = "/reconduire")
+    TraiteNPResp reconduire(@Valid @RequestBody ReconduireTraiteReq dto)
+    {
+        return traiteNpService.reconduireTraiteAndCondtions(dto);
+    }
+
 
     @PutMapping(path = "/update")
     TraiteNPResp update(@Valid @RequestBody UpdateTraiteNPReq dto){

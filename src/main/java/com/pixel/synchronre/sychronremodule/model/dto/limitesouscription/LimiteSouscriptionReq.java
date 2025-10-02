@@ -12,18 +12,22 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@NotNull(message = "Aucune donnée parvenue")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @NotNull(message = "Aucune donnée parvenue")
 public class LimiteSouscriptionReq
 {
     private Long limiteSouscriptionId;
     private BigDecimal limSousMontant;
-    @ExistingRisqueId
+    @ExistingRisqueId @NotNull(message = "Veuillez saisir le risque")
     private Long risqueId;
-    @ExistingCategorieId
+    @ExistingCategorieId @NotNull(message = "Veuillez selectionner la catégorie")
     private Long categorieId;
     private List<Long> couIds;
+
+    public LimiteSouscriptionReq(Long limiteSouscriptionId, BigDecimal limSousMontant, Long risqueId, Long categorieId)
+    {
+        this.limiteSouscriptionId = limiteSouscriptionId;
+        this.categorieId = categorieId;
+        this.risqueId = risqueId;
+        this.limSousMontant = limSousMontant;
+    }
 }

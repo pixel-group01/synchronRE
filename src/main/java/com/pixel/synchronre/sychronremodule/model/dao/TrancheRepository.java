@@ -68,6 +68,9 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
     """)
     List<TrancheResp> getTrancheList(Long traiteNpId);
 
+    @Query("select tr from Tranche tr where tr.traiteNonProportionnel.traiteNpId = ?1")
+    List<Tranche> findByTnpId(Long traiteNpId);
+
     @Query("select tr.traiteNonProportionnel.traiteNpId from Tranche tr where tr.trancheId = ?1")
     Long getTraiteNpIdByTrancheId(Long tranchepId);
 

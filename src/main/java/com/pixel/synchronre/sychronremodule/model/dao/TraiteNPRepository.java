@@ -1,5 +1,6 @@
 package com.pixel.synchronre.sychronremodule.model.dao;
 
+import com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.request.UpdateTraiteNPReq;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TauxCourtiersResp;
 import com.pixel.synchronre.sychronremodule.model.dto.traite.response.TraiteNPResp;
@@ -182,5 +183,17 @@ public interface TraiteNPRepository extends JpaRepository<TraiteNonProportionnel
     where t.trancheId = ?1
     """)
     BigDecimal getIntereDepotLibByTrancheId(Long trancheId);
+
+    @Query("""
+    select new com.pixel.synchronre.sychronremodule.model.dto.traite.request.CreateTraiteNPReq(
+    tnp.traiLibelle, tnp.traiEcerciceRattachement
+    , tnp.traiDateEffet, tnp.traiDateEcheance, tnp.traiCoursDevise, tnp.traiPeriodicite
+    , tnp.traiDelaiEnvoi, tnp.traiDelaiConfirmation, tnp.traiDelaiPaiement, tnp.traiTauxCourtier
+    , tnp.traiTauxCourtierPlaceur, tnp.traiTauxAbattement, tnp.traiInteretDepotLib
+    , tnp.exercice.exeCode, tnp.traiReference, tnp.nature.natCode, tnp.traiDevise.devCode
+    , tnp.traiCompteDevise.devCode, tnp.courtierPlaceur.cesId
+    ) from TraiteNonProportionnel tnp where tnp.traiteNpId = ?1
+""")
+    Optional<CreateTraiteNPReq> findCreateTraiteNPReqById(Long tnpId);
 
 }
