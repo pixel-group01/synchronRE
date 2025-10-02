@@ -1,0 +1,23 @@
+implémenter private void reconduireTranche(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite).
+Qui consiste à ajouter à newTraite de nouvelles tranches ayant les mêmes caratéristiques que celles de traite.
+Consulter public TrancheResp create(TrancheReq dto) de public class TrancheService implements IServiceTranche
+
+private void reconduireAssiettePrime(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite)
+Qui consiste à ajouter à newTraite de nouvelles assiette de prime ayant les mêmes caratéristiques que celles de traite.
+Consulter public TrancheCedanteReq save(TrancheCedanteReq dto) de public class TrancheCedanteService
+
+private void reconduireLimitesSouscription(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite)
+Qui consiste à ajouter à newTraite de nouvelles limites de souscription ayant les mêmes caratéristiques que celles de traite.
+Consulter public LimiteSouscriptionResp create(LimiteSouscriptionReq dto) de public class LimiteSouscriptionService implements IServiceLimiteSouscription
+
+private void reconduireSousLimites(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite)
+Qui consiste à ajouter à newTraite de nouvelles sous limites de souscription ayant les mêmes caratéristiques que celles de traite.
+Consulter public SousLimiteDetailsResp create(CreateSousLimiteReq dto) de public class ServiceSousLimiteImpl implements IServiceSousLimite
+
+private void reconduireReconstitutions(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite)
+Qui consiste à ajouter à newTraite de nouvelles reconstitution ayant les mêmes caratéristiques que celles de traite.
+Consulter public ReconstitutionResp create(ReconstitutionReq dto) de public class ReconstitutionServiceImpl implements IserviceReconstitution
+
+implémenter private void reconduirePlacement(TraiteNonProportionnel newTraite, TraiteNonProportionnel traite)
+Qui consiste à ajouter à newTraite de nouveaux placements ayant les mêmes caratéristiques que ceux de traite.
+Consulter public RepartitionTraiteNPResp create(PlacementTraiteNPReq dto) de public class RepartitionTraiteNPService implements IServiceRepartitionTraiteNP
