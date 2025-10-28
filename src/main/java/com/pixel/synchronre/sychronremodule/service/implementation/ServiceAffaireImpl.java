@@ -24,7 +24,6 @@ import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -79,7 +78,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     public FacultativeDetailsResp createFacultative(CreateFacultativeReq dto, HistoDetails hd)
     {
         if(dto.getReserveCourtier() != null && dto.getFacSmpLci().compareTo(dto.getReserveCourtier())<=0) throw new AppException("La réserve courtier ne peut exéder la SMPLCI");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         Affaire aff=facultativeMapper.mapToAffaire(dto);
         BeanUtils.copyProperties(hd, aff);
         if(dto.getReserveCourtier() == null) aff.setReserveCourtier(BigDecimal.ZERO);
@@ -164,7 +163,7 @@ public class ServiceAffaireImpl implements IserviceAffaire
     @Override
     public FacultativeDetailsResp renewAffaire(RenewFacultativeReq dto) {
         Affaire oldAffaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         entityManager.detach(oldAffaire);
         Affaire newAffaire = new Affaire();
         BeanUtils.copyProperties(oldAffaire, newAffaire, "affId");

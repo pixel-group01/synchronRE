@@ -9,7 +9,6 @@ import com.pixel.synchronre.sharedmodule.utilities.ConvertMontant;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sychronremodule.model.constants.*;
 import com.pixel.synchronre.sychronremodule.model.dao.*;
-import com.pixel.synchronre.sychronremodule.model.dto.cessionnaire.response.CessionnaireListResp;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.SinMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.mouvement.request.MvtReq;
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.request.CreateSinistreReq;
@@ -18,7 +17,6 @@ import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.EtatComp
 import com.pixel.synchronre.sychronremodule.model.dto.sinistre.response.SinistreDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
 import com.pixel.synchronre.sychronremodule.service.interfac.*;
-import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -65,7 +63,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
         Affaire affaire = affRepo.findById(dto.getAffId()).orElseThrow(()->new AppException("Affaire introuvable"));
         String affStatutCrea = affRepo.getAffStatutCreation(affaire.getAffId());
         if(affStatutCrea == null || !affStatutCrea.equals("REALISEE"))  throw new AppException("Impossible de déclarer un sinistre sur une affaire non réalisée ou en instance");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         Sinistre sinistre = sinMapper.mapToSinistre(dto);
         Statut sinStatut = isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode);
         sinistre.setStatut(sinStatut);
@@ -105,7 +103,7 @@ public class ServiceSinistreImpl implements IServiceSinistre
 
     @Override
      public  Page<SinistreDetailsResp> transmettreSinistreAuSouscripteur(Long sinId, int returnPageSize) throws UnknownHostException {
-         boolean isCourtier = jwtService.UserIsCourtier() ;
+         boolean isCourtier = jwtService.userIsCourtier() ;
          String newStatut = isCourtier ? SAISIE_CRT.staCode : TRANSMIS.staCode;
          mvtService.createMvtSinistre(new MvtReq(SinistreActions.TRANSMETTRE_AU_SOUSCRIPTEUR, sinId, newStatut, null));
         Affaire affaire = sinRepo.getAffairedBySinId(sinId).orElseThrow(()->new AppException("Affaire introuvable"));

@@ -260,7 +260,7 @@ public class JwtService implements IJwtService
     }
 
     @Override
-    public boolean UserIsCourtier()
+    public boolean userIsCourtier()
     {
         return this.getConnectedUserCedId() == null;
     }

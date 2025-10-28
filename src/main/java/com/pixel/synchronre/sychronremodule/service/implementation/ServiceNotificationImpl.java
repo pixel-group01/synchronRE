@@ -38,14 +38,14 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countAffairesEnAttenteDePlacement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PLA", "RET-FAC-CED");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority? 0 : notifRepo.countAffaires(Collections.singletonList("APLA"), null);
     }
 
     @Override
     public long countAffairesRetourneesALaCedante()
     {
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         Long cedId = jwtService.getConnectedUserCedId();
         return isCourtier ? 0 : notifRepo.countAffaires(Collections.singletonList("RET"), cedId);
     }
@@ -54,7 +54,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countAffairesEnAttenteDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-FAC", "CRT-REV-FAC");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countAffaires(Collections.singletonList("APAI"), null);
     }
 
@@ -62,7 +62,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countPlacementsEnAttenteDeValidation()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-PLA", "RET-PLA");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("AVAL"), null);
     }
 
@@ -70,7 +70,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countPlacementRetourneAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("ACPT-PLA", "ANL-PLA", "REFU-PLA","TRANS-PLA", "DLT-PLA");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countPlacements(Collections.singletonList("RET"), null);
     }
 
@@ -78,14 +78,14 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreTransmisAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("TRANS-SIN-VAL");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("TRA"), null);
     }
 
     @Override
     public long countSinistreRetournesALaCedante()
     {
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         Long cedId = jwtService.getConnectedUserCedId();
         return isCourtier ? 0 : notifRepo.countSinistres(Collections.singletonList("RET"), cedId);
     }
@@ -94,7 +94,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreEnAttenteDeValidation()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-SIN", "RET-SIN-SOUS");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("AVAL"), null);
     }
 
@@ -102,7 +102,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreRetournesAuSouscripteur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("TRANS-SIN-VAL", "RET-SIN-CED");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-VAL"), null);
     }
 
@@ -110,7 +110,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreEnAttenteDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-SIN");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("APAI"), null);
     }
 
@@ -118,7 +118,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreRetourneAuValidateur()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("VAL-SIN", "RET-SIN-SOUS");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Collections.singletonList("RET-COMPTA"), null);
     }
 
@@ -126,7 +126,7 @@ public class ServiceNotificationImpl implements IServiceNotification
     public long countSinistreEnCoursDeReglement()
     {
         boolean hasAuthority = jwtService.hasAnyAuthority("CRT-PAI-SIN", "CRT-REV-SIN", "UPD-PAI-SIN", "UPD-REV-SIN");
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         return !isCourtier || !hasAuthority ? 0 : notifRepo.countSinistres(Arrays.asList("CPAI", "CPAI-CREV", "CREV"), null);
     }
 

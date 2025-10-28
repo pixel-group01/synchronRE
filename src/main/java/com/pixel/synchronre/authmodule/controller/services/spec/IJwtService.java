@@ -6,7 +6,6 @@ import com.pixel.synchronre.logmodule.model.entities.Log;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -41,7 +40,7 @@ public interface IJwtService
     Long getConnectedUserCedId();
     Long getConnectedUserCesId();
 
-    boolean UserIsCourtier();
+    boolean userIsCourtier();
 
     boolean hasAnyAuthority(String ...s);
     Set<String> getAuthorities();

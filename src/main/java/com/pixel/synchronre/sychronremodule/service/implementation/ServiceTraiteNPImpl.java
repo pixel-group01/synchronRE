@@ -58,7 +58,7 @@ public class ServiceTraiteNPImpl implements IServiceTraiteNP
     @Override @Transactional
     public TraiteNPResp create(CreateTraiteNPReq dto)
     {
-        boolean isCourtier = jwtService.UserIsCourtier();
+        boolean isCourtier = jwtService.userIsCourtier();
         TraiteNonProportionnel traiteNP = traiteNPMapper.mapToTraiteNP(dto);
         Statut statut = isCourtier ? new Statut(SAISIE_CRT.staCode) : new Statut(SAISIE.staCode);
         traiteNP.setStatut(statut);
