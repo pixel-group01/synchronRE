@@ -2,7 +2,6 @@ package com.pixel.synchronre.sychronremodule.model.dto.tranche;
 
 import com.pixel.synchronre.sychronremodule.model.dto.categorie.CategorieResp;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,17 +20,19 @@ public class TrancheResp
     private BigDecimal tranchePorte;
     private BigDecimal trancheTauxPrime;
     private Long trancheNumero;
-    private String risques;
     private String couvertures;
+    private String couIds;
+    private String risqueIds;
     private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
 
     private List<CategorieResp> categories;
-    private List<Long> risqueIds;
-    private List<Long> couIds;
 
-    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero, Long traiteNpId, String traiReference, String traiNumero) {
+    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite
+            , BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero
+            , Long traiteNpId, String traiReference, String traiNumero)
+    {
         this.trancheId = trancheId;
         this.trancheType = trancheType;
         this.trancheLibelle = trancheLibelle;
@@ -42,5 +43,24 @@ public class TrancheResp
         this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;
+    }
+
+    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle
+            , BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime
+            , Integer trancheNumero, Long traiteNpId, String traiReference, String traiNumero
+            , String couvertures, String couIds, String risqueIds) {
+        this.trancheId = trancheId;
+        this.trancheType = trancheType;
+        this.trancheLibelle = trancheLibelle;
+        this.tranchePriorite = tranchePriorite;
+        this.tranchePorte = tranchePorte;
+        this.trancheTauxPrime = trancheTauxPrime;
+        this.trancheNumero = trancheNumero == null ? null : trancheNumero.longValue();
+        this.traiteNpId = traiteNpId;
+        this.traiReference = traiReference;
+        this.traiNumero = traiNumero;
+        this.couvertures = couvertures;
+        this.couIds = couIds;
+        this.risqueIds = risqueIds;
     }
 }

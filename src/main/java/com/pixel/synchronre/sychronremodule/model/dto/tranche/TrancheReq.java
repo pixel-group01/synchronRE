@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -50,5 +51,25 @@ public class TrancheReq
         this.trancheTauxPrime = trancheTauxPrime;
         this.trancheNumero = trancheNumero;
         this.traiteNpId = traiteNpId;
+    }
+
+    public TrancheReq(Long trancheId, String trancheType, String trancheLibelle
+            , BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime
+            , Integer trancheNumero, Long traiteNpId, String risqueIds)
+    {
+        this.trancheId = trancheId;
+        this.trancheType = trancheType;
+        this.trancheLibelle = trancheLibelle;
+        this.tranchePriorite = tranchePriorite;
+        this.tranchePorte = tranchePorte;
+        this.trancheTauxPrime = trancheTauxPrime;
+        this.trancheNumero = trancheNumero == null ? null : trancheNumero.longValue();
+        this.traiteNpId = traiteNpId;
+        if(risqueIds != null)
+        {
+            List<Long> ids =  Arrays.stream(risqueIds.split(", ")).map(Long::parseLong).toList();
+            this.risqueIds = ids;
+        }
+
     }
 }

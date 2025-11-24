@@ -66,4 +66,14 @@ public class VTrancheRisque
     @Column(name = "cou_id")
     private Long couId;
 
+    @Column(name = "asso_type_id")
+    private Long assoTypeId;
+
+    @Size(max = 255)
+    @Column(name = "asso_type_unique_code")
+    private String assoTypeUniqueCode;
+
+    @Column(name = "tranche_taux_prime", precision = 38, scale = 2)
+    private BigDecimal trancheTauxPrime;
+
 }
