@@ -98,6 +98,7 @@ public class TrancheService implements IServiceTranche
                     asso.setTranche(finalTranche);
                     asso.setRisqueCouvert(new RisqueCouvert(id));
                     asso.setType(typeRepo.findByUniqueCode("TRAN-RISQ").orElseThrow(() -> new AppException("Type de d'association inconnu")));
+                    associationRepository.save(asso);
                 }
             });
         }
