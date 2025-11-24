@@ -21,17 +21,17 @@ public class TrancheResp
     private BigDecimal tranchePorte;
     private BigDecimal trancheTauxPrime;
     private Long trancheNumero;
-    private Long risqueId;
-    private String risqueDescription;
-    private Long couId;
-    private String couLibelle;
-    private String couLibelleAbrege;
+    private String risques;
+    private String couvertures;
     private Long traiteNpId;
     private String traiReference;
     private String traiNumero;
-    private List<CategorieResp> categories;
 
-    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero, Long risqueId, String risqueDescription, Long couId, String couLibelle, String couLibelleAbrege, Long traiteNpId, String traiReference, String traiNumero) {
+    private List<CategorieResp> categories;
+    private List<Long> risqueIds;
+    private List<Long> couIds;
+
+    public TrancheResp(Long trancheId, String trancheType, String trancheLibelle, BigDecimal tranchePriorite, BigDecimal tranchePorte, BigDecimal trancheTauxPrime, Long trancheNumero, Long traiteNpId, String traiReference, String traiNumero) {
         this.trancheId = trancheId;
         this.trancheType = trancheType;
         this.trancheLibelle = trancheLibelle;
@@ -39,11 +39,6 @@ public class TrancheResp
         this.tranchePorte = tranchePorte;
         this.trancheTauxPrime = trancheTauxPrime;
         this.trancheNumero = trancheNumero;
-        this.risqueId = risqueId;
-        this.risqueDescription = risqueDescription;
-        this.couId = couId;
-        this.couLibelle = couLibelle;
-        this.couLibelleAbrege = couLibelleAbrege;
         this.traiteNpId = traiteNpId;
         this.traiReference = traiReference;
         this.traiNumero = traiNumero;

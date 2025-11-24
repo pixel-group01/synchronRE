@@ -171,19 +171,43 @@ public class JwtService implements IJwtService
     public Log getUserInfosFromJwt(String token)
     {
         Log log = new Log();
-        Claims claims= this.extractAllClaims(token);
-        Long  functionId = claims.get("functionId", Long.class);
-        log.setUserEmail(this.extractUsername(token));
-        log.setUserId(claims.get("userId", Long.class));
-        log.setFunction(functionId == null ? null : functionRepo.findById(functionId).orElse(null));
-        log.setConnectionId(claims.get("connectionId", String.class));
+
+        // Vérification du token avant traitement
+        if (token == null || token.trim().isEmpty())
+        {
+            // Token invalide - retourner un log avec des valeurs par défaut
+            log.setUserEmail("SYSTEM");
+            log.setUserId(null);
+            log.setFunction(null);
+            log.setConnectionId("UNKNOWN");
+            return log;
+        }
+
+        try
+        {
+            Claims claims = this.extractAllClaims(token);
+            Long functionId = claims.get("functionId", Long.class);
+            log.setUserEmail(this.extractUsername(token));
+            log.setUserId(claims.get("userId", Long.class));
+            log.setFunction(functionId == null ? null : functionRepo.findById(functionId).orElse(null));
+            log.setConnectionId(claims.get("connectionId", String.class));
+        } catch (Exception e)
+        {
+            // En cas d'erreur de parsing JWT, retourner des valeurs par défaut
+            log.setUserEmail("SYSTEM_ERROR");
+            log.setUserId(null);
+            log.setFunction(null);
+            log.setConnectionId("ERROR");
+        }
+
         return log;
     }
 
     @Override
     public Log getUserInfosFromJwt()
     {
-        return this.getUserInfosFromJwt(this.getCurrentJwt());
+        String currentJwt = this.getCurrentJwt();
+        return this.getUserInfosFromJwt(currentJwt);
     }
 
     @Override
@@ -223,10 +247,43 @@ public class JwtService implements IJwtService
     @Override
     public String getCurrentJwt()
     {
-        HttpServletRequest request = HttpServletManager.getCurrentHttpRequest();
-        if(request == null) return null;
-        return request.getHeader("Authorization") == null ? null : request.getHeader("Authorization").substring("Bearer ".length());
+        try
+        {
+            HttpServletRequest request = HttpServletManager.getCurrentHttpRequest();
+            if(request == null) return null;
+
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer "))
+            {
+                return null;
+            }
+
+            String token = authHeader.substring("Bearer ".length());
+            return token.trim().isEmpty() ? null : token;
+
+        } catch (Exception e)
+        {
+            return null;
+        }
     }
+
+    private boolean isValidJwt(String jwt)
+    {
+        if (jwt == null || jwt.trim().isEmpty())
+        {
+            return false;
+        }
+
+        try
+        {
+            this.extractAllClaims(jwt);
+            return true;
+        } catch (Exception e)
+        {
+            return false;
+        }
+    }
+
 
     @Override
     public Object getClaim(String claimName)

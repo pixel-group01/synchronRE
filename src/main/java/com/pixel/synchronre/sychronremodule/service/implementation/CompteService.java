@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CompteService implements IserviceCompte {
+public class CompteService implements IserviceCompte
+{
     private final CompteTraiteRepo compteTraiteRepo;
     private final CedMapper cedMapper;
     private final CompteCedanteRepo compteCedanteRepo;

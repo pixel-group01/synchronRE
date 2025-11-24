@@ -16,11 +16,8 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 {
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
+    t.trancheId,t.trancheType,t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
-    left join t.risqueCouvert r 
-    left join r.couverture c 
     left join t.traiteNonProportionnel tnp 
     where t.trancheId = ?1
     """)
@@ -28,19 +25,13 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
-    left join t.risqueCouvert r 
-    left join r.couverture c 
     left join t.traiteNonProportionnel tnp left join t.statut s
     where (
     locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  t.trancheLibelle) as string))) >0 or
     locate(upper(coalesce(:key, '') ), upper(cast(t.tranchePriorite as string))) =1 or
-    locate(upper(coalesce(:key, '') ), upper(cast(t.tranchePorte as string))) =1 or
-    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  r.description) as string))) >0 or
-    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelle) as string))) >0 or 
-    locate(upper(coalesce(:key, '') ), upper(cast(function('strip_accents',  c.couLibelleAbrege) as string))) >0 
+    locate(upper(coalesce(:key, '') ), upper(cast(t.tranchePorte as string))) =1  
     )
     and tnp.traiteNpId = :traiteNpId and s.staCode = 'ACT' order by t.trancheNumero
     """)
@@ -48,9 +39,8 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
         select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq(
-        t.trancheId, t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId,tnp.traiteNpId)
+        t.trancheId, t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero,tnp.traiteNpId)
         from Tranche t
-        left join t.risqueCouvert r
         left join t.traiteNonProportionnel tnp 
         where t.trancheId = ?1
     """)
@@ -58,11 +48,8 @@ public interface TrancheRepository extends JpaRepository<Tranche, Long>
 
     @Query("""
     select new com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp(
-    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, r.risqueId, r.description,
-    c.couId, c.couLibelle, c.couLibelleAbrege, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
+    t.trancheId,t.trancheType, t.trancheLibelle, t.tranchePriorite, t.tranchePorte, t.trancheTauxPrime, t.trancheNumero, tnp.traiteNpId, tnp.traiReference, tnp.traiNumero)
     from Tranche t 
-    left join t.risqueCouvert r 
-    left join r.couverture c 
     left join t.traiteNonProportionnel tnp left join t.statut s
     where tnp.traiteNpId = ?1 and s.staCode = 'ACT'
     """)

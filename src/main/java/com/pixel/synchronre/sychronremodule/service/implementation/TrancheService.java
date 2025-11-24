@@ -4,15 +4,11 @@ import com.pixel.synchronre.logmodule.controller.service.ILogService;
 import com.pixel.synchronre.sharedmodule.exceptions.AppException;
 import com.pixel.synchronre.sharedmodule.utilities.ObjectCopier;
 import com.pixel.synchronre.sharedmodule.utilities.StringUtils;
-import com.pixel.synchronre.sychronremodule.model.dao.CategorieRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.TraiteNPRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.TrancheCategorieRepository;
-import com.pixel.synchronre.sychronremodule.model.dao.TrancheRepository;
+import com.pixel.synchronre.sychronremodule.model.dao.*;
 import com.pixel.synchronre.sychronremodule.model.dto.mapper.TrancheMapper;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheResp;
 import com.pixel.synchronre.sychronremodule.model.entities.*;
-import com.pixel.synchronre.sychronremodule.model.events.TrancheEvent;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceTranche;
 import com.pixel.synchronre.sychronremodule.service.interfac.ITrancheCedanteService;
 import com.pixel.synchronre.typemodule.controller.repositories.TypeRepo;
@@ -26,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,6 +39,10 @@ public class TrancheService implements IServiceTranche
     private final ITrancheCedanteService trancheCedanteService;
     private final CategorieRepository catRepo;
     private final TraiteNPRepository tnpRepo;
+    private final RisqueCouvertRepository risqueCouvertRepo;
+    private final AssociationRepository associationRepository;
+    private final TrancheRisqueRepo trancheRisqueRepo;
+
     @Override
     public TrancheResp save(TrancheReq dto)
     {
@@ -86,6 +87,20 @@ public class TrancheService implements IServiceTranche
         {
             dto.getCategorieIds().forEach(catCedId->this.addCategorie(finalTranche, catCedId));
         }
+        List<Long> risqueIds = dto.getRisqueIds();
+        if(risqueIds != null && !risqueIds.isEmpty())
+        {
+            risqueIds.forEach(id ->
+            {
+                if (risqueCouvertRepo.existsById(id))
+                {
+                    Association asso = new Association();
+                    asso.setTranche(finalTranche);
+                    asso.setRisqueCouvert(new RisqueCouvert(id));
+                    asso.setType(typeRepo.findByUniqueCode("TRAN-RISQ").orElseThrow(() -> new AppException("Type de d'association inconnu")));
+                }
+            });
+        }
         return trancheRepo.getTrancheResp(dto.getTrancheId());
     }
 
@@ -101,15 +116,35 @@ public class TrancheService implements IServiceTranche
     @Override @Transactional
     public TrancheResp update(TrancheReq dto)
     {
-        if(dto.getRisqueId() == null) throw new AppException("Veuillez sélectionner la tranche à modifier");
-        Tranche tranche = trancheRepo.findById(dto.getTrancheId()).orElseThrow(()->new AppException("Tranche introuvable"));
+        Long trancheId = dto.getTrancheId();
+        if(trancheId == null) throw new AppException("Veuillez sélectionner la tranche à modifier");
+        Tranche tranche = trancheRepo.findById(trancheId).orElseThrow(()->new AppException("Tranche introuvable"));
         Tranche oldTranche = trancheCopier.copy(tranche);
         BeanUtils.copyProperties(dto, tranche, "trancheNumero");
-        tranche.setRisqueCouvert(new RisqueCouvert(dto.getRisqueId()));
         tranche = trancheRepo.save(tranche);
-        eventPublisher.publishEvent(new TrancheEvent(this, "Modification de tranche", tranche));
-        logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
         final Tranche finalTranche = tranche;
+        List<Long> risqueIds = dto.getRisqueIds();
+        if(risqueIds != null && !risqueIds.isEmpty())
+        {
+            List<Long> risqueIdsToAdd = trancheRisqueRepo.getRisqueIdsToAdd(trancheId, risqueIds);
+            List<Long> risqueIdsToRemove =  trancheRisqueRepo.getRisqueIdsToRemove(trancheId, risqueIds);
+            risqueIdsToAdd.forEach(id->
+            {
+                if(risqueCouvertRepo.existsById(id))
+                {
+                    Association asso = new Association();
+                    asso.setTranche(finalTranche);
+                    asso.setRisqueCouvert(new RisqueCouvert(id));
+                    asso.setType(typeRepo.findByUniqueCode("TRAN-RISQ").orElseThrow(()->new AppException("Type de d'association inconnu")));
+                }
+            });
+            risqueIdsToRemove.forEach(id->
+            {
+                associationRepository.deleteByTrancheIdAndRisqueId(finalTranche.getTrancheId(), id);
+            });
+        }
+        logService.logg("Modification d'une tranche", oldTranche, tranche, "Tranche");
+
         if(dto.getCategorieIds() != null )
         {
             List<Long> catIdsToAdd = trancheCatRepo.getCatIdsToAdd(dto.getTrancheId(), dto.getCategorieIds());
