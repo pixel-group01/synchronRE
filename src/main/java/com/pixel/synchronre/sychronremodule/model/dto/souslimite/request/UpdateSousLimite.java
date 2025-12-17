@@ -5,10 +5,12 @@ import com.pixel.synchronre.sychronremodule.model.dto.couverture.validator.Exist
 import com.pixel.synchronre.sychronremodule.model.dto.risquecouvert.ExistingRisqueId;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.validator.ExistingSousLimiteSouscriptionId;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.ExistingTrancheId;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
@@ -19,9 +21,9 @@ public class UpdateSousLimite
     private Long sousLimiteSouscriptionId;
     @NotNull(message = "Veuillez saisir le montant de la sous limite")
     private BigDecimal sousLimMontant;
-    @ExistingCouId @NotNull(message = "Veuillez sélectionner l'activité")
-    private Long couId;
-    private Long traiteNonProportionnelId;
+   // @ExistingCouId
+    @NotEmpty @NotNull(message = "Veuillez sélectionner l'activité")
+    private List<Long> couIds;
 }
 
 

@@ -11,8 +11,9 @@ public class SousLimiteDetailsResp
 {
     private Long sousLimiteSouscriptionId;
     private BigDecimal sousLimMontant;
-    private Long sslimiteCouvertId;
-    private String sslimiteCouvertLibelle;
+    //private Long sslimiteCouvertId;
+    //private String sslimiteCouvertLibelle;
+    private String couLibelles;
     private Long traiteNpId;
     private String sslimiteTraiteReference;
     private String sslimiteTraiteNumero;

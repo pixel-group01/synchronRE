@@ -39,6 +39,8 @@ public class Association
     private Type type;
     @ManyToOne @JoinColumn(name = "limite_souscription_id")
     private LimiteSouscription limiteSouscription;
+    @ManyToOne @JoinColumn(name = "sous_limite_id")
+    private SousLimite sousLimite;
     @ManyToOne @JoinColumn(name = "STA_CODE")  @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private Statut statut;
 

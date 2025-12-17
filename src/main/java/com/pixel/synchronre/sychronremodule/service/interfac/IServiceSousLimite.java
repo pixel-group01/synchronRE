@@ -4,6 +4,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.association.response.Activ
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateSousLimiteReq;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
+import com.pixel.synchronre.sychronremodule.model.views.VSousLimite;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -14,7 +15,7 @@ public interface IServiceSousLimite {
 
     SousLimiteDetailsResp create(CreateSousLimiteReq dto) throws UnknownHostException;
 
-    Page<SousLimiteDetailsResp> search(String key, Long traiteNpId, Pageable pageable);
+    Page<VSousLimite> search(String key, Long traiteNpId, Pageable pageable);
 
     SousLimiteDetailsResp update(UpdateSousLimite dto) throws  UnknownHostException;
 

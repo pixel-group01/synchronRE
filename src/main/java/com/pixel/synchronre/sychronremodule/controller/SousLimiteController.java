@@ -6,6 +6,7 @@ import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.CreateS
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.request.UpdateSousLimite;
 import com.pixel.synchronre.sychronremodule.model.dto.souslimite.response.SousLimiteDetailsResp;
 import com.pixel.synchronre.sychronremodule.model.dto.tranche.TrancheReq;
+import com.pixel.synchronre.sychronremodule.model.views.VSousLimite;
 import com.pixel.synchronre.sychronremodule.service.interfac.IServiceSousLimite;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +36,10 @@ public class SousLimiteController {
     }
 
     @GetMapping(path = "/search")
-    Page<SousLimiteDetailsResp> create(@RequestParam(defaultValue = "") String key,
-                              @RequestParam(required = true) Long traiteNpId,
-                              @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "100") int size)
+    Page<VSousLimite> create(@RequestParam(defaultValue = "") String key,
+                             @RequestParam(required = true) Long traiteNpId,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "100") int size)
     {
         return iServiceSousLimite.search(key, traiteNpId, PageRequest.of(page, size));
     }
